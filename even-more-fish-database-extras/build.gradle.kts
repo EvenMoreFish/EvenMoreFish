@@ -2,7 +2,6 @@ plugins {
     id("com.oheers.evenmorefish.java-conventions")
 }
 
-
 dependencies {
     compileOnly(libs.jooq)
     compileOnly(libs.jooq.codegen)
@@ -10,9 +9,4 @@ dependencies {
     implementation(libs.annotations)
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-        vendor.set(JvmVendorSpec.ADOPTIUM)
-    }
-}
+java.sourceCompatibility = JavaVersion.VERSION_17
