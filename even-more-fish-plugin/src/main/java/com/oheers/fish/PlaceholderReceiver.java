@@ -183,7 +183,7 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
             }
             
             if (value != -1.0f) {
-                return Float.toString(Math.round(value * 10f) / 10f);
+                return Double.toString(FishUtils.roundDouble(value, 1));
             } else {
                 return "";
             }

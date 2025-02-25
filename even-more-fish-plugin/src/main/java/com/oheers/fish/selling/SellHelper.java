@@ -65,7 +65,6 @@ public class SellHelper {
 
         List<SoldFish> soldFish = getTotalSoldFish();
         double totalWorth = getTotalWorth(soldFish);
-        double sellPrice = Math.floor(totalWorth * 10) / 10;
 
         // Remove sold items
         for (ItemStack item : getPossibleSales()) {
@@ -88,7 +87,7 @@ public class SellHelper {
         // sending the sell message to the player
 
         AbstractMessage message = ConfigMessage.FISH_SALE.getMessage();
-        message.setSellPrice(economy.getWorthFormat(sellPrice, true));
+        message.setSellPrice(economy.getWorthFormat(totalWorth, true));
         message.setAmount(Integer.toString(fishCount));
         message.setPlayer(this.player);
         message.send(player);
@@ -155,7 +154,7 @@ public class SellHelper {
         }
         this.fishCount = count;
 
-        return Math.floor(totalValue * 10) / 10;
+        return totalValue;
     }
 
     private void logSoldFish(final UUID uuid, @NotNull List<SoldFish> soldFish) {

@@ -1,6 +1,7 @@
 package com.oheers.fish.economy;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.adapter.AbstractMessage;
 import com.oheers.fish.api.economy.EconomyType;
 import com.oheers.fish.config.MainConfig;
@@ -76,10 +77,11 @@ public class VaultEconomyType implements EconomyType {
 
     @Override
     public double prepareValue(double value, boolean applyMultiplier) {
+        double finalValue = value;
         if (applyMultiplier) {
-            return value * getMultiplier();
+            finalValue = value * getMultiplier();
         }
-        return value;
+        return finalValue;
     }
 
     @Override
@@ -99,9 +101,7 @@ public class VaultEconomyType implements EconomyType {
             message.setVariable("{amount}", String.valueOf(worth));
             return message.getLegacyMessage();
         }
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(MainConfig.getInstance().getDecimalLocale());
-        DecimalFormat format = new DecimalFormat(ConfigMessage.SELL_PRICE_FORMAT.getMessage().getLegacyMessage(), symbols);
-        return format.format(worth);
+        return FishUtils.formatDouble(ConfigMessage.SELL_PRICE_FORMAT.getMessage().getLegacyMessage(), worth);
     }
 
 }

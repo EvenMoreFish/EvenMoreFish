@@ -2,6 +2,7 @@ package com.oheers.fish.database;
 
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.FishUtils;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
@@ -308,7 +309,7 @@ public class Database implements DatabaseAPI {
                         .set(Tables.FISH.FISH_RARITY, fish.getRarity().getId())
                         .set(Tables.FISH.FIRST_FISHER, uuid.toString())
                         .set(Tables.FISH.TOTAL_CAUGHT, 1)
-                        .set(Tables.FISH.LARGEST_FISH, Math.round(fish.getLength() * 10f) / 10f)
+                        .set(Tables.FISH.LARGEST_FISH, fish.getLength())
                         .set(Tables.FISH.FIRST_FISHER, uuid.toString())
                         .set(Tables.FISH.LARGEST_FISHER, uuid.toString())
                         .set(Tables.FISH.FIRST_CATCH_TIME, LocalDateTime.now())
@@ -356,7 +357,7 @@ public class Database implements DatabaseAPI {
             @Override
             protected int onRunUpdate(DSLContext dslContext) {
                 return dslContext.update(Tables.FISH)
-                        .set(Tables.FISH.LARGEST_FISH, Math.round(fish.getLength() * 10f) / 10f /* todo use decimal format */)
+                        .set(Tables.FISH.LARGEST_FISH, fish.getLength()) // TODO use decimal format
                         .set(Tables.FISH.LARGEST_FISHER, uuid.toString())
                         .where(Tables.FISH.FISH_RARITY.eq(fish.getRarity().getId()).and(Tables.FISH.FISH_NAME.eq(fish.getName())))
                         .execute();
@@ -551,7 +552,7 @@ public class Database implements DatabaseAPI {
                         .set(Tables.USERS_SALES.FISH_RARITY, fishRarity)
                         .set(Tables.USERS_SALES.FISH_AMOUNT, fishAmount)
                         .set(Tables.USERS_SALES.FISH_LENGTH, fishLength)
-                        .set(Tables.USERS_SALES.PRICE_SOLD, Math.round(priceSold * 10) / 10.0) //todo use decimal format, or a util command
+                        .set(Tables.USERS_SALES.PRICE_SOLD, priceSold)
                         .execute();
             }
         }.executeUpdate();
