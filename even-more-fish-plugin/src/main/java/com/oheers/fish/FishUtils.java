@@ -267,65 +267,6 @@ public class FishUtils {
         return whitelistedWorlds.contains(l.getWorld().getName());
     }
 
-    public static @NotNull String translateColorCodes(String message) {
-        return EvenMoreFish.getAdapter().translateColorCodes(message);
-    }
-
-    //gets the item with a custom texture
-    public static @NotNull ItemStack getSkullFromBase64(String base64EncodedString) {
-        final ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        UUID headUuid = UUID.randomUUID();
-        // 1.20.5+ handling
-        if (MinecraftVersion.isNewerThan(MinecraftVersion.MC1_20_R3)) {
-            NBT.modifyComponents(
-                    skull, nbt -> {
-                        ReadWriteNBT profileNbt = nbt.getOrCreateCompound("minecraft:profile");
-                        profileNbt.setUUID("id", headUuid);
-                        ReadWriteNBT propertiesNbt = profileNbt.getCompoundList("properties").addCompound();
-                        // This key is required, so we set it to an empty string.
-                        propertiesNbt.setString("name", "textures");
-                        propertiesNbt.setString("value", base64EncodedString);
-                    }
-            );
-            // 1.20.4 and below handling
-        } else {
-            NBT.modify(
-                    skull, nbt -> {
-                        ReadWriteNBT skullOwnerCompound = nbt.getOrCreateCompound("SkullOwner");
-                        skullOwnerCompound.setUUID("Id", headUuid);
-                        skullOwnerCompound.getOrCreateCompound("Properties")
-                                .getCompoundList("textures")
-                                .addCompound()
-                                .setString("Value", base64EncodedString);
-                    }
-            );
-        }
-        return skull;
-    }
-
-    //gets the item with a custom uuid
-    public static @NotNull ItemStack getSkullFromUUID(UUID uuid) {
-        final ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        // 1.20.5+ handling
-        if (MinecraftVersion.isNewerThan(MinecraftVersion.MC1_20_R3)) {
-            NBT.modifyComponents(
-                    skull, nbt -> {
-                        ReadWriteNBT profileNbt = nbt.getOrCreateCompound("minecraft:profile");
-                        profileNbt.setUUID("id", uuid);
-                    }
-            );
-            // 1.20.4 and below handling
-        } else {
-            NBT.modify(
-                    skull, nbt -> {
-                        ReadWriteNBT skullOwnerCompound = nbt.getOrCreateCompound("SkullOwner");
-                        skullOwnerCompound.setUUID("Id", uuid);
-                    }
-            );
-        }
-        return skull;
-    }
-
     public static @NotNull String timeFormat(long timeLeft) {
         String returning = "";
         long hours = timeLeft / 3600;
@@ -579,6 +520,20 @@ public class FishUtils {
         }
 
         return new ItemStack(material);
+    }
+
+    // The following methods have been delegated to the platform adapter.
+
+    public static @NotNull String translateColorCodes(String message) {
+        return EvenMoreFish.getAdapter().translateColorCodes(message);
+    }
+
+    public static @NotNull ItemStack getSkullFromBase64(String base64) {
+        return EvenMoreFish.getAdapter().getSkullFromBase64(base64);
+    }
+
+    public static @NotNull ItemStack getSkullFromUUID(UUID uuid) {
+        return EvenMoreFish.getAdapter().getSkullFromUUID(uuid);
     }
 
 }

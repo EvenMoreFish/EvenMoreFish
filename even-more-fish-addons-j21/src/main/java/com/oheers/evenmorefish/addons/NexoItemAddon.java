@@ -11,8 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 public class NexoItemAddon extends ItemAddon implements Listener {
-
-    private boolean nexoLoaded = false;
     
     @Override
     public String getPrefix() {
@@ -36,7 +34,8 @@ public class NexoItemAddon extends ItemAddon implements Listener {
 
     @Override
     public ItemStack getItemStack(String id) {
-        if (!nexoLoaded) {
+        if (!NexoItems.exists(id)) {
+            getLogger().warning(() -> "Nexo item with id %s doesn't exist.".formatted(id));
             return null;
         }
 
@@ -46,6 +45,7 @@ public class NexoItemAddon extends ItemAddon implements Listener {
             getLogger().info(() -> String.format("Could not obtain Nexo item %s", id));
             return null;
         }
+
         return item.build();
     }
 
@@ -53,7 +53,6 @@ public class NexoItemAddon extends ItemAddon implements Listener {
     public void onItemsLoad(NexoItemsLoadedEvent event) {
         getLogger().info("Detected that Nexo has finished loading all items...");
         getLogger().info("Reloading EMF.");
-        this.nexoLoaded = true;
 
         EMFPlugin.getInstance().reload(null);
     }

@@ -9,18 +9,18 @@ public abstract class EMFPlugin extends JavaPlugin {
 
     private static EMFPlugin instance;
 
+    protected EMFPlugin() {
+        if (instance != null) {
+            throw new UnsupportedOperationException("EMFPlugin has already been assigned!");
+        }
+        instance = this;
+    }
+
     public static @NotNull EMFPlugin getInstance() {
         if (instance == null) {
             throw new RuntimeException("EMFPlugin not found. This should not happen!");
         }
         return instance;
-    }
-
-    public static void setInstance(@NotNull EMFPlugin plugin) {
-        if (instance != null) {
-            throw new UnsupportedOperationException("EMFPlugin has already been assigned!");
-        }
-        instance = plugin;
     }
 
     public abstract void reload(@Nullable CommandSender sender);

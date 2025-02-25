@@ -9,11 +9,12 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.ref.WeakReference;
 
 public class RequirementContext {
-    WeakReference<World> worldRef;
-    Location location;
-    Player player;
-    YamlDocument config;
-    String configPath;
+
+    private WeakReference<World> worldRef;
+    private Location location;
+    private Player player;
+    private YamlDocument config;
+    private String configPath;
 
     /**
      * Provides data about the current server to the requirement checker, for example it passes through the current
@@ -74,4 +75,5 @@ public class RequirementContext {
     public void setPlayer(Player player) {
         this.player = player;
     }
+
 }

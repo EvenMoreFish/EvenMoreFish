@@ -37,6 +37,7 @@ public class SkullSaver implements Listener {
         
         ItemStack stack = block.getDrops().iterator().next().clone();
         event.setCancelled(true);
+        event.setDropItems(false);
         
         try {
             Fish f = FishUtils.getFish(skullMeta, event.getPlayer());
