@@ -267,18 +267,6 @@ public class FishUtils {
         return whitelistedWorlds.contains(l.getWorld().getName());
     }
 
-    public static @NotNull String translateColorCodes(String message) {
-        return EvenMoreFish.getAdapter().translateColorCodes(message);
-    }
-
-    public static @NotNull ItemStack getSkullFromBase64(String base64) {
-        return EvenMoreFish.getAdapter().getSkullFromBase64(base64); // Delegate to the platform adapter
-    }
-
-    public static @NotNull ItemStack getSkullFromUUID(UUID uuid) {
-        return EvenMoreFish.getAdapter().getSkullFromUUID(uuid); // Delegate to the platform adapter
-    }
-
     public static @NotNull String timeFormat(long timeLeft) {
         String returning = "";
         long hours = timeLeft / 3600;
@@ -532,6 +520,20 @@ public class FishUtils {
         }
 
         return new ItemStack(material);
+    }
+
+    // The following methods have been delegated to the platform adapter.
+
+    public static @NotNull String translateColorCodes(String message) {
+        return EvenMoreFish.getAdapter().translateColorCodes(message);
+    }
+
+    public static @NotNull ItemStack getSkullFromBase64(String base64) {
+        return EvenMoreFish.getAdapter().getSkullFromBase64(base64);
+    }
+
+    public static @NotNull ItemStack getSkullFromUUID(UUID uuid) {
+        return EvenMoreFish.getAdapter().getSkullFromUUID(uuid);
     }
 
 }
