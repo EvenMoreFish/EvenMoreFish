@@ -111,7 +111,13 @@ public class EvenMoreFish extends EMFPlugin {
     private AddonManager addonManager;
     private Map<String, String> commandUsages = new HashMap<>();
 
-    public static EvenMoreFish getInstance() {
+    public EvenMoreFish() {
+        // Assigns the EMFPlugin instance for API usage.
+        super();
+        instance = this;
+    }
+
+    public static @NotNull EvenMoreFish getInstance() {
         return instance;
     }
 
@@ -137,15 +143,11 @@ public class EvenMoreFish extends EMFPlugin {
             throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
         }
 
-        // This should only ever be done once.
-        EMFPlugin.setInstance(this);
-
         CommandAPI.onEnable();
 
         // If EMF folder does not exist, this is the first load.
         firstLoad = !getDataFolder().exists();
 
-        instance = this;
         scheduler = UniversalScheduler.getScheduler(this);
         platformAdapter = loadAdapter();
 
@@ -225,12 +227,6 @@ public class EvenMoreFish extends EMFPlugin {
 
     @Override
     public void onDisable() {
-
-        // Prevent issues when NBT preload fails.
-        if (instance == null) {
-            return;
-        }
-
         CommandAPI.onDisable();
 
         terminateGUIS();
