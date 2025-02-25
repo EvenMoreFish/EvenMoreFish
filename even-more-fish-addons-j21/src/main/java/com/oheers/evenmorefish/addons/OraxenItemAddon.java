@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 public class OraxenItemAddon extends ItemAddon implements Listener {
+
     @Override
     public String getPrefix() {
         return "oraxen";
