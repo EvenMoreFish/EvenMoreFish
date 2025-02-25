@@ -34,9 +34,6 @@ public class NexoItemAddon extends ItemAddon implements Listener {
 
     @Override
     public ItemStack getItemStack(String id) {
-        for (ItemBuilder itemBuilder : NexoItems.items()) {
-            System.out.println(itemBuilder.);
-        }
         if (!NexoItems.exists(id)) {
             getLogger().warning(() -> "Nexo item with id %s doesn't exist.".formatted(id));
             return null;

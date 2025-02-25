@@ -41,7 +41,7 @@ dependencyResolutionManagement {
             library("nbt-api", "de.tr7zw:item-nbt-api:2.14.1")
             library("denizen-api", "com.denizenscript:denizen:1.3.1-SNAPSHOT")
             library("oraxen", "io.th0rgal:oraxen:1.188.0")
-            library("nexo", "com.nexomc:nexo:0.9.0-dev.9")
+            library("nexo", "com.nexomc:nexo:1.0.0")
 
             library("ecoitems-api", "com.willfp:EcoItems:5.6.1")
             library("ecoitems-libreforge", "com.willfp:libreforge:4.21.1")

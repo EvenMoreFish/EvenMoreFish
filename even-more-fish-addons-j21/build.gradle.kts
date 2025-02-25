@@ -4,7 +4,7 @@ plugins {
 
 
 repositories {
-    maven("https://repo.nexomc.com/snapshots/")
+    maven("https://repo.nexomc.com/releases/")
     maven("https://repo.oraxen.com/releases")
 }
 
