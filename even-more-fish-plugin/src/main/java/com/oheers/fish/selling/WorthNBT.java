@@ -93,9 +93,7 @@ public class WorthNBT {
     }
 
     private static double getMultipliedValue(Float length, String rarity, String name) {
-        double worthMultiplier = getWorthMultiplier(rarity, name);
-        double value = multipleWorthByLength(worthMultiplier, length);
-        return sortFunkyDecimals(value);
+        return getWorthMultiplier(rarity, name) * length;
     }
 
     private static double getWorthMultiplier(final String rarityStr, final String name) {
@@ -116,26 +114,4 @@ public class WorthNBT {
         return value;
     }
 
-    /**
-     * Calculates the worth of an item based on a given worth multiplier and length.
-     *
-     * @param worthMultiplier The multiplier to apply to the length value.
-     * @param length The length value to be multiplied.
-     * @return The calculated worth of the item.
-     */
-    private static double multipleWorthByLength(final double worthMultiplier, final Float length) {
-        return worthMultiplier * length;
-    }
-
-
-    /**
-     * Sorts a double value by rounding it to the nearest whole number with one decimal place.
-     *
-     * @param value The double value to be sorted.
-     * @return The rounded double value with one decimal place.
-     */
-    // Sorts out funky decimals during the above multiplication.
-    private static double sortFunkyDecimals(final double value) {
-        return Math.round(value * 10.0) / 10.0;
-    }
 }
