@@ -6,6 +6,7 @@ import com.oheers.fish.api.adapter.PlatformAdapter;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
@@ -53,6 +54,11 @@ public class PaperAdapter extends PlatformAdapter {
             meta.setPlayerProfile(profile);
         });
         return skull;
+    }
+
+    @Override
+    public boolean isSpawnerMob(@NotNull Entity entity) {
+        return entity.fromMobSpawner();
     }
 
 }

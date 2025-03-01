@@ -12,6 +12,9 @@ disabled: false
 # See valid types here: https://github.com/Oheers/EvenMoreFish/wiki/Competition-Types
 type: LARGEST_FISH
 
+# Added in EvenMoreFish 2.0.0. If this is enabled, players can kill fish entities to compete in this competition.
+allow-hunting: false
+
 # How long should this competition last (in minutes)?
 # This cannot be less than 1.
 duration: 15

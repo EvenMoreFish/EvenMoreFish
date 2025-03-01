@@ -44,6 +44,18 @@ public class MainConfig extends ConfigBase {
         return databaseEnabled() && !EvenMoreFish.getInstance().getDatabase().getMigrationManager().usingV2();
     }
 
+    public boolean isFishCatchOnlyInCompetition() {
+        return getConfig().getBoolean("fishing.catch-only-in-competition", false);
+    }
+
+    public boolean isFishHuntOnlyInCompetition() {
+        return getConfig().getBoolean("fishing.hunt-only-in-competition", true);
+    }
+
+    public boolean isFishHuntIgnoreSpawnerFish() {
+        return getConfig().getBoolean("fishing.hunt-ignore-spawner-fish", true);
+    }
+
     public boolean isCompetitionUnique() {
         return getConfig().getBoolean("fish-only-in-competition", false);
     }
@@ -277,6 +289,14 @@ public class MainConfig extends ConfigBase {
                 String path = "economy." + economyType.toLowerCase();
                 yamlDocument.set(path + ".enabled", true);
             }
+        }
+
+        // Updated fishing section - Requires the section to exist first.
+        String oldFishUniqueKey = "fish-only-in-competition";
+        if (yamlDocument.contains(oldFishUniqueKey)) {
+            boolean fishOnlyInCompetition = yamlDocument.getBoolean(oldFishUniqueKey, false);
+            yamlDocument.set("fishing.catch-only-in-competition", fishOnlyInCompetition);
+            yamlDocument.remove(oldFishUniqueKey);
         }
 
         save();

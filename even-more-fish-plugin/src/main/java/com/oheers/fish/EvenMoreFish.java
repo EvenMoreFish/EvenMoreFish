@@ -35,6 +35,7 @@ import com.oheers.fish.economy.PlayerPointsEconomyType;
 import com.oheers.fish.economy.VaultEconomyType;
 import com.oheers.fish.events.*;
 import com.oheers.fish.fishing.FishingProcessor;
+import com.oheers.fish.fishing.HuntingProcessor;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.requirements.*;
@@ -289,49 +290,53 @@ public class EvenMoreFish extends EMFPlugin {
     }
 
     private void listeners() {
+        PluginManager pm = getServer().getPluginManager();
 
-        getServer().getPluginManager().registerEvents(new JoinChecker(), this);
-        getServer().getPluginManager().registerEvents(new FishingProcessor(), this);
-        getServer().getPluginManager().registerEvents(new UpdateNotify(), this);
-        getServer().getPluginManager().registerEvents(new SkullSaver(), this);
-        getServer().getPluginManager().registerEvents(new BaitListener(), this);
+        pm.registerEvents(new JoinChecker(), this);
+        pm.registerEvents(new FishingProcessor(), this);
+        pm.registerEvents(new HuntingProcessor(), this);
+        pm.registerEvents(new UpdateNotify(), this);
+        pm.registerEvents(new SkullSaver(), this);
+        pm.registerEvents(new BaitListener(), this);
 
         optionalListeners();
     }
 
     private void optionalListeners() {
+        PluginManager pm = getServer().getPluginManager();
+
         if (checkingEatEvent) {
-            getServer().getPluginManager().registerEvents(FishEatEvent.getInstance(), this);
+            pm.registerEvents(FishEatEvent.getInstance(), this);
         }
 
         if (checkingIntEvent) {
-            getServer().getPluginManager().registerEvents(FishInteractEvent.getInstance(), this);
+            pm.registerEvents(FishInteractEvent.getInstance(), this);
         }
 
         if (MainConfig.getInstance().blockCrafting()) {
-            getServer().getPluginManager().registerEvents(new AntiCraft(), this);
+            pm.registerEvents(new AntiCraft(), this);
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
             usingMcMMO = true;
             if (MainConfig.getInstance().disableMcMMOTreasure()) {
-                getServer().getPluginManager().registerEvents(McMMOTreasureEvent.getInstance(), this);
+                pm.registerEvents(McMMOTreasureEvent.getInstance(), this);
             }
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("HeadDatabase")) {
             usingHeadsDB = true;
-            getServer().getPluginManager().registerEvents(new HeadDBIntegration(), this);
+            pm.registerEvents(new HeadDBIntegration(), this);
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("AureliumSkills")) {
             if (MainConfig.getInstance().disableAureliumSkills()) {
-                getServer().getPluginManager().registerEvents(new AureliumSkillsFishingEvent(), this);
+                pm.registerEvents(new AureliumSkillsFishingEvent(), this);
             }
         }
         if (Bukkit.getPluginManager().isPluginEnabled("AuraSkills")) {
             if (MainConfig.getInstance().disableAureliumSkills()) {
-                getServer().getPluginManager().registerEvents(new AuraSkillsFishingEvent(), this);
+                pm.registerEvents(new AuraSkillsFishingEvent(), this);
             }
         }
     }

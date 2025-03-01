@@ -13,7 +13,7 @@ public class AureliumSkillsFishingEvent implements Listener {
     public void fishCatch(PlayerLootDropEvent event) {
         if (event.getCause() == LootDropCause.LUCKY_CATCH || event.getCause() == LootDropCause.TREASURE_HUNTER || event.getCause() == LootDropCause.EPIC_CATCH || event.getCause() == LootDropCause.FISHING_OTHER_LOOT) {
             if (MainConfig.getInstance().disableAureliumSkills()) {
-                if (MainConfig.getInstance().isCompetitionUnique()) {
+                if (MainConfig.getInstance().isFishCatchOnlyInCompetition()) {
                     if (Competition.isActive()) {
                         event.setCancelled(true);
                     }

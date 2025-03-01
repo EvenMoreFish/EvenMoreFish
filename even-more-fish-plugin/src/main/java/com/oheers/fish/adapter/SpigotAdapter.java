@@ -1,12 +1,19 @@
 package com.oheers.fish.adapter;
 
+import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.adapter.PlatformAdapter;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
+import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -14,6 +21,8 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 public class SpigotAdapter extends PlatformAdapter {
+
+    private final NamespacedKey spawnerKey = new NamespacedKey(EvenMoreFish.getInstance(), "spawner-mob");
 
     public SpigotAdapter() {
         super();
@@ -91,4 +100,18 @@ public class SpigotAdapter extends PlatformAdapter {
         }
         return skull;
     }
+
+    @EventHandler
+    public void onSpawnerSpawn(SpawnerSpawnEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+        event.getEntity().getPersistentDataContainer().set(spawnerKey, PersistentDataType.STRING, "true");
+    }
+
+    @Override
+    public boolean isSpawnerMob(@NotNull Entity entity) {
+        return entity.getPersistentDataContainer().has(spawnerKey, PersistentDataType.STRING);
+    }
+
 }

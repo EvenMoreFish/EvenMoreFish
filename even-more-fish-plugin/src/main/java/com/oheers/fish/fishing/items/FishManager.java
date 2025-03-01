@@ -145,7 +145,7 @@ public class FishManager {
 
         if (!Competition.isActive() && EvenMoreFish.getInstance().isRaritiesCompCheckExempt()) {
             if (allowedRarities.get(idx).hasCompExemptFish()) return allowedRarities.get(idx);
-        } else if (Competition.isActive() || !MainConfig.getInstance().isCompetitionUnique()) {
+        } else if (Competition.isActive() || !MainConfig.getInstance().isFishCatchOnlyInCompetition()) {
             return allowedRarities.get(idx);
         }
 
@@ -208,7 +208,7 @@ public class FishManager {
         // checks whether weight calculations need doing for fish
         returningFish = getRandomWeightedFish(available, boostRate, boostedFish);
 
-        if (Competition.isActive() || !MainConfig.getInstance().isCompetitionUnique() || (EvenMoreFish.getInstance().isRaritiesCompCheckExempt() && returningFish.isCompExemptFish())) {
+        if (Competition.isActive() || !MainConfig.getInstance().isFishCatchOnlyInCompetition() || (EvenMoreFish.getInstance().isRaritiesCompCheckExempt() && returningFish.isCompExemptFish())) {
             return returningFish;
         } else {
             return null;

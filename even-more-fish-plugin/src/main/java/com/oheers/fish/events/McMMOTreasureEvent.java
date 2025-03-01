@@ -22,7 +22,7 @@ public class McMMOTreasureEvent implements Listener {
     @EventHandler
     public void mcmmoTreasure(McMMOReplaceVanillaTreasureEvent event) {
         if (MainConfig.getInstance().disableMcMMOTreasure()) {
-            if (MainConfig.getInstance().isCompetitionUnique()) {
+            if (MainConfig.getInstance().isFishCatchOnlyInCompetition()) {
                 if (Competition.isActive()) {
                     event.setReplacementItemStack(event.getOriginalItem().getItemStack());
                 }
@@ -35,7 +35,7 @@ public class McMMOTreasureEvent implements Listener {
     @EventHandler
     public void mcmmoTreasure(McMMOPlayerFishingTreasureEvent event) {
         if (MainConfig.getInstance().disableMcMMOTreasure()) {
-            if (MainConfig.getInstance().isCompetitionUnique()) {
+            if (MainConfig.getInstance().isFishCatchOnlyInCompetition()) {
                 if (Competition.isActive()) {
                     event.setTreasure(null);
                 }

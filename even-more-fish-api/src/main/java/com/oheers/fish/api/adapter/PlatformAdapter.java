@@ -1,15 +1,19 @@
 package com.oheers.fish.api.adapter;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
 
-public abstract class PlatformAdapter {
+public abstract class PlatformAdapter implements Listener {
 
     public PlatformAdapter() {
+        Bukkit.getPluginManager().registerEvents(this, EMFPlugin.getInstance());
         logLoadedMessage();
     }
 
@@ -41,5 +45,7 @@ public abstract class PlatformAdapter {
         }
         return getSkullFromUUID(uuid);
     }
+
+    public abstract boolean isSpawnerMob(@NotNull Entity entity);
 
 }
