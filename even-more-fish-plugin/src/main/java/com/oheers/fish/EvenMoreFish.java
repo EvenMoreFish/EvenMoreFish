@@ -204,7 +204,6 @@ public class EvenMoreFish extends EMFPlugin {
         getScheduler().runTaskAsynchronously(() -> isUpdateAvailable = checkUpdate());
 
         listeners();
-        registerCommands();
 
         if (!MainConfig.getInstance().debugSession()) {
             metrics();
@@ -218,6 +217,8 @@ public class EvenMoreFish extends EMFPlugin {
             database = new Database();
             DataManager.getInstance().loadUserReportsIntoCache();
         }
+
+        registerCommands();
 
         logger.log(Level.INFO, "EvenMoreFish by Oheers : Enabled");
 
