@@ -15,7 +15,7 @@ import com.oheers.fish.database.generated.mysql.tables.UsersSales;
 /**
  * Convenience access to all tables in the default schema.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
 
     /**

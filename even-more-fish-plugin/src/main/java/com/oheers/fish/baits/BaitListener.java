@@ -24,7 +24,10 @@ public class BaitListener implements Listener {
 
     @EventHandler
     public void onClickEvent(InventoryClickEvent event) {
-        if (event.getCurrentItem() == null || event.getCursor() == null) {
+        ItemStack potentialFishingRod = event.getCurrentItem();
+        ItemStack cursor = event.getCursor();
+
+        if (potentialFishingRod == null || cursor == null) {
             return;
         }
 
@@ -32,11 +35,9 @@ public class BaitListener implements Listener {
             return;
         }
 
-        ItemStack potentialFishingRod = event.getCurrentItem();
-        ItemStack cursor = event.getCursor();
-
-        if (potentialFishingRod.getType() != Material.FISHING_ROD)
+        if (potentialFishingRod.getType() != Material.FISHING_ROD) {
             return;
+        }
 
         if (!BaitNBTManager.isBaitObject(cursor)) {
             return;
@@ -81,9 +82,9 @@ public class BaitListener implements Listener {
             message.send(event.getWhoClicked());
         }
 
-        if (result == null || result.getFishingRod() == null)
+        if (result == null || result.getFishingRod() == null) {
             return;
-
+        }
 
         event.setCancelled(true);
         event.setCurrentItem(result.getFishingRod());

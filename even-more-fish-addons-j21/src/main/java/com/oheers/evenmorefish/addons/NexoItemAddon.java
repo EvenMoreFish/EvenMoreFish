@@ -6,6 +6,7 @@ import com.nexomc.nexo.api.events.NexoItemsLoadedEvent;
 import com.nexomc.nexo.items.ItemBuilder;
 import com.oheers.fish.api.addons.ItemAddon;
 import com.oheers.fish.api.plugin.EMFPlugin;
+import org.apache.commons.lang3.JavaVersion;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -30,6 +31,11 @@ public class NexoItemAddon extends ItemAddon implements Listener {
     @Override
     public String getVersion() {
         return "1.0.0";
+    }
+
+    @Override
+    public JavaVersion getRequiredJavaVersion() {
+        return JavaVersion.JAVA_21;
     }
 
     @Override
