@@ -243,6 +243,10 @@ public class BaitNBTManager {
             totalWeight += (bait.getApplicationWeight());
         }
 
+        if (baitList.isEmpty()) {
+            return null;
+        }
+
         int idx = 0;
         for (double r = Math.random() * totalWeight; idx < baitList.size() - 1; ++idx) {
             r -= baitList.get(idx).getApplicationWeight();
@@ -268,6 +272,10 @@ public class BaitNBTManager {
         // Weighted random logic (nabbed from stackoverflow)
         for (Bait bait : baitList) {
             totalWeight += (bait.getCatchWeight());
+        }
+
+        if (baitList.isEmpty()) {
+            return null;
         }
 
         int idx = 0;
