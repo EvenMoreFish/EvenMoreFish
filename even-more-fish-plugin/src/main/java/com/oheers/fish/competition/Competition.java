@@ -71,7 +71,7 @@ public class Competition {
 
     public void begin(boolean adminStart) {
         try {
-            if (!adminStart && EvenMoreFish.getInstance().getOnlinePlayersExcludingVanish().size() < playersNeeded) {
+            if (!adminStart && EvenMoreFish.getInstance().getVisibleOnlinePlayers().size() < playersNeeded) {
                 new Message(ConfigMessage.NOT_ENOUGH_PLAYERS).broadcast(true);
                 active = false;
                 return;

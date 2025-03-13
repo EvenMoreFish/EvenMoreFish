@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Objects;
 
 public class ItemsAdderItemAddon extends ItemAddon implements Listener {
-    private boolean itemsAdderLoaded = false;
 
     @Override
     public String getPrefix() {
@@ -32,17 +31,14 @@ public class ItemsAdderItemAddon extends ItemAddon implements Listener {
 
     @Override
     public ItemStack getItemStack(String id) {
-        if (!itemsAdderLoaded) {
-            return null;
-        }
-
         String[] splitMaterialValue = id.split(":");
         if (!verifyItemsFormat(splitMaterialValue)) {
-            getLogger().severe(() -> String.format("Incorrect format for ItemsAdderItemAddon, use %s:namespace:id. Got %s",getPrefix(), String.join(":", splitMaterialValue)));
+            getLogger().severe(() -> String.format("Incorrect format for ItemsAdderItemAddon, use %s:namespace:id. Got %s", getPrefix(), String.join(":", splitMaterialValue)));
             return null;
         }
 
         final String namespaceId = splitMaterialValue[0] + ":" + splitMaterialValue[1];
+
         final CustomStack customStack = CustomStack.getInstance(namespaceId);
         if (customStack == null) {
             getLogger().info(() -> String.format("Could not obtain itemsadder item %s", namespaceId));
@@ -56,7 +52,6 @@ public class ItemsAdderItemAddon extends ItemAddon implements Listener {
     public void onItemsLoad(ItemsAdderLoadDataEvent event) {
         getLogger().info("Detected that itemsadder has finished loading all items...");
         getLogger().info("Reloading EMF.");
-        this.itemsAdderLoaded = true;
 
         ((EMFPlugin) Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("EvenMoreFish"))).reload(null);
     }

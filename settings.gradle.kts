@@ -60,16 +60,15 @@ dependencyResolutionManagement {
 
             library("universalscheduler", "com.github.Anon8281:UniversalScheduler:0.1.6")
             library("playerpoints", "org.black_ixx:playerpoints:3.2.7")
-            library("cmi-api", "CMI-API:CMI-API:9.7.0.1")
-            library("essx-api", "net.essentialsx:EssentialsX:2.20.1")
+            library("vanishchecker", "uk.firedev:VanishChecker:1.0.5")
 
             library("acf", "co.aikar:acf-paper:0.5.1-SNAPSHOT")
-            library("inventorygui", "de.themoep:inventorygui:1.6.3-SNAPSHOT")
+            library("inventorygui", "de.themoep:inventorygui:1.6.5-SNAPSHOT")
 
             plugin("shadow", "com.gradleup.shadow").version("8.3.1")
             plugin("bukkit-yml", "net.minecrell.plugin-yml.bukkit").version("0.6.0")
 
-            version("adventure", "4.17.0")
+            version("adventure", "4.19.0")
             library("adventure-api", "net.kyori","adventure-api").versionRef("adventure")
             library("adventure-minimessage", "net.kyori","adventure-text-minimessage").versionRef("adventure")
             library("adventure-legacy", "net.kyori","adventure-text-serializer-legacy").versionRef("adventure")

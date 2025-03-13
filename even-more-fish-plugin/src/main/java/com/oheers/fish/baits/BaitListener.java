@@ -35,6 +35,10 @@ public class BaitListener implements Listener {
         ItemStack potentialFishingRod = event.getCurrentItem();
         ItemStack cursor = event.getCursor();
 
+        if (potentialFishingRod == null || cursor == null) {
+            return;
+        }
+
         if (potentialFishingRod.getType() != Material.FISHING_ROD)
             return;
 
