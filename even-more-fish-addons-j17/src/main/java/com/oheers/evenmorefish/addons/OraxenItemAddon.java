@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Objects;
 
 public class OraxenItemAddon extends ItemAddon implements Listener {
-    private boolean oraxenLoaded = false;
     
     @Override
     public String getPrefix() {
@@ -33,16 +32,18 @@ public class OraxenItemAddon extends ItemAddon implements Listener {
 
     @Override
     public ItemStack getItemStack(String id) {
-        if (!oraxenLoaded) {
+        if (!OraxenItems.exists(id)) {
+            getLogger().warning(() -> "Oraxen item with id %s doesn't exist.".formatted(id));
             return null;
         }
-        
+
         final ItemBuilder item = OraxenItems.getItemById(id);
 
         if (item == null) {
-            getLogger().info(() -> String.format("Could not obtain oraxen item %s", id));
+            getLogger().info(() -> "Could not obtain Oraxen item %s".formatted(id));
             return null;
         }
+
         return item.build();
     }
 
@@ -50,7 +51,6 @@ public class OraxenItemAddon extends ItemAddon implements Listener {
     public void onItemsLoad(OraxenItemsLoadedEvent event) {
         getLogger().info("Detected that oraxen has finished loading all items...");
         getLogger().info("Reloading EMF.");
-        this.oraxenLoaded = true;
 
         ((EMFPlugin) Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("EvenMoreFish"))).reload(null);
     }
