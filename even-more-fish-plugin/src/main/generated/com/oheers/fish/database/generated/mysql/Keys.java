@@ -4,19 +4,8 @@
 package com.oheers.fish.database.generated.mysql;
 
 
-import com.oheers.fish.database.generated.mysql.tables.Competitions;
-import com.oheers.fish.database.generated.mysql.tables.Fish;
-import com.oheers.fish.database.generated.mysql.tables.FishLog;
-import com.oheers.fish.database.generated.mysql.tables.Transactions;
-import com.oheers.fish.database.generated.mysql.tables.Users;
-import com.oheers.fish.database.generated.mysql.tables.UsersSales;
-import com.oheers.fish.database.generated.mysql.tables.records.CompetitionsRecord;
-import com.oheers.fish.database.generated.mysql.tables.records.FishLogRecord;
-import com.oheers.fish.database.generated.mysql.tables.records.FishRecord;
-import com.oheers.fish.database.generated.mysql.tables.records.TransactionsRecord;
-import com.oheers.fish.database.generated.mysql.tables.records.UsersRecord;
-import com.oheers.fish.database.generated.mysql.tables.records.UsersSalesRecord;
-
+import com.oheers.fish.database.generated.mysql.tables.*;
+import com.oheers.fish.database.generated.mysql.tables.records.*;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;

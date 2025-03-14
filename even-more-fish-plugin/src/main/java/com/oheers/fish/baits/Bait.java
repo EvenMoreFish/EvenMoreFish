@@ -1,7 +1,6 @@
 package com.oheers.fish.baits;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.FishUtils;
 import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.exceptions.MaxBaitReachedException;
@@ -13,6 +12,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFMessage;
 import com.oheers.fish.utils.ItemFactory;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -74,7 +74,7 @@ public class Bait extends ConfigBase {
         ItemStack baitItem = itemFactory.createItem(player, -1);
         baitItem.setAmount(getDropQuantity());
 
-        baitItem.editMeta(meta -> meta.setLore(createBoostLore()));
+        baitItem.editMeta(meta -> meta.lore(createBoostLore()));
 
         return BaitNBTManager.applyBaitNBT(baitItem, this.id);
     }
@@ -117,7 +117,7 @@ public class Bait extends ConfigBase {
      * This fetches the boost's lore from the config and inserts the boost-rates into the {boosts} variable. This needs
      * to be called after the bait theme is set and the boosts have been initialized, since it uses those variables.
      */
-    private List<String> createBoostLore() {
+    private List<Component> createBoostLore() {
 
         EMFMessage lore = ConfigMessage.BAIT_BAIT_LORE.getMessage();
 
@@ -148,7 +148,7 @@ public class Bait extends ConfigBase {
 
         lore.setBaitTheme(getTheme());
 
-        return lore.getLegacyListMessage();
+        return lore.getComponentListMessage();
     }
 
     public boolean isDisabled() {

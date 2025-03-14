@@ -285,8 +285,7 @@ public class AdminCommand {
 
                     int totalDeleted = BaitNBTManager.deleteAllBaits(fishingRod);
                     if (totalDeleted > 0) {
-                        // TODO still uses deprecated method
-                        fishingRod.editMeta(meta -> meta.setLore(BaitNBTManager.deleteOldLore(fishingRod)));
+                        fishingRod.editMeta(meta -> meta.lore(BaitNBTManager.deleteOldLore(fishingRod)));
                     }
 
                     EMFMessage message = ConfigMessage.BAITS_CLEARED.getMessage();

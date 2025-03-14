@@ -119,9 +119,7 @@ public class GUIUtils {
             }
             new SellGui(player, SellGui.SellState.NORMAL, null).open();
         });
-        newActionMap.put("show-command-help", (gui, click) -> {
-            Bukkit.dispatchCommand(click.getWhoClicked(), "emf help");
-        });
+        newActionMap.put("show-command-help", (gui, click) -> Bukkit.dispatchCommand(click.getWhoClicked(), "emf help"));
         newActionMap.put("sell-inventory", (gui, click) -> {
             HumanEntity humanEntity = click.getWhoClicked();
             if (!(humanEntity instanceof Player player)) {

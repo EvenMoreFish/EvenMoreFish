@@ -4,12 +4,7 @@
 package com.oheers.fish.database.generated.mysql;
 
 
-import com.oheers.fish.database.generated.mysql.tables.Competitions;
-import com.oheers.fish.database.generated.mysql.tables.Fish;
-import com.oheers.fish.database.generated.mysql.tables.FishLog;
-import com.oheers.fish.database.generated.mysql.tables.Transactions;
-import com.oheers.fish.database.generated.mysql.tables.Users;
-import com.oheers.fish.database.generated.mysql.tables.UsersSales;
+import com.oheers.fish.database.generated.mysql.tables.*;
 
 
 /**

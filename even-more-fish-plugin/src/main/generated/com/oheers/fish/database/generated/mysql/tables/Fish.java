@@ -7,26 +7,13 @@ package com.oheers.fish.database.generated.mysql.tables;
 import com.oheers.fish.database.generated.mysql.DefaultSchema;
 import com.oheers.fish.database.generated.mysql.Keys;
 import com.oheers.fish.database.generated.mysql.tables.records.FishRecord;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
-
-import org.jooq.Condition;
-import org.jooq.Field;
-import org.jooq.Name;
-import org.jooq.PlainSQL;
-import org.jooq.QueryPart;
-import org.jooq.SQL;
-import org.jooq.Schema;
-import org.jooq.Select;
-import org.jooq.Stringly;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
+
+import java.time.LocalDateTime;
+import java.util.Collection;
 
 
 /**

@@ -5,7 +5,6 @@ package com.oheers.fish.database.generated.mysql.tables.records;
 
 
 import com.oheers.fish.database.generated.mysql.tables.Users;
-
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
 

@@ -4,19 +4,13 @@
 package com.oheers.fish.database.generated.mysql;
 
 
-import com.oheers.fish.database.generated.mysql.tables.Competitions;
-import com.oheers.fish.database.generated.mysql.tables.Fish;
-import com.oheers.fish.database.generated.mysql.tables.FishLog;
-import com.oheers.fish.database.generated.mysql.tables.Transactions;
-import com.oheers.fish.database.generated.mysql.tables.Users;
-import com.oheers.fish.database.generated.mysql.tables.UsersSales;
-
-import java.util.Arrays;
-import java.util.List;
-
+import com.oheers.fish.database.generated.mysql.tables.*;
 import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 /**

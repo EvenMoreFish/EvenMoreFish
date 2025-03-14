@@ -5,11 +5,10 @@ package com.oheers.fish.database.generated.mysql.tables.records;
 
 
 import com.oheers.fish.database.generated.mysql.tables.Fish;
-
-import java.time.LocalDateTime;
-
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
+
+import java.time.LocalDateTime;
 
 
 /**

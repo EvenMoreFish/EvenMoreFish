@@ -18,6 +18,9 @@ public class NbtKeys {
     public static final String EMF_BAIT = "emf-bait";
     public static final String EMF_APPLIED_BAIT = "emf-applied-bait";
 
+    // Used to identify whether a baited rod has been updated with the line identifier
+    public static final String EMF_BAIT_REFORMATTED = "emf-bait-reformatted";
+
     public static final String EMF_ROD_NBT = "emf-rod-nbt";
 
     public static final String PUBLIC_BUKKIT_VALUES = "PublicBukkitValues";
