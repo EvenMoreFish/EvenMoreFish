@@ -51,7 +51,7 @@ public class MainConfig extends ConfigBase {
         this.topSubCommandName = getConfig().getString("command.subcommands.top", "top");
         this.shopSubCommandName = getConfig().getString("command.subcommands.shop", "shop");
         this.sellAllSubCommandName = getConfig().getString("command.subcommands.sellall", "sellall");
-        this.applyBaitsSubCommandName = getConfig().getString("command.subcommands.apply-baits", "applybaits");
+        this.applyBaitsSubCommandName = getConfig().getString("command.subcommands.applybaits", "applybaits");
     }
 
     public static MainConfig getInstance() {
