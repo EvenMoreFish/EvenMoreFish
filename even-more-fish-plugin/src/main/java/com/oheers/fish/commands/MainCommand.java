@@ -26,6 +26,13 @@ public class MainCommand {
     private final CommandAPICommand command;
 
     public MainCommand() {
+        // Add the admin command to the help message
+        String adminName = MainConfig.getInstance().getAdminSubCommandName();
+        helpMessageBuilder.addUsage(
+            adminName,
+            ConfigMessage.HELP_GENERAL_ADMIN::getMessage
+        );
+
         this.command = new CommandAPICommand(MainConfig.getInstance().getMainCommandName())
             .withAliases(MainConfig.getInstance().getMainCommandAliases().toArray(String[]::new))
             .withSubcommands(
@@ -37,7 +44,7 @@ public class MainCommand {
                 getShop(),
                 getSellAll(),
                 getApplyBaits(),
-                new AdminCommand(MainConfig.getInstance().getAdminSubCommandName()).getCommand()
+                new AdminCommand(adminName).getCommand()
             )
             .executes(info -> {
                 sendHelpMessage(info.sender());
