@@ -193,6 +193,7 @@ requirements:
 give-straight-to-inventory: false
 
 # Customize the plugin's command. Requires a server restart to take effect.
+# NOTE: All names and aliases must use English letters only, as the command library does not support other characters.
 command:
   # The /emf admin shortcut command
   admin-shortcut:
