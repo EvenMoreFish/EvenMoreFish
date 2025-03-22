@@ -204,6 +204,27 @@ command:
   aliases:
     - evenmorefish
 
+  # Change the name of the plugin's subcommands
+  subcommands:
+    # The /emf admin command
+    admin: "admin"
+    # The /emf next command
+    next: "next"
+    # The /emf toggle command
+    toggle: "toggle"
+    # The /emf gui command
+    gui: "gui"
+    # The /emf help command
+    help: "help"
+    # The /emf top command
+    top: "top"
+    # The /emf shop command
+    shop: "shop"
+    # The /emf sellall command
+    sellall: "sellall"
+    # The /emf applybaits command
+    applybaits: "applybaits"
+
 # Customizable sets of biomes for fish.yml configuration
 biome-sets:
   # oceans biome set. you can add more sets as you please.
@@ -218,4 +239,4 @@ biome-sets:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-config-version: 23
+config-version: 24

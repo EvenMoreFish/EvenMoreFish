@@ -19,13 +19,39 @@ public class MainConfig extends ConfigBase {
     private static MainConfig instance = null;
 
     // Cache these so we don't have a mismatch after reload.
-    private String mainCommandName = null;
-    private List<String> mainCommandAliases = null;
+    private final boolean adminShortcutEnabled;
+    private final String adminShortcutName;
+    private final String mainCommandName;
+    private final List<String> mainCommandAliases;
+    private final String adminSubCommandName;
+    private final String nextSubCommandName;
+    private final String toggleSubCommandName;
+    private final String guiSubCommandName;
+    private final String helpSubCommandName;
+    private final String topSubCommandName;
+    private final String shopSubCommandName;
+    private final String sellAllSubCommandName;
+    private final String applyBaitsSubCommandName;
 
     public MainConfig() {
         super("config.yml", "config.yml", EvenMoreFish.getInstance(), true);
         instance = this;
         applyOneTimeConversions();
+
+        // Command caching
+        this.mainCommandName = getConfig().getString("command.main", "emf");
+        this.mainCommandAliases = getConfig().getStringList("command.aliases");
+        this.adminShortcutEnabled = getConfig().getBoolean("command.admin-shortcut.enabled", true);
+        this.adminShortcutName = getConfig().getString("command.admin-shortcut.name", "emfa");
+        this.adminSubCommandName = getConfig().getString("command.subcommands.admin", "admin");
+        this.nextSubCommandName = getConfig().getString("command.subcommands.next", "next");
+        this.toggleSubCommandName = getConfig().getString("command.subcommands.toggle", "toggle");
+        this.guiSubCommandName = getConfig().getString("command.subcommands.gui", "gui");
+        this.helpSubCommandName = getConfig().getString("command.subcommands.help", "help");
+        this.topSubCommandName = getConfig().getString("command.subcommands.top", "top");
+        this.shopSubCommandName = getConfig().getString("command.subcommands.shop", "shop");
+        this.sellAllSubCommandName = getConfig().getString("command.subcommands.sellall", "sellall");
+        this.applyBaitsSubCommandName = getConfig().getString("command.subcommands.apply-baits", "applybaits");
     }
 
     public static MainConfig getInstance() {
@@ -198,25 +224,55 @@ public class MainConfig extends ConfigBase {
     public int getNearbyPlayersRequirementRange() { return getConfig().getInt("requirements.nearby-players.range", 0); }
 
     public boolean isAdminShortcutCommandEnabled() {
-        return getConfig().getBoolean("command.admin-shortcut.enabled", true);
+        return adminShortcutEnabled;
     }
 
     public String getAdminShortcutCommandName() {
-        return getConfig().getString("command.admin-shortcut.name", "emfa");
+        return adminShortcutName;
     }
 
     public String getMainCommandName() {
-        if (mainCommandName == null) {
-            mainCommandName = getConfig().getString("command.main", "emf");
-        }
         return mainCommandName;
     }
 
     public List<String> getMainCommandAliases() {
-        if (mainCommandAliases == null) {
-            mainCommandAliases = getConfig().getStringList("command.aliases");
-        }
         return mainCommandAliases;
+    }
+
+    public String getAdminSubCommandName() {
+        return adminSubCommandName;
+    }
+
+    public String getNextSubCommandName() {
+        return nextSubCommandName;
+    }
+
+    public String getToggleSubCommandName() {
+        return toggleSubCommandName;
+    }
+
+    public String getGuiSubCommandName() {
+        return guiSubCommandName;
+    }
+
+    public String getHelpSubCommandName() {
+        return helpSubCommandName;
+    }
+
+    public String getTopSubCommandName() {
+        return topSubCommandName;
+    }
+
+    public String getShopSubCommandName() {
+        return shopSubCommandName;
+    }
+
+    public String getSellAllSubCommandName() {
+        return sellAllSubCommandName;
+    }
+
+    public String getApplyBaitsSubCommandName() {
+        return applyBaitsSubCommandName;
     }
 
     public boolean giveStraightToInventory() {
