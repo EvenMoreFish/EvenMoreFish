@@ -20,28 +20,28 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class MainCommand {
-    
+
     private final HelpMessageBuilder helpMessageBuilder = HelpMessageBuilder.create();
 
     private final CommandAPICommand command;
 
     public MainCommand() {
         this.command = new CommandAPICommand(MainConfig.getInstance().getMainCommandName())
-                .withAliases(MainConfig.getInstance().getMainCommandAliases().toArray(String[]::new))
-                .withSubcommands(
-                        getNext(),
-                        getToggle(),
-                        getGui(),
-                        getHelp(),
-                        getTop(),
-                        getShop(),
-                        getSellAll(),
-                        getApplyBaits(),
-                        new AdminCommand("admin").getCommand()
-                )
-                .executes(info -> {
-                    sendHelpMessage(info.sender());
-                });
+            .withAliases(MainConfig.getInstance().getMainCommandAliases().toArray(String[]::new))
+            .withSubcommands(
+                getNext(),
+                getToggle(),
+                getGui(),
+                getHelp(),
+                getTop(),
+                getShop(),
+                getSellAll(),
+                getApplyBaits(),
+                new AdminCommand("admin").getCommand()
+            )
+            .executes(info -> {
+                sendHelpMessage(info.sender());
+            });
     }
 
     public CommandAPICommand getCommand() {
@@ -49,142 +49,150 @@ public class MainCommand {
     }
 
     private CommandAPICommand getNext() {
+        String name = MainConfig.getInstance().getNextSubCommandName();
         helpMessageBuilder.addUsage(
-                "next", 
-                ConfigMessage.HELP_GENERAL_NEXT::getMessage
+            name,
+            ConfigMessage.HELP_GENERAL_NEXT::getMessage
         );
-        return new CommandAPICommand("next")
-                .withPermission(UserPerms.NEXT)
-                .executes(info -> {
-                    EMFMessage message = Competition.getNextCompetitionMessage();
-                    message.prependMessage(PrefixType.DEFAULT.getPrefix());
-                    message.send(info.sender());
-                });
+        return new CommandAPICommand(name)
+            .withPermission(UserPerms.NEXT)
+            .executes(info -> {
+                EMFMessage message = Competition.getNextCompetitionMessage();
+                message.prependMessage(PrefixType.DEFAULT.getPrefix());
+                message.send(info.sender());
+            });
     }
 
     private CommandAPICommand getToggle() {
+        String name = MainConfig.getInstance().getToggleSubCommandName();
         helpMessageBuilder.addUsage(
-                "toggle",
-                ConfigMessage.HELP_GENERAL_TOGGLE::getMessage
+            name,
+            ConfigMessage.HELP_GENERAL_TOGGLE::getMessage
         );
-        return new CommandAPICommand("toggle")
-                .withPermission(UserPerms.TOGGLE)
-                .executesPlayer(info -> {
-                    EvenMoreFish.getInstance().performFishToggle(info.sender());
-                });
+        return new CommandAPICommand(name)
+            .withPermission(UserPerms.TOGGLE)
+            .executesPlayer(info -> {
+                EvenMoreFish.getInstance().performFishToggle(info.sender());
+            });
     }
 
     private CommandAPICommand getGui() {
+        String name = MainConfig.getInstance().getGuiSubCommandName();
         helpMessageBuilder.addUsage(
-                "gui",
-                ConfigMessage.HELP_GENERAL_GUI::getMessage
+            name,
+            ConfigMessage.HELP_GENERAL_GUI::getMessage
         );
-        return new CommandAPICommand("gui")
-                .withPermission(UserPerms.GUI)
-                .executesPlayer(info -> {
-                    new MainMenuGui(info.sender()).open();
-                });
+        return new CommandAPICommand(name)
+            .withPermission(UserPerms.GUI)
+            .executesPlayer(info -> {
+                new MainMenuGui(info.sender()).open();
+            });
     }
 
     private CommandAPICommand getHelp() {
+        String name = MainConfig.getInstance().getHelpSubCommandName();
         helpMessageBuilder.addUsage(
-                "help",
-                ConfigMessage.HELP_GENERAL_HELP::getMessage
+            name,
+            ConfigMessage.HELP_GENERAL_HELP::getMessage
         );
-        return new CommandAPICommand("help")
-                .withPermission(UserPerms.HELP)
-                .executes(info -> {
-                    sendHelpMessage(info.sender());
-                });
+        return new CommandAPICommand(name)
+            .withPermission(UserPerms.HELP)
+            .executes(info -> {
+                sendHelpMessage(info.sender());
+            });
     }
 
     private CommandAPICommand getTop() {
+        String name = MainConfig.getInstance().getTopSubCommandName();
         helpMessageBuilder.addUsage(
-                "top",
-                ConfigMessage.HELP_GENERAL_TOP::getMessage
+            name,
+            ConfigMessage.HELP_GENERAL_TOP::getMessage
         );
-        return new CommandAPICommand("top")
-                .withPermission(UserPerms.TOP)
-                .executesPlayer(info -> {
-                    Competition active = Competition.getCurrentlyActive();
-                    if (active == null) {
-                        ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
-                        return;
-                    }
-                    active.sendPlayerLeaderboard(info.sender());
-                })
-                .executes(info -> {
-                    Competition active = Competition.getCurrentlyActive();
-                    if (active == null) {
-                        ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
-                        return;
-                    }
-                    active.sendConsoleLeaderboard(info.sender());
-                });
+        return new CommandAPICommand(name)
+            .withPermission(UserPerms.TOP)
+            .executesPlayer(info -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
+                    return;
+                }
+                active.sendPlayerLeaderboard(info.sender());
+            })
+            .executes(info -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
+                    return;
+                }
+                active.sendConsoleLeaderboard(info.sender());
+            });
     }
 
     private CommandAPICommand getShop() {
+        String name = MainConfig.getInstance().getShopSubCommandName();
         helpMessageBuilder.addUsage(
-                "shop",
-                ConfigMessage.HELP_GENERAL_SHOP::getMessage
+            name,
+            ConfigMessage.HELP_GENERAL_SHOP::getMessage
         );
-        return new CommandAPICommand("shop")
-                .withPermission(UserPerms.SHOP)
-                .withArguments(
-                        ArgumentHelper.getPlayerArgument("target").setOptional(true)
-                )
-                .executes((sender, args) -> {
-                    Player player = args.getUnchecked("target");
-                    if (player == null){
-                        if (!(sender instanceof Player p)) {
-                            ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
-                            return;
-                        }
-                        player = p;
-                    }
-                    if (!checkEconomy(player)) {
+        return new CommandAPICommand(name)
+            .withPermission(UserPerms.SHOP)
+            .withArguments(
+                ArgumentHelper.getPlayerArgument("target").setOptional(true)
+            )
+            .executes((sender, args) -> {
+                Player player = args.getUnchecked("target");
+                if (player == null) {
+                    if (!(sender instanceof Player p)) {
+                        ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
                         return;
                     }
-                    if (sender == player) {
-                        new SellGui(player, SellGui.SellState.NORMAL, null).open();
-                        return;
-                    }
-                    if (!sender.hasPermission(AdminPerms.ADMIN)) {
-                        ConfigMessage.NO_PERMISSION.getMessage().send(sender);
-                        return;
-                    }
+                    player = p;
+                }
+                if (!checkEconomy(player)) {
+                    return;
+                }
+                if (sender == player) {
                     new SellGui(player, SellGui.SellState.NORMAL, null).open();
-                    EMFMessage message = ConfigMessage.ADMIN_OPEN_FISH_SHOP.getMessage();
-                    message.setPlayer(player);
-                    message.send(sender);
-                });
+                    return;
+                }
+                if (!sender.hasPermission(AdminPerms.ADMIN)) {
+                    ConfigMessage.NO_PERMISSION.getMessage().send(sender);
+                    return;
+                }
+                new SellGui(player, SellGui.SellState.NORMAL, null).open();
+                EMFMessage message = ConfigMessage.ADMIN_OPEN_FISH_SHOP.getMessage();
+                message.setPlayer(player);
+                message.send(sender);
+            });
     }
 
     private CommandAPICommand getSellAll() {
+        String name = MainConfig.getInstance().getSellAllSubCommandName();
         helpMessageBuilder.addUsage(
-                "sellall",
-                ConfigMessage.HELP_GENERAL_SELLALL::getMessage
+            name,
+            ConfigMessage.HELP_GENERAL_SELLALL::getMessage
         );
-        return new CommandAPICommand("sellall")
-                .withPermission(UserPerms.SELL_ALL)
-                .executesPlayer(info -> {
-                    Player player = info.sender();
-                    if (checkEconomy(player)) {
-                        new SellHelper(player.getInventory(), player).sellFish();
-                    }
-                });
+        return new CommandAPICommand(name)
+            .withPermission(UserPerms.SELL_ALL)
+            .executesPlayer(info -> {
+                Player player = info.sender();
+                if (checkEconomy(player)) {
+                    new SellHelper(player.getInventory(), player).sellFish();
+                }
+            });
     }
 
     private CommandAPICommand getApplyBaits() {
+        String name = MainConfig.getInstance().getApplyBaitsSubCommandName();
         helpMessageBuilder.addUsage(
-                "applybaits",
-                ConfigMessage.HELP_GENERAL_APPLYBAITS::getMessage
+            name,
+            ConfigMessage.HELP_GENERAL_APPLYBAITS::getMessage
         );
-        return new CommandAPICommand("applybaits")
-                .withPermission(UserPerms.APPLYBAITS)
-                .executesPlayer(info -> {
-                    new ApplyBaitsGui(info.sender(), null).open();
-                });
+        return new CommandAPICommand(name)
+            .withPermission(UserPerms.APPLYBAITS)
+            .executesPlayer(info -> {
+                new ApplyBaitsGui(info.sender(), null).open();
+            });
     }
 
     private void sendHelpMessage(@NotNull CommandSender sender) {
