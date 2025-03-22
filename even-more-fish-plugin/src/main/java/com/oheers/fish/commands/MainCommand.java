@@ -37,7 +37,7 @@ public class MainCommand {
                 getShop(),
                 getSellAll(),
                 getApplyBaits(),
-                new AdminCommand("admin").getCommand()
+                new AdminCommand(MainConfig.getInstance().getAdminSubCommandName()).getCommand()
             )
             .executes(info -> {
                 sendHelpMessage(info.sender());
