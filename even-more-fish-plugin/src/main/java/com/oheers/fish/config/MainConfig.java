@@ -249,4 +249,8 @@ public class MainConfig extends ConfigBase {
         return biomeSetMap;
     }
 
+    public boolean shouldDisableStartupWarning() {
+        return getConfig().getBoolean("disable-startup-warning", false);
+    }
+
 }

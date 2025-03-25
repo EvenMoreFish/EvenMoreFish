@@ -233,6 +233,12 @@ public class EvenMoreFish extends JavaPlugin implements EMFPlugin {
         }
 
         logger.log(Level.INFO, "EvenMoreFish by Oheers : Enabled");
+
+        if (!MainConfig.getInstance().shouldDisableStartupWarning()) {
+            logger.warning("EvenMoreFish 1.7.x has been superseded by 2.0.0.");
+            logger.warning("2.0.0 requires you to use Paper 1.18.2 or newer.");
+            logger.warning("You can get it from the Modrinth page: https://modrinth.com/plugin/evenmorefish");
+        }
     }
 
     @Override
