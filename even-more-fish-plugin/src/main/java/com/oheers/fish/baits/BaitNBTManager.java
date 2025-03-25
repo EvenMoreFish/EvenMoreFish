@@ -266,8 +266,10 @@ public class BaitNBTManager {
     public static @Nullable Bait randomBaitCatch() {
 
         Map<String, Bait> baitMap = BaitManager.getInstance().getBaitMap();
-        List<Bait> baitList = new ArrayList<>(baitMap.values());
-
+        List<Bait> baitList = baitMap.values().stream()
+            .filter(Bait::getCanBeCaught)
+            .toList();
+        
         // Fix IndexOutOfBoundsException caused by the list being empty.
         if (baitList.isEmpty()) {
             return null;

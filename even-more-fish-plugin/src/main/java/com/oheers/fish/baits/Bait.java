@@ -303,4 +303,9 @@ public class Bait extends ConfigBase {
     public String getDisplayName() {
         return getConfig().getString("item.displayname", this.id);
     }
+
+    public boolean getCanBeCaught() {
+        return getConfig().getBoolean("can-be-caught", true);
+    }
+
 }

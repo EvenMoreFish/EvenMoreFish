@@ -14,6 +14,9 @@ bait-theme: "<yellow>"
 # When more than 1 types of baits are applied, how likely is it that this one should be used?
 application-weight: 150
 
+# Can this bait be caught by fishing?
+can-be-caught: true
+
 # How likely should it be to find this bait when they're caught.
 catch-weight: 100
 
