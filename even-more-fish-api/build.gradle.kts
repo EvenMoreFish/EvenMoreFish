@@ -20,11 +20,10 @@ java {
     }
 }
 
-/*
 publishing {
     repositories { // Copied directly from CodeMC's docs
         maven {
-            url = uri("https://repo.codemc.io/repository/Oheers/")
+            url = uri("https://repo.codemc.io/repository/EvenMoreFish/")
 
             val mavenUsername = System.getenv("JENKINS_USERNAME")
             val mavenPassword = System.getenv("JENKINS_PASSWORD")
@@ -47,4 +46,3 @@ publishing {
         }
     }
 }
- */
