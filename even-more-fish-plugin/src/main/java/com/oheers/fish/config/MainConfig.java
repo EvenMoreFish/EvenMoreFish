@@ -6,6 +6,7 @@ import com.oheers.fish.api.economy.EconomyType;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.boostedyaml.route.Route;
+import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import org.apache.commons.lang3.LocaleUtils;
 import org.bukkit.block.Biome;
 import org.bukkit.boss.BarStyle;
@@ -373,6 +374,20 @@ public class MainConfig extends ConfigBase {
         }
 
         save();
+    }
+
+    @Override
+    public UpdaterSettings getUpdaterSettings() {
+        return UpdaterSettings.builder(super.getUpdaterSettings())
+            // Config Version 25 - Add item protection configs
+            .addCustomLogic("25", document -> {
+                if (document.contains("block-crafting")) {
+                    boolean blockCrafting = document.getBoolean("block-crafting");
+                    document.set("item-protection.block-crafting", blockCrafting);
+                    document.remove("block-crafting");
+                }
+            })
+            .build();
     }
 
     public boolean hasCredentials() {
