@@ -35,7 +35,7 @@ import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.requirements.*;
-import com.oheers.fish.utils.AntiCraft;
+import com.oheers.fish.utils.ItemProtectionListener;
 import com.oheers.fish.utils.HeadDBIntegration;
 import com.oheers.fish.utils.ItemFactory;
 import com.oheers.fish.utils.nbt.NbtKeys;
@@ -325,7 +325,7 @@ public class EvenMoreFish extends EMFPlugin {
         }
 
         if (MainConfig.getInstance().blockCrafting()) {
-            pm.registerEvents(new AntiCraft(), this);
+            pm.registerEvents(new ItemProtectionListener(), this);
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {

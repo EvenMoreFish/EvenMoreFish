@@ -176,8 +176,25 @@ public class MainConfig extends ConfigBase {
     }
 
     public boolean blockCrafting() {
-        return getConfig().getBoolean("block-crafting", false);
+        return getConfig().getBoolean("item-protection.block-crafting", true);
     }
+
+    public boolean blockConsume() {
+        return getConfig().getBoolean("item-protection.block-consume", true);
+    }
+
+    public boolean blockFurnaceBurn() {
+        return getConfig().getBoolean("item-protection.block-furnace-burn", true);
+    }
+
+    public boolean blockCooking() {
+        return getConfig().getBoolean("item-protection.block-cooking", true);
+    }
+
+    public boolean blockPlacing() {
+        return getConfig().getBoolean("item-protection.block-placing", true);
+    }
+
     public boolean debugSession() {
         return getConfig().getBoolean("debug-session", false);
     }

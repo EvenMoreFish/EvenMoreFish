@@ -96,9 +96,24 @@ nbt-rod-item:
 # Vault and a permission manager such as LuckPerms.
 requires-fishing-permission: false
 
-# Should fish and baits be blocked from being crafted into other items. For example, when the player tries to craft
-# the starfish into a beacon.
-block-crafting: true
+# Various protections for EMF items.
+# These do not apply if raw-material is used.
+item-protection:
+  # Should EMF items be blocked from being crafted into other items?
+  # For example, when the player tries to craft the starfish into a beacon.
+  block-crafting: true
+  # Should EMF items be blocked from being consumed?
+  # For example, when the player tries to drink the epic elixir bait.
+  block-consume: true
+  # Should EMF items be blocked from being used in furnaces as fuel?
+  # For example, when the player places an NBT rod in a furnace's fuel slot.
+  block-furnace-burn: true
+  # Should EMF items be blocked from being cooked?
+  # For example, when the player tries to cook an atlantic cod.
+  block-cooking: true
+  # Should EMF items be blocked from being placed?
+  # For example, when the player tries to place a Spongebob.
+  block-placing: true
 
 # /emf shop configuration. If you wish to change the layout, please look at the guis.yml file.
 sell-gui:
