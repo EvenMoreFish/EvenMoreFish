@@ -309,6 +309,7 @@ public class EvenMoreFish extends EMFPlugin {
         pm.registerEvents(new UpdateNotify(), this);
         pm.registerEvents(new SkullSaver(), this);
         pm.registerEvents(new BaitListener(), this);
+        pm.registerEvents(new ItemProtectionListener(), this);
 
         optionalListeners();
     }
@@ -322,10 +323,6 @@ public class EvenMoreFish extends EMFPlugin {
 
         if (checkingIntEvent) {
             pm.registerEvents(FishInteractEvent.getInstance(), this);
-        }
-
-        if (MainConfig.getInstance().blockCrafting()) {
-            pm.registerEvents(new ItemProtectionListener(), this);
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
