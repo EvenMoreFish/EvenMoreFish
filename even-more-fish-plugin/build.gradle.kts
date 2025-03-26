@@ -117,7 +117,7 @@ bukkit {
     main = "com.oheers.fish.EvenMoreFish"
     version = project.version.toString()
     description = project.description.toString()
-    website = "https://github.com/Oheers/EvenMoreFish"
+    website = "https://github.com/EvenMoreFish/EvenMoreFish"
     foliaSupported = true
 
     depend = listOf()

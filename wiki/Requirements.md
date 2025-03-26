@@ -87,7 +87,7 @@ A config example of using the ingame-time requirement:
 ```
 
 #### IRL Time
-This restricts your users to only catching fish during certain times of the real-world day, this is inputted similar to times for [times in the competitions.yml wiki](https://github.com/Oheers/EvenMoreFish/wiki/competitions.yml#timing) where they are formatted by 00:00 in 24-hour format. Like ingame-time, you need to specify the minimum and maximum time.
+This restricts your users to only catching fish during certain times of the real-world day, this is inputted similar to times for [times in the competitions.yml wiki](https://github.com/EvenMoreFish/EvenMoreFish/wiki/competitions.yml#timing) where they are formatted by 00:00 in 24-hour format. Like ingame-time, you need to specify the minimum and maximum time.
 
 A config example of using the irl-time requirement:
 ```yaml

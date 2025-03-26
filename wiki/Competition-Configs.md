@@ -6,7 +6,7 @@ To create a new competition, you need to create a new yml file in the competitio
 
 The following configs are required in each competition config file:
 - `id` - Allows the plugin to identify this competition internally, mainly used in the Database
-- `type` - Controls the type of competition this is. You can see a list of valid types [here](https://github.com/Oheers/EvenMoreFish/wiki/Competition-Types)
+- `type` - Controls the type of competition this is. You can see a list of valid types [here](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Competition-Types)
 - `duration` - Controls how long this competition should last for. This is measured in minutes.
 
 All other configs are optional, however you will most likely want to schedule your competition for specific times in the day.
@@ -65,4 +65,4 @@ Doing either of these will prevent the competition from being registered into th
 An example config will always be available inside your competitions folder, and contains every possible config option.
 This file will reset every time the plugin loads, meaning it will always be up to date.
 
-You can view this example file [here](https://github.com/Oheers/EvenMoreFish/blob/master/even-more-fish-plugin/src/main/resources/competitions/_example.yml)
+You can view this example file [here](https://github.com/EvenMoreFish/EvenMoreFish/blob/master/even-more-fish-plugin/src/main/resources/competitions/_example.yml)

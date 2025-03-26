@@ -26,7 +26,7 @@ displayname: <yellow>Example Rarity
 # The permission required to fish this rarity.
 permission: emf.rarity.example
 
-# You can set custom requirements for this rarity to appear, all possible requirements are on the wiki: https://github.com/Oheers/EvenMoreFish/wiki/Requirements
+# You can set custom requirements for this rarity to appear, all possible requirements are on the wiki: https://github.com/EvenMoreFish/EvenMoreFish/wiki/Requirements
 requirements:
   biome:
     - OCEAN
@@ -129,7 +129,7 @@ fish:
     lore:
       - <gray>Hola!
 
-    # You can set custom requirements for this fish to appear, all possible requirements are on the wiki: https://github.com/Oheers/EvenMoreFish/wiki/Requirements
+    # You can set custom requirements for this fish to appear, all possible requirements are on the wiki: https://github.com/EvenMoreFish/EvenMoreFish/wiki/Requirements
     requirements:
       biome:
         - COLD_OCEAN

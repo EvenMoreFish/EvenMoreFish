@@ -2,7 +2,7 @@
 This is the file for modifying messages sent to the players from the plugin: if you're running the server locally or viewing the files on a panel through FTP/SFTP, you can use a text-editor such as [Notepad++](https://notepad-plus-plus.org/). At some point in the very distant future I plan to add in a way of modifying this file using a web-editor like LuckPerms uses, but right now (and probably for quite a while) it's just the basic text editor.
 
 ## The Wiki
-This file has every value explained already so unlike the [competitions.yml wiki](https://github.com/Oheers/EvenMoreFish/wiki/competitions.yml) and [fish.yml wiki](https://github.com/Oheers/EvenMoreFish/wiki/fish.yml), not every value will be explained but a copy of messages_en.yml can be found [here](https://github.com/EvenMoreFish/EvenMoreFish/blob/master/even-more-fish-plugin/src/main/resources/locales/messages_en.yml).
+This file has every value explained already so unlike the [competitions.yml wiki](https://github.com/EvenMoreFish/EvenMoreFish/wiki/competitions.yml) and [fish.yml wiki](https://github.com/EvenMoreFish/EvenMoreFish/wiki/fish.yml), not every value will be explained but a copy of messages_en.yml can be found [here](https://github.com/EvenMoreFish/EvenMoreFish/blob/master/even-more-fish-plugin/src/main/resources/locales/messages_en.yml).
 
 ***
 

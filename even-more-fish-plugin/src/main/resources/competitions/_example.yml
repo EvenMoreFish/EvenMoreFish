@@ -9,7 +9,7 @@ id: exampleCompetition
 disabled: false
 
 # Which type of competition should this be?
-# See valid types here: https://github.com/Oheers/EvenMoreFish/wiki/Competition-Types
+# See valid types here: https://github.com/EvenMoreFish/EvenMoreFish/wiki/Competition-Types
 type: LARGEST_FISH
 
 # Added in EvenMoreFish 2.0.0. If this is enabled, players can kill fish entities to compete in this competition.
@@ -105,7 +105,7 @@ alerts:
   - 5:00
 
 # Configure the rewards for winning this competition.
-# All Reward Types are listed here: https://github.com/Oheers/EvenMoreFish/wiki/Reward-Types
+# All Reward Types are listed here: https://github.com/EvenMoreFish/EvenMoreFish/wiki/Reward-Types
 rewards:
   # These are given to the first place winner.
   '1':

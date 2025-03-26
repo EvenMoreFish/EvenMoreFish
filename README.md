@@ -12,7 +12,7 @@ Supported Versions: 1.18.2, 1.19.4, 1.20.6, 1.21.1, 1.21.4 (Experimental, Dev Bu
 
 If you encounter any issues with the plugin, please do the following before reporting the problem:
 - Create a Paper test server using one of the supported versions.
-- Add the latest [dev build](https://ci.codemc.io/job/Oheers/job/EvenMoreFish/) to the server.
+- Add the latest [dev build](https://ci.codemc.io/job/EvenMoreFish/job/EvenMoreFish/) to the server.
 - Test your issue.
 - If your issue is still happening, open a GitHub issue or send a message in the Discord server.
 
@@ -22,7 +22,7 @@ If you encounter any issues with the plugin, please do the following before repo
 
 There are two sources for the plugin:
 - [Modrinth](https://modrinth.com/plugin/evenmorefish)
-- [Jenkins](https://ci.codemc.io/job/Oheers/job/EvenMoreFish/) (Bleeding edge, potentially unstable)
+- [Jenkins](https://ci.codemc.io/job/EvenMoreFish/job/EvenMoreFish/) (Experimental)
 
 ---
 

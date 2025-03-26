@@ -1,1 +1,1 @@
-![plugin banner](https://github.com/Oheers/EvenMoreFish/assets/4803946/312e1b72-894a-4f4b-9659-67006f6a52b4)
+![plugin banner](https://github.com/EvenMoreFish/EvenMoreFish/assets/4803946/312e1b72-894a-4f4b-9659-67006f6a52b4)
