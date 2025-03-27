@@ -143,26 +143,21 @@ public class Fish {
      * @return An ItemStack version of the fish.
      */
     public ItemStack give(int randomIndex) {
-
         ItemStack fish = factory.createItem(getFishermanPlayer(), randomIndex);
-        if (factory.isRawMaterial()) return fish;
-        ItemMeta fishMeta = fish.getItemMeta();
-
-        if (fishMeta != null) {
-            NBT.modify(fish, nbt -> {
-                nbt.modifyMeta((readOnlyNbt, meta) -> {
-                    meta.displayName(getDisplayName().getComponentMessage());
-                    if (!section.getBoolean("disable-lore", false)) {
-                        meta.lore(getFishLore());
-                    }
-                    meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                });
-            });
-
-            WorthNBT.setNBT(fish, this);
+        if (factory.isRawMaterial()) {
+            return fish;
         }
+
+        fish.editMeta(meta -> {
+            meta.displayName(getDisplayName().getComponentMessage());
+            if (!section.getBoolean("disable-lore", false)) {
+                meta.lore(getFishLore());
+            }
+            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        });
+        WorthNBT.setNBT(fish, this);
 
         return fish;
     }

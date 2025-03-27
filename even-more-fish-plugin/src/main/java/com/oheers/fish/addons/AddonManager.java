@@ -44,7 +44,6 @@ public class AddonManager {
 
     @Nullable
     public ItemStack getItemStack(final String prefix, final String id) throws NoPrefixException {
-        // somehow, oraxen isn't registered as loaded
         if (!addonMap.containsKey(prefix)) {
             if (!loadingMap.getOrDefault(prefix, true)) {
                 throw new NoPrefixException(prefix);
@@ -54,7 +53,7 @@ public class AddonManager {
 
         final Addon addon = addonMap.get(prefix);
         if (!(addon instanceof ItemAddon itemAddon)) {
-            return new ItemStack(Material.AIR);
+            return null;
         }
         return itemAddon.getItemStack(id);
     }

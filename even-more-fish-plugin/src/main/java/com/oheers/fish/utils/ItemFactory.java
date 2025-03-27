@@ -459,7 +459,6 @@ public class ItemFactory {
         itemRandom = true;
 
         return EvenMoreFish.getInstance().getHDBapi().getItemHead(Integer.toString(headID));
-
     }
 
     /**
