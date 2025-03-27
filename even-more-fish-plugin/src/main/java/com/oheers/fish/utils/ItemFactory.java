@@ -345,7 +345,7 @@ public class ItemFactory {
             return new ItemStack(material);
         }
 
-        ItemStack customItemStack = checkItem(mValue);
+        ItemStack customItemStack = checkItem(mValue, false);
         if (customItemStack != null) {
             return customItemStack;
         }
@@ -354,17 +354,17 @@ public class ItemFactory {
         return new ItemStack(Material.COD);
     }
 
-    private ItemStack checkItem(final String materialId) {
+    private ItemStack checkItem(final String materialId, boolean rawMaterial) {
         if (materialId == null) {
             return null;
         }
 
-        rawMaterial = false;
-
         try {
-            return getItem(materialId);
+            ItemStack item = getItem(materialId);
+            this.rawMaterial = rawMaterial;
+            return item;
         } catch (IncorrectAssignedMaterialException e) {
-            rawMaterial = true;
+            this.rawMaterial = true;
             EvenMoreFish.getInstance().getLogger().warning(e::getMessage);
             return new ItemStack(Material.COD);
         }
@@ -523,7 +523,7 @@ public class ItemFactory {
             rawMaterial = true;
         }
 
-        return checkItem(materialID);
+        return checkItem(materialID, true);
     }
 
     public ItemStack getItem(final @NotNull String materialString) throws IncorrectAssignedMaterialException {
