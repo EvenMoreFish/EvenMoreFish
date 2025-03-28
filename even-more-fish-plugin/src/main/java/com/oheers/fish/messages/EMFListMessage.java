@@ -77,14 +77,13 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public @NotNull Component getComponentMessage() {
-        formatPlaceholderAPI();
-        return Component.join(JoinConfiguration.newlines(), this.message);
+        return Component.join(JoinConfiguration.newlines(), getComponentListMessage());
     }
 
     @Override
     public @NotNull List<Component> getComponentListMessage() {
         formatPlaceholderAPI();
-        return List.copyOf(this.message);
+        return this.message.stream().map(EMFMessage::removeDefaultItalics).toList();
     }
 
     @Override
