@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.config.GUIFillerConfig;
 import com.oheers.fish.messages.EMFSingleMessage;
+import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.ItemFactory;
 import com.oheers.fish.utils.ItemUtils;
 import de.themoep.inventorygui.GuiElement;
@@ -29,7 +30,7 @@ public class ConfigGui {
     protected final Map<String, BiConsumer<ConfigGui, GuiElement.Click>> actions = GUIUtils.getActionMap();
     protected final Section config;
     protected final Player player;
-    private final @NotNull Map<String, EMFSingleMessage> replacements = new HashMap<>();
+    private final @NotNull Map<String, EMFMessage> replacements = new HashMap<>();
 
     protected InventoryGui gui;
     private InventoryGui.CloseAction closeAction = null;

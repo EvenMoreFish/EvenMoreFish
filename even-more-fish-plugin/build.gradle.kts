@@ -1,5 +1,4 @@
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
-import net.minecrell.pluginyml.paper.PaperPluginDescription
 import nu.studer.gradle.jooq.JooqExtension
 import org.jooq.meta.jaxb.Property
 import java.time.Instant

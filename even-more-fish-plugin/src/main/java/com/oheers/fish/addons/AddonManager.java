@@ -11,7 +11,6 @@ import com.oheers.fish.api.addons.exceptions.JavaVersionException;
 import com.oheers.fish.api.addons.exceptions.NoPrefixException;
 import com.oheers.fish.api.addons.exceptions.RequiredPluginException;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

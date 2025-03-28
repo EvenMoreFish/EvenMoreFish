@@ -4,7 +4,9 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.addons.exceptions.IncorrectAssignedMaterialException;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
+import com.oheers.fish.messages.abstracted.EMFMessage;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NbtApiException;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -91,7 +93,7 @@ public class ItemFactory {
      * @return The completed ItemStack
      * @throws NullPointerException The type has not been enabled, therefore the ItemStack was never set in the first place.
      */
-    public ItemStack createItem(OfflinePlayer player, int randomIndex, @Nullable Map<String, EMFSingleMessage> replacements) {
+    public ItemStack createItem(OfflinePlayer player, int randomIndex, @Nullable Map<String, EMFMessage> replacements) {
         if (rawMaterial) {
             return this.product;
         }
@@ -322,7 +324,7 @@ public class ItemFactory {
      * If it is null or blank, logs a debug message and returns null.
      * 2. Attempts to resolve the material value as a standard {@link Material} enum value.
      *    - If successful, returns a new {@link ItemStack} of the resolved material.
-     * 3. If the material value is not a standard material, attempts to resolve it as a custom item using the {@link #checkItem(String)} method.
+     * 3. If the material value is not a standard material, attempts to resolve it as a custom item using the {@link #checkItem(String, boolean)} method.
      *    - If a custom item is found, returns the corresponding {@link ItemStack}.
      * 4. If the material value cannot be resolved as either a standard material or a custom item, logs an error and returns a default {@link ItemStack} of {@link Material#COD}.
      *
@@ -596,7 +598,7 @@ public class ItemFactory {
         }
     }
 
-    private void applyLore(@Nullable Map<String, EMFSingleMessage> replacements) {
+    private void applyLore(@Nullable Map<String, EMFMessage> replacements) {
         List<String> loreConfig = this.configurationFile.getStringList(configLocation + "lore");
         if (loreConfig.isEmpty()) {
             return;
@@ -604,7 +606,7 @@ public class ItemFactory {
 
         product.editMeta(
                 meta -> {
-                    EMFSingleMessage lore = EMFSingleMessage.fromStringList(loreConfig);
+                    EMFListMessage lore = EMFListMessage.fromStringList(loreConfig);
                     lore.setVariables(replacements);
                     meta.lore(lore.getComponentListMessage());
                 }
@@ -615,7 +617,7 @@ public class ItemFactory {
      * Applies a custom display name to the item, this is if server owners don't like the default colour or whatever their
      * reason is.
      */
-    private void applyDisplayName(@Nullable Map<String, EMFSingleMessage> replacements) {
+    private void applyDisplayName(@Nullable Map<String, EMFMessage> replacements) {
         final String displayName = this.configurationFile.getString(configLocation + "item.displayname", this.displayName);
 
         product.editMeta(
