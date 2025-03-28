@@ -5,6 +5,7 @@ import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.messages.ConfigMessage;
+import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.selling.WorthNBT;
@@ -313,7 +314,7 @@ public class Fish {
         List<String> loreOverride = section.getStringList("lore-override");
         EMFMessage newLoreLine;
         if (!loreOverride.isEmpty()) {
-            newLoreLine = EMFSingleMessage.fromStringList(loreOverride);
+            newLoreLine = EMFListMessage.fromStringList(loreOverride);
         } else {
             newLoreLine = ConfigMessage.FISH_LORE.getMessage();
         }

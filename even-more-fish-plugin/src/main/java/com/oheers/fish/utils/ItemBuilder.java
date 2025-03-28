@@ -1,5 +1,6 @@
 package com.oheers.fish.utils;
 
+import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -69,7 +70,7 @@ public class ItemBuilder {
                 meta.displayName(EMFSingleMessage.fromString(this.display).getComponentMessage());
             }
             if (!this.lore.isEmpty()) {
-                meta.lore(EMFSingleMessage.fromStringList(this.lore).getComponentListMessage());
+                meta.lore(EMFListMessage.fromStringList(this.lore).getComponentListMessage());
             }
         });
         if (this.glowing) {
