@@ -110,7 +110,7 @@ no-player-in-place: Hãy câu cá và chiếm lấy vị trí này đi!
 #Shown when the emf competition placeholders are used when there's no competition running
 no-competition-running: Không có cuộc thi câu cá nào đang diễn ra.
 #How should the %emf_competition_place_fish_*% be formatted?
-emf-competition-fish-format: '{length}cm <bold>{rarity} {fish}'
+emf-competition-fish-format: '{length}cm <bold>{rarity}</bold> {fish}'
 #How should the %emf_competition_place_fish_*% be formatted when there's no length on the fish?
 emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity}{fish}'
 #How should %emf_competition_place_fish_*% be formatted during MOST/SPECIFIC_FISH competitions?

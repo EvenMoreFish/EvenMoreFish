@@ -1,9 +1,9 @@
 # Если сообщение содержит заполнители EvenMoreFish, например {player} или {rarity}, оно также поддерживает заполнители placeholderapi.
 
 # Отправляется игрокам, когда они ловят рыбу EvenMoreFish
-fish-caught: <bold>{player} <reset>выловил рыбу {rarity_colour}{length}cm <bold>{rarity} {rarity_colour}{fish}!
+fish-caught: <bold>{player} <reset>выловил рыбу {rarity_colour}{length}cm <bold>{rarity}</bold> {rarity_colour}{fish}!
 # Установив минимальную длину рыбы меньше 0, вы можете создать рыбу меньшей длины. Это используется, когда игрок ловит рыбу без длины.
-lengthless-fish-caught: <bold>{player} <reset>выловил рыбу {rarity_colour}<bold>{rarity} {rarity_colour}{fish}!
+lengthless-fish-caught: <bold>{player} <reset>выловил рыбу {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}!
 # Отправляется игроку, когда у него нет разрешения на выполнение команды.
 no-permission: <red>У вас нет разрешения на выполнение этой команды.
 
@@ -28,7 +28,7 @@ competition-types:
   # LARGEST_FISH
   largest: самая крупная рыба
   # SPECIFIC_FISH
-  specific: '{amount} {rarity_colour}<bold>{rarity} {rarity_colour}{fish}<reset>'
+  specific: '{amount} {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>'
 
 # Segments shown in the bossbar when competitions run
 bossbar:
@@ -62,7 +62,7 @@ fish-lore:
 help: /{command} - {description}
 
 # Формат таблицы лидеров после окончания соревнования (это сообщение не поддерживает заполнители papi)
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
 leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>fish)
 # Если вы проводите соревнование, в котором нет таблицы лидеров, это сообщение отправляется при определении победителя
 single-winner: <reset>{player} выиграл в соревнование в категории {type}. Поздравляю!
@@ -122,7 +122,7 @@ emf-competition-size-null: true
 # Должен ли %emf_competition_place_fish_*% содержать указанное выше значение (false) или возвращать значение null (true).
 emf-competition-fish-null: true
 # Как следует форматировать %emf_competition_place_fish_*%?
-emf-competition-fish-format: '{length}cm <bold>{rarity} {fish}'
+emf-competition-fish-format: '{length}cm <bold>{rarity}</bold> {fish}'
 
 # Отправляется, когда игрок пытается применить слишком много типов приманок к удочке, установленных в общем разделе baits.yml
 max-baits-reached: Вы достигли максимального количества типов приманок для этой удочки.

@@ -7,9 +7,9 @@
 # Aqui estão os documentos do MiniMessage: https://docs.advntr.dev/minimessage/format.html
 
 # Enviado aos jogadores quando eles pescam um peixe do EvenMoreFish
-fish-caught: <bold>{player} <reset>pescou um {rarity_colour}{length}cm <bold>{rarity} {rarity_colour}{fish}!
+fish-caught: <bold>{player} <reset>pescou um {rarity_colour}{length}cm <bold>{rarity}</bold> {rarity_colour}{fish}!
 # Definindo o comprimento-mínimo de um peixe para menos de 0, você pode criar um peixe sem comprimento. Isso é usado quando um jogador pesca um peixe sem comprimento.
-lengthless-fish-caught: <bold>{player} <reset>pescou um {rarity_colour}<bold>{rarity} {rarity_colour}{fish}!
+lengthless-fish-caught: <bold>{player} <reset>pescou um {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}!
 # Enviado a um jogador quando ele não tem permissão para executar um comando.
 no-permission: <red>Você não tem permissão para executar esse comando.
 
@@ -36,7 +36,7 @@ competition-types:
   # LARGEST_TOTAL_FISH
   largest-total: o maior comprimento total de peixe
   # SPECIFIC_FISH
-  specific: '{amount} {rarity_colour}<bold>{rarity} {rarity_colour}{fish}<reset>'
+  specific: '{amount} {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>'
   # SPECIFIC_RARITY
   specific-rarity: '{amount} peixes {rarity_colour}<bold>{rarity}<reset>'
 # Segmentos mostrados na barra de chefe quando as competições estão em andamento
@@ -74,7 +74,7 @@ length-lore:
   - <white>Mede {length}cm.
 
 # O formato do placar após uma competição terminar (essa mensagem não suporta placeholders do papi)
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
 leaderboard-largest-total: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)
 leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>peixes)
 # Se você estiver executando uma competição em que não há placar, essa mensagem é enviada quando há um vencedor
@@ -158,9 +158,9 @@ no-competition-running-fish: Nenhuma competição em andamento no momento.
 no-competition-running-size: Nenhuma competição em andamento no momento.
 
 # Como o %emf_competition_place_fish_*% deve ser formatado?
-emf-competition-fish-format: '{rarity_colour}{length}cm <bold>{rarity} {fish}'
+emf-competition-fish-format: '{rarity_colour}{length}cm <bold>{rarity}</bold> {fish}'
 # Como o %emf_competition_place_fish_*% deve ser formatado quando o peixe não tem comprimento?
-emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity} {fish}'
+emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity}</bold> {fish}'
 # Como %emf_competition_place_fish_*% deve ser formatado durante competições de MAIOR_QUANTIDADE/PEIXE_ESPECÍFICO?
 emf-most-fish-format: '{amount} peixes'
 # O que deve ser exibido para %emf_competition_place_size_*% durante a competição de MAIOR_QUANTIDADE?

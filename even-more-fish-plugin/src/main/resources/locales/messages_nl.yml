@@ -28,7 +28,7 @@ competition-types:
   # LARGEST_TOTAL_FISH
   largest-total: de grootste totale vislengte
   # SPECIFIC_FISH
-  specific: '{amount} {rarity_colour}<bold>{rarity} {rarity_colour}{fish}<reset>'
+  specific: '{amount} {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>'
   # SPECIFIC_RARITY
   specific-rarity: '{amount} {rarity_colour}<bold>{rarity}<reset> vissen'
 # Segments shown in the bossbar when competitions run
@@ -69,7 +69,7 @@ length-lore:
 help: /{command} - {description}
 
 # Het formaat van het leaderboard na afloop van een wedstrijd (deze boodschap ondersteunt geen PAPI placeholders)
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
 leaderboard-largest-total: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)
 leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>vissen)
 # Als je een wedstrijd organiseert zonder leaderboard, wordt deze boodschap verzonden wanneer er een winnaar is
@@ -127,9 +127,9 @@ no-player-in-place: Begin met vissen om deze plek in te nemen.
 no-competition-running: Er loopt momenteel geen competitie.
 
 # Hoe moet %emf_competition_place_fish_*% worden opgemaakt?
-emf-competition-fish-format: '{rarity_colour}{length} cm <bold>{rarity} {fish}'
+emf-competition-fish-format: '{rarity_colour}{length} cm <bold>{rarity}</bold> {fish}'
 # Hoe moet %emf_competition_place_fish_*% worden opgemaakt wanneer er geen lengte bij de vis staat?
-emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity} {fish}'
+emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity}</bold> {fish}'
 # Hoe moet %emf_competition_place_fish_*% worden opgemaakt tijdens MOST/SPECIFIC_FISH-competities?
 emf-most-fish-format: '{amount} vissen'
 # Wat moet worden weergegeven voor %emf_competition_place_size_*% tijdens de MOST_FISH-competitie?

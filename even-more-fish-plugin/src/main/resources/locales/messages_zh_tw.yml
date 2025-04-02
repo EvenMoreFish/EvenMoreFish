@@ -3,9 +3,9 @@
 # 如果一條信息包含EvenMoreFish的佔位符，例如{player}或{rarity}，它也支持api佔位符。
 
 # 當玩家釣到EvenMoreFish的魚時發給他們。
-fish-caught: <green>{player} </green><white>捕捉到了 {rarity_colour}{length}cm <bold>{rarity} {rarity_colour}{fish}!
+fish-caught: <green>{player} </green><white>捕捉到了 {rarity_colour}{length}cm <bold>{rarity}</bold> {rarity_colour}{fish}!
 # 通過將魚的最小長度設置為小於0，你可以創建一條無長度的魚。當玩家釣到一條無長度的魚時，就會用到這一點。
-lengthless-fish-caught: <green>{player} </green><white>捕捉到了 {rarity_colour}<bold>{rarity} {rarity_colour}{fish}!
+lengthless-fish-caught: <green>{player} </green><white>捕捉到了 {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}!
 # 當玩家沒有執行命令的權限時發給他們。
 no-permission: <red>你沒有權限使用此指令.
 
@@ -32,7 +32,7 @@ competition-types:
   # LARGEST_TOTAL_FISH
   largest-total: 魚的總長度
   # SPECIFIC_FISH
-  specific: '{amount} {rarity_colour}<bold>{rarity} {rarity_colour}{fish}<reset>'
+  specific: '{amount} {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>'
   # SPECIFIC_RARITY
   specific-rarity: '{amount} {rarity_colour}<bold>{rarity}<reset> 鱼'
 # bossbar上面顯示的文字
@@ -66,7 +66,7 @@ fish-lore:
 help: /{command} - {description}
 
 # 比賽結束後排行榜的格式（此信息不支持papi佔位符）。
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
 leaderboard-largest-total: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)
 leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>fish)
 # 如果你正在運行一個沒有排行榜的比賽，當有獲勝者時，會發送這個消息
@@ -122,9 +122,9 @@ no-player-in-place: <gray>------
 no-competition-running: <gray>------
 
 # %emf_competition_place_fish_*%的格式應該是怎樣的？
-emf-competition-fish-format: '{rarity_colour} <bold>{rarity} {fish}<reset> | {rarity_colour}{length}cm'
+emf-competition-fish-format: '{rarity_colour} <bold>{rarity}</bold> {fish}<reset> | {rarity_colour}{length}cm'
 # 當魚上沒有長度時，%emf_competition_place_fish_*%的格式應該是怎樣的
-emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity} {fish}'
+emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity}</bold> {fish}'
 # 在MOST/SPECIFIC_FISH比賽期間，%emf_competition_place_fish_*%的格式應該是怎樣的？
 emf-most-fish-format: '{amount} 條魚'
 # 在MOST_FISH比賽期間，%emf_competition_place_fish_*%的格式應該是怎樣的？

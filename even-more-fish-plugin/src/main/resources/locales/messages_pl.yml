@@ -2,9 +2,9 @@
 # If a message contains EvenMoreFish placeholders, e.g. {player} or {rarity} it also supports placeholderapi placeholders.
 
 # Sent to players when they fish an EvenMoreFish fish
-fish-caught: <bold>{player} <reset>złowił {rarity_colour}{length}cm <bold>{rarity} {rarity_colour}{fish}!
+fish-caught: <bold>{player} <reset>złowił {rarity_colour}{length}cm <bold>{rarity}</bold> {rarity_colour}{fish}!
 # By setting a fish's minimum-length to less than 0, you can create a lengthless fish. This is used when a player fishes a lengthless fish.
-lengthless-fish-caught: <bold>{player} <reset>złowił {rarity_colour}<bold>{rarity} {rarity_colour}{fish}!
+lengthless-fish-caught: <bold>{player} <reset>złowił {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}!
 # Sent to a player when they don't have permission to execute a command.
 no-permission: <red>Nie masz uprawnień do uruchomienia tego polecenia..
 
@@ -31,7 +31,7 @@ competition-types:
   # LARGEST_TOTAL_FISH
   largest-total: największa całkowita długość ryby
   # SPECIFIC_FISH
-  specific: '{amount} {rarity_colour}<bold>{rarity} {rarity_colour}{fish}<reset>'
+  specific: '{amount} {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>'
   # SPECIFIC_RARITY
   specific-rarity: '{amount} {rarity_colour}<bold>{rarity}<reset> ryba'
 # Segments shown in the bossbar when competitions run
@@ -72,7 +72,7 @@ length-lore:
 help: /{command} - {description}
 
 # The format of the leaderboard after a competition is over (this message doesn't support papi placeholders)
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
 leaderboard-largest-total: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)
 leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>fish)
 # If you're running a competition where there's no leaderboard, this message is sent when there's a winner
@@ -129,9 +129,9 @@ no-player-in-place: Zacznij łowić, by zająć to miejsce
 no-competition-running: W tej chwili nie ma startujących zawodów.
 
 # How should the %emf_competition_place_fish_*% be formatted?
-emf-competition-fish-format: '{rarity_colour}{length}cm <bold>{rarity} {fish}'
+emf-competition-fish-format: '{rarity_colour}{length}cm <bold>{rarity}</bold> {fish}'
 # How should the %emf_competition_place_fish_*% be formatted when there's no length on the fish?
-emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity} {fish}'
+emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity}</bold> {fish}'
 # How should %emf_competition_place_fish_*% be formatted during MOST/SPECIFIC_FISH competitions?
 emf-most-fish-format: '{amount} ryba'
 # What should be displayed for %emf_competition_place_size_*% during the MOST_FISH competition?
