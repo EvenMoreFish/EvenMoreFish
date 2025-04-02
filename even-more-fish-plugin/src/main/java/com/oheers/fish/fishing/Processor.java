@@ -135,11 +135,9 @@ public abstract class Processor<E extends Event> implements Listener {
 
         if (!fish.isSilent()) {
             String length = decimalFormat.format(fish.getLength());
-            EMFMessage rarity = EMFSingleMessage.fromString(fish.getRarity().getId());
 
             EMFMessage message = ConfigMessage.FISH_CAUGHT.getMessage();
             message.setPlayer(player);
-            message.setVariable("{rarity}", rarity);
             message.setLength(length);
 
             EvenMoreFish.getInstance().incrementMetricFishCaught(1);
