@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.logging.Level;
 
 public class SpecificRarityStrategy implements CompetitionStrategy {
+
     @Override
     public boolean begin(Competition competition) {
         return chooseRarity(competition);
@@ -96,4 +97,39 @@ public class SpecificRarityStrategy implements CompetitionStrategy {
             return false;
         }
     }
+
+    /**
+     * Gets the single console leaderboard message.
+     *
+     * @param entry The competition entry to get the leaderboard information from.
+     * @return The single console leaderboard message.
+     */
+    @Override
+    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry) {
+        Fish fish = entry.getFish();
+
+        EMFMessage message = ConfigMessage.LEADERBOARD_LARGEST_FISH.getMessage();
+        message.setLength(getDecimalFormat().format(entry.getValue()));
+        message.setRarity(fish.getRarity().getDisplayName());
+        message.setFishCaught(fish.getDisplayName());
+        return message;
+    }
+
+    /**
+     * Gets the single player leaderboard message.
+     *
+     * @param entry The competition entry to get the leaderboard information from.
+     * @return The single player leaderboard message.
+     */
+    @Override
+    public EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry) {
+        Fish fish = entry.getFish();
+
+        EMFMessage message = ConfigMessage.LEADERBOARD_LARGEST_FISH.getMessage();
+        message.setLength(getDecimalFormat().format(entry.getValue()));
+        message.setRarity(fish.getRarity().getDisplayName());
+        message.setFishCaught(fish.getDisplayName());
+        return message;
+    }
+
 }

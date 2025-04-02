@@ -134,11 +134,6 @@ public class EMFSingleMessage extends EMFMessage {
     }
 
     @Override
-    public void setMessage(@NotNull EMFMessage message) {
-        this.message = message.getComponentMessage();
-    }
-
-    @Override
     public void appendString(@NotNull String string) {
         this.message = this.message.append(formatString(string));
     }

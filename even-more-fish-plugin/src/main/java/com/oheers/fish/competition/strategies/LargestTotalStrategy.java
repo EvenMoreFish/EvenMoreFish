@@ -28,15 +28,15 @@ public class LargestTotalStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull EMFMessage message, @NotNull CompetitionEntry entry) {
-        message.setMessage(ConfigMessage.LEADERBOARD_LARGEST_TOTAL.getMessage());
+    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry) {
+        EMFMessage message = ConfigMessage.LEADERBOARD_LARGEST_TOTAL.getMessage();
         message.setAmount(getDecimalFormat().format(entry.getValue()));
         return message;
     }
 
     @Override
-    public EMFMessage getSinglePlayerLeaderboard(@NotNull EMFMessage message, @NotNull CompetitionEntry entry) {
-        message.setMessage(ConfigMessage.LEADERBOARD_LARGEST_TOTAL.getMessage());
+    public EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry) {
+        EMFMessage message = ConfigMessage.LEADERBOARD_LARGEST_TOTAL.getMessage();
         message.setAmount(getDecimalFormat().format(entry.getValue()));
         return message;
     }

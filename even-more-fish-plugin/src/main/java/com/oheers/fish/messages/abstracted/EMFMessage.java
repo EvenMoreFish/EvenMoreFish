@@ -27,7 +27,6 @@ public abstract class EMFMessage {
     public static final PlainTextComponentSerializer PLAINTEXT_SERIALIZER = PlainTextComponentSerializer.plainText();
     public static final Component EMPTY = Component.empty().colorIfAbsent(NamedTextColor.WHITE);
 
-
     protected boolean perPlayer = true;
     protected boolean canSilent = false;
     protected OfflinePlayer relevantPlayer = null;
@@ -106,8 +105,6 @@ public abstract class EMFMessage {
     public abstract boolean isEmpty();
 
     public abstract boolean containsString(@NotNull String string);
-
-    public abstract void setMessage(@NotNull EMFMessage message);
 
     // Broadcast
 

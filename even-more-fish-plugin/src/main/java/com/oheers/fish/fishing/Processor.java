@@ -136,7 +136,10 @@ public abstract class Processor<E extends Event> implements Listener {
         if (!fish.isSilent()) {
             String length = decimalFormat.format(fish.getLength());
 
-            EMFMessage message = ConfigMessage.FISH_CAUGHT.getMessage();
+            EMFMessage message = fish.getLength() == -1 ?
+                ConfigMessage.FISH_LENGTHLESS_CAUGHT.getMessage() :
+                ConfigMessage.FISH_CAUGHT.getMessage();
+
             message.setPlayer(player);
             message.setLength(length);
 
@@ -145,11 +148,6 @@ public abstract class Processor<E extends Event> implements Listener {
             fish.getDisplayName();
             message.setFishCaught(fish.getDisplayName());
             message.setRarity(fish.getRarity().getDisplayName());
-
-
-            if (fish.getLength() == -1) {
-                message.setMessage(ConfigMessage.FISH_LENGTHLESS_CAUGHT.getMessage());
-            }
 
             if (fish.getRarity().getAnnounce() && Competition.isActive()) {
                 FishUtils.broadcastFishMessage(message, player, false);

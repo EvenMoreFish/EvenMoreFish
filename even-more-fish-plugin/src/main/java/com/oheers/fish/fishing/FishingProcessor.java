@@ -35,7 +35,7 @@ public class FishingProcessor extends Processor<PlayerFishEvent> {
         }
 
         if (MainConfig.getInstance().requireFishingPermission()) {
-            //check if player have permssion to fish emf fishes
+            //check if player have permission to fish emf fishes
             if (!event.getPlayer().hasPermission(UserPerms.USE_ROD)) {
                 if (event.getState() == PlayerFishEvent.State.FISHING) {//send msg only when throw the lure
                     ConfigMessage.NO_PERMISSION_FISHING.getMessage().send(event.getPlayer());

@@ -319,15 +319,12 @@ public class Competition {
             if (pos > competitionColours.size() || pos > maxCount) {
                 break;
             }
-            EMFMessage message = ConfigMessage.LEADERBOARD_LARGEST_FISH.getMessage();
-            message.setPlayer(Bukkit.getOfflinePlayer(entry.getPlayer()));
-            message.setPosition(Integer.toString(pos));
-            message.setPositionColour(competitionColours.get(pos - 1));
 
+            EMFMessage message;
             if (isConsole) {
-                message = competitionType.getStrategy().getSingleConsoleLeaderboardMessage(message, entry);
+                message = competitionType.getStrategy().getSingleConsoleLeaderboardMessage(entry);
             } else {
-                message = competitionType.getStrategy().getSinglePlayerLeaderboard(message, entry);
+                message = competitionType.getStrategy().getSinglePlayerLeaderboard(entry);
             }
 
             builder.appendMessage(message);

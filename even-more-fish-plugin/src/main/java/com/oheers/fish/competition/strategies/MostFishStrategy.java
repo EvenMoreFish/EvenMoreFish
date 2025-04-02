@@ -6,10 +6,12 @@ import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.competition.CompetitionStrategy;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.messages.ConfigMessage;
+import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class MostFishStrategy implements CompetitionStrategy {
-
 
     @Override
     public void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition) {
@@ -22,5 +24,39 @@ public class MostFishStrategy implements CompetitionStrategy {
         } else {
             leaderboard.addEntry(new CompetitionEntry(fisher.getUniqueId(), fish, competition.getCompetitionType()));
         }
+    }
+
+    /**
+     * Gets the single console leaderboard message.
+     *
+     * @param entry The competition entry to get the leaderboard information from.
+     * @return The single console leaderboard message.
+     */
+    @Override
+    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry) {
+        Fish fish = entry.getFish();
+
+        EMFMessage message = ConfigMessage.LEADERBOARD_MOST_FISH.getMessage();
+        message.setLength(getDecimalFormat().format(entry.getValue()));
+        message.setRarity(fish.getRarity().getDisplayName());
+        message.setFishCaught(fish.getDisplayName());
+        return message;
+    }
+
+    /**
+     * Gets the single player leaderboard message.
+     *
+     * @param entry The competition entry to get the leaderboard information from.
+     * @return The single player leaderboard message.
+     */
+    @Override
+    public EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry) {
+        Fish fish = entry.getFish();
+
+        EMFMessage message = ConfigMessage.LEADERBOARD_MOST_FISH.getMessage();
+        message.setLength(getDecimalFormat().format(entry.getValue()));
+        message.setRarity(fish.getRarity().getDisplayName());
+        message.setFishCaught(fish.getDisplayName());
+        return message;
     }
 }

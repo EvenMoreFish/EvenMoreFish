@@ -14,7 +14,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class RandomStrategy implements CompetitionStrategy {
+
     private CompetitionType randomType;
+
     @Override
     public boolean begin(Competition competition) {
         competition.setCompetitionType(getRandomType());
@@ -29,18 +31,24 @@ public class RandomStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull EMFMessage message, @NotNull CompetitionEntry entry) {
-        return randomType.getStrategy().getSingleConsoleLeaderboardMessage(message, entry);
+    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry) {
+        return randomType.getStrategy().getSingleConsoleLeaderboardMessage(entry);
+    }
+
+    /**
+     * Gets the single player leaderboard message.
+     *
+     * @param entry The competition entry to get the leaderboard information from.
+     * @return The single player leaderboard message.
+     */
+    @Override
+    public EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry) {
+        return randomType.getStrategy().getSinglePlayerLeaderboard(entry);
     }
 
     @Override
     public EMFMessage getBeginMessage(Competition competition, CompetitionType type) {
         return randomType.getStrategy().getBeginMessage(competition, type);
-    }
-
-    @Override
-    public EMFMessage getSinglePlayerLeaderboard(@NotNull EMFMessage message, @NotNull CompetitionEntry entry) {
-        return randomType.getStrategy().getSinglePlayerLeaderboard(message, entry);
     }
 
     @Override

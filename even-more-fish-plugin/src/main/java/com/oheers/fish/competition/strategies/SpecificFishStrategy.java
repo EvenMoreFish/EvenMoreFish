@@ -1,6 +1,5 @@
 package com.oheers.fish.competition.strategies;
 
-
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
@@ -21,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SpecificFishStrategy implements CompetitionStrategy {
+
     @Override
     public boolean begin(Competition competition) {
         return chooseFish(competition);
@@ -67,6 +67,40 @@ public class SpecificFishStrategy implements CompetitionStrategy {
     @Override
     public EMFMessage getBeginMessage(@NotNull Competition competition, CompetitionType type) {
         return getTypeFormat(competition, ConfigMessage.COMPETITION_START);
+    }
+
+    /**
+     * Gets the single console leaderboard message.
+     *
+     * @param entry The competition entry to get the leaderboard information from.
+     * @return The single console leaderboard message.
+     */
+    @Override
+    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry) {
+        Fish fish = entry.getFish();
+
+        EMFMessage message = ConfigMessage.LEADERBOARD_LARGEST_FISH.getMessage();
+        message.setLength(getDecimalFormat().format(entry.getValue()));
+        message.setRarity(fish.getRarity().getDisplayName());
+        message.setFishCaught(fish.getDisplayName());
+        return message;
+    }
+
+    /**
+     * Gets the single player leaderboard message.
+     *
+     * @param entry The competition entry to get the leaderboard information from.
+     * @return The single player leaderboard message.
+     */
+    @Override
+    public EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry) {
+        Fish fish = entry.getFish();
+
+        EMFMessage message = ConfigMessage.LEADERBOARD_LARGEST_FISH.getMessage();
+        message.setLength(getDecimalFormat().format(entry.getValue()));
+        message.setRarity(fish.getRarity().getDisplayName());
+        message.setFishCaught(fish.getDisplayName());
+        return message;
     }
 
     private boolean chooseFish(Competition competition) {
@@ -116,6 +150,5 @@ public class SpecificFishStrategy implements CompetitionStrategy {
             return false;
         }
     }
-
 
 }

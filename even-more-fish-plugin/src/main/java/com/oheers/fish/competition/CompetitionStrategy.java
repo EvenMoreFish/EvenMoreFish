@@ -51,30 +51,18 @@ public interface CompetitionStrategy {
     /**
      * Gets the single console leaderboard message.
      *
-     * @param message The message to set the leaderboard information on.
      * @param entry   The competition entry to get the leaderboard information from.
      * @return The single console leaderboard message.
      */
-    default EMFMessage getSingleConsoleLeaderboardMessage(@NotNull EMFMessage message, @NotNull CompetitionEntry entry) {
-        //todo temp, since this really isn't supposed to be the case, but was the original code. idk
-        message.setMessage(ConfigMessage.LEADERBOARD_MOST_FISH.getMessage());
-        message.setAmount(Integer.toString((int) entry.getValue()));
-        return message;
-    }
+    EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry);
 
     /**
      * Gets the single player leaderboard message.
      *
-     * @param message The message to set the leaderboard information on.
      * @param entry   The competition entry to get the leaderboard information from.
      * @return The single player leaderboard message.
      */
-    default EMFMessage getSinglePlayerLeaderboard(@NotNull EMFMessage message, @NotNull CompetitionEntry entry) {
-        //todo temp, since this really isn't supposed to be the case, but was the original code. idk
-        message.setMessage(ConfigMessage.LEADERBOARD_MOST_FISH.getMessage());
-        message.setAmount(Integer.toString((int) entry.getValue()));
-        return message;
-    }
+    EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry);
 
     /**
      * This creates a message object and applies all the settings to it to make it able to use the {type} variable. It

@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class ShortestTotalStrategy implements CompetitionStrategy {
+
     @Override
     public void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition) {
         CompetitionEntry entry = leaderboard.getEntry(fisher.getUniqueId());
@@ -28,16 +29,17 @@ public class ShortestTotalStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull EMFMessage message, @NotNull CompetitionEntry entry) {
-        message.setMessage(ConfigMessage.LEADERBOARD_SHORTEST_TOTAL.getMessage());
+    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry) {
+        EMFMessage message = ConfigMessage.LEADERBOARD_SHORTEST_TOTAL.getMessage();
         message.setAmount(getDecimalFormat().format(entry.getValue()));
         return message;
     }
 
     @Override
-    public EMFMessage getSinglePlayerLeaderboard(@NotNull EMFMessage message, @NotNull CompetitionEntry entry) {
-        message.setMessage(ConfigMessage.LEADERBOARD_SHORTEST_TOTAL.getMessage());
+    public EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry) {
+        EMFMessage message = ConfigMessage.LEADERBOARD_SHORTEST_TOTAL.getMessage();
         message.setAmount(getDecimalFormat().format(entry.getValue()));
         return message;
     }
+
 }

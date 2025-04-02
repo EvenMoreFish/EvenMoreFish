@@ -104,11 +104,6 @@ public class EMFListMessage extends EMFMessage {
     }
 
     @Override
-    public void setMessage(@NotNull EMFMessage message) {
-        this.message = new ArrayList<>(message.getComponentListMessage());
-    }
-
-    @Override
     public void appendString(@NotNull String string) {
         this.message.add(formatString(string));
     }

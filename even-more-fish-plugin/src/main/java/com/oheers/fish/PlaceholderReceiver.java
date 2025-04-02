@@ -213,13 +213,11 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
                     fish = null;
                 }
                 if (fish != null) {
-                    EMFMessage message = ConfigMessage.PLACEHOLDER_FISH_FORMAT.getMessage();
-                    if (fish.getLength() == -1) {
-                        message.setMessage(ConfigMessage.PLACEHOLDER_FISH_LENGTHLESS_FORMAT.getMessage());
-                    } else {
-                        message.setLength(Float.toString(fish.getLength()));
-                    }
+                    EMFMessage message = fish.getLength() == -1 ?
+                        ConfigMessage.PLACEHOLDER_FISH_LENGTHLESS_FORMAT.getMessage() :
+                        ConfigMessage.PLACEHOLDER_FISH_FORMAT.getMessage();
 
+                    message.setLength(Float.toString(fish.getLength()));
                     message.setFishCaught(fish.getDisplayName());
                     message.setRarity(fish.getRarity().getDisplayName());
                     return message.getLegacyMessage();
