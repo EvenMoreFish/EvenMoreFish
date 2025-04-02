@@ -320,12 +320,20 @@ public class Competition {
                 break;
             }
 
+            // Get the leaderboard message with length/amount defined
             EMFMessage message;
             if (isConsole) {
                 message = competitionType.getStrategy().getSingleConsoleLeaderboardMessage(entry);
             } else {
                 message = competitionType.getStrategy().getSinglePlayerLeaderboard(entry);
             }
+
+            // Format remaining variables
+            message.setPlayer(Bukkit.getOfflinePlayer(entry.getPlayer()));
+            message.setPosition(Integer.toString(pos));
+            message.setPositionColour(competitionColours.get(pos - 1));
+            message.setRarity(entry.getFish().getRarity().getDisplayName());
+            message.setFishCaught(entry.getFish().getDisplayName());
 
             builder.appendMessage(message);
         }

@@ -42,12 +42,8 @@ public class ShortestFishStrategy implements CompetitionStrategy {
 
     @Override
     public EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry) {
-        Fish fish = entry.getFish();
-
         EMFMessage message = ConfigMessage.LEADERBOARD_SHORTEST_FISH.getMessage();
         message.setLength("%.1f".formatted(entry.getValue()));
-        message.setRarity(fish.getRarity().getDisplayName());
-        message.setFishCaught(fish.getDisplayName());
         return message;
     }
 }
