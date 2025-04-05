@@ -191,7 +191,7 @@ public class FishManager {
                 if (!(boostRate != -1 || boostedFish == null || boostedFish.contains(fish))) {
                     return false;
                 }
-                if (!processor.canUseFish(fish)) {
+                if (processor != null && !processor.canUseFish(fish)) {
                     return false;
                 }
                 if (doRequirementChecks) {
