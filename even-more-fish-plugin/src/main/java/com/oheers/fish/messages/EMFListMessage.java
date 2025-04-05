@@ -105,31 +105,49 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public void appendString(@NotNull String string) {
+        if (isEmpty()) {
+            return;
+        }
         this.message.add(formatString(string));
     }
 
     @Override
     public void appendMessage(@NotNull EMFMessage message) {
+        if (isEmpty()) {
+            return;
+        }
         this.message.addAll(message.getComponentListMessage());
     }
 
     @Override
     public void appendComponent(@NotNull Component component) {
+        if (isEmpty()) {
+            return;
+        }
         this.message.add(component);
     }
 
     @Override
     public void prependString(@NotNull String string) {
+        if (isEmpty()) {
+            return;
+        }
         this.message.add(0, formatString(string));
     }
 
     @Override
     public void prependMessage(@NotNull EMFMessage message) {
+        if (isEmpty()) {
+            return;
+        }
         this.message.addAll(0, message.getComponentListMessage());
     }
 
     @Override
     public void prependComponent(@NotNull Component component) {
+        if (isEmpty()) {
+            return;
+        }
         this.message.add(0, component);
     }
 

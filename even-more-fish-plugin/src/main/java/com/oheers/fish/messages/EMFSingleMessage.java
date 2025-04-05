@@ -135,33 +135,51 @@ public class EMFSingleMessage extends EMFMessage {
 
     @Override
     public void appendString(@NotNull String string) {
+        if (isEmpty()) {
+            return;
+        }
         this.message = this.message.append(formatString(string));
     }
 
     @Override
     public void appendMessage(@NotNull EMFMessage message) {
+        if (isEmpty()) {
+            return;
+        }
         this.message = this.message.append(message.getComponentMessage());
     }
 
     @Override
     public void appendComponent(@NotNull Component component) {
+        if (isEmpty()) {
+            return;
+        }
         this.message = this.message.append(component);
     }
 
     @Override
     public void prependString(@NotNull String string) {
+        if (isEmpty()) {
+            return;
+        }
         // Ensure the base component is always empty
         this.message = EMPTY.append(formatString(string)).append(this.message);
     }
 
     @Override
     public void prependMessage(@NotNull EMFMessage message) {
+        if (isEmpty()) {
+            return;
+        }
         // An EMFMessage base component is always empty
         this.message = message.getComponentMessage().append(this.message);
     }
 
     @Override
     public void prependComponent(@NotNull Component component) {
+        if (isEmpty()) {
+            return;
+        }
         // Ensure the base component is always empty
         this.message = EMPTY.append(component).append(this.message);
     }
