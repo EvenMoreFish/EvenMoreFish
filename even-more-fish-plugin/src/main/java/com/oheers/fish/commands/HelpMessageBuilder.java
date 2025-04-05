@@ -2,6 +2,7 @@ package com.oheers.fish.commands;
 
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.messages.ConfigMessage;
+import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,7 @@ public class HelpMessageBuilder {
      * @return The created help message
      */
     public EMFMessage buildMessage() {
-        final EMFMessage message = ConfigMessage.HELP_GENERAL_TITLE.getMessage();
+        final EMFListMessage message = ConfigMessage.HELP_GENERAL_TITLE.getMessage().toListMessage();
         usages.forEach((key, value) -> {
             EMFMessage usage = ConfigMessage.HELP_FORMAT.getMessage();
             usage.setVariable("{command}", correctCommand(key));
