@@ -41,6 +41,9 @@ public class EMFListMessage extends EMFMessage {
     }
 
     public static EMFListMessage of(@NotNull Component component) {
+        if (PLAINTEXT_SERIALIZER.serialize(component).isEmpty()) {
+            return empty();
+        }
         return new EMFListMessage(List.of(component));
     }
 
@@ -49,6 +52,9 @@ public class EMFListMessage extends EMFMessage {
     }
 
     public static EMFListMessage fromString(@NotNull String string) {
+        if (string.isEmpty()) {
+            return empty();
+        }
         return of(formatString(string));
     }
 
