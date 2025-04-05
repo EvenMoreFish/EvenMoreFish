@@ -39,19 +39,31 @@ public class EMFSingleMessage extends EMFMessage {
     }
 
     public static EMFSingleMessage of(@NotNull Component component) {
+        if (PLAINTEXT_SERIALIZER.serialize(component).isEmpty()) {
+            return empty();
+        }
         return new EMFSingleMessage(component);
     }
 
     public static EMFSingleMessage ofList(@NotNull List<Component> components) {
+        if (components.isEmpty()) {
+            return empty();
+        }
         Component finalComponent = Component.join(JoinConfiguration.newlines(), components);
         return new EMFSingleMessage(finalComponent);
     }
 
     public static EMFSingleMessage fromString(@NotNull String string) {
+        if (string.isEmpty()) {
+            return empty();
+        }
         return of(formatString(string));
     }
 
     public static EMFSingleMessage fromStringList(@NotNull List<String> strings) {
+        if (strings.isEmpty()) {
+            return empty();
+        }
         return ofList(strings.stream().map(EMFSingleMessage::formatString).toList());
     }
 

@@ -328,7 +328,11 @@ public enum ConfigMessage {
     public EMFMessage getMessage() {
         if (isListForm()) {
             EMFListMessage listMessage = EMFListMessage.empty();
+            listMessage.setCanSilent(this.canSilent);
             List<String> list = getStringList(getNormalList(), getId());
+            if (list.isEmpty()) {
+                return listMessage;
+            }
             for (String line : list) {
                 if (this.canHidePrefix && line.startsWith("[noPrefix]")) {
                     listMessage.appendString(line.substring(10));
@@ -338,12 +342,12 @@ public enum ConfigMessage {
                     listMessage.appendMessage(prefix);
                 }
             }
-            listMessage.setCanSilent(this.canSilent);
             return listMessage;
         } else {
             String line = getString(getNormal(), getId());
             EMFSingleMessage singleMessage = EMFSingleMessage.empty();
-            if (line != null) {
+            singleMessage.setCanSilent(this.canSilent);
+            if (line != null && !line.isEmpty()) {
                 if (this.canHidePrefix && line.startsWith("[noPrefix]")) {
                     singleMessage.appendString(line.substring(10));
                 } else {
@@ -352,7 +356,6 @@ public enum ConfigMessage {
                     singleMessage.appendMessage(prefix);
                 }
             }
-            singleMessage.setCanSilent(this.canSilent);
             return singleMessage;
         }
     }

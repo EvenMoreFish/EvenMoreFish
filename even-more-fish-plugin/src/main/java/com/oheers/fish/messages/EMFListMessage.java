@@ -45,6 +45,9 @@ public class EMFListMessage extends EMFMessage {
     }
 
     public static EMFListMessage ofList(@NotNull List<Component> components) {
+        if (components.isEmpty()) {
+            return empty();
+        }
         return new EMFListMessage(components);
     }
 
@@ -53,6 +56,9 @@ public class EMFListMessage extends EMFMessage {
     }
 
     public static EMFListMessage fromStringList(@NotNull List<String> strings) {
+        if (strings.isEmpty()) {
+            return empty();
+        }
         return ofList(strings.stream().map(EMFListMessage::formatString).toList());
     }
 
