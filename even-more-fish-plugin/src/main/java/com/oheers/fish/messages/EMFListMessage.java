@@ -25,7 +25,12 @@ public class EMFListMessage extends EMFMessage {
     private EMFListMessage(@Nullable List<Component> message) {
         super();
         if (message != null) {
-            this.message.addAll(message);
+            message.forEach(line -> {
+                if (line == null) {
+                    return;
+                }
+                this.message.add(EMPTY.append(line));
+            });
         }
     }
 
