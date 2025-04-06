@@ -9,6 +9,7 @@ import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
+import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.ItemFactory;
@@ -120,7 +121,7 @@ public class Bait extends ConfigBase {
      */
     private List<Component> createBoostLore() {
 
-        EMFMessage lore = ConfigMessage.BAIT_BAIT_LORE.getMessage();
+        EMFListMessage lore = ConfigMessage.BAIT_BAIT_LORE.getMessage().toListMessage();
 
         Supplier<EMFMessage> boostsVariable = () -> {
             EMFMessage message = EMFSingleMessage.empty();
@@ -143,7 +144,7 @@ public class Bait extends ConfigBase {
         };
         lore.setVariable("{boosts}", boostsVariable.get());
 
-        Supplier<EMFSingleMessage> loreVariable = () -> EMFSingleMessage.fromStringList(getConfig().getStringList("lore"));
+        Supplier<EMFListMessage> loreVariable = () -> EMFListMessage.fromStringList(getConfig().getStringList("lore"));
         lore.setVariable("{lore}", loreVariable.get());
 
         lore.setBaitTheme(getTheme());
