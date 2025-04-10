@@ -3,7 +3,6 @@ package com.oheers.fish.config;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.PrefixType;
-import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 
 public class MessageConfig extends ConfigBase {
@@ -31,55 +30,51 @@ public class MessageConfig extends ConfigBase {
     }
 
     @Override
-    protected boolean postLoad() {
-        boolean changed = false;
-        YamlDocument document = getConfig();
+    public UpdaterSettings getUpdaterSettings() {
+        return UpdaterSettings.builder(super.getUpdaterSettings())
+            // Config Version 1 - Rework bossbar config layout
+            .addCustomLogic("1", document -> {
+                if (document.contains("bossbar.hour-color")) {
+                    String hourColor = document.getString("bossbar.hour-color", "<white>");
+                    String hour = document.getString("bossbar.hour", "h");
+                    document.set("bossbar.hour", hourColor + "{hour}" + hour);
+                    document.remove("bossbar.hour-color");
+                }
 
-        // Bossbar config relocation - Hour Color
-        if (document.contains("bossbar.hour-color")) {
-            String hourColor = document.getString("bossbar.hour-color", "<white>");
-            String hour = document.getString("bossbar.hour", "h");
-            document.set("bossbar.hour", hourColor + "{hour}" + hour);
-            document.remove("bossbar.hour-color");
-            changed = true;
-        }
+                if (document.contains("bossbar.minute-color")) {
+                    String minuteColor = document.getString("bossbar.minute-color", "<white>");
+                    String minute = document.getString("bossbar.minute", "m");
+                    document.set("bossbar.minute", minuteColor + "{minute}" + minute);
+                    document.remove("bossbar.minute-color");
+                }
 
-        // Bossbar config relocation - Minute Color
-        if (document.contains("bossbar.minute-color")) {
-            String minuteColor = document.getString("bossbar.minute-color", "<white>");
-            String minute = document.getString("bossbar.minute", "m");
-            document.set("bossbar.minute", minuteColor + "{minute}" + minute);
-            document.remove("bossbar.minute-color");
-            changed = true;
-        }
+                if (document.contains("bossbar.second-color")) {
+                    String secondColor = document.getString("bossbar.second-color", "<white>");
+                    String second = document.getString("bossbar.second", "s");
+                    document.set("bossbar.second", secondColor + "{second}" + second);
+                    document.remove("bossbar.second-color");
+                }
+            })
 
-        // Bossbar config relocation - Second Color
-        if (document.contains("bossbar.second-color")) {
-            String secondColor = document.getString("bossbar.second-color", "<white>");
-            String second = document.getString("bossbar.second", "s");
-            document.set("bossbar.second", secondColor + "{second}" + second);
-            document.remove("bossbar.second-color");
-            changed = true;
-        }
+            // Config Version 1 - Rework prefix config layout
+            .addCustomLogic("1", document -> {
+                if (!document.contains("prefix")) {
+                    return;
+                }
+                String prefix = document.getString("prefix");
 
-        // Prefix config relocation
+                String oldRegular = document.getString("prefix-regular");
+                document.set("prefix-regular", oldRegular + prefix);
 
-        if (document.contains("prefix")) {
-            String prefix = document.getString("prefix");
+                String oldAdmin = document.getString("prefix-admin");
+                document.set("prefix-admin", oldAdmin + prefix);
 
-            String oldRegular = document.getString("prefix-regular");
-            document.set("prefix-regular", oldRegular + prefix);
+                String oldError = document.getString("prefix-error");
+                document.set("prefix-error", oldError + prefix);
 
-            String oldAdmin = document.getString("prefix-admin");
-            document.set("prefix-admin", oldAdmin + prefix);
-
-            String oldError = document.getString("prefix-error");
-            document.set("prefix-error", oldError + prefix);
-
-            document.remove("prefix");
-        }
-
-        return changed;
+                document.remove("prefix");
+            })
+            .build();
     }
 
 }

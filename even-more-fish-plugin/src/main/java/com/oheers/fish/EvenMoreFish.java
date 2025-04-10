@@ -19,8 +19,8 @@ import com.oheers.fish.competition.CompetitionQueue;
 import com.oheers.fish.competition.JoinChecker;
 import com.oheers.fish.competition.rewardtypes.*;
 import com.oheers.fish.competition.rewardtypes.external.*;
-import com.oheers.fish.config.GUIConfig;
-import com.oheers.fish.config.GUIFillerConfig;
+import com.oheers.fish.config.GuiConfig;
+import com.oheers.fish.config.GuiFillerConfig;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.database.DataManager;
@@ -176,8 +176,8 @@ public class EvenMoreFish extends EMFPlugin {
         this.addonManager = new AddonManager(this);
         this.addonManager.load();
 
-        new GUIConfig();
-        new GUIFillerConfig();
+        new GuiConfig();
+        new GuiFillerConfig();
 
         checkPapi();
 
@@ -240,7 +240,7 @@ public class EvenMoreFish extends EMFPlugin {
 
         CommandAPI.onDisable();
 
-        terminateGUIS();
+        terminateGuis();
         // Don't use the scheduler here because it will throw errors on disable
         saveUserData(false);
 
@@ -384,8 +384,8 @@ public class EvenMoreFish extends EMFPlugin {
         return permission != null;
     }
 
-    // gets called on server shutdown to simulate all players closing their GUIs
-    private void terminateGUIS() {
+    // gets called on server shutdown to simulate all players closing their Guis
+    private void terminateGuis() {
         getServer().getOnlinePlayers().forEach(player -> {
             InventoryGui inventoryGui = InventoryGui.getOpen(player);
             if (inventoryGui != null) {
@@ -442,15 +442,15 @@ public class EvenMoreFish extends EMFPlugin {
         // If EMF folder does not exist, assume first load again.
         firstLoad = !getDataFolder().exists();
 
-        terminateGUIS();
+        terminateGuis();
 
         reloadConfig();
         saveDefaultConfig();
 
         MainConfig.getInstance().reload();
         MessageConfig.getInstance().reload();
-        GUIConfig.getInstance().reload();
-        GUIFillerConfig.getInstance().reload();
+        GuiConfig.getInstance().reload();
+        GuiFillerConfig.getInstance().reload();
 
         FishManager.getInstance().reload();
         BaitManager.getInstance().reload();

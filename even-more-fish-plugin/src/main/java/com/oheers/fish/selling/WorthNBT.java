@@ -85,13 +85,6 @@ public class WorthNBT {
         }
     }
 
-    public static ItemStack attributeDefault(ItemStack defaultGUIItem) {
-        NBT.modify(defaultGUIItem, nbt -> {
-            nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND).setByte(NbtKeys.DEFAULT_GUI_ITEM, Byte.MAX_VALUE);
-        });
-        return defaultGUIItem;
-    }
-
     private static double getMultipliedValue(Float length, String rarity, String name) {
         return getWorthMultiplier(rarity, name) * length;
     }

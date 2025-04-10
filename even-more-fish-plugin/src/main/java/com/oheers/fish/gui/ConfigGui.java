@@ -2,7 +2,7 @@ package com.oheers.fish.gui;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.config.GUIFillerConfig;
+import com.oheers.fish.config.GuiFillerConfig;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.ItemFactory;
@@ -27,7 +27,7 @@ import java.util.function.BiConsumer;
 
 public class ConfigGui {
 
-    protected final Map<String, BiConsumer<ConfigGui, GuiElement.Click>> actions = GUIUtils.getActionMap();
+    protected final Map<String, BiConsumer<ConfigGui, GuiElement.Click>> actions = GuiUtils.getActionMap();
     protected final Section config;
     protected final Player player;
     private final @NotNull Map<String, EMFMessage> replacements = new HashMap<>();
@@ -112,7 +112,7 @@ public class ConfigGui {
         ItemStack item = new ItemStack(filler);
         item.editMeta(meta -> meta.displayName(Component.empty()));
         gui.setFiller(item);
-        gui.addElements(GUIFillerConfig.getInstance().getDefaultFillerItems(this));
+        gui.addElements(GuiFillerConfig.getInstance().getDefaultFillerItems(this));
     }
 
     private void loadItems(@NotNull InventoryGui gui, @NotNull Section config) {
@@ -124,10 +124,10 @@ public class ConfigGui {
             addGuiItem(gui, itemSection);
         });
         gui.addElements(
-            GUIUtils.getFirstPageButton(),
-            GUIUtils.getPreviousPageButton(),
-            GUIUtils.getNextPageButton(),
-            GUIUtils.getLastPageButton()
+            GuiUtils.getFirstPageButton(),
+            GuiUtils.getPreviousPageButton(),
+            GuiUtils.getNextPageButton(),
+            GuiUtils.getLastPageButton()
         );
     }
 

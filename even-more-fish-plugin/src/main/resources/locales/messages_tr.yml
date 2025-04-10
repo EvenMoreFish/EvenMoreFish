@@ -119,4 +119,4 @@ emf-competition-fish-format: '{length}cm <bold>{rarity}</bold> {fish}'
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-config-version: '29'
+version: 1

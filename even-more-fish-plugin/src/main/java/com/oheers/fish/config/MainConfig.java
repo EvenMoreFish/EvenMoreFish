@@ -3,7 +3,6 @@ package com.oheers.fish.config;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.economy.EconomyType;
-import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.boostedyaml.route.Route;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
@@ -136,36 +135,9 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("disable-aureliumskills-loot", true);
     }
 
-    public String rewardEffect() {
-        return getConfig().getString("reward-gui.reward-effect");
-    }
-
-    public String rewardItem() {
-        return getConfig().getString("reward-gui.reward-item");
-    }
-
-    public String rewardMoney() {
-        return getConfig().getString("reward-gui.reward-money");
-    }
-
-    public String rewardHealth() {
-        return getConfig().getString("reward-gui.reward-health");
-    }
-
-    public String rewardHunger() {
-        return getConfig().getString("reward-gui.reward-hunger");
-    }
-
-    public String rewardCommand(String command) {
-        return getConfig().getString("reward-gui.command-override." + command);
-    }
-
-
     public boolean doDBVerbose() {
         return !getConfig().getBoolean("disable-db-verbose", false);
     }
-
-
 
     public boolean blockPlacingHeads() {
         return getConfig().getBoolean("place-head-fish", false);
@@ -355,49 +327,32 @@ public class MainConfig extends ConfigBase {
     }
 
     @Override
-    protected boolean postLoad() {
-        boolean changed = false;
-        YamlDocument document = getConfig();
-
-        // Economy Rework - Requires the config to contain the new format first.
-        String economyType = document.getString("economy-type");
-        if (economyType != null) {
-            document.remove("enable-economy");
-            document.remove("economy-type");
-            if (!economyType.equalsIgnoreCase("NONE")) {
-                String path = "economy." + economyType.toLowerCase();
-                document.set(path + ".enabled", true);
-            }
-            changed = true;
-        }
-
-        // Updated fishing section - Requires the section to exist first.
-        String oldFishUniqueKey = "fish-only-in-competition";
-        if (document.contains(oldFishUniqueKey)) {
-            boolean fishOnlyInCompetition = document.getBoolean(oldFishUniqueKey, false);
-            document.set("fishing.catch-only-in-competition", fishOnlyInCompetition);
-            document.remove(oldFishUniqueKey);
-            changed = true;
-        }
-
-        // Added item protection configs
-        String blockCraftingKey = "block-crafting";
-        if (document.contains(blockCraftingKey)) {
-            boolean blockCrafting = document.getBoolean(blockCraftingKey);
-            document.set("item-protection.block-crafting", blockCrafting);
-            document.remove(blockCraftingKey);
-        }
-
-        // Updated fishing configs
-        String vanillaFishingKey = "vanilla-fishing";
-        if (document.contains(vanillaFishingKey)) {
-            boolean vanillaFishing = document.getBoolean(vanillaFishingKey);
-            document.set("fishing.catch-enabled", !vanillaFishing);
-            document.remove(vanillaFishingKey);
-            changed = true;
-        }
-
-        return changed;
+    public UpdaterSettings getUpdaterSettings() {
+        return UpdaterSettings.builder(super.getUpdaterSettings())
+            // Config Version 1 - Economy Rework
+            .addCustomLogic("1", document -> {
+                String economyType = document.getString("economy-type");
+                document.remove("enable-economy");
+                document.remove("economy-type");
+                if (economyType != null && !economyType.equalsIgnoreCase("NONE")) {
+                    String path = "economy." + economyType.toLowerCase();
+                    document.set(path + ".enabled", true);
+                }
+            })
+            // Config Version 1 - Add item protection configs
+            .addRelocation("1", "block-crafting", "item-protection.block-crafting", '.')
+            // Config Version 1 - Update fishing section of the config
+            .addRelocation("1", "fish-only-in-competition", "fishing.catch-only-in-competition", '.')
+            // Config Version 1 - Add fishing.catch-enabled config
+            .addCustomLogic("1", document -> {
+                if (!document.contains("vanilla-fishing")) {
+                    return;
+                }
+                boolean vanillaFishing = document.getBoolean("vanilla-fishing");
+                document.set("fishing.catch-enabled", !vanillaFishing);
+                document.remove("vanilla-fishing");
+            })
+            .build();
     }
 
     public boolean hasCredentials() {

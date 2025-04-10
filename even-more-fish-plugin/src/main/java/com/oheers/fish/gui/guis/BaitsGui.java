@@ -2,7 +2,7 @@ package com.oheers.fish.gui.guis;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.baits.BaitManager;
-import com.oheers.fish.config.GUIConfig;
+import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.gui.ConfigGui;
 import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
@@ -15,7 +15,7 @@ public class BaitsGui extends ConfigGui {
 
     public BaitsGui(@NotNull HumanEntity player) {
         super(
-            GUIConfig.getInstance().getConfig().getSection("baits-menu"),
+            GuiConfig.getInstance().getConfig().getSection("baits-menu"),
             player
         );
 

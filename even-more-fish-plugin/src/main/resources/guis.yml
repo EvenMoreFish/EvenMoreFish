@@ -284,4 +284,4 @@ apply-baits-menu:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-config-version: 6
+version: 1

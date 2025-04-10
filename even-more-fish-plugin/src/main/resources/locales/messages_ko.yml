@@ -133,4 +133,4 @@ bait-use: '{bait_theme}<bold>{bait} <reset>미끼 중 하나를 사용했습니�
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-config-version: '29'
+version: 1

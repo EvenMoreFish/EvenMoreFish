@@ -1,7 +1,7 @@
 package com.oheers.fish.gui;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.config.GUIConfig;
+import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.gui.guis.BaitsGui;
 import com.oheers.fish.gui.guis.MainMenuGui;
 import com.oheers.fish.gui.guis.SellGui;
@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public class GUIUtils {
+public class GuiUtils {
 
     public static GuiPageElement getFirstPageButton() {
-        YamlDocument config = GUIConfig.getInstance().getConfig();
+        YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('f',
             createItemStack(
                 config.getString("gui.global.first-page.material", "arrow"),
@@ -38,7 +38,7 @@ public class GUIUtils {
     }
 
     public static GuiPageElement getNextPageButton() {
-        YamlDocument config = GUIConfig.getInstance().getConfig();
+        YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('n',
             createItemStack(
                 config.getString("gui.global.next-page.material", "paper"),
@@ -51,7 +51,7 @@ public class GUIUtils {
     }
 
     public static GuiPageElement getPreviousPageButton() {
-        YamlDocument config = GUIConfig.getInstance().getConfig();
+        YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('p',
             createItemStack(
                 config.getString("gui.global.previous-page.material", "paper"),
@@ -64,7 +64,7 @@ public class GUIUtils {
     }
 
     public static GuiPageElement getLastPageButton() {
-        YamlDocument config = GUIConfig.getInstance().getConfig();
+        YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('l',
             createItemStack(
                 config.getString("gui.global.last-page.material", "arrow"),
@@ -85,7 +85,7 @@ public class GUIUtils {
 
     public static Map<String, BiConsumer<ConfigGui, GuiElement.Click>> getActionMap() {
         Map<String, BiConsumer<ConfigGui, GuiElement.Click>> newActionMap = new HashMap<>();
-        // Exiting the main menu should close the GUI
+        // Exiting the main menu should close the Gui
         newActionMap.put("full-exit", (gui, click) -> {
             if (gui != null) {
                 gui.doRescue();
@@ -99,7 +99,7 @@ public class GUIUtils {
             }
             new MainMenuGui(click.getWhoClicked()).open();
         });
-        // Toggling custom fish should redraw the GUI and leave it at that
+        // Toggling custom fish should redraw the Gui and leave it at that
         newActionMap.put("fish-toggle", (gui, click) -> {
             if (click.getWhoClicked() instanceof Player player) {
                 EvenMoreFish.getInstance().performFishToggle(player);
@@ -125,8 +125,8 @@ public class GUIUtils {
             if (!(humanEntity instanceof Player player)) {
                 return;
             }
-            if (gui instanceof SellGui sellGUI) {
-                new SellGui(player, SellGui.SellState.CONFIRM, sellGUI.getFishInventory()).open();
+            if (gui instanceof SellGui sellGui) {
+                new SellGui(player, SellGui.SellState.CONFIRM, sellGui.getFishInventory()).open();
                 return;
             }
             new SellHelper(click.getWhoClicked().getInventory(), player).sellFish();
@@ -134,8 +134,8 @@ public class GUIUtils {
         });
         newActionMap.put("sell-shop", (gui, click) -> {
             HumanEntity humanEntity = click.getWhoClicked();
-            if (gui instanceof SellGui sellGUI && humanEntity instanceof Player player) {
-                new SellGui(player, SellGui.SellState.CONFIRM, sellGUI.getFishInventory()).open();
+            if (gui instanceof SellGui sellGui && humanEntity instanceof Player player) {
+                new SellGui(player, SellGui.SellState.CONFIRM, sellGui.getFishInventory()).open();
                 return;
             }
             SellHelper.sellInventoryGui(click.getGui(), click.getWhoClicked());

@@ -43,9 +43,8 @@ public class ConfigBase {
         reload(file);
         update();
 
-        if (postLoad()) {
-            save();
-        }
+        getConfig().remove("config-version");
+        save();
     }
 
     public ConfigBase(@NotNull String fileName, @NotNull String resourceName, @NotNull Plugin plugin, boolean configUpdater) {
@@ -57,9 +56,8 @@ public class ConfigBase {
         reload(new File(getPlugin().getDataFolder(), getFileName()));
         update();
 
-        if (postLoad()) {
-            save();
-        }
+        getConfig().remove("config-version");
+        save();
     }
 
     /**
@@ -151,7 +149,11 @@ public class ConfigBase {
     }
 
     public UpdaterSettings getUpdaterSettings() {
-        return UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version")).setKeepAll(true).setEnableDowngrading(false).build();
+        return UpdaterSettings.builder()
+            .setVersioning(new BasicVersioning("version"))
+            .setKeepAll(true)
+            .setEnableDowngrading(false)
+            .build();
     }
 
     public void save() {
@@ -226,14 +228,6 @@ public class ConfigBase {
         // Legacy -> Component -> MiniMessage
         Component legacy = legacySerializer.deserialize(message);
         return miniMessageSerializer.serialize(legacy);
-    }
-
-    /**
-     * If any configs have been moved, they should be relocated in this method instead of UpdaterSettings.
-     * @return true if any changes have been made
-     */
-    protected boolean postLoad() {
-        return false;
     }
 
 }

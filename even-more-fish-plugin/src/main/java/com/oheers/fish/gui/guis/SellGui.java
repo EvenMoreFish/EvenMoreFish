@@ -2,7 +2,7 @@ package com.oheers.fish.gui.guis;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.economy.Economy;
-import com.oheers.fish.config.GUIConfig;
+import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.selling.SellHelper;
@@ -64,7 +64,7 @@ public class SellGui extends ConfigGui {
         }
 
         public Section getGuiConfig() {
-            return GUIConfig.getInstance().getConfig().getSection(configLocation);
+            return GuiConfig.getInstance().getConfig().getSection(configLocation);
         }
     }
 
