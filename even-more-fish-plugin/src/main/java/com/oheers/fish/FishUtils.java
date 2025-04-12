@@ -620,4 +620,25 @@ public class FishUtils {
         return component;
     }
 
+    /**
+     * @param colour The original colour
+     * @return A MiniMessage string turned into a format key for use in configs.
+     */
+    public static @NotNull String getFormat(@NotNull String colour) {
+        int openingTagEnd = colour.indexOf(">");
+
+        if (openingTagEnd == -1) {
+            return colour + "{name}";  // No tags at all
+        }
+
+        // At least one opening tag exists
+        if (colour.contains("</")) {
+            // Case: <tag>content</tag> → <tag>{name}content</tag>
+            return colour.substring(0, openingTagEnd + 1) + "{name}" + colour.substring(openingTagEnd + 1);
+        }
+
+        // Case: <tag> → <tag>{name}
+        return colour.substring(0, openingTagEnd + 1) + "{name}";
+    }
+
 }
