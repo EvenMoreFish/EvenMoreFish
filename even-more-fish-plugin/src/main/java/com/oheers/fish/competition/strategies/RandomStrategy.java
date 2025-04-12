@@ -1,6 +1,5 @@
 package com.oheers.fish.competition.strategies;
 
-
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
@@ -66,8 +65,8 @@ public class RandomStrategy implements CompetitionStrategy {
             types.remove(CompetitionType.SPECIFIC_FISH);
             types.remove(CompetitionType.SPECIFIC_RARITY);
         }
-        // -1 from the length so that the RANDOM isn't chosen as the random value.
-        int type = EvenMoreFish.getInstance().getRandom().nextInt(types.size() - 1);
+        int type = EvenMoreFish.getInstance().getRandom().nextInt(types.size());
         return types.get(type);
     }
+
 }
