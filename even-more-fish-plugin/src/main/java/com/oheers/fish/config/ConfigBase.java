@@ -206,16 +206,21 @@ public class ConfigBase {
      * If the message already contains a MiniMessage tag, this does nothing.
      */
     private String convertLegacyString(@NotNull String message) {
-        // Get MiniMessage serializer
-        final MiniMessage miniMessageSerializer = MiniMessage.builder()
-            .strict(true)
-            .postProcessor(component -> component)
-            .build();
+        // Exclude command reward types
+        if (message.toUpperCase().startsWith("COMMAND:")) {
+            return message;
+        }
 
         // If the message isn't legacy, don't do anything
         if (!FishUtils.isLegacyString(message)) {
             return message;
         }
+
+        // Get MiniMessage serializer
+        final MiniMessage miniMessageSerializer = MiniMessage.builder()
+            .strict(true)
+            .postProcessor(component -> component)
+            .build();
 
         // Get LegacyComponentSerializer
         final LegacyComponentSerializer legacySerializer = LegacyComponentSerializer.builder()
