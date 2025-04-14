@@ -22,7 +22,7 @@ import java.util.logging.Level;
 public class SpecificRarityStrategy implements CompetitionStrategy {
 
     @Override
-    public boolean init(@NotNull Competition competition) {
+    public boolean randomInit(@NotNull Competition competition) {
         return competition.getNumberNeeded() > 0 && competition.chooseRarity();
     }
 

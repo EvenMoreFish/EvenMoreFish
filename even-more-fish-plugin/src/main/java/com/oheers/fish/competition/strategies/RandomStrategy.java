@@ -23,7 +23,7 @@ public class RandomStrategy implements CompetitionStrategy {
     private CompetitionType randomType;
 
     @Override
-    public boolean init(@NotNull Competition competition) {
+    public boolean randomInit(@NotNull Competition competition) {
         // This has to return false
         return false;
     }
@@ -71,7 +71,7 @@ public class RandomStrategy implements CompetitionStrategy {
         List<CompetitionType> types = Arrays.stream(CompetitionType.values())
             .filter(type -> {
                 try {
-                    return type.getStrategy().init(competition);
+                    return type.getStrategy().randomInit(competition);
                 } catch (Exception exception) {
                     EvenMoreFish.getInstance().getLogger().log(Level.SEVERE, exception.getMessage(), exception);
                     return false;

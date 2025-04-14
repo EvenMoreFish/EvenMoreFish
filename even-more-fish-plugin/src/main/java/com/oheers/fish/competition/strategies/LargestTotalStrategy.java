@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class LargestTotalStrategy implements CompetitionStrategy {
 
     @Override
-    public boolean init(@NotNull Competition competition) {
+    public boolean randomInit(@NotNull Competition competition) {
         return true;
     }
 

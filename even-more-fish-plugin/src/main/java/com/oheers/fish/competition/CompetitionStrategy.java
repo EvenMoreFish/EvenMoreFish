@@ -18,7 +18,7 @@ public interface CompetitionStrategy {
     /**
      * Initializes the competition strategy for the random type.
      */
-    boolean init(@NotNull Competition competition);
+    boolean randomInit(@NotNull Competition competition);
 
     /**
      * Begins the competition.
