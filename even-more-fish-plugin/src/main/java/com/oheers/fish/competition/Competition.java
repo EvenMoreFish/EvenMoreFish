@@ -271,7 +271,7 @@ public class Competition {
         List<String> competitionColours = competitionFile.getPositionColours();
         List<CompetitionEntry> entries = leaderboard.getEntries();
 
-        EMFMessage leaderboardMessage = buildLeaderboardMessage(entries, competitionColours, true, null);
+        EMFMessage leaderboardMessage = buildLeaderboardMessage(entries, competitionColours, true);
         leaderboardMessage.send(console);
 
         EMFMessage message = ConfigMessage.LEADERBOARD_TOTAL_PLAYERS.getMessage();
@@ -295,7 +295,7 @@ public class Competition {
         List<String> competitionColours = competitionFile.getPositionColours();
         List<CompetitionEntry> entries = leaderboard.getEntries();
 
-        EMFMessage leaderboardMessage = buildLeaderboardMessage(entries, competitionColours, false, player.getUniqueId());
+        EMFMessage leaderboardMessage = buildLeaderboardMessage(entries, competitionColours, false);
         leaderboardMessage.send(player);
 
         EMFMessage message = ConfigMessage.LEADERBOARD_TOTAL_PLAYERS.getMessage();
@@ -303,7 +303,7 @@ public class Competition {
         message.send(player);
     }
 
-    private @NotNull EMFMessage buildLeaderboardMessage(List<CompetitionEntry> entries, List<String> competitionColours, boolean isConsole, UUID playerUuid) {
+    private @NotNull EMFMessage buildLeaderboardMessage(List<CompetitionEntry> entries, List<String> competitionColours, boolean isConsole) {
         if (entries == null) {
             entries = List.of();
         }
@@ -447,10 +447,6 @@ public class Competition {
 
     public @NotNull CompetitionFile getCompetitionFile() {
         return this.competitionFile;
-    }
-
-    public void setCompetitionName(@NotNull String competitionName) {
-        this.competitionName = competitionName;
     }
 
     public static @NotNull EMFMessage getNextCompetitionMessage() {
