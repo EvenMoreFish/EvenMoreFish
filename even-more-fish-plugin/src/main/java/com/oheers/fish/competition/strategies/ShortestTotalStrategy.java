@@ -14,6 +14,11 @@ import org.jetbrains.annotations.NotNull;
 public class ShortestTotalStrategy implements CompetitionStrategy {
 
     @Override
+    public boolean init(@NotNull Competition competition) {
+        return true;
+    }
+
+    @Override
     public void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition) {
         CompetitionEntry entry = leaderboard.getEntry(fisher.getUniqueId());
         float increaseAmount = fish.getLength();

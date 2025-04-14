@@ -22,8 +22,19 @@ import java.util.logging.Level;
 public class SpecificRarityStrategy implements CompetitionStrategy {
 
     @Override
+    public boolean init(@NotNull Competition competition) {
+        return competition.getNumberNeeded() != 0 && competition.chooseRarity();
+    }
+
+    @Override
     public boolean begin(Competition competition) {
-        return chooseRarity(competition);
+        if (competition.getNumberNeeded() == 0) {
+            EvenMoreFish.getInstance().getLogger().warning(
+                competition.getCompetitionFile().getId() + " competition does not have number-needed set. Defaulting to 1."
+            );
+            competition.setNumberNeeded(1);
+        }
+        return competition.getSelectedRarity() != null;
     }
 
     @Override
@@ -66,36 +77,6 @@ public class SpecificRarityStrategy implements CompetitionStrategy {
         message.setRarity(selectedRarity.getDisplayName());
 
         return message;
-    }
-
-    private boolean chooseRarity(Competition competition) {
-        List<Rarity> configRarities = competition.getCompetitionFile().getAllowedRarities();
-
-        if (configRarities.isEmpty()) {
-            EvenMoreFish.getInstance().getLogger().severe("No allowed-rarities list found in the " + competition.getCompetitionFile().getFileName() + " competition config file.");
-            return false;
-        }
-
-        competition.setNumberNeeded(competition.getCompetitionFile().getNumberNeeded());
-
-        try {
-            Rarity rarity = configRarities.get(EvenMoreFish.getInstance().getRandom().nextInt(configRarities.size()));
-            if (rarity != null) {
-                competition.setSelectedRarity(rarity);
-                return true;
-            }
-            competition.setSelectedRarity(FishManager.getInstance().getRandomWeightedRarity(null, 0, null, Set.copyOf(FishManager.getInstance().getRarityMap().values())));
-            return true;
-        } catch (IllegalArgumentException exception) {
-            EvenMoreFish.getInstance()
-                    .getLogger()
-                    .severe("Could not load: " + competition.getCompetitionName() + " because a random rarity could not be chosen. \nIf you need support, please provide the following information:");
-            EvenMoreFish.getInstance().getLogger().severe("rarities.size(): " + FishManager.getInstance().getRarityMap().size());
-            EvenMoreFish.getInstance().getLogger().severe("configRarities.size(): " + configRarities.size());
-            // Also log the exception
-            EvenMoreFish.getInstance().getLogger().log(Level.SEVERE, exception.getMessage(), exception);
-            return false;
-        }
     }
 
     /**

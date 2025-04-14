@@ -16,6 +16,11 @@ import java.text.DecimalFormat;
 public interface CompetitionStrategy {
 
     /**
+     * Initializes the competition strategy for the random type.
+     */
+    boolean init(@NotNull Competition competition);
+
+    /**
      * Begins the competition.
      *
      * @param competition The competition to begin.

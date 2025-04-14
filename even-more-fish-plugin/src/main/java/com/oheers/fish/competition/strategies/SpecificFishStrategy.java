@@ -7,23 +7,27 @@ import com.oheers.fish.competition.CompetitionStrategy;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class SpecificFishStrategy implements CompetitionStrategy {
 
     @Override
+    public boolean init(@NotNull Competition competition) {
+        return competition.getNumberNeeded() != 0 && competition.chooseFish();
+    }
+
+    @Override
     public boolean begin(Competition competition) {
-        return chooseFish(competition);
+        if (competition.getNumberNeeded() == 0) {
+            EvenMoreFish.getInstance().getLogger().warning(
+                competition.getCompetitionFile().getId() + " competition does not have number-needed set. Defaulting to 1."
+            );
+            competition.setNumberNeeded(1);
+        }
+        return competition.getSelectedFish() != null;
     }
 
     @Override
@@ -97,54 +101,6 @@ public class SpecificFishStrategy implements CompetitionStrategy {
         message.setRarity(fish.getRarity().getDisplayName());
         message.setFishCaught(fish.getDisplayName());
         return message;
-    }
-
-    private boolean chooseFish(Competition competition) {
-        List<Rarity> configRarities = competition.getCompetitionFile().getAllowedRarities();
-        final Logger logger = EvenMoreFish.getInstance().getLogger();
-        if (configRarities.isEmpty()) {
-            logger.severe(() -> "No allowed-rarities list found in the " + competition.getCompetitionFile().getFileName() + " competition config file.");
-            return false;
-        }
-
-        List<Fish> fish = new ArrayList<>();
-        List<Rarity> allowedRarities = new ArrayList<>();
-        double totalWeight = 0;
-
-        for (Rarity rarity : configRarities) {
-            fish.addAll(rarity.getOriginalFishList());
-            allowedRarities.add(rarity);
-            totalWeight += rarity.getWeight();
-        }
-
-        int idx = 0;
-        for (double r = Math.random() * totalWeight; idx < allowedRarities.size() - 1; ++idx) {
-            r -= allowedRarities.get(idx).getWeight();
-            if (r <= 0.0) {
-                break;
-            }
-        }
-
-        if (competition.getNumberNeeded() == 0) {
-            competition.setNumberNeeded(competition.getCompetitionFile().getNumberNeeded());
-        }
-
-        try {
-            Fish selectedFish = FishManager.getInstance().getFish(allowedRarities.get(idx), null, null, 1.0d, null, false, null);
-            if (selectedFish == null) {
-                // For the catch block to catch.
-                throw new IllegalArgumentException();
-            }
-            competition.setSelectedFish(selectedFish);
-            return true;
-        } catch (IllegalArgumentException | IndexOutOfBoundsException exception) {
-            logger.severe(() -> "Could not load: %s because a random fish could not be chosen. %nIf you need support, please provide the following information:".formatted(competition.getCompetitionName()));
-            logger.severe(() -> "fish.size(): %s".formatted(fish.size()));
-            logger.severe(() -> "allowedRarities.size(): %s".formatted(allowedRarities.size()));
-            // Also log the exception
-            logger.log(Level.SEVERE, exception.getMessage(), exception);
-            return false;
-        }
     }
 
 }

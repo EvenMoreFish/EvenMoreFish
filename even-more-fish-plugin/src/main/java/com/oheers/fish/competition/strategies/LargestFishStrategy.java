@@ -14,6 +14,11 @@ import org.jetbrains.annotations.NotNull;
 public class LargestFishStrategy implements CompetitionStrategy {
 
     @Override
+    public boolean init(@NotNull Competition competition) {
+        return true;
+    }
+
+    @Override
     public void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition) {
         if (fish.getLength() <= 0) return;
 

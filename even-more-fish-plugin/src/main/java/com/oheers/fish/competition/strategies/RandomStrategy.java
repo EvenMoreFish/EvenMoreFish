@@ -13,11 +13,19 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RandomStrategy implements CompetitionStrategy {
 
     private CompetitionType randomType;
+
+    @Override
+    public boolean init(@NotNull Competition competition) {
+        // This has to return false
+        return false;
+    }
 
     @Override
     public boolean begin(Competition competition) {
@@ -59,12 +67,15 @@ public class RandomStrategy implements CompetitionStrategy {
     }
 
     public CompetitionType getRandomType(@NotNull Competition competition) {
-        List<CompetitionType> types = new ArrayList<>(List.of(CompetitionType.values()));
-        types.remove(CompetitionType.RANDOM);
-        if (competition.getNumberNeeded() == 0) {
-            types.remove(CompetitionType.SPECIFIC_FISH);
-            types.remove(CompetitionType.SPECIFIC_RARITY);
+        List<CompetitionType> types = Arrays.stream(CompetitionType.values())
+            .filter(type -> type.getStrategy().init(competition))
+            .collect(Collectors.toCollection(ArrayList::new));
+
+        if (types.isEmpty()) {
+            EvenMoreFish.getInstance().getLogger().warning("No competition types available for random strategy. Defaulting to LARGEST_FISH.");
+            return CompetitionType.LARGEST_FISH;
         }
+
         int type = EvenMoreFish.getInstance().getRandom().nextInt(types.size());
         return types.get(type);
     }

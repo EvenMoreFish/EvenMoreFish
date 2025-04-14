@@ -153,7 +153,7 @@ public class CompetitionFile extends ConfigBase {
      * @return The number of fish needed for SPECIFIC_* competition types.
      */
     public int getNumberNeeded() {
-        return Math.max(1, getConfig().getInt("number-needed", 1));
+        return Math.max(1, getConfig().getInt("number-needed", 0));
     }
 
     /**
