@@ -16,7 +16,7 @@ public class SpecificFishStrategy implements CompetitionStrategy {
 
     @Override
     public boolean init(@NotNull Competition competition) {
-        return competition.getNumberNeeded() != 0 && competition.chooseFish();
+        return competition.getNumberNeeded() > 0 && competition.chooseFish();
     }
 
     @Override

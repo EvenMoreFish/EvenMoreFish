@@ -23,7 +23,7 @@ public class SpecificRarityStrategy implements CompetitionStrategy {
 
     @Override
     public boolean init(@NotNull Competition competition) {
-        return competition.getNumberNeeded() != 0 && competition.chooseRarity();
+        return competition.getNumberNeeded() > 0 && competition.chooseRarity();
     }
 
     @Override
