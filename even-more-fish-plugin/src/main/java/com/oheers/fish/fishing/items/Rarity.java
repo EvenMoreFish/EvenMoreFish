@@ -261,4 +261,21 @@ public class Rarity extends ConfigBase {
         return type;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof Rarity rarity)) {
+            return false;
+        }
+        // Check if the id matches.
+        return this.getId().equals(rarity.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
 }

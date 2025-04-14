@@ -565,4 +565,21 @@ public class Fish {
         }
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof Fish fish)) {
+            return false;
+        }
+        // Check if the rarity and name match.
+        return this.getRarity().equals(fish.getRarity()) && this.getName().equals(fish.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRarity(), getName());
+    }
+
 }

@@ -33,11 +33,8 @@ public class SpecificFishStrategy implements CompetitionStrategy {
     @Override
     public void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition) {
         Fish selected = competition.getSelectedFish();
-        if (selected != null) {
-            if (!fish.getName().equalsIgnoreCase(selected.getName()) ||
-                    fish.getRarity() != selected.getRarity()) {
-                return;
-            }
+        if (selected != null && !fish.equals(selected)) {
+            return;
         }
 
         CompetitionEntry entry = leaderboard.getEntry(fisher.getUniqueId());

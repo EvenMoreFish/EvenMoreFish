@@ -537,10 +537,6 @@ public class Competition {
             }
         }
 
-        if (getNumberNeeded() == 0) {
-            setNumberNeeded(getCompetitionFile().getNumberNeeded());
-        }
-
         try {
             Fish selectedFish = FishManager.getInstance().getFish(allowedRarities.get(idx), null, null, 1.0d, null, false, null);
             if (selectedFish == null) {
