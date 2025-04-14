@@ -51,7 +51,7 @@ public class Competition {
     private Sound startSound;
     private MyScheduledTask timingSystem;
     private CompetitionFile competitionFile;
-    private int numberNeeded;
+    private int numberNeeded = 0;
 
     public Competition(final @NotNull CompetitionFile competitionFile) {
         this.competitionFile = competitionFile;
@@ -71,7 +71,6 @@ public class Competition {
         this.alertTimes = new ArrayList<>();
         this.rewards = new HashMap<>();
         this.competitionType = type;
-        this.numberNeeded = 0;
     }
 
     public void setMaxDuration(int duration) {

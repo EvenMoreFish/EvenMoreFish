@@ -11,6 +11,7 @@ import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.config.FishConversions;
 import com.oheers.fish.fishing.items.config.RarityConversions;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -184,7 +185,8 @@ public class FishManager {
             r = getRandomWeightedRarity(p, 1, null, Set.copyOf(rarityMap.values()));
         }
 
-        RequirementContext context = new RequirementContext(l.getWorld(), l, p, null, null);
+        World world = l == null ? null : l.getWorld();
+        RequirementContext context = new RequirementContext(world, l, p, null, null);
 
         List<Fish> available = r.getFishList().stream()
             .filter(fish -> {

@@ -54,12 +54,6 @@ public enum CompetitionType {
             "Shortest Total",
             true,
             new ShortestTotalStrategy()
-    ),
-    NULL(
-        ConfigMessage.COMPETITION_TYPE_LARGEST,
-        "Null",
-        false,
-        new NullStrategy()
     );
 
     private final ConfigMessage typeVariable;

@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class RandomStrategy implements CompetitionStrategy {
@@ -68,7 +69,14 @@ public class RandomStrategy implements CompetitionStrategy {
 
     public CompetitionType getRandomType(@NotNull Competition competition) {
         List<CompetitionType> types = Arrays.stream(CompetitionType.values())
-            .filter(type -> type.getStrategy().init(competition))
+            .filter(type -> {
+                try {
+                    return type.getStrategy().init(competition);
+                } catch (Exception exception) {
+                    EvenMoreFish.getInstance().getLogger().log(Level.SEVERE, exception.getMessage(), exception);
+                    return false;
+                }
+            })
             .collect(Collectors.toCollection(ArrayList::new));
 
         if (types.isEmpty()) {
