@@ -9,7 +9,7 @@ include(":even-more-fish-plugin")
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            library("paper-api", "io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT")
+            library("paper-api", "io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
             library("vault-api", "com.github.MilkBowl:VaultAPI:1.7.1")
             library("placeholder-api", "me.clip:placeholderapi:2.11.6")
             library("bstats", "org.bstats:bstats-bukkit:3.1.0")
