@@ -78,7 +78,7 @@ dependencyResolutionManagement {
 
             library("boostedyaml", "dev.dejvokep:boosted-yaml:1.3.7")
 
-            plugin("grgit", "org.ajoberstar.grgit").version("5.2.2")
+            plugin("grgit", "org.ajoberstar.grgit").version("5.3.0")
 
             version("jooq", "3.19.18")
             library("jooq", "org.jooq","jooq").versionRef("jooq")
