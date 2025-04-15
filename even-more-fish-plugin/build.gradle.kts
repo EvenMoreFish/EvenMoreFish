@@ -270,10 +270,9 @@ tasks {
             attributes["Database-Baseline-Version"] = "7.0"
         }
 
-        minimize {
-            exclude(dependency("net.kyori:.*"))
-        }
+        minimize()
 
+        exclude("LICENSE")
         exclude("META-INF/**")
 
         archiveFileName.set("even-more-fish-${project.version}-${buildNumberOrDate}.jar")
