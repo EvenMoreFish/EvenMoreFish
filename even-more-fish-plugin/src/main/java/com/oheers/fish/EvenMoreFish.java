@@ -133,7 +133,6 @@ public class EvenMoreFish extends EMFPlugin {
     public void onLoad() {
         CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(this)
                 .shouldHookPaperReload(true)
-                .usePluginNamespace()
                 .missingExecutorImplementationMessage("You are not able to use this command!");
         CommandAPI.onLoad(config);
     }
