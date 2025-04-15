@@ -19,7 +19,7 @@ dependencyResolutionManagement {
             library("worldguard-bukkit", "com.sk89q.worldguard","worldguard-bukkit").versionRef("worldguard")
             bundle("worldguard", listOf("worldguard-core", "worldguard-bukkit"))
 
-            version("worldedit", "7.2.17") //We must use 7.2.17 until we compile against a newer Minecraft version
+            version("worldedit", "7.3.0") // 7.3.0 is the last version that supports 1.20.1 and Java 17
             library("worldedit-core", "com.sk89q.worldedit","worldedit-core").versionRef("worldedit")
             library("worldedit-bukkit", "com.sk89q.worldedit","worldedit-bukkit").versionRef("worldedit")
             bundle("worldedit", listOf("worldedit-core", "worldedit-bukkit"))
