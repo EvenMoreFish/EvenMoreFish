@@ -7,6 +7,7 @@ import com.oheers.fish.gui.guis.MainMenuGui;
 import com.oheers.fish.gui.guis.SellGui;
 import com.oheers.fish.selling.SellHelper;
 import com.oheers.fish.utils.ItemBuilder;
+import com.oheers.fish.utils.ItemFactory;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiPageElement;
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -28,10 +29,10 @@ public class GuiUtils {
         YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('f',
             createItemStack(
-                config.getString("gui.global.first-page.material", "arrow"),
+                config.getString("general.first-page.material", "arrow"),
                 Material.ARROW,
-                config.getString("gui.global.first-page.name", "<aqua>First Page"),
-                config.getStringList("gui.global.first-page.lore")
+                config.getString("general.first-page.name", "<aqua>First Page"),
+                config.getStringList("general.first-page.lore")
             ),
             GuiPageElement.PageAction.FIRST
         );
@@ -41,10 +42,10 @@ public class GuiUtils {
         YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('n',
             createItemStack(
-                config.getString("gui.global.next-page.material", "paper"),
+                config.getString("general.next-page.material", "paper"),
                 Material.PAPER,
-                config.getString("gui.global.next-page.name", "<aqua>Next Page"),
-                config.getStringList("gui.global.next-page.lore")
+                config.getString("general.next-page.name", "<aqua>Next Page"),
+                config.getStringList("general.next-page.lore")
             ),
             GuiPageElement.PageAction.NEXT
         );
@@ -54,10 +55,10 @@ public class GuiUtils {
         YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('p',
             createItemStack(
-                config.getString("gui.global.previous-page.material", "paper"),
+                config.getString("general.previous-page.material", "paper"),
                 Material.PAPER,
-                config.getString("gui.global.previous-page.name", "<aqua>Previous Page"),
-                config.getStringList("gui.global.previous-page.lore")
+                config.getString("general.previous-page.name", "<aqua>Previous Page"),
+                config.getStringList("general.previous-page.lore")
             ),
             GuiPageElement.PageAction.PREVIOUS
         );
@@ -67,10 +68,10 @@ public class GuiUtils {
         YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('l',
             createItemStack(
-                config.getString("gui.global.last-page.material", "arrow"),
+                config.getString("general.last-page.material", "arrow"),
                 Material.ARROW,
-                config.getString("gui.global.last-page.name", "<aqua>Last Page"),
-                config.getStringList("gui.global.last-page.lore")
+                config.getString("general.last-page.name", "<aqua>Last Page"),
+                config.getStringList("general.last-page.lore")
             ),
             GuiPageElement.PageAction.LAST
         );
