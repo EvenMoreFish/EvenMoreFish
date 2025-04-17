@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 public class Head64ItemAddon extends ItemAddon {
 
     @Override
-    public String getPrefix() {
+    public String getIdentifier() {
         return "head64";
     }
 
@@ -32,11 +32,6 @@ public class Head64ItemAddon extends ItemAddon {
         }
 
         return FishUtils.getSkullFromBase64(id);
-    }
-
-    @Override
-    public boolean canRegister() {
-        return true;
     }
 
 }

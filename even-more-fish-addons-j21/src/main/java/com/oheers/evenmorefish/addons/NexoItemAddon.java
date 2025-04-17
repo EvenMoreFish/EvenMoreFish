@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 public class NexoItemAddon extends ItemAddon implements Listener {
     
     @Override
-    public String getPrefix() {
+    public String getIdentifier() {
         return "nexo";
     }
 
@@ -34,21 +34,16 @@ public class NexoItemAddon extends ItemAddon implements Listener {
     }
 
     @Override
-    public JavaVersion getRequiredJavaVersion() {
-        return JavaVersion.JAVA_21;
-    }
-
-    @Override
     public ItemStack getItemStack(String id) {
         if (!NexoItems.exists(id)) {
-            getLogger().warning(() -> "Nexo item with id %s doesn't exist.".formatted(id));
+            getLogger().warn("Nexo item with id {} doesn't exist.", id);
             return null;
         }
 
         final ItemBuilder item = NexoItems.itemFromId(id);
 
         if (item == null) {
-            getLogger().info(() -> String.format("Could not obtain Nexo item %s", id));
+            getLogger().info("Could not obtain Nexo item {}", id);
             return null;
         }
 

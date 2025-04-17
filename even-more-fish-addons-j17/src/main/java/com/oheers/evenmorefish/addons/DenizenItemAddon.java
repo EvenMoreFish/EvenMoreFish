@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 public class DenizenItemAddon extends ItemAddon {
 
     @Override
-    public String getPrefix() {
+    public String getIdentifier() {
         return "denizen";
     }
 
@@ -31,7 +31,7 @@ public class DenizenItemAddon extends ItemAddon {
     public ItemStack getItemStack(String id) {
         final ItemTag itemTag = ItemTag.valueOf(id, false);
         if (itemTag == null) {
-            getLogger().info(() -> String.format("Could not obtain denizen item %s", id));
+            getLogger().info("Could not obtain denizen item {}", id);
             return null;
         }
 

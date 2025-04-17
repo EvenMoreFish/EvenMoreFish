@@ -2,7 +2,7 @@ package com.oheers.fish.commands;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.addons.AddonManager;
+import com.oheers.fish.api.addons.AddonManager;
 import com.oheers.fish.api.addons.Addon;
 import com.oheers.fish.api.reward.RewardType;
 import com.oheers.fish.baits.Bait;
@@ -318,10 +318,12 @@ public class AdminCommand {
                     final AddonManager addonManager = EvenMoreFish.getInstance().getAddonManager();
                     final String messageFormat = "Addon: %s, Loading: %b, Version: %s";
                     final List<String> messageList = new ArrayList<>();
+                    /** TODO Temporarily Broken :(
                     for (final Map.Entry<String, Addon> entry : addonManager.getAddonMap().entrySet()) {
                         final String prefix = entry.getKey();
                         messageList.add(String.format(messageFormat, prefix, addonManager.isLoading(prefix), entry.getValue().getVersion()));
                     }
+                    */
 
                     EMFListMessage.fromStringList(messageList).send(info.sender());
                 });

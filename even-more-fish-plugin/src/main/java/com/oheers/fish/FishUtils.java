@@ -4,6 +4,7 @@ import br.net.fabiozumbi12.RedProtect.Bukkit.RedProtect;
 import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import com.oheers.fish.api.addons.ItemAddon;
 import com.oheers.fish.api.addons.exceptions.NoPrefixException;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.configs.CompetitionFile;
@@ -488,8 +489,8 @@ public class FishUtils {
             final String prefix = split[0];
             final String id = split[1];
             EvenMoreFish.debug("GET ITEM for Addon(%s) Id(%s)".formatted(prefix, id));
-            return EvenMoreFish.getInstance().getAddonManager().getItemStack(prefix, id);
-        } catch (ArrayIndexOutOfBoundsException | NoPrefixException exception) {
+            return ItemAddon.getItem(prefix, id);
+        } catch (ArrayIndexOutOfBoundsException exception) {
             return null;
         }
     }

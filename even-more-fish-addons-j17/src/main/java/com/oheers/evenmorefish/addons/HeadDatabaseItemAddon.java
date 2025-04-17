@@ -14,7 +14,7 @@ public class HeadDatabaseItemAddon extends ItemAddon implements Listener {
     private HeadDatabaseAPI api = null;
 
     @Override
-    public String getPrefix() {
+    public String getIdentifier() {
         return "headdb";
     }
 
@@ -40,7 +40,7 @@ public class HeadDatabaseItemAddon extends ItemAddon implements Listener {
         }
 
         if (!api.isHead(id)) {
-            getLogger().warning(() -> String.format("No such head with the id %s", id));
+            getLogger().warn("No such head with the id {}", id);
             return null;
         }
 

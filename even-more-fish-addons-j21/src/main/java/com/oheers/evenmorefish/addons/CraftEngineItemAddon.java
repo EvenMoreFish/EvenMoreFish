@@ -13,7 +13,7 @@ import java.util.Optional;
 public class CraftEngineItemAddon extends ItemAddon implements Listener {
 
     @Override
-    public String getPrefix() {
+    public String getIdentifier() {
         return "craftengine";
     }
 
@@ -28,11 +28,6 @@ public class CraftEngineItemAddon extends ItemAddon implements Listener {
     }
 
     @Override
-    public JavaVersion getRequiredJavaVersion() {
-        return JavaVersion.JAVA_21;
-    }
-
-    @Override
     public String getAuthor() {
         return "FireML";
     }
@@ -41,14 +36,14 @@ public class CraftEngineItemAddon extends ItemAddon implements Listener {
     public ItemStack getItemStack(String id) {
         Optional<CustomItem<ItemStack>> optionalItem = BukkitCraftEngine.instance().itemManager().getCustomItem(Key.of(id));
         if (optionalItem.isEmpty()) {
-            getLogger().warning(() -> "CraftEngine item with id %s doesn't exist.".formatted(id));
+            getLogger().warn("CraftEngine item with id {} doesn't exist.", id);
             return null;
         }
 
         final ItemStack item = optionalItem.get().buildItemStack();
 
         if (item == null) {
-            getLogger().info(() -> String.format("Could not obtain CraftEngine item %s", id));
+            getLogger().info("Could not obtain CraftEngine item {}", id);
             return null;
         }
 

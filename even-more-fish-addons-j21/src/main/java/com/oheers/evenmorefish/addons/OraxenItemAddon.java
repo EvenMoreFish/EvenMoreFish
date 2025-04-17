@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 public class OraxenItemAddon extends ItemAddon implements Listener {
 
     @Override
-    public String getPrefix() {
+    public String getIdentifier() {
         return "oraxen";
     }
 
@@ -34,21 +34,16 @@ public class OraxenItemAddon extends ItemAddon implements Listener {
     }
 
     @Override
-    public JavaVersion getRequiredJavaVersion() {
-        return JavaVersion.JAVA_21;
-    }
-
-    @Override
     public ItemStack getItemStack(String id) {
         if (!OraxenItems.exists(id)) {
-            getLogger().warning(() -> "Oraxen item with id %s doesn't exist.".formatted(id));
+            getLogger().warn("Oraxen item with id {} doesn't exist.", id);
             return null;
         }
 
         final ItemBuilder item = OraxenItems.getItemById(id);
 
         if (item == null) {
-            getLogger().info(() -> "Could not obtain Oraxen item %s".formatted(id));
+            getLogger().info("Could not obtain Oraxen item {}", id);
             return null;
         }
 

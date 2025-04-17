@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 public class ItemsAdderItemAddon extends ItemAddon implements Listener {
 
     @Override
-    public String getPrefix() {
+    public String getIdentifier() {
         return "itemsadder";
     }
 
@@ -35,7 +35,11 @@ public class ItemsAdderItemAddon extends ItemAddon implements Listener {
     public ItemStack getItemStack(String id) {
         String[] splitMaterialValue = id.split(":");
         if (!verifyItemsFormat(splitMaterialValue)) {
-            getLogger().severe(() -> String.format("Incorrect format for ItemsAdderItemAddon, use %s:namespace:id. Got %s", getPrefix(), String.join(":", splitMaterialValue)));
+            getLogger().error(
+                "Incorrect format for ItemsAdderItemAddon, use {}:namespace:id. Got {}",
+                getIdentifier(),
+                String.join(":", splitMaterialValue)
+            );
             return null;
         }
 
@@ -43,7 +47,7 @@ public class ItemsAdderItemAddon extends ItemAddon implements Listener {
 
         final CustomStack customStack = CustomStack.getInstance(namespaceId);
         if (customStack == null) {
-            getLogger().info(() -> String.format("Could not obtain itemsadder item %s", namespaceId));
+            getLogger().info("Could not obtain itemsadder item {}", namespaceId);
             return null;
         }
         return CustomStack.getInstance(namespaceId).getItemStack();

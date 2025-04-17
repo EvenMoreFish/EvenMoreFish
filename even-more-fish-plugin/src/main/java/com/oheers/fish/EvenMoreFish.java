@@ -2,7 +2,7 @@ package com.oheers.fish;
 
 import com.github.Anon8281.universalScheduler.UniversalScheduler;
 import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
-import com.oheers.fish.addons.AddonManager;
+import com.oheers.fish.api.addons.AddonManager;
 import com.oheers.fish.addons.DefaultAddons;
 import com.oheers.fish.api.EMFAPI;
 import com.oheers.fish.api.economy.Economy;
@@ -173,7 +173,7 @@ public class EvenMoreFish extends EMFPlugin {
         new MessageConfig();
 
         saveAdditionalDefaultAddons();
-        this.addonManager = new AddonManager(this);
+        this.addonManager = new AddonManager();
         this.addonManager.load();
 
         new GuiConfig();

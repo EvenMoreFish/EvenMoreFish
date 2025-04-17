@@ -8,11 +8,6 @@ import org.bukkit.inventory.ItemStack;
 public class EcoItemsItemAddon extends ItemAddon {
 
     @Override
-    public String getPrefix() {
-        return "ecoitems";
-    }
-
-    @Override
     public String getPluginName() {
         return "EcoItems";
     }
@@ -20,6 +15,11 @@ public class EcoItemsItemAddon extends ItemAddon {
     @Override
     public String getAuthor() {
         return "FireML";
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "ecoitems";
     }
 
     @Override
@@ -32,7 +32,7 @@ public class EcoItemsItemAddon extends ItemAddon {
         final EcoItem item = EcoItems.INSTANCE.getByID(id);
 
         if (item == null) {
-            getLogger().info(() -> String.format("Could not obtain EcoItems item %s", id));
+            getLogger().info("Could not obtain EcoItems item {}", id);
             return null;
         }
 

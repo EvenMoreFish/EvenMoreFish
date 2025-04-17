@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -60,27 +61,27 @@ public class FileUtil {
 
         for (final String match : matches) {
             futures.add(
-                    CompletableFuture.supplyAsync(() -> {
-                                try {
-                                    final URL jar = file.toURI().toURL();
-                                    try (final URLClassLoader loader = new URLClassLoader(new URL[]{jar}, clazz.getClassLoader())) {
-                                        Class<? extends T> addonClass = loadClass(loader, match, clazz);
-                                        if (addonClass != null) {
-                                            return addonClass;
-                                        }
-                                    }
-                                } catch (final VerifyError ex) {
-                                    Logger logger = Logger.getLogger("EvenMoreFish");
-                                    //todo, this can't be here it's blocking
-                                    logger.severe(() -> String.format("Failed to load addon class %s", file.getName()));
-                                    logger.severe(() -> String.format("Cause: %s %s", ex.getClass().getSimpleName(), ex.getMessage()));
-                                    return null;
-                                } catch (IOException | ClassNotFoundException e) {
-                                    throw new CompletionException(e.getCause());
+                CompletableFuture.supplyAsync(() -> {
+                        try {
+                            final URL jar = file.toURI().toURL();
+                            try (final URLClassLoader loader = new URLClassLoader(new URL[]{jar}, clazz.getClassLoader())) {
+                                Class<? extends T> addonClass = loadClass(loader, match, clazz);
+                                if (addonClass != null) {
+                                    return addonClass;
                                 }
-                                return null;
                             }
-                    )
+                        } catch (final VerifyError ex) {
+                            Logger logger = Logger.getLogger("EvenMoreFish");
+                            //todo, this can't be here it's blocking
+                            logger.severe(() -> String.format("Failed to load addon class %s", file.getName()));
+                            logger.severe(() -> String.format("Cause: %s %s", ex.getClass().getSimpleName(), ex.getMessage()));
+                            return null;
+                        } catch (IOException | ClassNotFoundException e) {
+                            throw new CompletionException(e.getCause());
+                        }
+                        return null;
+                    }
+                )
             );
         }
 
@@ -101,6 +102,7 @@ public class FileUtil {
                     }
 
                     matches.add(name.substring(0, name.lastIndexOf('.')).replace('/', '.'));
+                    System.out.println(matches);
                 }
             }
         } catch (Exception e) {
@@ -146,21 +148,16 @@ public class FileUtil {
         return configFile;
     }
 
-    /**
-     * Retrieves all files in the given directory.
-     *
-     * @param directory The directory to search
-     * @param ignoreUnderscoreFiles Should files that start with an underscore be ignored?
-     * @param recursive Should this also search subdirectories?
-     * @return A list of files in the directory. Returns an empty list if none.
-     */
-    public static List<File> getFilesInDirectory(@NotNull File directory, boolean ignoreUnderscoreFiles, boolean recursive) {
+    public static List<File> getFilesInDirectoryWithExtension(@NotNull File directory, @Nullable String extension, boolean ignoreUnderscoreFiles, boolean recursive) {
         List<File> finalList = new ArrayList<>();
         if (!directory.exists() || !directory.isDirectory()) {
             return finalList;
         }
         try {
-            File[] fileArray = directory.listFiles();
+            FilenameFilter filter = extension == null
+                ? null
+                : (dir, name) -> name.endsWith(extension);
+            File[] fileArray = directory.listFiles(filter);
             if (fileArray == null) {
                 return finalList;
             }
@@ -178,6 +175,18 @@ public class FileUtil {
             EMFPlugin.getInstance().getLogger().log(Level.WARNING, "Failed to retrieve files in " + directory.getAbsolutePath() + ": Access Denied.", exception);
         }
         return finalList;
+    }
+
+    /**
+     * Retrieves all files in the given directory.
+     *
+     * @param directory The directory to search
+     * @param ignoreUnderscoreFiles Should files that start with an underscore be ignored?
+     * @param recursive Should this also search subdirectories?
+     * @return A list of files in the directory. Returns an empty list if none.
+     */
+    public static List<File> getFilesInDirectory(@NotNull File directory, boolean ignoreUnderscoreFiles, boolean recursive) {
+        return getFilesInDirectoryWithExtension(directory, null, ignoreUnderscoreFiles, recursive);
     }
 
     public static boolean doesDirectoryContainFile(@NotNull File directory, @NotNull String fileName, boolean recursive) {
