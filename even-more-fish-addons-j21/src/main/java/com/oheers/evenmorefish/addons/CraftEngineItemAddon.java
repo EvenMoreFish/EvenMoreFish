@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;
 
-public class CraftEngineItemAddon extends ItemAddon implements Listener {
+public class CraftEngineItemAddon extends ItemAddon {
 
     @Override
     public String getIdentifier() {
@@ -36,14 +36,14 @@ public class CraftEngineItemAddon extends ItemAddon implements Listener {
     public ItemStack getItemStack(String id) {
         Optional<CustomItem<ItemStack>> optionalItem = BukkitCraftEngine.instance().itemManager().getCustomItem(Key.of(id));
         if (optionalItem.isEmpty()) {
-            getLogger().warn("CraftEngine item with id {} doesn't exist.", id);
+            getLogger().warning(() -> "CraftEngine item with id %s doesn't exist.".formatted(id));
             return null;
         }
 
         final ItemStack item = optionalItem.get().buildItemStack();
 
         if (item == null) {
-            getLogger().info("Could not obtain CraftEngine item {}", id);
+            getLogger().info(() -> String.format("Could not obtain CraftEngine item %s", id));
             return null;
         }
 

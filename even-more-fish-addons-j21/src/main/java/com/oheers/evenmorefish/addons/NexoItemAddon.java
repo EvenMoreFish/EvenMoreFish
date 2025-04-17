@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-public class NexoItemAddon extends ItemAddon implements Listener {
+public class NexoItemAddon extends ItemAddon {
     
     @Override
     public String getIdentifier() {
@@ -36,14 +36,14 @@ public class NexoItemAddon extends ItemAddon implements Listener {
     @Override
     public ItemStack getItemStack(String id) {
         if (!NexoItems.exists(id)) {
-            getLogger().warn("Nexo item with id {} doesn't exist.", id);
+            getLogger().warning(() -> "Nexo item with id %s doesn't exist.".formatted(id));
             return null;
         }
 
         final ItemBuilder item = NexoItems.itemFromId(id);
 
         if (item == null) {
-            getLogger().info("Could not obtain Nexo item {}", id);
+            getLogger().info(() -> String.format("Could not obtain Nexo item %s", id));
             return null;
         }
 

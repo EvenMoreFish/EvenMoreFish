@@ -31,7 +31,7 @@ public class DenizenItemAddon extends ItemAddon {
     public ItemStack getItemStack(String id) {
         final ItemTag itemTag = ItemTag.valueOf(id, false);
         if (itemTag == null) {
-            getLogger().info("Could not obtain denizen item {}", id);
+            getLogger().info(() -> String.format("Could not obtain denizen item %s", id));
             return null;
         }
 

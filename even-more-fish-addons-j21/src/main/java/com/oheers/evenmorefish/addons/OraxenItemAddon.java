@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-public class OraxenItemAddon extends ItemAddon implements Listener {
+public class OraxenItemAddon extends ItemAddon {
 
     @Override
     public String getIdentifier() {
@@ -36,14 +36,14 @@ public class OraxenItemAddon extends ItemAddon implements Listener {
     @Override
     public ItemStack getItemStack(String id) {
         if (!OraxenItems.exists(id)) {
-            getLogger().warn("Oraxen item with id {} doesn't exist.", id);
+            getLogger().warning(() -> "Oraxen item with id %s doesn't exist.".formatted(id));
             return null;
         }
 
         final ItemBuilder item = OraxenItems.getItemById(id);
 
         if (item == null) {
-            getLogger().info("Could not obtain Oraxen item {}", id);
+            getLogger().info(() -> "Could not obtain Oraxen item %s".formatted(id));
             return null;
         }
 

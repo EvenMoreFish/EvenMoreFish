@@ -32,7 +32,7 @@ public class EcoItemsItemAddon extends ItemAddon {
         final EcoItem item = EcoItems.INSTANCE.getByID(id);
 
         if (item == null) {
-            getLogger().info("Could not obtain EcoItems item {}", id);
+            getLogger().info(() -> String.format("Could not obtain EcoItems item %s", id));
             return null;
         }
 

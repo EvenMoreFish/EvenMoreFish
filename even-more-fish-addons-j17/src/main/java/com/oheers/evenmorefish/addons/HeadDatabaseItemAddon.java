@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-public class HeadDatabaseItemAddon extends ItemAddon implements Listener {
+public class HeadDatabaseItemAddon extends ItemAddon {
 
     private HeadDatabaseAPI api = null;
 
@@ -40,7 +40,7 @@ public class HeadDatabaseItemAddon extends ItemAddon implements Listener {
         }
 
         if (!api.isHead(id)) {
-            getLogger().warn("No such head with the id {}", id);
+            getLogger().warning(() -> String.format("No such head with the id %s", id));
             return null;
         }
 

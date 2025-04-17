@@ -2,16 +2,17 @@ package com.oheers.fish.api.addons;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
-public abstract class ItemAddon {
+public abstract class ItemAddon implements Listener {
 
     private static final Map<String, ItemAddon> loaded = new HashMap<>();
 
@@ -55,6 +56,7 @@ public abstract class ItemAddon {
         if (loaded.containsKey(id)) {
             return false;
         }
+        Bukkit.getPluginManager().registerEvents(this, EMFPlugin.getInstance());
         loaded.put(id, this);
         EMFPlugin.getInstance().getLogger().info("Loaded " + getIdentifier() + " ItemAddon.");
         return true;
@@ -66,7 +68,7 @@ public abstract class ItemAddon {
     }
 
     protected Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
+        return EMFPlugin.getInstance().getLogger();
     }
 
 }
