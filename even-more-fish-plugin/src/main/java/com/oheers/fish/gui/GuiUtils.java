@@ -11,12 +11,15 @@ import com.oheers.fish.utils.ItemFactory;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiPageElement;
 import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,12 +31,7 @@ public class GuiUtils {
     public static GuiPageElement getFirstPageButton() {
         YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('f',
-            createItemStack(
-                config.getString("general.first-page.material", "arrow"),
-                Material.ARROW,
-                config.getString("general.first-page.name", "<aqua>First Page"),
-                config.getStringList("general.first-page.lore")
-            ),
+            createItemStack(config.getSection("general.first-page")),
             GuiPageElement.PageAction.FIRST
         );
     }
@@ -41,12 +39,7 @@ public class GuiUtils {
     public static GuiPageElement getNextPageButton() {
         YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('n',
-            createItemStack(
-                config.getString("general.next-page.material", "paper"),
-                Material.PAPER,
-                config.getString("general.next-page.name", "<aqua>Next Page"),
-                config.getStringList("general.next-page.lore")
-            ),
+            createItemStack(config.getSection("general.next-page")),
             GuiPageElement.PageAction.NEXT
         );
     }
@@ -54,12 +47,7 @@ public class GuiUtils {
     public static GuiPageElement getPreviousPageButton() {
         YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('p',
-            createItemStack(
-                config.getString("general.previous-page.material", "paper"),
-                Material.PAPER,
-                config.getString("general.previous-page.name", "<aqua>Previous Page"),
-                config.getStringList("general.previous-page.lore")
-            ),
+            createItemStack(config.getSection("general.previous-page")),
             GuiPageElement.PageAction.PREVIOUS
         );
     }
@@ -67,21 +55,25 @@ public class GuiUtils {
     public static GuiPageElement getLastPageButton() {
         YamlDocument config = GuiConfig.getInstance().getConfig();
         return new GuiPageElement('l',
-            createItemStack(
-                config.getString("general.last-page.material", "arrow"),
-                Material.ARROW,
-                config.getString("general.last-page.name", "<aqua>Last Page"),
-                config.getStringList("general.last-page.lore")
-            ),
+            createItemStack(config.getSection("general.last-page")),
             GuiPageElement.PageAction.LAST
         );
     }
 
-    public static ItemStack createItemStack(@NotNull String materialName, @NotNull Material defaultMaterial, @NotNull String display, @NotNull List<String> lore) {
-        return new ItemBuilder(materialName, defaultMaterial)
-            .withDisplay(display)
-            .withLore(lore)
-            .build();
+    public static ItemStack createItemStack(@Nullable Section section) {
+        if (section == null) {
+            ItemStack fallback = new ItemStack(Material.BARRIER);
+            fallback.editMeta(meta -> meta.displayName(Component.text("Invalid Item")));
+            return fallback;
+        }
+        // Fix for me messing up the item config layout - FireML
+        if (section.contains("displayname")) {
+            section.set("item.displayname", section.get("displayname"));
+            section.remove("displayname");
+        }
+        ItemFactory factory = new ItemFactory(null, section);
+        factory.enableAllChecks();
+        return factory.createItem(null, -1);
     }
 
     public static Map<String, BiConsumer<ConfigGui, GuiElement.Click>> getActionMap() {
