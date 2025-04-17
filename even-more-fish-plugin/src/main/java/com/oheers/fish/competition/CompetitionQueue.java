@@ -49,7 +49,7 @@ public class CompetitionQueue {
         }
 
         competitionFiles.forEach(file -> {
-            EvenMoreFish.debug("Loading " + file.getName() + " competition");
+            EvenMoreFish.getInstance().debug("Loading " + file.getName() + " competition");
             CompetitionFile competitionFile;
             try {
                 competitionFile = new CompetitionFile(file);
@@ -74,7 +74,7 @@ public class CompetitionQueue {
             if (loadRepeatedTiming(competition)) {
                 return;
             }
-            EvenMoreFish.debug(Level.WARNING, file.getName() + "'s timings are not configured properly. This competition will never automatically start.");
+            EvenMoreFish.getInstance().debug(Level.WARNING, file.getName() + "'s timings are not configured properly. This competition will never automatically start.");
         });
     }
 

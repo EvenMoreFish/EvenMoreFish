@@ -130,7 +130,7 @@ public class MigrationManager {
         final MigrationVersion latestBaseVersion = MigrationVersion.fromVersion(latestBaselineVersion);
         try (Connection ignored = connectionFactory.getConnection()) {
             // This will create the database file if it doesn't exist
-            EvenMoreFish.debug("Attempting first connection to database...");
+            EvenMoreFish.getInstance().debug("Attempting first connection to database...");
         } catch (SQLException e) {
             return latestBaseVersion;
         }

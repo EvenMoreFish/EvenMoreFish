@@ -17,9 +17,9 @@ public abstract class AddonLoader {
         if (!canLoad()) {
             return;
         }
-        EMFPlugin.getInstance().getLogger().info("Loading " + getName() + " " + getVersion() + " by " + getAuthor());
+        EMFPlugin.getInstance().debug("Loading " + getName() + " " + getVersion() + " by " + getAuthor());
         loadAddons();
-        EMFPlugin.getInstance().getLogger().info("Finished loading " + getName());
+        EMFPlugin.getInstance().debug("Finished loading " + getName());
     }
 
     public abstract boolean canLoad();

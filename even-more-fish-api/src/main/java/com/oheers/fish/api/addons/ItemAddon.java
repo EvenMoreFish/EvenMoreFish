@@ -65,7 +65,7 @@ public abstract class ItemAddon implements Listener {
         }
         Bukkit.getPluginManager().registerEvents(this, EMFPlugin.getInstance());
         loaded.put(id, this);
-        EMFPlugin.getInstance().getLogger().info("Loaded " + getIdentifier() + " ItemAddon.");
+        EMFPlugin.getInstance().debug("Loaded " + getIdentifier() + " ItemAddon.");
         return true;
     }
 

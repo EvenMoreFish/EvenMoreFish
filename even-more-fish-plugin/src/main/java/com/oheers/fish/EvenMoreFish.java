@@ -313,14 +313,9 @@ public class EvenMoreFish extends EMFPlugin {
         }
     }
 
-    public static void debug(final String message) {
-        debug(Level.INFO, message);
-    }
-
-    public static void debug(final Level level, final String message) {
-        if (MainConfig.getInstance().debugSession()) {
-            getInstance().getLogger().log(level, () -> "DEBUG %s".formatted(message));
-        }
+    @Override
+    public boolean isDebugSession() {
+        return MainConfig.getInstance().debugSession();
     }
 
     public static void dbVerbose(final String message) {

@@ -257,7 +257,7 @@ public class FishManager {
         }
 
         rarityFiles.forEach(file -> {
-            EvenMoreFish.debug("Loading " + file.getName() + " rarity");
+            EvenMoreFish.getInstance().debug("Loading " + file.getName() + " rarity");
             Rarity rarity;
             try {
                 rarity = new Rarity(file);

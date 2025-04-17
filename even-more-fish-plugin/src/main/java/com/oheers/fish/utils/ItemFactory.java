@@ -195,7 +195,7 @@ public class ItemFactory {
         }
 
         // The fish has no item type specified
-        EvenMoreFish.debug("GET TYPE: No item type specified, config location (%s)".formatted(configLocation + configurationFile.getNameAsString()));
+        EvenMoreFish.getInstance().debug("GET TYPE: No item type specified, config location (%s)".formatted(configLocation + configurationFile.getNameAsString()));
         return new ItemStack(Material.COD);
 
     }
@@ -341,7 +341,7 @@ public class ItemFactory {
      */
     private ItemStack checkMaterial(String mValue) {
         if (mValue == null || mValue.isBlank()) {
-            EvenMoreFish.debug("MATERIAL CHECK: Config Location (%s, %s), empty string".formatted(configLocation + "item.material", configurationFile.getNameAsString()));
+            EvenMoreFish.getInstance().debug("MATERIAL CHECK: Config Location (%s, %s), empty string".formatted(configLocation + "item.material", configurationFile.getNameAsString()));
             return null;
         }
 

@@ -102,7 +102,7 @@ public class BaitManager {
         }
 
         baitFiles.forEach(file -> {
-            EvenMoreFish.debug("Loading " + file.getName() + " bait");
+            EvenMoreFish.getInstance().debug("Loading " + file.getName() + " bait");
             Bait bait;
             try {
                 bait = new Bait(file);

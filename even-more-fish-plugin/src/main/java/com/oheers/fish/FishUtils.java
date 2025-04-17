@@ -231,7 +231,7 @@ public class FishUtils {
 
     public static @Nullable String getRegionName(Location location) {
         if (!MainConfig.getInstance().isRegionBoostsEnabled()) {
-            EvenMoreFish.debug("Region boosts are disabled.");
+            EvenMoreFish.getInstance().debug("Region boosts are disabled.");
             return null;
         }
 
@@ -244,7 +244,7 @@ public class FishUtils {
             ApplicableRegionSet set = container.createQuery().getApplicableRegions(BukkitAdapter.adapt(location));
 
             if (set.getRegions().isEmpty()) {
-                EvenMoreFish.debug("Could not find any regions with WorldGuard");
+                EvenMoreFish.getInstance().debug("Could not find any regions with WorldGuard");
                 return null;
             }
 
@@ -254,7 +254,7 @@ public class FishUtils {
         if (pluginManager.isPluginEnabled("RedProtect")) {
             Region region = RedProtect.get().getAPI().getRegion(location);
             if (region == null) {
-                EvenMoreFish.debug("Could not find any regions with RedProtect");
+                EvenMoreFish.getInstance().debug("Could not find any regions with RedProtect");
                 return null;
             }
 
@@ -335,14 +335,14 @@ public class FishUtils {
         Competition activeComp = Competition.getCurrentlyActive();
 
         if (plain.isEmpty() || activeComp == null) {
-            EvenMoreFish.debug("Formatted (Empty Message) " + plain.isEmpty());
-            EvenMoreFish.debug("Active Comp is null? " + (activeComp == null));
+            EvenMoreFish.getInstance().debug("Formatted (Empty Message) " + plain.isEmpty());
+            EvenMoreFish.getInstance().debug("Active Comp is null? " + (activeComp == null));
             return;
         }
 
         List<? extends Player> validPlayers = getValidPlayers(referencePlayer, activeComp);
         List<String> playerNames = validPlayers.stream().map(Player::getName).toList();
-        EvenMoreFish.debug("Valid players: " + StringUtils.join(playerNames, ","));
+        EvenMoreFish.getInstance().debug("Valid players: " + StringUtils.join(playerNames, ","));
 
         if (actionBar) {
             validPlayers.forEach(message::sendActionBar);
@@ -497,7 +497,7 @@ public class FishUtils {
             final String[] split = materialString.split(":", 2);
             final String prefix = split[0];
             final String id = split[1];
-            EvenMoreFish.debug("GET ITEM for Addon(%s) Id(%s)".formatted(prefix, id));
+            EvenMoreFish.getInstance().debug("GET ITEM for Addon(%s) Id(%s)".formatted(prefix, id));
             return ItemAddon.getItem(prefix, id);
         } catch (ArrayIndexOutOfBoundsException exception) {
             return null;
