@@ -28,7 +28,8 @@ public class J21AddonLoader extends AddonLoader {
     }
 
     @Override
-    public void loadItemAddons() {
+    public void loadAddons() {
+        // ItemAddon
         new CraftEngineItemAddon().register();
         new NexoItemAddon().register();
         new OraxenItemAddon().register();

@@ -2,6 +2,7 @@ package com.oheers.fish;
 
 import com.github.Anon8281.universalScheduler.UniversalScheduler;
 import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
+import com.oheers.fish.addons.impl.Head64ItemAddon;
 import com.oheers.fish.api.addons.AddonManager;
 import com.oheers.fish.addons.DefaultAddons;
 import com.oheers.fish.api.EMFAPI;
@@ -173,8 +174,7 @@ public class EvenMoreFish extends EMFPlugin {
         new MessageConfig();
 
         saveAdditionalDefaultAddons();
-        this.addonManager = new AddonManager();
-        this.addonManager.load();
+        loadAddonManager();
 
         new GuiConfig();
         new GuiFillerConfig();
@@ -193,10 +193,6 @@ public class EvenMoreFish extends EMFPlugin {
         }
 
         setupPermissions();
-
-        // Do this before anything fish or competition related.
-        loadRewardTypes();
-        loadRequirementTypes();
 
         FishManager.getInstance().load();
         BaitManager.getInstance().load();
@@ -628,6 +624,11 @@ public class EvenMoreFish extends EMFPlugin {
         }
     }
 
+    private void loadItemAddons() {
+        // Load ItemAddons
+        new Head64ItemAddon().register();
+    }
+
     private void loadRewardTypes() {
         // Load RewardTypes
         new CommandRewardType().register();
@@ -685,6 +686,16 @@ public class EvenMoreFish extends EMFPlugin {
         if (pm.isPluginEnabled("Vault")) {
             new MoneyRewardType().register();
         }
+    }
+
+    private void loadAddonManager() {
+        this.addonManager = new AddonManager();
+        this.addonManager.load();
+
+        // Internal Addons
+        loadItemAddons();
+        loadRewardTypes();
+        loadRequirementTypes();
     }
 
     public List<Player> getVisibleOnlinePlayers() {

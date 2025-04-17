@@ -27,4 +27,12 @@ public class J17AddonLoader extends AddonLoader {
         return SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_17);
     }
 
+    @Override
+    public void loadAddons() {
+        new DenizenItemAddon().register();
+        new EcoItemsItemAddon().register();
+        new HeadDatabaseItemAddon().register();
+        new ItemsAdderItemAddon().register();
+    }
+
 }
