@@ -3,6 +3,7 @@ package com.oheers.fish;
 import com.github.Anon8281.universalScheduler.UniversalScheduler;
 import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
 import com.oheers.fish.addons.DefaultAddons;
+import com.oheers.fish.addons.InternalAddonLoader;
 import com.oheers.fish.addons.impl.Head64ItemAddon;
 import com.oheers.fish.api.EMFAPI;
 import com.oheers.fish.api.addons.AddonManager;
@@ -656,78 +657,13 @@ public class EvenMoreFish extends EMFPlugin {
         }
     }
 
-    private void loadItemAddons() {
-        // Load ItemAddons
-        new Head64ItemAddon().register();
-    }
-
-    private void loadRewardTypes() {
-        // Load RewardTypes
-        new CommandRewardType().register();
-        new EffectRewardType().register();
-        new HealthRewardType().register();
-        new HungerRewardType().register();
-        new ItemRewardType().register();
-        new MessageRewardType().register();
-        new EXPRewardType().register();
-        loadExternalRewardTypes();
-    }
-
-    private void loadRequirementTypes() {
-        // Load RequirementTypes
-        new BiomeRequirementType().register();
-        new BiomeSetRequirementType().register();
-        new DisabledRequirementType().register();
-        new InGameTimeRequirementType().register();
-        new IRLTimeRequirementType().register();
-        new MoonPhaseRequirementType().register();
-        new NearbyPlayersRequirementType().register();
-        new PermissionRequirementType().register();
-        new RegionRequirementType().register();
-        new WeatherRequirementType().register();
-        new WorldRequirementType().register();
-
-        // Load Group RequirementType
-        if (isUsingVault()) {
-            RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-            if (rsp != null) {
-                new GroupRequirementType(rsp.getProvider()).register();
-            }
-        }
-    }
-
-    private void loadExternalRewardTypes() {
-        PluginManager pm = Bukkit.getPluginManager();
-        if (pm.isPluginEnabled("PlayerPoints")) {
-            new PlayerPointsRewardType().register();
-        }
-        if (pm.isPluginEnabled("GriefPrevention")) {
-            new GPClaimBlocksRewardType().register();
-        }
-        if (pm.isPluginEnabled("AuraSkills")) {
-            new AuraSkillsXPRewardType().register();
-        }
-        if (pm.isPluginEnabled("mcMMO")) {
-            new McMMOXPRewardType().register();
-        }
-        // Only enable the PERMISSION type if Vault perms is found.
-        if (getPermission() != null && getPermission().isEnabled()) {
-            new PermissionRewardType().register();
-        }
-        // Only enable the Money RewardType is Vault is enabled.
-        if (pm.isPluginEnabled("Vault")) {
-            new MoneyRewardType().register();
-        }
-    }
 
     private void loadAddonManager() {
         this.addonManager = new AddonManager();
         this.addonManager.load();
 
-        // Internal Addons
-        loadItemAddons();
-        loadRewardTypes();
-        loadRequirementTypes();
+        // Load internal addons
+        new InternalAddonLoader().load();
     }
 
     public List<Player> getVisibleOnlinePlayers() {

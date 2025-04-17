@@ -61,7 +61,7 @@ public abstract class RequirementType {
             return false;
         }
         loadedTypes.put(getIdentifier(), this);
-        EMFPlugin.getInstance().getLogger().info("Registered " + getIdentifier() + " RequirementType by " + getAuthor() + " from the plugin " + getPlugin().getName());
+        EMFPlugin.getInstance().getLogger().info("Registered " + getIdentifier() + " RequirementType");
         return true;
     }
 

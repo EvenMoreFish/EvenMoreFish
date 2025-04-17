@@ -49,7 +49,7 @@ public abstract class RewardType {
             return false;
         }
         loadedTypes.put(getIdentifier(), this);
-        EMFPlugin.getInstance().getLogger().info("Registered " + getIdentifier() + " RewardType by " + getAuthor() + " from the plugin " + getPlugin().getName());
+        EMFPlugin.getInstance().getLogger().info("Registered " + getIdentifier() + " RewardType");
         return true;
     }
 
