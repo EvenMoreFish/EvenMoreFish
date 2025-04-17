@@ -16,7 +16,7 @@ Welcome to the EvenMoreFish Wiki.
 * [Database](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Database-Config)
 ### Additional Features
 * [Reward Types](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Reward-Types)
-* [Addons](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Addons)
+* [Item Addons](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Item-Addons)
 ### Support
 * [FAQs](https://github.com/EvenMoreFish/EvenMoreFish/wiki/FAQs)
 * [Discord](https://discord.gg/Hb9cj3tNbb)
