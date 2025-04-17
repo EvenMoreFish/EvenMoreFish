@@ -24,28 +24,28 @@ general:
   first-page:
     item:
       material: arrow
-    displayname: <aqua>First Page
+      displayname: <aqua>First Page
     lore:
       - <yellow>Go to the first page
   # Character: p
   previous-page:
     item:
       material: paper
-    displayname: <aqua>Previous Page
+      displayname: <aqua>Previous Page
     lore:
       - <yellow>Go to the previous page
   # Character: n
   next-page:
     item:
       material: paper
-    displayname: <aqua>Next Page
+      displayname: <aqua>Next Page
     lore:
       - <yellow>Go to the next page
   # Character: l
   last-page:
     item:
       material: arrow
-    displayname: <aqua>Last Page
+      displayname: <aqua>Last Page
     lore:
       - <yellow>Go to the last page
 
