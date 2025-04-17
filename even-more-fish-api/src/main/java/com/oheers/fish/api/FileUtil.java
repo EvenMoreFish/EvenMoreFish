@@ -18,9 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.oheers.fish.api;
-
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.plugin.Plugin;
@@ -35,11 +33,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.logging.Level;
@@ -50,43 +44,43 @@ public class FileUtil {
         throw new UnsupportedOperationException();
     }
 
-    public static <T> @NotNull List<CompletableFuture<Class<? extends T>>> findClassesAsync(@NotNull final File file, @NotNull final Class<T> clazz) throws CompletionException {
+    private static final Map<File, URLClassLoader> fileClassLoaders = new HashMap<>();
+
+    public static <T> @NotNull List<Class<? extends T>> findClasses(@NotNull final File file, @NotNull final Class<T> clazz) {
         if (!file.exists()) {
             return Collections.emptyList();
         }
 
-        final List<CompletableFuture<Class<? extends T>>> futures = new ArrayList<>();
+        final List<Class<? extends T>> classes = new ArrayList<>();
 
         final List<String> matches = matchingNames(file);
 
         for (final String match : matches) {
-            futures.add(
-                CompletableFuture.supplyAsync(() -> {
-                        try {
-                            final URL jar = file.toURI().toURL();
-                            try (final URLClassLoader loader = new URLClassLoader(new URL[]{jar}, clazz.getClassLoader())) {
-                                Class<? extends T> addonClass = loadClass(loader, match, clazz);
-                                if (addonClass != null) {
-                                    return addonClass;
-                                }
-                            }
-                        } catch (final VerifyError ex) {
-                            Logger logger = Logger.getLogger("EvenMoreFish");
-                            //todo, this can't be here it's blocking
-                            logger.severe(() -> String.format("Failed to load addon class %s", file.getName()));
-                            logger.severe(() -> String.format("Cause: %s %s", ex.getClass().getSimpleName(), ex.getMessage()));
-                            return null;
-                        } catch (IOException | ClassNotFoundException e) {
-                            throw new CompletionException(e.getCause());
-                        }
-                        return null;
-                    }
-                )
-            );
+            try {
+                final URL jar = file.toURI().toURL();
+                // We need persistent class loaders, so we store a map of them.
+                // I'm not sure if this would cause memory problems. I assume not since this only ever happens once, but idk.
+                final URLClassLoader loader = fileClassLoaders.computeIfAbsent(
+                    file,
+                    f -> new URLClassLoader(new URL[]{jar}, clazz.getClassLoader())
+                );
+                Class<? extends T> addonClass = loadClass(loader, match, clazz);
+                if (addonClass != null) {
+                    classes.add(addonClass);
+                }
+            } catch (final VerifyError ex) {
+                Logger logger = Logger.getLogger("EvenMoreFish");
+                //todo, this can't be here it's blocking
+                logger.severe(() -> String.format("Failed to load addon class %s", file.getName()));
+                logger.severe(() -> String.format("Cause: %s %s", ex.getClass().getSimpleName(), ex.getMessage()));
+                continue;
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
 
 
-        return futures;
+        return classes;
     }
 
     private static @NotNull List<String> matchingNames(final File file) {

@@ -1,5 +1,6 @@
 package com.oheers.fish.api.addons;
 
+import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +47,7 @@ public abstract class ItemAddon implements Addon {
             return false;
         }
         loaded.put(id, this);
+        EMFPlugin.getInstance().getLogger().info("Loaded " + getIdentifier() + " ItemAddon.");
         return true;
     }
 

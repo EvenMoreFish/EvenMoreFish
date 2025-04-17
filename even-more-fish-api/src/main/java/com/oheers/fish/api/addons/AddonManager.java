@@ -39,15 +39,8 @@ public class AddonManager {
     }
 
     private void processJar(File jar) {
-        List<CompletableFuture<Class<? extends AddonLoader>>> futures = FileUtil.findClassesAsync(jar, AddonLoader.class);
-
-        futures.forEach(future ->
-            future.thenAccept(this::loadAddonLoader)
-                .exceptionally(ex -> {
-                    EMFPlugin.getInstance().getLogger().log(Level.WARNING, "Error processing JAR file: " + jar.getName(), ex);
-                    return null;
-                })
-        );
+        List<Class<? extends AddonLoader>> classes = FileUtil.findClasses(jar, AddonLoader.class);
+        classes.forEach(this::loadAddonLoader);
     }
 
     private void loadAddonLoader(Class<? extends AddonLoader> clazz) {
