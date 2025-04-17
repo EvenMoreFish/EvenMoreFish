@@ -2,14 +2,10 @@ package com.oheers.fish.api.addons;
 
 import com.oheers.fish.api.FileUtil;
 import com.oheers.fish.api.plugin.EMFPlugin;
-import com.oheers.fish.api.reward.RewardType;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
+import java.util.List;
 
 public class AddonManager {
 
