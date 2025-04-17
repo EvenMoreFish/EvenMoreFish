@@ -252,8 +252,8 @@ admin:
   update-available: '<reset>There is an update available: https://modrinth.com/plugin/evenmorefish/versions?l=paper'
   # When the plugin is reloaded
   reload: <reset>Successfully reloaded the plugin.
-  # When checking the list of RewardTypes. The actual list is added to the end of this message.
-  list-reward-types: '<reset>Registered Reward Types: '
+  # When checking a list of registered addons. The actual list is added to the end of this message.
+  list-addons: '<reset>Registered {addon-type}s: '
 
 # When an invalid rarity is provided for a command.
 rarity-invalid: <reset>That is not a valid rarity!

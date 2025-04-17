@@ -3,12 +3,17 @@ package com.oheers.fish.commands;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.addons.AddonManager;
-import com.oheers.fish.api.addons.Addon;
+import com.oheers.fish.api.addons.ItemAddon;
+import com.oheers.fish.api.requirement.RequirementType;
 import com.oheers.fish.api.reward.RewardType;
 import com.oheers.fish.baits.Bait;
 import com.oheers.fish.baits.BaitManager;
 import com.oheers.fish.baits.BaitNBTManager;
-import com.oheers.fish.commands.arguments.*;
+import com.oheers.fish.commands.arguments.ArgumentHelper;
+import com.oheers.fish.commands.arguments.BaitArgument;
+import com.oheers.fish.commands.arguments.CompetitionTypeArgument;
+import com.oheers.fish.commands.arguments.FishArgument;
+import com.oheers.fish.commands.arguments.RarityArgument;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.configs.CompetitionFile;
@@ -30,6 +35,7 @@ import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -41,7 +47,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.jar.Attributes;
 
 public class AdminCommand {
@@ -64,9 +73,8 @@ public class AdminCommand {
                         getBait(),
                         getClearBaits(),
                         getReload(),
-                        getAddons(),
                         getVersion(),
-                        getRewardTypes(),
+                        getList(),
                         getMigrate(),
                         getRawItem(),
                         getHelp(),
@@ -136,7 +144,7 @@ public class AdminCommand {
                 .withArguments(
                         new MultiLiteralArgument(
                                 "listTarget",
-                                "fish", "rarities"
+                                "fish", "rarities", "requirementTypes", "rewardTypes", "itemAddons"
                         ),
                         RarityArgument.create().setOptional(true)
                 )
@@ -179,6 +187,9 @@ public class AdminCommand {
                             }
                             sender.sendMessage(builder.build());
                         }
+                        case "requirementTypes" -> listRequirementTypes(sender);
+                        case "rewardTypes" -> listRewardTypes(sender);
+                        case "itemAddons" -> listItemAddons(sender);
                     }
                 });
     }
@@ -307,28 +318,6 @@ public class AdminCommand {
                 });
     }
 
-    private CommandAPICommand getAddons() {
-        helpMessageBuilder.addUsage(
-                "admin addons",
-                ConfigMessage.HELP_ADMIN_ADDONS::getMessage
-        );
-        return new CommandAPICommand("addons")
-                .withFullDescription(ConfigMessage.HELP_ADMIN_ADDONS.getMessage().getPlainTextMessage())
-                .executes(info -> {
-                    final AddonManager addonManager = EvenMoreFish.getInstance().getAddonManager();
-                    final String messageFormat = "Addon: %s, Loading: %b, Version: %s";
-                    final List<String> messageList = new ArrayList<>();
-                    /** TODO Temporarily Broken :(
-                    for (final Map.Entry<String, Addon> entry : addonManager.getAddonMap().entrySet()) {
-                        final String prefix = entry.getKey();
-                        messageList.add(String.format(messageFormat, prefix, addonManager.isLoading(prefix), entry.getValue().getVersion()));
-                    }
-                    */
-
-                    EMFListMessage.fromStringList(messageList).send(info.sender());
-                });
-    }
-
     @SuppressWarnings("UnstableApiUsage")
     private CommandAPICommand getVersion() {
         helpMessageBuilder.addUsage(
@@ -390,27 +379,64 @@ public class AdminCommand {
         return ManifestUtil.getAttributeFromManifest(Attributes.Name.IMPLEMENTATION_VERSION.toString(), "");
     }
 
-    private CommandAPICommand getRewardTypes() {
-        helpMessageBuilder.addUsage(
-                "admin rewardtypes",
-                ConfigMessage.HELP_ADMIN_REWARDTYPES::getMessage
-        );
-        return new CommandAPICommand("rewardtypes")
-                .executes(info -> {
-                    TextComponent.Builder builder = Component.text();
-                    builder.append(ConfigMessage.ADMIN_LIST_REWARD_TYPES.getMessage().getComponentMessage());
-                    RewardType.getLoadedTypes().forEach((string, rewardType) -> {
-                        Component show = EMFSingleMessage.fromString(
-                            "Author: " + rewardType.getAuthor() + "\n" +
-                            "Registered Plugin: " + rewardType.getPlugin().getName()
-                        ).getComponentMessage();
+    // TODO fix stray comma in all of these messages
+    private void listRewardTypes(@NotNull Audience audience) {
+        TextComponent.Builder builder = Component.text();
 
-                        TextComponent.Builder typeBuilder = Component.text().content(rewardType.getIdentifier());
-                        typeBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, show));
-                        builder.append(typeBuilder).append(Component.text(", "));
-                    });
-                    info.sender().sendMessage(builder.build());
-                });
+        EMFMessage listMessage = ConfigMessage.ADMIN_LIST_ADDONS.getMessage();
+        listMessage.setVariable("{addon-type}", RewardType.class.getSimpleName());
+        builder.append(listMessage.getComponentMessage());
+
+        RewardType.getLoadedTypes().forEach((string, rewardType) -> {
+            Component show = EMFSingleMessage.fromString(
+                "Author: " + rewardType.getAuthor() + "\n" +
+                    "Registered Plugin: " + rewardType.getPlugin().getName()
+            ).getComponentMessage();
+
+            TextComponent.Builder typeBuilder = Component.text().content(rewardType.getIdentifier());
+            typeBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, show));
+            builder.append(typeBuilder).append(Component.text(", "));
+        });
+        audience.sendMessage(builder.build());
+    }
+
+    private void listRequirementTypes(@NotNull Audience audience) {
+        TextComponent.Builder builder = Component.text();
+
+        EMFMessage listMessage = ConfigMessage.ADMIN_LIST_ADDONS.getMessage();
+        listMessage.setVariable("{addon-type}", RequirementType.class.getSimpleName());
+        builder.append(listMessage.getComponentMessage());
+
+        RequirementType.getLoadedTypes().forEach((string, requirementType) -> {
+            Component show = EMFSingleMessage.fromString(
+                "Author: " + requirementType.getAuthor() + "\n" +
+                    "Registered Plugin: " + requirementType.getPlugin().getName()
+            ).getComponentMessage();
+
+            TextComponent.Builder typeBuilder = Component.text().content(requirementType.getIdentifier());
+            typeBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, show));
+            builder.append(typeBuilder).append(Component.text(", "));
+        });
+        audience.sendMessage(builder.build());
+    }
+
+    private void listItemAddons(@NotNull Audience audience) {
+        TextComponent.Builder builder = Component.text();
+
+        EMFMessage listMessage = ConfigMessage.ADMIN_LIST_ADDONS.getMessage();
+        listMessage.setVariable("{addon-type}", ItemAddon.class.getSimpleName());
+        builder.append(listMessage.getComponentMessage());
+
+        ItemAddon.getLoadedAddons().forEach((string, itemAddon) -> {
+            Component show = EMFSingleMessage.fromString(
+                "Author: " + itemAddon.getAuthor()
+            ).getComponentMessage();
+
+            TextComponent.Builder typeBuilder = Component.text().content(itemAddon.getIdentifier());
+            typeBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, show));
+            builder.append(typeBuilder).append(Component.text(", "));
+        });
+        audience.sendMessage(builder.build());
     }
 
     private CommandAPICommand getMigrate() {

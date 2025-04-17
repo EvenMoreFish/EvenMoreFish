@@ -4,8 +4,6 @@ import com.oheers.fish.api.addons.ItemAddon;
 import net.momirealms.craftengine.bukkit.plugin.BukkitCraftEngine;
 import net.momirealms.craftengine.core.item.CustomItem;
 import net.momirealms.craftengine.core.util.Key;
-import org.apache.commons.lang3.JavaVersion;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;

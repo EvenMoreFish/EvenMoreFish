@@ -1,6 +1,13 @@
 package com.oheers.fish.competition;
 
-import com.oheers.fish.competition.strategies.*;
+import com.oheers.fish.competition.strategies.LargestFishStrategy;
+import com.oheers.fish.competition.strategies.LargestTotalStrategy;
+import com.oheers.fish.competition.strategies.MostFishStrategy;
+import com.oheers.fish.competition.strategies.RandomStrategy;
+import com.oheers.fish.competition.strategies.ShortestFishStrategy;
+import com.oheers.fish.competition.strategies.ShortestTotalStrategy;
+import com.oheers.fish.competition.strategies.SpecificFishStrategy;
+import com.oheers.fish.competition.strategies.SpecificRarityStrategy;
 import com.oheers.fish.messages.ConfigMessage;
 import org.jetbrains.annotations.Nullable;
 

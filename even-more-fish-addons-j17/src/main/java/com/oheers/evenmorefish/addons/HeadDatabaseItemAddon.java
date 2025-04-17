@@ -6,7 +6,6 @@ import com.oheers.fish.api.plugin.EMFPlugin;
 import me.arcaniax.hdb.api.DatabaseLoadEvent;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 public class HeadDatabaseItemAddon extends ItemAddon {

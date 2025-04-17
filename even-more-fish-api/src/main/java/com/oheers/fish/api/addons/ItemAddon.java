@@ -6,7 +6,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +14,14 @@ import java.util.logging.Logger;
 public abstract class ItemAddon implements Listener {
 
     private static final Map<String, ItemAddon> loaded = new HashMap<>();
+
+    public static Map<String, ItemAddon> getLoadedAddons() {
+        return Map.copyOf(loaded);
+    }
+
+    public static void unregisterAll() {
+        loaded.clear();
+    }
 
     public static @Nullable ItemAddon get(final @NotNull String prefix) {
         return loaded.get(prefix);

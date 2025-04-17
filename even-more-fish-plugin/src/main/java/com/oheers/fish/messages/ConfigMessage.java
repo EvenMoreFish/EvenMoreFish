@@ -28,7 +28,7 @@ public enum ConfigMessage {
     ADMIN_NUMBER_RANGE_ERROR("<reset>{amount} is not a number between 1-64.", PrefixType.ERROR, false, true, "admin.number-range-error"),
     ADMIN_UNKNOWN_PLAYER("<reset>{player} could not be found.", PrefixType.ERROR, false, true, "admin.player-not-found"),
     ADMIN_UPDATE_AVAILABLE("<reset>There is an update available: " + "https://modrinth.com/plugin/evenmorefish/versions?l=paper", PrefixType.ADMIN, false, false, "admin.update-available"),
-    ADMIN_LIST_REWARD_TYPES("<reset>Registered Reward Types: ", PrefixType.ADMIN, false, false, "admin.list-reward-types"),
+    ADMIN_LIST_ADDONS("<reset>Registered {addon-type}s: ", PrefixType.ADMIN, false, false, "admin.list-addons"),
 
     BAITS_CLEARED("<reset>You have removed all {amount} baits from your fishing rod.", PrefixType.ADMIN, true, true, "admin.all-baits-cleared"),
     BAIT_CAUGHT("<reset><b>{player} <reset>has caught a {bait_theme}<b>{bait} <reset>bait!", PrefixType.NONE, true, true, "bait-catch"),

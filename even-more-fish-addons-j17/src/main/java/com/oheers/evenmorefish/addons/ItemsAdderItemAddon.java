@@ -6,7 +6,6 @@ import com.oheers.fish.api.plugin.EMFPlugin;
 import dev.lone.itemsadder.api.CustomStack;
 import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemsAdderItemAddon extends ItemAddon {
