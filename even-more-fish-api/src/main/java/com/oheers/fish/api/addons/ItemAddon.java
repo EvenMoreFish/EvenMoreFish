@@ -5,11 +5,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class ItemAddon implements Addon {
+public abstract class ItemAddon {
 
     private static final Map<String, ItemAddon> loaded = new HashMap<>();
 
@@ -33,7 +35,14 @@ public abstract class ItemAddon implements Addon {
 
     public abstract String getPluginName();
 
-    @Override
+    public abstract String getAuthor();
+
+    public abstract String getIdentifier();
+
+    public String getVersion() {
+        return "0.0.0";
+    }
+
     public boolean canLoad() {
         return getPluginName() == null || Bukkit.getPluginManager().isPluginEnabled(getPluginName());
     }
@@ -54,6 +63,10 @@ public abstract class ItemAddon implements Addon {
     @Override
     public final String toString() {
         return String.format("ItemAddon[prefix: %s, author: %s]", getIdentifier(), getAuthor());
+    }
+
+    protected Logger getLogger() {
+        return LoggerFactory.getLogger(this.getClass());
     }
 
 }
