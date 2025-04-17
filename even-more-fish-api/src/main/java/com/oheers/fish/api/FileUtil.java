@@ -101,7 +101,6 @@ public class FileUtil {
                     }
 
                     matches.add(name.substring(0, name.lastIndexOf('.')).replace('/', '.'));
-                    System.out.println(matches);
                 }
             }
         } catch (Exception e) {

@@ -29,8 +29,6 @@ public class AddonManager {
             true
         );
 
-        System.out.println(jars);
-
         jars.forEach(this::processJar);
     }
 
@@ -43,7 +41,6 @@ public class AddonManager {
         if (clazz == null) {
             return;
         }
-        System.out.println(clazz.getSimpleName());
         try {
             AddonLoader loaderInstance = clazz.getDeclaredConstructor().newInstance();
             loaderInstance.load();
