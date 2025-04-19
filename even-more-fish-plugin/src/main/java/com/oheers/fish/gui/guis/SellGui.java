@@ -45,7 +45,7 @@ public class SellGui extends ConfigGui {
 
         Section config = getGuiConfig();
         if (config != null) {
-            super.gui.addElement(new GuiStorageElement(FishUtils.getCharFromString(getGuiConfig().getString("deposit-character", "i"), 'i'), this.fishInventory));
+            getGui().addElement(new GuiStorageElement(FishUtils.getCharFromString(getGuiConfig().getString("deposit-character", "i"), 'i'), this.fishInventory));
         }
     }
 

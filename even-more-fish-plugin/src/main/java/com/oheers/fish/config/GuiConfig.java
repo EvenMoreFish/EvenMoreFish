@@ -23,6 +23,9 @@ public class GuiConfig extends ConfigBase {
         // Config Version 1 - Remove competition menu button
         builder.addCustomLogic("1", document -> document.remove("main-menu.coming-soon-competitions"));
 
+        // Config Version 6 - Remove journal coming soon button
+        builder.addCustomLogic("6", document -> document.remove("main-menu.coming-soon-journal"));
+
         return builder.build();
     }
 

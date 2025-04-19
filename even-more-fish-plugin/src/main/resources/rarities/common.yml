@@ -1,6 +1,7 @@
 id: Common
 disabled: false
 weight: 100
+material: light_gray_concrete_powder
 format: <gray>{name}
 worth-multiplier: 0.1
 broadcast: false

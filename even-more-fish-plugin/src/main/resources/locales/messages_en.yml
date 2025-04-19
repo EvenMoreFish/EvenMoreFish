@@ -66,7 +66,7 @@ prefix-admin: '<red>[EvenMoreFish] '
 prefix-error: '<red>[EvenMoreFish] '
 
 # This is the format of the lore given to fish when they're caught.
-# {custom-lore} is specified in the fish.yml under the lore: section, if the fish has a lore, the lore's lines will
+# {custom-lore} is specified in the fish configs under the lore: section, if the fish has a lore, the lore's lines will
 # replace the {fish_lore}, however if it's empty the line will be removed. DO NOT ADD ANYTHING OTHER THAN THIS VARIABLE
 # TO THAT LINE.
 fish-lore:
@@ -106,7 +106,7 @@ invalid-type: '<reset>That isn''t a type of competition type, available types: M
 not-enough-players: <reset>There's not enough players online to start the scheduled fishing competition.
 # Sent to all players at specific times to show the remaining time left
 # {time_formatted} shows the time (e.g. 5m left, 10m 30s left)
-# {time_raw} is what you input in competitions.yml
+# {time_raw} is what you input in competition configs
 time-alert: <reset>There is {time_formatted} left on the competition for {type}
 
 # The sell price:
@@ -134,6 +134,7 @@ help-general:
   sellall: '[noPrefix]Sell all the fish in your inventory.'
   next: '[noPrefix]Show how much time is until the next competition.'
   applybaits: '[noPrefix]Apply baits to your fishing rod.'
+  journal: "[noPrefix]View a journal of caught fish and their stats."
 
 help-list:
   fish: '[noPrefix]Display all fish in a specific rarity.'

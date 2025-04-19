@@ -23,7 +23,7 @@ public class BaitsGui extends ConfigGui {
 
         Section config = getGuiConfig();
         if (config != null) {
-            super.gui.addElements(getBaitsGroup(config));
+            getGui().addElements(getBaitsGroup(config));
         }
     }
 

@@ -1,6 +1,7 @@
 id: Rare
 disabled: false
 weight: 10
+material: light_blue_concrete_powder
 format: <aqua>{name}
 worth-multiplier: 0.2
 broadcast: false

@@ -106,6 +106,7 @@ public enum ConfigMessage {
     HELP_GENERAL_NEXT("[noPrefix]Show how much time is until the next competition.", PrefixType.DEFAULT, false, true, "help-general.next"),
     HELP_GENERAL_SELLALL("[noPrefix]Sell all the fish in your inventory.", PrefixType.DEFAULT, false, true, "help-general.sellall"),
     HELP_GENERAL_APPLYBAITS("[noPrefix]Apply baits to your fishing rod.", PrefixType.DEFAULT, false, true, "help-general.applybaits"),
+    HELP_GENERAL_JOURNAL("[noPrefix]View a journal of caught fish and their stats.", PrefixType.DEFAULT, false, true, "help-general.journal"),
     HELP_ADMIN_TITLE(
         "[noPrefix]<white><st> <#ffedeb><st> <#ffdcd7><st> <#ffcac3><st> <#ffb8b0><st> <#ffa69d><st> <#ff948a><st> <#ff8078><st> <#ff6c66><st> <red><st> <white> <red><b>EvenMoreFish <red><st> <#ff6c66><st><st> <#ff8078><st> <#ff948a><st> <#ffa69d><st> <#ffb8b0><st> <#ffcac3><st> <#ffdcd7><st> <#ffedeb><st> <white><st> <white>",
         PrefixType.ADMIN,
