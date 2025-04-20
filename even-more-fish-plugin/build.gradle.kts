@@ -14,6 +14,7 @@ plugins {
     alias(libs.plugins.shadow)
     alias(libs.plugins.grgit)
     alias(libs.plugins.jooq)
+    id("org.sonarqube") version "6.0.1.5171"
 }
 
 group = "com.oheers.evenmorefish"
@@ -210,6 +211,15 @@ bukkit {
 
     }
 }
+
+sonar {
+  properties {
+    property("sonar.projectKey", "EvenMoreFish_EvenMoreFish")
+    property("sonar.organization", "evenmorefish")
+    property("sonar.host.url", "https://sonarcloud.io")
+  }
+}
+
 sourceSets {
     main {
         java.srcDirs.add(File("src/main/generated"))
