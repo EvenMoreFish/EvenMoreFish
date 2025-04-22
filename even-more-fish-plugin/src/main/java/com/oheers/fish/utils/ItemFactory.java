@@ -195,6 +195,7 @@ public class ItemFactory {
         }
 
         // The fish has no item type specified
+        this.rawMaterial = false;
         EvenMoreFish.getInstance().debug("GET TYPE: No item type specified, config location (%s)".formatted(configLocation + configurationFile.getNameAsString()));
         return new ItemStack(Material.COD);
 
@@ -366,10 +367,11 @@ public class ItemFactory {
 
         try {
             ItemStack item = getItem(materialId);
-            this.rawMaterial = rawMaterial;
+            if (item != null) {
+                this.rawMaterial = rawMaterial;
+            }
             return item;
         } catch (IncorrectAssignedMaterialException e) {
-            this.rawMaterial = true;
             EvenMoreFish.getInstance().getLogger().warning(e::getMessage);
             return new ItemStack(Material.COD);
         }
@@ -523,8 +525,8 @@ public class ItemFactory {
      */
     private ItemStack checkRawMaterial() {
         String materialID = this.configurationFile.getString(configLocation + "item.raw-material");
-        if (materialID != null) {
-            rawMaterial = true;
+        if (materialID == null) {
+            return null;
         }
 
         return checkItem(materialID, true);
