@@ -100,4 +100,9 @@ public class SpecificFishStrategy implements CompetitionStrategy {
         return message;
     }
 
+    @Override
+    public boolean shouldUseFishLength() {
+        return true;
+    }
+
 }

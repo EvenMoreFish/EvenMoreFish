@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class DatabaseStrategyFactory {
+
     @Contract("null -> new")
     public static @NotNull DatabaseTypeStrategy getStrategy(ConnectionFactory connectionFactory) {
         if (connectionFactory instanceof SqliteConnectionFactory) {
@@ -20,4 +21,5 @@ public class DatabaseStrategyFactory {
         }
         return new MySqlStrategy();
     }
+
 }

@@ -57,4 +57,9 @@ public class MostFishStrategy implements CompetitionStrategy {
         return message;
     }
 
+    @Override
+    public boolean shouldUseFishLength() {
+        return false;
+    }
+
 }

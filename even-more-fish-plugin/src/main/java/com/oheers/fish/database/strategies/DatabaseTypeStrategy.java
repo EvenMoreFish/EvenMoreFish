@@ -6,10 +6,12 @@ import org.jooq.conf.Settings;
 
 
 public interface DatabaseTypeStrategy {
+
     default Settings applySettings(Settings settings, String tablePrefix, String dbName) {
         return settings;
     }
     default FluentConfiguration configureFlyway(FluentConfiguration flywayConfig) {
         return flywayConfig;
     }
+
 }

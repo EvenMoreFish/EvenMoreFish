@@ -88,4 +88,9 @@ public class RandomStrategy implements CompetitionStrategy {
         return types.get(type);
     }
 
+    @Override
+    public boolean shouldUseFishLength() {
+        return randomType.getStrategy().shouldUseFishLength();
+    }
+
 }

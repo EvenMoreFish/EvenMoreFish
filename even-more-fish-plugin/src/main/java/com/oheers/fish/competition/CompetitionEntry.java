@@ -17,7 +17,7 @@ public class CompetitionEntry {
         this.fish = fish;
         this.time = Instant.now().toEpochMilli();
 
-        if (type == CompetitionType.LARGEST_FISH || type == CompetitionType.SHORTEST_FISH) {
+        if (type.getStrategy().shouldUseFishLength()) {
             this.value = fish.getLength();
         } else {
             this.value = 1;

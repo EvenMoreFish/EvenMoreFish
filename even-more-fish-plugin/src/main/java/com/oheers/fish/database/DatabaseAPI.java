@@ -71,5 +71,6 @@ public interface DatabaseAPI {
             int userId,
             @NotNull Timestamp timestamp
     );
+
 }
 

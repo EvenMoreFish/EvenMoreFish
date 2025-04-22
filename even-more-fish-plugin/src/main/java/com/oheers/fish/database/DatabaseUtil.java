@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DatabaseUtil {
+
     private DatabaseUtil() {
         throw new UnsupportedOperationException();
     }

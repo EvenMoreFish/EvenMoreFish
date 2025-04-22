@@ -1,6 +1,5 @@
 package com.oheers.fish.database;
 
-
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
