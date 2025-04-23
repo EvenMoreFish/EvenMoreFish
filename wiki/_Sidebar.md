@@ -19,7 +19,7 @@ Welcome to the EvenMoreFish Wiki.
 * [Item Addons](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Item-Addons)
 ### Support
 * [FAQs](https://github.com/EvenMoreFish/EvenMoreFish/wiki/FAQs)
-* [Discord](https://discord.gg/Hb9cj3tNbb)
+* [Discord](https://discord.gg/9fRbqWTnHS)
 ### Developers & API 
 * [Developers & API](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Developers)
 * [Database](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Database-API)

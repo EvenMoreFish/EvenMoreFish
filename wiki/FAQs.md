@@ -1,6 +1,6 @@
 # FAQs
 
-This answers a few questions I recognize are asked pretty frequently on [the discord help server](https://discord.gg/Hb9cj3tNbb):
+This answers a few questions I recognize are asked pretty frequently on [the discord help server](https://discord.gg/9fRbqWTnHS):
 
 ## How do I add commands when a fish is caught?
 

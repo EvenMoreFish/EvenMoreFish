@@ -195,7 +195,7 @@ public class CompetitionFile extends ConfigBase {
                 seconds += (Long.parseLong(split[0]) * 60);
                 finalTimes.add(seconds);
             } catch (NumberFormatException exception) {
-                logger.severe("Could not turn " + time + " into an alert time. If you need support, feel free to join the discord server: https://discord.gg/Hb9cj3tNbb");
+                logger.severe("Could not turn " + time + " into an alert time. If you need support, feel free to join the discord server: https://discord.gg/9fRbqWTnHS");
             }
         }
         return finalTimes;
