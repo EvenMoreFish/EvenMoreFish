@@ -180,12 +180,20 @@ public class ConfigBase {
 
     // MiniMessage conversion methods. DO NOT REMOVE
 
+    public List<String> getMiniMessageExclusions() {
+        return List.of();
+    }
+
     /**
      * Converts all Legacy colors to MiniMessage.
      */
     @SuppressWarnings("unchecked")
     public void convertLegacy(@NotNull YamlDocument document) {
+        List<String> excludedKeys = getMiniMessageExclusions();
         for (String key : document.getRoutesAsStrings(true)) {
+            if (excludedKeys.contains(key)) {
+                continue;
+            }
             if (document.isString(key)) {
                 String updated = convertLegacyString(document.getString(key));
                 document.set(key, updated);
