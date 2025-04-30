@@ -4,10 +4,12 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.exceptions.InvalidFishException;
+import com.oheers.fish.utils.ItemUtils;
 import com.oheers.fish.fishing.CatchType;
 import com.oheers.fish.fishing.items.config.RarityFileUpdates;
 import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -162,6 +164,13 @@ public class Rarity extends ConfigBase {
 
     public double getWorthMultiplier() {
         return getConfig().getDouble("worth-multiplier", 0.0D);
+    }
+
+    public Material getMaterial() {
+        return ItemUtils.getMaterial(
+            getConfig().getString("material"),
+            Material.IRON_BARS
+        );
     }
 
     // External variables

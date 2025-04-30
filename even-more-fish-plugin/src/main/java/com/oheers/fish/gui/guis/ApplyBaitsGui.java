@@ -47,7 +47,7 @@ public class ApplyBaitsGui extends ConfigGui {
 
         Section config = getGuiConfig();
         if (config != null) {
-            super.gui.addElement(new GuiStorageElement(FishUtils.getCharFromString(getGuiConfig().getString("bait-character", "b"), 'b'), this.baitInventory));
+            getGui().addElement(new GuiStorageElement(FishUtils.getCharFromString(getGuiConfig().getString("bait-character", "b"), 'b'), this.baitInventory));
         }
     }
 

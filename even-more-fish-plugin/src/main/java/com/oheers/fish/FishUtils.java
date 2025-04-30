@@ -493,6 +493,26 @@ public class FishUtils {
         }
     }
 
+    public static String getPlayerName(@Nullable UUID uuid) {
+        if (uuid == null) {
+            return null;
+        }
+        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        return player.getName();
+    }
+
+    public static String getPlayerName(@Nullable String uuidString) {
+        if (uuidString == null) {
+            return null;
+        }
+        try {
+            UUID uuid = UUID.fromString(uuidString);
+            return getPlayerName(uuid);
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
+    }
+
     public static @Nullable ItemStack getCustomItem(@NotNull String materialString) {
         if (!materialString.contains(":")) {
             return null;

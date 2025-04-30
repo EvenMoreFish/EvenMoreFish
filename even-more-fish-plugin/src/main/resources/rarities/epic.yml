@@ -1,6 +1,7 @@
 id: Epic
 disabled: false
 weight: 3
+material: magenta_concrete_powder
 format: <light_purple>{name}
 worth-multiplier: 0.15
 broadcast: true

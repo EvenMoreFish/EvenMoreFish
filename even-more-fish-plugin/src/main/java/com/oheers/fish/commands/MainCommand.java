@@ -3,8 +3,11 @@ package com.oheers.fish.commands;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.commands.arguments.ArgumentHelper;
+import com.oheers.fish.commands.arguments.RarityArgument;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.fishing.items.Rarity;
+import com.oheers.fish.gui.guis.journal.FishJournalGui;
 import com.oheers.fish.gui.guis.ApplyBaitsGui;
 import com.oheers.fish.gui.guis.MainMenuGui;
 import com.oheers.fish.gui.guis.SellGui;
@@ -34,21 +37,24 @@ public class MainCommand {
         );
 
         this.command = new CommandAPICommand(MainConfig.getInstance().getMainCommandName())
-            .withAliases(MainConfig.getInstance().getMainCommandAliases().toArray(String[]::new))
-            .withSubcommands(
-                getNext(),
-                getToggle(),
-                getGui(),
-                getHelp(),
-                getTop(),
-                getShop(),
-                getSellAll(),
-                getApplyBaits(),
-                new AdminCommand(adminName).getCommand()
-            )
-            .executes(info -> {
-                sendHelpMessage(info.sender());
-            });
+                .withAliases(MainConfig.getInstance().getMainCommandAliases().toArray(String[]::new))
+                .withSubcommands(
+                        getNext(),
+                        getToggle(),
+                        getGui(),
+                        getHelp(),
+                        getTop(),
+                        getShop(),
+                        getSellAll(),
+                        getApplyBaits(),
+                        new AdminCommand("admin").getCommand()
+                )
+                .executes(info -> {
+                    sendHelpMessage(info.sender());
+                });
+        if (MainConfig.getInstance().isDatabaseOnline()) {
+            this.command.withSubcommand(getJournal());
+        }
     }
 
     public CommandAPICommand getCommand() {
@@ -199,6 +205,22 @@ public class MainCommand {
             .withPermission(UserPerms.APPLYBAITS)
             .executesPlayer(info -> {
                 new ApplyBaitsGui(info.sender(), null).open();
+            });
+    }
+
+    private CommandAPICommand getJournal() {
+        helpMessageBuilder.addUsage(
+            "journal",
+            ConfigMessage.HELP_GENERAL_JOURNAL::getMessage
+        );
+        return new CommandAPICommand("journal")
+            .withPermission(UserPerms.JOURNAL)
+            .withArguments(
+                RarityArgument.create().setOptional(true)
+            )
+            .executesPlayer(info -> {
+                Rarity rarity = info.args().getUnchecked("rarity"); // This is allowed to be null.
+                new FishJournalGui(info.sender(), rarity).open();
             });
     }
 

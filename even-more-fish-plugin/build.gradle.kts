@@ -177,7 +177,8 @@ bukkit {
                 "emf.sellall",
                 "emf.help",
                 "emf.next",
-                "emf.applybaits"
+                "emf.applybaits",
+                "emf.journal"
             )
         }
 
