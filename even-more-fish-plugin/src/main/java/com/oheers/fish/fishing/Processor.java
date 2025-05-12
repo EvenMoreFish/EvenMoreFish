@@ -148,7 +148,7 @@ public abstract class Processor<E extends Event> implements Listener {
             message.setFishCaught(fish.getDisplayName());
             message.setRarity(fish.getRarity().getDisplayName());
 
-            if (fish.getRarity().getAnnounce() && Competition.isActive()) {
+            if (fish.getRarity().getAnnounce()) {
                 FishUtils.broadcastFishMessage(message, player, false);
             } else {
                 message.send(player);

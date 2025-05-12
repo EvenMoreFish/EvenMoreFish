@@ -335,12 +335,9 @@ public class FishUtils {
     }
 
     public static void broadcastFishMessage(EMFMessage message, Player referencePlayer, boolean actionBar) {
-        String plain = message.getPlainTextMessage();
         Competition activeComp = Competition.getCurrentlyActive();
 
-        if (plain.isEmpty() || activeComp == null) {
-            EvenMoreFish.getInstance().debug("Formatted (Empty Message) " + plain.isEmpty());
-            EvenMoreFish.getInstance().debug("Active Comp is null? " + (activeComp == null));
+        if (message.isEmpty()) {
             return;
         }
 
@@ -355,7 +352,11 @@ public class FishUtils {
         }
     }
 
-    private static @NotNull List<? extends Player> getValidPlayers(@NotNull Player referencePlayer, @NotNull Competition activeComp) {
+    private static @NotNull List<? extends Player> getValidPlayers(@NotNull Player referencePlayer, @Nullable Competition activeComp) {
+        if (activeComp == null) {
+            return Bukkit.getOnlinePlayers().stream().toList();
+        }
+
         CompetitionFile activeCompetitionFile = activeComp.getCompetitionFile();
 
         // Get the list of online players once and store in a variable.
