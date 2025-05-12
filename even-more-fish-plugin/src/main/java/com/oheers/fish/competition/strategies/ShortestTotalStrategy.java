@@ -52,4 +52,9 @@ public class ShortestTotalStrategy implements CompetitionStrategy {
         return true;
     }
 
+    @Override
+    public boolean isSingleReward() {
+        return false;
+    }
+
 }

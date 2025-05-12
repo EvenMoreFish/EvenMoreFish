@@ -51,4 +51,9 @@ public class LargestTotalStrategy implements CompetitionStrategy {
         return true;
     }
 
+    @Override
+    public boolean isSingleReward() {
+        return false;
+    }
+
 }

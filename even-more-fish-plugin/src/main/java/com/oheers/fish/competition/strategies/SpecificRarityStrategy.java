@@ -65,7 +65,7 @@ public class SpecificRarityStrategy implements CompetitionStrategy {
         }
 
         if (entry.getValue() >= competition.getNumberNeeded()) {
-            competition.singleReward(fisher);
+            competition.setSingleWinner(fisher);
             competition.end(false);
         }
     }
@@ -117,6 +117,11 @@ public class SpecificRarityStrategy implements CompetitionStrategy {
 
     @Override
     public boolean shouldUseFishLength() {
+        return true;
+    }
+
+    @Override
+    public boolean isSingleReward() {
         return true;
     }
 

@@ -52,4 +52,9 @@ public class LargestFishStrategy implements CompetitionStrategy {
     public boolean shouldUseFishLength() {
         return true;
     }
+
+    @Override
+    public boolean isSingleReward() {
+        return false;
+    }
 }

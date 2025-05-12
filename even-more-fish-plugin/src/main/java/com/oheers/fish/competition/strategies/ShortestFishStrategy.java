@@ -53,4 +53,9 @@ public class ShortestFishStrategy implements CompetitionStrategy {
         return true;
     }
 
+    @Override
+    public boolean isSingleReward() {
+        return false;
+    }
+
 }

@@ -50,4 +50,9 @@ public class NullStrategy implements CompetitionStrategy {
         return true;
     }
 
+    @Override
+    public boolean isSingleReward() {
+        return false;
+    }
+
 }

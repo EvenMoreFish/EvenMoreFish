@@ -59,6 +59,7 @@ public class Competition {
     private MyScheduledTask timingSystem;
     private CompetitionFile competitionFile;
     private int numberNeeded = 0;
+    private Player singleWinner = null;
 
     public Competition(final @NotNull CompetitionFile competitionFile) {
         this.competitionFile = competitionFile;
@@ -152,7 +153,11 @@ public class Competition {
                     ConfigMessage.COMPETITION_END.getMessage().send(player);
                     sendLeaderboard(player);
                 }
-                handleRewards();
+                if (competitionType.getStrategy().isSingleReward() && singleWinner != null) {
+                    singleReward(singleWinner);
+                } else {
+                    handleRewards();
+                }
                 if (originallyRandom) {
                     competitionType = CompetitionType.RANDOM;
                 }
@@ -353,6 +358,7 @@ public class Competition {
     }
 
     private void handleRewards() {
+
         if (leaderboard.getSize() == 0) {
             if (!((competitionType == CompetitionType.SPECIFIC_FISH || competitionType == CompetitionType.SPECIFIC_RARITY) && numberNeeded == 1)) {
                 ConfigMessage.NO_WINNERS.getMessage().broadcast();
@@ -396,7 +402,7 @@ public class Competition {
         }
     }
 
-    public void singleReward(Player player) {
+    private void singleReward(Player player) {
         EMFMessage message = getTypeFormat(ConfigMessage.COMPETITION_SINGLE_WINNER);
         message.setPlayer(player);
         message.setCompetitionType(competitionType.getTypeVariable().getMessage());
@@ -570,6 +576,10 @@ public class Competition {
             EvenMoreFish.getInstance().getLogger().log(Level.SEVERE, exception.getMessage(), exception);
             return false;
         }
+    }
+
+    public void setSingleWinner(@Nullable Player player) {
+        this.singleWinner = player;
     }
 
 }

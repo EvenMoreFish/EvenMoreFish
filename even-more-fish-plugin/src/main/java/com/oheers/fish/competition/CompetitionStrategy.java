@@ -91,4 +91,6 @@ public interface CompetitionStrategy {
 
     boolean shouldUseFishLength();
 
+    boolean isSingleReward();
+
 }

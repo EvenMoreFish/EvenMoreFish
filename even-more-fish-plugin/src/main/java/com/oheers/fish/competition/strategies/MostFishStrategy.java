@@ -69,4 +69,9 @@ public class MostFishStrategy implements CompetitionStrategy {
         return new DecimalFormat();
     }
 
+    @Override
+    public boolean isSingleReward() {
+        return false;
+    }
+
 }

@@ -99,4 +99,9 @@ public class RandomStrategy implements CompetitionStrategy {
         return randomType.getStrategy().getDecimalFormat();
     }
 
+    @Override
+    public boolean isSingleReward() {
+        return randomType.getStrategy().isSingleReward();
+    }
+
 }
