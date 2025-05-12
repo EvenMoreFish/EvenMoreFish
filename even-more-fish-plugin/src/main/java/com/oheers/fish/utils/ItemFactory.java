@@ -98,7 +98,7 @@ public class ItemFactory {
      */
     public ItemStack createItem(OfflinePlayer player, int randomIndex, @Nullable Map<String, EMFMessage> replacements) {
         if (rawMaterial) {
-            return this.product;
+            return this.product.clone();
         }
         if (itemRandom && player != null) {
             applyItemRandomType(player, randomIndex);
@@ -128,7 +128,7 @@ public class ItemFactory {
 
         applyFlags();
 
-        return product;
+        return product.clone();
     }
 
     /**
