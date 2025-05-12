@@ -60,10 +60,11 @@ public class SpecificRarityStrategy implements CompetitionStrategy {
             entry.incrementValue(increaseAmount);
             leaderboard.updateEntry(entry);
         } else {
-            leaderboard.addEntry(new CompetitionEntry(fisher.getUniqueId(), fish, competition.getCompetitionType()));
+            entry = new CompetitionEntry(fisher.getUniqueId(), fish, competition.getCompetitionType());
+            leaderboard.addEntry(entry);
         }
 
-        if (entry != null && entry.getValue() >= competition.getNumberNeeded()) {
+        if (entry.getValue() >= competition.getNumberNeeded()) {
             competition.singleReward(fisher);
             competition.end(false);
         }
