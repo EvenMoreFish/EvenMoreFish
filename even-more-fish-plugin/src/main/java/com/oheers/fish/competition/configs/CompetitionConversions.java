@@ -2,6 +2,7 @@ package com.oheers.fish.competition.configs;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.ConfigBase;
+import com.oheers.fish.utils.Logging;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +49,7 @@ public class CompetitionConversions {
         file.renameTo(new File(EvenMoreFish.getInstance().getDataFolder(), "competitions.yml.old"));
         file.delete();
 
-        EvenMoreFish.getInstance().getLogger().severe("Your competition configs have been automatically converted to the new format.");
+        Logging.infoComponent("<yellow>Your competition configs have been automatically converted to the new format.");
     }
 
     /**

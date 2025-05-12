@@ -2,6 +2,7 @@ package com.oheers.fish.fishing.items.config;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.ConfigBase;
+import com.oheers.fish.utils.Logging;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,8 +43,8 @@ public class FishConversions extends RarityConversions {
         file.renameTo(new File(EvenMoreFish.getInstance().getDataFolder(), "fish.yml.old"));
         file.delete();
 
-        EvenMoreFish.getInstance().getLogger().severe("Your fish configs have been automatically converted to the new format.");
-        EvenMoreFish.getInstance().getLogger().severe("They are now located in the rarity files.");
+        Logging.infoComponent("<yellow>Your fish configs have been automatically converted to the new format.");
+        Logging.infoComponent("<yellow>They are now located in the rarity files.");
     }
 
     private void convertSectionToFile(@NotNull Section section) {
