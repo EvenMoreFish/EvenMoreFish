@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "com.oheers.evenmorefish"
-version = "2.0.0-SNAPSHOT"
+version = properties["project-version"] as String
 
 dependencies {
     compileOnly(libs.paper.api)
