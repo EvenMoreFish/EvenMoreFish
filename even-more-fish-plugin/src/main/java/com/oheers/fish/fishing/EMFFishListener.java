@@ -3,6 +3,7 @@ package com.oheers.fish.fishing;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.EMFFishEvent;
+import com.oheers.fish.api.EMFFishHuntEvent;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.data.FishRarityKey;
@@ -13,6 +14,7 @@ import com.oheers.fish.database.model.fish.FishStats;
 import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.fishing.items.Fish;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
