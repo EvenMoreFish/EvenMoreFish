@@ -4,6 +4,8 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.database.Database;
+import com.oheers.fish.database.data.FishRarityKey;
+import com.oheers.fish.database.data.UserFishRarityKey;
 import com.oheers.fish.database.model.fish.FishStats;
 import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.fishing.items.Fish;
@@ -22,9 +24,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.function.Supplier;
 
 public class FishJournalGui extends ConfigGui {
 
@@ -32,10 +33,10 @@ public class FishJournalGui extends ConfigGui {
 
     public FishJournalGui(@NotNull HumanEntity player, @Nullable Rarity rarity) {
         super(
-            GuiConfig.getInstance().getConfig().getSection(
-                rarity == null ? "journal-menu" : "journal-rarity"
-            ),
-            player
+                GuiConfig.getInstance().getConfig().getSection(
+                        rarity == null ? "journal-menu" : "journal-rarity"
+                ),
+                player
         );
 
         this.rarity = rarity;
@@ -59,13 +60,15 @@ public class FishJournalGui extends ConfigGui {
     private DynamicGuiElement getFishGroup(Section section) {
         char character = FishUtils.getCharFromString(section.getString("fish-character", "f"), 'f');
 
-        return new DynamicGuiElement(character, who -> {
+        return new DynamicGuiElement(
+                character, who -> {
             GuiElementGroup group = new GuiElementGroup(character);
             this.rarity.getFishList().forEach(fish ->
-                group.addElement(new StaticGuiElement(character, getFishItem(fish, section)))
+                    group.addElement(new StaticGuiElement(character, getFishItem(fish, section)))
             );
             return group;
-        });
+        }
+        );
     }
 
     private ItemStack getFishItem(Fish fish, Section section) {
@@ -84,37 +87,33 @@ public class FishJournalGui extends ConfigGui {
         ItemStack item = factory.createItem(null, -1);
         item.editMeta(meta -> {
             // Display Name
-            String displayStr = section.getString("fish-item.item.displayname");
+            final String displayStr = section.getString("fish-item.item.displayname");
             if (displayStr != null) {
                 EMFSingleMessage display = EMFSingleMessage.fromString(displayStr);
                 display.setVariable("{fishname}", fish.getDisplayName());
                 meta.displayName(display.getComponentMessage());
             }
 
-            //user id
-            int userId = EvenMoreFish.getInstance().getUserManager().getUserId(player.getUniqueId());
-            UserFishStats userFishStats = EvenMoreFish.getInstance().getUserFishStatsDataManager().get(userId + "." + fish.getName() + "." + fish.getRarity().getId());
-            FishStats fishStats = EvenMoreFish.getInstance().getFishStatsDataManager().get(fish.getName() + "." + fish.getRarity().getId());
-            // Lore
-            LocalDateTime discover = userFishStats.getFirstCatchTime();
-            String discoverDate = discover == null ? "Unknown" : discover.format(DateTimeFormatter.ISO_DATE);
+            final int userId = EvenMoreFish.getInstance().getUserManager().getUserId(player.getUniqueId());
 
-            String discoverer = FishUtils.getPlayerName(fishStats.getDiscoverer());
-            if (discoverer == null) {
-                discoverer = "Unknown";
-            }
+            final UserFishStats userFishStats = EvenMoreFish.getInstance().getUserFishStatsDataManager().get(UserFishRarityKey.of(userId, fish).toString());
+            final FishStats fishStats = EvenMoreFish.getInstance().getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
+
+            final String discoverDate = getValueOrUnknown(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE));
+            final String discoverer = getValueOrUnknown(() -> FishUtils.getPlayerName(fishStats.getDiscoverer()));
 
             EMFListMessage lore = EMFListMessage.fromStringList(
                     section.getStringList("fish-item.lore")
             );
-            lore.setVariable("{times-caught}", Integer.toString(userFishStats.getQuantity()));
-            lore.setVariable("{largest-size}", userFishStats.getLongestLength());
-            lore.setVariable("{smallest-size}", userFishStats.getShortestLength());
+
+            lore.setVariable("{times-caught}", getValueOrUnknown(() -> Integer.toString(userFishStats.getQuantity())));
+            lore.setVariable("{largest-size}", getValueOrUnknown(() -> String.valueOf(userFishStats.getLongestLength())));
+            lore.setVariable("{smallest-size}", getValueOrUnknown(() -> String.valueOf(userFishStats.getShortestLength())));
             lore.setVariable("{discover-date}", discoverDate);
             lore.setVariable("{discoverer}", discoverer);
-            lore.setVariable("{server-largest}", fishStats.getLongestLength());
-            lore.setVariable("{server-smallest}", fishStats.getShortestLength());
-            lore.setVariable("{server-caught}", fishStats.getQuantity());
+            lore.setVariable("{server-largest}", getValueOrUnknown(() -> String.valueOf(fishStats.getLongestLength())));
+            lore.setVariable("{server-smallest}", getValueOrUnknown(() -> String.valueOf(fishStats.getShortestLength())));
+            lore.setVariable("{server-caught}", getValueOrUnknown(() -> String.valueOf(fishStats.getQuantity())));
             meta.lore(lore.getComponentListMessage());
         });
 
@@ -123,21 +122,36 @@ public class FishJournalGui extends ConfigGui {
         return item;
     }
 
+    @NotNull
+    private String getValueOrUnknown(Supplier<String> supplier) {
+        try {
+            String value = supplier.get();
+            return (value == null) ? "Unknown" : value;
+        } catch (NullPointerException e) {
+            return "Unknown";
+        }
+    }
+
+
     private DynamicGuiElement getRarityGroup(Section section) {
         char character = FishUtils.getCharFromString(section.getString("rarity-character", "r"), 'r');
 
-        return new DynamicGuiElement(character, who -> {
+        return new DynamicGuiElement(
+                character, who -> {
             GuiElementGroup group = new GuiElementGroup(character);
             FishManager.getInstance().getRarityMap().values().forEach(rarity ->
-                group.addElement(
-                    new StaticGuiElement(character, getRarityItem(rarity, section), click -> {
-                        click.getGui().close();
-                        new FishJournalGui(player, rarity).open();
-                        return true;
-                    }))
+                    group.addElement(
+                            new StaticGuiElement(
+                                    character, getRarityItem(rarity, section), click -> {
+                                click.getGui().close();
+                                new FishJournalGui(player, rarity).open();
+                                return true;
+                            }
+                            ))
             );
             return group;
-        });
+        }
+        );
     }
 
     private ItemStack getRarityItem(Rarity rarity, Section section) {
@@ -150,7 +164,7 @@ public class FishJournalGui extends ConfigGui {
             return factory.createItem(player, -1);
         }
 
-        ItemFactory factory = new ItemFactory("rarity-item", section);
+        final ItemFactory factory = new ItemFactory("rarity-item", section);
         factory.enableAllChecks();
         ItemStack item = factory.createItem(null, -1);
         item = ItemUtils.changeMaterial(item, rarity.getMaterial());

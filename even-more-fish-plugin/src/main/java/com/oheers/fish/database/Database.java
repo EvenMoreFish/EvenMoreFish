@@ -653,7 +653,8 @@ public class Database implements DatabaseAPI {
             @Override
             protected Boolean onRunQuery(DSLContext dslContext) throws Exception {
                 return dslContext.fetchExists(Tables.USER_FISH_STATS,
-                    Tables.USER_FISH_STATS.FISH_RARITY.eq(rarity)
+                        Tables.USER_FISH_STATS.USER_ID.eq(id)
+                                .and(Tables.USER_FISH_STATS.FISH_RARITY.eq(rarity))
                 );
             }
 
@@ -672,7 +673,6 @@ public class Database implements DatabaseAPI {
                         .filter(Objects::nonNull)
                         .map(log -> {
                             FishLogRecord logRecord = new FishLogRecord();
-                            EvenMoreFish.getInstance().debug(("USER ID " + log.getUserId()));
                             logRecord.setUserId(log.getUserId());
                             logRecord.setFishLength(log.getLength());
                             logRecord.setCompetitionId(log.getCompetitionId());
