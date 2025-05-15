@@ -1,6 +1,7 @@
 package com.oheers.fish.database.model.fish;
 
 
+import com.oheers.fish.fishing.items.Fish;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -34,6 +35,22 @@ public class FishStats {
         this.longestLength = longestLength;
         this.longestFisher = longestFisher;
         this.quantity = quantity;
+    }
+
+    public FishStats(Fish fish, @NotNull LocalDateTime firstCatchTime, @NotNull UUID discoverer, float shortestLength, @NotNull UUID shortestFisher, float longestLength, @NotNull UUID longestFisher, int quantity) {
+        this.fishName = fish.getName();
+        this.fishRarity = fish.getRarity().getId();
+        this.firstCatchTime = firstCatchTime;
+        this.discoverer = discoverer;
+        this.shortestLength = shortestLength;
+        this.shortestFisher = shortestFisher;
+        this.longestLength = longestLength;
+        this.longestFisher = longestFisher;
+        this.quantity = quantity;
+    }
+
+    public static FishStats empty(Fish fish, LocalDateTime firstCatchTime) {
+        return new FishStats(fish,firstCatchTime,fish.getFisherman(), fish.getLength(),fish.getFisherman(),fish.getLength(), fish.getFisherman(), 0);
     }
 
     public @NotNull String getFishName() {

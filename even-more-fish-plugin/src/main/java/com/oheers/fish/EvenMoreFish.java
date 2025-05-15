@@ -237,7 +237,7 @@ public class EvenMoreFish extends EMFPlugin {
                 return EvenMoreFish.getInstance().getDatabase().getFishStats(fishName,fishRarity);
             });
 
-            this.userFishStatsDataManager = new DataManager<>(new UserFishStatsSavingStrategy(5L), key -> {
+            this.userFishStatsDataManager = new DataManager<>(new UserFishStatsSavingStrategy(MainConfig.getInstance().getUserFishStatsSaveInterval()), key -> {
                 final int userId = Integer.parseInt(key.split("\\.")[0]);
                 final String fishName = key.split("\\.")[1];
                 final String fishRarity = key.split("\\.")[2];
@@ -245,7 +245,7 @@ public class EvenMoreFish extends EMFPlugin {
             });
 
             this.userReportDataManager = new DataManager<>(new UserReportsSavingStrategy(), uuid -> EvenMoreFish.getInstance().getDatabase().getUserReport(UUID.fromString(uuid)));
-            this.competitionDataManager = new DataManager<>(new CompetitionSavingStrategy(5L), key -> database.getCompetitionReport(Integer.parseInt(key)));
+            this.competitionDataManager = new DataManager<>(new CompetitionSavingStrategy(MainConfig.getInstance().getCompetitionSaveInterval()), key -> database.getCompetitionReport(Integer.parseInt(key)));
         }
 
 

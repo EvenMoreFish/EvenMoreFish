@@ -1,6 +1,7 @@
 package com.oheers.fish.database.data.strategy.impl;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.data.strategy.HybridSavingStrategy;
 import com.oheers.fish.database.model.user.UserFishStats;
 
@@ -13,7 +14,7 @@ public class UserFishStatsSavingStrategy extends HybridSavingStrategy<UserFishSt
                 stats -> EvenMoreFish.getInstance().getDatabase().upsertUserFishStats(stats),
                 stats ->  EvenMoreFish.getInstance().getDatabase().batchUpdateUserFishStats(stats),
                 interval,
-                TimeUnit.MINUTES
+                TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
         );
     }
 

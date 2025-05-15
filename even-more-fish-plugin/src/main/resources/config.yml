@@ -51,7 +51,9 @@ database:
   password: ''
   advanced:
     save-interval:
+      unit: SECONDS
       user-fish-stats: 5
+      competition: 5
 
 # Prevents verbose output when the plugin interacts with the database.
 disable-db-verbose: true

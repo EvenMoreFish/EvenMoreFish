@@ -81,7 +81,7 @@ public class EMFFishListener implements Listener {
         final FishStats stats = fishStatsDataManager.getOrCreate(
                 fishRarityKey.toString(),
                 key -> EvenMoreFish.getInstance().getDatabase().getFishStats(fish.getName(),fish.getRarity().getId()),
-                () -> new FishStats(fish.getName(),fish.getRarity().getId(),LocalDateTime.now(),fish.getFisherman(),fish.getLength(),fish.getFisherman(),fish.getLength(),fish.getFisherman(),1)
+                () -> FishStats.empty(fish,LocalDateTime.now())
         );
 
         if (stats.getLongestLength() < fish.getLength()) {
@@ -95,8 +95,8 @@ public class EMFFishListener implements Listener {
         }
 
         stats.incrementQuantity();
-        EvenMoreFish.getInstance().debug("Fish Stats: %s".formatted( stats.toString()));
         fishStatsDataManager.update(fishRarityKey.toString(), stats);
+        EvenMoreFish.getInstance().debug("Fish Stats: %s".formatted( stats.toString()));
     }
 
     private void handleFishLog(final int userId, final Fish fish, final LocalDateTime catchTime) {
@@ -104,13 +104,13 @@ public class EMFFishListener implements Listener {
         final String competitionId = Competition.getCurrentlyActive() != null ? Competition.getCurrentlyActive().getCompetitionName() : null;
         final FishLog log = new FishLog(userId, fish, catchTime, competitionId);
         final String key = UserFishRarityKey.of(userId,fish).toString();
-        fishLogDataManager.update(key, Collections.singletonList(log)); //todo, what if there are multiple logs? we can fix this later, just don't forget
+        fishLogDataManager.update(key, Collections.singletonList(log));
     }
 
     private void handleUserFishStats(final int userId, final @NotNull Fish fish) {
         final DataManager<UserFishStats> userFishStatsDataManager = EvenMoreFish.getInstance().getUserFishStatsDataManager();
         final UserFishStats stats = userFishStatsDataManager.getOrCreate(
-                String.valueOf(userId),
+                UserFishRarityKey.of(userId,fish).toString(),
                 id -> EvenMoreFish.getInstance().getDatabase().getUserFishStats(userId, fish.getName(), fish.getRarity().getId()),
                 () -> new UserFishStats(userId, fish, LocalDateTime.now())
         );

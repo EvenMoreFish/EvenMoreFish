@@ -2,6 +2,7 @@ package com.oheers.fish.database.data.strategy.impl;
 
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.data.strategy.HybridSavingStrategy;
 import com.oheers.fish.database.model.CompetitionReport;
 
@@ -13,7 +14,7 @@ public class CompetitionSavingStrategy extends HybridSavingStrategy<CompetitionR
                 competition -> EvenMoreFish.getInstance().getDatabase().updateCompetition(competition),
                 competitions -> EvenMoreFish.getInstance().getDatabase().batchUpdateCompetitions(competitions),
                 interval,
-                TimeUnit.MINUTES
+                TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
         );
     }
 }

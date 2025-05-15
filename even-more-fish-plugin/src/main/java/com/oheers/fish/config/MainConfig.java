@@ -38,6 +38,7 @@ public class MainConfig extends ConfigBase {
     private final String applyBaitsSubCommandName;
     private final String journalSubCommandName;
 
+
     public MainConfig() {
         super("config.yml", "config.yml", EvenMoreFish.getInstance(), true);
         instance = this;
@@ -210,6 +211,22 @@ public class MainConfig extends ConfigBase {
 
     public String getDatabaseType() {
         return getConfig().getString("database.type", "sqlite");
+    }
+
+    public String getSaveIntervalUnit() {
+        return getConfig().getString(Route.from("database", "advanced", "save-interval", "units"), "SECONDS");
+    }
+
+    public int getCompetitionSaveInterval() {
+        return getSaveInterval("competition");
+    }
+
+    public int getUserFishStatsSaveInterval() {
+        return getSaveInterval("user-fish-stats");
+    }
+
+    private int getSaveInterval(final String path) {
+        return getConfig().getInt(Route.from("database", "advanced", "save-interval", path), 5);
     }
 
 
