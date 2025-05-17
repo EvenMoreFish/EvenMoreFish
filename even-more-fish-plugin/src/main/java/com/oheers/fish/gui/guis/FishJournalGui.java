@@ -143,7 +143,6 @@ public class FishJournalGui extends ConfigGui {
                     group.addElement(
                             new StaticGuiElement(
                                     character, getRarityItem(rarity, section), click -> {
-                                click.getGui().close();
                                 new FishJournalGui(player, rarity).open();
                                 return true;
                             }

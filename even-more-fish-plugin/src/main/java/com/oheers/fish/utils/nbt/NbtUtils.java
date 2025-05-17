@@ -16,6 +16,10 @@ public class NbtUtils {
         throw new UnsupportedOperationException();
     }
 
+    public static boolean isInvalidItem(@Nullable final ItemStack item) {
+        return item == null || item.isEmpty();
+    }
+
     public static boolean hasKey(final ItemStack item, final String key) {
         final NbtVersion nbtVersion = NbtVersion.getVersion(item);
         final NamespacedKey namespacedKey = getNamespacedKey(key);
@@ -88,6 +92,9 @@ public class NbtUtils {
 
     @Nullable
     public static String getString(final ItemStack item, final String key) {
+        if (isInvalidItem(item)) {
+            return null;
+        }
         final NbtVersion nbtVersion = NbtVersion.getVersion(item);
         final NamespacedKey namespacedKey = NbtUtils.getNamespacedKey(key);
         return NBT.get(item, nbt -> {
@@ -96,12 +103,20 @@ public class NbtUtils {
     }
 
     public static String[] getBaitArray(final ItemStack item) {
+        if (isInvalidItem(item)) {
+            return new String[0];
+        }
         final String appliedBait = NbtUtils.getString(item, NbtKeys.EMF_APPLIED_BAIT);
-        if (appliedBait == null) return new String[0];
+        if (appliedBait == null) {
+            return new String[0];
+        }
         return appliedBait.split(",");
     }
 
     public static @Nullable Float getFloat(final ItemStack item, final String key) {
+        if (isInvalidItem(item)) {
+            return null;
+        }
         final NbtVersion nbtVersion = NbtVersion.getVersion(item);
         final NamespacedKey namespacedKey = NbtUtils.getNamespacedKey(key);
         return NBT.get(item, nbt -> switch (nbtVersion) {
@@ -129,6 +144,9 @@ public class NbtUtils {
     }
 
     public static @Nullable Integer getInteger(final ItemStack item, final String key) {
+        if (isInvalidItem(item)) {
+            return null;
+        }
         final NbtVersion nbtVersion = NbtVersion.getVersion(item);
         final NamespacedKey namespacedKey = NbtUtils.getNamespacedKey(key);
         return NBT.get(item, nbt -> switch (nbtVersion) {

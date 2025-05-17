@@ -13,13 +13,18 @@ import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 public class WorthNBT {
+
     private WorthNBT() {
         throw new UnsupportedOperationException();
     }
 
-    public static ItemStack setNBT(ItemStack fishItem, Fish fish) {
+    public static ItemStack setNBT(@NotNull ItemStack fishItem, @NotNull Fish fish) {
+        if (NbtUtils.isInvalidItem(fishItem)) {
+            return fishItem;
+        }
         // creates key and plops in the value of "value"
         NBT.modify(fishItem, nbt -> {
             ReadWriteNBT emfCompound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
@@ -58,7 +63,11 @@ public class WorthNBT {
         itemMeta.set(nbtname, PersistentDataType.STRING, fish.getName());
     }
 
-    public static double getValue(ItemStack item) {
+    public static double getValue(@NotNull ItemStack item) {
+        if (NbtUtils.isInvalidItem(item)) {
+            return -1.0;
+        }
+
         // creating the key to check for
         if (!FishUtils.isFish(item)) {
             return -1.0;

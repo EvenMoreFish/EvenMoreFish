@@ -9,6 +9,7 @@ Welcome to the EvenMoreFish Wiki.
 * [Competition Types](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Competition-Types)
 * [Competition Configs](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Competition-Configs)
 * [Rarities](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Rarities)
+* [Catch Types](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Catch-Types)
 * [Baits](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Baits)
 * [Messages.yml](https://github.com/EvenMoreFish/EvenMoreFish/wiki/Messages.yml)
 * [GUI Action Types](https://github.com/EvenMoreFish/EvenMoreFish/wiki/GUI-Actions)
