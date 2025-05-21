@@ -567,6 +567,14 @@ public class FishUtils {
         return skull;
     }
 
+    public static @NotNull ItemStack getSkullFromUUIDString(@NotNull String uuidString) {
+        try {
+            return getSkullFromUUID(UUID.fromString(uuidString));
+        } catch (IllegalArgumentException exception) {
+            return new ItemStack(Material.PLAYER_HEAD);
+        }
+    }
+
     /**
      * Sorts a double value by rounding it to the provided amount of decimal places.
      *
