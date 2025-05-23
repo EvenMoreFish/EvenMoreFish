@@ -325,7 +325,7 @@ public class Fish {
             newLoreLine = ConfigMessage.FISH_LORE.getMessage();
         }
 
-        List<String> fishLore = section.getStringList("lore");
+        List<String> fishLore = factory.getLore().getConfiguredValue();
         EMFListMessage fishLoreReplacement = fishLore.isEmpty() ? EMFListMessage.empty() : EMFListMessage.fromStringList(fishLore);
         newLoreLine.setVariable("{fish_lore}", fishLoreReplacement);
 
