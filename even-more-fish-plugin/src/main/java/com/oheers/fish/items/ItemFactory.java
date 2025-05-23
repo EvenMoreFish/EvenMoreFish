@@ -47,6 +47,10 @@ public class ItemFactory {
         } else {
             this.configuration = ConfigUtils.getOrCreateSection(configuration, configLocation);
         }
+
+        // Updates the configuration to put everything in the correct place
+        new ItemFactoryConversion().performConversions(this.configuration);
+
         this.customModelData = new CustomModelDataItemConfig(configuration);
         this.itemDamage = new ItemDamageItemConfig(configuration);
         this.displayName = new DisplayNameItemConfig(configuration);
