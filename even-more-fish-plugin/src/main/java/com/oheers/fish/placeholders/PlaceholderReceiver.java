@@ -4,12 +4,15 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionType;
+import com.oheers.fish.database.model.fish.FishStats;
+import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,130 +20,122 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Handles all PlaceholderAPI expansions for EvenMoreFish.
- * <p>
- * Placeholders are processed in priority order:
- * 1. EXACT_MATCH (e.g. %emf_competition_active%)
- * 2. SPECIFIC_PATTERN (e.g. %emf_competition_place_player_1%)
- * 3. GENERAL_PATTERN (e.g. %emf_total_money_earned_<uuid>%)
- * 4. FALLBACK
- * </p>
  */
 public class PlaceholderReceiver extends PlaceholderExpansion {
 
+    private static final Map<CompetitionType, ConfigMessage> COMPETITION_TYPE_MESSAGES = Map.of(
+            CompetitionType.LARGEST_FISH, ConfigMessage.COMPETITION_TYPE_LARGEST,
+            CompetitionType.LARGEST_TOTAL, ConfigMessage.COMPETITION_TYPE_LARGEST_TOTAL,
+            CompetitionType.MOST_FISH, ConfigMessage.COMPETITION_TYPE_MOST,
+            CompetitionType.SPECIFIC_FISH, ConfigMessage.COMPETITION_TYPE_SPECIFIC,
+            CompetitionType.SPECIFIC_RARITY, ConfigMessage.COMPETITION_TYPE_SPECIFIC_RARITY,
+            CompetitionType.SHORTEST_FISH, ConfigMessage.COMPETITION_TYPE_SHORTEST,
+            CompetitionType.SHORTEST_TOTAL, ConfigMessage.COMPETITION_TYPE_SHORTEST_TOTAL
+    );
+
     private final EvenMoreFish plugin;
-    private final List<HandlerDefinition> handlers = new ArrayList<>();
+    private final List<HandlerDefinition> handlers;
 
-
-    /**
-     * Since we register the expansion inside our own plugin, we
-     * can simply use this method here to get an instance of our
-     * plugin.
-     *
-     * @param plugin The instance of our plugin.
-     */
     public PlaceholderReceiver(EvenMoreFish plugin) {
         this.plugin = plugin;
-        registerHandlers();
-        sortHandlers();
+        this.handlers = createHandlers();
     }
 
-    /**
-     * Because this is an internal class,
-     * you must override this method to let PlaceholderAPI know to not unregister your expansion class when
-     * PlaceholderAPI is reloaded
-     *
-     * @return true to persist through reloads
-     */
     @Override
     public boolean persist() {
         return true;
     }
 
-    /**
-     * Because this is a internal class, this check is not needed
-     * and we can simply return {@code true}
-     *
-     * @return Always true since it's an internal class.
-     */
     @Override
     public boolean canRegister() {
         return true;
     }
 
-    /**
-     * The name of the person who created this expansion should go here.
-     * <br>For convenience do we return the author from the plugin.yml
-     *
-     * @return The name of the author as a String.
-     */
     @Override
-    @SuppressWarnings("UnstableApiUsage")
     public @NotNull String getAuthor() {
         return plugin.getPluginMeta().getAuthors().toString();
     }
 
-    /**
-     * The placeholder identifier should go here.
-     * <br>This is what tells PlaceholderAPI to call our onRequest
-     * method to obtain a value if a placeholder starts with our
-     * identifier.
-     * <br>The identifier has to be lowercase and can't contain _ or %
-     *
-     * @return The identifier in {@code %<identifier>_<value>%} as String.
-     */
     @Override
     public @NotNull String getIdentifier() {
         return "emf";
     }
 
-    /**
-     * This is the version of the expansion.
-     * <br>You don't have to use numbers, since it is set as a String.
-     * <p>
-     * For convenience do we return the version from the plugin.yml
-     *
-     * @return The version as a String.
-     */
     @Override
-    @SuppressWarnings("UnstableApiUsage")
     public @NotNull String getVersion() {
         return plugin.getPluginMeta().getVersion();
     }
 
-    private void register(Predicate<String> matcher,
-                          Priority priority,
-                          BiFunction<Player, String, String> handler) {
-        Objects.requireNonNull(matcher, "Matcher cannot be null");
-        Objects.requireNonNull(priority, "Priority cannot be null");
-        Objects.requireNonNull(handler, "Handler cannot be null");
+    private List<HandlerDefinition> createHandlers() {
+        return Stream.of(
+                        // Competition placeholders
+                        new HandlerDefinition(
+                                id -> id.startsWith("competition_place_size_"),
+                                Priority.SPECIFIC_PATTERN,
+                                this::handleCompetitionPlaceSize
+                        ),
+                        new HandlerDefinition(
+                                id -> id.startsWith("competition_place_fish_"),
+                                Priority.SPECIFIC_PATTERN,
+                                this::handleCompetitionPlaceFish
+                        ),
+                        new HandlerDefinition(
+                                id -> id.startsWith("competition_place_player_"),
+                                Priority.SPECIFIC_PATTERN,
+                                this::handleCompetitionPlacePlayer
+                        ),
 
-        handlers.add(new HandlerDefinition(matcher, priority, handler));
-    }
+                        // Total stats placeholders
+                        new HandlerDefinition(
+                                id -> id.startsWith("total_money_earned_"),
+                                Priority.GENERAL_PATTERN,
+                                this::handleTotalMoneyEarned
+                        ),
+                        new HandlerDefinition(
+                                id -> id.startsWith("total_fish_sold_"),
+                                Priority.GENERAL_PATTERN,
+                                this::handleTotalFishSold
+                        ),
 
-    private void sortHandlers() {
-        handlers.sort(Comparator.comparingInt(def -> def.priority().ordinal()));
-    }
-
-    private void registerHandlers() {
-        // Competition placeholders
-        register(id -> id.startsWith("competition_place_size_"), Priority.SPECIFIC_PATTERN, this::handleCompetitionPlaceSize);
-        register(id -> id.startsWith("competition_place_fish_"), Priority.SPECIFIC_PATTERN, this::handleCompetitionPlaceFish);
-        register(id -> id.startsWith("competition_place_player_"), Priority.SPECIFIC_PATTERN, this::handleCompetitionPlacePlayer);
-
-        // Total stats placeholders
-        register(id -> id.startsWith("total_money_earned_"), Priority.GENERAL_PATTERN, this::handleTotalMoneyEarned);
-        register(id -> id.startsWith("total_fish_sold_"), Priority.GENERAL_PATTERN, this::handleTotalFishSold);
-
-        // Exact match placeholders
-        register(id -> id.equalsIgnoreCase("competition_time_left"), Priority.EXACT_MATCH, this::handleCompetitionTimeLeft);
-        register(id -> id.equalsIgnoreCase("competition_active"), Priority.EXACT_MATCH, this::handleCompetitionActive);
-        register(id -> id.equalsIgnoreCase("custom_fishing_boolean"), Priority.EXACT_MATCH, this::handleCustomFishingBoolean);
-        register(id -> id.equalsIgnoreCase("custom_fishing_status"), Priority.EXACT_MATCH, this::handleCustomFishingStatus);
-        register(id -> id.equalsIgnoreCase("competition_type"), Priority.EXACT_MATCH, this::handleCompetitionType);
-        register(id -> id.equalsIgnoreCase("competition_type_format"), Priority.EXACT_MATCH, this::handleCompetitionTypeFormat);
+                        // Exact match placeholders
+                        new HandlerDefinition(
+                                id -> id.equalsIgnoreCase("competition_time_left"),
+                                Priority.EXACT_MATCH,
+                                this::handleCompetitionTimeLeft
+                        ),
+                        new HandlerDefinition(
+                                id -> id.equalsIgnoreCase("competition_active"),
+                                Priority.EXACT_MATCH,
+                                this::handleCompetitionActive
+                        ),
+                        new HandlerDefinition(
+                                id -> id.equalsIgnoreCase("custom_fishing_boolean"),
+                                Priority.EXACT_MATCH,
+                                this::handleCustomFishingBoolean
+                        ),
+                        new HandlerDefinition(
+                                id -> id.equalsIgnoreCase("custom_fishing_status"),
+                                Priority.EXACT_MATCH,
+                                this::handleCustomFishingStatus
+                        ),
+                        new HandlerDefinition(
+                                id -> id.equalsIgnoreCase("competition_type"),
+                                Priority.EXACT_MATCH,
+                                this::handleCompetitionType
+                        ),
+                        new HandlerDefinition(
+                                id -> id.equalsIgnoreCase("competition_type_format"),
+                                Priority.EXACT_MATCH,
+                                this::handleCompetitionTypeFormat
+                        )
+                )
+                .sorted(Comparator.comparingInt(def -> def.priority().ordinal()))
+                .toList();
     }
 
     private String handleCompetitionPlacePlayer(Player player, String identifier) {
@@ -149,22 +144,15 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage();
         }
 
-        // checking the leaderboard actually contains the value of place
-        int place = Integer.parseInt(identifier.substring(25));
+        int place = parsePlace(identifier, "competition_place_player_".length());
         if (!leaderboardContainsPlace(activeComp, place)) {
             return ConfigMessage.PLACEHOLDER_NO_PLAYER_IN_PLACE.getMessage().getLegacyMessage();
         }
 
-        // getting "place" place in the competition
-        UUID uuid;
-        try {
-            uuid = activeComp.getLeaderboard().getEntry(place).getPlayer();
-        } catch (NullPointerException exception) {
-            uuid = null;
-        }
+        UUID uuid = activeComp.getLeaderboard().getEntry(place).getPlayer();
         if (uuid != null) {
-            // To be in the leaderboard the player must have joined
-            return Objects.requireNonNull(Bukkit.getOfflinePlayer(uuid)).getName();
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+            return offlinePlayer.getName();
         }
         return "";
     }
@@ -172,20 +160,11 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
     private @NotNull String handleCompetitionTypeFormat(Player player, String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
-            return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage();
+            return "";
         }
 
-        CompetitionType competitionType = activeComp.getCompetitionType();
-        return switch (competitionType) {
-            case LARGEST_FISH -> ConfigMessage.COMPETITION_TYPE_LARGEST.getMessage().getLegacyMessage();
-            case LARGEST_TOTAL -> ConfigMessage.COMPETITION_TYPE_LARGEST_TOTAL.getMessage().getLegacyMessage();
-            case MOST_FISH -> ConfigMessage.COMPETITION_TYPE_MOST.getMessage().getLegacyMessage();
-            case SPECIFIC_FISH -> ConfigMessage.COMPETITION_TYPE_SPECIFIC.getMessage().getLegacyMessage();
-            case SPECIFIC_RARITY -> ConfigMessage.COMPETITION_TYPE_SPECIFIC_RARITY.getMessage().getLegacyMessage();
-            case SHORTEST_FISH -> ConfigMessage.COMPETITION_TYPE_SHORTEST.getMessage().getLegacyMessage();
-            case SHORTEST_TOTAL -> ConfigMessage.COMPETITION_TYPE_SHORTEST_TOTAL.getMessage().getLegacyMessage();
-            default -> "";
-        };
+        ConfigMessage message = COMPETITION_TYPE_MESSAGES.get(activeComp.getCompetitionType());
+        return message != null ? message.getMessage().getLegacyMessage() : "";
     }
 
     private String handleCompetitionType(Player player, String identifier) {
@@ -195,29 +174,22 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
                 : ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage();
     }
 
-    /* Competition Placeholder Handlers */
     private String handleCompetitionPlaceSize(Player player, String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING_SIZE.getMessage().getLegacyMessage();
         }
-        if (!(activeComp.getCompetitionType() == CompetitionType.LARGEST_FISH ||
-                activeComp.getCompetitionType() == CompetitionType.LARGEST_TOTAL)) {
+
+        if (!isSizeCompetition(activeComp.getCompetitionType())) {
             return ConfigMessage.PLACEHOLDER_SIZE_DURING_MOST_FISH.getMessage().getLegacyMessage();
         }
 
-        int place = Integer.parseInt(identifier.substring(23));
+        int place = parsePlace(identifier, "competition_place_size_".length());
         if (!leaderboardContainsPlace(activeComp, place)) {
             return ConfigMessage.PLACEHOLDER_NO_SIZE_IN_PLACE.getMessage().getLegacyMessage();
         }
 
-        float value;
-        try {
-            value = activeComp.getLeaderboard().getEntry(place).getValue();
-        } catch (NullPointerException exception) {
-            value = -1;
-        }
-
+        float value = activeComp.getLeaderboard().getEntry(place).getValue();
         return value != -1.0f ? Double.toString(FishUtils.roundDouble(value, 1)) : "";
     }
 
@@ -227,33 +199,31 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING_FISH.getMessage().getLegacyMessage();
         }
 
-        int place = Integer.parseInt(identifier.substring(23));
+        int place = parsePlace(identifier, "competition_place_fish_".length());
 
         if (activeComp.getCompetitionType() == CompetitionType.LARGEST_FISH) {
             if (!leaderboardContainsPlace(activeComp, place)) {
                 return ConfigMessage.PLACEHOLDER_NO_FISH_IN_PLACE.getMessage().getLegacyMessage();
             }
 
-            Fish fish = getFishFromLeaderboard(activeComp, place);
+            Fish fish = activeComp.getLeaderboard().getEntry(place).getFish();
             if (fish != null) {
                 return formatFishMessage(fish);
             }
         } else {
-            float value = getValueFromLeaderboard(activeComp, place);
-            if (value == -1) {
-                return ConfigMessage.PLACEHOLDER_NO_FISH_IN_PLACE.getMessage().getLegacyMessage();
+            float value = activeComp.getLeaderboard().getEntry(place).getValue();
+            if (value != -1) {
+                return formatMostFishMessage((int) value);
             }
-            return formatMostFishMessage((int) value);
+            return ConfigMessage.PLACEHOLDER_NO_FISH_IN_PLACE.getMessage().getLegacyMessage();
         }
         return "";
     }
 
-    /* Stats Placeholder Handlers */
     private @Nullable String handleTotalMoneyEarned(Player player, @NotNull String identifier) {
         try {
-            final UUID uuid = UUID.fromString(identifier.split("total_money_earned_")[1]);
-
-            final UserReport userReport = EvenMoreFish.getInstance().getUserReportDataManager().get(String.valueOf(uuid));
+            UUID uuid = UUID.fromString(identifier.substring("total_money_earned_".length()));
+            UserReport userReport = plugin.getUserReportDataManager().get(uuid.toString());
             return userReport != null ? String.format("%.2f", userReport.getMoneyEarned()) : null;
         } catch (IllegalArgumentException e) {
             return null;
@@ -262,15 +232,14 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
 
     private @Nullable String handleTotalFishSold(Player player, @NotNull String identifier) {
         try {
-            final UUID uuid = UUID.fromString(identifier.split("total_fish_sold_")[1]);
-            final UserReport userReport = EvenMoreFish.getInstance().getUserReportDataManager().get(String.valueOf(uuid));
+            UUID uuid = UUID.fromString(identifier.substring("total_fish_sold_".length()));
+            UserReport userReport = plugin.getUserReportDataManager().get(uuid.toString());
             return userReport != null ? String.valueOf(userReport.getFishSold()) : null;
         } catch (IllegalArgumentException e) {
             return null;
         }
     }
 
-    /* Simple Placeholder Handlers */
     private @NotNull String handleCompetitionTimeLeft(Player player, String identifier) {
         return Competition.getNextCompetitionMessage().getLegacyMessage();
     }
@@ -290,20 +259,16 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
     }
 
     /* Helper Methods */
-    private @Nullable Fish getFishFromLeaderboard(Competition competition, int place) {
+    private int parsePlace(String identifier, int prefixLength) {
         try {
-            return competition.getLeaderboard().getEntry(place).getFish();
-        } catch (NullPointerException e) {
-            return null;
+            return Integer.parseInt(identifier.substring(prefixLength));
+        } catch (NumberFormatException e) {
+            return -1;
         }
     }
 
-    private float getValueFromLeaderboard(Competition competition, int place) {
-        try {
-            return competition.getLeaderboard().getEntry(place).getValue();
-        } catch (NullPointerException e) {
-            return -1;
-        }
+    private boolean isSizeCompetition(CompetitionType type) {
+        return type == CompetitionType.LARGEST_FISH || type == CompetitionType.LARGEST_TOTAL;
     }
 
     private @NotNull String formatFishMessage(@NotNull Fish fish) {
@@ -342,6 +307,6 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
     ) {}
 
     private boolean leaderboardContainsPlace(@NotNull Competition competition, int place) {
-        return competition.getLeaderboardSize() >= place;
+        return place > 0 && competition.getLeaderboardSize() >= place;
     }
 }
