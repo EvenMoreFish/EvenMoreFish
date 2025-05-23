@@ -20,6 +20,9 @@ public class DyeColourItemConfig extends ItemConfig<Color> {
     @Override
     public Color getConfiguredValue() {
         String colourString = section.getString("item.dye-colour");
+        if (colourString == null) {
+            return null;
+        }
         try {
             java.awt.Color color = java.awt.Color.decode(colourString);
             return Color.fromRGB(color.getRed(), color.getGreen(), color.getBlue());
