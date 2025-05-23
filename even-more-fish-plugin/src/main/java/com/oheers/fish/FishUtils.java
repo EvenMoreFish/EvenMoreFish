@@ -93,6 +93,7 @@ public class FishUtils {
         String playerString = NbtUtils.getString(item, NbtKeys.EMF_FISH_PLAYER);
         String rarityString = NbtUtils.getString(item, NbtKeys.EMF_FISH_RARITY);
         Float lengthFloat = NbtUtils.getFloat(item, NbtKeys.EMF_FISH_LENGTH);
+        Integer randomIndex = NbtUtils.getInteger(item, NbtKeys.EMF_FISH_RANDOM_INDEX);
 
         if (nameString == null || rarityString == null) {
             return null;
@@ -111,6 +112,9 @@ public class FishUtils {
         if (fish == null) {
             return null;
         }
+        if (randomIndex != null) {
+            fish.getFactory().setRandomIndex(randomIndex);
+        }
         fish.setLength(lengthFloat);
         if (playerString != null) {
             try {
@@ -128,6 +132,7 @@ public class FishUtils {
         final String playerString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_PLAYER).toString()));
         final String rarityString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RARITY).toString()));
         final Float lengthFloat = NBT.getPersistentData(skull, nbt -> nbt.getFloat(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_LENGTH).toString()));
+        final Integer randomIndex = NBT.getPersistentData(skull, nbt -> nbt.getInteger(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RANDOM_INDEX).toString()));
 
         if (nameString == null || rarityString == null) {
             throw new InvalidFishException("NBT Error");
@@ -146,6 +151,9 @@ public class FishUtils {
             return null;
         }
         fish.setLength(lengthFloat);
+        if (randomIndex != null) {
+            fish.getFactory().setRandomIndex(randomIndex);
+        }
         if (playerString != null) {
             try {
                 fish.setFisherman(UUID.fromString(playerString));

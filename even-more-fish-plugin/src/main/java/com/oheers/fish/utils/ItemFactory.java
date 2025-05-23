@@ -15,12 +15,11 @@ import de.tr7zw.changeme.nbtapi.NbtApiException;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -31,6 +30,7 @@ public class ItemFactory {
     private final @NotNull Section configuration;
     private boolean rawItem = false;
     private UUID relevantPlayer = null;
+    private int randomIndex = -1;
 
     private final CustomModelDataItemConfig customModelData;
     private final ItemDamageItemConfig itemDamage;
@@ -352,26 +352,37 @@ public class ItemFactory {
         return FishUtils.getSkullFromUUID(relevantPlayer);
     }
 
-    private @Nullable ItemStack getRandomItem(@NotNull ArrayList<String> strings, @NotNull Function<String, ItemStack> function) {
-        final Random random = EvenMoreFish.getInstance().getRandom();
-        int randomIndex = random.nextInt(strings.size());
-
-        // Get the item from the random string and check if it's valid
-        String randomStr = strings.remove(randomIndex);
-        ItemStack randomItem = getItemFromMaterialString(randomStr);
-        if (randomItem != null) {
-            return randomItem;
-        }
-        EvenMoreFish.getInstance().debug(
-            configuration.getRouteAsString() + " has an invalid name in its list."
-        );
-
-        // Keep trying until we find a valid item
-        for (String materialStr : strings) {
-            ItemStack item = function.apply(materialStr);
-            if (item != null) {
-                return item;
+    private @Nullable ItemStack getRandomItem(@NotNull List<String> strings, @NotNull Function<String, ItemStack> function) {
+        if (randomIndex != -1) {
+            EvenMoreFish.getInstance().debug("Random index is set to " + randomIndex + ", trying to use it.");
+            try {
+                String randomStr = strings.get(randomIndex);
+                ItemStack randomItem = function.apply(randomStr);
+                if (randomItem != null) {
+                    return randomItem;
+                }
+            } catch (IndexOutOfBoundsException exception) {
+                EvenMoreFish.getInstance().debug("Random index " + randomIndex + " is out of bounds, getting a new one.");
             }
+        }
+
+        ArrayList<String> checkList = new ArrayList<>(strings);
+        final Random random = EvenMoreFish.getInstance().getRandom();
+
+        // Get a random item from the list, keep trying until we find a valid one
+        while (!checkList.isEmpty()) {
+            int randomIndex = random.nextInt(checkList.size());
+            String randomStr = checkList.remove(randomIndex);
+            ItemStack randomItem = function.apply(randomStr);
+
+            if (randomItem != null) {
+                this.randomIndex = randomIndex;
+                return randomItem;
+            }
+
+            EvenMoreFish.getInstance().debug(
+                configuration.getRouteAsString() + " has an invalid name in its list: " + randomStr
+            );
         }
 
         EvenMoreFish.getInstance().debug(
@@ -382,6 +393,14 @@ public class ItemFactory {
 
     public boolean isRawItem() {
         return rawItem;
+    }
+
+    public void setRandomIndex(int randomIndex) {
+        this.randomIndex = randomIndex;
+    }
+
+    public int getRandomIndex() {
+        return randomIndex;
     }
 
 }

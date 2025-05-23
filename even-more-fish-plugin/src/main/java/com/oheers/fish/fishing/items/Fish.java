@@ -133,6 +133,16 @@ public class Fish {
         });
     }
 
+    public ItemStack give(int randomIndex) {
+        int initialIndex = factory.getRandomIndex();
+
+        factory.setRandomIndex(randomIndex);
+        ItemStack item = give();
+        factory.setRandomIndex(initialIndex);
+
+        return item;
+    }
+
     /**
      * Returns the item stack version of the fish to be given to the player.
      *
