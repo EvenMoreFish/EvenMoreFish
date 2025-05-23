@@ -44,7 +44,7 @@ public class SkullSaver implements Listener {
             if (f == null) {
                 return;
             }
-            ItemStack fishItem = f.give(f.getFactory().getChosenRandomIndex());
+            ItemStack fishItem = f.give();
             if (fishItem == null) {
                 return;
             }

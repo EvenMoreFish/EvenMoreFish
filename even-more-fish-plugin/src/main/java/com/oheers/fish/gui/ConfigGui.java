@@ -137,9 +137,8 @@ public class ConfigGui {
         if (character == '#') {
             return;
         }
-        ItemFactory factory = new ItemFactory(null, itemSection);
-        factory.enableAllChecks();
-        ItemStack item = factory.createItem(this.player, -1, this.replacements);
+        ItemFactory factory = ItemFactory.create(itemSection);
+        ItemStack item = factory.createItem(this.player.getUniqueId(), this.replacements);
         if (item.getType() == Material.AIR) {
             return;
         }

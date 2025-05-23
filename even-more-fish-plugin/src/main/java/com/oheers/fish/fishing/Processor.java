@@ -154,7 +154,7 @@ public abstract class Processor<E extends Event> implements Listener {
 
         competitionCheck(fish, player, location);
 
-        return fish.give(-1);
+        return fish.give();
     }
 
     // Checks if it should be giving the player the fish considering the fish-only-in-competition option in config.yml

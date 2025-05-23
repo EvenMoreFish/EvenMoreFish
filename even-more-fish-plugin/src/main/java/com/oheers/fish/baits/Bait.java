@@ -14,6 +14,7 @@ import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.ItemFactory;
+import com.oheers.fish.utils.items.DisplayNameItemConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -57,10 +58,11 @@ public class Bait extends ConfigBase {
         performRequiredConfigChecks();
         this.id = Objects.requireNonNull(getConfig().getString("id"));
 
-        ItemFactory factory = new ItemFactory(null, getConfig());
-        factory.enableDefaultChecks();
-        factory.setItemDisplayNameCheck(true);
-        factory.setDisplayName("<yellow>" + this.id);
+        ItemFactory factory = ItemFactory.create(getConfig());
+
+        DisplayNameItemConfig displayNameConfig = factory.getDisplayName();
+        displayNameConfig.setEnabled(true);
+        displayNameConfig.setDefault("<yellow>" + this.id);
         this.itemFactory = factory;
     }
 
@@ -79,7 +81,7 @@ public class Bait extends ConfigBase {
      * @return An item stack representing the bait object, with nbt.
      */
     public ItemStack create(OfflinePlayer player) {
-        ItemStack baitItem = itemFactory.createItem(player, -1);
+        ItemStack baitItem = itemFactory.createItem(player.getUniqueId());
         baitItem.setAmount(getDropQuantity());
 
         baitItem.editMeta(meta -> meta.lore(createBoostLore()));

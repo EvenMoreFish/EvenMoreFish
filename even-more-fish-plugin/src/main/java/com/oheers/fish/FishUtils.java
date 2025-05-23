@@ -16,6 +16,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.ItemUtils;
+import com.oheers.fish.utils.Logging;
 import com.oheers.fish.utils.nbt.NbtKeys;
 import com.oheers.fish.utils.nbt.NbtUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -44,6 +45,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -90,7 +93,6 @@ public class FishUtils {
         String playerString = NbtUtils.getString(item, NbtKeys.EMF_FISH_PLAYER);
         String rarityString = NbtUtils.getString(item, NbtKeys.EMF_FISH_RARITY);
         Float lengthFloat = NbtUtils.getFloat(item, NbtKeys.EMF_FISH_LENGTH);
-        Integer randomIndex = NbtUtils.getInteger(item, NbtKeys.EMF_FISH_RANDOM_INDEX);
 
         if (nameString == null || rarityString == null) {
             return null;
@@ -109,9 +111,6 @@ public class FishUtils {
         if (fish == null) {
             return null;
         }
-        if (randomIndex != null) {
-            fish.getFactory().setType(randomIndex);
-        }
         fish.setLength(lengthFloat);
         if (playerString != null) {
             try {
@@ -129,7 +128,6 @@ public class FishUtils {
         final String playerString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_PLAYER).toString()));
         final String rarityString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RARITY).toString()));
         final Float lengthFloat = NBT.getPersistentData(skull, nbt -> nbt.getFloat(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_LENGTH).toString()));
-        final Integer randomIndex = NBT.getPersistentData(skull, nbt -> nbt.getInteger(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RANDOM_INDEX).toString()));
 
         if (nameString == null || rarityString == null) {
             throw new InvalidFishException("NBT Error");
@@ -148,9 +146,6 @@ public class FishUtils {
             return null;
         }
         fish.setLength(lengthFloat);
-        if (randomIndex != null) {
-            fish.getFactory().setType(randomIndex);
-        }
         if (playerString != null) {
             try {
                 fish.setFisherman(UUID.fromString(playerString));
@@ -693,5 +688,33 @@ public class FishUtils {
         return colour.substring(0, openingTagEnd + 1) + "{name}";
     }
 
+    public static PotionEffect getPotionEffect(@NotNull String effectString) {
+        String[] split = effectString.split(":");
+        if (split.length != 3) {
+            Logging.error("Potion effect string is formatted incorrectly. Use \"potion:duration:amplifier\".");
+            return null;
+        }
+        PotionEffectType type = PotionEffectType.getByName(split[0]);
+        if (type == null) {
+            Logging.error("Potion effect type " + split[0] + " is not valid.");
+            return null;
+        }
+        Integer duration = FishUtils.getInteger(split[1]);
+        if (duration == null) {
+            Logging.error("Potion effect duration " + split[1] + " is not valid.");
+            return null;
+        }
+        Integer amplifier = FishUtils.getInteger(split[2]);
+        if (amplifier == null) {
+            Logging.error("Potion effect amplifier " + split[2] + " is not valid.");
+            return null;
+        }
+        return new PotionEffect(
+            type,
+            duration * 20,
+            amplifier - 1,
+            false
+        );
+    }
 
 }

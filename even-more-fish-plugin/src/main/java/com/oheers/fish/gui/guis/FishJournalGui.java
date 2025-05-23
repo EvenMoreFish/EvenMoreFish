@@ -77,20 +77,18 @@ public class FishJournalGui extends ConfigGui {
 
         if (database == null) {
             Logging.warn("Can not show fish in the Journal Menu, please enable the database!");
-            ItemFactory factory = new ItemFactory("undiscovered-fish", section);
-            factory.enableAllChecks();
-            return factory.createItem(null, -1);
+            ItemFactory factory = ItemFactory.create(section, "undiscovered-fish");
+            return factory.createItem(player.getUniqueId());
         }
 
         boolean hideUndiscovered = section.getBoolean("hide-undiscovered-fish", true);
         // If undiscovered fish should be hidden
         if (hideUndiscovered && !database.userHasFish(fish, player)) {
-            ItemFactory factory = new ItemFactory("undiscovered-fish", section);
-            factory.enableAllChecks();
-            return factory.createItem(null, -1);
+            ItemFactory factory = ItemFactory.create(section, "undiscovered-fish");
+            return factory.createItem(player.getUniqueId());
         }
 
-        ItemStack item = fish.give(-1);
+        ItemStack item = fish.give();
 
         item.editMeta(meta -> {
             EMFSingleMessage display = prepareDisplay(section, fish);
@@ -175,20 +173,17 @@ public class FishJournalGui extends ConfigGui {
 
         if (database == null) {
             Logging.warn("Can not show rarities in the Journal Menu, please enable the database!");
-            ItemFactory factory = new ItemFactory("undiscovered-rarity", section);
-            factory.enableAllChecks();
-            return factory.createItem(player, -1);
+            ItemFactory factory = ItemFactory.create(section, "undiscovered-rarity");
+            return factory.createItem(player.getUniqueId());
         }
 
         if (hideUndiscovered && !database.userHasRarity(rarity, player)) {
-            ItemFactory factory = new ItemFactory("undiscovered-rarity", section);
-            factory.enableAllChecks();
-            return factory.createItem(player, -1);
+            ItemFactory factory = ItemFactory.create(section, "undiscovered-rarity");
+            return factory.createItem(player.getUniqueId());
         }
 
-        final ItemFactory factory = new ItemFactory("rarity-item", section);
-        factory.enableAllChecks();
-        ItemStack item = factory.createItem(null, -1);
+        final ItemFactory factory = ItemFactory.create(section, "rarity-item");
+        ItemStack item = factory.createItem(player.getUniqueId());
         item = ItemUtils.changeMaterial(item, rarity.getMaterial());
 
         item.editMeta(meta -> {

@@ -79,13 +79,11 @@ public class Fish {
 
         this.setWorth = section.getDouble("set-worth");
 
-        this.factory = new ItemFactory(null, section);
+        this.factory = ItemFactory.create(section);
         checkDisplayName();
 
-        // These settings don't mean these will be applied, but they will be considered if the settings exist.
-        factory.enableDefaultChecks();
-        factory.setItemDisplayNameCheck(this.displayName != null);
-        factory.setItemLoreCheck(!section.getBoolean("disable-lore", false));
+        factory.getDisplayName().setEnabled(this.displayName != null);
+        factory.getLore().setEnabled(!section.getBoolean("disable-lore", false));
 
         setSize();
         checkEatEvent();
@@ -138,14 +136,11 @@ public class Fish {
     /**
      * Returns the item stack version of the fish to be given to the player.
      *
-     * @param randomIndex If the value isn't -1 then a specific index of the random results of the fish will be chosen,
-     *                    relying on the fact that it's a fish doing random choices. If it is -1 then a random one will
-     *                    be rolled.
      * @return An ItemStack version of the fish.
      */
-    public ItemStack give(int randomIndex) {
-        ItemStack fish = factory.createItem(getFishermanPlayer(), randomIndex);
-        if (factory.isRawMaterial()) {
+    public ItemStack give() {
+        ItemStack fish = factory.createItem(fisherman);
+        if (factory.isRawItem()) {
             return fish;
         }
 

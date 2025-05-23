@@ -70,9 +70,8 @@ public class GuiUtils {
             section.set("item.displayname", section.get("displayname"));
             section.remove("displayname");
         }
-        ItemFactory factory = new ItemFactory(null, section);
-        factory.enableAllChecks();
-        return factory.createItem(null, -1);
+        ItemFactory factory = ItemFactory.create(section);
+        return factory.createItem();
     }
 
     public static Map<String, BiConsumer<ConfigGui, GuiElement.Click>> getActionMap() {
