@@ -25,8 +25,9 @@ fish:
   Tuna: ''
   Mackerel: ''
   Spanish Mackerel:
-    lore:
-      - <gray>Hola!
+    item:
+      lore:
+        - <gray>Hola!
   Salmon:
     item:
       material: SALMON

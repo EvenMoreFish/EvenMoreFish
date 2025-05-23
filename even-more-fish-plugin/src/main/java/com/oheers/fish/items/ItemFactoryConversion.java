@@ -12,6 +12,7 @@ public class ItemFactoryConversion {
         moveIfPresent(section, "dye-colour", "item.dye-colour");
         moveIfPresent(section, "durability", "item.durability");
         moveIfPresent(section, "lore", "item.lore");
+        moveIfPresent(section, "displayname", "item.displayname");
 
         if (changed) {
             try {

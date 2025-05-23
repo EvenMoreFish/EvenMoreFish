@@ -38,8 +38,6 @@ public class Fish {
     private UUID fisherman;
     private Float length;
 
-    private String displayName;
-
     private List<Reward> actionRewards;
     private List<Reward> fishRewards;
     private List<Reward> sellRewards;
@@ -58,6 +56,7 @@ public class Fish {
     private boolean isCompExemptFish;
 
     private final boolean disableFisherman;
+    private final String displayName;
 
     private int day = -1;
     private final double setWorth;
@@ -80,9 +79,8 @@ public class Fish {
         this.setWorth = section.getDouble("set-worth");
 
         this.factory = ItemFactory.create(section);
-        checkDisplayName();
+        this.displayName = factory.getDisplayName().getConfiguredValue();
 
-        factory.getDisplayName().setEnabled(this.displayName != null);
         factory.getLore().setEnabled(!section.getBoolean("disable-lore", false));
 
         setSize();
@@ -352,10 +350,6 @@ public class Fish {
         }
 
         return newLoreLine.getComponentListMessage();
-    }
-
-    public void checkDisplayName() {
-        this.displayName = section.getString("displayname");
     }
 
     public void checkEatEvent() {
