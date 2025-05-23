@@ -4,7 +4,7 @@ disabled: false
 item:
   material: STRING
   displayname: <yellow>Stringy Worms
-glowing: true
+  glowing: true
 rarities:
   - Common
   - Legendary

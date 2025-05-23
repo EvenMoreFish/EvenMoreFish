@@ -4,7 +4,7 @@ item:
   material: NAUTILUS_SHELL
   # How should this be displayed in game?
   displayname: <#ff7777>Shrimps
-glowing: true
+  glowing: true
 # This can be used in the lore format to create a consistent colour theme.
 format: <#ff7777>{name}</#ff7777>
 # This lists the fish that are attracted to this bait (make sure to specify the rarity and ensure there's no typos)
