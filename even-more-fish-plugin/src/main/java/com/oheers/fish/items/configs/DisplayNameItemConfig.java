@@ -1,4 +1,4 @@
-package com.oheers.fish.utils.items;
+package com.oheers.fish.items.configs;
 
 import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;

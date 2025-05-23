@@ -1,4 +1,4 @@
-package com.oheers.fish.utils.items;
+package com.oheers.fish.items.configs;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Color;

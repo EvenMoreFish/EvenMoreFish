@@ -48,7 +48,7 @@ import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.placeholders.PlaceholderReceiver;
 import com.oheers.fish.utils.HeadDBIntegration;
-import com.oheers.fish.utils.ItemFactory;
+import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.utils.ItemProtectionListener;
 import com.oheers.fish.utils.nbt.NbtKeys;
 import de.themoep.inventorygui.InventoryGui;

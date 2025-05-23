@@ -8,7 +8,7 @@ import com.oheers.fish.gui.guis.MainMenuGui;
 import com.oheers.fish.gui.guis.SellGui;
 import com.oheers.fish.gui.guis.FishJournalGui;
 import com.oheers.fish.selling.SellHelper;
-import com.oheers.fish.utils.ItemFactory;
+import com.oheers.fish.items.ItemFactory;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiPageElement;
 import dev.dejvokep.boostedyaml.YamlDocument;

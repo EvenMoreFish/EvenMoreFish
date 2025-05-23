@@ -4,7 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.gui.GuiUtils;
-import com.oheers.fish.utils.ItemFactory;
+import com.oheers.fish.items.ItemFactory;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.StaticGuiElement;
 import dev.dejvokep.boostedyaml.block.implementation.Section;

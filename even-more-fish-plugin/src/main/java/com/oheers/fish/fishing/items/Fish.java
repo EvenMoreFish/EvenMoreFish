@@ -10,7 +10,7 @@ import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.selling.WorthNBT;
-import com.oheers.fish.utils.ItemFactory;
+import com.oheers.fish.items.ItemFactory;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;

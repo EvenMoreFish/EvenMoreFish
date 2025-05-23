@@ -14,7 +14,7 @@ import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
-import com.oheers.fish.utils.ItemFactory;
+import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.utils.ItemUtils;
 import com.oheers.fish.utils.Logging;
 import de.themoep.inventorygui.*;

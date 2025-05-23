@@ -1,15 +1,16 @@
-package com.oheers.fish.utils;
+package com.oheers.fish.items;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.config.ConfigUtils;
-import com.oheers.fish.utils.items.CustomModelDataItemConfig;
-import com.oheers.fish.utils.items.DisplayNameItemConfig;
-import com.oheers.fish.utils.items.DyeColourItemConfig;
-import com.oheers.fish.utils.items.GlowingItemConfig;
-import com.oheers.fish.utils.items.ItemDamageItemConfig;
-import com.oheers.fish.utils.items.LoreItemConfig;
-import com.oheers.fish.utils.items.PotionMetaItemConfig;
+import com.oheers.fish.utils.ItemUtils;
+import com.oheers.fish.items.configs.CustomModelDataItemConfig;
+import com.oheers.fish.items.configs.DisplayNameItemConfig;
+import com.oheers.fish.items.configs.DyeColourItemConfig;
+import com.oheers.fish.items.configs.GlowingItemConfig;
+import com.oheers.fish.items.configs.ItemDamageItemConfig;
+import com.oheers.fish.items.configs.LoreItemConfig;
+import com.oheers.fish.items.configs.PotionMetaItemConfig;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NbtApiException;
 import dev.dejvokep.boostedyaml.block.implementation.Section;

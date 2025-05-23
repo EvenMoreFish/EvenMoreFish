@@ -5,7 +5,7 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.config.GuiFillerConfig;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import com.oheers.fish.utils.ItemFactory;
+import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.utils.ItemUtils;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiStorageElement;
