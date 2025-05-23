@@ -292,12 +292,12 @@ apply-baits-menu:
 journal-menu:
   title: <dark_blue>Fish Journal
   layout:
-    - '         '
-    - ' rrrrrrr '
-    - ' rrrrrrr '
-    - ' rrrrrrr '
-    - ' rrrrrrr '
-    - '    x    '
+    - ' 2323232 '
+    - '3rrrrrrr3'
+    - '2rrrrrrr2'
+    - '3rrrrrrr3'
+    - '2rrrrrrr2'
+    - ' 323x323 '
   filler: gray_stained_glass_pane
   # The character to use for rarity items
   rarity-character: r

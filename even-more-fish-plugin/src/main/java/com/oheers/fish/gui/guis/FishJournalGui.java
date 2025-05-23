@@ -16,6 +16,7 @@ import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.utils.ItemFactory;
 import com.oheers.fish.utils.ItemUtils;
+import com.oheers.fish.utils.Logging;
 import de.themoep.inventorygui.*;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
@@ -74,6 +75,13 @@ public class FishJournalGui extends ConfigGui {
     private ItemStack getFishItem(Fish fish, Section section) {
         Database database = EvenMoreFish.getInstance().getDatabase();
 
+        if (database == null) {
+            Logging.warn("Can not show fish in the Journal Menu, please enable the database!");
+            ItemFactory factory = new ItemFactory("undiscovered-fish", section);
+            factory.enableAllChecks();
+            return factory.createItem(null, -1);
+        }
+
         boolean hideUndiscovered = section.getBoolean("hide-undiscovered-fish", true);
         // If undiscovered fish should be hidden
         if (hideUndiscovered && !database.userHasFish(fish, player)) {
@@ -82,44 +90,52 @@ public class FishJournalGui extends ConfigGui {
             return factory.createItem(null, -1);
         }
 
-        ItemFactory factory = new ItemFactory("fish-item", section);
-        factory.enableAllChecks();
-        ItemStack item = factory.createItem(null, -1);
+        ItemStack item = fish.give(-1);
+
         item.editMeta(meta -> {
-            // Display Name
-            final String displayStr = section.getString("fish-item.item.displayname");
-            if (displayStr != null) {
-                EMFSingleMessage display = EMFSingleMessage.fromString(displayStr);
-                display.setVariable("{fishname}", fish.getDisplayName());
+            EMFSingleMessage display = prepareDisplay(section, fish);
+            if (display != null) {
                 meta.displayName(display.getComponentMessage());
             }
-
-            final int userId = EvenMoreFish.getInstance().getUserManager().getUserId(player.getUniqueId());
-
-            final UserFishStats userFishStats = EvenMoreFish.getInstance().getUserFishStatsDataManager().get(UserFishRarityKey.of(userId, fish).toString());
-            final FishStats fishStats = EvenMoreFish.getInstance().getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
-
-            final String discoverDate = getValueOrUnknown(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE));
-            final String discoverer = getValueOrUnknown(() -> FishUtils.getPlayerName(fishStats.getDiscoverer()));
-
-            EMFListMessage lore = EMFListMessage.fromStringList(
-                    section.getStringList("fish-item.lore")
-            );
-
-            lore.setVariable("{times-caught}", getValueOrUnknown(() -> Integer.toString(userFishStats.getQuantity())));
-            lore.setVariable("{largest-size}", getValueOrUnknown(() -> String.valueOf(userFishStats.getLongestLength())));
-            lore.setVariable("{smallest-size}", getValueOrUnknown(() -> String.valueOf(userFishStats.getShortestLength())));
-            lore.setVariable("{discover-date}", discoverDate);
-            lore.setVariable("{discoverer}", discoverer);
-            lore.setVariable("{server-largest}", getValueOrUnknown(() -> String.valueOf(fishStats.getLongestLength())));
-            lore.setVariable("{server-smallest}", getValueOrUnknown(() -> String.valueOf(fishStats.getShortestLength())));
-            lore.setVariable("{server-caught}", getValueOrUnknown(() -> String.valueOf(fishStats.getQuantity())));
-            meta.lore(lore.getComponentListMessage());
+            meta.lore(prepareLore(section, fish).getComponentListMessage());
         });
 
-        ItemUtils.changeMaterial(item, fish.getFactory().getMaterial());
-
         return item;
+    }
+
+    private @Nullable EMFSingleMessage prepareDisplay(@NotNull Section section, @NotNull Fish fish) {
+        final String displayStr = section.getString("fish-item.item.displayname");
+        if (displayStr == null) {
+            return null;
+        }
+        EMFSingleMessage display = EMFSingleMessage.fromString(displayStr);
+        display.setVariable("{fishname}", fish.getDisplayName());
+        return display;
+    }
+
+    private @NotNull EMFListMessage prepareLore(@NotNull Section section, @NotNull Fish fish) {
+        final int userId = EvenMoreFish.getInstance().getUserManager().getUserId(player.getUniqueId());
+
+        final UserFishStats userFishStats = EvenMoreFish.getInstance().getUserFishStatsDataManager().get(UserFishRarityKey.of(userId, fish).toString());
+        final FishStats fishStats = EvenMoreFish.getInstance().getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
+
+        final String discoverDate = getValueOrUnknown(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE));
+        final String discoverer = getValueOrUnknown(() -> FishUtils.getPlayerName(fishStats.getDiscoverer()));
+
+        EMFListMessage lore = EMFListMessage.fromStringList(
+            section.getStringList("fish-item.lore")
+        );
+
+        lore.setVariable("{times-caught}", getValueOrUnknown(() -> Integer.toString(userFishStats.getQuantity())));
+        lore.setVariable("{largest-size}", getValueOrUnknown(() -> String.valueOf(userFishStats.getLongestLength())));
+        lore.setVariable("{smallest-size}", getValueOrUnknown(() -> String.valueOf(userFishStats.getShortestLength())));
+        lore.setVariable("{discover-date}", discoverDate);
+        lore.setVariable("{discoverer}", discoverer);
+        lore.setVariable("{server-largest}", getValueOrUnknown(() -> String.valueOf(fishStats.getLongestLength())));
+        lore.setVariable("{server-smallest}", getValueOrUnknown(() -> String.valueOf(fishStats.getShortestLength())));
+        lore.setVariable("{server-caught}", getValueOrUnknown(() -> String.valueOf(fishStats.getQuantity())));
+
+        return lore;
     }
 
     @NotNull
@@ -143,7 +159,6 @@ public class FishJournalGui extends ConfigGui {
                     group.addElement(
                             new StaticGuiElement(
                                     character, getRarityItem(rarity, section), click -> {
-                                click.getGui().close();
                                 new FishJournalGui(player, rarity).open();
                                 return true;
                             }
@@ -157,6 +172,13 @@ public class FishJournalGui extends ConfigGui {
     private ItemStack getRarityItem(Rarity rarity, Section section) {
         Database database = EvenMoreFish.getInstance().getDatabase();
         boolean hideUndiscovered = section.getBoolean("hide-undiscovered-rarities", true);
+
+        if (database == null) {
+            Logging.warn("Can not show rarities in the Journal Menu, please enable the database!");
+            ItemFactory factory = new ItemFactory("undiscovered-rarity", section);
+            factory.enableAllChecks();
+            return factory.createItem(player, -1);
+        }
 
         if (hideUndiscovered && !database.userHasRarity(rarity, player)) {
             ItemFactory factory = new ItemFactory("undiscovered-rarity", section);

@@ -50,6 +50,7 @@ database:
   username: root
   password: ''
   advanced:
+    disable-jooq-startup-comments: true
     save-interval:
       unit: SECONDS
       user-fish-stats: 5
@@ -74,6 +75,7 @@ economy:
     enabled: false
     multiplier: 1.0
     display: '{amount} Player Point(s)'
+  # Allows fish to pay out with claim blocks
   # Allows fish to pay out with claim blocks
   griefprevention:
     enabled: false

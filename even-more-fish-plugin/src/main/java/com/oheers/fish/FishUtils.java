@@ -335,11 +335,11 @@ public class FishUtils {
     }
 
     public static void broadcastFishMessage(EMFMessage message, Player referencePlayer, boolean actionBar) {
-        Competition activeComp = Competition.getCurrentlyActive();
-
         if (message.isEmpty()) {
             return;
         }
+
+        Competition activeComp = Competition.getCurrentlyActive();
 
         List<? extends Player> validPlayers = getValidPlayers(referencePlayer, activeComp);
         List<String> playerNames = validPlayers.stream().map(Player::getName).toList();

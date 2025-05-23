@@ -21,8 +21,9 @@ public class FishRarityKey {
     }
 
     public static @NotNull FishRarityKey from(final String pattern) {
-        if (pattern.equalsIgnoreCase("."))
+        if (pattern.length() == 1)
             return empty();
+
         return new FishRarityKey(pattern.split("\\.")[0], pattern.split("\\.")[1]);
     }
 

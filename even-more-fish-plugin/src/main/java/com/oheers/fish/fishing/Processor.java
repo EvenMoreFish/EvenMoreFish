@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 public abstract class Processor<E extends Event> implements Listener {
 
@@ -34,12 +35,7 @@ public abstract class Processor<E extends Event> implements Listener {
     private final DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
     protected boolean isSpaceForNewFish(Inventory inventory) {
-        for (ItemStack item : inventory.getContents()) {
-            if (item == null) {
-                return true;
-            }
-        }
-        return false;
+        return inventory != null && inventory.firstEmpty() != -1;
     }
 
     protected boolean isCustomFishAllowed(Player player) {
@@ -60,13 +56,14 @@ public abstract class Processor<E extends Event> implements Listener {
         if (bait != null) {
             return bait.chooseFish(player, location);
         }
-        Rarity fishRarity = FishManager.getInstance().getRandomWeightedRarity(player, 1, null, Set.copyOf(FishManager.getInstance().getRarityMap().values()));
+
+        final Rarity fishRarity = FishManager.getInstance().getRandomWeightedRarity(player, 1, null, Set.copyOf(FishManager.getInstance().getRarityMap().values()));
         if (fishRarity == null) {
             EvenMoreFish.getInstance().getLogger().severe("Could not determine a rarity for fish for " + player.getName());
             return null;
         }
 
-        Fish fish = FishManager.getInstance().getFish(fishRarity, location, player, 1, null, true, this);
+        final Fish fish = FishManager.getInstance().getFish(fishRarity, location, player, 1, null, true, this);
         if (fish == null) {
             EvenMoreFish.getInstance().getLogger().severe("Could not determine a fish for " + player.getName());
             return null;
@@ -79,6 +76,7 @@ public abstract class Processor<E extends Event> implements Listener {
         if (!FishUtils.checkRegion(location, MainConfig.getInstance().getAllowedRegions())) {
             return null;
         }
+
         if (!FishUtils.checkWorld(location)) {
             return null;
         }
@@ -162,17 +160,17 @@ public abstract class Processor<E extends Event> implements Listener {
     // Checks if it should be giving the player the fish considering the fish-only-in-competition option in config.yml
     protected abstract boolean competitionOnlyCheck();
 
-    protected void competitionCheck(Fish fish, Player fisherman, Location location) {
-        Competition active = Competition.getCurrentlyActive();
+    protected void competitionCheck(@NotNull Fish fish, @NotNull Player fisherman,@NotNull Location location) {
+        final Competition active = Competition.getCurrentlyActive();
         if (active == null) {
             return;
         }
+
         List<World> competitionWorlds = active.getCompetitionFile().getRequiredWorlds();
         if (!competitionWorlds.isEmpty()) {
-            if (location.getWorld() != null) {
-                if (!competitionWorlds.contains(location.getWorld())) {
-                    return;
-                }
+            final World world = location.getWorld();
+            if (world == null || !competitionWorlds.contains(world)) {
+                return;
             }
         }
         active.applyToLeaderboard(fish, fisherman);

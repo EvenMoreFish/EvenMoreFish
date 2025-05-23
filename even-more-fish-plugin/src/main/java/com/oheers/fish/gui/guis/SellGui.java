@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+// TODO look into dynamically updating the sell items when a fish is added/removed - AFTER we switch to TriumphGui
 public class SellGui extends ConfigGui {
 
     private final Inventory fishInventory;

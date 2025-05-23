@@ -2,6 +2,7 @@ package com.oheers.fish.gui;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.GuiConfig;
+import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.gui.guis.BaitsGui;
 import com.oheers.fish.gui.guis.MainMenuGui;
 import com.oheers.fish.gui.guis.SellGui;
@@ -154,6 +155,9 @@ public class GuiUtils {
             new BaitsGui(click.getWhoClicked()).open();
         });
         newActionMap.put("open-journal-menu", (gui, click) -> {
+            if (!MainConfig.getInstance().isDatabaseOnline()) {
+                return;
+            }
             if (gui != null) {
                 gui.doRescue();
             }

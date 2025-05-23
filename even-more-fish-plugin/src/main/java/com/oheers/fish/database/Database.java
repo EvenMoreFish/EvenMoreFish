@@ -60,6 +60,7 @@ public class Database implements DatabaseAPI {
     private Settings settings;
 
     public Database() {
+        setJooqStartupProperties();
         this.settings = new Settings();
         this.connectionFactory = getConnectionFactory(MainConfig.getInstance().getDatabaseType().toLowerCase());
         this.connectionFactory.init();
@@ -74,6 +75,13 @@ public class Database implements DatabaseAPI {
         migrateFromDatabaseVersionToLatest();
 
         initSettings(MainConfig.getInstance().getPrefix(), MainConfig.getInstance().getDatabase());
+    }
+
+    private void setJooqStartupProperties() {
+        if (MainConfig.getInstance().isDisableJooqStartupCommments()) {
+            System.setProperty("org.jooq.no-logo", "true");
+            System.setProperty("org.jooq.no-tips", "true");
+        }
     }
 
     public void migrateFromDatabaseVersionToLatest() {
@@ -588,24 +596,40 @@ public class Database implements DatabaseAPI {
                         .set(Tables.FISH.FIRST_CATCH_TIME, fishStats.getFirstCatchTime())
                         .onDuplicateKeyUpdate()
                         .set(Tables.FISH.TOTAL_CAUGHT, fishStats.getQuantity())
-                        .set(Tables.FISH.LARGEST_FISH,
-                                DSL.when(Tables.FISH.LARGEST_FISH.lt(fishStats.getLongestLength()),
-                                                fishStats.getLongestLength())
-                                        .otherwise(Tables.FISH.LARGEST_FISH))
-                        .set(Tables.FISH.LARGEST_FISHER,
-                                DSL.when(Tables.FISH.LARGEST_FISH.lt(fishStats.getLongestLength()),
-                                                fishStats.getLongestFisher().toString())
-                                        .otherwise(Tables.FISH.LARGEST_FISHER))
-                        .set(Tables.FISH.SHORTEST_LENGTH,
-                                DSL.when(Tables.FISH.SHORTEST_LENGTH.gt(fishStats.getShortestLength())
+                        .set(
+                                Tables.FISH.LARGEST_FISH,
+                                DSL.when(
+                                                Tables.FISH.LARGEST_FISH.lt(fishStats.getLongestLength()),
+                                                fishStats.getLongestLength()
+                                        )
+                                        .otherwise(Tables.FISH.LARGEST_FISH)
+                        )
+                        .set(
+                                Tables.FISH.LARGEST_FISHER,
+                                DSL.when(
+                                                Tables.FISH.LARGEST_FISH.lt(fishStats.getLongestLength()),
+                                                fishStats.getLongestFisher().toString()
+                                        )
+                                        .otherwise(Tables.FISH.LARGEST_FISHER)
+                        )
+                        .set(
+                                Tables.FISH.SHORTEST_LENGTH,
+                                DSL.when(
+                                                Tables.FISH.SHORTEST_LENGTH.gt(fishStats.getShortestLength())
                                                         .or(Tables.FISH.SHORTEST_LENGTH.isNull()),
-                                                fishStats.getShortestLength())
-                                        .otherwise(Tables.FISH.SHORTEST_LENGTH))
-                        .set(Tables.FISH.SHORTEST_FISHER,
-                                DSL.when(Tables.FISH.SHORTEST_LENGTH.gt(fishStats.getShortestLength())
+                                                fishStats.getShortestLength()
+                                        )
+                                        .otherwise(Tables.FISH.SHORTEST_LENGTH)
+                        )
+                        .set(
+                                Tables.FISH.SHORTEST_FISHER,
+                                DSL.when(
+                                                Tables.FISH.SHORTEST_LENGTH.gt(fishStats.getShortestLength())
                                                         .or(Tables.FISH.SHORTEST_LENGTH.isNull()),
-                                                fishStats.getShortestFisher().toString())
-                                        .otherwise(Tables.FISH.SHORTEST_FISHER))
+                                                fishStats.getShortestFisher().toString()
+                                        )
+                                        .otherwise(Tables.FISH.SHORTEST_FISHER)
+                        )
                         .execute();
             }
         }.executeInTransaction();
@@ -644,7 +668,7 @@ public class Database implements DatabaseAPI {
      * Checks if a player has caught a specific rarity by its name.
      *
      * @param rarity The rarity's name
-     * @param id The database ID of the player
+     * @param id     The database ID of the player
      * @return true if the player has caught the rarity, false otherwise
      */
     @Override
@@ -652,7 +676,8 @@ public class Database implements DatabaseAPI {
         return new ExecuteQuery<Boolean>(connectionFactory, settings) {
             @Override
             protected Boolean onRunQuery(DSLContext dslContext) throws Exception {
-                return dslContext.fetchExists(Tables.USER_FISH_STATS,
+                return dslContext.fetchExists(
+                        Tables.USER_FISH_STATS,
                         Tables.USER_FISH_STATS.USER_ID.eq(id)
                                 .and(Tables.USER_FISH_STATS.FISH_RARITY.eq(rarity))
                 );
@@ -761,13 +786,15 @@ public class Database implements DatabaseAPI {
 
 
     public void updateCompetition(CompetitionReport competition) {
+        String winnerUuid = competition.getWinnerUuid() == null ? "None" : competition.getWinnerUuid().toString();
+
         new ExecuteUpdate(connectionFactory, settings) {
             @Override
             protected int onRunUpdate(DSLContext dslContext) {
                 return dslContext.insertInto(Tables.COMPETITIONS)
                         .set(Tables.COMPETITIONS.COMPETITION_NAME, competition.getCompetitionConfigId())
                         .set(Tables.COMPETITIONS.WINNER_FISH, competition.getWinnerFish())
-                        .set(Tables.COMPETITIONS.WINNER_UUID, competition.getWinnerUuid().toString())
+                        .set(Tables.COMPETITIONS.WINNER_UUID, winnerUuid)
                         .set(Tables.COMPETITIONS.WINNER_SCORE, competition.getWinnerScore())
                         .set(Tables.COMPETITIONS.CONTESTANTS, competition.getContestants().stream().map(UUID::toString).collect(Collectors.joining(", ")))
                         .set(Tables.COMPETITIONS.START_TIME, competition.getStartTime())

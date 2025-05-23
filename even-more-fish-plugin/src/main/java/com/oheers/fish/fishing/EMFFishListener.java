@@ -34,7 +34,7 @@ public class EMFFishListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEMFFishHunt(EMFFishHuntEvent event) {
-        handleFishEvent(event.getPlayer(), event.getFish(), LocalDateTime.now());
+        handleFishEvent(event.getPlayer(), event.getFish(), event.getHuntTime());
     }
 
     private void handleFishEvent(Player player, Fish fish, LocalDateTime catchTime) {

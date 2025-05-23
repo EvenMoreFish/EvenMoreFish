@@ -84,8 +84,12 @@ public class Competition {
         this.competitionType = type;
     }
 
+    /**
+     * Sets the maximum duration of the competition in seconds.
+     * @param duration The maximum duration of the competition in seconds.
+     */
     public void setMaxDuration(int duration) {
-        this.maxDuration = duration * 60L;
+        this.maxDuration = duration;
     }
 
     public static boolean isActive() {

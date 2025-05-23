@@ -76,7 +76,7 @@ public class Rarity extends ConfigBase {
     }
 
     public boolean getAnnounce() {
-        return getConfig().getBoolean("broadcast");
+        return getConfig().getBoolean("broadcast", true);
     }
 
     public boolean getUseConfigCasing() {
@@ -260,7 +260,7 @@ public class Rarity extends ConfigBase {
     }
 
     protected @NotNull CatchType getCatchType() {
-        String typeStr = getConfig().getString("catch-type", "CATCH");
+        String typeStr = getConfig().getString("catch-type", "BOTH");
         CatchType type;
         try {
             type = CatchType.valueOf(typeStr.toUpperCase());

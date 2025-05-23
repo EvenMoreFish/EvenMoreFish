@@ -6,6 +6,7 @@ import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
+import com.oheers.fish.permissions.UserPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDateTime;
 
 public class HuntingProcessor extends Processor<EntityDeathEvent> {
 
@@ -37,14 +40,15 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> {
             return;
         }
 
-        if (MainConfig.getInstance().requireFishingPermission()) {
+        if (MainConfig.getInstance().requireFishingPermission() && !player.hasPermission(UserPerms.USE_ROD)) {
             ConfigMessage.NO_PERMISSION_FISHING.getMessage().send(player);
             return;
         }
 
+        //Event gets fired here
         ItemStack fish = getFish(player, fishEntity.getLocation(), player.getInventory().getItemInMainHand());
 
-        if (fish == null) {
+        if (fish == null || fish.getType().isAir()) {
             return;
         }
 
@@ -53,9 +57,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> {
             FishUtils.giveItem(fish, player);
         } else {
             // replaces the fishing item with a custom evenmorefish fish.
-            if (!fish.getType().isAir()) {
-                event.getDrops().add(fish);
-            }
+            event.getDrops().add(fish);
         }
     }
 
@@ -77,7 +79,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> {
 
     @Override
     protected boolean fireEvent(@NotNull Fish fish, @NotNull Player player) {
-        EMFFishHuntEvent fishHuntEvent = new EMFFishHuntEvent(fish, player);
+        EMFFishHuntEvent fishHuntEvent = new EMFFishHuntEvent(fish, player, LocalDateTime.now());
         return fishHuntEvent.callEvent();
     }
 
@@ -98,8 +100,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> {
 
     @Override
     public boolean canUseFish(@NotNull Fish fish) {
-        return fish.getCatchType().equals(CatchType.HUNT)
-            || fish.getCatchType().equals(CatchType.BOTH);
+        return fish.getCatchType() == CatchType.HUNT || fish.getCatchType() == CatchType.BOTH;
     }
 
 }
