@@ -35,9 +35,9 @@ fish:
     item:
       material: NETHER_STAR
   Spongebob:
-    glowing: true
     item:
       material: SPONGE
+      glowing: true
   Golden Hermit Crab:
     item:
       head-64: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDhiNWU0MjdkY2Y3NzFmYjhkYTY2YmUyYjc0ODBlYjE1NjhlYTUxMDA4OGZmZWM4NzAxOTRiNGUxZmQ1NmVlZSJ9fX0=
@@ -51,8 +51,8 @@ fish:
     displayname: BLÅHAJ
     item:
       head-64: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTIxODhiYzk1YjhhM2M3MWZmYzQwNjZmYTNkZGYyMDRlMDYxYTNiM2NlNGUxODY3YzA0YjI1ZmRmNjhhMjA3MCJ9fX0=
-    lore:
-      - <italic><gray>Den bästa hajen
+      lore:
+        - <italic><gray>Den bästa hajen
   MrCrayfish:
     item:
       head-64: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzdjM2QxNTg5Y2U2NzMzMzFmNjkwYjY5MmRiMmEzNTVjMzNmYjYzZTc1NGIxNzY3YmVkZWU2NmI4ZjM3In19fQ==

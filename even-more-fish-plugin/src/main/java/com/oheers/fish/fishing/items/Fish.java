@@ -10,7 +10,7 @@ import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.selling.WorthNBT;
-import com.oheers.fish.utils.ItemFactory;
+import com.oheers.fish.items.ItemFactory;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -38,8 +38,6 @@ public class Fish {
     private UUID fisherman;
     private Float length;
 
-    private String displayName;
-
     private List<Reward> actionRewards;
     private List<Reward> fishRewards;
     private List<Reward> sellRewards;
@@ -58,6 +56,7 @@ public class Fish {
     private boolean isCompExemptFish;
 
     private final boolean disableFisherman;
+    private final String displayName;
 
     private int day = -1;
     private final double setWorth;
@@ -79,13 +78,10 @@ public class Fish {
 
         this.setWorth = section.getDouble("set-worth");
 
-        this.factory = new ItemFactory(null, section);
-        checkDisplayName();
+        this.factory = ItemFactory.create(section);
+        this.displayName = factory.getDisplayName().getConfiguredValue();
 
-        // These settings don't mean these will be applied, but they will be considered if the settings exist.
-        factory.enableDefaultChecks();
-        factory.setItemDisplayNameCheck(this.displayName != null);
-        factory.setItemLoreCheck(!section.getBoolean("disable-lore", false));
+        factory.getLore().setEnabled(!section.getBoolean("disable-lore", false));
 
         setSize();
         checkEatEvent();
@@ -135,17 +131,24 @@ public class Fish {
         });
     }
 
+    public ItemStack give(int randomIndex) {
+        int initialIndex = factory.getRandomIndex();
+
+        factory.setRandomIndex(randomIndex);
+        ItemStack item = give();
+        factory.setRandomIndex(initialIndex);
+
+        return item;
+    }
+
     /**
      * Returns the item stack version of the fish to be given to the player.
      *
-     * @param randomIndex If the value isn't -1 then a specific index of the random results of the fish will be chosen,
-     *                    relying on the fact that it's a fish doing random choices. If it is -1 then a random one will
-     *                    be rolled.
      * @return An ItemStack version of the fish.
      */
-    public ItemStack give(int randomIndex) {
-        ItemStack fish = factory.createItem(getFishermanPlayer(), randomIndex);
-        if (factory.isRawMaterial()) {
+    public ItemStack give() {
+        ItemStack fish = factory.createItem(fisherman);
+        if (factory.isRawItem()) {
             return fish;
         }
 
@@ -320,7 +323,7 @@ public class Fish {
             newLoreLine = ConfigMessage.FISH_LORE.getMessage();
         }
 
-        List<String> fishLore = section.getStringList("lore");
+        List<String> fishLore = factory.getLore().getConfiguredValue();
         EMFListMessage fishLoreReplacement = fishLore.isEmpty() ? EMFListMessage.empty() : EMFListMessage.fromStringList(fishLore);
         newLoreLine.setVariable("{fish_lore}", fishLoreReplacement);
 
@@ -347,10 +350,6 @@ public class Fish {
         }
 
         return newLoreLine.getComponentListMessage();
-    }
-
-    public void checkDisplayName() {
-        this.displayName = section.getString("displayname");
     }
 
     public void checkEatEvent() {

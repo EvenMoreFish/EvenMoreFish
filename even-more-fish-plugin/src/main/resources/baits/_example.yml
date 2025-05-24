@@ -36,6 +36,9 @@ drop-quantity: 1
 item:
   material: NAUTILUS_SHELL
   displayname: "<gray>Example Bait"
+  # This is the bait's custom lore, this is added as the {lore} variable in the general bait lore (configured in messages.yml)
+  lore:
+    - "<gray>Boosts Epic & Legendary fish."
 
 # This lists the fish that are attracted to this bait (make sure to specify the rarity and ensure there's no typos)
 fish:
@@ -52,7 +55,3 @@ fish:
 rarities:
   - "Epic"
   - "Legendary"
-
-# This is the bait's custom lore, this is added as the {lore} variable in the general bait lore (configured in messages.yml)
-lore:
-  - "<gray>Boosts Epic & Legendary fish."

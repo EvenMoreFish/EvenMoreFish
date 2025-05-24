@@ -7,9 +7,9 @@ button-example:
   item:
     material: diamond
     displayname: <gold>Example Button
-  lore:
-    - This is customizable lore.
-    - Add whatever you want in here.
+    lore:
+      - This is customizable lore.
+      - Add whatever you want in here.
   character: c # The character to use inside the GUI layout configs.
   click-action:
     left: fish-toggle # The click action to execute on left click.
@@ -25,29 +25,29 @@ general:
     item:
       material: arrow
       displayname: <aqua>First Page
-    lore:
-      - <yellow>Go to the first page
+      lore:
+        - <yellow>Go to the first page
   # Character: p
   previous-page:
     item:
       material: paper
       displayname: <aqua>Previous Page
-    lore:
-      - <yellow>Go to the previous page
+      lore:
+        - <yellow>Go to the previous page
   # Character: n
   next-page:
     item:
       material: paper
       displayname: <aqua>Next Page
-    lore:
-      - <yellow>Go to the next page
+      lore:
+        - <yellow>Go to the next page
   # Character: l
   last-page:
     item:
       material: arrow
       displayname: <aqua>Last Page
-    lore:
-      - <yellow>Go to the last page
+      lore:
+        - <yellow>Go to the last page
 
 main-menu:
   title: <dark_blue>EvenMoreFish
@@ -65,11 +65,11 @@ main-menu:
     item:
       material: tropical_fish
       displayname: <gold>»    Toggle Custom Fish
-    lore:
-      - '<strikethrough><white>                                 '
-      - <gray>Click this button to
-      - <gray>toggle custom fish.
-      - '<strikethrough><white>                                 '
+      lore:
+        - '<strikethrough><white>                                 '
+        - <gray>Click this button to
+        - <gray>toggle custom fish.
+        - '<strikethrough><white>                                 '
     character: t
     click-action: fish-toggle
 
@@ -77,11 +77,11 @@ main-menu:
     item:
       material: gold_ingot
       displayname: <gold>»    Open Fish Shop
-    lore:
-      - '<strikethrough><white>                                 '
-      - <gray>Sell the fish you catch to
-      - <gray>earn a bit of extra money.
-      - '<strikethrough><white>                                 '
+      lore:
+        - '<strikethrough><white>                                 '
+        - <gray>Sell the fish you catch to
+        - <gray>earn a bit of extra money.
+        - '<strikethrough><white>                                 '
     character: s
     click-action: open-shop
 
@@ -89,12 +89,12 @@ main-menu:
     item:
       material: COMPASS
       displayname: <gold>»    Command Help
-    lore:
-      - '<strikethrough><white>                                 '
-      - <gray>Shows a list of commands
-      - <gray>that can be used to use
-      - <gray>this plugin.
-      - '<strikethrough><white>                                 '
+      lore:
+        - '<strikethrough><white>                                 '
+        - <gray>Shows a list of commands
+        - <gray>that can be used to use
+        - <gray>this plugin.
+        - '<strikethrough><white>                                 '
     character: h
     click-action: show-command-help
 
@@ -102,10 +102,10 @@ main-menu:
     item:
       material: nautilus_shell
       displayname: <gold>»    View Baits
-    lore:
-      - '<strikethrough><white>                                 '
-      - <gray>Shows all loaded baits
-      - '<strikethrough><white>                                 '
+      lore:
+        - '<strikethrough><white>                                 '
+        - <gray>Shows all loaded baits
+        - '<strikethrough><white>                                 '
     character: b
     click-action: open-baits-menu
 
@@ -113,11 +113,11 @@ main-menu:
     item:
       material: writable_book
       displayname: "<gold>»    Fish Journal"
-    lore:
-      - '<strikethrough><white>                                 '
-      - <gray>Keep track of all the
-      - <gray>fish you have caught.
-      - '<strikethrough><white>                                 '
+      lore:
+        - '<strikethrough><white>                                 '
+        - <gray>Keep track of all the
+        - <gray>fish you have caught.
+        - '<strikethrough><white>                                 '
     character: j
     click-action: open-journal-menu
 
@@ -125,8 +125,8 @@ main-menu:
     item:
       material: pufferfish
       displayname: <red>Exit
-    lore:
-      - <yellow>Exit to the Menu
+      lore:
+        - <yellow>Exit to the Menu
     glowing: true
     character: x
     click-action: full-exit
@@ -146,16 +146,16 @@ sell-menu-normal:
     item:
       material: GOLD_INGOT
       displayname: <bold><gold>SELL
-    lore:
-      - <dark_gray>Fish Shop
-      - ''
-      - <gray>Total Value » </gray><yellow>{sell-price}
-      - ''
-      - <gray>Sell your fish here to make
-      - <gray>some extra money.
-      - ''
-      - <yellow>» (Left-click) sell the fish.
-      - <gray>» (Right-click) cancel.
+      lore:
+        - <dark_gray>Fish Shop
+        - ''
+        - <gray>Total Value » </gray><yellow>{sell-price}
+        - ''
+        - <gray>Sell your fish here to make
+        - <gray>some extra money.
+        - ''
+        - <yellow>» (Left-click) sell the fish.
+        - <gray>» (Right-click) cancel.
     character: s
     click-action:
       left: sell-shop
@@ -165,16 +165,16 @@ sell-menu-normal:
     item:
       material: COD_BUCKET
       displayname: <bold><gold>SELL ALL
-    lore:
-      - <dark_gray>Inventory
-      - ''
-      - <gray>Total Value » </gray><yellow>{sell-all-price}
-      - ''
-      - <gray>Click this button to sell
-      - <gray>the fish in your inventory to
-      - <gray>make some extra money.
-      - ''
-      - <yellow>» (Left-click) sell the fish.
+      lore:
+        - <dark_gray>Inventory
+        - ''
+        - <gray>Total Value » </gray><yellow>{sell-all-price}
+        - ''
+        - <gray>Click this button to sell
+        - <gray>the fish in your inventory to
+        - <gray>make some extra money.
+        - ''
+        - <yellow>» (Left-click) sell the fish.
     character: a
     click-action: sell-inventory
 
@@ -193,16 +193,16 @@ sell-menu-confirm:
     item:
       material: GOLD_INGOT
       displayname: <bold><gold>CONFIRM SELL
-    lore:
-      - <dark_gray>Fish Shop
-      - ''
-      - <gray>Total Value » </gray><yellow>{sell-price}
-      - ''
-      - <gray>Sell your fish here to make
-      - <gray>some extra money.
-      - ''
-      - <yellow>» (Left-click) sell the fish.
-      - <gray>» (Right-click) cancel.
+      lore:
+        - <dark_gray>Fish Shop
+        - ''
+        - <gray>Total Value » </gray><yellow>{sell-price}
+        - ''
+        - <gray>Sell your fish here to make
+        - <gray>some extra money.
+        - ''
+        - <yellow>» (Left-click) sell the fish.
+        - <gray>» (Right-click) cancel.
     character: s
     click-action:
       left: sell-shop-confirm
@@ -212,16 +212,16 @@ sell-menu-confirm:
     item:
       material: COD_BUCKET
       displayname: <bold><gold>CONFIRM SELL ALL
-    lore:
-      - <dark_gray>Inventory
-      - ''
-      - <gray>Total Value » </gray><yellow>{sell-all-price}
-      - ''
-      - <gray>Click this button to sell
-      - <gray>the fish in your inventory to
-      - <gray>make some extra money.
-      - ''
-      - <yellow>» (Left-click) sell the fish.
+      lore:
+        - <dark_gray>Inventory
+        - ''
+        - <gray>Total Value » </gray><yellow>{sell-all-price}
+        - ''
+        - <gray>Click this button to sell
+        - <gray>the fish in your inventory to
+        - <gray>make some extra money.
+        - ''
+        - <yellow>» (Left-click) sell the fish.
     character: a
     click-action: sell-inventory-confirm
 
@@ -241,8 +241,8 @@ baits-menu:
     item:
       material: pufferfish
       displayname: <red>Exit
-    lore:
-      - <yellow>Exit to the Menu
+      lore:
+        - <yellow>Exit to the Menu
     glowing: true
     character: x
     click-action: open-main-menu
@@ -251,8 +251,8 @@ baits-menu:
     item:
       material: paper
       displayname: <yellow>Next Page
-    lore:
-      - <yellow>Navigate to the next page
+      lore:
+        - <yellow>Navigate to the next page
     character: n
     click-action: next-page
 
@@ -260,8 +260,8 @@ baits-menu:
     item:
       material: paper
       displayname: <yellow>Previous Page
-    lore:
-      - <yellow>Navigate to the previous page
+      lore:
+        - <yellow>Navigate to the previous page
     character: p
     click-action: previous-page
 
@@ -280,8 +280,8 @@ apply-baits-menu:
     item:
       material: pufferfish
       displayname: <red>Exit
-    lore:
-      - <yellow>Exit to the Menu
+      lore:
+        - <yellow>Exit to the Menu
     glowing: true
     character: x
     click-action: full-exit
@@ -310,26 +310,26 @@ journal-menu:
     item:
       material: iron_bars
       displayname: <dark_gray>Undiscovered Rarity
-    lore:
-      - ''
-      - <white>Catch a fish from this
-      - <white>rarity to unlock it here.
+      lore:
+        - ''
+        - <white>Catch a fish from this
+        - <white>rarity to unlock it here.
 
   rarity-item:
     item:
       # This will be overwritten by the rarity's material.
       material: cod
       displayname: '{rarity}'
-    lore:
-      - ''
-      - '<aqua>→ Click to view caught fish'
+      lore:
+        - ''
+        - '<aqua>→ Click to view caught fish'
 
   exit:
     item:
       material: pufferfish
       displayname: <red>Exit
-    lore:
-      - <yellow>Exit to the Menu
+      lore:
+        - <yellow>Exit to the Menu
     glowing: true
     character: x
     click-action: full-exit
@@ -365,17 +365,17 @@ journal-rarity:
   fish-item:
     item:
       displayname: <white>{fishname}
-    lore:
-      - ''
-      - '<white>Caught: {times-caught}x'
-      - '<white>Largest Size: {largest-size}cm'
-      - '<white>Smallest Size: {smallest-size}cm'
-      - '<white>Found: {discover-date}'
-      - ''
-      - '<white>Discovered by: {discoverer}'
-      - '<white>Server Largest: {server-largest}cm'
-      - '<white>Server Smallest: {server-smallest}cm'
-      - '<white>Server Caught: {server-caught}x'
+      lore:
+        - ''
+        - '<white>Caught: {times-caught}x'
+        - '<white>Largest Size: {largest-size}cm'
+        - '<white>Smallest Size: {smallest-size}cm'
+        - '<white>Found: {discover-date}'
+        - ''
+        - '<white>Discovered by: {discoverer}'
+        - '<white>Server Largest: {server-largest}cm'
+        - '<white>Server Smallest: {server-smallest}cm'
+        - '<white>Server Caught: {server-caught}x'
 
   rarity-item:
     item:
@@ -385,17 +385,17 @@ journal-rarity:
     item:
       material: book
       displayname: <red>INFO
-    lore:
-      - <yellow>Here you can see all the fish you have caught.
-      - <yellow>From this rarity.
+      lore:
+        - <yellow>Here you can see all the fish you have caught.
+        - <yellow>From this rarity.
     character: a
 
   exit:
     item:
       material: pufferfish
       displayname: <red>Exit
-    lore:
-      - <yellow>Exit to the Menu
+      lore:
+        - <yellow>Exit to the Menu
     glowing: true
     character: x
     click-action: open-journal-menu

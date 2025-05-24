@@ -4,7 +4,7 @@ disabled: false
 item:
   material: GOLDEN_CARROT
   displayname: <gold>Legendary Lure
-glowing: true
+  glowing: true
 rarities:
   - Legendary
 catch-weight: 2

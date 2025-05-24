@@ -89,8 +89,12 @@ fish:
       # Should the item have the enchant glint? This applies unbreaking to the item and hides it.
       glowing: true
 
-    # Lets you set a custom displayname for the fish, this replaces the {fish} in "You have caught a {rarity} {fish}" and the fish name in the item.
-    displayname: <red>Example Fish
+      # Lets you set a custom displayname for the fish, this replaces the {fish} in "You have caught a {rarity} {fish}" and the fish name in the item.
+      displayname: <red>Example Fish
+
+      # Add one or more lines of lore to your fish, these replace the {fish_lore} variable defined in your fish-lore setting in messages.yml
+      lore:
+        - <gray>Hola!
 
     # The catch type for this fish. This overrides the rarity's value.
     catch-type: BOTH
@@ -134,10 +138,6 @@ fish:
 
     # How likely is this fish to be chosen? Having a greater weight means the rarity is more likely to be chosen (the total weights don't have to add to 100)
     weight: 10
-
-    # Add one or more lines of lore to your fish, these replace the {fish_lore} variable defined in your fish-lore setting in messages.yml
-    lore:
-      - <gray>Hola!
 
     # You can set custom requirements for this fish to appear, all possible requirements are on the wiki: https://github.com/EvenMoreFish/EvenMoreFish/wiki/Requirements
     requirements:

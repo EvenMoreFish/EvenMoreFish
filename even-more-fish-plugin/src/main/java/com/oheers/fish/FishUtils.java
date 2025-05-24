@@ -16,6 +16,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.ItemUtils;
+import com.oheers.fish.utils.Logging;
 import com.oheers.fish.utils.nbt.NbtKeys;
 import com.oheers.fish.utils.nbt.NbtUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -44,6 +45,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -110,7 +113,7 @@ public class FishUtils {
             return null;
         }
         if (randomIndex != null) {
-            fish.getFactory().setType(randomIndex);
+            fish.getFactory().setRandomIndex(randomIndex);
         }
         fish.setLength(lengthFloat);
         if (playerString != null) {
@@ -149,7 +152,7 @@ public class FishUtils {
         }
         fish.setLength(lengthFloat);
         if (randomIndex != null) {
-            fish.getFactory().setType(randomIndex);
+            fish.getFactory().setRandomIndex(randomIndex);
         }
         if (playerString != null) {
             try {
@@ -567,6 +570,14 @@ public class FishUtils {
         return skull;
     }
 
+    public static @NotNull ItemStack getSkullFromUUIDString(@NotNull String uuidString) {
+        try {
+            return getSkullFromUUID(UUID.fromString(uuidString));
+        } catch (IllegalArgumentException exception) {
+            return new ItemStack(Material.PLAYER_HEAD);
+        }
+    }
+
     /**
      * Sorts a double value by rounding it to the provided amount of decimal places.
      *
@@ -685,5 +696,33 @@ public class FishUtils {
         return colour.substring(0, openingTagEnd + 1) + "{name}";
     }
 
+    public static PotionEffect getPotionEffect(@NotNull String effectString) {
+        String[] split = effectString.split(":");
+        if (split.length != 3) {
+            Logging.error("Potion effect string is formatted incorrectly. Use \"potion:duration:amplifier\".");
+            return null;
+        }
+        PotionEffectType type = PotionEffectType.getByName(split[0]);
+        if (type == null) {
+            Logging.error("Potion effect type " + split[0] + " is not valid.");
+            return null;
+        }
+        Integer duration = FishUtils.getInteger(split[1]);
+        if (duration == null) {
+            Logging.error("Potion effect duration " + split[1] + " is not valid.");
+            return null;
+        }
+        Integer amplifier = FishUtils.getInteger(split[2]);
+        if (amplifier == null) {
+            Logging.error("Potion effect amplifier " + split[2] + " is not valid.");
+            return null;
+        }
+        return new PotionEffect(
+            type,
+            duration * 20,
+            amplifier - 1,
+            false
+        );
+    }
 
 }

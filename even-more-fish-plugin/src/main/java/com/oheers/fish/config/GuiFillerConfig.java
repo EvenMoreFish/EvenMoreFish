@@ -4,7 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.gui.GuiUtils;
-import com.oheers.fish.utils.ItemFactory;
+import com.oheers.fish.items.ItemFactory;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.StaticGuiElement;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -49,9 +49,8 @@ public class GuiFillerConfig extends ConfigBase {
         if (character == '#') {
             return null;
         }
-        ItemFactory factory = new ItemFactory(null, itemSection);
-        factory.enableAllChecks();
-        ItemStack item = factory.createItem(null, -1);
+        ItemFactory factory = ItemFactory.create(itemSection);
+        ItemStack item = factory.createItem();
         if (item.getType() == Material.AIR) {
             return null;
         }

@@ -27,7 +27,7 @@ fish:
   Shiny Pickle:
     item:
       material: SEA_PICKLE
-    glowing: true
+      glowing: true
   Penguin:
     item:
       head-64: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWVhNzU5Zjk3OWI5YjhlYTgzMWNhN2UyZDY2ZGYxNDgyOTNmMWE1MTQ3OTgzYjUyYzQ4ZWZlMmMzMTVlIn19fQ==
@@ -56,21 +56,21 @@ fish:
   Clownfish:
     item:
       material: TROPICAL_FISH
-    lore:
-      - <italic><gray>What's the difference between
-      - <italic><gray>pork and a meteorite? One's
-      - <italic><gray>meaty and the other's a little
-      - <italic><gray>meteor.
+      lore:
+        - <italic><gray>What's the difference between
+        - <italic><gray>pork and a meteorite? One's
+        - <italic><gray>meaty and the other's a little
+        - <italic><gray>meteor.
   Breaded Fish Fillet:
     item:
       material: BREAD
   Coinfish:
     item:
       material: SUNFLOWER
+      lore:
+        - <italic><gray>Gives $50 when flipped
     interact-event:
       - MONEY:50
-    lore:
-      - <italic><gray>Gives $50 when flipped
   Kelpfish:
     item:
       material: KELP

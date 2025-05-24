@@ -96,11 +96,11 @@ nbt-rod-item:
     # This needs to be FISHING_ROD, can be an addon string, but the base material has to be FISHING_ROD
     material: FISHING_ROD
     displayname: <yellow>EvenMoreFish Fishing Rod
-  glowing: true
-  lore:
-    - ''
-    - <gray>Catch </gray><yellow>custom </yellow><gray>fish using this
-    - <gray>fishing rod.
+    glowing: true
+    lore:
+      - ''
+      - <gray>Catch </gray><yellow>custom </yellow><gray>fish using this
+      - <gray>fishing rod.
 
 # Should the user need emf.use_rod permission in order to catch default custom fish. This requires
 # Vault and a permission manager such as LuckPerms.

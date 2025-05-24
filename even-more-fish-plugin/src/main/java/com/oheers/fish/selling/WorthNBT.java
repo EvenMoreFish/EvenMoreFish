@@ -36,7 +36,7 @@ public class WorthNBT {
             }
             emfCompound.setString(NbtKeys.EMF_FISH_NAME, fish.getName());
             emfCompound.setString(NbtKeys.EMF_FISH_RARITY, fish.getRarity().getId());
-            emfCompound.setInteger(NbtKeys.EMF_FISH_RANDOM_INDEX, fish.getFactory().getChosenRandomIndex());
+            emfCompound.setInteger(NbtKeys.EMF_FISH_RANDOM_INDEX, fish.getFactory().getRandomIndex());
         });
 
         return fishItem;
@@ -58,7 +58,7 @@ public class WorthNBT {
         if (fish.getFisherman() != null && !fish.hasFishermanDisabled()) {
             itemMeta.set(nbtplayer, PersistentDataType.STRING, fish.getFisherman().toString());
         }
-        itemMeta.set(nbtrandomIndex, PersistentDataType.INTEGER, fish.getFactory().getChosenRandomIndex());
+        itemMeta.set(nbtrandomIndex, PersistentDataType.INTEGER, fish.getFactory().getRandomIndex());
         itemMeta.set(nbtrarity, PersistentDataType.STRING, fish.getRarity().getId());
         itemMeta.set(nbtname, PersistentDataType.STRING, fish.getName());
     }

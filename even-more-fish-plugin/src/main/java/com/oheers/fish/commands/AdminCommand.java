@@ -124,7 +124,7 @@ public class AdminCommand {
 
                         fish.setFisherman(target.getUniqueId());
 
-                        final ItemStack fishItem = fish.give(-1);
+                        final ItemStack fishItem = fish.give();
                         fishItem.setAmount(amount);
 
                         FishUtils.giveItem(fishItem, target);

@@ -20,8 +20,8 @@ fish:
     item:
       material: FISHING_ROD
   Explorers Boat:
-    displayname: Explorer's Boat
     item:
+      displayname: Explorer's Boat
       materials:
         - OAK_BOAT
         - SPRUCE_BOAT
@@ -33,5 +33,5 @@ fish:
   Old Fishers Hat:
     item:
       material: LEATHER_HELMET
-    dye-colour: '#888877'
-    displayname: Old Fisher's Hat
+      dye-colour: '#888877'
+      displayname: Old Fisher's Hat
