@@ -35,6 +35,7 @@ public class ItemFactory {
     private int randomIndex = -1;
     private Consumer<ItemStack> finalChanges = null;
 
+    private final @NotNull ItemStack baseItem;
     private final CustomModelDataItemConfig customModelData;
     private final ItemDamageItemConfig itemDamage;
     private final DisplayNameItemConfig displayName;
@@ -60,6 +61,8 @@ public class ItemFactory {
         this.glowing = new GlowingItemConfig(configuration);
         this.lore = new LoreItemConfig(configuration);
         this.potionMeta = new PotionMetaItemConfig(configuration);
+
+        this.baseItem = getBaseItem();
     }
 
     /**
@@ -86,7 +89,7 @@ public class ItemFactory {
     }
 
     public @NotNull ItemStack createItem(@Nullable Map<String, ?> replacements) {
-        ItemStack item = getBaseItem();
+        ItemStack item = baseItem.clone();
 
         if (!rawItem) {
             customModelData.apply(item, replacements);
