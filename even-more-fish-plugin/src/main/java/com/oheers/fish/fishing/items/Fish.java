@@ -78,7 +78,21 @@ public class Fish {
 
         this.setWorth = section.getDouble("set-worth");
 
-        this.factory = ItemFactory.create(section);
+        ItemFactory factory = ItemFactory.create(section);
+        factory.setFinalChanges(fish -> {
+            fish.editMeta(meta -> {
+                meta.displayName(getDisplayName().getComponentMessage());
+                if (!section.getBoolean("disable-lore", false)) {
+                    meta.lore(getFishLore());
+                }
+                meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            });
+            WorthNBT.setNBT(fish, this);
+        });
+        this.factory = factory;
+
         this.displayName = factory.getDisplayName().getConfiguredValue();
 
         factory.getLore().setEnabled(!section.getBoolean("disable-lore", false));
@@ -147,23 +161,7 @@ public class Fish {
      * @return An ItemStack version of the fish.
      */
     public ItemStack give() {
-        ItemStack fish = factory.createItem(fisherman);
-        if (factory.isRawItem()) {
-            return fish;
-        }
-
-        fish.editMeta(meta -> {
-            meta.displayName(getDisplayName().getComponentMessage());
-            if (!section.getBoolean("disable-lore", false)) {
-                meta.lore(getFishLore());
-            }
-            meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        });
-        WorthNBT.setNBT(fish, this);
-
-        return fish;
+        return factory.createItem(fisherman);
     }
 
     private OfflinePlayer getFishermanPlayer() {

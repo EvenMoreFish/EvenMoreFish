@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ItemFactory {
@@ -32,6 +33,7 @@ public class ItemFactory {
     private boolean rawItem = false;
     private UUID relevantPlayer = null;
     private int randomIndex = -1;
+    private Consumer<ItemStack> finalChanges = null;
 
     private final CustomModelDataItemConfig customModelData;
     private final ItemDamageItemConfig itemDamage;
@@ -94,6 +96,10 @@ public class ItemFactory {
             glowing.apply(item, replacements);
             lore.apply(item, replacements);
             potionMeta.apply(item, replacements);
+
+            if (finalChanges != null) {
+                finalChanges.accept(item);
+            }
         }
 
         return item;
@@ -406,6 +412,10 @@ public class ItemFactory {
 
     public int getRandomIndex() {
         return randomIndex;
+    }
+
+    public void setFinalChanges(@Nullable Consumer<ItemStack> finalChanges) {
+        this.finalChanges = finalChanges;
     }
 
 }

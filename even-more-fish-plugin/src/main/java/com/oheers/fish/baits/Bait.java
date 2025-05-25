@@ -63,6 +63,12 @@ public class Bait extends ConfigBase {
         DisplayNameItemConfig displayNameConfig = factory.getDisplayName();
         displayNameConfig.setEnabled(true);
         displayNameConfig.setDefault("<yellow>" + this.id);
+
+        factory.setFinalChanges(item -> {
+            item.setAmount(getDropQuantity());
+            item.editMeta(meta -> meta.lore(createBoostLore()));
+            BaitNBTManager.applyBaitNBT(item, this.id);
+        });
         this.itemFactory = factory;
     }
 
@@ -81,12 +87,7 @@ public class Bait extends ConfigBase {
      * @return An item stack representing the bait object, with nbt.
      */
     public ItemStack create(OfflinePlayer player) {
-        ItemStack baitItem = itemFactory.createItem(player.getUniqueId());
-        baitItem.setAmount(getDropQuantity());
-
-        baitItem.editMeta(meta -> meta.lore(createBoostLore()));
-
-        return BaitNBTManager.applyBaitNBT(baitItem, this.id);
+        return itemFactory.createItem(player.getUniqueId());
     }
 
     /**
