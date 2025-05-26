@@ -3,7 +3,7 @@
 # These messages partially support the MiniMessage format (Things like hoverable and clickable text will not work).
 # MiniMessage is in strict mode, meaning all tags need to be closed in order to work.
 # You are able to mix MiniMessage with the existing legacy codes, however this is not recommended.
-# Here is the MiniMessage Pull Request for more info: https://github.com/Oheers/EvenMoreFish/pull/387
+# Here is the MiniMessage Pull Request for more info: https://github.com/EvenMoreFish/EvenMoreFish/pull/387
 # Here are the MiniMessage Docs: https://docs.advntr.dev/minimessage/format.html
 
 # Sent to players when they fish an EvenMoreFish fish

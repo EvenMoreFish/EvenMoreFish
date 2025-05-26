@@ -1,6 +1,4 @@
-# Welcome to the fish.yml file, edit your fish here with guidance from comments. For a more in-depth explanation as well as some hidden settings, visit the official wiki page for the fish.yml
-# file at this page: https://github.com/Oheers/EvenMoreFish/wiki/Fish.yml - when using rarity names, make sure they exist in your rarities.yml file. If you need any further assistance please don't
-# leave a review but instead join the discord server using the invite link and support will happily be provided: https://discord.gg/Hb9cj3tNbb (this is a non-expiring link).
+# Welcome to the fish.yml file, edit your fish here with guidance from comments. When using rarity names, make sure they exist in your rarities.yml file.
 
 # All files support hex codes, this is used in the format &#66aabb. A gradient maker can be found here: https://minecraft.menu/minecraft-rgb-generator - use the provided format ("Nickname (&rrggbb)") for compatibility with EvenMoreFish.
 
@@ -14,7 +12,7 @@ fish:
     # Using "" creates a default fish with cod material.
     Cod: ""
     Atlantic Cod:
-      # You can set custom requirements that the fish needs to appear, there's a whole wiki page for this: https://github.com/Oheers/EvenMoreFish/wiki/Requirements
+      # You can set custom requirements that the fish needs to appear, there's a whole wiki page for this: https://evenmorefish.github.io/EvenMoreFish/docs/features/requirements
       requirements:
         biome:
           - COLD_OCEAN

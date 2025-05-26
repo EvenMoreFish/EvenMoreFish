@@ -94,7 +94,7 @@ public class Fish implements Cloneable {
     }
     
     /*
-      Accounts for bug https://github.com/Oheers/EvenMoreFish/issues/173
+      Accounts for bug https://github.com/EvenMoreFish/EvenMoreFish/issues/173
       This will allow breaking heads that have already been placed with the wrong nbt data.
      */
     private void setFishAndRarityConfig() {
