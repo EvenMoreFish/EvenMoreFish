@@ -1,0 +1,41 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+:global(.navbar) {
+    opacity: 0.95;
+}
+
+.heroBanner {
+    padding: 4rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    background: var(--emf-background-color);
+    background: var(--emf-background-color-gradient);
+
+    display: flex;
+    justify-content: center; /* horizontal */
+    align-items: center;
+}
+
+.emfHome {
+    background: var(--emf-background-color-alt);
+}
+
+.heroBanner img {
+    border-radius: 10px;
+}
+
+@media screen and (max-width: 996px) {
+    .heroBanner {
+        padding: 2rem;
+    }
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

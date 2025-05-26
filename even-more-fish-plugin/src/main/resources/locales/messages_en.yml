@@ -101,7 +101,7 @@ no-winners: <white>There were no fishing records.
 # When an individual player didn't get a record
 no-record: <white>You didn't catch any fish.
 # Sent when an admin tries to start a competition where the type doesn't exist e.g. /emf admin competition start 600 ABCDEFGH
-invalid-type: '<white>That isn''t a type of competition type, available types: https://github.com/EvenMoreFish/EvenMoreFish/wiki/Competition-Types'
+invalid-type: '<white>That isn''t a type of competition type, available types: https://evenmorefish.github.io/EvenMoreFish/docs/features/competitions/types'
 # Sent to all online players when not enough players are on to start a competition
 not-enough-players: <white>There's not enough players online to start the scheduled fishing competition.
 # Sent to all players at specific times to show the remaining time left
@@ -240,7 +240,7 @@ admin:
   # Sent when a competition is already running when using /emf admin competition start
   competition-already-running: <white>There's already a competition running.
   # When an invalid competition type is provided
-  competition-type-invalid: '<white>That isn''t a competition type. Available Types: https://github.com/EvenMoreFish/EvenMoreFish/wiki/Competition-Types'
+  competition-type-invalid: '<white>That isn''t a competition type. Available Types: https://evenmorefish.github.io/EvenMoreFish/docs/features/competitions/types'
   # When an invalid competition id is provided
   competition-id-invalid: <white>That isn't a valid competition id.
 

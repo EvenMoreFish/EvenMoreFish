@@ -1,0 +1,64 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #EC8F4Cff;
+  --ifm-color-primary-dark: #e08442;
+  --ifm-color-primary-darker: #d47a38;
+  --ifm-color-primary-darkest: #c86f2e;
+  --ifm-color-primary-light: #FDC16Aff;
+  --ifm-color-primary-lighter: #FEC26Bff;
+  --ifm-color-primary-lightest: #fef0d7;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  --emf-background-color: #ffffff;
+  /*--emf-background-color: #a4adbd;*/
+  --emf-background-color-alt: #6d758b;
+  --emf-background-color-gradient: linear-gradient(
+          180deg,
+          var(--emf-background-color) 0%,
+          color-mix(in srgb, var(--emf-background-color) 75%, var(--emf-background-color-alt) 25%) 25%,
+          color-mix(in srgb, var(--emf-background-color) 50%, var(--emf-background-color-alt) 50%) 50%,
+          color-mix(in srgb, var(--emf-background-color) 25%, var(--emf-background-color-alt) 75%) 75%,
+          color-mix(in srgb, var(--emf-background-color) 15%, var(--emf-background-color-alt) 90%) 90%,
+          color-mix(in srgb, var(--emf-background-color) 0%, var(--emf-background-color-alt) 100%) 100%,
+          var(--emf-background-color-alt) 100%
+  );
+
+  --badge-background-color: #fef0d7;
+  --badge-color: #131313;
+}
+
+[data-theme='dark'] {
+  /* Dark mode - adjusted for better contrast and readability */
+  --ifm-color-primary: #FDC16Aff;
+  --ifm-color-primary-dark: #EC8F4Cff;
+  --ifm-color-primary-darker: #d47a38;
+  --ifm-color-primary-darkest: #b86524;
+  --ifm-color-primary-light: #FEC26Bff;
+  --ifm-color-primary-lighter: #fed89d;
+  --ifm-color-primary-lightest: #fff4e5;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+  --emf-background-color: #2e384d;
+  /*--emf-background-color: #2e384d;*/
+  --emf-background-color-alt: #151923;
+  --emf-background-color-gradient: linear-gradient(
+          180deg,
+          var(--emf-background-color) 0%,
+          color-mix(in srgb, var(--emf-background-color) 75%, var(--emf-background-color-alt) 25%) 25%,
+          color-mix(in srgb, var(--emf-background-color) 50%, var(--emf-background-color-alt) 50%) 50%,
+          color-mix(in srgb, var(--emf-background-color) 25%, var(--emf-background-color-alt) 75%) 75%,
+          color-mix(in srgb, var(--emf-background-color) 15%, var(--emf-background-color-alt) 90%) 90%,
+          color-mix(in srgb, var(--emf-background-color) 0%, var(--emf-background-color-alt) 100%) 100%,
+          var(--emf-background-color-alt) 100%
+  );
+
+  --badge-background-color: #131313;
+  --badge-color: #fef0d7;
+}

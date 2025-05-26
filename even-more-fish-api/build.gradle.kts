@@ -13,6 +13,7 @@ dependencies {
     compileOnly(libs.boostedyaml)
 }
 
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))

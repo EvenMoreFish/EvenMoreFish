@@ -1,0 +1,68 @@
+---
+title: Getting Started
+sidebar_position: 1
+description: Maven, Gradle
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## Artifacts
+
+Currently, EMF has 2 main artifacts for use:
+- `even-more-fish-api`
+- `even-more-fish-plugin`
+
+In the future these will be further abstracted so you don't need to use the "core" artifact any longer.
+
+## CodeMC
+
+The plugin is available via CodeMC's Maven Repository. To add it to your build tool, follow the examples below:
+
+<Tabs>
+<TabItem value="gradle" label="Gradle (Kotlin)">
+
+```kotlin title="build.gradle.kts"
+repositories {
+    maven("https://repo.codemc.io/repository/EvenMoreFish/")
+}
+
+dependencies {
+    // For the plugin artifact
+    compileOnly("com.oheers.evenmorefish:even-more-fish-plugin:2.0.0-SNAPSHOT")
+    // For the api artifact
+    compileOnly("com.oheers.evenmorefish:even-more-fish-api:2.0.0-SNAPSHOT")
+}
+```
+
+</TabItem>
+<TabItem value="maven" label="Maven">
+
+    ```xml title="pom.xml"
+    <repositories>
+        <repository>
+            <id>evenmorefish</id>
+            <url>https://repo.codemc.io/repository/EvenMoreFish</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- For the plugin artifact -->
+        <dependency>
+            <groupId>com.oheers.evenmorefish</groupId>
+            <artifactId>even-more-fish-plugin</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- For the api artifact -->
+        <dependency>
+            <groupId>com.oheers.evenmorefish</groupId>
+            <artifactId>even-more-fish-api</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    ```
+
+</TabItem>
+</Tabs>
