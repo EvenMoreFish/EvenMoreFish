@@ -77,14 +77,14 @@ public class FishJournalGui extends ConfigGui {
 
         if (database == null) {
             Logging.warn("Can not show fish in the Journal Menu, please enable the database!");
-            ItemFactory factory = ItemFactory.create(section, "undiscovered-fish");
+            ItemFactory factory = ItemFactory.itemFactory(section, "undiscovered-fish");
             return factory.createItem(player.getUniqueId());
         }
 
         boolean hideUndiscovered = section.getBoolean("hide-undiscovered-fish", true);
         // If undiscovered fish should be hidden
         if (hideUndiscovered && !database.userHasFish(fish, player)) {
-            ItemFactory factory = ItemFactory.create(section, "undiscovered-fish");
+            ItemFactory factory = ItemFactory.itemFactory(section, "undiscovered-fish");
             return factory.createItem(player.getUniqueId());
         }
 
@@ -173,16 +173,16 @@ public class FishJournalGui extends ConfigGui {
 
         if (database == null) {
             Logging.warn("Can not show rarities in the Journal Menu, please enable the database!");
-            ItemFactory factory = ItemFactory.create(section, "undiscovered-rarity");
+            ItemFactory factory = ItemFactory.itemFactory(section, "undiscovered-rarity");
             return factory.createItem(player.getUniqueId());
         }
 
         if (hideUndiscovered && !database.userHasRarity(rarity, player)) {
-            ItemFactory factory = ItemFactory.create(section, "undiscovered-rarity");
+            ItemFactory factory = ItemFactory.itemFactory(section, "undiscovered-rarity");
             return factory.createItem(player.getUniqueId());
         }
 
-        final ItemFactory factory = ItemFactory.create(section, "rarity-item");
+        final ItemFactory factory = ItemFactory.itemFactory(section, "rarity-item");
         ItemStack item = factory.createItem(player.getUniqueId());
         item = ItemUtils.changeMaterial(item, rarity.getMaterial());
 

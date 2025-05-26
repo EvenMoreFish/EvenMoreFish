@@ -70,7 +70,7 @@ public class ItemFactory {
      * @param configuration The configuration to use.
      * @return A new ItemFactory instance.
      */
-    public static ItemFactory create(@NotNull Section configuration) {
+    public static ItemFactory itemFactory(@NotNull Section configuration) {
         return new ItemFactory(configuration, null);
     }
 
@@ -80,7 +80,7 @@ public class ItemFactory {
      * @param configLocation The config location to use.
      * @return A new ItemFactory instance.
      */
-    public static ItemFactory create(@NotNull Section configuration, @NotNull String configLocation) {
+    public static ItemFactory itemFactory(@NotNull Section configuration, @NotNull String configLocation) {
         return new ItemFactory(configuration, configLocation);
     }
 

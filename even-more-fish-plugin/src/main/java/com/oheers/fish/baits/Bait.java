@@ -58,7 +58,7 @@ public class Bait extends ConfigBase {
         performRequiredConfigChecks();
         this.id = Objects.requireNonNull(getConfig().getString("id"));
 
-        ItemFactory factory = ItemFactory.create(getConfig());
+        ItemFactory factory = ItemFactory.itemFactory(getConfig());
 
         DisplayNameItemConfig displayNameConfig = factory.getDisplayName();
         displayNameConfig.setEnabled(true);

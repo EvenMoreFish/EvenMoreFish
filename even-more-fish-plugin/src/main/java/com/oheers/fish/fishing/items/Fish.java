@@ -78,7 +78,7 @@ public class Fish {
 
         this.setWorth = section.getDouble("set-worth");
 
-        ItemFactory factory = ItemFactory.create(section);
+        ItemFactory factory = ItemFactory.itemFactory(section);
         factory.setFinalChanges(fish -> {
             fish.editMeta(meta -> {
                 meta.displayName(getDisplayName().getComponentMessage());

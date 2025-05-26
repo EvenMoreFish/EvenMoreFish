@@ -70,7 +70,7 @@ public class GuiUtils {
             section.set("item.displayname", section.get("displayname"));
             section.remove("displayname");
         }
-        ItemFactory factory = ItemFactory.create(section);
+        ItemFactory factory = ItemFactory.itemFactory(section);
         return factory.createItem();
     }
 

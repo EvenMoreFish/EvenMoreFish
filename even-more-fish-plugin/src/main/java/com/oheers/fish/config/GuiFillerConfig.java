@@ -49,7 +49,7 @@ public class GuiFillerConfig extends ConfigBase {
         if (character == '#') {
             return null;
         }
-        ItemFactory factory = ItemFactory.create(itemSection);
+        ItemFactory factory = ItemFactory.itemFactory(itemSection);
         ItemStack item = factory.createItem();
         if (item.getType() == Material.AIR) {
             return null;

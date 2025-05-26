@@ -137,7 +137,7 @@ public class ConfigGui {
         if (character == '#') {
             return;
         }
-        ItemFactory factory = ItemFactory.create(itemSection);
+        ItemFactory factory = ItemFactory.itemFactory(itemSection);
         ItemStack item = factory.createItem(this.player.getUniqueId(), this.replacements);
         if (item.getType() == Material.AIR) {
             return;
