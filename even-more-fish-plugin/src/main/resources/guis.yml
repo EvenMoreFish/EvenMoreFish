@@ -297,7 +297,7 @@ journal-menu:
     - '2rrrrrrr2'
     - '3rrrrrrr3'
     - '2rrrrrrr2'
-    - ' 323x323 '
+    - 'p323x323n'
   filler: gray_stained_glass_pane
   # The character to use for rarity items
   rarity-character: r
@@ -343,7 +343,7 @@ journal-rarity:
     - ' fffffff '
     - ' fffffff '
     - ' fffffff '
-    - '    x    '
+    - 'p   x   n'
   filler: gray_stained_glass_pane
   # The character to use for fish items
   fish-character: f
