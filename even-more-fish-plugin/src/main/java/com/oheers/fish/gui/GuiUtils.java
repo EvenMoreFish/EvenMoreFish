@@ -11,6 +11,7 @@ import com.oheers.fish.selling.SellHelper;
 import com.oheers.fish.items.ItemFactory;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiPageElement;
+import de.themoep.inventorygui.InventoryGui;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
@@ -81,7 +82,7 @@ public class GuiUtils {
             if (gui != null) {
                 gui.doRescue();
             }
-            click.getGui().close();
+            clearHistory(click.getWhoClicked());
         });
         // Exiting a sub-menu should open the main menu
         newActionMap.put("open-main-menu", (gui, click) -> {
@@ -89,7 +90,7 @@ public class GuiUtils {
                 gui.doRescue();
             }
             new MainMenuGui(click.getWhoClicked()).open();
-            click.getGui().close();
+            clearHistory(click.getWhoClicked());
         });
         // Toggling custom fish should redraw the Gui and leave it at that
         newActionMap.put("fish-toggle", (gui, click) -> {
@@ -110,7 +111,7 @@ public class GuiUtils {
                 return;
             }
             new SellGui(player, SellGui.SellState.NORMAL, null).open();
-            click.getGui().close();
+            clearHistory(click.getWhoClicked());
         });
         newActionMap.put("show-command-help", (gui, click) -> Bukkit.dispatchCommand(click.getWhoClicked(), "emf help"));
         newActionMap.put("sell-inventory", (gui, click) -> {
@@ -123,7 +124,7 @@ public class GuiUtils {
                 return;
             }
             new SellHelper(click.getWhoClicked().getInventory(), player).sellFish();
-            click.getGui().close();
+            clearHistory(click.getWhoClicked());
         });
         newActionMap.put("sell-shop", (gui, click) -> {
             HumanEntity humanEntity = click.getWhoClicked();
@@ -132,7 +133,7 @@ public class GuiUtils {
                 return;
             }
             SellHelper.sellInventoryGui(click.getGui(), click.getWhoClicked());
-            click.getGui().close();
+            clearHistory(click.getWhoClicked());
         });
         newActionMap.put("sell-inventory-confirm", (gui, click) -> {
             HumanEntity humanEntity = click.getWhoClicked();
@@ -143,18 +144,18 @@ public class GuiUtils {
             if (gui != null) {
                 gui.doRescue();
             }
-            click.getGui().close();
+            clearHistory(click.getWhoClicked());
         });
         newActionMap.put("sell-shop-confirm", (gui, click) -> {
             SellHelper.sellInventoryGui(click.getGui(), click.getWhoClicked());
-            click.getGui().close();
+            clearHistory(click.getWhoClicked());
         });
         newActionMap.put("open-baits-menu", (gui, click) -> {
             if (gui != null) {
                 gui.doRescue();
             }
             new BaitsGui(click.getWhoClicked()).open();
-            click.getGui().close();
+            clearHistory(click.getWhoClicked());
         });
         newActionMap.put("open-journal-menu", (gui, click) -> {
             if (!MainConfig.getInstance().isDatabaseOnline()) {
@@ -164,7 +165,7 @@ public class GuiUtils {
                 gui.doRescue();
             }
             new FishJournalGui(click.getWhoClicked(), null).open();
-            click.getGui().close();
+            clearHistory(click.getWhoClicked());
         });
         // Add page actions so third party plugins cannot register their own.
         newActionMap.put("first-page", (gui, click) -> {});
@@ -173,6 +174,13 @@ public class GuiUtils {
         newActionMap.put("last-page", (gui, click) -> {});
 
         return newActionMap;
+    }
+
+    /**
+     * Closes the given GUI after 1 tick
+     */
+    private static void clearHistory(HumanEntity entity) {
+        InventoryGui.clearHistory(entity);
     }
 
 }
