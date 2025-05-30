@@ -89,6 +89,7 @@ public class GuiUtils {
                 gui.doRescue();
             }
             new MainMenuGui(click.getWhoClicked()).open();
+            click.getGui().close();
         });
         // Toggling custom fish should redraw the Gui and leave it at that
         newActionMap.put("fish-toggle", (gui, click) -> {
@@ -109,6 +110,7 @@ public class GuiUtils {
                 return;
             }
             new SellGui(player, SellGui.SellState.NORMAL, null).open();
+            click.getGui().close();
         });
         newActionMap.put("show-command-help", (gui, click) -> Bukkit.dispatchCommand(click.getWhoClicked(), "emf help"));
         newActionMap.put("sell-inventory", (gui, click) -> {
@@ -152,6 +154,7 @@ public class GuiUtils {
                 gui.doRescue();
             }
             new BaitsGui(click.getWhoClicked()).open();
+            click.getGui().close();
         });
         newActionMap.put("open-journal-menu", (gui, click) -> {
             if (!MainConfig.getInstance().isDatabaseOnline()) {
@@ -161,14 +164,13 @@ public class GuiUtils {
                 gui.doRescue();
             }
             new FishJournalGui(click.getWhoClicked(), null).open();
+            click.getGui().close();
         });
         // Add page actions so third party plugins cannot register their own.
         newActionMap.put("first-page", (gui, click) -> {});
         newActionMap.put("previous-page", (gui, click) -> {});
         newActionMap.put("next-page", (gui, click) -> {});
         newActionMap.put("last-page", (gui, click) -> {});
-
-
 
         return newActionMap;
     }
