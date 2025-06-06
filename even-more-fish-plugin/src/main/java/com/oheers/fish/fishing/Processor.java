@@ -11,6 +11,8 @@ import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
+import com.oheers.fish.fishing.rods.CustomRod;
+import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.Location;
@@ -26,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 
 public abstract class Processor<E extends Event> implements Listener {
 
@@ -52,18 +53,18 @@ public abstract class Processor<E extends Event> implements Listener {
      * @param location The location of the fisher.
      *                 {@code @returns} A random fish without any bait application.
      */
-    protected Fish chooseFish(@NotNull Player player, @NotNull Location location, @Nullable Bait bait) {
-        if (bait != null) {
+    protected Fish chooseFish(@NotNull Player player, @NotNull Location location, @Nullable Bait bait, @Nullable CustomRod customRod) {
+        if (bait != null && customRod == null) {
             return bait.chooseFish(player, location);
         }
 
-        final Rarity fishRarity = FishManager.getInstance().getRandomWeightedRarity(player, 1, null, Set.copyOf(FishManager.getInstance().getRarityMap().values()));
+        final Rarity fishRarity = FishManager.getInstance().getRandomWeightedRarity(player, 1, null, Set.copyOf(FishManager.getInstance().getRarityMap().values()), customRod);
         if (fishRarity == null) {
             EvenMoreFish.getInstance().getLogger().severe("Could not determine a rarity for fish for " + player.getName());
             return null;
         }
 
-        final Fish fish = FishManager.getInstance().getFish(fishRarity, location, player, 1, null, true, this);
+        final Fish fish = FishManager.getInstance().getFish(fishRarity, location, player, 1, null, true, this, customRod);
         if (fish == null) {
             EvenMoreFish.getInstance().getLogger().severe("Could not determine a fish for " + player.getName());
             return null;
@@ -101,12 +102,13 @@ public abstract class Processor<E extends Event> implements Listener {
         }
 
         Bait applyingBait = null;
+        CustomRod customRod = RodManager.getInstance().getRod(fishingRod);
 
-        if (BaitNBTManager.isBaitedRod(fishingRod) && (!MainConfig.getInstance().getBaitCompetitionDisable() || !Competition.isActive())) {
+        if (customRod == null && BaitNBTManager.isBaitedRod(fishingRod) && (!MainConfig.getInstance().getBaitCompetitionDisable() || !Competition.isActive())) {
             applyingBait = BaitNBTManager.randomBaitApplication(fishingRod);
         }
 
-        Fish fish = chooseFish(player, location, applyingBait);
+        Fish fish = chooseFish(player, location, applyingBait, customRod);
 
         if (fish == null) {
             return null;

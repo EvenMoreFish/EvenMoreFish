@@ -153,8 +153,8 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("place-head-fish", false);
     }
 
-    public boolean requireNBTRod() {
-        return getConfig().getBoolean("require-nbt-rod", false);
+    public boolean requireCustomRod() {
+        return getConfig().getBoolean("fishing.require-custom-rod", false);
     }
 
     public boolean requireFishingPermission() {
@@ -387,6 +387,8 @@ public class MainConfig extends ConfigBase {
                 document.set("fishing.catch-enabled", !vanillaFishing);
                 document.remove("vanilla-fishing");
             })
+            // Config Version 2 - Rework NBT Rods
+            .addRelocation("2", "require-nbt-rod", "fishing.require-custom-rod", '.')
             .build();
     }
 

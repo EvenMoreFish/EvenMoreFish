@@ -1,9 +1,15 @@
 package com.oheers.fish.recipe;
 
 import com.oheers.fish.FishUtils;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
+import net.kyori.adventure.key.Key;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class RecipeUtil {
 
@@ -13,6 +19,29 @@ public class RecipeUtil {
             return null;
         }
         return new RecipeChoice.ExactChoice(customItem);
+    }
+
+    public static @Nullable EMFRecipe<?> getRecipe(@NotNull Section section, @NotNull NamespacedKey key, @NotNull ItemStack result) {
+        String type = section.getString("type");
+        if (type == null) {
+            return null;
+        }
+        return switch (type.toLowerCase()) {
+            case "shapeless" -> {
+                List<String> ingredients = section.getStringList("ingredients");
+                yield new EMFShapelessRecipe(
+                    key,
+                    result,
+                    ingredients
+                );
+            }
+            case "shaped" -> new EMFShapedRecipe(
+                key,
+                result,
+                section
+            );
+            default -> null; // Not a valid recipe type
+        };
     }
 
 }

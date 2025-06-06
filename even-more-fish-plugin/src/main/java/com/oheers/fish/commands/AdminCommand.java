@@ -19,6 +19,7 @@ import com.oheers.fish.database.Database;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
+import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
@@ -41,6 +42,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.jar.Attributes;
@@ -62,7 +64,7 @@ public class AdminCommand {
                         getFish(),
                         getList(),
                         getCompetition(),
-                        getNbtRod(),
+                        getCustomRod(),
                         getBait(),
                         getClearBaits(),
                         getReload(),
@@ -131,12 +133,7 @@ public class AdminCommand {
                     }
 
                     EMFMessage message = ConfigMessage.ADMIN_GIVE_PLAYER_FISH.getMessage();
-
-                    if ("@a".equals(arguments.getRaw("targets"))) {
-                        message.setVariable("{player}", "All Players");
-                    } else {
-                        message.setVariable("{player}", String.join(", ", targets.stream().map(Player::getName).toList()));
-                    }
+                    message.setVariable("{player}", getPlayersVariable(arguments.getRaw("targets"), targets));
 
                     message.setFishCaught(initialFish.getName());
                     message.send(sender);
@@ -198,48 +195,41 @@ public class AdminCommand {
                 });
     }
 
-    private CommandAPICommand getNbtRod() {
+    private CommandAPICommand getCustomRod() {
         helpMessageBuilder.addUsage(
-                "admin nbt-rod",
-                ConfigMessage.HELP_ADMIN_NBTROD::getMessage
+            "admin custom-rod",
+            ConfigMessage.HELP_ADMIN_CUSTOMROD::getMessage
         );
-        return new CommandAPICommand("nbt-rod")
-                .withArguments(
-                    new EntitySelectorArgument.ManyPlayers("targets").setOptional(true)
-                )
-                .executes(((sender, args) -> {
-                    if (!MainConfig.getInstance().requireNBTRod()) {
-                        ConfigMessage.ADMIN_NBT_NOT_REQUIRED.getMessage().send(sender);
-                        return;
+        return new CommandAPICommand("custom-rod")
+            .withArguments(
+                CustomRodArgument.create(),
+                new EntitySelectorArgument.ManyPlayers("targets").setOptional(true)
+            )
+            .executes(((sender, args) -> {
+                final List<Player> players = (List<Player>) args.getOptional("targets").orElseGet(() -> {
+                    if (sender instanceof Player p) {
+                        return List.of(p);
                     }
-                    final List<Player> players = (List<Player>) args.getOptional("targets").orElseGet(() -> {
-                        if (sender instanceof Player p) {
-                            return List.of(p);
-                        }
-                        return null;
-                    });
+                    return null;
+                });
 
-                    if (players == null) {
-                        ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
-                        return;
-                    }
+                if (players == null) {
+                    ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
+                    return;
+                }
 
-                    ItemStack rod = EvenMoreFish.getInstance().getCustomNBTRod();
+                CustomRod rod = Objects.requireNonNull(args.getUnchecked("customRod"));
+                ItemStack rodItem = rod.create();
 
-                    for (Player player : players) {
-                        FishUtils.giveItems(List.of(rod), player);
-                    }
+                for (Player player : players) {
+                    FishUtils.giveItems(List.of(rodItem), player);
+                }
 
-                    EMFMessage giveMessage = ConfigMessage.ADMIN_NBT_ROD_GIVEN.getMessage();
+                EMFMessage giveMessage = ConfigMessage.ADMIN_CUSTOM_ROD_GIVEN.getMessage();
+                giveMessage.setVariable("{player}", getPlayersVariable(args.getRaw("targets"), players));
 
-                    if ("@a".equals(args.getRaw("targets"))) {
-                        giveMessage.setVariable("{player}", "All Players");
-                    } else {
-                        giveMessage.setVariable("{player}", String.join(", ", players.stream().map(Player::getName).toList()));
-                    }
-
-                    giveMessage.send(sender);
-                }));
+                giveMessage.send(sender);
+            }));
     }
 
     private CommandAPICommand getBait() {
@@ -274,12 +264,7 @@ public class AdminCommand {
                         FishUtils.giveItems(List.of(baitItem), target);
                     }
                     EMFMessage message = ConfigMessage.ADMIN_GIVE_PLAYER_BAIT.getMessage();
-
-                    if ("@a".equals(args.getRaw("targets"))) {
-                        message.setVariable("{player}", "All Players");
-                    } else {
-                        message.setVariable("{player}", String.join(", ", targets.stream().map(Player::getName).toList()));
-                    }
+                    message.setVariable("{player}", getPlayersVariable(args.getRaw("targets"), targets));
                     message.setBait(bait.getId());
                     message.send(sender);
                 });
@@ -610,6 +595,14 @@ public class AdminCommand {
                     competition.setAdminStarted(true);
                     competition.begin();
                 });
+    }
+
+    private @NotNull String getPlayersVariable(@Nullable String raw, @NotNull List<Player> players) {
+        if ("@a".equals(raw)) {
+            return "All Players";
+        } else {
+            return String.join(", ", players.stream().map(Player::getName).toList());
+        }
     }
 
 }

@@ -14,12 +14,12 @@ public enum ConfigMessage {
     ADMIN_GIVE_PLAYER_BAIT("<reset>You have given {player} a {bait}.", PrefixType.ADMIN, true, true, "admin.given-player-bait"),
     ADMIN_GIVE_PLAYER_FISH("<reset>You have given {player} a {fish}.", PrefixType.ADMIN, true, true, "admin.given-player-fish"),
     ADMIN_OPEN_FISH_SHOP("<reset>Opened a shop inventory for {player}.", PrefixType.ADMIN, true, true, "admin.open-fish-shop"),
-    ADMIN_NBT_ROD_GIVEN(
-            "<reset>You have given {player} a NBT rod, make sure \"require-nbt-rod\" is set to <green>true <reset>for this to be different from any other fishing rod.",
+    ADMIN_CUSTOM_ROD_GIVEN(
+            "<white>You have given {player} a custom fishing rod.",
             PrefixType.ADMIN,
             true,
             true,
-            "admin.nbt-rod-given"
+            "admin.custom-rod-given"
     ),
     ADMIN_NBT_NOT_REQUIRED("<reset>Change \"require-nbt-rod\" to true in order to use this feature.", PrefixType.ERROR, false, true, "admin.nbt-not-required"),
     ADMIN_NO_BAIT_SPECIFIED("<reset>You must specify a bait name.", PrefixType.ERROR, false, true, "admin.no-bait-specified"),
@@ -119,6 +119,7 @@ public enum ConfigMessage {
     HELP_ADMIN_COMPETITION("[noPrefix]Starts or stops a competition", PrefixType.ADMIN, false, true, "help-admin.competition"),
     HELP_ADMIN_CLEARBAITS("[noPrefix]Removes all applied baits from a fishing rod.", PrefixType.ADMIN, false, true, "help-admin.clearbaits"),
     HELP_ADMIN_FISH("[noPrefix]Gives a fish to a player.", PrefixType.ADMIN, false, true, "help-admin.fish"),
+    HELP_ADMIN_CUSTOMROD("[noPrefix]Gives a custom fishing rod to a player.", PrefixType.ADMIN, false, true, "help-admin.custom-rod"),
     HELP_ADMIN_NBTROD("[noPrefix]Gives a custom NBT rod to a player required for catching EMF fish.", PrefixType.ADMIN, false, true, "help-admin.nbt-rod"),
     HELP_ADMIN_RELOAD("[noPrefix]Reloads the plugin's config files", PrefixType.ADMIN, false, true, "help-admin.reload"),
     HELP_ADMIN_VERSION("[noPrefix]Displays plugin information.", PrefixType.ADMIN, false, true, "help-admin.version"),

@@ -1,0 +1,11 @@
+id: default
+disabled: true
+allowed-rarities: ALL
+item:
+  material: FISHING_ROD
+  displayname: <yellow>EvenMoreFish Fishing Rod
+  glowing: true
+  lore:
+    - ''
+    - <gray>Catch </gray><yellow>custom </yellow><gray>fish using this
+    - <gray>fishing rod.

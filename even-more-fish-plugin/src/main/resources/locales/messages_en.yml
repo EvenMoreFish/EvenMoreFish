@@ -151,6 +151,7 @@ help-admin:
   clearbaits: '[noPrefix]Removes all applied baits from a fishing rod.'
   fish: '[noPrefix]Gives a fish to a player.'
   nbt-rod: '[noPrefix]Gives a custom NBT rod to a player required for catching EMF fish.'
+  custom-rod: '[noPrefix]Gives a custom fishing rod to a player.'
   reload: '[noPrefix]Reloads the plugin''s config files.'
   migrate: '[noPrefix]Migrate the database from Legacy (V2) to V3'
   addons: '[noPrefix]Display all addons.'
@@ -244,10 +245,8 @@ admin:
   # When an invalid competition id is provided
   competition-id-invalid: <white>That isn't a valid competition id.
 
-  # When the command /emf admin nbt-rod is run.
-  nbt-rod-given: <white>You have given {player} a NBT rod, make sure "require-nbt-rod" is set to <green>true <white>for this to be different from any other fishing rod.
-  # When the command /emf admin nbt-rod is run but require-rod-nbt is false in the config.yml file.
-  nbt-not-required: <white>Change "require-nbt-rod" to true in order to use this feature.
+  # When the command /emf admin custom-rod is run.
+  custom-rod-given: <white>You have given {player} a custom fishing rod.
 
   # When there's a modrinth update available, don't translate the URL otherwise it won't direct to the correct page.
   update-available: '<white>There is an update available: https://modrinth.com/plugin/evenmorefish/versions?l=paper'
@@ -297,4 +296,4 @@ bait:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 1
+version: 2

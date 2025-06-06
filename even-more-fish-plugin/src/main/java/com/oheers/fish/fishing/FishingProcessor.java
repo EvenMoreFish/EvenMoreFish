@@ -5,6 +5,8 @@ import com.oheers.fish.api.EMFFishEvent;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.fishing.rods.CustomRod;
+import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.permissions.UserPerms;
 import com.oheers.fish.utils.nbt.NbtKeys;
@@ -15,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,18 +28,8 @@ public class FishingProcessor extends Processor<PlayerFishEvent> {
     @Override
     @EventHandler(priority = EventPriority.HIGHEST)
     public void process(@NotNull PlayerFishEvent event) {
-        if (!isCustomFishAllowed(event.getPlayer())) {
+        if (!isCustomFishAllowed(event.getPlayer()) || !canUseRod(event)) {
             return;
-        }
-
-        if (MainConfig.getInstance().requireNBTRod()) {
-            //check if player is using the fishing rod with correct nbt value.
-            ItemStack rodInHand = event.getPlayer().getInventory().getItemInMainHand();
-            if (rodInHand.getType() != Material.AIR && !NbtUtils.hasKey(rodInHand, NbtKeys.EMF_ROD_NBT)) {
-                //tag is null or tag is false
-                return;
-            }
-
         }
 
         if (MainConfig.getInstance().requireFishingPermission() && !event.getPlayer().hasPermission(UserPerms.USE_ROD)) {
@@ -116,6 +109,28 @@ public class FishingProcessor extends Processor<PlayerFishEvent> {
     public boolean canUseFish(@NotNull Fish fish) {
         return fish.getCatchType().equals(CatchType.CATCH)
                 || fish.getCatchType().equals(CatchType.BOTH);
+    }
+
+    private boolean canUseRod(@NotNull PlayerFishEvent event) {
+        if (!MainConfig.getInstance().requireCustomRod()) {
+            return true;
+        }
+        EquipmentSlot hand = event.getHand();
+        if (hand == null) {
+            return true;
+        }
+        ItemStack rod = switch (hand) {
+            case HAND -> event.getPlayer().getInventory().getItemInMainHand();
+            case OFF_HAND -> event.getPlayer().getInventory().getItemInOffHand();
+            default -> null;
+        };
+
+        if (rod == null) {
+            return true;
+        }
+
+        CustomRod customRod = RodManager.getInstance().getRod(rod);
+        return customRod != null;
     }
 
 }

@@ -10,6 +10,7 @@ import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.config.FishConversions;
 import com.oheers.fish.fishing.items.config.RarityConversions;
+import com.oheers.fish.fishing.rods.CustomRod;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -91,7 +92,7 @@ public class FishManager {
     }
 
     // TODO cleanup
-    public Rarity getRandomWeightedRarity(Player fisher, double boostRate, Set<Rarity> boostedRarities, Set<Rarity> totalRarities) {
+    public Rarity getRandomWeightedRarity(Player fisher, double boostRate, Set<Rarity> boostedRarities, Set<Rarity> totalRarities, @Nullable CustomRod customRod) {
         Map<UUID, Rarity> decidedRarities = EvenMoreFish.getInstance().getDecidedRarities();
         if (fisher != null && decidedRarities.containsKey(fisher.getUniqueId())) {
             Rarity chosenRarity = decidedRarities.get(fisher.getUniqueId());
@@ -123,6 +124,11 @@ public class FishManager {
             }
         } else {
             allowedRarities.addAll(totalRarities);
+        }
+
+        // Remove all rarities that are not allowed by the custom rod.
+        if (customRod != null) {
+            allowedRarities.retainAll(customRod.getAllowedRarities());
         }
 
         if (allowedRarities.isEmpty()) {
@@ -181,20 +187,25 @@ public class FishManager {
         return fishList.get(idx);
     }
 
-    public Fish getFish(Rarity r, Location l, Player p, double boostRate, List<Fish> boostedFish, boolean doRequirementChecks, @Nullable Processor<?> processor) {
+    public Fish getFish(Rarity r, Location l, Player p, double boostRate, List<Fish> boostedFish, boolean doRequirementChecks, @Nullable Processor<?> processor, @Nullable CustomRod customRod) {
         if (r == null) return null;
         // will store all the fish that match the player's biome or don't discriminate biomes
 
         // Protection against /emf admin reload causing the plugin to be unable to get the rarity
         if (r.getOriginalFishList().isEmpty()) {
-            r = getRandomWeightedRarity(p, 1, null, Set.copyOf(rarityMap.values()));
+            r = getRandomWeightedRarity(p, 1, null, Set.copyOf(rarityMap.values()), customRod);
         }
+
+        List<Fish> customRodFish = customRod == null ? List.of() : customRod.getAllowedFish();
 
         World world = l == null ? null : l.getWorld();
         RequirementContext context = new RequirementContext(world, l, p, null, null);
 
         List<Fish> available = r.getFishList().stream()
             .filter(fish -> {
+                if (!customRodFish.isEmpty() && !customRodFish.contains(fish)) {
+                    return false;
+                }
                 if (!(boostRate != -1 || boostedFish == null || boostedFish.contains(fish))) {
                     return false;
                 }

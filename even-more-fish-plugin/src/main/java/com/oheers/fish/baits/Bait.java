@@ -192,26 +192,26 @@ public class Bait extends ConfigBase {
 
         boostedRarities.addAll(fishListRarities);
 
-        Rarity fishRarity = FishManager.getInstance().getRandomWeightedRarity(player, getBoostRate(), boostedRarities, Set.copyOf(FishManager.getInstance().getRarityMap().values()));
+        Rarity fishRarity = FishManager.getInstance().getRandomWeightedRarity(player, getBoostRate(), boostedRarities, Set.copyOf(FishManager.getInstance().getRarityMap().values()), null);
         Fish fish;
 
         if (!getFish().isEmpty()) {
             // The bait has both rarities: and fish: set but the plugin chose a rarity with no boosted fish. This ensures
             // the method isn't given an empty list.
             if (!fishListRarities.contains(fishRarity)) {
-                fish = FishManager.getInstance().getFish(fishRarity, location, player, MainConfig.getInstance().getBaitBoostRate(), fishRarity.getFishList(), true, null);
+                fish = FishManager.getInstance().getFish(fishRarity, location, player, MainConfig.getInstance().getBaitBoostRate(), fishRarity.getFishList(), true, null, null);
             } else {
-                fish = FishManager.getInstance().getFish(fishRarity, location, player, MainConfig.getInstance().getBaitBoostRate(), getFish(), true, null);
+                fish = FishManager.getInstance().getFish(fishRarity, location, player, MainConfig.getInstance().getBaitBoostRate(), getFish(), true, null, null);
             }
 
             if (!getRarities().contains(fishRarity) && (fish == null || !getFish().contains(fish))) {
                 // boost effect chose a fish but the randomizer didn't pick out the right fish - they've been incorrectly boosted.
-                fish = FishManager.getInstance().getFish(fishRarity, location, player, 1, null, true, null);
+                fish = FishManager.getInstance().getFish(fishRarity, location, player, 1, null, true, null, null);
             } else {
                 alertUsage(player);
             }
         } else {
-            fish = FishManager.getInstance().getFish(fishRarity, location, player, 1, null, true, null);
+            fish = FishManager.getInstance().getFish(fishRarity, location, player, 1, null, true, null, null);
             if (getRarities().contains(fishRarity)) {
                 alertUsage(player);
             }
