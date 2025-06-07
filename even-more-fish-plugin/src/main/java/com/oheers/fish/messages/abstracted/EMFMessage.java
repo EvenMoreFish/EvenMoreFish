@@ -33,7 +33,7 @@ public abstract class EMFMessage {
         .useUnusualXRepeatedCharacterHexFormat()
         .build();
     public static final PlainTextComponentSerializer PLAINTEXT_SERIALIZER = PlainTextComponentSerializer.plainText();
-    public static final Component EMPTY = Component.empty().colorIfAbsent(NamedTextColor.WHITE);
+    public static final Component EMPTY = Component.empty();
 
     protected boolean perPlayer = true;
     protected boolean canSilent = false;

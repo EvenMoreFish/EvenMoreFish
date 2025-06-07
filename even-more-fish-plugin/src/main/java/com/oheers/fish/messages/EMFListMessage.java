@@ -6,6 +6,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.jetbrains.annotations.NotNull;
@@ -92,7 +93,10 @@ public class EMFListMessage extends EMFMessage {
     @Override
     public @NotNull List<Component> getComponentListMessage() {
         formatPlaceholderAPI();
-        return this.message.stream().map(EMFMessage::removeDefaultItalics).toList();
+        return this.message.stream()
+            .map(EMFMessage::removeDefaultItalics)
+            .map(component -> component.colorIfAbsent(NamedTextColor.WHITE))
+            .toList();
     }
 
     @Override

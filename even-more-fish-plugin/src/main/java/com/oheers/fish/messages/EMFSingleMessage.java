@@ -6,6 +6,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
@@ -110,7 +111,7 @@ public class EMFSingleMessage extends EMFMessage {
     @Override
     public @NotNull Component getComponentMessage() {
         formatPlaceholderAPI();
-        return removeDefaultItalics(this.message);
+        return removeDefaultItalics(this.message).colorIfAbsent(NamedTextColor.WHITE);
     }
 
     @Override
