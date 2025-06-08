@@ -20,8 +20,14 @@ public abstract class ItemConfig<T> {
     }
 
     public T getActualValue() {
-        T val = override == null ? getConfiguredValue() : override;
-        return val == null ? def : val;
+        if (override != null) {
+            return override;
+        }
+        T configured = getConfiguredValue();
+        if (configured == null) {
+            return def;
+        }
+        return configured;
     }
 
     /**

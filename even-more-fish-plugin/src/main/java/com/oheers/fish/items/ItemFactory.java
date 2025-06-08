@@ -54,13 +54,13 @@ public class ItemFactory {
         // Updates the configuration to put everything in the correct place
         new ItemFactoryConversion().performConversions(this.configuration);
 
-        this.customModelData = new CustomModelDataItemConfig(configuration);
-        this.itemDamage = new ItemDamageItemConfig(configuration);
-        this.displayName = new DisplayNameItemConfig(configuration);
-        this.dyeColour = new DyeColourItemConfig(configuration);
-        this.glowing = new GlowingItemConfig(configuration);
-        this.lore = new LoreItemConfig(configuration);
-        this.potionMeta = new PotionMetaItemConfig(configuration);
+        this.customModelData = new CustomModelDataItemConfig(this.configuration);
+        this.itemDamage = new ItemDamageItemConfig(this.configuration);
+        this.displayName = new DisplayNameItemConfig(this.configuration);
+        this.dyeColour = new DyeColourItemConfig(this.configuration);
+        this.glowing = new GlowingItemConfig(this.configuration);
+        this.lore = new LoreItemConfig(this.configuration);
+        this.potionMeta = new PotionMetaItemConfig(this.configuration);
 
         this.baseItem = getBaseItem();
     }
