@@ -44,11 +44,11 @@ public class ItemFactory {
     private final LoreItemConfig lore;
     private final PotionMetaItemConfig potionMeta;
 
-    private ItemFactory(@NotNull Section configuration, @Nullable String configLocation) {
+    private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation) {
         if (configLocation == null) {
-            this.configuration = configuration;
+            this.configuration = initialSection;
         } else {
-            this.configuration = ConfigUtils.getOrCreateSection(configuration, configLocation);
+            this.configuration = ConfigUtils.getOrCreateSection(initialSection, configLocation);
         }
 
         // Updates the configuration to put everything in the correct place
