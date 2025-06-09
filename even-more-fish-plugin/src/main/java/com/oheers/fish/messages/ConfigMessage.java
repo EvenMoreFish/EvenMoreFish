@@ -134,23 +134,23 @@ public enum ConfigMessage {
     INVALID_COMPETITION_ID("<reset>That isn't a valid competition id.", PrefixType.ADMIN, false, false, "admin.competition-id-invalid"),
 
     LEADERBOARD_LARGEST_FISH(
-            "<reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<b>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)",
+            "<reset>#{position} | {player} <reset>({rarity_colour}<b>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)",
             PrefixType.DEFAULT,
             false,
             true,
             "leaderboard-largest-fish"
     ),
-    LEADERBOARD_LARGEST_TOTAL("<reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)", PrefixType.DEFAULT, false, true, "leaderboard-largest-total"),
-    LEADERBOARD_MOST_FISH("<reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>fish)", PrefixType.DEFAULT, false, true, "leaderboard-most-fish"),
+    LEADERBOARD_LARGEST_TOTAL("<reset>#{position} | {player} <reset>({amount}cm<reset>)", PrefixType.DEFAULT, false, true, "leaderboard-largest-total"),
+    LEADERBOARD_MOST_FISH("<reset>#{position} | {player} <reset>({amount} <reset>fish)", PrefixType.DEFAULT, false, true, "leaderboard-most-fish"),
     LEADERBOARD_TOTAL_PLAYERS("<reset>There are a total of {amount} player(s) in the leaderboard.", PrefixType.DEFAULT, true, true, "total-players"),
     LEADERBOARD_SHORTEST_FISH(
-            "<reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<b>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)",
+            "<reset>#{position} | {player} <reset>({rarity_colour}<b>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)",
             PrefixType.DEFAULT,
             false,
             true,
             "leaderboard-shortest-fish"
     ),
-    LEADERBOARD_SHORTEST_TOTAL("<reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)", PrefixType.DEFAULT, false, true, "leaderboard-shortest-total"),
+    LEADERBOARD_SHORTEST_TOTAL("<reset>#{position} | {player} <reset>({amount}cm<reset>)", PrefixType.DEFAULT, false, true, "leaderboard-shortest-total"),
 
     NEW_FIRST_PLACE_NOTIFICATION("<reset>{player} is now #1", PrefixType.DEFAULT, true, true, "new-first"),
 

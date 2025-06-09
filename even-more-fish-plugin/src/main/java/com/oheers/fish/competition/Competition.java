@@ -337,7 +337,6 @@ public class Competition {
             message.setPlayer(player);
 
             message.setPosition(Integer.toString(pos));
-            message.setPositionColour(competitionColours.get(pos - 1));
             message.setRarity(entry.getFish().getRarity().getDisplayName());
             message.setFishCaught(entry.getFish().getDisplayName());
 

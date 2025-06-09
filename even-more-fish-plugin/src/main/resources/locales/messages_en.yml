@@ -83,11 +83,11 @@ length-lore:
   - <white>Measures {length}cm.
 
 # The format of the leaderboard after a competition is over (this message doesn't support papi placeholders)
-leaderboard-largest-fish: <white>#{position} | {pos_colour}{player} (<b>{rarity}</b> {fish}, {length}cm)
-leaderboard-largest-total: <white>#{position} | {pos_colour}{player} <white>({pos_colour}{amount}cm<white>)
-leaderboard-most-fish: <white>#{position} | {pos_colour}{player} <white>({pos_colour}{amount} <white>fish)
-leaderboard-shortest-fish: <white>#{position} | {pos_colour}{player} <white>(<b>{rarity}</b> {fish}<white>, {length}cm<white>)
-leaderboard-shortest-total: <white>#{position} | {pos_colour}{player} <white>({pos_colour}{amount}cm<white>)
+leaderboard-largest-fish: <white>#{position} | {player} (<b>{rarity}</b> {fish}, {length}cm)
+leaderboard-largest-total: <white>#{position} | {player} <white>({amount}cm<white>)
+leaderboard-most-fish: <white>#{position} | {player} <white>({amount} <white>fish)
+leaderboard-shortest-fish: <white>#{position} | {player} <white>(<b>{rarity}</b> {fish}<white>, {length}cm<white>)
+leaderboard-shortest-total: <white>#{position} | {player} <white>({amount}cm<white>)
 # If you're running a competition where there's no leaderboard, this message is sent when there's a winner
 single-winner: <white>{player} has won the competition for {type}. Congratulations!
 # This shows the number of players currently in the competition, set to "" to disable.

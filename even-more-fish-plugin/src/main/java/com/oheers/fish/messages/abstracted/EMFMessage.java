@@ -269,15 +269,6 @@ public abstract class EMFMessage {
     }
 
     /**
-     * Sets the colour of the position for the {pos_colour} variable in the /emf top leaderboard.
-     *
-     * @param positionColour The position.
-     */
-    public void setPositionColour(@NotNull final Object positionColour) {
-        setVariable("{pos_colour}", positionColour);
-    }
-
-    /**
      * Sets the formatted (Nh, Nm, Ns) time to replace the {time_formatted} variable.
      *
      * @param timeFormatted The formatted time.

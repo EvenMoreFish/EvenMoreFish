@@ -73,11 +73,11 @@ length-lore:
   - <white>Measures {length}cm.
 
 # The format of the leaderboard after a competition is over (this message doesn't support papi placeholders)
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
-leaderboard-largest-total: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)
-leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>Fisch/e)
-leaderboard-shortest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
-leaderboard-shortest-total: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)
+leaderboard-largest-fish: <reset>#{position} | {player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-largest-total: <reset>#{position} | {player} <reset>({amount}cm<reset>)
+leaderboard-most-fish: <reset>#{position} | {player} <reset>({amount} <reset>Fisch/e)
+leaderboard-shortest-fish: <reset>#{position} | {player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-shortest-total: <reset>#{position} | {player} <reset>({amount}cm<reset>)
 # If you're running a competition where there's no leaderboard, this message is sent when there's a winner
 single-winner: <reset>{player} hat den Angelwettbewerb für {type} gewonnen. Glückwunsch!
 # This shows the number of players currently in the competition, set to "" to disable.

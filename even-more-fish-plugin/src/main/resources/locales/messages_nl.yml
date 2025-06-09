@@ -69,9 +69,9 @@ length-lore:
 help: /{command} - {description}
 
 # Het formaat van het leaderboard na afloop van een wedstrijd (deze boodschap ondersteunt geen PAPI placeholders)
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
-leaderboard-largest-total: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)
-leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>vissen)
+leaderboard-largest-fish: <reset>#{position} | {player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-largest-total: <reset>#{position} | {player} <reset>({amount}cm<reset>)
+leaderboard-most-fish: <reset>#{position} | {player} <reset>({amount} <reset>vissen)
 # Als je een wedstrijd organiseert zonder leaderboard, wordt deze boodschap verzonden wanneer er een winnaar is
 single-winner: <reset>{player} heeft de wedstrijd voor {type} gewonnen. Gefeliciteerd!
 # Dit toont het aantal spelers dat momenteel in de wedstrijd zit, stel in op "" om uit te schakelen.

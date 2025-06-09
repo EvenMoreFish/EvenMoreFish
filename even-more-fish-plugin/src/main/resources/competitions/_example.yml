@@ -91,7 +91,7 @@ required-worlds:
 
 # Allows control over the competition's leaderboard.
 leaderboard:
-  # These are the colours used in the {pos_colour} variable on the leaderboard. If you aren't using this variable, it isn't needed.
+  # These are the colours displayed on the leaderboard.
   # Start from #1 then go down as many as you like
   position-colours:
     - <gold>

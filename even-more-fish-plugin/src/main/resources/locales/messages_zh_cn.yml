@@ -68,9 +68,9 @@ length-lore:
 help: /{command} - {description}
 
 # 比赛结束后排行榜的格式（此信息不支持papi占位符）。
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
-leaderboard-largest-total: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)
-leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>fish)
+leaderboard-largest-fish: <reset>#{position} | {player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-largest-total: <reset>#{position} | {player} <reset>({amount}cm<reset>)
+leaderboard-most-fish: <reset>#{position} | {player} <reset>({amount} <reset>fish)
 # 如果你正在运行一个没有排行榜的比赛，当有获胜者时，会发送这个消息
 single-winner: <reset>{player} 赢得了这场比赛!
 # 这显示了当前参加比赛的玩家数量，设置为""可禁用。

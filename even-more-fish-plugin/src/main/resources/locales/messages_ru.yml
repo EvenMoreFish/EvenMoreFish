@@ -62,8 +62,8 @@ fish-lore:
 help: /{command} - {description}
 
 # Формат таблицы лидеров после окончания соревнования (это сообщение не поддерживает заполнители papi)
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
-leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>fish)
+leaderboard-largest-fish: <reset>#{position} | {player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-most-fish: <reset>#{position} | {player} <reset>({amount} <reset>fish)
 # Если вы проводите соревнование, в котором нет таблицы лидеров, это сообщение отправляется при определении победителя
 single-winner: <reset>{player} выиграл в соревнование в категории {type}. Поздравляю!
 # Это показывает количество игроков, участвующих в соревновании в данный момент, для отключения установлено значение "".

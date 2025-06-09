@@ -66,9 +66,9 @@ fish-lore:
 help: /{command} - {description}
 
 # 比賽結束後排行榜的格式（此信息不支持papi佔位符）。
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
-leaderboard-largest-total: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)
-leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>fish)
+leaderboard-largest-fish: <reset>#{position} | {player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-largest-total: <reset>#{position} | {player} <reset>({amount}cm<reset>)
+leaderboard-most-fish: <reset>#{position} | {player} <reset>({amount} <reset>fish)
 # 如果你正在運行一個沒有排行榜的比賽，當有獲勝者時，會發送這個消息
 single-winner: <reset>{player} 贏得了這場比賽!
 # 這顯示了當前參加比賽的玩家數量，設置為""可禁用。

@@ -66,9 +66,9 @@ fish-lore:
 help: /{command} - {description}
 
 # Le format du classement après la fin d'une compétition (ce message ne prend pas en charge les placeholders papi)
-leaderboard-largest-fish: <reset>#{position} | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
-leaderboard-largest-total: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount}cm<reset>)
-leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>fish)
+leaderboard-largest-fish: <reset>#{position} | {player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)
+leaderboard-largest-total: <reset>#{position} | {player} <reset>({amount}cm<reset>)
+leaderboard-most-fish: <reset>#{position} | {player} <reset>({amount} <reset>fish)
 # Si vous organisez un concours où il n'y a pas de classement, ce message est envoyé lorsqu'il y a un gagnant
 single-winner: <reset>{player} a remporté une compétition {type}. Félicitations!
 # Cela montre le nombre de joueurs actuellement dans la compétition, mettez "" pour désactiver.

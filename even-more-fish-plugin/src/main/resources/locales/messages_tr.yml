@@ -58,8 +58,8 @@ fish-length: '<white>Uzunluk: {length}cm'
 help: /{command} - {description}
 
 # The format of the leaderboard after a competition is over (this message doesn't support papi placeholders)
-leaderboard-largest-fish: '{pos_colour}#{position}<reset> | {pos_colour}{player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)'
-leaderboard-most-fish: <reset>#{position} | {pos_colour}{player} <reset>({pos_colour}{amount} <reset>fish)
+leaderboard-largest-fish: '#{position}<reset> | {player} <reset>({rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>, {length}cm<reset>)'
+leaderboard-most-fish: <reset>#{position} | {player} <reset>({amount} <reset>fish)
 # If you're running a competition where there's no leaderboard, this message is sent when there's a winner
 single-winner: <reset>{player} etkinliği kazandı. Tebrikler!
 # The number of positions shown in the leaderboard - can't be less than 1.
