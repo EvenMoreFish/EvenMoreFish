@@ -127,11 +127,11 @@ emf-competition-fish-format: '{length}cm <bold>{rarity}</bold> {fish}'
 # Отправляется, когда игрок пытается применить слишком много типов приманок к удочке, установленных в общем разделе baits.yml
 max-baits-reached: Вы достигли максимального количества типов приманок для этой удочки.
 # Не следует путать с вышеизложенным, это отправляется, когда достигается максимум конкретной приманки. Определите это в baits.yml с использованием "max-baits".
-max-bait-reached: Вы достигли максимального количества {bait_theme}{bait} <reset> приманки, которое может быть применено к одной удочке.
+max-bait-reached: Вы достигли максимального количества {bait} <reset> приманки, которое может быть применено к одной удочке.
 # Отправляется, когда игрок ловит приманку во время рыбалки (это можно отключить, установив процент улова равным 0 в baits.yml
-bait-catch: <bold>{player} <reset>has caught a {bait_theme}<bold>{bait} <reset>bait!
+bait-catch: <bold>{player} <reset>has caught a <bold>{bait} <reset>bait!
 # Отправляется, когда наживка применена и рыба поймана.
-bait-use: You have used one of your rod's {bait_theme}<bold>{bait} <reset>bait.
+bait-use: You have used one of your rod's <bold>{bait} <reset>bait.
 
 # Отображается при включении переключателя /emf toggle для выключения и включения соответственно.
 toggle-off: Вы больше не будете ловить кастомную рыбу.

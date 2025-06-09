@@ -143,11 +143,11 @@ emf-time-remaining-during-comp: Der er ikke en konkurrence i gang lige nu.
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
 max-baits-reached: <reset>Du har opnået det maksimale antal maddings typer denne fiskestang kan bruge.
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: <reset>Du har opnået det maksimale antal af {bait_theme}{bait} <reset>madding der kan bruges på en enkelt fiskestang.
+max-bait-reached: <reset>Du har opnået det maksimale antal af {bait} <reset>madding der kan bruges på en enkelt fiskestang.
 # Sent when a player catches a bait from fishing (this can be disabled by setting catch-percentage to 0 in baits.yml
-bait-catch: <reset><bold>{player} <reset>har fanget en {bait_theme}<bold>{bait} <reset>madding!
+bait-catch: <reset><bold>{player} <reset>har fanget en <bold>{bait} <reset>madding!
 # Sent when a bait is applied and a fish is caught.
-bait-use: <reset>Du har brugt en af de {bait_theme}<bold>{bait} <reset>maddinger din fiskestang havde.
+bait-use: <reset>Du har brugt en af de <bold>{bait} <reset>maddinger din fiskestang havde.
 # Sent when someone tries to use a bait in creative
 bait-survival-limited: <reset>Du er nød til at være i <underlined>overlevelses tilstand<reset> for at benytte maddinger på fiskestænger.
 

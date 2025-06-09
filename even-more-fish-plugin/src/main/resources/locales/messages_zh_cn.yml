@@ -150,11 +150,11 @@ emf-time-remaining-during-comp: <aqua>现在有一个钓鱼比赛正在进行中
 # 当玩家试图在钓竿上应用过多类型的鱼饵时发出，在baits.yml的常规部分设置。
 max-baits-reached: <red>你已经达到了该钓竿的最大鱼饵类型数量
 # 不要与上述混淆，这是在达到特定诱饵的最大值时发送的。在baits.yml中使用 "max-baits "来定义这个。
-max-bait-reached: <red>你已经达到了一个鱼竿可以应用的 {bait_theme}{bait} <reset>的最大数量
+max-bait-reached: <red>你已经达到了一个鱼竿可以应用的 {bait} <reset>的最大数量
 # 当玩家通过钓鱼捕获一个诱饵时发送（这可以通过在baits.yml中设置捕获率为0来禁用）。
-bait-catch: <green>{player} </green><white>捕捉到了 {bait_theme}<bold>{bait} </bold></white><white>!
+bait-catch: <green>{player} </green><white>捕捉到了 <bold>{bait} </bold></white><white>!
 # 在使用鱼饵并捕到鱼时发送。
-bait-use: <green>你使用了一根钓竿的 {bait_theme}<bold>{bait} </bold></green><green>诱饵.
+bait-use: <green>你使用了一根钓竿的 <bold>{bait} </bold></green><green>诱饵.
 # 当有人试图在创造模式中使用诱饵时发出的
 bait-survival-limited: <red>你必须在 <underlined>生存模式<reset> 中才能将鱼饵应用在钓竿上。
 

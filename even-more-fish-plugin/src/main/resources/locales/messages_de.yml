@@ -180,11 +180,11 @@ emf-time-remaining-during-comp: Es findet gerade ein Wettbewerb statt.
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
 max-baits-reached: <reset>Du hast die maximale Anzahl an Ködern für diese Angel erreicht.
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: <reset>Du hast die maximale Anzahl an {bait_theme}{bait} <reset>Köder für diese Angel erreicht.
+max-bait-reached: <reset>Du hast die maximale Anzahl an {bait} <reset>Köder für diese Angel erreicht.
 # Sent when a player catches a bait from fishing (this can be disabled by setting catch-percentage to 0 in baits.yml
-bait-catch: <reset><bold>{player} <reset>hat einen {bait_theme}<bold>{bait} <reset>Köder gefangen!
+bait-catch: <reset><bold>{player} <reset>hat einen <bold>{bait} <reset>Köder gefangen!
 # Sent when a bait is applied and a fish is caught.
-bait-use: <reset>Du hast einen {bait_theme}<bold>{bait} <reset>Köder deiner Angel verwendet.
+bait-use: <reset>Du hast einen <bold>{bait} <reset>Köder deiner Angel verwendet.
 # Sent when someone tries to use a bait in creative
 bait-survival-limited: <reset>Du musst im Spielmodus <underlined>survival<reset> sein um Köder zu verwenden.
 # Sent when someone tries to merge a baited rod into an unbaited rod
@@ -261,7 +261,7 @@ bait:
   # given out will have this lore. Bait themes can be set as a colour or prefix and be used in this lore.
   bait-lore:
     - <white>
-    - '{bait_theme}Increases the catch rates for:'
+    - 'Increases the catch rates for:'
     - '{boosts}'
     - '{lore}'
     - <white>
@@ -276,9 +276,9 @@ bait:
   # These are listed in the {boosts} variable above in bait-lore
   # boost-rarity/rarities: shown when the bait only impacts 1 rarity or when it impacts multiple rarities.
   # boost-fish: shown when the bait impacts some fish individually.
-  boosts-rarity: '{bait_theme}► <white>1 {bait_theme}Rarity'
-  boosts-rarities: '{bait_theme}► <white>{amount} {bait_theme}Rarities'
-  boosts-fish: '{bait_theme}► <white>{amount} {bait_theme}Fish'
+  boosts-rarity: '► <white>1 Rarity'
+  boosts-rarities: '► <white>{amount} Rarities'
+  boosts-fish: '► <white>{amount} Fish'
 
   # This is added to the lore in place of a bait if show-unused-slots is enabled in the general section.
   unused-slot: <gray>► ? <italic>Available Slot

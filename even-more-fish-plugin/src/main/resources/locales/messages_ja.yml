@@ -144,11 +144,11 @@ emf-time-remaining-during-comp: 現在釣り大会が開かれています。
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
 max-baits-reached: <reset>この釣り竿に付けられる、餌の種類の最大数に達しました。
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: <reset><reset>釣り竿１本に適用できる {bait_theme}{bait} 餌の最大数に達しました。
+max-bait-reached: <reset><reset>釣り竿１本に適用できる {bait} 餌の最大数に達しました。
 # Sent when a player catches a bait from fishing (this can be disabled by setting catch-percentage to 0 in baits.yml
-bait-catch: <reset><bold>{player} <reset>は [餌] {bait_theme}<bold>{bait} <reset>を釣り上げました！
+bait-catch: <reset><bold>{player} <reset>は [餌] <bold>{bait} <reset>を釣り上げました！
 # Sent when a bait is applied and a fish is caught.
-bait-use: <reset>釣り竿の [餌] {bait_theme}<bold>{bait} <reset>の１つを使用しました。
+bait-use: <reset>釣り竿の [餌] <bold>{bait} <reset>の１つを使用しました。
 # Sent when someone tries to use a bait in creative
 bait-survival-limited: <reset>釣り竿に餌を適用するには、<underlined>サバイバルモード <reset>である必要があります。
 

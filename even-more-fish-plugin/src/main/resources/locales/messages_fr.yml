@@ -138,11 +138,11 @@ emf-time-remaining-during-comp: Il y a un concours en cours en ce moment.
 # Envoyé lorsqu'un joueur essaie d'appliquer trop de types d'appâts à une canne à pêche, défini dans la section générale de baits.yml
 max-baits-reached: <reset>Vous avez atteint le nombre maximum de types d'appâts pour cette canne à pêche.
 # À ne pas confondre avec ce qui précède, ceci est envoyé lorsque le maximum d'un appât spécifique est atteint. Définissez ceci dans baits.yml en utilisant "max-baits".
-max-bait-reached: <reset>Vous avez atteint le nombre maximum d'appâts {bait_theme}{bait} <reset>pouvant être appliqués sur une canne.
+max-bait-reached: <reset>Vous avez atteint le nombre maximum d'appâts {bait} <reset>pouvant être appliqués sur une canne.
 # Envoyé lorsqu'un joueur attrape un appât en pêchant (cela peut être désactivé en définissant catch-percentage sur 0 dans baits.yml
-bait-catch: <reset><bold>{player} <reset>a attrapé un appât{bait_theme}<bold>{bait} <reset>!
+bait-catch: <reset><bold>{player} <reset>a attrapé un appât<bold>{bait} <reset>!
 # Envoyé lorsqu'un appât est appliqué et qu'un poisson est attrapé.
-bait-use: <reset>Vous avez utilisé l'un des appâts {bait_theme}<bold>{bait} <reset>de votre canne.
+bait-use: <reset>Vous avez utilisé l'un des appâts <bold>{bait} <reset>de votre canne.
 # Envoyé lorsque quelqu'un essaie d'utiliser un appât en créatif
 bait-survival-limited: <reset>Vous devez être en <underlined>survie<reset> pour appliquer des appâts aux cannes à pêche.
 

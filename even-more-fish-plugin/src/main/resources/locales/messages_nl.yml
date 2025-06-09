@@ -142,11 +142,11 @@ emf-time-remaining-during-comp: Er is momenteel een competitie aan de gang.
 # Verzonden wanneer een speler probeert te veel soorten aas op een vishengel toe te passen, ingesteld in het algemene gedeelte van baits.yml
 max-baits-reached: <reset>Je hebt het maximale aantal soorten aas voor deze vishengel bereikt.
 # Niet te verwarren met het bovenstaande, dit wordt verzonden wanneer het maximum van een specifiek aas is bereikt. Definieer dit in baits.yml met behulp van "max-baits".
-max-bait-reached: <reset>Je hebt het maximale aantal {bait_theme}{bait} <reset>aas bereikt dat op één hengel kan worden aangebracht.
+max-bait-reached: <reset>Je hebt het maximale aantal {bait} <reset>aas bereikt dat op één hengel kan worden aangebracht.
 # Verzonden wanneer een speler aas vangt tijdens het vissen (dit kan worden uitgeschakeld door catch-percentage in te stellen op 0 in baits.yml)
-bait-catch: <reset><bold>{player} <reset>heeft {bait_theme}<bold>{bait} <reset>aas gevangen!
+bait-catch: <reset><bold>{player} <reset>heeft <bold>{bait} <reset>aas gevangen!
 # Verzonden wanneer aas wordt toegepast en er een vis wordt gevangen.
-bait-use: '<reset>Je hebt een van het aas van je hengel gebruikt: {bait_theme}<bold>{bait}.'
+bait-use: '<reset>Je hebt een van het aas van je hengel gebruikt: <bold>{bait}.'
 # Verzonden wanneer iemand probeert aas te gebruiken in de creatieve modus
 bait-survival-limited: <reset>Je moet in de <underlined>overlevingsmodus<reset> zijn om aas op vishengels toe te passen.
 

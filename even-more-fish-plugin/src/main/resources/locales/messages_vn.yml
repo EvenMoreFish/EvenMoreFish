@@ -124,11 +124,11 @@ emf-time-remaining-during-comp: Đang có cuộc thi câu cá diễn ra.
 #Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
 max-baits-reached: <reset>Bạn đã đạt đến mức độ tối đa của mồi câu cho cần câu này.
 #Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: <reset>Bạn đã đạt đến mức tối đa của mồi cầu {bait_theme}{bait}<reset> để có thể áp dụng vào cần câu.
+max-bait-reached: <reset>Bạn đã đạt đến mức tối đa của mồi cầu {bait}<reset> để có thể áp dụng vào cần câu.
 #Sent when a player catches a bait from fishing (this can be disabled by setting catch-percentage to 0 in baits.yml
-bait-catch: <reset><bold>{player}<reset> đã bắt được mồi câu {bait_theme}<bold>{bait}<reset>!
+bait-catch: <reset><bold>{player}<reset> đã bắt được mồi câu <bold>{bait}<reset>!
 #Sent when a bait is applied and a fish is caught.
-bait-use: <reset>Bạn đã dùng mồi {bait_theme}<bold>{bait}.
+bait-use: <reset>Bạn đã dùng mồi <bold>{bait}.
 #Sent when someone tries to use a bait in creative
 bait-survival-limited: <reset>Bạn phải ở <underlined>Sinh tồn<reset> để có thể áp dụng mồi câu.
 #Shown when /emf toggle is run, to turn off and on respectively.

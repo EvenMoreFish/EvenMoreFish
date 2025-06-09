@@ -173,11 +173,11 @@ emf-time-remaining-during-comp: Há uma competição em andamento no momento.
 # Enviado quando um jogador tenta aplicar muitos tipos de isca em uma vara de pescar, definido na seção geral de baits.yml
 max-baits-reached: <reset>Você atingiu o número máximo de tipos de iscas para esta vara de pescar.
 # Não confunda com o acima, isso é enviado quando o máximo de uma isca específica é atingido. Defina isso em baits.yml usando "max-baits".
-max-bait-reached: <reset>Você atingiu o número máximo de {bait_theme}{bait} <reset>isca que pode ser aplicada a uma vara.
+max-bait-reached: <reset>Você atingiu o número máximo de {bait} <reset>isca que pode ser aplicada a uma vara.
 # Enviado quando um jogador pesca uma isca (isso pode ser desativado definindo a porcentagem de captura para 0 em baits.yml)
-bait-catch: <reset><bold>{player} <reset>pescou uma {bait_theme}<bold>{bait} <reset>isca!
+bait-catch: <reset><bold>{player} <reset>pescou uma <bold>{bait} <reset>isca!
 # Enviado quando uma isca é aplicada e um peixe é capturado.
-bait-use: <reset>Você usou uma das iscas {bait_theme}<bold>{bait} <reset>da sua vara.
+bait-use: <reset>Você usou uma das iscas <bold>{bait} <reset>da sua vara.
 # Enviado quando alguém tenta usar uma isca no modo criativo
 bait-survival-limited: <reset>Você deve estar no <underlined>modo sobrevivência ou aventura<reset> para aplicar iscas às varas de pescar.
 # Enviado quando alguém tenta combinar uma vara com isca em outra sem isca

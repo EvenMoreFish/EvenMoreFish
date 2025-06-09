@@ -144,11 +144,11 @@ emf-time-remaining-during-comp: W tej chwili trwa konkurs.
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
 max-baits-reached: <reset>Osiągnąłeś maksymalną liczbę rodzajów przynęt na tę wędkę.
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: <reset>Osiągnąłeś maksymalną liczbę {bait_theme}{bait} <reset>przynęt, która może być zastosowana do jednej wędki.
+max-bait-reached: <reset>Osiągnąłeś maksymalną liczbę {bait} <reset>przynęt, która może być zastosowana do jednej wędki.
 # Sent when a player catches a bait from fishing (this can be disabled by setting catch-percentage to 0 in baits.yml
-bait-catch: <reset><bold>{player} <reset>złapał {bait_theme}<bold>{bait} <reset>przynęta!
+bait-catch: <reset><bold>{player} <reset>złapał <bold>{bait} <reset>przynęta!
 # Sent when a bait is applied and a fish is caught.
-bait-use: <reset>Użyłeś jednego ze swoich prętów {bait_theme}<bold>{bait} <reset>przynęta.
+bait-use: <reset>Użyłeś jednego ze swoich prętów <bold>{bait} <reset>przynęta.
 # Sent when someone tries to use a bait in creative
 bait-survival-limited: <reset>Musisz być w <underlined>survival<reset>, żeby nakładać przynęty na wędki.
 

@@ -32,11 +32,11 @@ public enum ConfigMessage {
     ADMIN_LIST_REWARD_TYPES("<reset>Registered Reward Types: ", PrefixType.ADMIN, false, false, "admin.list-reward-types"),
 
     BAITS_CLEARED("<reset>You have removed all {amount} baits from your fishing rod.", PrefixType.ADMIN, true, true, "admin.all-baits-cleared"),
-    BAIT_CAUGHT("<reset><b>{player} <reset>has caught a {bait_theme}<b>{bait} <reset>bait!", PrefixType.NONE, true, true, "bait-catch"),
-    BAIT_USED("<reset>You have used one of your rod's {bait_theme}<b>{bait} <reset>bait.", PrefixType.DEFAULT, true, true, "bait-use"),
+    BAIT_CAUGHT("<reset><b>{player} <reset>has caught a <b>{bait} <reset>bait!", PrefixType.NONE, true, true, "bait-catch"),
+    BAIT_USED("<reset>You have used one of your rod's <b>{bait} <reset>bait.", PrefixType.DEFAULT, true, true, "bait-use"),
     BAIT_WRONG_GAMEMODE("<reset>You must be in <u>survival or adventure mode<reset> to apply baits to fishing rods.", PrefixType.ERROR, false, true, "bait-survival-limited"),
     BAITS_MAXED("<reset>You have reached the maximum number of types of baits for this fishing rod.", PrefixType.DEFAULT, false, true, "max-baits-reached"),
-    BAITS_MAXED_ON_ROD("<reset>You have reached the maximum number of {bait_theme}{bait} <reset>bait that can be applied to one rod.", PrefixType.ERROR, false, true, "max-baits-reached"),
+    BAITS_MAXED_ON_ROD("<reset>You have reached the maximum number of {bait} <reset>bait that can be applied to one rod.", PrefixType.ERROR, false, true, "max-baits-reached"),
     BAIT_ROD_PROTECTION("<reset>Protected your baited fishing rod. If you are trying to repair it, please put it in the first slot instead.", PrefixType.ERROR, false, true, "bait-rod-protection"),
 
     BAR_LAYOUT("{prefix}<reset>{time-formatted}<reset> {remaining}", PrefixType.NONE, true, false, "bossbar.layout"),
@@ -239,7 +239,7 @@ public enum ConfigMessage {
     ), PrefixType.NONE, false, false, "bait.rod-lore"),
     BAIT_BAIT_LORE(List.of(
             "<white>",
-            "{bait_theme}Increases the catch rates for:",
+            "Increases the catch rates for:",
             "{boosts}",
             "{lore}",
             "<white>",
@@ -248,9 +248,9 @@ public enum ConfigMessage {
             "<white>"
     ), PrefixType.NONE, false, false, "bait.bait-lore"),
     BAIT_BAITS("<gold>► {amount} {bait}", PrefixType.NONE, false, false, "bait.baits"),
-    BAIT_BOOSTS_RARITY("{bait_theme}► <white>1 {bait_theme}Rarity", PrefixType.NONE, false, false, "bait.boosts-rarity"),
-    BAIT_BOOSTS_RARITIES("{bait_theme}► <white>{amount} {bait_theme}Rarities", PrefixType.NONE, false, false, "bait.boosts-rarities"),
-    BAIT_BOOSTS_FISH("{bait_theme}► <white>{amount} {bait_theme}Fish", PrefixType.NONE, false, false, "bait.boosts-fish"),
+    BAIT_BOOSTS_RARITY("► <white>1 Rarity", PrefixType.NONE, false, false, "bait.boosts-rarity"),
+    BAIT_BOOSTS_RARITIES("► <white>{amount} Rarities", PrefixType.NONE, false, false, "bait.boosts-rarities"),
+    BAIT_BOOSTS_FISH("► <white>{amount} Fish", PrefixType.NONE, false, false, "bait.boosts-fish"),
     BAIT_UNUSED_SLOT("<gray>► ? <i>Available Slot", PrefixType.NONE, false, false, "bait.unused-slot");
 
     private final String id;

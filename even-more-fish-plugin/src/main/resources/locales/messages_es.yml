@@ -168,11 +168,11 @@ emf-time-remaining-during-comp: En estos momentos se está celebrando una compet
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
 max-baits-reached: <reset>Ha alcanzado el número máximo de tipos de cebos para esta caña de pescar.
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: <reset>Ha alcanzado el número máximo de {bait_theme}{bait} <reset>cebos que se puede aplicar a una caña.
+max-bait-reached: <reset>Ha alcanzado el número máximo de {bait} <reset>cebos que se puede aplicar a una caña.
 # Sent when a player catches a bait from fishing (this can be disabled by setting catch-percentage to 0 in baits.yml
-bait-catch: <reset><bold>{player} <reset>¡ha atrapado un {bait_theme}<bold>{bait} <reset>cebos!
+bait-catch: <reset><bold>{player} <reset>¡ha atrapado un <bold>{bait} <reset>cebos!
 # Sent when a bait is applied and a fish is caught.
-bait-use: <reset>Has utilizado uno de los {bait_theme}<bold>{bait} <reset>cebos de tu caña.
+bait-use: <reset>Has utilizado uno de los <bold>{bait} <reset>cebos de tu caña.
 # Sent when someone tries to use a bait in creative
 bait-survival-limited: <reset>Debes estar en <underlined>survival<reset> para aplicar cebos a las cañas de pescar.
 # Sent when someone tries to merge a baited rod into an unbaited rod
