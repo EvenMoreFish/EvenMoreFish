@@ -73,8 +73,26 @@ public class Competition {
         this.alertTimes = competitionFile.getAlertTimes();
         this.rewards = competitionFile.getRewards();
         this.competitionType = competitionFile.getType();
-        this.statusBar = competitionFile.createBossbar();
         this.numberNeeded = competitionFile.getNumberNeeded();
+    }
+
+    /**
+     * @return A valid bossbar for this competition. Null if it should not be shown.
+     */
+    private @NotNull Bar createBossbar() {
+        Bar bar = new Bar();
+        bar.setShouldShow(competitionFile.shouldShowBossbar());
+        bar.setColour(competitionFile.getBossbarColour());
+
+        EMFSingleMessage prefix = competitionFile.getBossbarPrefix();
+        if (selectedRarity != null) {
+            prefix.setRarity(selectedRarity.getDisplayName());
+        } else if (selectedFish != null) {
+            prefix.setRarity(selectedFish.getRarity().getDisplayName());
+            prefix.setVariable("{fish}", selectedFish.getDisplayName());
+        }
+        bar.setPrefix(prefix, competitionType);
+        return bar;
     }
 
     public Competition(final Integer duration, final CompetitionType type) {
@@ -127,6 +145,9 @@ public class Competition {
 
             this.leaderboard = new Leaderboard(competitionType);
 
+            if (this.statusBar == null) {
+                this.statusBar = createBossbar();
+            }
             statusBar.show();
 
             initTimer();
