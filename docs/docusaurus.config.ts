@@ -4,6 +4,10 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 let discord = "https://discord.gg/9fRbqWTnHS";
+let modrinth = "https://modrinth.com/plugin/evenmorefish";
+let spigot = "https://www.spigotmc.org/resources/evenmorefish-%E2%96%AA-extensive-fishing-plugin-%E2%96%AA.91310/";
+let jenkins = "https://ci.codemc.io/job/EvenMoreFish/job/EvenMoreFish/";
+let github = "https://github.com/EvenMoreFish/EvenMoreFish";
 
 const config: Config = {
   title: 'EvenMoreFish',
@@ -45,7 +49,6 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-
   themeConfig: {
     image: 'img/brand/evenmorefish-social-card.png',
     navbar: {
@@ -62,23 +65,31 @@ const config: Config = {
           label: 'Documentation',
         },
         {
-          href: 'https://modrinth.com/plugin/evenmorefish',
-          label: 'Download (Modrinth)',
+          href: modrinth,
+          className: 'header-modrinth-link',
+          'aria-label': 'Download (Modrinth)',
+          // label: 'Download (Modrinth)',
           position: 'right',
         },
         {
-          href: 'https://ci.codemc.io/job/EvenMoreFish/job/EvenMoreFish/',
-          label: 'Experimental Download (Jenkins)',
+          href: jenkins,
+          // label: 'Experimental Download (Jenkins)',
+          className: 'header-jenkins-link',
+          'aria-label': 'Experimental Download (Jenkins)',
           position: 'right',
         },
         {
           href: discord,
-          label: 'Discord',
+          // label: 'Discord',
+          className: 'header-discord-link',
+          'aria-label': 'Discord',
           position: 'right',
         },
         {
-          href: 'https://github.com/EvenMoreFish/EvenMoreFish',
-          label: 'GitHub',
+          href: github,
+          // label: 'GitHub',
+          className: 'header-github-link',
+          'aria-label': 'Github',
           position: 'right',
         },
       ],
@@ -113,16 +124,34 @@ const config: Config = {
           items: [
             {
               label: 'Modrinth',
-              href: 'https://modrinth.com/plugin/evenmorefish',
+              href: modrinth,
             },
             {
               label: 'Spigot',
-              href: 'https://www.spigotmc.org/resources/evenmorefish-%E2%96%AA-extensive-fishing-plugin-%E2%96%AA.91310/',
+              href: spigot,
             }
           ]
         },
       ],
       copyright: `Copyright © 2021 - ${new Date().getFullYear()} EvenMoreFish`,
+    },
+    algolia: {
+      appId: 'OYCYW3JATA',
+      apiKey: '078a0c0e8ee1517d753bdccc6f56716a', //safe to commit
+
+      indexName: 'evenmorefishio',
+
+      // Optional: see doc section below
+      contextualSearch: true,
+
+      // Optional: Replace parts of the item URLs from Algolia. Useful when using the same search index for multiple deployments using a different baseUrl. You can use regexp or string in the `from` param. For example: localhost:3000 vs myCompany.com/docs
+      replaceSearchResultPathname: {
+        from: '/docs/', // or as RegExp: /\/docs\//
+        to: '/',
+      },
+
+      searchParameters: {},
+      searchPagePath: 'search',
     },
     prism: {
       theme: prismThemes.github,

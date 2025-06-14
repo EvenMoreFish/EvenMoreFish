@@ -6,59 +6,108 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #EC8F4Cff;
-  --ifm-color-primary-dark: #e08442;
-  --ifm-color-primary-darker: #d47a38;
-  --ifm-color-primary-darkest: #c86f2e;
-  --ifm-color-primary-light: #FDC16Aff;
-  --ifm-color-primary-lighter: #FEC26Bff;
-  --ifm-color-primary-lightest: #fef0d7;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+    --ifm-color-primary: #EC8F4Cff;
+    --ifm-color-primary-dark: #e08442;
+    --ifm-color-primary-darker: #d47a38;
+    --ifm-color-primary-darkest: #c86f2e;
+    --ifm-color-primary-light: #FDC16Aff;
+    --ifm-color-primary-lighter: #FEC26Bff;
+    --ifm-color-primary-lightest: #fef0d7;
+    --ifm-code-font-size: 95%;
+    --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 
-  --emf-background-color: #ffffff;
-  /*--emf-background-color: #a4adbd;*/
-  --emf-background-color-alt: #6d758b;
-  --emf-background-color-gradient: linear-gradient(
-          180deg,
-          var(--emf-background-color) 0%,
-          color-mix(in srgb, var(--emf-background-color) 75%, var(--emf-background-color-alt) 25%) 25%,
-          color-mix(in srgb, var(--emf-background-color) 50%, var(--emf-background-color-alt) 50%) 50%,
-          color-mix(in srgb, var(--emf-background-color) 25%, var(--emf-background-color-alt) 75%) 75%,
-          color-mix(in srgb, var(--emf-background-color) 15%, var(--emf-background-color-alt) 90%) 90%,
-          color-mix(in srgb, var(--emf-background-color) 0%, var(--emf-background-color-alt) 100%) 100%,
-          var(--emf-background-color-alt) 100%
-  );
+    --emf-background-color: #ffffff;
+    --emf-background-color-secondary: #a4adbd;
+    --emf-background-color-alt: #6d758b;
+    --emf-background-color-gradient: linear-gradient(
+            180deg,
+            var(--emf-background-color) 0%,
+            color-mix(in srgb, var(--emf-background-color) 75%, var(--emf-background-color-alt) 25%) 25%,
+            color-mix(in srgb, var(--emf-background-color) 50%, var(--emf-background-color-alt) 50%) 50%,
+            color-mix(in srgb, var(--emf-background-color) 25%, var(--emf-background-color-alt) 75%) 75%,
+            color-mix(in srgb, var(--emf-background-color) 15%, var(--emf-background-color-alt) 90%) 90%,
+            color-mix(in srgb, var(--emf-background-color) 0%, var(--emf-background-color-alt) 100%) 100%,
+            var(--emf-background-color-alt) 100%
+    );
 
-  --badge-background-color: #fef0d7;
-  --badge-color: #131313;
+    --badge-background-color: #fef0d7;
+    --badge-color: #131313;
 }
 
 [data-theme='dark'] {
-  /* Dark mode - adjusted for better contrast and readability */
-  --ifm-color-primary: #FDC16Aff;
-  --ifm-color-primary-dark: #EC8F4Cff;
-  --ifm-color-primary-darker: #d47a38;
-  --ifm-color-primary-darkest: #b86524;
-  --ifm-color-primary-light: #FEC26Bff;
-  --ifm-color-primary-lighter: #fed89d;
-  --ifm-color-primary-lightest: #fff4e5;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+    /* Dark mode - adjusted for better contrast and readability */
+    --ifm-color-primary: #FDC16Aff;
+    --ifm-color-primary-dark: #EC8F4Cff;
+    --ifm-color-primary-darker: #d47a38;
+    --ifm-color-primary-darkest: #b86524;
+    --ifm-color-primary-light: #FEC26Bff;
+    --ifm-color-primary-lighter: #fed89d;
+    --ifm-color-primary-lightest: #fff4e5;
+    --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 
-  --emf-background-color: #2e384d;
-  /*--emf-background-color: #2e384d;*/
-  --emf-background-color-alt: #151923;
-  --emf-background-color-gradient: linear-gradient(
-          180deg,
-          var(--emf-background-color) 0%,
-          color-mix(in srgb, var(--emf-background-color) 75%, var(--emf-background-color-alt) 25%) 25%,
-          color-mix(in srgb, var(--emf-background-color) 50%, var(--emf-background-color-alt) 50%) 50%,
-          color-mix(in srgb, var(--emf-background-color) 25%, var(--emf-background-color-alt) 75%) 75%,
-          color-mix(in srgb, var(--emf-background-color) 15%, var(--emf-background-color-alt) 90%) 90%,
-          color-mix(in srgb, var(--emf-background-color) 0%, var(--emf-background-color-alt) 100%) 100%,
-          var(--emf-background-color-alt) 100%
-  );
+    --emf-background-color: #2e384d;
+    --emf-background-color-secondary: #283143;
+    --emf-background-color-alt: #151923;
+    --emf-background-color-gradient: linear-gradient(
+            180deg,
+            var(--emf-background-color) 0%,
+            color-mix(in srgb, var(--emf-background-color) 75%, var(--emf-background-color-alt) 25%) 25%,
+            color-mix(in srgb, var(--emf-background-color) 50%, var(--emf-background-color-alt) 50%) 50%,
+            color-mix(in srgb, var(--emf-background-color) 25%, var(--emf-background-color-alt) 75%) 75%,
+            color-mix(in srgb, var(--emf-background-color) 15%, var(--emf-background-color-alt) 90%) 90%,
+            color-mix(in srgb, var(--emf-background-color) 0%, var(--emf-background-color-alt) 100%) 100%,
+            var(--emf-background-color-alt) 100%
+    );
 
-  --badge-background-color: #131313;
-  --badge-color: #fef0d7;
+    --badge-background-color: #131313;
+    --badge-color: #fef0d7;
 }
+
+:is(.header-github-link, .header-discord-link, .header-modrinth-link, .header-jenkins-link):before {
+    content: "";
+    background-color: var(--ifm-navbar-link-color);
+    width: 24px;
+    height: 24px;
+    transition: background-color var(--ifm-transition-fast) var(--ifm-transition-timing-default);
+    display: flex;
+    mask-image: var(--icon-url);
+    -webkit-mask-image: var(--icon-url);
+}
+
+:is(.header-github-link, .header-discord-link, .header-modrinth-link, .header-jenkins-link):hover:before {
+    background-color: var(--brand-color);
+}
+
+.header-github-link:before {
+    --icon-url: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E");
+}
+
+.header-github-link:hover:before {
+    --brand-color: var(--ifm-color-primary);
+}
+
+.header-discord-link:before {
+    width: 32px;
+    --icon-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 126.644 96'%3E%3Cpath fill='currentColor' d='M81.15,0c-1.2376,2.1973-2.3489,4.4704-3.3591,6.794-9.5975-1.4396-19.3718-1.4396-28.9945,0-.985-2.3236-2.1216-4.5967-3.3591-6.794-9.0166,1.5407-17.8059,4.2431-26.1405,8.0568C2.779,32.5304-1.6914,56.3725.5312,79.8863c9.6732,7.1476,20.5083,12.603,32.0505,16.0884,2.6014-3.4854,4.8998-7.1981,6.8698-11.0623-3.738-1.3891-7.3497-3.1318-10.8098-5.1523.9092-.6567,1.7932-1.3386,2.6519-1.9953,20.281,9.547,43.7696,9.547,64.0758,0,.8587.7072,1.7427,1.3891,2.6519,1.9953-3.4601,2.0457-7.0718,3.7632-10.835,5.1776,1.97,3.8642,4.2683,7.5769,6.8698,11.0623,11.5419-3.4854,22.3769-8.9156,32.0509-16.0631,2.626-27.2771-4.496-50.9172-18.817-71.8548C98.9811,4.2684,90.1918,1.5659,81.1752.0505l-.0252-.0505ZM42.2802,65.4144c-6.2383,0-11.4159-5.6575-11.4159-12.6535s4.9755-12.6788,11.3907-12.6788,11.5169,5.708,11.4159,12.6788c-.101,6.9708-5.026,12.6535-11.3907,12.6535ZM84.3576,65.4144c-6.2637,0-11.3907-5.6575-11.3907-12.6535s4.9755-12.6788,11.3907-12.6788,11.4917,5.708,11.3906,12.6788c-.101,6.9708-5.026,12.6535-11.3906,12.6535Z'/%3E%3C/svg%3E");
+}
+
+.header-discord-link:hover:before {
+    --brand-color: #5865f2;
+}
+
+.header-modrinth-link:before {
+    --icon-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 514'%3E%3Cpath fill='currentColor' fill-rule='evenodd' d='M503.16 323.56c11.39-42.09 12.16-87.65.04-132.8C466.57 54.23 326.04-26.8 189.33 9.78 83.81 38.02 11.39 128.07.69 230.47h43.3c10.3-83.14 69.75-155.74 155.76-178.76 106.3-28.45 215.38 28.96 253.42 129.67l-42.14 11.27c-19.39-46.85-58.46-81.2-104.73-95.83l-7.74 43.84c36.53 13.47 66.16 43.84 77 84.25 15.8 58.89-13.62 119.23-67 144.26l11.53 42.99c70.16-28.95 112.31-101.86 102.34-177.02l41.98-11.23a210.2 210.2 0 0 1-3.86 84.16z' clip-rule='evenodd'/%3E%3Cpath fill='currentColor' d='M321.99 504.22C185.27 540.8 44.75 459.77 8.11 323.24A257.6 257.6 0 0 1 0 275.46h43.27c1.09 11.91 3.2 23.89 6.41 35.83 3.36 12.51 7.77 24.46 13.11 35.78l38.59-23.15c-3.25-7.5-5.99-15.32-8.17-23.45-24.04-89.6 29.2-181.7 118.92-205.71 17-4.55 34.1-6.32 50.8-5.61L255.19 133c-10.46.05-21.08 1.42-31.66 4.25-66.22 17.73-105.52 85.7-87.78 151.84 1.1 4.07 2.38 8.04 3.84 11.9l49.35-29.61-14.87-39.43 46.6-47.87 58.9-12.69 17.05 20.99-27.15 27.5-23.68 7.45-16.92 17.39 8.29 23.07s16.79 17.84 16.82 17.85l23.72-6.31 16.88-18.54 36.86-11.67 10.98 24.7-38.03 46.63-63.73 20.18-28.58-31.82-49.82 29.89c25.54 29.08 63.94 45.23 103.75 41.86l11.53 42.99c-59.41 7.86-117.44-16.73-153.49-61.91l-38.41 23.04c50.61 66.49 138.2 99.43 223.97 76.48 61.74-16.52 109.79-58.6 135.81-111.78l42.64 15.5c-30.89 66.28-89.84 118.94-166.07 139.34'/%3E%3C/svg%3E");
+}
+.header-modrinth-link:hover:before {
+    --brand-color: #1bd96a;
+}
+
+.header-jenkins-link:before {
+    --icon-url: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' stroke-width='1.5' fill='none' xmlns='http://www.w3.org/2000/svg' color='currentColor'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.25 4C7.25 3.58579 7.58579 3.25 8 3.25L16 3.25C16.4142 3.25 16.75 3.58579 16.75 4C16.75 4.41421 16.4142 4.75 16 4.75L8 4.75C7.58579 4.75 7.25 4.41421 7.25 4Z' fill='currentColor'%3E%3C/path%3E%3Cpath d='M9 3.75C9.41421 3.75 9.75 4.08579 9.75 4.5L9.75 10.2602C9.75 10.9166 9.51517 11.5514 9.08796 12.0498L7.20363 14.2482L16.7964 14.2482L14.912 12.0498C14.4848 11.5514 14.25 10.9166 14.25 10.2602L14.25 4.5C14.25 4.08579 14.5858 3.75 15 3.75C15.4142 3.75 15.75 4.08579 15.75 4.5L15.75 10.2602C15.75 10.5585 15.8567 10.8471 16.0509 11.0736L21.088 16.9502C21.5152 17.4486 21.75 18.0834 21.75 18.7398V19C21.75 20.5188 20.5188 21.75 19 21.75L5 21.75C3.48122 21.75 2.25 20.5188 2.25 19V18.7398C2.25 18.0834 2.48483 17.4486 2.91204 16.9502L7.94907 11.0736C8.14326 10.8471 8.25 10.5585 8.25 10.2602L8.25 4.5C8.25 4.08579 8.58579 3.75 9 3.75Z' fill='currentColor'%3E%3C/path%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.5117 8.44156C12.8196 8.71865 12.8446 9.19287 12.5675 9.50075L12.5575 9.51186C12.2804 9.81975 11.8062 9.84471 11.4983 9.56761C11.1904 9.29052 11.1654 8.8163 11.4425 8.50842L11.4525 8.49731C11.7296 8.18942 12.2038 8.16447 12.5117 8.44156Z' fill='currentColor'%3E%3C/path%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M11.5117 1.44156C11.8196 1.71865 11.8446 2.19287 11.5675 2.50075L11.5575 2.51186C11.2804 2.81975 10.8062 2.84471 10.4983 2.56761C10.1904 2.29052 10.1654 1.8163 10.4425 1.50842L10.4525 1.49731C10.7296 1.18942 11.2038 1.16447 11.5117 1.44156Z' fill='currentColor'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.header-jenkins-link:hover:before {
+    --brand-color: #d64636;
+}
+
+
