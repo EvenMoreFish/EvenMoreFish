@@ -1,7 +1,6 @@
 package com.oheers.fish.config;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfigUtils {

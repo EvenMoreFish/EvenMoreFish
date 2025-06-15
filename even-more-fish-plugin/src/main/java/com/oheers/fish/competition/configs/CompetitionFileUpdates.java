@@ -1,11 +1,9 @@
 package com.oheers.fish.competition.configs;
 
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.baits.Bait;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CompetitionFileUpdates {

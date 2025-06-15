@@ -10,10 +10,10 @@ import java.util.List;
 
 public enum ConfigMessage {
 
-    ADMIN_CANT_BE_CONSOLE("<reset>Command cannot be run from console.", PrefixType.ERROR, false, true, "admin.cannot-run-on-console"),
-    ADMIN_GIVE_PLAYER_BAIT("<reset>You have given {player} a {bait}.", PrefixType.ADMIN, true, true, "admin.given-player-bait"),
-    ADMIN_GIVE_PLAYER_FISH("<reset>You have given {player} a {fish}.", PrefixType.ADMIN, true, true, "admin.given-player-fish"),
-    ADMIN_OPEN_FISH_SHOP("<reset>Opened a shop inventory for {player}.", PrefixType.ADMIN, true, true, "admin.open-fish-shop"),
+    ADMIN_CANT_BE_CONSOLE("<white>Command cannot be run from console.", PrefixType.ERROR, false, true, "admin.cannot-run-on-console"),
+    ADMIN_GIVE_PLAYER_BAIT("<white>You have given {player} a {bait}.", PrefixType.ADMIN, true, true, "admin.given-player-bait"),
+    ADMIN_GIVE_PLAYER_FISH("<white>You have given {player} a {fish}.", PrefixType.ADMIN, true, true, "admin.given-player-fish"),
+    ADMIN_OPEN_FISH_SHOP("<white>Opened a shop inventory for {player}.", PrefixType.ADMIN, true, true, "admin.open-fish-shop"),
     ADMIN_CUSTOM_ROD_GIVEN(
             "<white>You have given {player} a custom fishing rod.",
             PrefixType.ADMIN,
@@ -21,61 +21,62 @@ public enum ConfigMessage {
             true,
             "admin.custom-rod-given"
     ),
-    ADMIN_NBT_NOT_REQUIRED("<reset>Change \"require-nbt-rod\" to true in order to use this feature.", PrefixType.ERROR, false, true, "admin.nbt-not-required"),
-    ADMIN_NO_BAIT_SPECIFIED("<reset>You must specify a bait name.", PrefixType.ERROR, false, true, "admin.no-bait-specified"),
-    ADMIN_NOT_HOLDING_ROD("<reset>You need to be holding a fishing rod to run that command.", PrefixType.ERROR, false, true, "admin.must-be-holding-rod"),
-    ADMIN_NUMBER_FORMAT_ERROR("<reset>{amount} is not a valid number.", PrefixType.ERROR, false, true, "admin.number-format-error"),
-    ADMIN_NUMBER_RANGE_ERROR("<reset>{amount} is not a number between 1-64.", PrefixType.ERROR, false, true, "admin.number-range-error"),
-    ADMIN_UNKNOWN_PLAYER("<reset>{player} could not be found.", PrefixType.ERROR, false, true, "admin.player-not-found"),
-    ADMIN_UPDATE_AVAILABLE("<reset>There is an update available: " + "https://modrinth.com/plugin/evenmorefish/versions?l=paper", PrefixType.ADMIN, false, false, "admin.update-available"),
-    ADMIN_LIST_ADDONS("<reset>Registered {addon-type}s: ", PrefixType.ADMIN, false, false, "admin.list-addons"),
-    ADMIN_LIST_REWARD_TYPES("<reset>Registered Reward Types: ", PrefixType.ADMIN, false, false, "admin.list-reward-types"),
+    ADMIN_NBT_NOT_REQUIRED("<white>Change \"require-nbt-rod\" to true in order to use this feature.", PrefixType.ERROR, false, true, "admin.nbt-not-required"),
+    ADMIN_NO_BAIT_SPECIFIED("<white>You must specify a bait name.", PrefixType.ERROR, false, true, "admin.no-bait-specified"),
+    ADMIN_NOT_HOLDING_ROD("<white>You need to be holding a fishing rod to run that command.", PrefixType.ERROR, false, true, "admin.must-be-holding-rod"),
+    ADMIN_NUMBER_FORMAT_ERROR("<white>{amount} is not a valid number.", PrefixType.ERROR, false, true, "admin.number-format-error"),
+    ADMIN_NUMBER_RANGE_ERROR("<white>{amount} is not a number between 1-64.", PrefixType.ERROR, false, true, "admin.number-range-error"),
+    ADMIN_UNKNOWN_PLAYER("<white>{player} could not be found.", PrefixType.ERROR, false, true, "admin.player-not-found"),
+    ADMIN_UPDATE_AVAILABLE("<white>There is an update available: " + "https://modrinth.com/plugin/evenmorefish/versions?l=paper", PrefixType.ADMIN, false, false, "admin.update-available"),
+    ADMIN_LIST_ADDONS("<white>Registered {addon-type}s: ", PrefixType.ADMIN, false, false, "admin.list-addons"),
+    ADMIN_LIST_REWARD_TYPES("<white>Registered Reward Types: ", PrefixType.ADMIN, false, false, "admin.list-reward-types"),
 
-    BAITS_CLEARED("<reset>You have removed all {amount} baits from your fishing rod.", PrefixType.ADMIN, true, true, "admin.all-baits-cleared"),
-    BAIT_CAUGHT("<reset><b>{player} <reset>has caught a <b>{bait} <reset>bait!", PrefixType.NONE, true, true, "bait-catch"),
-    BAIT_USED("<reset>You have used one of your rod's <b>{bait} <reset>bait.", PrefixType.DEFAULT, true, true, "bait-use"),
-    BAIT_WRONG_GAMEMODE("<reset>You must be in <u>survival or adventure mode<reset> to apply baits to fishing rods.", PrefixType.ERROR, false, true, "bait-survival-limited"),
-    BAITS_MAXED("<reset>You have reached the maximum number of types of baits for this fishing rod.", PrefixType.DEFAULT, false, true, "max-baits-reached"),
-    BAITS_MAXED_ON_ROD("<reset>You have reached the maximum number of {bait} <reset>bait that can be applied to one rod.", PrefixType.ERROR, false, true, "max-baits-reached"),
-    BAIT_ROD_PROTECTION("<reset>Protected your baited fishing rod. If you are trying to repair it, please put it in the first slot instead.", PrefixType.ERROR, false, true, "bait-rod-protection"),
+    BAITS_CLEARED("<white>You have removed all {amount} baits from your fishing rod.", PrefixType.ADMIN, true, true, "admin.all-baits-cleared"),
+    BAIT_CAUGHT("<white><b>{player}</b> <white>has caught a <b>{bait}</b> <white>bait!", PrefixType.NONE, true, true, "bait-catch"),
+    BAIT_USED("<white>You have used one of your rod's <b>{bait}</b> <white>bait.", PrefixType.DEFAULT, true, true, "bait-use"),
+    BAIT_WRONG_GAMEMODE("<white>You must be in <u>survival or adventure mode</u> to apply baits to fishing rods.", PrefixType.ERROR, false, true, "bait-survival-limited"),
+    BAITS_MAXED("<white>You have reached the maximum number of types of baits for this fishing rod.", PrefixType.DEFAULT, false, true, "max-baits-reached"),
+    BAITS_MAXED_ON_ROD("<white>You have reached the maximum number of {bait} bait that can be applied to one rod.", PrefixType.ERROR, false, true, "max-baits-reached"),
+    BAIT_ROD_PROTECTION("<white>Protected your baited fishing rod. If you are trying to repair it, please put it in the first slot instead.", PrefixType.ERROR, false, true, "bait-rod-protection"),
+    BAIT_INVALID_ROD("<white>You cannot apply bait to this fishing rod!", PrefixType.ERROR, true, false, "bait-invalid-rod"),
 
-    BAR_LAYOUT("{prefix}<reset>{time-formatted}<reset> {remaining}", PrefixType.NONE, true, false, "bossbar.layout"),
-    BAR_SECOND("<reset>{second}s", PrefixType.NONE, true, false, "bossbar.second"),
-    BAR_MINUTE("<reset>{minute}m", PrefixType.NONE, true, false, "bossbar.minute"),
-    BAR_HOUR("<reset>{hour}h", PrefixType.NONE, true, false, "bossbar.hour"),
+    BAR_LAYOUT("{prefix}{time-formatted} {remaining}", PrefixType.NONE, true, false, "bossbar.layout"),
+    BAR_SECOND("<white>{second}s", PrefixType.NONE, true, false, "bossbar.second"),
+    BAR_MINUTE("<white>{minute}m", PrefixType.NONE, true, false, "bossbar.minute"),
+    BAR_HOUR("<white>{hour}h", PrefixType.NONE, true, false, "bossbar.hour"),
     BAR_REMAINING("left", PrefixType.NONE, true, false, "bossbar.remaining"),
 
-    COMPETITION_ALREADY_RUNNING("<reset>There's already a competition running.", PrefixType.ADMIN, false, true, "admin.competition-already-running"),
+    COMPETITION_ALREADY_RUNNING("<white>There's already a competition running.", PrefixType.ADMIN, false, true, "admin.competition-already-running"),
 
-    COMPETITION_END("<reset>The fishing contest has ended.", PrefixType.DEFAULT, false, true, "contest-end"),
-    COMPETITION_JOIN("<reset>A fishing contest for {type} is going on.", PrefixType.DEFAULT, true, true, "contest-join"),
-    COMPETITION_START("<reset>A fishing contest for {type} has started.", PrefixType.DEFAULT, false, true, "contest-start"),
+    COMPETITION_END("<white>The fishing contest has ended.", PrefixType.DEFAULT, false, true, "contest-end"),
+    COMPETITION_JOIN("<white>A fishing contest for {type} is going on.", PrefixType.DEFAULT, true, true, "contest-join"),
+    COMPETITION_START("<white>A fishing contest for {type} has started.", PrefixType.DEFAULT, false, true, "contest-start"),
 
     COMPETITION_TYPE_LARGEST("the largest fish", PrefixType.NONE, true, true, "competition-types.largest"),
     COMPETITION_TYPE_LARGEST_TOTAL("the largest total fish length", PrefixType.NONE, true, true, "competition-types.largest-total"),
     COMPETITION_TYPE_MOST("the most fish", PrefixType.NONE, true, true, "competition-types.most"),
-    COMPETITION_TYPE_SPECIFIC("{amount} {rarity_colour}<b>{rarity} {rarity_colour}{fish}<reset>", PrefixType.NONE, true, true, "competition-types.specific"),
-    COMPETITION_TYPE_SPECIFIC_RARITY("{amount} {rarity_colour}<b>{rarity}<reset> fish", PrefixType.NONE, true, true, "competition-types.specific-rarity"),
+    COMPETITION_TYPE_SPECIFIC("{amount} <b>{rarity}</b> {fish}", PrefixType.NONE, true, true, "competition-types.specific"),
+    COMPETITION_TYPE_SPECIFIC_RARITY("{amount} <b>{rarity}</b> fish", PrefixType.NONE, true, true, "competition-types.specific-rarity"),
     COMPETITION_TYPE_SHORTEST("the shortest fish", PrefixType.NONE, true, true, "competition-types.shortest"),
     COMPETITION_TYPE_SHORTEST_TOTAL("the shortest total fish length", PrefixType.NONE, true, true, "competition-types.shortest-total"),
 
-    COMPETITION_SINGLE_WINNER("<reset>{player} has won the competition for {type}. Congratulations!", PrefixType.DEFAULT, true, true, "single-winner"),
+    COMPETITION_SINGLE_WINNER("<white>{player} has won the competition for {type}. Congratulations!", PrefixType.DEFAULT, true, true, "single-winner"),
 
 
 
-    ECONOMY_DISABLED("<reset>EvenMoreFish's economy features are disabled.", PrefixType.ERROR, false, false, "admin.economy-disabled"),
+    ECONOMY_DISABLED("<white>EvenMoreFish's economy features are disabled.", PrefixType.ERROR, false, false, "admin.economy-disabled"),
 
-    FISH_CANT_BE_PLACED("<reset>You cannot place this fish.", PrefixType.ERROR, true, true, "place-fish-blocked"),
-    FISH_CAUGHT("<reset><b>{player} <reset>has fished a {rarity_colour}{length}cm <b>{rarity} {rarity_colour}{fish}!", PrefixType.NONE, true, true, "fish-caught"),
-    FISH_LENGTHLESS_CAUGHT("<reset><b>{player} <reset>has fished a {rarity_colour}<b>{rarity} {rarity_colour}{fish}!", PrefixType.NONE, true, true, "lengthless-fish-caught"),
-    FISH_HUNTED("<bold>{player} <reset>has hunted a {rarity_colour}{length}cm <bold>{rarity}</bold> {rarity_colour}{fish}!", PrefixType.NONE, true, true, "fish-hunted"),
-    FISH_LENGTHLESS_HUNTED("<bold>{player} <reset>has hunted a {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}!", PrefixType.NONE, true, true, "lengthless-fish-hunted"),
+    FISH_CANT_BE_PLACED("<white>You cannot place this fish.", PrefixType.ERROR, true, true, "place-fish-blocked"),
+    FISH_CAUGHT("<white><b>{player}</b> has fished a {length}cm <b>{rarity}</b> {fish}!", PrefixType.NONE, true, true, "fish-caught"),
+    FISH_LENGTHLESS_CAUGHT("<white><b>{player}</b> has fished a <b>{rarity}</b> {fish}!", PrefixType.NONE, true, true, "lengthless-fish-caught"),
+    FISH_HUNTED("<white><b>{player}</b> has hunted a {length}cm <bold>{rarity}</bold> {fish}!", PrefixType.NONE, true, true, "fish-hunted"),
+    FISH_LENGTHLESS_HUNTED("<white><b>{player}</b> has hunted a <bold>{rarity}</bold> {fish}!", PrefixType.NONE, true, true, "lengthless-fish-hunted"),
     FISH_LORE(Arrays.asList(
             "{fisherman_lore}",
             "{length_lore}",
             "",
             "{fish_lore}",
-            "{rarity_colour}<b>{rarity}"
+            "<b>{rarity}</b>"
     ), PrefixType.NONE, false, true, "fish-lore"),
     FISHERMAN_LORE(Collections.singletonList(
             "<white>Caught by {player}"
@@ -83,7 +84,7 @@ public enum ConfigMessage {
     LENGTH_LORE(Collections.singletonList(
             "<white>Measures {length}cm"
     ), PrefixType.NONE, false, true, "length-lore"),
-    FISH_SALE("<reset>You've sold <green>{amount} <white>fish for <green>{sell-price}<white>.", PrefixType.DEFAULT, true, true, "fish-sale"),
+    FISH_SALE("<white>You've sold <green>{amount} <white>fish for <green>{sell-price}<white>.", PrefixType.DEFAULT, true, true, "fish-sale"),
     HELP_FORMAT(
             "[noPrefix]<aqua>{command} <yellow>- {description}",
             PrefixType.DEFAULT,
@@ -109,7 +110,7 @@ public enum ConfigMessage {
     HELP_GENERAL_APPLYBAITS("[noPrefix]Apply baits to your fishing rod.", PrefixType.DEFAULT, false, true, "help-general.applybaits"),
     HELP_GENERAL_JOURNAL("[noPrefix]View a journal of caught fish and their stats.", PrefixType.DEFAULT, false, true, "help-general.journal"),
     HELP_ADMIN_TITLE(
-            "[noPrefix]<white><st> <#ffedeb><st> <#ffdcd7><st> <#ffcac3><st> <#ffb8b0><st> <#ffa69d><st> <#ff948a><st> <#ff8078><st> <#ff6c66><st> <red><st> <white> <red><b>EvenMoreFish <red><st> <#ff6c66><st><st> <#ff8078><st> <#ff948a><st> <#ffa69d><st> <#ffb8b0><st> <#ffcac3><st> <#ffdcd7><st> <#ffedeb><st> <white><st> <white>",
+            "[noPrefix]<white><st> <#ffedeb><st> <#ffdcd7><st> <#ffcac3><st> <#ffb8b0><st> <#ffa69d><st> <#ff948a><st> <#ff8078><st> <#ff6c66><st> <red><st> <white> <red><b>EvenMoreFish</b> <red><st> <#ff6c66><st><st> <#ff8078><st> <#ff948a><st> <#ffa69d><st> <#ffb8b0><st> <#ffcac3><st> <#ffdcd7><st> <#ffedeb><st> <white><st> <white>",
             PrefixType.ADMIN,
             false,
             true,
@@ -131,43 +132,43 @@ public enum ConfigMessage {
     HELP_LIST_RARITIES("[noPrefix]Display all rarities.", PrefixType.ADMIN, false, true, "help-list.rarities"),
     HELP_COMPETITION_START("[noPrefix]Starts a competition of a specified duration", PrefixType.ADMIN, false, true, "help-competition.start"),
     HELP_COMPETITION_END("[noPrefix]Ends the current competition (if there is one)", PrefixType.ADMIN, false, true, "help-competition.end"),
-    INVALID_COMPETITION_TYPE("<reset>That isn't a type of competition type, available types: MOST_FISH, LARGEST_FISH, SPECIFIC_FISH", PrefixType.ADMIN, false, false, "admin.competition-type-invalid"),
-    INVALID_COMPETITION_ID("<reset>That isn't a valid competition id.", PrefixType.ADMIN, false, false, "admin.competition-id-invalid"),
+    INVALID_COMPETITION_TYPE("<white>That isn't a type of competition type, available types: MOST_FISH, LARGEST_FISH, SPECIFIC_FISH", PrefixType.ADMIN, false, false, "admin.competition-type-invalid"),
+    INVALID_COMPETITION_ID("<white>That isn't a valid competition id.", PrefixType.ADMIN, false, false, "admin.competition-id-invalid"),
 
     LEADERBOARD_LARGEST_FISH(
-            "<reset>#{position} | {player} <reset>({rarity_colour}<b>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)",
+            "<white>#{position} | {player} (<b>{rarity}</b> {fish}, {length}cm)",
             PrefixType.DEFAULT,
             false,
             true,
             "leaderboard-largest-fish"
     ),
-    LEADERBOARD_LARGEST_TOTAL("<reset>#{position} | {player} <reset>({amount}cm<reset>)", PrefixType.DEFAULT, false, true, "leaderboard-largest-total"),
-    LEADERBOARD_MOST_FISH("<reset>#{position} | {player} <reset>({amount} <reset>fish)", PrefixType.DEFAULT, false, true, "leaderboard-most-fish"),
-    LEADERBOARD_TOTAL_PLAYERS("<reset>There are a total of {amount} player(s) in the leaderboard.", PrefixType.DEFAULT, true, true, "total-players"),
+    LEADERBOARD_LARGEST_TOTAL("<white>#{position} | {player} ({amount}cm)", PrefixType.DEFAULT, false, true, "leaderboard-largest-total"),
+    LEADERBOARD_MOST_FISH("<white>#{position} | {player} ({amount} fish)", PrefixType.DEFAULT, false, true, "leaderboard-most-fish"),
+    LEADERBOARD_TOTAL_PLAYERS("<white>There are a total of {amount} player(s) in the leaderboard.", PrefixType.DEFAULT, true, true, "total-players"),
     LEADERBOARD_SHORTEST_FISH(
-            "<reset>#{position} | {player} <reset>({rarity_colour}<b>{rarity} {rarity_colour}{fish}<reset>, {length}cm<reset>)",
+            "<white>#{position} | {player} (<b>{rarity}</b> {fish}, {length}cm)",
             PrefixType.DEFAULT,
             false,
             true,
             "leaderboard-shortest-fish"
     ),
-    LEADERBOARD_SHORTEST_TOTAL("<reset>#{position} | {player} <reset>({amount}cm<reset>)", PrefixType.DEFAULT, false, true, "leaderboard-shortest-total"),
+    LEADERBOARD_SHORTEST_TOTAL("<white>#{position} | {player} ({amount}cm)", PrefixType.DEFAULT, false, true, "leaderboard-shortest-total"),
 
-    NEW_FIRST_PLACE_NOTIFICATION("<reset>{player} is now #1", PrefixType.DEFAULT, true, true, "new-first"),
+    NEW_FIRST_PLACE_NOTIFICATION("<white>{player} is now #1", PrefixType.DEFAULT, true, true, "new-first"),
 
-    NO_BAITS("<reset>The fishing rod does not have any baits applied.", PrefixType.ERROR, true, true, "admin.no-baits-on-rod"),
-    NO_COMPETITION_RUNNING("<reset>No competition running right now.", PrefixType.ERROR, false, false, "no-competition-running"),
-    NO_FISH_CAUGHT("<reset>You didn't catch any fish.", PrefixType.DEFAULT, true, true, "no-record"),
+    NO_BAITS("<white>The fishing rod does not have any baits applied.", PrefixType.ERROR, true, true, "admin.no-baits-on-rod"),
+    NO_COMPETITION_RUNNING("<white>No competition running right now.", PrefixType.ERROR, false, false, "no-competition-running"),
+    NO_FISH_CAUGHT("<white>You didn't catch any fish.", PrefixType.DEFAULT, true, true, "no-record"),
     NO_PERMISSION_FISHING("<red>You don't have permission to fish using this rod, you will catch vanilla fish.", PrefixType.DEFAULT, true, true, "no-permission-fishing"),
     NO_PERMISSION("<red>You don't have permission to run that command.", PrefixType.ERROR, false, true, "no-permission"),
-    NO_WINNERS("<reset>There were no fishing records.", PrefixType.DEFAULT, true, true, "no-winners"),
-    NOT_ENOUGH_PLAYERS("<reset>There's not enough players online to start the scheduled fishing competition.", PrefixType.ERROR, true, false, "not-enough-players"),
+    NO_WINNERS("<white>There were no fishing records.", PrefixType.DEFAULT, true, true, "no-winners"),
+    NOT_ENOUGH_PLAYERS("<white>There's not enough players online to start the scheduled fishing competition.", PrefixType.ERROR, true, false, "not-enough-players"),
 
     CUSTOM_FISHING_ENABLED("<green>Enabled", PrefixType.NONE, false, true, "custom-fishing-enabled"),
     CUSTOM_FISHING_DISABLED("<red>Disabled", PrefixType.NONE, false, true, "custom-fishing-disabled"),
 
-    PLACEHOLDER_FISH_FORMAT("{rarity_colour}{length}cm <b>{rarity} {fish}", PrefixType.NONE, true, false, "emf-competition-fish-format"),
-    PLACEHOLDER_FISH_LENGTHLESS_FORMAT("{rarity_colour}<b>{rarity} {fish}", PrefixType.NONE, true, false, "emf-lengthless-fish-format"),
+    PLACEHOLDER_FISH_FORMAT("{length}cm <b>{rarity}</b> {fish}", PrefixType.NONE, true, false, "emf-competition-fish-format"),
+    PLACEHOLDER_FISH_LENGTHLESS_FORMAT("<b>{rarity}</b> {fish}", PrefixType.NONE, true, false, "emf-lengthless-fish-format"),
     PLACEHOLDER_FISH_MOST_FORMAT("{amount} fish", PrefixType.NONE, true, false, "emf-most-fish-format"),
     PLACEHOLDER_NO_COMPETITION_RUNNING("No competition running right now.", PrefixType.NONE, true, false, "no-competition-running"),
     PLACEHOLDER_NO_COMPETITION_RUNNING_FISH("No competition running right now.", PrefixType.NONE, true, false, "no-competition-running-fish"),
@@ -180,17 +181,17 @@ public enum ConfigMessage {
     PLACEHOLDER_TIME_REMAINING("Time left until next competition: {days}d, {hours}h, {minutes}m.", PrefixType.NONE, true, false, "emf-time-remaining"),
     PLACEHOLDER_TIME_REMAINING_DURING_COMP("There is a competition running right now.", PrefixType.NONE, true, false, "emf-time-remaining-during-comp"),
 
-    RELOAD_SUCCESS("<reset>Successfully reloaded the plugin.", PrefixType.ADMIN, false, false, "admin.reload"),
+    RELOAD_SUCCESS("<white>Successfully reloaded the plugin.", PrefixType.ADMIN, false, false, "admin.reload"),
     SELL_PRICE_FORMAT("#,##0.0", PrefixType.NONE, false, false, "sell-price-format"),
-    TIME_ALERT("<reset>There is {time_formatted} left on the competition for {type}", PrefixType.DEFAULT, false, true, "time-alert"),
+    TIME_ALERT("<white>There is {time_formatted} left on the competition for {type}", PrefixType.DEFAULT, false, true, "time-alert"),
 
-    TOGGLE_ON("<reset>You will now catch custom fish.", PrefixType.DEFAULT, false, true, "toggle-on"),
-    TOGGLE_OFF("<reset>You will no longer catch custom fish.", PrefixType.DEFAULT, false, true, "toggle-off"),
+    TOGGLE_ON("<white>You will now catch custom fish.", PrefixType.DEFAULT, false, true, "toggle-on"),
+    TOGGLE_OFF("<white>You will no longer catch custom fish.", PrefixType.DEFAULT, false, true, "toggle-off"),
 
-    WORTH_GUI_NAME("<dark_blue><b>Sell Fish", PrefixType.NONE, false, false, "worth-gui-name"),
-    WORTH_GUI_CONFIRM_ALL_BUTTON_NAME("<gold><b>CONFIRM", PrefixType.NONE, false, false, "confirm-sell-all-gui-name"),
-    WORTH_GUI_CONFIRM_BUTTON_NAME("<gold><b>CONFIRM", PrefixType.NONE, false, false, "confirm-gui-name"),
-    WORTH_GUI_NO_VAL_BUTTON_NAME("<red><b>Can't Sell", PrefixType.NONE, false, false, "error-gui-name"),
+    WORTH_GUI_NAME("<dark_blue><b>Sell Fish</b>", PrefixType.NONE, false, false, "worth-gui-name"),
+    WORTH_GUI_CONFIRM_ALL_BUTTON_NAME("<gold><b>CONFIRM</b>", PrefixType.NONE, false, false, "confirm-sell-all-gui-name"),
+    WORTH_GUI_CONFIRM_BUTTON_NAME("<gold><b>CONFIRM</b>", PrefixType.NONE, false, false, "confirm-gui-name"),
+    WORTH_GUI_NO_VAL_BUTTON_NAME("<red><b>Can't Sell</b>", PrefixType.NONE, false, false, "error-gui-name"),
     WORTH_GUI_NO_VAL_BUTTON_LORE(Arrays.asList(
             "<dark_gray>Fish Shop",
             "",
@@ -202,12 +203,12 @@ public enum ConfigMessage {
             "<red>» (Left-click) sell the fish.",
             "<gray>» (Right-click) cancel."
     ), PrefixType.NONE, false, false, "error-gui-lore"),
-    WORTH_GUI_NO_VAL_ALL_BUTTON_NAME("<red><b>Can't Sell", PrefixType.NONE, false, false, "error-sell-all-gui-name"),
-    WORTH_GUI_SELL_ALL_BUTTON_NAME("<gold><b>SELL ALL", PrefixType.NONE, false, false, "sell-all-name"),
+    WORTH_GUI_NO_VAL_ALL_BUTTON_NAME("<red><b>Can't Sell</b>", PrefixType.NONE, false, false, "error-sell-all-gui-name"),
+    WORTH_GUI_SELL_ALL_BUTTON_NAME("<gold><b>SELL ALL</b>", PrefixType.NONE, false, false, "sell-all-name"),
     WORTH_GUI_SELL_ALL_BUTTON_LORE(Arrays.asList(
-            "<yellow><b>Value: <yellow>${sell-price}", "<gray>LEFT CLICK to sell all fish in your inventory."
+            "<yellow><b>Value</b>: <yellow>${sell-price}", "<gray>LEFT CLICK to sell all fish in your inventory."
     ), PrefixType.NONE, false, false, "sell-all-lore"),
-    WORTH_GUI_SELL_BUTTON_NAME("<gold><b>SELL", PrefixType.NONE, false, false, "sell-gui-name"),
+    WORTH_GUI_SELL_BUTTON_NAME("<gold><b>SELL</b>", PrefixType.NONE, false, false, "sell-gui-name"),
     WORTH_GUI_SELL_BUTTON_LORE(Arrays.asList(
             "<dark_gray>Inventory",
             "",
@@ -230,7 +231,7 @@ public enum ConfigMessage {
             "<yellow>» (Left-click) sell the fish.",
             "<gray>» (Right-click) cancel."
     ), PrefixType.NONE, false, false, "sell-gui-lore"),
-    RARITY_INVALID("<reset>That is not a valid rarity!", PrefixType.ERROR, false, true, "rarity-invalid"),
+    RARITY_INVALID("<white>That is not a valid rarity!", PrefixType.ERROR, false, true, "rarity-invalid"),
     BAIT_ROD_LORE(List.of(
             "<white>",
             "<gray>Bait Slots: <yellow>({current_baits}/{max_baits})",

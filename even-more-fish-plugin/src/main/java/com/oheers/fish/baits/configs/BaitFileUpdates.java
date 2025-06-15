@@ -2,7 +2,6 @@ package com.oheers.fish.baits.configs;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.baits.Bait;
-import com.oheers.fish.fishing.items.Rarity;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import org.jetbrains.annotations.NotNull;
 

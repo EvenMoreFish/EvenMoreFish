@@ -202,6 +202,8 @@ bait-use: <white>You have used one of your rod's <b>{bait}</b> bait.
 bait-survival-limited: <white>You must be in <u>survival or adventure mode</u> to apply baits to fishing rods.
 # Sent when someone tries to merge a baited rod into an unbaited rod
 bait-rod-protection: <white>Protected your baited fishing rod. If you are trying to repair it, please put it in the first slot instead.
+# Sent when someone tries to apply a bait to a fishing rod they cannot use to fish
+bait-invalid-rod: <white>You cannot apply bait to this fishing rod!
 
 # Shown when /emf toggle is run, to turn off and on respectively.
 toggle-off: <white>You will no longer catch custom fish.
@@ -296,4 +298,4 @@ bait:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 2
+version: 3

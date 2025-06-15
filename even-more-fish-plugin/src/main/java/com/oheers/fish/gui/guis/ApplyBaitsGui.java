@@ -1,5 +1,6 @@
 package com.oheers.fish.gui.guis;
 
+import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.baits.ApplicationResult;
@@ -15,7 +16,6 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import de.themoep.inventorygui.GuiStorageElement;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -53,7 +53,7 @@ public class ApplyBaitsGui extends ConfigGui {
 
     private void processBaits() {
         ItemStack handItem = this.player.getInventory().getItemInMainHand();
-        if (!handItem.getType().equals(Material.FISHING_ROD)) {
+        if (!Checks.canUseRod(handItem)) {
             return;
         }
         boolean changedRod = false;

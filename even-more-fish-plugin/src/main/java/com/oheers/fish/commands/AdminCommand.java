@@ -8,7 +8,12 @@ import com.oheers.fish.api.reward.RewardType;
 import com.oheers.fish.baits.Bait;
 import com.oheers.fish.baits.BaitManager;
 import com.oheers.fish.baits.BaitNBTManager;
-import com.oheers.fish.commands.arguments.*;
+import com.oheers.fish.commands.arguments.ArgumentHelper;
+import com.oheers.fish.commands.arguments.BaitArgument;
+import com.oheers.fish.commands.arguments.CompetitionTypeArgument;
+import com.oheers.fish.commands.arguments.CustomRodArgument;
+import com.oheers.fish.commands.arguments.FishArgument;
+import com.oheers.fish.commands.arguments.RarityArgument;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.configs.CompetitionFile;
@@ -44,7 +49,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.jar.Attributes;
 
 @SuppressWarnings("unchecked")

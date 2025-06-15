@@ -1,5 +1,6 @@
 package com.oheers.fish.baits;
 
+import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.exceptions.MaxBaitReachedException;
@@ -28,7 +29,7 @@ public class BaitListener implements Listener {
         ItemStack potentialFishingRod = event.getCurrentItem();
         ItemStack cursor = event.getCursor();
 
-        if (potentialFishingRod == null || cursor == null) {
+        if (potentialFishingRod == null) {
             return;
         }
 
@@ -36,7 +37,14 @@ public class BaitListener implements Listener {
             return;
         }
 
-        if (potentialFishingRod.getType() != Material.FISHING_ROD) {
+        // Silently return if no fishing rod is held
+        if (!potentialFishingRod.getType().equals(Material.FISHING_ROD)) {
+            return;
+        }
+
+        // Tell the player if the rod is invalid
+        if (!Checks.canUseRod(potentialFishingRod)) {
+            ConfigMessage.BAIT_INVALID_ROD.getMessage().send(event.getWhoClicked());
             return;
         }
 
