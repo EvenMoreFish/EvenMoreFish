@@ -126,7 +126,7 @@ public class EvenMoreFish extends JavaPlugin implements EMFPlugin {
     public void onEnable() {
 
         if (!NBT.preloadApi()) {
-            throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
+            throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin. If you are using a version higher than 1.21.1, use the builds on Modrinth.");
         }
 
         instance = this;
