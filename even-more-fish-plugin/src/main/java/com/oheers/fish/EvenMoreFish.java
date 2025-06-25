@@ -199,8 +199,8 @@ public class EvenMoreFish extends JavaPlugin implements EMFPlugin {
         competitionQueue = new CompetitionQueue();
         competitionQueue.load();
 
-        // async check for updates on the spigot page
-        getScheduler().runTaskAsynchronously(() -> isUpdateAvailable = checkUpdate());
+        // async check for updates on the spigot page - DISABLED FOR LEGACY
+        //getScheduler().runTaskAsynchronously(() -> isUpdateAvailable = checkUpdate());
 
         listeners();
         loadCommandManager();

@@ -36,7 +36,6 @@ public class Bar {
             progress = 1.0D;
         }
         bar.setProgress(progress);
-
     }
 
     public void setPrefix(String prefix, CompetitionType type) {
