@@ -1,53 +1,75 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":dependencyDashboard",
     ":semanticCommits",
     ":disableRateLimiting"
   ],
   "packageRules": [
     {
-      "matchPackageNames": ["io.papermc.paper:paper-api"],
+      "matchPackageNames": [
+        "io.papermc.paper:paper-api"
+      ],
       "allowedVersions": "1.20.1-R0.1-SNAPSHOT"
     },
     {
-      "matchPackagePrefixes": ["com.sk89q.worldguard"],
-      "allowedVersions": "7.0.9"
+      "allowedVersions": "7.0.9",
+      "matchPackageNames": [
+        "com.sk89q.worldguard{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["com.sk89q.worldedit"],
-      "allowedVersions": "7.3.0"
+      "allowedVersions": "7.3.0",
+      "matchPackageNames": [
+        "com.sk89q.worldedit{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["br.net.fabiozumbi12.RedProtect"],
-      "allowedVersions": "7.7.3"
+      "allowedVersions": "7.7.3",
+      "matchPackageNames": [
+        "br.net.fabiozumbi12.RedProtect{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["com.sk89q.worldguard"],
-      "groupName": "WorldGuard"
+      "groupName": "WorldGuard",
+      "matchPackageNames": [
+        "com.sk89q.worldguard{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["com.sk89q.worldedit"],
-      "groupName": "WorldEdit"
+      "groupName": "WorldEdit",
+      "matchPackageNames": [
+        "com.sk89q.worldedit{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.flywaydb:"],
-      "groupName": "Flyway"
+      "groupName": "Flyway",
+      "matchPackageNames": [
+        "org.flywaydb:{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.jooq:"],
-      "groupName": "jOOQ"
+      "groupName": "jOOQ",
+      "matchPackageNames": [
+        "org.jooq:{/,}**"
+      ]
     },
-
     {
-      "matchUpdateTypes": ["patch", "minor"],
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
       "matchCurrentVersion": "!/^0/",
       "groupName": "non-major updates",
-      "schedule": ["before 5am on monday"]
+      "schedule": [
+        "before 5am on monday"
+      ]
     },
     {
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "groupName": "major updates",
       "dependencyDashboardApproval": true
     }
@@ -56,5 +78,7 @@
   "prHourlyLimit": 0,
   "rangeStrategy": "bump",
   "dependencyDashboard": true,
-  "ignoreDeps": ["org.gradle.toolchains.foojay-resolver-convention"]
+  "ignoreDeps": [
+    "org.gradle.toolchains.foojay-resolver-convention"
+  ]
 }
