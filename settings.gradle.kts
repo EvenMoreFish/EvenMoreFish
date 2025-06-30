@@ -91,7 +91,7 @@ dependencyResolutionManagement {
             plugin("jooq", "nu.studer.jooq").version("9.0")
 
             library("connectors-mysql", "com.mysql:mysql-connector-j:9.3.0")
-            library("connectors-sqlite", "org.xerial:sqlite-jdbc:3.50.1.0")
+            library("connectors-sqlite", "org.xerial:sqlite-jdbc:3.50.2.0")
             library("connectors-h2", "com.h2database:h2:2.3.232")
 
             library("maven-artifact", "org.apache.maven:maven-artifact:4.0.0-rc-4")
