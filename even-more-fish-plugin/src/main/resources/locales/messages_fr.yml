@@ -4,22 +4,22 @@
 # You are able to mix both formats on the same line, however this is not recommended.
 # Here are the MiniMessage Docs for help with using MiniMessage: https://docs.advntr.dev/minimessage/format.html
 # Sent to players when they fish an EvenMoreFish fish
-fish-caught: <bold>{player} <reset>a pêché un(e) {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish} de {length}cm !
+fish-caught: <b>{player}</b> a pêché un(e) <b>{rarity}</b> {fish} de {length}cm !
 # By setting a fish's minimum-length to less than 0, you can create a lengthless fish. This is used when a player fishes a lengthless fish.
-lengthless-fish-caught: <bold>{player} <reset>a pêché un(e) {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}!
+lengthless-fish-caught: <b>{player}</b> a pêché un(e) <b>{rarity}</b> {fish}!
 # Sent to players when they hunt an EvenMoreFish fish
-fish-hunted: <b>{player}</b> has hunted a {length}cm <b>{rarity}</b> {fish}!
+fish-hunted: <b>{player}</b> a pêché un <b>{rarity}</b> {fish} de {length}cm !
 # This is used when a player hunts a lengthless fish.
-lengthless-fish-hunted: <b>{player}</b> has hunted a <b>{rarity}</b> {fish}!
+lengthless-fish-hunted: <b>{player}</b> a pêché un <b>{rarity}</b> {fish} !
 # Sent to a player when they don't have permission to execute a command.
 no-permission: <red>Vous n'êtes pas autorisé à exécuter cette commande.
 # The message to be sent when a competition starts and ends
-contest-start: <reset>Un concours de pêche {type} a commencé.
-contest-end: <reset>Le concours de pêche est terminé.
+contest-start: <white>Un concours de pêche {type} a commencé.
+contest-end: <white>Le concours de pêche est terminé.
 # The message to be sent when a player joins whilst a competition is going on
-contest-join: <reset>Un concours de pêche {type} est en cours.
+contest-join: <white>Un concours de pêche {type} est en cours.
 # Shown to players when a new player takes #1 spot, remove this value or set it to "" to disable this message
-new-first: '<reset>{player} est maintenant #1'
+new-first: '<white>{player} est maintenant #1'
 # Should this message appear in chat (false) or above the exp bar (true)
 action-bar-message: true
 # What competition types should the action bar be used for? (recommended: MOST_FISH)
@@ -34,20 +34,20 @@ competition-types:
   # LARGEST_TOTAL_FISH
   largest-total: la plus grande longueur totale de poissons
   # SHORTEST_FISH
-  shortest: the shortest fish
+  shortest: le plus petit poisson
   # SHORTEST_TOTAL_FISH
-  shortest-total: the shortest total fish length
+  shortest-total: la plus petite taille totale
   # SPECIFIC_FISH
-  specific: '{amount} {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>'
+  specific: '{amount} {rarity}<b>{rarity}</b> {fish}'
   # SPECIFIC_RARITY
-  specific-rarity: '{amount} {rarity_colour}<bold>{rarity}<reset> poisson(s)'
+  specific-rarity: '{amount} {rarity}<b>{rarity}</b> poisson(s)'
 # Segments shown in the bossbar when competitions run
 bossbar:
-  layout: '{prefix}<reset>{time-formatted}<reset>{remaining}'
+  layout: '{prefix}{time-formatted} {remaining}'
   # The abbreviations used for different units of time in the {time-formatted} variable.
-  hour: <reset>{hour}h
-  minute: <reset>{minute}m
-  second: <reset>{second}s
+  hour: <white>{hour}h
+  minute: <white>{minute}m
+  second: <white>{second}s
   # For translating the "left" at the end e.g. "5s left" -> "5s kvar"
   # This is the {remaining} variable.
   remaining: restantes
@@ -62,141 +62,141 @@ prefix-error: '<red>[EvenMoreFish] '
 # replace the {fish_lore}, however if it's empty the line will be removed. DO NOT ADD ANYTHING OTHER THAN THIS VARIABLE
 # TO THAT LINE.
 fish-lore:
-  - '<white>Attrapé par {player}'
-  - '<white>Mesures {length}cm'
+  - '{fisherman_lore}'
+  - '{length_lore}'
   - ''
   - '{fish_lore}'
-  - '{rarity_colour}<bold>{rarity}'
+  - '<b>{rarity}'
 # Sets what to replace with the {fisherman_lore} or {length_lore} with above ^
 fisherman-lore:
-  - <white>Caught by {player}
+  - <white>Attrapé par {player}
 length-lore:
-  - <white>Measures {length}cm.
+  - <white>Mesure {length}cm.
 # The format of the leaderboard after a competition is over (this message doesn't support papi placeholders)
 leaderboard-largest-fish: '<white>#{position} | {player} (<b>{rarity}</b> {fish}, {length}cm)'
 leaderboard-largest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
-leaderboard-most-fish: '<white>#{position} | {player} <white>({amount} <white>fish)'
+leaderboard-most-fish: '<white>#{position} | {player} <white>({amount} <white>poisson)'
 leaderboard-shortest-fish: '<white>#{position} | {player} <white>(<b>{rarity}</b> {fish}<white>, {length}cm<white>)'
 leaderboard-shortest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
 # If you're running a competition where there's no leaderboard, this message is sent when there's a winner
-single-winner: <reset>{player} a remporté une compétition {type}. Félicitations!
+single-winner: <white>{player} a remporté une compétition {type}. Félicitations !
 # This shows the number of players currently in the competition, set to "" to disable.
-total-players: <reset>Il y a un total de {amount} joueur(s) dans le classement.
+total-players: <white>Il y a un total de {amount} joueur(s) dans le classement.
 # The number of positions shown in the leaderboard - can't be less than 1.
 leaderboard-count: 5
 # If the player doesn't appear on /emf top, should their position be displayed at the bottom?
 always-show-pos: true
 # Sent to players when nobody got a record during a competition
-no-winners: <reset>Il n'y a pas de gagnants.
+no-winners: <white>Il n'y a pas de gagnants.
 # When an individual player didn't get a record
-no-record: <reset>Vous n'avez pas attrapé de poisson.
+no-record: <white>Vous n'avez pas attrapé de poisson.
 # Sent when an admin tries to start a competition where the type doesn't exist e.g. /emf admin competition start 600 ABCDEFGH
-invalid-type: '<reset>Ce n''est pas un type de compétition, types disponibles : MOST_FISH, LARGEST_FISH, SPECIFIC_FISH'
+invalid-type: '<white>Ce n''est pas un type de compétition, types disponibles : https://evenmorefish.github.io/EvenMoreFish/docs/features/competitions/types'
 # Sent to all online players when not enough players are on to start a competition
-not-enough-players: <reset>Il n'y a pas assez de joueurs en ligne pour commencer la compétition de pêche prévue.
+not-enough-players: <white>Il n'y a pas assez de joueurs en ligne pour commencer la compétition de pêche prévue.
 # Sent to all players at specific times to show the remaining time left
 # {time_formatted} shows the time (e.g. 5m left, 10m 30s left)
 # {time_raw} is what you input in competitions.yml
-time-alert: <reset>Il reste {time_formatted} à la compétition {type}
+time-alert: <white>Il reste {time_formatted} à la compétition {type}
 # The sell price:
 # 0 – prints a digit if provided, 0 otherwise
 # # – prints a digit if provided, nothing otherwise
 # . – indicate where to put the decimal separator
 # , – indicate where to put the grouping separator
-sell-price-format: '$#,##0.0'
+sell-price-format: '$#.##0,0'
 # The message sent to players when they've sold their fish in the /emf shop
-fish-sale: <white>Vous avez vendu </white><green>{amount} </green><white>poisson(s) pour </white><green>{sell-price}</green><white>.
+fish-sale: <white>Vous avez vendu <green>{amount} <white>poisson(s) pour <green>{sell-price}<white>.
 # Help messages
 # General help (/emf help) - permission node dependant commands will only show if they are formatted with the forward-slash.
 help-format: '[noPrefix]<aqua>{command} <yellow>- {description}'
 help-general:
   title: '[noPrefix]<gradient:#f1ffed:#f1ffed><st>         </st><b><green> EvenMoreFish </green></b><st><gradient:#73ff6b:#f1ffed>         '
-  top: '[noPrefix]Shows an ongoing competition''s leaderboard.'
-  help: '[noPrefix]Shows you this page.'
-  shop: ''
-  toggle: '[noPrefix]Toggles whether or not you receive custom fish.'
-  gui: '[noPrefix]Opens the Main Menu GUI.'
-  admin: '[noPrefix]Admin command help page.'
-  sellall: '[noPrefix]Sell all the fish in your inventory.'
-  next: '[noPrefix]Show how much time is until the next competition.'
-  applybaits: '[noPrefix]Apply baits to your fishing rod.'
-  journal: "[noPrefix]View a journal of caught fish and their stats."
+  top: '[noPrefix]Affiche le classement de la compétition en cours.'
+  help: '[noPrefix]Vous affiche cette page.'
+  shop: '[noPrefix]Ouvre une boutique pour vendre vos poissons.'
+  toggle: '[noPrefix]Active ou non si vous recevez des poissons personnalisés.'
+  gui: '[noPrefix]Ouvre le menu principal.'
+  admin: '[noPrefix]Page d''aide des commandes admin.'
+  sellall: '[noPrefix]Vends tous les poissons de ton inventaire.'
+  next: '[noPrefix]Affiche le temps restant avant la prochaine compétition.'
+  applybaits: '[noPrefix]Applique un appât sur votre canne à pêche.'
+  journal: "[noPrefix]Affiche le journal des poissons attrapés ainsi que leurs statistiques."
 help-list:
-  fish: '[noPrefix]Display all fish in a specific rarity.'
-  rarities: '[noPrefix]Display all rarities.'
+  fish: '[noPrefix]Affiche tous les poissons dans une rareté spécifique.'
+  rarities: '[noPrefix]Affiche toutes les raretés.'
 # Competition help (/emf admin competition help)
 help-competition:
-  start: '[noPrefix]Starts a competition of a specified duration'
-  end: '[noPrefix]Ends the current competition (if there is one)'
+  start: '[noPrefix]Démarre une compétition avec une durée spécifique.'
+  end: '[noPrefix]Termine la compétition en cours (s''il y en a une).'
 # Admin help (/emf admin help)
 help-admin:
-  bait: '[noPrefix]Gives baits to a player.'
-  competition: '[noPrefix]Starts or stops a competition'
-  clearbaits: '[noPrefix]Removes all applied baits from a fishing rod.'
-  fish: '[noPrefix]Gives a fish to a player.'
-  nbt-rod: '[noPrefix]Gives a custom NBT rod to a player required for catching EMF fish.'
-  custom-rod: '[noPrefix]Gives a custom fishing rod to a player.'
-  reload: '[noPrefix]Reloads the plugin''s config files.'
-  migrate: '[noPrefix]Migrate the database from Legacy (V2) to V3'
-  addons: '[noPrefix]Display all addons.'
-  rewardtypes: '[noPrefix]Display all reward types.'
-  version: '[noPrefix]Displays plugin information.'
-  rawitem: '[noPrefix]Displays the item in your main hand as raw NBT.'
+  bait: '[noPrefix]Donne un appât à un joueur.'
+  competition: '[noPrefix]Démarre ou arrête une compétition'
+  clearbaits: '[noPrefix]Retire tous les appâts appliqués'
+  fish: '[noPrefix]Donne un poisson à un joueur'
+  nbt-rod: '[noPrefix]Donne une canne à pêche NBT personnalisée à un joueur requis pour pêcher des poissons d''EMF'
+  custom-rod: '[noPrefix]Donne une canne à pêche personnalisée à un joueur'
+  reload: '[noPrefix]Recharge les configurations du plugin'
+  migrate: '[noPrefix]Migre la base de données de Legacy (V2) to V3'
+  addons: '[noPrefix]Afficher tous les modules complémentaires.'
+  rewardtypes: '[noPrefix]Affiche tous les types de récompenses.'
+  version: '[noPrefix]Affiche les informations du plugin.'
+  rawitem: '[noPrefix]Affiche l''objet dans votre main principale en tant que NBT brut.'
 # Shown when the emf %emf_competition_place_player_*% placeholder requests a position in the leaderboard that doesn't exist
 no-player-in-place: Commencez à pêcher pour prendre cette place
 # Shown when the emf %emf_competition_place_fish_*% placeholder requests a position in the leaderboard that doesn't exist
-no-fish-in-place: Start fishing to take this place
+no-fish-in-place: Commencez à pêcher pour prendre cette place
 # Shown when the emf %emf_competition_place_size_*% placeholder requests a position in the leaderboard that doesn't exist
-no-size-in-place: Start fishing to take this place
+no-size-in-place: Commencez à pêcher pour prendre cette place
 # Shown when the emf %emf_competition_place_player_*% placeholder is used when there's no competition running
 no-competition-running: Aucune compétition en cours actuellement.
 # Shown when the emf %emf_competition_place_fish_*% placeholder is used when there's no competition running
-no-competition-running-fish: No competition running right now.
+no-competition-running-fish: Aucune compétition en cours actuellement.
 # Shown when the emf %emf_competition_place_size_*% placeholder is used when there's no competition running
-no-competition-running-size: No competition running right now.
+no-competition-running-size: Aucune compétition en cours actuellement.
 # HOw should %emf_custom_fishing_status% be formatted?
-custom-fishing-enabled: <green>Enabled
-custom-fishing-disabled: <red>Disabled
+custom-fishing-enabled: <green>Activé
+custom-fishing-disabled: <red>Désactivé
 # How should the %emf_competition_place_fish_*% be formatted?
-emf-competition-fish-format: '{rarity_colour}{length}cm <bold>{rarity}</bold> {fish}'
+emf-competition-fish-format: '{length}cm <b>{rarity}</b> {fish}'
 # How should the %emf_competition_place_fish_*% be formatted when there's no length on the fish?
-emf-lengthless-fish-format: '{rarity_colour}<bold>{rarity}</bold> {fish}'
+emf-lengthless-fish-format: '<b>{rarity}</b> {fish}'
 # How should %emf_competition_place_fish_*% be formatted during MOST/SPECIFIC_FISH competitions?
-emf-most-fish-format: '{amount} poisson(s)'
+emf-most-fish-format: '{amount} {rarity_colour} poisson(s)'
 # What should be displayed for %emf_competition_place_size_*% during the MOST_FISH competition?
 emf-size-during-most-fish: N/A
 # How the %emf_competition_time_left% variable should be formatted.
-emf-time-remaining: 'Temps restant avant la prochaine compétition: {days}d, {hours}h, {minutes}m.'
+emf-time-remaining: 'Temps restant avant la prochaine compétition : {days}d, {hours}h, {minutes}m.'
 # Replaces the %emf_competition_time_left% variable when there's a competition already running.
 emf-time-remaining-during-comp: Il y a un concours en cours en ce moment.
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
-max-baits-reached: <reset>Vous avez atteint le nombre maximum de types d'appâts pour cette canne à pêche.
+max-baits-reached: <white>Vous avez atteint le nombre maximum de types d'appâts pour cette canne à pêche.
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: <reset>Vous avez atteint le nombre maximum d'appâts {bait_theme}{bait} <reset>pouvant être appliqués sur une canne.
+max-bait-reached: <white>Vous avez atteint le nombre maximum d'appâts {bait} <white>pouvant être appliqués sur une canne.
 # Sent when a player catches a bait from fishing (this can be disabled by setting catch-percentage to 0 in baits.yml
-bait-catch: <reset><bold>{player} <reset>a attrapé un appât{bait_theme}<bold>{bait} <reset>!
+bait-catch: <white><b>{player}</b> a attrapé un appât <b>{bait}</b> !
 # Sent when a bait is applied and a fish is caught.
-bait-use: <reset>Vous avez utilisé l'un des appâts {bait_theme}<bold>{bait} <reset>de votre canne.
+bait-use: <white>Vous avez utilisé l'un des appâts <b>{bait}</b> de votre canne.
 # Sent when someone tries to use a bait in creative
-bait-survival-limited: <reset>Vous devez être en <underlined>survie<reset> pour appliquer des appâts aux cannes à pêche.
+bait-survival-limited: <white>Vous devez être en <u>survie</u> pour appliquer des appâts aux cannes à pêche.
 # Sent when someone tries to merge a baited rod into an unbaited rod
-bait-rod-protection: <white>Protected your baited fishing rod. If you are trying to repair it, please put it in the first slot instead.
+bait-rod-protection: <white>Protégé votre canne à pêche appâtée. Si vous essayez de la réparer, veuillez la mettre dans le premier emplacement.
 # Sent when someone tries to apply a bait to a fishing rod they cannot use to fish
-bait-invalid-rod: <white>You cannot apply bait to this fishing rod!
+bait-invalid-rod: <white>Tu ne peux pas appliquer d'appât sur cette canne à pêche !
 # Shown when /emf toggle is run, to turn off and on respectively.
-toggle-off: <reset>Vous n'attraperez plus de poisson personnalisé.
-toggle-on: <reset>Vous allez maintenant attraper des poissons personnalisés.
+toggle-off: <white>Vous n'attraperez plus de poisson personnalisé.
+toggle-on: <white>Vous allez maintenant attraper des poissons personnalisés.
 # When trying to place a skull-fish when this is blocked in config.yml
-place-fish-blocked: <reset>Vous ne pouvez pas placer ce poisson.
+place-fish-blocked: <white>Vous ne pouvez pas placer ce poisson.
 admin:
   # Opens an /emf shop for another player
-  open-fish-shop: <reset>Boutique ouverte pour {player}.
+  open-fish-shop: <white>Boutique ouverte pour {player}.
   # When a fish is given to a player
-  given-player-fish: <reset>Vous avez donné à {player} un {fish}.
+  given-player-fish: <white>Vous avez donné à {player} un {fish}.
   # When a bait is given to a player
-  given-player-bait: <reset>Vous avez donné à {player} un {bait}.
+  given-player-bait: <white>Vous avez donné à {player} un {bait}.
   # When an admin runs /emf admin bait without a bait name.
-  no-bait-specified: <reset>Vous devez spécifier un nom d'appât.
+  no-bait-specified: <white>Vous devez spécifier un nom d'appât.
   # When the admin tries the command /emf admin clearbaits whe not holding a fishing rod.
   must-be-holding-rod: <reset>Vous devez tenir une canne à pêche pour exécuter cette commande
   # When /emf admin clearbaits command is run.
@@ -218,23 +218,23 @@ admin:
   # When an invalid competition type is provided
   competition-type-invalid: '<reset>Ce n''est pas un type de compétition, les types disponibles sont: MOST_FISH, LARGEST_FISH, SPECIFIC_FISH'
   # When an invalid competition id is provided
-  competition-id-invalid: <white>That isn't a valid competition id.
+  competition-id-invalid: <white>Ce n'est pas un identifiant de compétition valide.
   # When the command /emf admin custom-rod is run.
-  custom-rod-given: <white>You have given {player} a custom fishing rod.
+  custom-rod-given: <white>Vous avez donné à {player} une canne à pêche personnalisée.
   # When there's a modrinth update available, don't translate the URL otherwise it won't direct to the correct page.
   update-available: '<reset>Il y a une mise à jour disponible: https://modrinth.com/plugin/evenmorefish/versions?l=paper'
   # When the plugin is reloaded
   reload: <reset>Successfully reloaded the plugin.
   # When checking a list of registered addons. The actual list is added to the end of this message.
-  list-addons: '<white>Registered {addon-type}s: '
+  list-addons: '<white>A enregistré {addon-type}: '
 # When an invalid rarity is provided for a command.
-rarity-invalid: <white>That is not a valid rarity!
+rarity-invalid: <white>Ce n'est pas une rareté valide !
 # Bait messages
 bait:
   # How the lore should look ({baits} takes up multiple lines)
   rod-lore:
     - <white>
-    - '<gray>Bait Slots: <yellow>({current_baits}/{max_baits})'
+    - '<gray>Emplacement d''appâts : <yellow>({current_baits}/{max_baits})'
     - <white>
     - '{baits}'
     - <white>
@@ -242,12 +242,12 @@ bait:
   # given out will have this lore. Bait themes can be set as a colour or prefix and be used in this lore.
   bait-lore:
     - <white>
-    - 'Increases the catch rates for:'
+    - 'Augmente les taux de capture pour :'
     - '{boosts}'
     - '{lore}'
     - <white>
-    - '<#dadada>Drop onto a fishing rod to apply,'
-    - '<#dadada>or hold <u>SHIFT</u> to apply all.'
+    - '<#dadada>Cliquer sur une canne à pêche pour appliquer'
+    - '<#dadada>ou maintenir <u>SHIFT</u> pour tout appliquer.'
     - <white>
   # How the baits should look in each line of the {baits} variable above ^. {baits} respects the display name setting,
   # the <gold> is there for baits without a display name set.
@@ -255,11 +255,11 @@ bait:
   # These are listed in the {boosts} variable above in bait-lore
   # boost-rarity/rarities: shown when the bait only impacts 1 rarity or when it impacts multiple rarities.
   # boost-fish: shown when the bait impacts some fish individually.
-  boosts-rarity: '► <white>1 Rarity'
-  boosts-rarities: '► <white>{amount} Rarities'
-  boosts-fish: '► <white>{amount} Fish'
+  boosts-rarity: '► <white>1 Rareté'
+  boosts-rarities: '► <white>{amount} Raretés'
+  boosts-fish: '► <white>{amount} Poissons'
   # This is added to the lore in place of a bait if show-unused-slots is enabled in the general section.
-  unused-slot: <gray>► ? <i>Available Slot
+  unused-slot: <gray>► ? <i>Emplacement disponible
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
 version: 3
