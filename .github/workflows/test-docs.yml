@@ -1,0 +1,35 @@
+name: Test Docusaurus Build
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - '.github/workflows/test-deploy.yml'
+
+jobs:
+  test-build:
+    name: Test Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: 'docs/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./docs
+
+      - name: Test Build
+        run: npm run build
+        working-directory: ./docs
