@@ -46,7 +46,6 @@ public class RodConversion {
         YamlDocument config = configBase.getConfig();
 
         config.set("id", "default");
-        config.set("disabled", !MainConfig.getInstance().getConfig().getBoolean("require-nbt-rod"));
         config.set("allowed-rarities", "ALL");
         config.set("item", section.get("item"));
 

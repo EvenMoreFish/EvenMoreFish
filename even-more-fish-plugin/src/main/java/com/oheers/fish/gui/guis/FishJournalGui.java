@@ -96,9 +96,9 @@ public class FishJournalGui extends ConfigGui {
             ItemFactory factory = ItemFactory.itemFactory(section, "fish-item");
             EMFSingleMessage display = prepareDisplay(factory, fish);
             if (display != null) {
-                meta.displayName(display.getComponentMessage());
+                meta.displayName(display.getComponentMessage(player));
             }
-            meta.lore(prepareLore(factory, fish).getComponentListMessage());
+            meta.lore(prepareLore(factory, fish).getComponentListMessage(player));
         });
 
         return item;
@@ -198,7 +198,7 @@ public class FishJournalGui extends ConfigGui {
                 if (configuredDisplay != null) {
                     EMFSingleMessage display = EMFSingleMessage.of(configuredDisplay);
                     display.setRarity(rarity.getDisplayName());
-                    meta.displayName(display.getComponentMessage());
+                    meta.displayName(display.getComponentMessage(player));
                 }
                 meta.lore(configuredMeta.lore());
                 if (configuredMeta.hasCustomModelData()) {

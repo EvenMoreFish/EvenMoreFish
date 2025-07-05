@@ -337,7 +337,7 @@ public class Bait extends ConfigBase {
             EvenMoreFish.getInstance().getMetricsManager().incrementBaitsUsed(1);
         } catch (MaxBaitReachedException | MaxBaitsReachedException e) {
             logger.log(Level.WARNING, e.getMessage());
-            player.sendMessage(e.getConfigMessage().getMessage().getComponentMessage());
+            player.sendMessage(e.getConfigMessage().getMessage().getComponentMessage(player));
         } catch (NullPointerException exception) {
             logger.log(Level.SEVERE, exception.getMessage(), exception);
         }

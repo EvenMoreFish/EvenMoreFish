@@ -9,6 +9,8 @@ import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +37,11 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public EMFListMessage createCopy() {
-        return toListMessage();
+        EMFListMessage message = EMFListMessage.ofList(this.message);
+        message.perPlayer = this.perPlayer;
+        message.canSilent = this.canSilent;
+        message.relevantPlayer = this.relevantPlayer;
+        return message;
     }
 
     // Factory methods
@@ -70,12 +76,36 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public void send(@NotNull Audience target) {
-        target.sendMessage(getComponentMessage());
+        if (isEmpty()) {
+            return;
+        }
+        List<Component> message = (target instanceof Player player) ?
+            getComponentListMessage(player) :
+            getComponentListMessage();
+
+        message.forEach(part -> {
+            if (silentCheck(part)) {
+                return;
+            }
+            target.sendMessage(part);
+        });
     }
 
     @Override
     public void sendActionBar(@NotNull Audience target) {
-        target.sendActionBar(getComponentMessage());
+        if (isEmpty()) {
+            return;
+        }
+
+        Component message = (target instanceof Player player) ?
+            getComponentMessage(player) :
+            getComponentMessage();
+
+        if (silentCheck(message)) {
+            return;
+        }
+
+        target.sendActionBar(message);
     }
 
     /**
@@ -87,13 +117,25 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public @NotNull Component getComponentMessage() {
-        return Component.join(JoinConfiguration.newlines(), getComponentListMessage());
+        return getComponentMessage(null);
+    }
+
+    @Override
+    public @NotNull Component getComponentMessage(@Nullable OfflinePlayer player) {
+        return Component.join(JoinConfiguration.newlines(), getComponentListMessage(player));
     }
 
     @Override
     public @NotNull List<Component> getComponentListMessage() {
-        formatPlaceholderAPI();
-        return this.message.stream()
+        return getComponentListMessage(null);
+    }
+
+    @Override
+    public @NotNull List<Component> getComponentListMessage(@Nullable OfflinePlayer player) {
+        EMFListMessage copy = createCopy();
+        copy.setPlayer(player);
+        copy.formatPlaceholderAPI();
+        return copy.message.stream()
             .map(EMFMessage::removeDefaultItalics)
             .map(component -> component.colorIfAbsent(NamedTextColor.WHITE))
             .toList();

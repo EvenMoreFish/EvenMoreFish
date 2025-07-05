@@ -327,7 +327,6 @@ public class Fish {
 
         if (!disableFisherman && getFishermanPlayer() != null) {
             newLoreLine.setVariable("{fisherman_lore}", ConfigMessage.FISHERMAN_LORE.getMessage().toListMessage());
-            newLoreLine.setPlayer(getFishermanPlayer());
         } else {
             newLoreLine.setVariable("{fisherman_lore}", EMFListMessage.empty());
         }
@@ -341,13 +340,11 @@ public class Fish {
 
         newLoreLine.setRarity(this.rarity.getLorePrep());
 
-        OfflinePlayer fisherman = getFishermanPlayer();
-        if (fisherman != null) {
-            newLoreLine.setPlayer(fisherman);
-            newLoreLine.formatPlaceholderAPI();
+        if (disableFisherman) {
+            return newLoreLine.getComponentListMessage();
+        } else {
+            return newLoreLine.getComponentListMessage(getFishermanPlayer());
         }
-
-        return newLoreLine.getComponentListMessage();
     }
 
     public void checkEatEvent() {

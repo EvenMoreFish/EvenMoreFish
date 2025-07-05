@@ -68,9 +68,17 @@ public abstract class EMFMessage {
         targets.forEach(this::sendActionBar);
     }
 
-    public abstract @NotNull Component getComponentMessage();
+    public @NotNull Component getComponentMessage() {
+        return getComponentMessage(null);
+    }
 
-    public abstract @NotNull List<Component> getComponentListMessage();
+    public abstract @NotNull Component getComponentMessage(@Nullable OfflinePlayer player);
+
+    public @NotNull List<Component> getComponentListMessage() {
+        return getComponentListMessage(null);
+    }
+
+    public abstract @NotNull List<Component> getComponentListMessage(@Nullable OfflinePlayer player);
 
     public @NotNull String getLegacyMessage() {
         return LEGACY_SERIALIZER.serialize(getComponentMessage());
@@ -207,7 +215,10 @@ public abstract class EMFMessage {
      *
      * @param player The player.
      */
-    public void setPlayer(@NotNull final OfflinePlayer player) {
+    public void setPlayer(@Nullable final OfflinePlayer player) {
+        if (player == null) {
+            return;
+        }
         this.relevantPlayer = player;
         setVariable("{player}", Objects.requireNonNullElse(player.getName(), "N/A"));
     }

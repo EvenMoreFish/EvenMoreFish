@@ -499,6 +499,10 @@ public class AdminCommand {
         return new CommandAPICommand("rawItem")
                 .executesPlayer(info -> {
                     ItemStack handItem = info.sender().getInventory().getItemInMainHand();
+                    if (handItem.isEmpty()) {
+                        return;
+                    }
+
                     String handItemNbt = NBT.itemStackToNBT(handItem).toString();
 
                     // Ensure the handItemNbt is escaped for use in YAML
@@ -512,7 +516,6 @@ public class AdminCommand {
                     builder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, handItemNbt));
                     info.sender().sendMessage(builder.build());
                 });
-
     }
 
     private CommandAPICommand getHelp() {
