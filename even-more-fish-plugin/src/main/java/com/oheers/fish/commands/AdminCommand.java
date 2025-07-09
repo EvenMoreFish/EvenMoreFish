@@ -18,10 +18,12 @@ import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.config.ConfigBase;
+import com.oheers.fish.config.ConfigUtils;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.database.Database;
 import com.oheers.fish.database.DatabaseUtil;
+import com.oheers.fish.entities.EntityFactory;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
@@ -33,6 +35,7 @@ import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.utils.ManifestUtil;
 import de.tr7zw.changeme.nbtapi.NBT;
 import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
@@ -65,7 +68,13 @@ public class AdminCommand {
         this.command = new CommandAPICommand(name)
                 .withPermission(AdminPerms.ADMIN)
                 .executes(info -> {
-                    sendHelpMessage(info.sender());
+                    if (!(info.sender() instanceof Player player)) {
+                        return;
+                    }
+                    EntityFactory factory = EntityFactory.entityFactory(MainConfig.getInstance().getConfig(), "entity-test");
+                    factory.spawnEntity(player.getLocation(), player.getUniqueId());
+
+                    //sendHelpMessage(info.sender());
                 })
                 .withSubcommands(
                         getFish(),

@@ -194,6 +194,23 @@ public class ItemFactory {
         return new ItemStack(Material.COD);
     }
 
+    public boolean isRawItem() {
+        return rawItem;
+    }
+
+    public void setRandomIndex(int randomIndex) {
+        this.randomIndex = randomIndex;
+        this.baseItem = getBaseItem();
+    }
+
+    public int getRandomIndex() {
+        return randomIndex;
+    }
+
+    public void setFinalChanges(@Nullable Consumer<ItemStack> finalChanges) {
+        this.finalChanges = finalChanges;
+    }
+
     // Customization Methods //
 
     public CustomModelDataItemConfig getModelData() {
@@ -426,23 +443,6 @@ public class ItemFactory {
             configuration.getRouteAsString() + " has no valid items in its list."
         );
         return null;
-    }
-
-    public boolean isRawItem() {
-        return rawItem;
-    }
-
-    public void setRandomIndex(int randomIndex) {
-        this.randomIndex = randomIndex;
-        this.baseItem = getBaseItem();
-    }
-
-    public int getRandomIndex() {
-        return randomIndex;
-    }
-
-    public void setFinalChanges(@Nullable Consumer<ItemStack> finalChanges) {
-        this.finalChanges = finalChanges;
     }
 
 }
