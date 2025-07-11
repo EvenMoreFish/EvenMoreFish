@@ -229,6 +229,8 @@ admin:
   list-addons: '<white>A enregistré {addon-type}: '
 # When an invalid rarity is provided for a command.
 rarity-invalid: <white>Ce n'est pas une rareté valide !
+# When the player can't access the Fishing Journal
+journal-disabled: <white>The Fishing Journal is not accessible. Please enable the plugin's database.
 # Bait messages
 bait:
   # How the lore should look ({baits} takes up multiple lines)
@@ -262,4 +264,4 @@ bait:
   unused-slot: <gray>► ? <i>Emplacement disponible
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 3
+version: 4
