@@ -8,9 +8,9 @@ fish-caught: <green>{player} </green><white>捕捉到了 {rarity_colour}{length}
 # By setting a fish's minimum-length to less than 0, you can create a lengthless fish. This is used when a player fishes a lengthless fish.
 lengthless-fish-caught: <green>{player} </green><white>捕捉到了 {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}!
 # Sent to players when they hunt an EvenMoreFish fish
-fish-hunted: <b>{player}</b> has hunted a {length}cm <b>{rarity}</b> {fish}!
+fish-hunted: <b>{player}</b> 抓到了一条 {length}cm 的 <b>{rarity}</b> {fish}！
 # This is used when a player hunts a lengthless fish.
-lengthless-fish-hunted: <b>{player}</b> has hunted a <b>{rarity}</b> {fish}!
+lengthless-fish-hunted: <b>{player}</b> 抓到了一条 <b>{rarity}</b> {fish}!
 # Sent to a player when they don't have permission to execute a command.
 no-permission: <red>你没有权限使用此指令.
 # The message to be sent when a competition starts and ends
@@ -34,9 +34,9 @@ competition-types:
   # LARGEST_TOTAL_FISH
   largest-total: 鱼的总长度
   # SHORTEST_FISH
-  shortest: the shortest fish
+  shortest: 最短的鱼
   # SHORTEST_TOTAL_FISH
-  shortest-total: the shortest total fish length
+  shortest-total: 鱼的最小长度
   # SPECIFIC_FISH
   specific: '{amount} {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>'
   # SPECIFIC_RARITY
@@ -75,7 +75,7 @@ length-lore:
 # The format of the leaderboard after a competition is over (this message doesn't support papi placeholders)
 leaderboard-largest-fish: '<white>#{position} | {player} (<b>{rarity}</b> {fish}, {length}cm)'
 leaderboard-largest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
-leaderboard-most-fish: '<white>#{position} | {player} <white>({amount} <white>fish)'
+leaderboard-most-fish: '<white>#{position} | {player} <white>({amount} <white>鱼)'
 leaderboard-shortest-fish: '<white>#{position} | {player} <white>(<b>{rarity}</b> {fish}<white>, {length}cm<white>)'
 leaderboard-shortest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
 # If you're running a competition where there's no leaderboard, this message is sent when there's a winner
@@ -111,37 +111,37 @@ fish-sale: <white>你出售了 </white><green>{amount} </green><white>条鱼，�
 help-format: '[noPrefix]<aqua>{command} <yellow>- {description}'
 help-general:
   title: '[noPrefix]<gradient:#f1ffed:#f1ffed><st>         </st><b><green> EvenMoreFish </green></b><st><gradient:#73ff6b:#f1ffed>         '
-  top: '[noPrefix]Shows an ongoing competition''s leaderboard.'
-  help: '[noPrefix]Shows you this page.'
-  shop: '[noPrefix]Opens a shop to sell your fish.'
-  toggle: '[noPrefix]Toggles whether or not you receive custom fish.'
-  gui: '[noPrefix]Opens the Main Menu GUI.'
-  admin: '[noPrefix]Admin command help page.'
-  sellall: '[noPrefix]Sell all the fish in your inventory.'
-  next: '[noPrefix]Show how much time is until the next competition.'
-  applybaits: '[noPrefix]Apply baits to your fishing rod.'
-  journal: "[noPrefix]View a journal of caught fish and their stats."
+  top: '[noPrefix]显示正在进行的竞赛排行榜.'
+  help: '[noPrefix]展示此页面.'
+  shop: '[noPrefix]打开一个商店来出售你的鱼.'
+  toggle: '[noPrefix]切换是否捕获到自定义鱼.'
+  gui: '[noPrefix]打开主菜单.'
+  admin: '[noPrefix]管理员命令帮助页面.'
+  sellall: '[noPrefix]出售物品栏中的所有鱼.'
+  next: '[noPrefix]显示距离下一次竞赛还有多长时间.'
+  applybaits: '[noPrefix]将鱼饵应用到鱼竿上.'
+  journal: "[noPrefix]查看捕获记录和它们的统计信息."
 help-list:
-  fish: '[noPrefix]Display all fish in a specific rarity.'
-  rarities: '[noPrefix]Display all rarities.'
+  fish: '[noPrefix]显示在一个稀有度内所有的鱼.'
+  rarities: '[noPrefix]显示所有稀有度.'
 # Competition help (/emf admin competition help)
 help-competition:
-  start: '[noPrefix]Starts a competition of a specified duration'
-  end: '[noPrefix]Ends the current competition (if there is one)'
+  start: '[noPrefix]开始一个指定持续时间的竞赛赛.'
+  end: '[noPrefix]结束当前的竞赛.(如果有)'
 # Admin help (/emf admin help)
 help-admin:
-  bait: '[noPrefix]Gives baits to a player.'
-  competition: '[noPrefix]Starts or stops a competition'
-  clearbaits: '[noPrefix]Removes all applied baits from a fishing rod.'
-  fish: '[noPrefix]Gives a fish to a player.'
-  nbt-rod: '[noPrefix]Gives a custom NBT rod to a player required for catching EMF fish.'
-  custom-rod: '[noPrefix]Gives a custom fishing rod to a player.'
-  reload: '[noPrefix]Reloads the plugin''s config files.'
-  migrate: '[noPrefix]Migrate the database from Legacy (V2) to V3'
-  addons: '[noPrefix]Display all addons.'
-  rewardtypes: '[noPrefix]Display all reward types.'
-  version: '[noPrefix]Displays plugin information.'
-  rawitem: '[noPrefix]Displays the item in your main hand as raw NBT.'
+  bait: '[noPrefix]给玩家一个鱼饵.'
+  competition: '[noPrefix]开始或停止竞赛.'
+  clearbaits: '[noPrefix]从钓鱼竿上移除所有鱼饵.'
+  fish: '[noPrefix]给玩家一个鱼.'
+  nbt-rod: '[noPrefix]给玩家一个自定义NBT钓鱼竿用来抓EMF中的鱼.'
+  custom-rod: '[noPrefix]给玩家一个自定义钓鱼竿.'
+  reload: '[noPrefix]重新加载插件的配置文件.'
+  migrate: '[noPrefix]将数据库从旧版(V2) 迁移到 V3.'
+  addons: '[noPrefix]显示所有插件.'
+  rewardtypes: '[noPrefix]显示所有奖励类型.'
+  version: '[noPrefix]显示插件信息.'
+  rawitem: '[noPrefix]将主手中的物品显示为原生NBT格式.'
 # Shown when the emf %emf_competition_place_player_*% placeholder requests a position in the leaderboard that doesn't exist
 no-player-in-place: 开始钓鱼以占据此位置
 # Shown when the emf %emf_competition_place_fish_*% placeholder requests a position in the leaderboard that doesn't exist
@@ -149,14 +149,14 @@ no-fish-in-place: 开始钓鱼以占据此位置
 # Shown when the emf %emf_competition_place_size_*% placeholder requests a position in the leaderboard that doesn't exist
 no-size-in-place: 开始捕鱼以占据此位置
 # Shown when the emf %emf_competition_place_player_*% placeholder is used when there's no competition running
-no-competition-running: 现在没有比赛
+no-competition-running: 目前没有正在进行的比赛
 # Shown when the emf %emf_competition_place_fish_*% placeholder is used when there's no competition running
-no-competition-running-fish: 现在没有正在进行的比赛
+no-competition-running-fish: 目前没有正在进行的比赛
 # Shown when the emf %emf_competition_place_size_*% placeholder is used when there's no competition running
-no-competition-running-size: 现在没有比赛
+no-competition-running-size: 目前没有正在进行的比赛
 # HOw should %emf_custom_fishing_status% be formatted?
-custom-fishing-enabled: <green>Enabled
-custom-fishing-disabled: <red>Disabled
+custom-fishing-enabled: <green>启用
+custom-fishing-disabled: <red>禁用
 # How should the %emf_competition_place_fish_*% be formatted?
 emf-competition-fish-format: '{rarity_colour}{length}cm <bold>{rarity}</bold> {fish}'
 # How should the %emf_competition_place_fish_*% be formatted when there's no length on the fish?
@@ -180,9 +180,9 @@ bait-use: <green>你使用了一根钓竿的 {bait_theme}<bold>{bait} </bold></g
 # Sent when someone tries to use a bait in creative
 bait-survival-limited: <red>你必须在 <underlined>生存模式<reset> 中才能将鱼饵应用在钓竿上。
 # Sent when someone tries to merge a baited rod into an unbaited rod
-bait-rod-protection: <white>Protected your baited fishing rod. If you are trying to repair it, please put it in the first slot instead.
+bait-rod-protection: <white>保护好你应用过饵料的钓鱼竿. 如果你试图修理他, 请将他放在第一个槽位上.
 # Sent when someone tries to apply a bait to a fishing rod they cannot use to fish
-bait-invalid-rod: <white>You cannot apply bait to this fishing rod!
+bait-invalid-rod: <white>你不能对这只钓鱼棒应用鱼饵!
 # Shown when /emf toggle is run, to turn off and on respectively.
 toggle-off: <red>你将不再捕获自定义的鱼
 toggle-on: <green>现在你将捕捉到自定义的鱼
@@ -218,23 +218,25 @@ admin:
   # When an invalid competition type is provided
   competition-type-invalid: '<green>这不是一个竞争类型，可用类型：MOST_FISH, LARGEST_FISH, SPECIFIC_FISH'
   # When an invalid competition id is provided
-  competition-id-invalid: <white>That isn't a valid competition id.
+  competition-id-invalid: <white>这不是一个有效的竞赛id.
   # When the command /emf admin custom-rod is run.
-  custom-rod-given: <white>You have given {player} a custom fishing rod.
+  custom-rod-given: <white>你给了 {player} 一个自定义钓鱼竿.
   # When there's a modrinth update available, don't translate the URL otherwise it won't direct to the correct page.
   update-available: '<green>有内容更新啦: https://modrinth.com/plugin/evenmorefish/versions?l=paper'
   # When the plugin is reloaded
   reload: <green>成功地重新加载了插件!
   # When checking a list of registered addons. The actual list is added to the end of this message.
-  list-addons: '<white>Registered {addon-type}s: '
+  list-addons: '<white>已注册的 {addon-type}: '
 # When an invalid rarity is provided for a command.
-rarity-invalid: <white>That is not a valid rarity!
+rarity-invalid: <white>这不是一个有效的稀有度!
+# When the player can't access the Fishing Journal
+journal-disabled: <white>The Fishing Journal is not accessible. Please enable the plugin's database.
 # Bait messages
 bait:
   # How the lore should look ({baits} takes up multiple lines)
   rod-lore:
     - <white>
-    - '<gray>Bait Slots: <yellow>({current_baits}/{max_baits})'
+    - '<gray>鱼饵槽位: <yellow>({current_baits}/{max_baits})'
     - <white>
     - '{baits}'
     - <white>
@@ -242,12 +244,12 @@ bait:
   # given out will have this lore. Bait themes can be set as a colour or prefix and be used in this lore.
   bait-lore:
     - <white>
-    - 'Increases the catch rates for:'
+    - '提高捕获率：'
     - '{boosts}'
     - '{lore}'
     - <white>
-    - '<#dadada>Drop onto a fishing rod to apply,'
-    - '<#dadada>or hold <u>SHIFT</u> to apply all.'
+    - '<#dadada>扔到一个钓鱼杆上以应用.'
+    - '<#dadada>或按住 <u>SHIFT</u> 来应用所有.'
     - <white>
   # How the baits should look in each line of the {baits} variable above ^. {baits} respects the display name setting,
   # the <gold> is there for baits without a display name set.
@@ -262,4 +264,4 @@ bait:
   unused-slot: <gray>► ? <i>Available Slot
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 3
+version: 4

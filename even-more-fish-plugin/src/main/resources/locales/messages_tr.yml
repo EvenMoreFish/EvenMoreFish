@@ -229,6 +229,8 @@ admin:
   list-addons: '<white>Registered {addon-type}s: '
 # When an invalid rarity is provided for a command.
 rarity-invalid: <white>That is not a valid rarity!
+# When the player can't access the Fishing Journal
+journal-disabled: <white>The Fishing Journal is not accessible. Please enable the plugin's database.
 # Bait messages
 bait:
   # How the lore should look ({baits} takes up multiple lines)
@@ -242,7 +244,7 @@ bait:
   # given out will have this lore. Bait themes can be set as a colour or prefix and be used in this lore.
   bait-lore:
     - <white>
-    - 'Increases the catch rates for:'
+    - 'Aşağıdakiler için yakalama oranlarını artırır:'
     - '{boosts}'
     - '{lore}'
     - <white>
@@ -255,11 +257,11 @@ bait:
   # These are listed in the {boosts} variable above in bait-lore
   # boost-rarity/rarities: shown when the bait only impacts 1 rarity or when it impacts multiple rarities.
   # boost-fish: shown when the bait impacts some fish individually.
-  boosts-rarity: '► <white>1 Rarity'
-  boosts-rarities: '► <white>{amount} Rarities'
-  boosts-fish: '► <white>{amount} Fish'
+  boosts-rarity: '► <white>1 Tür'
+  boosts-rarities: '► <white>{amount} Tür'
+  boosts-fish: '► <white>{amount} Balık'
   # This is added to the lore in place of a bait if show-unused-slots is enabled in the general section.
   unused-slot: <gray>► ? <i>Available Slot
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 3
+version: 4
