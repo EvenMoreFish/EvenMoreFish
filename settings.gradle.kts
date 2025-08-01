@@ -63,7 +63,7 @@ dependencyResolutionManagement {
             bundle("flyway", listOf("flyway-core", "flyway-mysql"))
 
             library("friendlyid", "com.devskiller.friendly-id:friendly-id:1.1.0")
-            library("hikaricp", "com.zaxxer:HikariCP:6.3.2")
+            library("hikaricp", "com.zaxxer:HikariCP:7.0.0")
             library("json-simple", "com.googlecode.json-simple:json-simple:1.1.1")
 
             library("universalscheduler", "com.github.Anon8281:UniversalScheduler:0.1.7")
