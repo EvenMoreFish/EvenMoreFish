@@ -42,7 +42,7 @@ dependencyResolutionManagement {
             library("nbt-api", "de.tr7zw:item-nbt-api:2.15.2-SNAPSHOT")
             library("denizen-api", "com.denizenscript:denizen:1.3.1-SNAPSHOT")
             library("oraxen", "io.th0rgal:oraxen:1.191.0")
-            library("nexo", "com.nexomc:nexo:1.9.0")
+            library("nexo", "com.nexomc:nexo:1.10.0")
 
             version("craftengine", "0.0.61")
             library("craftengine-core", "net.momirealms", "craft-engine-core").versionRef("craftengine")
@@ -74,14 +74,14 @@ dependencyResolutionManagement {
             library("commandapi", "dev.jorel:commandapi-bukkit-shade:10.1.2")
             library("inventorygui", "de.themoep:inventorygui:1.6.4-SNAPSHOT")
 
-            plugin("shadow", "com.gradleup.shadow").version("9.0.0")
+            plugin("shadow", "com.gradleup.shadow").version("9.0.2")
             plugin("plugin-yml", "de.eldoria.plugin-yml.bukkit").version("0.7.1")
 
             library("boostedyaml", "dev.dejvokep:boosted-yaml:1.3.7")
 
             plugin("grgit", "org.ajoberstar.grgit").version("5.3.2")
 
-            version("jooq", "3.19.24")
+            version("jooq", "3.19.25")
             library("jooq", "org.jooq","jooq").versionRef("jooq")
             library("jooq-codegen", "org.jooq", "jooq-codegen").versionRef("jooq")
             library("jooq-meta", "org.jooq", "jooq-meta").versionRef("jooq")
