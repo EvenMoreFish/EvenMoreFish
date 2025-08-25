@@ -32,7 +32,7 @@ dependencyResolutionManagement {
             library("redprotect-spigot", "br.net.fabiozumbi12.RedProtect","RedProtect-Spigot-1.13").versionRef("redprotect")
             bundle("redprotect", listOf("redprotect-core", "redprotect-spigot"))
 
-            library("mcmmo", "com.gmail.nossr50.mcMMO:mcMMO:2.2.040")
+            library("mcmmo", "com.gmail.nossr50.mcMMO:mcMMO:2.2.041")
             library("aurelium-skills", "com.github.Archy-X:AureliumSkills:Beta1.2.8")
             library("aura-skills", "dev.aurelium:auraskills-api-bukkit:2.3.6")
             library("headdatabase-api", "com.arcaniax:HeadDatabase-API:1.3.2")
@@ -41,8 +41,8 @@ dependencyResolutionManagement {
             library("itemsadder-api", "com.github.LoneDev6:API-ItemsAdder:3.6.1")
             library("nbt-api", "de.tr7zw:item-nbt-api:2.15.2-SNAPSHOT")
             library("denizen-api", "com.denizenscript:denizen:1.3.1-SNAPSHOT")
-            library("oraxen", "io.th0rgal:oraxen:1.191.0")
-            library("nexo", "com.nexomc:nexo:1.9.0")
+            library("oraxen", "io.th0rgal:oraxen:1.192.0")
+            library("nexo", "com.nexomc:nexo:1.10.0")
 
             version("craftengine", "0.0.61")
             library("craftengine-core", "net.momirealms", "craft-engine-core").versionRef("craftengine")
@@ -63,25 +63,25 @@ dependencyResolutionManagement {
             bundle("flyway", listOf("flyway-core", "flyway-mysql"))
 
             library("friendlyid", "com.devskiller.friendly-id:friendly-id:1.1.0")
-            library("hikaricp", "com.zaxxer:HikariCP:7.0.1")
+            library("hikaricp", "com.zaxxer:HikariCP:7.0.2")
             library("json-simple", "com.googlecode.json-simple:json-simple:1.1.1")
 
             library("universalscheduler", "com.github.Anon8281:UniversalScheduler:0.1.7")
-            library("playerpoints", "org.black_ixx:playerpoints:3.3.2")
+            library("playerpoints", "org.black_ixx:playerpoints:3.3.3")
 
             library("vanishchecker", "uk.firedev:VanishChecker:1.0.5")
 
             library("commandapi", "dev.jorel:commandapi-bukkit-shade:10.1.2")
             library("inventorygui", "de.themoep:inventorygui:1.6.4-SNAPSHOT")
 
-            plugin("shadow", "com.gradleup.shadow").version("9.0.0")
+            plugin("shadow", "com.gradleup.shadow").version("9.0.2")
             plugin("plugin-yml", "de.eldoria.plugin-yml.bukkit").version("0.7.1")
 
             library("boostedyaml", "dev.dejvokep:boosted-yaml:1.3.7")
 
             plugin("grgit", "org.ajoberstar.grgit").version("5.3.2")
 
-            version("jooq", "3.19.24")
+            version("jooq", "3.19.25")
             library("jooq", "org.jooq","jooq").versionRef("jooq")
             library("jooq-codegen", "org.jooq", "jooq-codegen").versionRef("jooq")
             library("jooq-meta", "org.jooq", "jooq-meta").versionRef("jooq")

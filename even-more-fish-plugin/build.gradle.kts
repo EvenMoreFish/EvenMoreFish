@@ -15,7 +15,7 @@ plugins {
     alias(libs.plugins.shadow)
     alias(libs.plugins.grgit)
     alias(libs.plugins.jooq)
-    id("org.sonarqube") version "6.2.0.5505"
+    id("org.sonarqube") version "6.3.0.5676"
 }
 
 group = "com.oheers.evenmorefish"
