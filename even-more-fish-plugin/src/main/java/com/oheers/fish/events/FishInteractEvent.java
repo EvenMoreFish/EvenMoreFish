@@ -31,7 +31,6 @@ public class FishInteractEvent implements Listener {
         // Creates a replica of the fish we can use
         Fish fish = FishUtils.getFish(event.getItem());
         if (fish != null) {
-            fish.checkIntEvent();
             if (fish.hasIntRewards()) {
                 // Cancel the interact event
                 event.setCancelled(true);

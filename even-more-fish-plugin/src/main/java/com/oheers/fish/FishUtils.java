@@ -16,7 +16,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.ItemUtils;
-import com.oheers.fish.utils.Logging;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.utils.nbt.NbtKeys;
 import com.oheers.fish.utils.nbt.NbtUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;

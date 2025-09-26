@@ -2,6 +2,7 @@ package com.oheers.fish.fishing;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.EMFFishHuntEvent;
+import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.items.Fish;

@@ -86,7 +86,6 @@ public class SellHelper {
             if (WorthNBT.getValue(item) != -1.0) {
                 Fish fish = FishUtils.getFish(item);
                 if (fish != null) {
-                    fish.checkSellEvent();
                     fish.getSellRewards().forEach(reward -> reward.rewardPlayer(player, null));
                 }
                 inventory.remove(item);

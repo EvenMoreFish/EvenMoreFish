@@ -134,8 +134,6 @@ public abstract class Processor<E extends Event> implements Listener {
             return null;
         }
 
-        fish.checkFishEvent();
-
         if (fish.hasFishRewards()) {
             fish.getFishRewards().forEach(fishReward -> fishReward.rewardPlayer(player, location));
         }

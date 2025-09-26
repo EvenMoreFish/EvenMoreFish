@@ -151,7 +151,12 @@ public class EvenMoreFish extends EMFPlugin {
         this.competitionQueue.load();
 
         // check for updates on the Modrinth page
-        new UpdateChecker(this).checkUpdate().thenAccept(available -> isUpdateAvailable = available);
+        new UpdateChecker(this).checkUpdate().thenAccept(available -> {
+            isUpdateAvailable = available;
+            if (available) {
+                getLogger().warning("A new update is available! Download it from https://modrinth.com/plugin/evenmorefish");
+            }
+        });
 
         this.metricsManager = new MetricsManager(this);
         this.metricsManager.setupMetrics();

@@ -3,6 +3,7 @@ package com.oheers.fish.fishing.items;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.AbstractFileBasedManager;
+import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
@@ -27,7 +28,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.ToDoubleFunction;
 
-public class FishManager extends AbstractFileBasedManager<Rarity> {
+public class FishManager extends AbstractFishManager<Rarity> {
 
     private static FishManager instance;
 
@@ -35,7 +36,7 @@ public class FishManager extends AbstractFileBasedManager<Rarity> {
         super();
     }
 
-    public static FishManager getInstance() {
+    public static @NotNull FishManager getInstance() {
         if (instance == null) {
             instance = new FishManager();
         }
@@ -72,10 +73,12 @@ public class FishManager extends AbstractFileBasedManager<Rarity> {
 
     /* Original Fish Manager Functionality Below */
 
+    @Override
     public @Nullable Rarity getRarity(@NotNull String rarityName) {
         return getItem(rarityName);
     }
 
+    @Override
     public @Nullable Fish getFish(@NotNull String rarityName, @NotNull String fishName) {
         final Rarity rarity = getRarity(rarityName);
         return rarity != null ? rarity.getFish(fishName) : null;
@@ -100,7 +103,8 @@ public class FishManager extends AbstractFileBasedManager<Rarity> {
         return false;
     }
 
-    public TreeMap<String, Rarity> getRarityMap() {
+    @Override
+    public @NotNull TreeMap<String, Rarity> getRarityMap() {
         return getItemMap();
     }
 
@@ -224,7 +228,7 @@ public class FishManager extends AbstractFileBasedManager<Rarity> {
                 (rarity.getPermission() != null && !fisher.hasPermission(rarity.getPermission()));
     }
 
-    public Fish getRandomWeightedFish(List<Fish> fishList, double boostRate, List<Fish> boostedFish) {
+    public @Nullable Fish getRandomWeightedFish(@NotNull List<Fish> fishList, double boostRate, @Nullable List<Fish> boostedFish) {
         if (fishList.isEmpty()) return null;
 
         ToDoubleFunction<Fish> weightFunction = fish -> fish.getWeight() == 0 ? 1 : fish.getWeight();

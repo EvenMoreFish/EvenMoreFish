@@ -1,11 +1,12 @@
 package com.oheers.fish.fishing.items;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.config.ConfigUtils;
 import com.oheers.fish.exceptions.InvalidFishException;
-import com.oheers.fish.fishing.CatchType;
+import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
@@ -30,14 +31,14 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
 
-public class Fish {
+public class Fish implements IFish {
 
     private final @NotNull Section section;
     private final String name;
     private final Rarity rarity;
     private final ItemFactory factory;
     private UUID fisherman;
-    private Float length;
+    private float length;
 
     private List<Reward> actionRewards;
     private List<Reward> fishRewards;
@@ -99,13 +100,13 @@ public class Fish {
         factory.getLore().setEnabled(!section.getBoolean("disable-lore", false));
 
         setSize();
+
         checkEatEvent();
+        checkFishEvent();
         checkIntEvent();
+        checkSellEvent();
         checkSilent();
 
-        checkFishEvent();
-
-        checkSellEvent();
         handleRequirements();
     }
 
@@ -146,7 +147,8 @@ public class Fish {
         });
     }
 
-    public ItemStack give(int randomIndex) {
+    @Override
+    public @NotNull ItemStack give(int randomIndex) {
         int initialIndex = factory.getRandomIndex();
 
         factory.setRandomIndex(randomIndex);
@@ -161,7 +163,8 @@ public class Fish {
      *
      * @return An ItemStack version of the fish.
      */
-    public ItemStack give() {
+    @Override
+    public @NotNull ItemStack give() {
         return factory.createItem(fisherman);
     }
 
@@ -201,10 +204,12 @@ public class Fish {
         }
     }
 
+    @Override
     public double getWorthMultiplier() {
         return section.getDouble("worth-multiplier", 0.0D);
     }
 
+    @Override
     public boolean hasEatRewards() {
         if (eventType != null) {
             return eventType.equals("eat");
@@ -213,14 +218,17 @@ public class Fish {
         }
     }
 
+    @Override
     public boolean hasFishRewards() {
         return !fishRewards.isEmpty();
     }
 
+    @Override
     public boolean hasSellRewards() {
         return !sellRewards.isEmpty();
     }
 
+    @Override
     public boolean hasIntRewards() {
         if (eventType != null) {
             return eventType.equals("int");
@@ -298,6 +306,7 @@ public class Fish {
     }
 
     // prepares it to be given to the player
+    @Override
     public void init() {
         generateSize();
         checkMessage();
@@ -352,7 +361,7 @@ public class Fish {
         }
     }
 
-    public void checkEatEvent() {
+    private void checkEatEvent() {
         List<String> configRewards = section.getStringList("eat-event");
         // Checks if the player has actually set reward for an eat event
         if (!configRewards.isEmpty()) {
@@ -367,7 +376,7 @@ public class Fish {
         }
     }
 
-    public void checkFishEvent() {
+    private void checkFishEvent() {
         fishRewards = new ArrayList<>();
         List<String> configRewards = section.getStringList("catch-event");
         if (!configRewards.isEmpty()) {
@@ -379,7 +388,7 @@ public class Fish {
         }
     }
 
-    public void checkSellEvent() {
+    private void checkSellEvent() {
         sellRewards = new ArrayList<>();
         List<String> configRewards = section.getStringList("sell-event");
         if (!configRewards.isEmpty())  {
@@ -390,7 +399,7 @@ public class Fish {
         }
     }
 
-    public void checkIntEvent() {
+    private void checkIntEvent() {
         List<String> configRewards = section.getStringList("interact-event");
         // Checks if the player has actually set reward for an interact event
         if (!configRewards.isEmpty()) {
@@ -410,68 +419,87 @@ public class Fish {
     /**
      * Checks if the fish has silent: true enabled, which stops the "You caught ... fish" from being broadcasted to anyone.
      */
+    @Override
     public void checkSilent() {
         this.silent = section.getBoolean("silent", false);
     }
 
-    public Fish createCopy() {
+    @Override
+    public @NotNull Fish createCopy() {
         return create(rarity, section);
     }
 
+    @Override
     public boolean hasFishermanDisabled() {
         return disableFisherman;
     }
 
-    public UUID getFisherman() {
+    @Override
+    public @Nullable UUID getFisherman() {
         return fisherman;
     }
 
-    public void setFisherman(UUID fisherman) {
+    @Override
+    public void setFisherman(@Nullable UUID fisherman) {
         this.fisherman = fisherman;
     }
 
+    @Override
     public boolean isCompExemptFish() {
         return isCompExemptFish;
     }
 
+    @Override
     public void setCompExemptFish(boolean compExemptFish) {
         isCompExemptFish = compExemptFish;
     }
 
+    @Override
     public double getSetWorth() {
         return setWorth;
     }
 
-    public String getName() {
+    @Override
+    public @NotNull String getName() {
         return name;
     }
 
-    public Rarity getRarity() {
+    @Override
+    public @NotNull Rarity getRarity() {
         return rarity;
     }
 
-    public Float getLength() {
+    @Override
+    public float getLength() {
         return length;
     }
 
+    @Override
     public void setLength(Float length) {
         this.length = length == null ? -1 : length;
     }
 
-    public List<Reward> getActionRewards() {
-        return actionRewards;
+    @Override
+    public @NotNull List<Reward> getActionRewards() {
+        return actionRewards == null ? new ArrayList<>() : actionRewards;
     }
 
-    public List<Reward> getFishRewards() {
-        return fishRewards;
+    @Override
+    public @NotNull List<Reward> getFishRewards() {
+        return fishRewards == null ? new ArrayList<>() : fishRewards;
     }
 
-    public List<Reward> getSellRewards() { return sellRewards; }
+    @Override
+    public @NotNull List<Reward> getSellRewards() {
+        return sellRewards == null ? new ArrayList<>() : fishRewards;
+    }
 
+    @Override
     public double getWeight() {
         return weight;
     }
 
+    @Override
     public void setWeight(double weight) {
         this.weight = weight;
     }
@@ -488,39 +516,37 @@ public class Fish {
         return factory;
     }
 
-    public Requirement getRequirement() {
+    @Override
+    public @NotNull Requirement getRequirement() {
         return this.requirement;
     }
 
-    public void setRequirement(Requirement requirement) {
+    @Override
+    public void setRequirement(@NotNull Requirement requirement) {
         this.requirement = requirement;
     }
 
+    @Override
     public boolean isWasBaited() {
         return wasBaited;
     }
 
+    @Override
     public void setWasBaited(boolean wasBaited) {
         this.wasBaited = wasBaited;
     }
 
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
+    @Override
     public boolean isSilent() {
         return silent;
     }
 
+    @Override
     public void setSilent(boolean silent) {
         this.silent = silent;
     }
 
-    public String parseEventPlaceholders(String rewardString) {
+    private String parseEventPlaceholders(String rewardString) {
 
         // {length} Placeholder
         rewardString = rewardString.replace("{length}", String.valueOf(length));
@@ -549,6 +575,7 @@ public class Fish {
         return rewardString;
     }
 
+    @Override
     public @NotNull CatchType getCatchType() {
         String typeStr = section.getString("catch-type");
         if (typeStr == null) {

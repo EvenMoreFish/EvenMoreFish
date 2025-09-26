@@ -2,10 +2,11 @@ package com.oheers.fish.fishing.items.config;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.ConfigBase;
-import com.oheers.fish.utils.Logging;
+import com.oheers.fish.api.Logging;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.jetbrains.annotations.NotNull;
+import uk.firedev.messagelib.message.ComponentMessage;
 
 import java.io.File;
 
@@ -42,7 +43,9 @@ public class RarityConversions {
         file.renameTo(new File(EvenMoreFish.getInstance().getDataFolder(), "rarities.yml.old"));
         file.delete();
 
-        Logging.infoComponent("<yellow>Your rarity configs have been automatically converted to the new format.");
+        Logging.info(
+            ComponentMessage.componentMessage("<yellow>Your rarity configs have been automatically converted to the new format.").get()
+        );
     }
 
     /**

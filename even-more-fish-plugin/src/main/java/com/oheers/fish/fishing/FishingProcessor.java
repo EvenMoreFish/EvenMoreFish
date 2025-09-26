@@ -4,6 +4,7 @@ import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.EMFFishEvent;
+import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.items.Fish;

@@ -1,7 +1,6 @@
 package com.oheers.fish.api;
 
-
-import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -101,7 +100,7 @@ public abstract class AbstractFileBasedManager<T> {
             Function<U, String> idExtractor,
             Predicate<U> shouldSkipItem
     ) {
-        File itemsFolder = new File(EvenMoreFish.getInstance().getDataFolder(), folderName);
+        File itemsFolder = new File(EMFPlugin.getInstance().getDataFolder(), folderName);
         if (!itemsFolder.exists()) {
             FileUtil.loadDefaultFiles(folderName, itemsFolder);
         }
@@ -110,7 +109,7 @@ public abstract class AbstractFileBasedManager<T> {
         List<File> itemFiles = FileUtil.getFilesInDirectory(itemsFolder, true, true);
 
         if (itemFiles.isEmpty()) {
-            EvenMoreFish.getInstance().debug("No files found in directory: " + itemsFolder);
+            EMFPlugin.getInstance().debug("No files found in directory: " + itemsFolder);
             return;
         }
 
@@ -119,8 +118,8 @@ public abstract class AbstractFileBasedManager<T> {
                     try {
                         return itemLoader.apply(file);
                     } catch (InvalidConfigurationException e) {
-                        EvenMoreFish.getInstance().getLogger().warning("Invalid configuration in file: " + file.getName());
-                        EvenMoreFish.getInstance().getLogger().warning(e.getMessage());
+                        Logging.warn("Invalid configuration in file: " + file.getName());
+                        Logging.warn(e.getMessage());
                         return null;
                     }
                 })
@@ -129,7 +128,7 @@ public abstract class AbstractFileBasedManager<T> {
                 .forEach(item -> {
                     String id = idExtractor.apply(item);
                     if (itemMap.containsKey(id)) {
-                        EvenMoreFish.getInstance().getLogger().warning("An item with the ID '" + id + "' already exists! Skipping.");
+                        Logging.warn("An item with the ID '" + id + "' already exists! Skipping.");
                         return;
                     }
                     itemMap.put(id, (T) item);

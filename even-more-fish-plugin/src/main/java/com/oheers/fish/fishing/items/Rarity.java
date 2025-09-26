@@ -2,14 +2,16 @@ package com.oheers.fish.fishing.items;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.config.ConfigUtils;
 import com.oheers.fish.exceptions.InvalidFishException;
-import com.oheers.fish.fishing.CatchType;
+import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.fishing.items.config.RarityFileUpdates;
 import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +24,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Rarity extends ConfigBase {
+public class Rarity extends ConfigBase implements IRarity {
 
     private static final Logger logger = EvenMoreFish.getInstance().getLogger();
 
@@ -53,10 +55,12 @@ public class Rarity extends ConfigBase {
 
     // Config getters
 
+    @Override
     public @NotNull String getId() {
         return Objects.requireNonNull(getConfig().getString("id"));
     }
 
+    @Override
     public boolean isDisabled() {
         return getConfig().getBoolean("disabled");
     }
@@ -72,14 +76,17 @@ public class Rarity extends ConfigBase {
         return message;
     }
 
+    @Override
     public double getWeight() {
         return getConfig().getDouble("weight");
     }
 
+    @Override
     public boolean getAnnounce() {
         return getConfig().getBoolean("broadcast", true);
     }
 
+    @Override
     public boolean getUseConfigCasing() {
         return getConfig().getBoolean("use-this-casing");
     }
@@ -105,22 +112,27 @@ public class Rarity extends ConfigBase {
         return format(finalName);
     }
 
+    @Override
     public @Nullable String getPermission() {
         return getConfig().getString("permission");
     }
 
-    public Requirement getRequirement() {
+    @Override
+    public @NotNull Requirement getRequirement() {
         return requirement;
     }
 
+    @Override
     public boolean isShouldDisableFisherman() {
         return getConfig().getBoolean("disable-fisherman", false);
     }
 
+    @Override
     public double getMinSize() {
         return getConfig().getDouble("size.minSize");
     }
 
+    @Override
     public double getMaxSize() {
         return getConfig().getDouble("size.maxSize");
     }
@@ -133,6 +145,7 @@ public class Rarity extends ConfigBase {
     /**
      * @return This rarity's original list of loaded fish
      */
+    @Override
     public @NotNull List<Fish> getOriginalFishList() {
         return fishList;
     }
@@ -140,10 +153,12 @@ public class Rarity extends ConfigBase {
     /**
      * @return This rarity's list of loaded fish, but each fish is a clone of the original
      */
+    @Override
     public @NotNull List<Fish> getFishList() {
         return fishList.stream().map(Fish::createCopy).toList();
     }
 
+    @Override
     public @Nullable Fish getEditableFish(@NotNull String name) {
         for (Fish fish : fishList) {
             if (fish.getName().equalsIgnoreCase(name)) {
@@ -153,6 +168,7 @@ public class Rarity extends ConfigBase {
         return null;
     }
 
+    @Override
     public @Nullable Fish getFish(@NotNull String name) {
         Fish fish = getEditableFish(name);
         if (fish == null) {
@@ -161,20 +177,25 @@ public class Rarity extends ConfigBase {
         return fish.createCopy();
     }
 
+    @Override
     public double getWorthMultiplier() {
         return getConfig().getDouble("worth-multiplier", 0.0D);
     }
 
-    public ItemStack getMaterial() {
-        return FishUtils.getItem(getConfig().getString("material", "cod"));
+    @Override
+    public @NotNull ItemStack getMaterial() {
+        ItemStack item = FishUtils.getItem(getConfig().getString("material"));
+        return item == null ? new ItemStack(Material.COD) : item;
     }
 
     // External variables
 
+    @Override
     public boolean isFishWeighted() {
         return fishWeighted;
     }
 
+    @Override
     public void setFishWeighted(boolean fishWeighted) {
         this.fishWeighted = fishWeighted;
     }

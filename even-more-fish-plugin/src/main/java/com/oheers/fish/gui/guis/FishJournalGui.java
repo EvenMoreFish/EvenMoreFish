@@ -15,7 +15,7 @@ import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
-import com.oheers.fish.utils.Logging;
+import com.oheers.fish.api.Logging;
 import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.StaticGuiElement;

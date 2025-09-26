@@ -124,7 +124,6 @@ public class AdminCommand {
                     for (Player target : targets) {
                         Fish fish = initialFish.createCopy();
                         fish.init();
-                        fish.checkFishEvent();
 
                         if (fish.hasFishRewards()) {
                             fish.getFishRewards().forEach(reward -> reward.rewardPlayer(target, target.getLocation()));

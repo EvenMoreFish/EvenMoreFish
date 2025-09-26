@@ -1,4 +1,4 @@
-package com.oheers.fish.fishing;
+package com.oheers.fish.api.fishing;
 
 public enum CatchType {
     CATCH,

@@ -8,7 +8,7 @@ import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.recipe.EMFRecipe;
 import com.oheers.fish.recipe.RecipeUtil;
-import com.oheers.fish.utils.Logging;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.utils.nbt.NbtKeys;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
