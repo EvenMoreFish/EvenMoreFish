@@ -32,16 +32,16 @@ dependencyResolutionManagement {
             library("redprotect-spigot", "br.net.fabiozumbi12.RedProtect","RedProtect-Spigot-1.13").versionRef("redprotect")
             bundle("redprotect", listOf("redprotect-core", "redprotect-spigot"))
 
-            library("mcmmo", "com.gmail.nossr50.mcMMO:mcMMO:2.2.041")
+            library("mcmmo", "com.gmail.nossr50.mcMMO:mcMMO:2.2.042")
             library("aurelium-skills", "com.github.Archy-X:AureliumSkills:Beta1.2.8")
-            library("aura-skills", "dev.aurelium:auraskills-api-bukkit:2.3.6")
+            library("aura-skills", "dev.aurelium:auraskills-api-bukkit:2.3.7")
             library("headdatabase-api", "com.arcaniax:HeadDatabase-API:1.3.2")
             library("griefprevention", "com.github.TechFortress:GriefPrevention:16.18.4")
 
             library("itemsadder-api", "com.github.LoneDev6:API-ItemsAdder:3.6.1")
             library("nbt-api", "de.tr7zw:item-nbt-api:2.15.2")
             library("denizen-api", "com.denizenscript:denizen:1.3.1-SNAPSHOT")
-            library("oraxen", "io.th0rgal:oraxen:1.192.0")
+            library("oraxen", "io.th0rgal:oraxen:1.193.2")
             library("nexo", "com.nexomc:nexo:1.10.0")
 
             version("craftengine", "0.0.63.4")
@@ -55,7 +55,7 @@ dependencyResolutionManagement {
             bundle("ecoitems", listOf("ecoitems-api", "ecoitems-libreforge", "ecoitems-eco"))
 
             library("caffeine", "com.github.ben-manes.caffeine:caffeine:3.2.2")
-            library("annotations", "org.jetbrains:annotations:26.0.2")
+            library("annotations", "org.jetbrains:annotations:26.0.2-1")
 
             version("flyway", "10.22.0")
             library("flyway-core", "org.flywaydb","flyway-core").versionRef("flyway")
@@ -74,15 +74,15 @@ dependencyResolutionManagement {
             library("commandapi", "dev.jorel:commandapi-bukkit-shade:10.1.2")
             library("inventorygui", "de.themoep:inventorygui:1.6.4-SNAPSHOT")
 
-            plugin("shadow", "com.gradleup.shadow").version("9.0.2")
+            plugin("shadow", "com.gradleup.shadow").version("9.2.2")
             plugin("plugin-yml", "de.eldoria.plugin-yml.bukkit").version("0.8.0")
 
             library("boostedyaml", "dev.dejvokep:boosted-yaml:1.3.7")
-            library("messagelib", "uk.firedev:MessageLib:1.0-SNAPSHOT")
+            library("messagelib", "uk.firedev:MessageLib:1.0.1")
 
-            plugin("grgit", "org.ajoberstar.grgit").version("5.3.2")
+            plugin("grgit", "org.ajoberstar.grgit").version("5.3.3")
 
-            version("jooq", "3.19.25")
+            version("jooq", "3.19.26")
             library("jooq", "org.jooq","jooq").versionRef("jooq")
             library("jooq-codegen", "org.jooq", "jooq-codegen").versionRef("jooq")
             library("jooq-meta", "org.jooq", "jooq-meta").versionRef("jooq")
@@ -91,7 +91,7 @@ dependencyResolutionManagement {
 
             library("connectors-mysql", "com.mysql:mysql-connector-j:9.4.0")
             library("connectors-sqlite", "org.xerial:sqlite-jdbc:3.47.0.0")
-            library("connectors-h2", "com.h2database:h2:2.3.232")
+            library("connectors-h2", "com.h2database:h2:2.4.240")
             bundle("connectors", listOf("connectors-mysql", "connectors-sqlite"))
             library("maven-artifact", "org.apache.maven:maven-artifact:4.0.0-rc-4")
 
@@ -99,7 +99,7 @@ dependencyResolutionManagement {
             library("junit-jupiter-api", "org.junit.jupiter","junit-jupiter-api").versionRef("junit")
             library("junit-jupiter-engine","org.junit.jupiter","junit-jupiter-engine").versionRef("junit")
 
-            library("guava", "com.google.guava:guava:33.4.8-jre")
+            library("guava", "com.google.guava:guava:33.5.0-jre")
         }
     }
 }
