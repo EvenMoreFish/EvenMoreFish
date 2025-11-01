@@ -4,7 +4,7 @@ worldedit = "7.3.0"
 redprotect = "7.7.3"
 flyway = "10.22.0"
 jooq = "3.19.27"
-junit = "5.14.0"
+junit = "5.14.1"
 craftengine = "0.0.64.1"
 
 shadow = "9.2.2"
@@ -23,7 +23,7 @@ vault-api = "com.github.MilkBowl:VaultAPI:1.7.1"
 placeholder-api = "me.clip:placeholderapi:2.11.6"
 bstats = "org.bstats:bstats-bukkit:3.1.0"
 
-kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20"
+kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21"
 
 # World Management
 worldguard-core = { module = "com.sk89q.worldguard:worldguard-core", version.ref = "worldguard" }
@@ -34,20 +34,20 @@ worldedit-bukkit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.re
 # Protection Plugins
 redprotect-core = { module = "br.net.fabiozumbi12.RedProtect:RedProtect-Core", version.ref = "redprotect" }
 redprotect-spigot = { module = "br.net.fabiozumbi12.RedProtect:RedProtect-Spigot-1.13", version.ref = "redprotect" }
-griefprevention = "com.github.TechFortress:GriefPrevention:16.18.4"
+griefprevention = "com.github.TechFortress:GriefPrevention:16.18.5"
 
 # Skills & Economy
 mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.2.043"
 aurelium-skills = "com.github.Archy-X:AureliumSkills:Beta1.2.8"
-aura-skills = "dev.aurelium:auraskills-api-bukkit:2.3.7"
+aura-skills = "dev.aurelium:auraskills-api-bukkit:2.3.8"
 playerpoints = "org.black_ixx:playerpoints:3.3.3"
 
 # Items & Customization
 headdatabase-api = "com.arcaniax:HeadDatabase-API:1.3.2"
 itemsadder-api = "com.github.LoneDev6:API-ItemsAdder:3.6.1"
 nbt-api = "de.tr7zw:item-nbt-api:2.15.3"
-oraxen = "io.th0rgal:oraxen:1.193.3"
-nexo = "com.nexomc:nexo:1.10.0"
+oraxen = "io.th0rgal:oraxen:1.195.0"
+nexo = "com.nexomc:nexo:1.14.0"
 
 # Craft Engine
 craftengine-core = { module = "net.momirealms:craft-engine-core", version.ref = "craftengine" }
@@ -62,7 +62,7 @@ ecoitems-eco = "com.willfp:eco:6.56.0"
 denizen-api = "com.denizenscript:denizen:1.3.1-SNAPSHOT"
 
 # Utilities
-caffeine = "com.github.ben-manes.caffeine:caffeine:3.2.2"
+caffeine = "com.github.ben-manes.caffeine:caffeine:3.2.3"
 annotations = "org.jetbrains:annotations:26.0.2-1"
 friendlyid = "com.devskiller.friendly-id:friendly-id:1.1.0"
 hikaricp = "com.zaxxer:HikariCP:7.0.2"
@@ -70,7 +70,7 @@ universalscheduler = "com.github.Anon8281:UniversalScheduler:0.1.7"
 vanishchecker = "uk.firedev:VanishChecker:1.0.5"
 inventorygui = "de.themoep:inventorygui:1.6.4-SNAPSHOT"
 boostedyaml = "dev.dejvokep:boosted-yaml:1.3.7"
-messagelib = "uk.firedev:MessageLib:1.0.2"
+messagelib = "uk.firedev:MessageLib:1.0.3"
 guava = "com.google.guava:guava:33.5.0-jre"
 maven-artifact = "org.apache.maven:maven-artifact:4.0.0-rc-4"
 
@@ -85,7 +85,7 @@ jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
 jooq-meta-extensions = { module = "org.jooq:jooq-meta-extensions", version.ref = "jooq" }
 
 # Database Connectors
-connectors-mysql = "com.mysql:mysql-connector-j:9.4.0"
+connectors-mysql = "com.mysql:mysql-connector-j:9.5.0"
 connectors-sqlite = "org.xerial:sqlite-jdbc:3.47.0.0"
 
 # Testing
