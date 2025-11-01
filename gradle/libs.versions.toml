@@ -5,7 +5,7 @@ redprotect = "7.7.3"
 flyway = "10.22.0"
 jooq = "3.19.27"
 junit = "5.14.0"
-craftengine = "0.0.64.1"
+craftengine = "0.0.64.23.1"
 
 shadow = "9.2.2"
 plugin-yml = "0.8.0"
