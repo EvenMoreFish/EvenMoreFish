@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.vanishchecker.VanishChecker;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,11 @@ public abstract class EvenMoreFish extends EMFPlugin {
     public void onLoad() {
         if (!NBT.preloadApi()) {
             throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
+        }
+        try {
+            new LibraryLoader(this).loadLibraries();
+        } catch (IOException exception) {
+            throw new RuntimeException("Failed to load libraries.", exception);
         }
         instance = this;
         loadCommands();

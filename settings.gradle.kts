@@ -52,5 +52,6 @@ dependencyResolutionManagement {
             }
         }
         maven("https://jitpack.io")
+        maven("https://repo.alessiodp.com/releases/")
     }
 }

@@ -94,7 +94,9 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 
 # Commands
 commandsapi-bukkit = { module = "dev.jorel:commandapi-bukkit-shade", version = "10.1.2" }
-commandsapi-paper = { module = "dev.jorel:commandapi-paper-core", version = "11.0.0" }
+
+# Libraries
+libby-paper = "net.byteflux:libby-paper:1.3.1"
 
 strokk-annotations = { module = "net.strokkur:commands-annotations", version.ref = "strokk-commands"}
 strokk-processor = { module = "net.strokkur:commands-processor", version.ref = "strokk-commands"}
