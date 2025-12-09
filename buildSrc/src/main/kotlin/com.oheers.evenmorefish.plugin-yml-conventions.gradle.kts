@@ -19,6 +19,8 @@ afterEvaluate {
         website = "https://github.com/EvenMoreFish/EvenMoreFish"
         apiVersion = "1.20"
         foliaSupported = true
+        generateLibrariesJson = true
+        paperSkipLibraries = true
 
         softDepend = listOf(
             "AuraSkills",
@@ -119,4 +121,8 @@ afterEvaluate {
 
         }
     }
+}
+
+tasks.generateBukkitPluginDescription {
+    useGoogleMavenCentralProxy()
 }

@@ -82,7 +82,7 @@ dependencies {
     implementation(libs.jooq.meta)
     implementation(libs.bundles.connectors)
     implementation(libs.hikaricp)
-    implementation(libs.libby.paper)
+    implementation(libs.libby.bukkit)
 
     compileOnly(libs.bundles.flyway) {
         exclude("org.xerial", "sqlite-jdbc")

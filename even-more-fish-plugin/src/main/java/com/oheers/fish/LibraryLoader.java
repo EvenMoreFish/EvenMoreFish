@@ -1,11 +1,8 @@
 package com.oheers.fish;
 
 import com.google.gson.Gson;
-import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
-import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
 import net.byteflux.libby.Library;
-import net.byteflux.libby.PaperLibraryManager;
-import org.bukkit.Bukkit;
+import net.byteflux.libby.BukkitLibraryManager;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.graph.Dependency;
@@ -13,7 +10,6 @@ import org.eclipse.aether.repository.RemoteRepository;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -33,9 +29,7 @@ public class LibraryLoader {
         if (libraries == null) {
             throw new IOException("Failed to read bukkit-libraries.json");
         }
-        PaperLibraryManager manager = new PaperLibraryManager(plugin, "libraries");
-        // TEMPORARY - Load maven central
-        manager.addMavenCentral();
+        BukkitLibraryManager manager = new BukkitLibraryManager(plugin, "libraries");
         libraries.asRepositories().forEach(repo -> manager.addRepository(repo.getUrl()));
         libraries.asDependencies().forEach(dep -> {
             Artifact artifact = dep.getArtifact();

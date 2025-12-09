@@ -23,8 +23,8 @@ public class EMFModule extends EvenMoreFish{
 
     @Override
     public void onLoad() {
-        registerItemConfigs();
         super.onLoad();
+        registerItemConfigs();
     }
 
     private void registerItemConfigs() {
