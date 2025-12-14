@@ -78,11 +78,11 @@ A config example of using the biome set requirement:
         - oceans
 ```
 
-### Ingame Time
+### In-game Time
 This restricts your users to only catching fish during certain times of in-game day, this time will be inputted based on the current in-game tick, which happens 20 times every second. For example, 15 seconds past midnight would be 20*15 and four minutes would be 4*60*20. Like minSize/maxSize, you need to specify a minTime & maxTime in the format of `min-max`.
 
 A config example of using the ingame-time requirement:
-```yaml title="Ingame Time Example"
+```yaml title="In-game Time Example"
 Atlantic Cod:
   requirements:
     ingame-time: 2000-4000 # Any time between the first 2000 ticks (100 seconds) and 4000 ticks (200 seconds) of the ingame day.
@@ -156,6 +156,38 @@ A config example of using the weather requirement:
 Atlantic Cod:
   requirements:
     weather: DOWNFALL # When it is raining or snowing.
+```
+
+### Disabled
+This will automatically fail the requirement check.
+
+A config example of using the disabled requirement:
+```yaml title="Disabled Example"
+Atlantic Cod:
+  requirements:
+    disabled: true # Ensures the check always fails.
+```
+
+### Group
+This limits the fish to specific permission groups.
+
+A config example of using the group requirement:
+```yaml title="Group Example"
+Atlantic Cod:
+  requirements:
+    group: donator # When the player is in the "donator" permission group.
+```
+
+### Nearby Players
+This limits the fish to only be caught when the provided amount of players is nearby.
+
+The distance this will check is configured in the config.yml file. Higher values may cause lag.
+
+A config example of using the nearby players requirement:
+```yaml title="Nearby Players Example"
+Atlantic Cod:
+  requirements:
+    nearby-players: 5 # When there are 5 players within range of the player.
 ```
 
 ### World
