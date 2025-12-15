@@ -23,10 +23,10 @@ public enum PrefixType {
     }
 
     /**
-     * Gives the associated prefix colour + the default plugin prefix by creating two Message objects and concatenating them.
-     * If the PrefixType is NONE, then just "" is returned.
+     * Gives the associated prefix message.
+     * If the PrefixType is NONE, then an empty message is returned.
      *
-     * @return The unformatted prefix, unless the type is NONE.
+     * @return An EMFSingleMessage containing the prefix, or empty if the type is NONE.
      */
     public EMFSingleMessage getPrefix() {
         if (id == null) {
