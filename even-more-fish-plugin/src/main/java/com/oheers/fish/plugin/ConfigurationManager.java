@@ -7,6 +7,7 @@ import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
+import uk.firedev.messagelib.MessageLibSettings;
 import uk.firedev.messagelib.ObjectProcessor;
 
 import java.util.logging.Level;
@@ -51,6 +52,11 @@ public class ConfigurationManager {
     }
 
     private void prepareMessageLib() {
+        MessageLibSettings settings = MessageLibSettings.get();
+        settings.setEnableLegacy(true);
+        settings.setAllowEmptyAppend(false);
+        settings.setAllowEmptyPrepend(false);
+
         ObjectProcessor.registerProcessor(
             EMFSingleMessage.class,
             EMFSingleMessage::getComponentListMessage

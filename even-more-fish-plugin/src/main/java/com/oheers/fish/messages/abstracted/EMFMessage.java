@@ -140,100 +140,64 @@ public abstract class EMFMessage {
     // Append
 
     public final void appendString(@NotNull String string) {
-        if (isEmpty()) {
-            return;
-        }
         setUnderlying(
             getUnderlying().append(string)
         );
     }
 
     public final void appendStringList(@NotNull List<String> strings) {
-        if (isEmpty()) {
-            return;
-        }
         strings.forEach(this::appendString);
     }
 
     public final void appendMessage(@NotNull EMFMessage message) {
-        if (isEmpty()) {
-            return;
-        }
         setUnderlying(
             getUnderlying().append(message.getUnderlying())
         );
     }
 
     public final void appendMessageList(@NotNull List<EMFMessage> messages) {
-        if (isEmpty()) {
-            return;
-        }
         messages.forEach(this::appendMessage);
     }
 
     public final void appendComponent(@NotNull Component component) {
-        if (isEmpty()) {
-            return;
-        }
         setUnderlying(
             getUnderlying().append(component)
         );
     }
 
     public final void appendComponentList(@NotNull List<Component> components) {
-        if (isEmpty()) {
-            return;
-        }
         components.forEach(this::appendComponent);
     }
 
     // Prepend
 
     public final void prependString(@NotNull String string) {
-        if (isEmpty()) {
-            return;
-        }
         setUnderlying(
             getUnderlying().prepend(string)
         );
     }
 
     public final void prependStringList(@NotNull List<String> strings) {
-        if (isEmpty()) {
-            return;
-        }
         strings.forEach(this::prependString);
     }
 
     public final void prependMessage(@NotNull EMFMessage message) {
-        if (isEmpty()) {
-            return;
-        }
         setUnderlying(
             getUnderlying().prepend(message.getUnderlying())
         );
     }
 
     public final void prependMessageList(@NotNull List<EMFMessage> messages) {
-        if (isEmpty()) {
-            return;
-        }
         messages.forEach(this::prependMessage);
     }
 
     public final void prependComponent(@NotNull Component component) {
-        if (isEmpty()) {
-            return;
-        }
         setUnderlying(
             getUnderlying().prepend(component)
         );
     }
 
     public final void prependComponentList(@NotNull List<Component> components) {
-        if (isEmpty()) {
-            return;
-        }
         components.forEach(this::prependComponent);
     }
 

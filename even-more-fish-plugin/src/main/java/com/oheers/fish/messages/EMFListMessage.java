@@ -147,18 +147,12 @@ public class EMFListMessage extends EMFMessage {
     }
 
     public void appendEachLine(@NotNull Object object) {
-        if (isEmpty()) {
-            return;
-        }
         setUnderlying(
             getUnderlying().appendEachLine(object)
         );
     }
 
     public void prependEachLine(@NotNull Object object) {
-        if (isEmpty()) {
-            return;
-        }
         setUnderlying(
             getUnderlying().prependEachLine(object)
         );
