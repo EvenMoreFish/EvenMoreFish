@@ -146,4 +146,16 @@ public class EMFListMessage extends EMFMessage {
         this.underlying = this.underlying.replaceWithListInsertion(variableMap);
     }
 
+    public void appendEachLine(@NotNull Object object) {
+        setUnderlying(
+            getUnderlying().appendEachLine(object)
+        );
+    }
+
+    public void prependEachLine(@NotNull Object object) {
+        setUnderlying(
+            getUnderlying().prependEachLine(object)
+        );
+    }
+
 }

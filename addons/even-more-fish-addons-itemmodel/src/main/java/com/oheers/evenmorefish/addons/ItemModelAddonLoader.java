@@ -25,7 +25,6 @@ public class ItemModelAddonLoader extends AddonLoader {
 
     @Override
     public void loadAddons() {
-        System.out.println("Loading ItemModel Item Config.");
         ItemConfigResolver.getInstance().setItemModelResolver(ItemModelItemConfig::new);
     }
 
