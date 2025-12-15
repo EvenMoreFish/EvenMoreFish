@@ -37,7 +37,7 @@ redprotect-spigot = { module = "br.net.fabiozumbi12.RedProtect:RedProtect-Spigot
 griefprevention = "com.github.TechFortress:GriefPrevention:16.18.4"
 
 # Skills & Economy
-mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.2.045"
+mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.2.048"
 aurelium-skills = "com.github.Archy-X:AureliumSkills:Beta1.2.8"
 aura-skills = "dev.aurelium:auraskills-api-bukkit:2.3.9"
 playerpoints = "org.black_ixx:playerpoints:3.3.3"
@@ -46,8 +46,8 @@ playerpoints = "org.black_ixx:playerpoints:3.3.3"
 headdatabase-api = "com.arcaniax:HeadDatabase-API:1.3.2"
 itemsadder-api = "com.github.LoneDev6:API-ItemsAdder:3.6.1"
 nbt-api = "de.tr7zw:item-nbt-api:2.15.5"
-oraxen = "io.th0rgal:oraxen:1.199.0"
-nexo = "com.nexomc:nexo:1.15.0"
+oraxen = "io.th0rgal:oraxen:1.200.0"
+nexo = "com.nexomc:nexo:1.16.1"
 
 # Craft Engine
 craftengine-core = { module = "net.momirealms:craft-engine-core", version.ref = "craftengine" }
