@@ -3,6 +3,7 @@ package com.oheers.fish.utils;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.events.FishEatEvent;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockCookEvent;
@@ -74,6 +75,10 @@ public class ItemProtectionListener implements Listener {
             return;
         }
         ItemStack item = event.getItemInHand();
+        // We can allow player heads through as we have the SkullSaver class.
+        if (item.getType().equals(Material.PLAYER_HEAD)) {
+            return;
+        }
         if (FishUtils.isFish(item) || FishUtils.isBaitObject(item)) {
             event.setCancelled(true);
         }
