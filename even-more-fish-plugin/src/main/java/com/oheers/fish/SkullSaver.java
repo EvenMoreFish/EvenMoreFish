@@ -31,8 +31,7 @@ public class SkullSaver implements Listener {
         BlockState state = event.getBlock().getState();
         Skull skullMeta = (Skull) state;
         if (!FishUtils.isFish(skullMeta)) return;
-        
-        
+
         ItemStack stack = block.getDrops().iterator().next().clone();
         event.setCancelled(true);
         event.setDropItems(false);
@@ -40,12 +39,12 @@ public class SkullSaver implements Listener {
         try {
             Fish f = FishUtils.getFish(skullMeta, event.getPlayer());
             if (f == null) {
+                // Uncancel the event so people can still pick up the heads.
+                event.setCancelled(false);
+                event.setDropItems(true);
                 return;
             }
             ItemStack fishItem = f.give();
-            if (fishItem == null) {
-                return;
-            }
             stack.setItemMeta(fishItem.getItemMeta());
             block.setType(Material.AIR);
             block.getWorld().dropItemNaturally(block.getLocation(), stack);
@@ -57,7 +56,8 @@ public class SkullSaver implements Listener {
                 block.getLocation().getBlockY(),
                 block.getLocation().getBlockZ(),
                 block.getLocation().getBlock().getWorld().getName()
-                ));
+                )
+            );
         }
         
         
