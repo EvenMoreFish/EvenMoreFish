@@ -30,5 +30,7 @@ allprojects {
             }
         }
         maven("https://jitpack.io")
+        // For testing local snapshots.
+        //mavenLocal()
     }
 }
