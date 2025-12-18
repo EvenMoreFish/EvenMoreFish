@@ -18,7 +18,7 @@ contest-start: <reset>Uma competição de pesca para {type} começou.
 contest-end: <reset>A competição de pesca terminou.
 # The message to be sent when a player joins whilst a competition is going on
 contest-join: <reset>Uma competição de pesca para {type} está ocorrendo.
-# Shown to players when a new player takes #1 spot, remove this value or set it to "" to disable this message
+# Shown to players when a new player takes #1 spot, remove this value or set it to "-s" to disable this message
 new-first: '<reset>{player} agora é o #1'
 # Should this message appear in chat (false) or above the exp bar (true)
 action-bar-message: true
