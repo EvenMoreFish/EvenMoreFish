@@ -23,7 +23,7 @@ contest-end: <white>The fishing contest has ended.
 # The message to be sent when a player joins whilst a competition is going on
 contest-join: <white>A fishing contest for {type} is occurring.
 
-# Shown to players when a new player takes #1 spot, remove this value or set it to "" to disable this message
+# Shown to players when a new player takes #1 spot, remove this value or set it to "-s" to disable this message
 new-first: '<white>{player} is now #1'
 # Should this message appear in chat (false) or above the exp bar (true)
 action-bar-message: true
