@@ -303,7 +303,7 @@ public class Fish implements IFish {
         OfflinePlayer fishermanPlayer = getFishermanPlayer();
 
         List<String> fishLore = factory.getLore().getConfiguredValue();
-        EMFListMessage fishLoreReplacement = fishLore.isEmpty() ? EMFListMessage.empty() : EMFListMessage.fromStringList(fishLore);
+        EMFListMessage fishLoreReplacement = (fishLore == null || fishLore.isEmpty()) ? EMFListMessage.empty() : EMFListMessage.fromStringList(fishLore);
         newLoreLine.setVariableWithListInsertion("{fish_lore}", fishLoreReplacement);
 
         if (!disableFisherman && fishermanPlayer != null) {
