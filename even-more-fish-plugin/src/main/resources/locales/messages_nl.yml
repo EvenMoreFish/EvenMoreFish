@@ -18,7 +18,7 @@ contest-start: <reset>Een vistoernooi is gestart voor {type}.
 contest-end: <reset>Het vistoernooi is afgelopen.
 # The message to be sent when a player joins whilst a competition is going on
 contest-join: <reset>Er is een vissenstoernooi bezig voor {type}.
-# Shown to players when a new player takes #1 spot, remove this value or set it to "" to disable this message
+# Shown to players when a new player takes #1 spot, remove this value or set it to "-s" to disable this message
 new-first: '<reset>{player} is nu nummer 1'
 # Should this message appear in chat (false) or above the exp bar (true)
 action-bar-message: true

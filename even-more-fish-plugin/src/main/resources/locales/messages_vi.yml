@@ -18,7 +18,7 @@ contest-start: <reset>Cuộc thi câu cá xếp hạng {type} đã bắt đầu.
 contest-end: <reset>Cuộc thi câu cá đã kết thúc.
 # The message to be sent when a player joins whilst a competition is going on
 contest-join: <reset>Cuộc thi câu cá hạng {type} đang diễn ra.
-# Shown to players when a new player takes #1 spot, remove this value or set it to "" to disable this message
+# Shown to players when a new player takes #1 spot, remove this value or set it to "-s" to disable this message
 new-first: '<reset>{player} đang TOP #1'
 # Should this message appear in chat (false) or above the exp bar (true)
 action-bar-message: true
