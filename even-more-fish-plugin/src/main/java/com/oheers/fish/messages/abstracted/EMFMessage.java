@@ -44,6 +44,10 @@ public abstract class EMFMessage {
     public abstract void setUnderlying(@NotNull ComponentMessage message);
 
     public final void send(@NotNull Audience target) {
+        if (getUnderlying().isEmpty()) {
+            return;
+        }
+
         if (target instanceof Player player) {
             OfflinePlayer relevant = relevantPlayer == null ? player : relevantPlayer;
             getUnderlying().replace("{player}", relevant.getName())
@@ -62,6 +66,10 @@ public abstract class EMFMessage {
     }
 
     public final void sendActionBar(@NotNull Audience target) {
+        if (getUnderlying().isEmpty()) {
+            return;
+        }
+
         if (target instanceof Player player) {
             OfflinePlayer relevant = relevantPlayer == null ? player : relevantPlayer;
             getUnderlying().messageType(MessageType.ACTION_BAR)
