@@ -32,6 +32,15 @@ disable-use-alert: false
 # The amount of this bait to drop when it is acquired
 drop-quantity: 1
 
+# Control whether this bait can be sold in the bait menu.
+purchase:
+  # The price this bait can be purchased for.
+  # This can be set to 0 to make the bait free. -1 will disable purchasing.
+  price: 50
+  # The amount of this bait that is given when purchased.
+  # This is automatically limited to the maximum stack size of the item.
+  quantity: 1
+
 # Item configuration follows the same format as fish
 item:
   material: NAUTILUS_SHELL

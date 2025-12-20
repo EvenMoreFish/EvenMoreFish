@@ -1,6 +1,8 @@
 package com.oheers.fish.baits;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.baits.configs.BaitFileUpdates;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.baits.model.ApplicationResult;
@@ -31,6 +33,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -361,4 +364,55 @@ public class BaitHandler extends ConfigBase {
     public BaitData getBaitData() {
         return baitData;
     }
+
+    // Bait Shop
+
+    /**
+     * Fetches the purchase price of the bait from the config.
+     * Defaults to -1 to allow baits to be given for free.
+     */
+    public double getPurchasePrice() {
+        return getConfig().getDouble("purchase.price", -1.0D);
+    }
+
+    /**
+     * Fetches the purchase quantity of the bait from the config.
+     * Defaults to 0.
+     */
+    public int getPurchaseQuantity() {
+        return getConfig().getInt("purchase.quantity", 0);
+    }
+
+    /**
+     * Attempts to purchase the bait for the player.
+     * @param player The player purchasing the bait.
+     * @return True if the purchase was successful, false otherwise.
+     */
+    public boolean attemptPurchase(@NotNull Player player) {
+        double price = getPurchasePrice();
+        if (price <= -1.0D) {
+            player.sendPlainMessage("This bait cannot be purchased.");
+            return false;
+        }
+        int quantity = getPurchaseQuantity();
+        if (quantity <= 0) {
+            player.sendPlainMessage("This bait cannot be purchased.");
+            return false;
+        }
+        Economy economy = Economy.getInstance();
+        if (!economy.has(player, price)) {
+            player.sendPlainMessage("You do not have enough money.");
+            return false;
+        }
+        economy.withdraw(player, price, false);
+
+        ItemStack baitItem = create(player);
+        // Limit to the item's max stack size.
+        int finalQuantity = Math.min(baitItem.getMaxStackSize(), quantity);
+        baitItem.setAmount(finalQuantity);
+        FishUtils.giveItem(baitItem, player);
+        player.sendPlainMessage("Purchased " + finalQuantity + "x " + getId());
+        return true;
+    }
+
 }
