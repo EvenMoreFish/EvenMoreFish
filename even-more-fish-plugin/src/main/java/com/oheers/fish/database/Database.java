@@ -348,7 +348,11 @@ public class Database implements DatabaseAPI {
     }
 
     private String prepareContestantsString(@NotNull List<CompetitionEntry> entries) {
-        return StringUtils.join(entries.stream().map(CompetitionEntry::getPlayer).toList(), ",");
+        // Cleaned up to use Stream#collect instead of Stream#toList and String#join
+        return entries.stream()
+            .map(CompetitionEntry::getPlayer)
+            .map(UUID::toString)
+            .collect(Collectors.joining(","));
     }
 
     private @NotNull String prepareRarityFishString(final @NotNull Fish fish) {
