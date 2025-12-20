@@ -28,7 +28,6 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 import de.tr7zw.changeme.nbtapi.NBT;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
@@ -314,56 +313,6 @@ public class FishUtils {
         // Remaining seconds to always show, e.g. "1 minutes and 0 seconds left" and "5 seconds left"
         returning += (timeLeft % 60);
         return returning;
-    }
-
-    public static void broadcastFishMessage(@NotNull EMFMessage message, @NotNull Player referencePlayer, boolean actionBar) {
-        if (message.isEmpty()) {
-            return;
-        }
-
-        Competition activeComp = Competition.getCurrentlyActive();
-
-        List<? extends Player> validPlayers = getValidPlayers(referencePlayer, activeComp);
-        List<String> playerNames = validPlayers.stream().map(Player::getName).toList();
-        EvenMoreFish.getInstance().debug("Valid players: " + StringUtils.join(playerNames, ","));
-
-        if (actionBar) {
-            validPlayers.forEach(message::sendActionBar);
-        } else {
-            validPlayers.forEach(message::send);
-        }
-    }
-
-    private static @NotNull List<? extends Player> getValidPlayers(@NotNull Player referencePlayer, @Nullable Competition activeComp) {
-        if (activeComp == null) {
-            return Bukkit.getOnlinePlayers().stream().toList();
-        }
-
-        CompetitionFile activeCompetitionFile = activeComp.getCompetitionFile();
-
-        // Get the list of online players once and store in a variable.
-        Stream<? extends Player> validPlayers = Bukkit.getOnlinePlayers().stream();
-
-        // Combine checks for fishing rod and broadcast range, to avoid unnecessary filtering.
-        if (activeCompetitionFile.shouldBroadcastOnlyRods() || activeCompetitionFile.getBroadcastRange() > -1) {
-            validPlayers = validPlayers.filter(player -> {
-                boolean isRodHolder = !activeCompetitionFile.shouldBroadcastOnlyRods() || isHoldingMaterial(player, Material.FISHING_ROD);
-                boolean isInRange = activeCompetitionFile.getBroadcastRange() <= -1 || isWithinRange(referencePlayer, player, activeCompetitionFile.getBroadcastRange());
-                return isRodHolder && isInRange;
-            });
-        }
-
-        return validPlayers.toList();
-    }
-
-
-    public static boolean isHoldingMaterial(@NotNull Player player, @NotNull Material material) {
-        return player.getInventory().getItemInMainHand().getType().equals(material)
-                || player.getInventory().getItemInOffHand().getType().equals(material);
-    }
-
-    private static boolean isWithinRange(@NotNull Player player1, @NotNull Player player2, int rangeSquared) {
-        return player1.getWorld().equals(player2.getWorld()) && player1.getLocation().distanceSquared(player2.getLocation()) <= rangeSquared;
     }
 
     /**
