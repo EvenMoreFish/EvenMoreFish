@@ -69,7 +69,7 @@ public class BaitsGui extends ConfigGui {
                     return true;
                 }
                 bait.attemptPurchase(player);
-                // Half second cooldown to prevent spam and accidents.
+                // Quarter-second cooldown to prevent spam and accidents.
                 cooldown.applyCooldown(uuid, Duration.ofMillis(250));
                 return true;
             }
