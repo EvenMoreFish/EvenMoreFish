@@ -188,6 +188,14 @@ bait-survival-limited: <red>你必須在 <underlined>生存模式<reset> 中才�
 bait-rod-protection: <white>你的釣竿已被保護。如果你想修理它，請將它放在第一個欄位。
 # Sent when someone tries to apply a bait to a fishing rod they cannot use to fish
 bait-invalid-rod: <white>這支釣竿無法裝上魚餌！
+# Sent when a bait is purchased from the menu.
+bait-purchased: <white>You have purchased {amount}x {bait} for {price}.
+# Sent when a player attempts to purchase a bait, asking them to confirm.
+bait-confirm-purchase: "<white>Click again within 5 seconds to confirm bait purchase."
+# Sent when a player attempts to purchase a bait they cannot afford.
+bait-cannot-afford: <white>You cannot afford to purchase that bait.
+# Sent when a player attempts to purchase a bait that is not for sale.
+bait-not-for-sale: <white>That bait is not for sale.
 toggle:
   fishing:
     off: <white>你將不再捕捉自訂魚類。
@@ -271,4 +279,4 @@ bait:
   unused-slot: <gray>► ? <i>可用欄位
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 7
+version: 8
