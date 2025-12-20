@@ -188,6 +188,14 @@ bait-survival-limited: <reset>Musisz być w <underlined>survival<reset>, żeby n
 bait-rod-protection: <white>Protected your baited fishing rod. If you are trying to repair it, please put it in the first slot instead.
 # Sent when someone tries to apply a bait to a fishing rod they cannot use to fish
 bait-invalid-rod: <white>You cannot apply bait to this fishing rod!
+# Sent when a bait is purchased from the menu.
+bait-purchased: <white>You have purchased {amount}x {bait} for {price}.
+# Sent when a player attempts to purchase a bait, asking them to confirm.
+bait-confirm-purchase: "<white>Click again within 5 seconds to confirm bait purchase."
+# Sent when a player attempts to purchase a bait they cannot afford.
+bait-cannot-afford: <white>You cannot afford to purchase that bait.
+# Sent when a player attempts to purchase a bait that is not for sale.
+bait-not-for-sale: <white>That bait is not for sale.
 toggle:
   fishing:
     off: <white>You will no longer catch custom fish.
@@ -271,4 +279,4 @@ bait:
   unused-slot: <gray>► ? <i>Available Slot
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 7
+version: 8
