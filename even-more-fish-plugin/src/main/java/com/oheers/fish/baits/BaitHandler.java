@@ -391,17 +391,17 @@ public class BaitHandler extends ConfigBase {
     public boolean attemptPurchase(@NotNull Player player) {
         double price = getPurchasePrice();
         if (price <= -1.0D) {
-            player.sendPlainMessage("This bait cannot be purchased.");
+            ConfigMessage.BAIT_NOT_FOR_SALE.getMessage().send(player);
             return false;
         }
         int quantity = getPurchaseQuantity();
         if (quantity <= 0) {
-            player.sendPlainMessage("This bait cannot be purchased.");
+            ConfigMessage.BAIT_NOT_FOR_SALE.getMessage().send(player);
             return false;
         }
         Economy economy = Economy.getInstance();
         if (!economy.has(player, price)) {
-            player.sendPlainMessage("You do not have enough money.");
+            ConfigMessage.BAIT_CANNOT_AFFORD.getMessage().send(player);
             return false;
         }
         economy.withdraw(player, price, false);
@@ -411,7 +411,13 @@ public class BaitHandler extends ConfigBase {
         int finalQuantity = Math.min(baitItem.getMaxStackSize(), quantity);
         baitItem.setAmount(finalQuantity);
         FishUtils.giveItem(baitItem, player);
-        player.sendPlainMessage("Purchased " + finalQuantity + "x " + getId());
+
+        EMFMessage message = ConfigMessage.BAIT_PURCHASED.getMessage();
+        message.setAmount(finalQuantity);
+        message.setVariable("{price}", Economy.getInstance().getWorthFormat(price, false));
+        message.setBait(getDisplayName());
+        message.send(player);
+
         return true;
     }
 

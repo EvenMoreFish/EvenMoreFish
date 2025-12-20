@@ -5,6 +5,7 @@ import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.gui.ConfigGui;
+import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.CooldownHelper;
 import de.themoep.inventorygui.DynamicGuiElement;
@@ -64,7 +65,7 @@ public class BaitsGui extends ConfigGui {
                     return true;
                 }
                 if (requireConfirmation(uuid)) {
-                    player.sendPlainMessage("Click within 5 seconds to confirm.");
+                    ConfigMessage.BAIT_CONFIRM_PURCHASE.getMessage().send(player);
                     return true;
                 }
                 bait.attemptPurchase(player);
