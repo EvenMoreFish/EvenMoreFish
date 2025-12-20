@@ -46,6 +46,11 @@ public class Economy {
         registeredEconomies.forEach(type -> type.withdraw(player, amount, applyMultiplier));
     }
 
+    public boolean has(@NotNull OfflinePlayer player, double amount) {
+        return registeredEconomies.stream()
+            .allMatch(type -> type.has(player, amount));
+    }
+
     public Map<EconomyType, Double> get(@NotNull OfflinePlayer player) {
         Map<EconomyType, Double> valuesMap = new HashMap<>();
         registeredEconomies.forEach(type -> valuesMap.put(type, type.get(player)));
