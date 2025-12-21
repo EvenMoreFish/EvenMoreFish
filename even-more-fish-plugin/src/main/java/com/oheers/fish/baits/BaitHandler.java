@@ -448,7 +448,9 @@ public class BaitHandler extends ConfigBase {
             return false;
         }
         if (!economy.has(player, price)) {
-            ConfigMessage.BAIT_CANNOT_AFFORD.getMessage().send(player);
+            EMFMessage message = ConfigMessage.BAIT_CANNOT_AFFORD.getMessage();
+            message.setVariable("{price}", economy.getWorthFormat(price, false));
+            message.send(player);
             return false;
         }
         economy.withdraw(player, price, false);
