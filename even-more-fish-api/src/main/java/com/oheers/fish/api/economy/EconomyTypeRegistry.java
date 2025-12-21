@@ -1,4 +1,4 @@
-package com.oheers.fish.api.reward;
+package com.oheers.fish.api.economy;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
@@ -8,15 +8,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class RewardTypeRegistry implements EMFRegistry<RewardType> {
+public class EconomyTypeRegistry implements EMFRegistry<EconomyType> {
 
-    private static final RewardTypeRegistry instance = new RewardTypeRegistry();
+    private static final EconomyTypeRegistry instance = new EconomyTypeRegistry();
 
-    private final Map<String, RewardType> registry = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private final Map<String, EconomyType> registry = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-    private RewardTypeRegistry() {}
+    private EconomyTypeRegistry() {}
 
-    public static @NotNull RewardTypeRegistry getInstance() {
+    public static @NotNull EconomyTypeRegistry getInstance() {
         return instance;
     }
 
@@ -34,7 +34,7 @@ public class RewardTypeRegistry implements EMFRegistry<RewardType> {
      * @return An immutable copy of the current registry.
      */
     @Override
-    public @NotNull Map<String, RewardType> getRegistry() {
+    public @NotNull Map<String, EconomyType> getRegistry() {
         return Map.copyOf(registry);
     }
 
@@ -45,7 +45,7 @@ public class RewardTypeRegistry implements EMFRegistry<RewardType> {
      * @return The value, or null if not found.
      */
     @Override
-    public @Nullable RewardType get(@NotNull String key) {
+    public @Nullable EconomyType get(@NotNull String key) {
         return registry.get(key);
     }
 
@@ -57,7 +57,7 @@ public class RewardTypeRegistry implements EMFRegistry<RewardType> {
      * @return The value, or the default value if not found.
      */
     @Override
-    public @NotNull RewardType getOrDefault(@NotNull String key, @NotNull RewardType defaultValue) {
+    public @NotNull EconomyType getOrDefault(@NotNull String key, @NotNull EconomyType defaultValue) {
         return registry.getOrDefault(key, defaultValue);
     }
 
@@ -80,12 +80,12 @@ public class RewardTypeRegistry implements EMFRegistry<RewardType> {
      * @return True if the value was registered, false if a value with the same key already exists and force is false.
      */
     @Override
-    public boolean register(@NotNull RewardType value, boolean force) {
+    public boolean register(@NotNull EconomyType value, boolean force) {
         if (!force && registry.containsKey(value.getKey())) {
             return false;
         }
         registry.put(value.getKey(), value);
-        EMFPlugin.getInstance().debug("Registered " + value.getKey() + " RewardType");
+        EMFPlugin.getInstance().debug("Registered " + value.getKey() + " EconomyType");
         return true;
     }
 

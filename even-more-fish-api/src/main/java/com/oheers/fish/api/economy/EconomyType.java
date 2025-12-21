@@ -1,13 +1,20 @@
 package com.oheers.fish.api.economy;
 
+import com.oheers.fish.api.registry.EMFRegistry;
+import com.oheers.fish.api.registry.RegistryItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface EconomyType {
+public interface EconomyType extends RegistryItem {
 
     String getIdentifier();
+
+    @Override
+    default @NotNull String getKey() {
+        return getIdentifier();
+    }
 
     double getMultiplier();
 
@@ -38,7 +45,7 @@ public interface EconomyType {
     boolean isAvailable();
 
     default boolean register() {
-        return Economy.getInstance().registerEconomyType(this);
+        return EMFRegistry.ECONOMY_TYPE.register(this);
     }
 
 }

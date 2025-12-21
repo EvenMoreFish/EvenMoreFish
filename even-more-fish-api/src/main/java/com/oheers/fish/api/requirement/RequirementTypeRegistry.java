@@ -20,6 +20,16 @@ public class RequirementTypeRegistry implements EMFRegistry<RequirementType> {
         return instance;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return registry.isEmpty();
+    }
+
+    @Override
+    public void clear() {
+        registry.clear();
+    }
+
     /**
      * @return An immutable copy of the current registry.
      */
