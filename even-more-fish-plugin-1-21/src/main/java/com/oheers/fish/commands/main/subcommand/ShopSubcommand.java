@@ -1,11 +1,17 @@
 package com.oheers.fish.commands.main.subcommand;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.oheers.fish.api.economy.Economy;
+import com.oheers.fish.api.registry.EMFRegistry;
+import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.main.MainCommand;
 import com.oheers.fish.gui.guis.SellGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.permissions.UserPerms;
+import io.papermc.paper.command.brigadier.MessageComponentSerializer;
+import net.kyori.adventure.text.Component;
 import net.strokkur.commands.annotations.DefaultExecutes;
 import net.strokkur.commands.annotations.Executes;
 import net.strokkur.commands.annotations.Executor;
@@ -30,6 +36,17 @@ public class ShopSubcommand {
     @Executes
     public void execute(CommandSender sender, Player target) {
         performCommand(sender, target);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    @Executes
+    public void execute(CommandSender sender) throws CommandSyntaxException {
+        if (!(sender instanceof Player executor)) {
+            throw new SimpleCommandExceptionType(MessageComponentSerializer.message().serialize(
+                Component.text("This command requires a player executor!")
+            )).create();
+        }
+        performCommand(executor, executor);
     }
 
     private void performCommand(@NotNull CommandSender sender, @NotNull Player target) {
