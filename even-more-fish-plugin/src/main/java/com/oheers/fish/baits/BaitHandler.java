@@ -3,6 +3,8 @@ package com.oheers.fish.baits;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.economy.Economy;
+import com.oheers.fish.api.economy.EconomyType;
+import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.baits.configs.BaitFileUpdates;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.baits.model.ApplicationResult;
@@ -47,7 +49,7 @@ public class BaitHandler extends ConfigBase {
     private final Logger logger = EvenMoreFish.getInstance().getLogger();
     private final FishManager fishManager;
     private final MainConfig mainConfig;
-
+    private final Economy economy;
 
     /**
      * This represents a bait, which can be used to boost the likelihood that a certain fish or fish rarity appears from
@@ -69,6 +71,15 @@ public class BaitHandler extends ConfigBase {
         this.fishManager = fishManager;
         this.mainConfig = mainConfig;
 
+        this.economy = fetchEconomyInstance();
+        System.out.println("Bait " + id);
+        if (economy == null) {
+            System.out.println("No economy because not purchasable.");
+        } else {
+            System.out.println("Economy found with the following types:");
+            System.out.println(economy.getEconomyTypes().stream().map(EconomyType::getIdentifier).toList());
+        }
+
         this.itemFactory = new BaitItemFactory(
                 baitData.id(),
                 baitData.rarities(),
@@ -86,6 +97,34 @@ public class BaitHandler extends ConfigBase {
         }
 
         return baitId;
+    }
+
+    /**
+     * Fetches the economy instance that will belong to this bait.
+     * If the bait is not purchasable, null is returned.
+     * If there are no provided economy types, the global economy instance is returned.
+     */
+    private Economy fetchEconomyInstance() {
+        // Bait cannot be purchased at all.
+        if (getPurchasePrice() <= -1.0D || getPurchaseQuantity() <= 0) {
+            return null;
+        }
+
+        List<String> typeStrings = getConfig().getStringList("purchase.economy-types");
+        // No economy types specified, use global economy.
+        if (typeStrings.isEmpty()) {
+            return Economy.getInstance();
+        }
+        List<EconomyType> types = typeStrings.stream()
+            .map(EMFRegistry.ECONOMY_TYPE::get)
+            .filter(Objects::nonNull)
+            .toList();
+        // No valid economy types found, use global economy.
+        if (types.isEmpty()) {
+            return Economy.getInstance();
+        }
+        // Return new economy instance for specified types.
+        return Economy.economy(types);
     }
 
     /**
@@ -206,14 +245,14 @@ public class BaitHandler extends ConfigBase {
         double boostRate = shouldApplyBoost(rarity) ? mainConfig.getBaitBoostRate() : DEFAULT_BOOST_RATE;
 
         return fishManager.getFish(
-                rarity,
-                location,
-                player,
-                boostRate,
-                eligibleFish,
-                true,
-                null,
-                null
+            rarity,
+            location,
+            player,
+            boostRate,
+            eligibleFish,
+            true,
+            null,
+            null
         );
     }
 
@@ -273,7 +312,7 @@ public class BaitHandler extends ConfigBase {
 
         try {
             ApplicationResult result = BaitNBTManager.applyBaitedRodNBT(fishingRod, this, -1); //updates the state of the rod, if the correct fish was baited
-            if (result == null || result.getFishingRod() == null) {
+            if (result.getFishingRod() == null) {
                 return;
             }
 
@@ -299,7 +338,6 @@ public class BaitHandler extends ConfigBase {
      *
      * @param player The player that's used the bait.
      */
-
     private void alertUsage(Player player) {
         if (baitData.disableUseAlert()) {
             return;
@@ -328,7 +366,6 @@ public class BaitHandler extends ConfigBase {
         return message;
     }
 
-
     /**
      * @return The displayname setting for the bait.
      */
@@ -354,10 +391,10 @@ public class BaitHandler extends ConfigBase {
         super.reload();
         this.baitData = loadBaitData();
         this.itemFactory = new BaitItemFactory(
-                baitData.id(),
-                baitData.rarities(),
-                baitData.fish(),
-                getConfig()
+            baitData.id(),
+            baitData.rarities(),
+            baitData.fish(),
+            getConfig()
         ).createFactory();
     }
 
@@ -384,11 +421,22 @@ public class BaitHandler extends ConfigBase {
     }
 
     /**
+     * Fetches the economy that this bait is purchased with.
+     */
+    public Economy getEconomy() {
+        return this.economy;
+    }
+
+    /**
      * Attempts to purchase the bait for the player.
      * @param player The player purchasing the bait.
      * @return True if the purchase was successful, false otherwise.
      */
     public boolean attemptPurchase(@NotNull Player player) {
+        if (economy == null) {
+            ConfigMessage.BAIT_NOT_FOR_SALE.getMessage().send(player);
+            return false;
+        }
         double price = getPurchasePrice();
         if (price <= -1.0D) {
             ConfigMessage.BAIT_NOT_FOR_SALE.getMessage().send(player);
@@ -399,7 +447,6 @@ public class BaitHandler extends ConfigBase {
             ConfigMessage.BAIT_NOT_FOR_SALE.getMessage().send(player);
             return false;
         }
-        Economy economy = Economy.getInstance();
         if (!economy.has(player, price)) {
             ConfigMessage.BAIT_CANNOT_AFFORD.getMessage().send(player);
             return false;
@@ -414,7 +461,7 @@ public class BaitHandler extends ConfigBase {
 
         EMFMessage message = ConfigMessage.BAIT_PURCHASED.getMessage();
         message.setAmount(finalQuantity);
-        message.setVariable("{price}", Economy.getInstance().getWorthFormat(price, false));
+        message.setVariable("{price}", economy.getWorthFormat(price, false));
         message.setBait(getDisplayName());
         message.send(player);
 

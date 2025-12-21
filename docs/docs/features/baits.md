@@ -35,6 +35,11 @@ purchase:
   # The amount of this bait that is given when purchased.
   # This is automatically limited to the maximum stack size of the item.
   quantity: 1
+  # The economy types to use for purchasing.
+  # Optional. If not set, all available types will be required.
+  economy-types: 
+    - vault
+    - playerpoints
 ```
 
 After this, the bait can be clicked inside the baits menu to be purchased by the player.
