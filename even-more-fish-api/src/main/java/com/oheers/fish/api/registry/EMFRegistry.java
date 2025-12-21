@@ -11,10 +11,10 @@ import java.util.Map;
 
 public interface EMFRegistry<T extends RegistryItem> {
 
-    RequirementTypeRegistry REQUIREMENT_TYPE = RequirementTypeRegistry.getInstance();
-    RewardTypeRegistry REWARD_TYPE = RewardTypeRegistry.getInstance();
-    ItemAddonRegistry ITEM_ADDON = ItemAddonRegistry.getInstance();
-    EconomyTypeRegistry ECONOMY_TYPE = EconomyTypeRegistry.getInstance();
+    @NotNull RequirementTypeRegistry REQUIREMENT_TYPE = RequirementTypeRegistry.getInstance();
+    @NotNull RewardTypeRegistry REWARD_TYPE = RewardTypeRegistry.getInstance();
+    @NotNull ItemAddonRegistry ITEM_ADDON = ItemAddonRegistry.getInstance();
+    @NotNull EconomyTypeRegistry ECONOMY_TYPE = EconomyTypeRegistry.getInstance();
 
     boolean isEmpty();
 

@@ -6,6 +6,7 @@ import com.oheers.fish.api.EMFAPI;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.events.EMFPluginReloadEvent;
 import com.oheers.fish.api.plugin.EMFPlugin;
+import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.api.requirement.RequirementType;
 import com.oheers.fish.api.reward.RewardType;
 import com.oheers.fish.baits.manager.BaitManager;
@@ -227,6 +228,9 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
         competitionQueue.reload();
 
+        // Refresh global economy instance with any new EconomyTypes that may have been registered.
+        Economy.getInstance().setEconomyTypes(EMFRegistry.ECONOMY_TYPE.getRegistry().values());
+        
         if (sender != null) {
             ConfigMessage.RELOAD_SUCCESS.getMessage().send(sender);
         }

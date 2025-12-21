@@ -1,5 +1,6 @@
 package com.oheers.fish.api.economy;
 
+import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.api.registry.RegistryItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
@@ -44,7 +45,7 @@ public interface EconomyType extends RegistryItem {
     boolean isAvailable();
 
     default boolean register() {
-        return EconomyTypeRegistry.getInstance().register(this);
+        return EMFRegistry.ECONOMY_TYPE.register(this);
     }
 
 }

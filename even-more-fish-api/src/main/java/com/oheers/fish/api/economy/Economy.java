@@ -1,84 +1,124 @@
 package com.oheers.fish.api.economy;
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
+import com.oheers.fish.api.registry.EMFRegistry;
+import com.oheers.fish.api.registry.RegistryItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class Economy {
 
-    private final Set<EconomyType> registeredEconomies;
-    private static Economy instance = null;
+    public static Economy instance;
 
-    private Economy() {
-        this.registeredEconomies = new HashSet<>();
+    private final List<EconomyType> relevantTypes;
+
+    private Economy(@NotNull Collection<EconomyType> types) {
+        this.relevantTypes = new ArrayList<>(types);
     }
 
-    public static Economy getInstance() {
+    /**
+     * Creates a new Economy instance with all registered EconomyTypes.
+     */
+    public static @NotNull Economy economy() {
+        return new Economy(EMFRegistry.ECONOMY_TYPE.getRegistry().values());
+    }
+
+    /**
+     * Creates a new Economy instance with a list of EconomyTypes.
+     * @param types List of EconomyType to register.
+     */
+    public static @NotNull Economy economy(@NotNull Collection<EconomyType> types) {
+        return new Economy(types);
+    }
+
+    public static @NotNull Economy getInstance() {
         if (instance == null) {
-            instance = new Economy();
+            instance = economy();
         }
         return instance;
     }
 
-    public List<EconomyType> getRegisteredEconomies() { return List.copyOf(registeredEconomies); }
+    /**
+     * @deprecated Use {@link #getEconomyTypes()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public List<EconomyType> getRegisteredEconomies() {
+        return getEconomyTypes();
+    }
+
+    /**
+     * Returns a copy of the EconomyTypes relevant to this Economy instance.
+     * If no types were provided at creation, all registered EconomyTypes are returned.
+     */
+    public List<EconomyType> getEconomyTypes() {
+        return List.copyOf(relevantTypes);
+    }
+
+    public void setEconomyTypes(@NotNull Collection<EconomyType> types) {
+        relevantTypes.clear();
+        relevantTypes.addAll(types);
+    }
 
     /**
      * @return True if any registered economy is available.
      */
     public boolean isEnabled() {
-        if (registeredEconomies.isEmpty()) {
-            EMFPlugin.getInstance().getLogger().warning("There are no registered economies.");
+        if (relevantTypes.isEmpty()) {
+            Logging.warn("There are no relevant economies.");
             return false;
         }
-
-        return registeredEconomies.stream().anyMatch(EconomyType::isAvailable);
+        return relevantTypes.stream().anyMatch(EconomyType::isAvailable);
     }
 
     public void deposit(@NotNull OfflinePlayer player, double amount, boolean applyMultiplier) {
-        registeredEconomies.forEach(type -> type.deposit(player, amount, applyMultiplier));
+        relevantTypes.forEach(type -> type.deposit(player, amount, applyMultiplier));
     }
 
     public void withdraw(@NotNull OfflinePlayer player, double amount, boolean applyMultiplier) {
-        registeredEconomies.forEach(type -> type.withdraw(player, amount, applyMultiplier));
+        relevantTypes.forEach(type -> type.withdraw(player, amount, applyMultiplier));
     }
 
     public boolean has(@NotNull OfflinePlayer player, double amount) {
-        return registeredEconomies.stream()
+        return relevantTypes.stream()
             .allMatch(type -> type.has(player, amount));
     }
 
-    public Map<EconomyType, Double> get(@NotNull OfflinePlayer player) {
-        Map<EconomyType, Double> valuesMap = new HashMap<>();
-        registeredEconomies.forEach(type -> valuesMap.put(type, type.get(player)));
-        return valuesMap;
-    }
-
+    /**
+     * Gets the economy type registered to this instance with the given identifier.
+     */
     public @NotNull Optional<EconomyType> getEconomyType(@NotNull String identifier) {
-        return registeredEconomies.stream()
-                .filter(EconomyType::isAvailable)
-                .filter(type -> type.getIdentifier().equalsIgnoreCase(identifier))
-                .findFirst();
+        for (EconomyType type : relevantTypes) {
+            if (type.getIdentifier().equalsIgnoreCase(identifier)) {
+                return Optional.of(type);
+            }
+        }
+        return Optional.empty();
     }
 
     public @NotNull Component getWorthFormat(double value, boolean applyMultiplier) {
-        List<Component> components = registeredEconomies.stream()
-                .map(type -> type.formatWorth(value, applyMultiplier))
-                .filter(Objects::nonNull)
-                .toList();
+        List<Component> components = getEconomyTypes().stream()
+            .map(type -> type.formatWorth(value, applyMultiplier))
+            .filter(Objects::nonNull)
+            .toList();
         return Component.join(JoinConfiguration.commas(true), components);
     }
 
+    /**
+     * @deprecated Use {@link EconomyTypeRegistry#register(RegistryItem)} instead.
+     */
+    @Deprecated(forRemoval = true)
     public boolean registerEconomyType(@NotNull EconomyType economyType) {
-        if (getEconomyType(economyType.getIdentifier()).isPresent()) {
-            // guessing this one is the problem
-            return false;
+        boolean registered = EMFRegistry.ECONOMY_TYPE.register(economyType);
+        if (registered) {
+            relevantTypes.add(economyType);
         }
-
-        return registeredEconomies.add(economyType);
+        return registered;
     }
 
 }
