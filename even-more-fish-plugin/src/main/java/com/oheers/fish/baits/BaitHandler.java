@@ -72,13 +72,6 @@ public class BaitHandler extends ConfigBase {
         this.mainConfig = mainConfig;
 
         this.economy = fetchEconomyInstance();
-        System.out.println("Bait " + id);
-        if (economy == null) {
-            System.out.println("No economy because not purchasable.");
-        } else {
-            System.out.println("Economy found with the following types:");
-            System.out.println(economy.getEconomyTypes().stream().map(EconomyType::getIdentifier).toList());
-        }
 
         this.itemFactory = new BaitItemFactory(
                 baitData.id(),
