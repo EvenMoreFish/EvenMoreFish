@@ -130,12 +130,8 @@ public class MainConfig extends ConfigBase {
     public boolean shouldProtectBaitedRods() { return getConfig().getBoolean("protect-baited-rods", true); }
 
     public BossBar.Overlay getBarStyle() {
-        try {
-            BarStyle style = BarStyle.valueOf(getConfig().getString("barstyle", "SEGMENTED_10"));
-            return FishUtils.modernizeBarStyle(style);
-        } catch (IllegalArgumentException exception) {
-            return BossBar.Overlay.NOTCHED_10;
-        }
+        String styleString = getConfig().getString("barstyle");
+        return FishUtils.fetchBarStyle(styleString);
     }
 
     public boolean sellOverDrop() {
