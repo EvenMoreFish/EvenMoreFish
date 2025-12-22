@@ -7,8 +7,6 @@ import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.events.EMFPluginReloadEvent;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
-import com.oheers.fish.api.requirement.RequirementType;
-import com.oheers.fish.api.reward.RewardType;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.competition.AutoRunner;
 import com.oheers.fish.competition.Competition;
@@ -31,12 +29,9 @@ import de.themoep.inventorygui.InventoryGui;
 import de.tr7zw.changeme.nbtapi.NBT;
 
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.vanishchecker.VanishChecker;
@@ -198,7 +193,7 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
     @Override
     public boolean isDebugSession() {
-        return MainConfig.getInstance().debugSession();
+        return MainConfig.getInstance().shouldDebug();
     }
 
     // gets called on server shutdown to simulate all players closing their Guis

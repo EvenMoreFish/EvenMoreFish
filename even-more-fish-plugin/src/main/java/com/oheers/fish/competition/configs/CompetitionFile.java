@@ -237,12 +237,12 @@ public class CompetitionFile extends ConfigBase {
      */
     public @NotNull BossBar.Color getBossbarColour() {
         String colour = getConfig().getString("bossbar-colour", "GREEN");
-        try {
-            return BossBar.Color.valueOf(colour.toUpperCase());
-        } catch (IllegalArgumentException exception) {
+        BossBar.Color color = FishUtils.getEnumValue(BossBar.Color.class, colour);
+        if (color == null) {
             EvenMoreFish.getInstance().getLogger().warning(colour + " is not a valid bossbar colour. Defaulting to GREEN.");
             return BossBar.Color.GREEN;
         }
+        return color;
     }
 
     /**
@@ -275,12 +275,12 @@ public class CompetitionFile extends ConfigBase {
         if (soundString.equalsIgnoreCase("none")) {
             return null;
         }
-        try {
-            return Sound.valueOf(soundString.toUpperCase());
-        } catch (IllegalArgumentException exception) {
+        Sound sound = FishUtils.getEnumValue(Sound.class, soundString);
+        if (sound == null) {
             EvenMoreFish.getInstance().getLogger().warning(soundString + " is not a valid sound. Defaulting to NONE.");
             return null;
         }
+        return sound;
     }
 
     /**

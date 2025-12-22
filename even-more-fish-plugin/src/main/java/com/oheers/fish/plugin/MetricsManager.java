@@ -17,7 +17,7 @@ public class MetricsManager {
     }
 
     public void setupMetrics() {
-        if (MainConfig.getInstance().debugSession()) {
+        if (MainConfig.getInstance().shouldDebug()) {
             return;
         }
         Metrics metrics = new Metrics(plugin, 11054);

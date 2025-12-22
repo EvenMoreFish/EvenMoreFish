@@ -18,7 +18,7 @@ public class ItemProtectionListener implements Listener {
     // Protect against crafting with an EMF item.
     @EventHandler
     public void onCraft(CraftItemEvent event) {
-        if (!MainConfig.getInstance().blockCrafting()) {
+        if (!MainConfig.getInstance().preventCrafting()) {
             return;
         }
         for (ItemStack craftItem : event.getInventory().getMatrix()) {
@@ -35,7 +35,7 @@ public class ItemProtectionListener implements Listener {
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent event) {
         // If the fish has eat-event, ignore item protection.
-        if (FishEatEvent.getInstance().checkEatEvent(event) || !MainConfig.getInstance().blockConsume()) {
+        if (FishEatEvent.getInstance().checkEatEvent(event) || !MainConfig.getInstance().preventConsume()) {
             return;
         }
         ItemStack item = event.getItem();
@@ -47,7 +47,7 @@ public class ItemProtectionListener implements Listener {
     // Protect against burning an EMF item as furnace fuel.
     @EventHandler
     public void onFurnaceBurn(FurnaceBurnEvent event) {
-        if (!MainConfig.getInstance().blockFurnaceBurn()) {
+        if (!MainConfig.getInstance().preventFurnaceBurn()) {
             return;
         }
         ItemStack item = event.getFuel();
@@ -59,7 +59,7 @@ public class ItemProtectionListener implements Listener {
     // Protect against cooking an EMF item.
     @EventHandler
     public void onCook(BlockCookEvent event) {
-        if (!MainConfig.getInstance().blockCooking()) {
+        if (!MainConfig.getInstance().preventCooking()) {
             return;
         }
         ItemStack item = event.getSource();
@@ -71,7 +71,7 @@ public class ItemProtectionListener implements Listener {
     // Protect against placing an EMF item.
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
-        if (!MainConfig.getInstance().blockPlacing()) {
+        if (!MainConfig.getInstance().preventPlacing()) {
             return;
         }
         ItemStack item = event.getItemInHand();

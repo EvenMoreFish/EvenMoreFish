@@ -229,6 +229,7 @@ baits-menu:
   # The character to use for the bait items.
   bait-character: b
   # The lore to use when a bait can be purchased.
+  # Supported variables: {quantity}, {price}, {bait}
   purchase-lore:
     - Click to purchase {quantity}x {bait} for {price}
 

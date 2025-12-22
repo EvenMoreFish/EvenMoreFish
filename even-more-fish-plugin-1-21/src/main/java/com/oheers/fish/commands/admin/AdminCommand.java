@@ -49,6 +49,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 import java.util.jar.Attributes;
 
+@SuppressWarnings("UnstableApiUsage")
 @NullMarked
 @Command("admin")
 @Permission(AdminPerms.ADMIN)

@@ -97,7 +97,7 @@ public class GriefPreventionEconomyType implements EconomyType {
             display = "{amount} Claim Block(s)";
         }
         EMFSingleMessage message = EMFSingleMessage.fromString(display);
-        message.setVariable("{amount}", String.valueOf(worth));
+        message.setVariable("{amount}", worth);
         return message.getComponentMessage();
     }
 

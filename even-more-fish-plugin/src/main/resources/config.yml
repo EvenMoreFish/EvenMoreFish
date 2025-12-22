@@ -1,6 +1,10 @@
 # Is the plugin enabled?
 enabled: true
 
+# Should the plugin print debug information to the console?
+# WARNING: This will flood your console with messages!
+debug: false
+
 # The locale of the message file
 # Currently: en, cs, de, es, fr, ja, ko, nl, pl, pt-br, ru, tr, vn, zh_cn
 # Delete messages.yml before changing this
@@ -13,6 +17,10 @@ locale: en
 decimal-locale: en_US
 
 fishing:
+  # Gives the fish directly to the player instead of creating an item entity.
+  # This only happens if the player has space in their inventory.
+  give-straight-to-inventory: false
+
   # Should fish be caught from fishing rods?
   catch-enabled: true
   # Should EMF fish only be given during a competition?
@@ -38,6 +46,8 @@ respect-vanished: true
 # ATTENTION: Toggling this requires a full server restart.
 database:
   enabled: false
+  # Prevents verbose output when the plugin interacts with the database.
+  disable-verbose: true
   # Available option are: mysql, sqlite
   type: sqlite
   # The address of the database
@@ -59,9 +69,6 @@ database:
       unit: SECONDS
       user-fish-stats: 5
       competition: 5
-
-# Prevents verbose output when the plugin interacts with the database.
-disable-db-verbose: true
 
 # When dropping tool items (e.g. fishing rod) should they be dropped with a random durability
 # instead of always full durability?
@@ -87,8 +94,8 @@ economy:
     display: '{amount} Claim Block(s)'
 
 # Setting this to change the boosbar style
-# you can use like: SEGMENTED_6 SEGMENTED_10 SEGMENTED_12 SEGMENTED_20 SOLID
-barstyle: SEGMENTED_10
+# you can use like: NOTCHED_6 NOTCHED_10 NOTCHED_12 NOTCHED_20 PROGRESS
+barstyle: NOTCHED_10
 
 # Should the user need emf.use_rod permission in order to catch default custom fish. This requires
 # Vault and a permission manager such as LuckPerms.
@@ -97,21 +104,21 @@ requires-fishing-permission: false
 # Various protections for EMF items.
 # These do not apply if raw-material is used.
 item-protection:
-  # Should EMF items be blocked from being crafted into other items?
+  # Should the plugin prevent EMF items being crafted into other items?
   # For example, when the player tries to craft the starfish into a beacon.
-  block-crafting: true
-  # Should EMF items be blocked from being consumed?
+  prevent-crafting: true
+  # Should the plugin prevent EMF items being consumed?
   # For example, when the player tries to drink the epic elixir bait.
-  block-consume: true
-  # Should EMF items be blocked from being used in furnaces as fuel?
+  prevent-consume: true
+  # Should the plugin prevent EMF items being used in furnaces as fuel?
   # For example, when the player places an NBT rod in a furnace's fuel slot.
-  block-furnace-burn: true
-  # Should EMF items be blocked from being cooked?
+  prevent-furnace-burn: true
+  # Should the plugin prevent EMF items being cooked?
   # For example, when the player tries to cook an atlantic cod.
-  block-cooking: true
-  # Should EMF items be blocked from being placed?
+  prevent-cooking: true
+  # Should the plugin prevent EMF items being placed?
   # For example, when the player tries to place a Spongebob.
-  block-placing: true
+  prevent-placing: true
 
 # /emf shop configuration. If you wish to change the layout, please look at the guis.yml file.
 sell-gui:
@@ -195,9 +202,6 @@ requirements:
   nearby-players:
     # How far should the plugin check in blocks? Large values may cause lag.
     range: 20
-
-# When the player catches a fish, should the fish be put straight into the inventory instead of the vanilla catching animation.
-give-straight-to-inventory: false
 
 # Customize the plugin's command. Requires a server restart to take effect.
 # NOTE: All names and aliases must use English letters only, as the command library does not support other characters.

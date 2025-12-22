@@ -89,6 +89,10 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("fishing.catch-only-in-competition", false);
     }
 
+    public boolean isGiveStraightToInventory() {
+        return getConfig().getBoolean("fishing.give-straight-to-inventory", false);
+    }
+
     public boolean isFishCatchOverrideOnlyFish() {
         return getConfig().getBoolean("fishing.only-fish", false);
     }
@@ -130,12 +134,8 @@ public class MainConfig extends ConfigBase {
     public boolean shouldProtectBaitedRods() { return getConfig().getBoolean("protect-baited-rods", true); }
 
     public BossBar.Overlay getBarStyle() {
-        try {
-            BarStyle style = BarStyle.valueOf(getConfig().getString("barstyle", "SEGMENTED_10"));
-            return FishUtils.modernizeBarStyle(style);
-        } catch (IllegalArgumentException exception) {
-            return BossBar.Overlay.NOTCHED_10;
-        }
+        String styleString = getConfig().getString("barstyle");
+        return FishUtils.fetchBarStyle(styleString);
     }
 
     public boolean sellOverDrop() {
@@ -151,7 +151,7 @@ public class MainConfig extends ConfigBase {
     }
 
     public boolean doDBVerbose() {
-        return !getConfig().getBoolean("disable-db-verbose", false);
+        return !getConfig().getBoolean("database.disable-verbose", false);
     }
 
     public boolean requireCustomRod() {
@@ -162,28 +162,28 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("requires-fishing-permission", false);
     }
 
-    public boolean blockCrafting() {
-        return getConfig().getBoolean("item-protection.block-crafting", true);
+    public boolean preventCrafting() {
+        return getConfig().getBoolean("item-protection.prevent-crafting", true);
     }
 
-    public boolean blockConsume() {
-        return getConfig().getBoolean("item-protection.block-consume", true);
+    public boolean preventConsume() {
+        return getConfig().getBoolean("item-protection.prevent-consume", true);
     }
 
-    public boolean blockFurnaceBurn() {
-        return getConfig().getBoolean("item-protection.block-furnace-burn", true);
+    public boolean preventFurnaceBurn() {
+        return getConfig().getBoolean("item-protection.prevent-furnace-burn", true);
     }
 
-    public boolean blockCooking() {
-        return getConfig().getBoolean("item-protection.block-cooking", true);
+    public boolean preventCooking() {
+        return getConfig().getBoolean("item-protection.prevent-cooking", true);
     }
 
-    public boolean blockPlacing() {
-        return getConfig().getBoolean("item-protection.block-placing", true);
+    public boolean preventPlacing() {
+        return getConfig().getBoolean("item-protection.prevent-placing", true);
     }
 
-    public boolean debugSession() {
-        return getConfig().getBoolean("debug-session", false);
+    public boolean shouldDebug() {
+        return getConfig().getBoolean("debug", false);
     }
 
     public boolean databaseEnabled() {
@@ -307,10 +307,6 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("command.old-base-command-behavior", false);
     }
 
-    public boolean giveStraightToInventory() {
-        return getConfig().getBoolean("give-straight-to-inventory");
-    }
-
     public Map<String, List<Biome>> getBiomeSets() {
         Map<String, List<Biome>> biomeSetMap = new HashMap<>();
         Section section = getConfig().getSection("biome-sets");
@@ -394,6 +390,19 @@ public class MainConfig extends ConfigBase {
             })
             // Config Version 2 - Rework NBT Rods
             .addRelocation("2", "require-nbt-rod", "fishing.require-custom-rod", '.')
+            // Config Version 4:
+            // Rename all item protection configs to use "prevent" rather than "block".
+            // Move disable-db-verbose to database.disable-verbose.
+            // Move give-straight-to-inventory to fishing.give-straight-to-inventory.
+            .addRelocations("4", Map.of(
+                "item-protection.block-crafting", "item-protection.prevent-crafting",
+                "item-protection.block-consume", "item-protection.prevent-consume",
+                "item-protection.block-furnace-burn", "item-protection.prevent-furnace-burn",
+                "item-protection.block-cooking", "item-protection.prevent-cooking",
+                "item-protection.block-placing", "item-protection.prevent-placing",
+                "disable-db-verbose", "database.disable-verbose",
+                "give-straight-to-inventory", "fishing.give-straight-to-inventory"
+            ), '.')
             .build();
     }
 

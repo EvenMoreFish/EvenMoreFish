@@ -1,6 +1,7 @@
 package com.oheers.fish.addons.internal.requirement;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.requirement.RequirementType;
 import org.bukkit.World;
@@ -19,10 +20,8 @@ public class MoonPhaseRequirementType extends RequirementType {
         }
         int phaseId = (int) (world.getFullTime() / 24000) % 8;
         for (String value : values) {
-            @NotNull Phase phase;
-            try {
-                phase = Phase.valueOf(value.toUpperCase());
-            } catch (IllegalArgumentException exception) {
+            MoonPhase phase = FishUtils.getEnumValue(MoonPhase.class, value);
+            if (phase == null) {
                 EvenMoreFish.getInstance().getLogger().severe(value + " is not a valid moon phase.");
                 return false;
             }

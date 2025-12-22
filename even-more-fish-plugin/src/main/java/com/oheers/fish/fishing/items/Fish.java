@@ -550,12 +550,12 @@ public class Fish implements IFish {
         if (typeStr == null) {
             return rarity.getCatchType();
         }
-        try {
-            return CatchType.valueOf(typeStr.toUpperCase());
-        } catch (IllegalArgumentException exception) {
+        CatchType catchType = FishUtils.getEnumValue(CatchType.class, typeStr);
+        if (catchType == null) {
             EvenMoreFish.getInstance().getLogger().warning("Fish " + getName() + " has an incorrect catch-type. Defaulting to its rarity's catch-type.");
             return rarity.getCatchType();
         }
+        return catchType;
     }
 
     @Override

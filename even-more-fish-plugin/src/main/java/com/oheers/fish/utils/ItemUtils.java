@@ -1,5 +1,6 @@
 package com.oheers.fish.utils;
 
+import com.oheers.fish.FishUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -21,23 +22,14 @@ public class ItemUtils {
         if (materialName == null) {
             return null;
         }
-        try {
-            return Material.valueOf(materialName.toUpperCase());
-        } catch (IllegalArgumentException ex) {
-            return null;
-        }
+        return FishUtils.getEnumValue(Material.class, materialName);
     }
 
     public static boolean isValidMaterial(@Nullable String materialName) {
         if (materialName == null || materialName.isEmpty()) {
             return false;
         }
-        try {
-            Material.valueOf(materialName.toUpperCase());
-            return true;
-        } catch (IllegalArgumentException ex) {
-            return false;
-        }
+        return getMaterial(materialName) != null;
     }
 
 }
