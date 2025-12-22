@@ -23,7 +23,7 @@ vault-api = "com.github.MilkBowl:VaultAPI:1.7.1"
 placeholder-api = "me.clip:placeholderapi:2.11.7"
 bstats = "org.bstats:bstats-bukkit:3.1.0"
 
-kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21"
+kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.0"
 
 # World Management
 worldguard-core = { module = "com.sk89q.worldguard:worldguard-core", version.ref = "worldguard" }
@@ -94,7 +94,7 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 
 # Commands
 commandsapi-bukkit = { module = "dev.jorel:commandapi-bukkit-shade", version = "10.1.2" }
-commandsapi-paper = { module = "dev.jorel:commandapi-paper-core", version = "11.0.0" }
+commandsapi-paper = { module = "dev.jorel:commandapi-paper-core", version = "11.1.0" }
 
 strokk-annotations = { module = "net.strokkur:commands-annotations", version.ref = "strokk-commands"}
 strokk-processor = { module = "net.strokkur:commands-processor", version.ref = "strokk-commands"}
