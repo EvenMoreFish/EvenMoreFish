@@ -1,6 +1,6 @@
 package com.oheers.fish.addons.internal.requirement;
 
-public enum Phase {
+public enum MoonPhase {
 
     FULL_MOON(0),
     WANING_GIBBOUS(1),
@@ -13,7 +13,7 @@ public enum Phase {
 
     final int phaseID;
 
-    Phase(int phaseID) {
+    MoonPhase(int phaseID) {
         this.phaseID = phaseID;
     }
 
