@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public class EMFFishHuntEvent extends Event implements Cancellable {
     private final LocalDateTime huntTime;
     private boolean cancel;
 
+    @ApiStatus.Internal
     public EMFFishHuntEvent(@NotNull Fish fish, @NotNull Player player, @NotNull LocalDateTime huntTime) {
         this.fish = fish;
         this.player = player;

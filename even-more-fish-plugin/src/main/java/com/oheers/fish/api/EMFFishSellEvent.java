@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ public class EMFFishSellEvent extends Event implements Cancellable {
     private final LocalDateTime soldTime;
     private boolean cancel;
 
-
+    @ApiStatus.Internal
     public EMFFishSellEvent(@NotNull List<SoldFish> soldFish, @NotNull Player player, double worth, @NotNull LocalDateTime soldTime) {
         this.soldFish = soldFish;
         this.player = player;

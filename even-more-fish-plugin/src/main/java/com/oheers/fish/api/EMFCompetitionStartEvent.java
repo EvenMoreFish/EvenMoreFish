@@ -3,6 +3,7 @@ package com.oheers.fish.api;
 import com.oheers.fish.competition.Competition;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public class EMFCompetitionStartEvent extends Event {
@@ -11,6 +12,7 @@ public class EMFCompetitionStartEvent extends Event {
 
     private final Competition competition;
 
+    @ApiStatus.Internal
     public EMFCompetitionStartEvent(@NotNull Competition competition) {
         this.competition = competition;
     }
