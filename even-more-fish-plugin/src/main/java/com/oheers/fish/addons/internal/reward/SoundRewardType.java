@@ -1,6 +1,7 @@
 package com.oheers.fish.addons.internal.reward;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.reward.RewardType;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -13,10 +14,8 @@ public class SoundRewardType extends RewardType {
     @Override
     public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location hookLocation) {
         String[] split = value.split(",");
-        Sound sound;
-        try {
-            sound = Sound.valueOf(split[0].toUpperCase());
-        } catch (IllegalArgumentException ex) {
+        Sound sound = FishUtils.getEnumValue(Sound.class, split[0]);
+        if (sound == null) {
             EvenMoreFish.getInstance().getLogger().warning("Invalid sound specified for RewardType " + getIdentifier() + ": " + value);
             return;
         }

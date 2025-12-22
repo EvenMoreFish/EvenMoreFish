@@ -24,10 +24,10 @@ public class ItemRarityItemConfig extends ItemConfig<String> {
     @Override
     protected BiConsumer<ItemStack, String> applyToItem(@Nullable Map<String, ?> replacements) {
         return (item, value) -> {
-            try {
-                ItemRarity rarity = ItemRarity.valueOf(value.toUpperCase());
+            ItemRarity rarity = FishUtils.getEnumValue(ItemRarity.class, value);
+            if (rarity != null) {
                 item.editMeta(meta -> meta.setRarity(rarity));
-            } catch (IllegalArgumentException ignored) {}
+            }
         };
     }
 

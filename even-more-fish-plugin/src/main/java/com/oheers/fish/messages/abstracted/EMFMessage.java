@@ -56,7 +56,7 @@ public abstract class EMFMessage {
             return;
         }
         String name = FishUtils.getPlayerName(relevantPlayer);
-        getUnderlying().replace("{player}", String.valueOf(name))
+        getUnderlying().replace("{player}", name)
             .parsePlaceholderAPI(relevantPlayer)
             .send(target);
     }
@@ -80,7 +80,7 @@ public abstract class EMFMessage {
         }
         String name = FishUtils.getPlayerName(relevantPlayer);
         getUnderlying().messageType(MessageType.ACTION_BAR)
-            .replace("{player}", String.valueOf(name))
+            .replace("{player}", name)
             .parsePlaceholderAPI(relevantPlayer)
             .send(target);
     }
