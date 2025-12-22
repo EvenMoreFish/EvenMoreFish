@@ -17,6 +17,10 @@ locale: en
 decimal-locale: en_US
 
 fishing:
+  # Gives the fish directly to the player instead of creating an item entity.
+  # This only happens if the player has space in their inventory.
+  give-straight-to-inventory: false
+
   # Should fish be caught from fishing rods?
   catch-enabled: true
   # Should EMF fish only be given during a competition?
@@ -198,9 +202,6 @@ requirements:
   nearby-players:
     # How far should the plugin check in blocks? Large values may cause lag.
     range: 20
-
-# When the player catches a fish, should the fish be put straight into the inventory instead of the vanilla catching animation.
-give-straight-to-inventory: false
 
 # Customize the plugin's command. Requires a server restart to take effect.
 # NOTE: All names and aliases must use English letters only, as the command library does not support other characters.

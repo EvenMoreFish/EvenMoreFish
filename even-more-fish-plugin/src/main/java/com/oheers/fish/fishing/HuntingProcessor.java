@@ -53,7 +53,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> {
         }
 
         event.getDrops().clear();
-        if (MainConfig.getInstance().giveStraightToInventory() && isSpaceForNewFish(player.getInventory())) {
+        if (MainConfig.getInstance().isGiveStraightToInventory() && isSpaceForNewFish(player.getInventory())) {
             FishUtils.giveItem(fish, player);
         } else {
             // replaces the fishing item with a custom evenmorefish fish.

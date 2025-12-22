@@ -89,6 +89,10 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("fishing.catch-only-in-competition", false);
     }
 
+    public boolean isGiveStraightToInventory() {
+        return getConfig().getBoolean("fishing.give-straight-to-inventory", false);
+    }
+
     public boolean isFishCatchOverrideOnlyFish() {
         return getConfig().getBoolean("fishing.only-fish", false);
     }
@@ -303,10 +307,6 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("command.old-base-command-behavior", false);
     }
 
-    public boolean giveStraightToInventory() {
-        return getConfig().getBoolean("give-straight-to-inventory");
-    }
-
     public Map<String, List<Biome>> getBiomeSets() {
         Map<String, List<Biome>> biomeSetMap = new HashMap<>();
         Section section = getConfig().getSection("biome-sets");
@@ -390,15 +390,18 @@ public class MainConfig extends ConfigBase {
             })
             // Config Version 2 - Rework NBT Rods
             .addRelocation("2", "require-nbt-rod", "fishing.require-custom-rod", '.')
-            // Config Version 4 - Rename all item protection configs to use "prevent" rather than "block"
-            // Also rename disable-db-verbose to database.disable-verbose
+            // Config Version 4:
+            // Rename all item protection configs to use "prevent" rather than "block".
+            // Move disable-db-verbose to database.disable-verbose.
+            // Move give-straight-to-inventory to fishing.give-straight-to-inventory.
             .addRelocations("4", Map.of(
                 "item-protection.block-crafting", "item-protection.prevent-crafting",
                 "item-protection.block-consume", "item-protection.prevent-consume",
                 "item-protection.block-furnace-burn", "item-protection.prevent-furnace-burn",
                 "item-protection.block-cooking", "item-protection.prevent-cooking",
                 "item-protection.block-placing", "item-protection.prevent-placing",
-                "disable-db-verbose", "database.disable-verbose"
+                "disable-db-verbose", "database.disable-verbose",
+                "give-straight-to-inventory", "fishing.give-straight-to-inventory"
             ), '.')
             .build();
     }
