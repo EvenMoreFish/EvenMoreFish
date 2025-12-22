@@ -162,24 +162,24 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("requires-fishing-permission", false);
     }
 
-    public boolean blockCrafting() {
-        return getConfig().getBoolean("item-protection.block-crafting", true);
+    public boolean preventCrafting() {
+        return getConfig().getBoolean("item-protection.prevent-crafting", true);
     }
 
-    public boolean blockConsume() {
-        return getConfig().getBoolean("item-protection.block-consume", true);
+    public boolean preventConsume() {
+        return getConfig().getBoolean("item-protection.prevent-consume", true);
     }
 
-    public boolean blockFurnaceBurn() {
-        return getConfig().getBoolean("item-protection.block-furnace-burn", true);
+    public boolean preventFurnaceBurn() {
+        return getConfig().getBoolean("item-protection.prevent-furnace-burn", true);
     }
 
-    public boolean blockCooking() {
-        return getConfig().getBoolean("item-protection.block-cooking", true);
+    public boolean preventCooking() {
+        return getConfig().getBoolean("item-protection.prevent-cooking", true);
     }
 
-    public boolean blockPlacing() {
-        return getConfig().getBoolean("item-protection.block-placing", true);
+    public boolean preventPlacing() {
+        return getConfig().getBoolean("item-protection.prevent-placing", true);
     }
 
     public boolean debugSession() {
@@ -394,6 +394,14 @@ public class MainConfig extends ConfigBase {
             })
             // Config Version 2 - Rework NBT Rods
             .addRelocation("2", "require-nbt-rod", "fishing.require-custom-rod", '.')
+            // Config Version 4 - Rename all item protection configs to use "prevent" rather than "block"
+            .addRelocations("4", Map.of(
+                "item-protection.block-crafting", "item-protection.prevent-crafting",
+                "item-protection.block-consume", "item-protection.prevent-consume",
+                "item-protection.block-furnace-burn", "item-protection.prevent-furnace-burn",
+                "item-protection.block-cooking", "item-protection.prevent-cooking",
+                "item-protection.block-placing", "item-protection.prevent-placing"
+            ), '.')
             .build();
     }
 
