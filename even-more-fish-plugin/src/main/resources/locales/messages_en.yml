@@ -215,7 +215,7 @@ bait-purchased: <white>You have purchased {amount}x {bait} for {price}.
 # Sent when a player attempts to purchase a bait, asking them to confirm.
 bait-confirm-purchase: "<white>Click again within 5 seconds to confirm bait purchase."
 # Sent when a player attempts to purchase a bait they cannot afford.
-bait-cannot-afford: <white>You cannot afford to purchase that bait.
+bait-cannot-afford: <white>You cannot afford to purchase that bait. You need {price}.
 # Sent when a player attempts to purchase a bait that is not for sale.
 bait-not-for-sale: <white>That bait is not for sale.
 

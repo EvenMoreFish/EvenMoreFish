@@ -44,7 +44,7 @@ public enum ConfigMessage {
     // Bait Shop
     BAIT_PURCHASED("<white>You have purchased {amount}x {bait} for {price}.", PrefixType.DEFAULT, "bait-purchased"),
     BAIT_CONFIRM_PURCHASE("<white>Click again within 5 seconds to confirm bait purchase.", PrefixType.DEFAULT, "bait-confirm-purchase"),
-    BAIT_CANNOT_AFFORD("<white>You cannot afford to purchase that bait.", PrefixType.ERROR, "bait-cannot-afford"),
+    BAIT_CANNOT_AFFORD("<white>You cannot afford to purchase that bait. You need {price}.", PrefixType.ERROR, "bait-cannot-afford"),
     BAIT_NOT_FOR_SALE("<white>That bait is not for sale.", PrefixType.ERROR, "bait-not-for-sale"),
 
     BAR_LAYOUT("{prefix}{time-formatted} {remaining}", PrefixType.NONE, "bossbar.layout"),
