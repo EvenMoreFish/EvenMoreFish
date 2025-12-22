@@ -147,7 +147,7 @@ public class MainConfig extends ConfigBase {
     }
 
     public boolean doDBVerbose() {
-        return !getConfig().getBoolean("disable-db-verbose", false);
+        return !getConfig().getBoolean("database.disable-verbose", false);
     }
 
     public boolean requireCustomRod() {
@@ -391,12 +391,14 @@ public class MainConfig extends ConfigBase {
             // Config Version 2 - Rework NBT Rods
             .addRelocation("2", "require-nbt-rod", "fishing.require-custom-rod", '.')
             // Config Version 4 - Rename all item protection configs to use "prevent" rather than "block"
+            // Also rename disable-db-verbose to database.disable-verbose
             .addRelocations("4", Map.of(
                 "item-protection.block-crafting", "item-protection.prevent-crafting",
                 "item-protection.block-consume", "item-protection.prevent-consume",
                 "item-protection.block-furnace-burn", "item-protection.prevent-furnace-burn",
                 "item-protection.block-cooking", "item-protection.prevent-cooking",
-                "item-protection.block-placing", "item-protection.prevent-placing"
+                "item-protection.block-placing", "item-protection.prevent-placing",
+                "disable-db-verbose", "database.disable-verbose"
             ), '.')
             .build();
     }

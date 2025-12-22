@@ -42,6 +42,8 @@ respect-vanished: true
 # ATTENTION: Toggling this requires a full server restart.
 database:
   enabled: false
+  # Prevents verbose output when the plugin interacts with the database.
+  disable-verbose: true
   # Available option are: mysql, sqlite
   type: sqlite
   # The address of the database
@@ -63,9 +65,6 @@ database:
       unit: SECONDS
       user-fish-stats: 5
       competition: 5
-
-# Prevents verbose output when the plugin interacts with the database.
-disable-db-verbose: true
 
 # When dropping tool items (e.g. fishing rod) should they be dropped with a random durability
 # instead of always full durability?
