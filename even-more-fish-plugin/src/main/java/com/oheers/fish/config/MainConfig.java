@@ -182,8 +182,8 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("item-protection.prevent-placing", true);
     }
 
-    public boolean debugSession() {
-        return getConfig().getBoolean("debug-session", false);
+    public boolean shouldDebug() {
+        return getConfig().getBoolean("debug", false);
     }
 
     public boolean databaseEnabled() {

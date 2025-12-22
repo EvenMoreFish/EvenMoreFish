@@ -1,6 +1,10 @@
 # Is the plugin enabled?
 enabled: true
 
+# Should the plugin print debug information to the console?
+# WARNING: This will flood your console with messages!
+debug: false
+
 # The locale of the message file
 # Currently: en, cs, de, es, fr, ja, ko, nl, pl, pt-br, ru, tr, vn, zh_cn
 # Delete messages.yml before changing this
