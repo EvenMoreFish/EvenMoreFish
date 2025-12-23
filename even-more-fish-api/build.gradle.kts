@@ -25,6 +25,8 @@ java {
         languageVersion.set(JavaLanguageVersion.of(17))
         vendor.set(JvmVendorSpec.ADOPTIUM)
     }
+    withSourcesJar()
+    withJavadocJar()
 }
 
 publishing {
@@ -39,6 +41,14 @@ publishing {
     }
 }
 
+tasks.javadoc {
+    // Don't fail when missing Javadoc comments
+    isFailOnError = false
+    // Disable warnings about missing Javadoc comments
+    (options as CoreJavadocOptions).apply {
+        addBooleanOption("Xdoclint:none", true)
+    }
+}
 
 testing {
     suites {
