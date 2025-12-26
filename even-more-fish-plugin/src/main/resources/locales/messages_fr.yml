@@ -171,9 +171,11 @@ emf-most-fish-format: '{amount} {rarity_colour} poisson(s)'
 # What should be displayed for %emf_competition_place_size_*% during the MOST_FISH competition?
 emf-size-during-most-fish: N/A
 # How the %emf_competition_time_left% variable should be formatted.
-emf-time-remaining: 'Temps restant avant la prochaine compétition : {days}d, {hours}h, {minutes}m.'
-# Replaces the %emf_competition_time_left% variable when there's a competition already running.
-emf-time-remaining-during-comp: Il y a un concours en cours en ce moment.
+emf-time-remaining:
+  # When there is not an active competition.
+  inactive: 'Time left until next competition: {days}d, {hours}h, {minutes}m.'
+  # When there is an active competition.
+  active: 'Time left in competition: {time-left}'
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
 max-baits-reached: <white>Vous avez atteint le nombre maximum de types d'appâts pour cette canne à pêche.
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
@@ -279,4 +281,4 @@ bait:
   unused-slot: <gray>► ? <i>Emplacement disponible
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 8
+version: 9
