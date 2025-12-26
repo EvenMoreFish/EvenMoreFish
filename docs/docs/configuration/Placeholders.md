@@ -10,7 +10,7 @@ Below is a list of the plugin's placeholders and what they do:
 - `%emf_competition_place_size_{place}%` - The size of the fish at the given place in the competition.
 - `%emf_competition_place_fish_{place}%` - The fish at the given place in the competition.
 - `%emf_competition_place_player_{place}%` - The player at the given place in the competition.
-- `%emf_competition_time_left%` - The time until the next competition.
+- `%emf_competition_time_left%` - The time until the next competition or in the active competition.
 - `%emf_competition_active%` - Whether a competition is active or not. true/false.
 - `%emf_competition_type%` - The type of the active competition. (e.g. `LARGEST_FISH` or `MOST_FISH`)
 - `%emf_competition_type_format%` - The type of the active competition formatted for display. (e.g. `Largest Fish` or `Most Fish`)
