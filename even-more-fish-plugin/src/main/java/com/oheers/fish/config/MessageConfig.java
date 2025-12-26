@@ -93,6 +93,13 @@ public class MessageConfig extends ConfigBase {
                 document.move("toggle-on", "toggle.fishing.on");
                 document.move("toggle-off", "toggle.fishing.off");
             })
+
+            // Config Version 9 - Rework the time left placeholder.
+            .addCustomLogic("9", document -> {
+                document.move("emf-time-remaining", "emf-time-remaining.inactive");
+                document.remove("emf-time-remaining-during-comp");
+            })
+
             .build();
     }
 

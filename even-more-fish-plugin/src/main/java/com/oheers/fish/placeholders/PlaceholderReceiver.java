@@ -276,7 +276,13 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
     }
 
     private @NotNull String handleCompetitionTimeLeft(Player player, String identifier) {
-        return Competition.getNextCompetitionMessage().getLegacyMessage();
+        Competition competition = Competition.getCurrentlyActive();
+        if (competition == null) {
+            return Competition.getNextCompetitionMessage().getLegacyMessage();
+        }
+        EMFMessage message = ConfigMessage.PLACEHOLDER_TIME_REMAINING_ACTIVE.getMessage();
+        message.setVariable("{time-left}", FishUtils.timeFormat(competition.getTimeLeft()));
+        return message.getLegacyMessage();
     }
 
     private @NotNull String handleCompetitionActive(Player player, String identifier) {
