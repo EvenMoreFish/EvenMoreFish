@@ -171,9 +171,11 @@ emf-most-fish-format: '{amount} fish'
 # What should be displayed for %emf_competition_place_size_*% during the MOST_FISH competition?
 emf-size-during-most-fish: N/A
 # How the %emf_competition_time_left% variable should be formatted.
-emf-time-remaining: '次の釣り大会まで {days}日、{hours}時間、{minutes}分 です。'
-# Replaces the %emf_competition_time_left% variable when there's a competition already running.
-emf-time-remaining-during-comp: 現在釣り大会が開かれています。
+emf-time-remaining:
+  # When there is not an active competition.
+  inactive: 'Time left until next competition: {days}d, {hours}h, {minutes}m.'
+  # When there is an active competition.
+  active: 'Time left in competition: {time-left}'
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
 max-baits-reached: <reset>この釣り竿に付けられる、餌の種類の最大数に達しました。
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
@@ -279,4 +281,4 @@ bait:
   unused-slot: <gray>► ? <i>Available Slot
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 8
+version: 9
