@@ -177,8 +177,8 @@ public enum ConfigMessage {
     PLACEHOLDER_NO_FISH_IN_PLACE("Start fishing to take this place", PrefixType.NONE, "no-fish-in-place"),
     PLACEHOLDER_NO_SIZE_IN_PLACE("Start fishing to take this place", PrefixType.NONE, "no-size-in-place"),
     PLACEHOLDER_SIZE_DURING_MOST_FISH("N/A", PrefixType.NONE, "emf-size-during-most-fish"),
-    PLACEHOLDER_TIME_REMAINING("Time left until next competition: {days}d, {hours}h, {minutes}m.", PrefixType.NONE, "emf-time-remaining"),
-    PLACEHOLDER_TIME_REMAINING_DURING_COMP("There is a competition running right now.", PrefixType.NONE, "emf-time-remaining-during-comp"),
+    PLACEHOLDER_TIME_REMAINING_INACTIVE("Time left until next competition: {days}d, {hours}h, {minutes}m.", PrefixType.NONE, "emf-time-remaining.inactive"),
+    PLACEHOLDER_TIME_REMAINING_ACTIVE("Time left in competition: {time-left}.", PrefixType.NONE, "emf-time-remaining.active"),
 
     RELOAD_SUCCESS("<white>Successfully reloaded the plugin.", PrefixType.ADMIN, "admin.reload"),
     SELL_PRICE_FORMAT("#,##0.0", PrefixType.NONE, "sell-price-format"),

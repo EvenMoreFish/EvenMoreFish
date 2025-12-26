@@ -1,9 +1,6 @@
 package com.oheers.fish.competition;
 
-import com.github.Anon8281.universalScheduler.UniversalRunnable;
-import com.github.Anon8281.universalScheduler.scheduling.tasks.MyScheduledTask;
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.EMFCompetitionEndEvent;
 import com.oheers.fish.api.EMFCompetitionStartEvent;
 import com.oheers.fish.api.Logging;
@@ -21,8 +18,6 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import com.oheers.fish.utils.DurationFormatter;
-import com.oheers.fish.utils.TimeCode;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -30,6 +25,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -41,8 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -524,12 +518,12 @@ public class Competition {
 
     public static @NotNull EMFMessage getNextCompetitionMessage() {
         if (Competition.isActive()) {
-            return ConfigMessage.PLACEHOLDER_TIME_REMAINING_DURING_COMP.getMessage();
+            return EMFSingleMessage.empty();
         }
 
         long remainingTime = getRemainingTime();
 
-        EMFMessage message = ConfigMessage.PLACEHOLDER_TIME_REMAINING.getMessage();
+        EMFMessage message = ConfigMessage.PLACEHOLDER_TIME_REMAINING_INACTIVE.getMessage();
         message.setDays(Long.toString(remainingTime / 1440));
         message.setHours(Long.toString((remainingTime % 1440) / 60));
         message.setMinutes(Long.toString((((remainingTime % 1440) % 60) % 60)));
