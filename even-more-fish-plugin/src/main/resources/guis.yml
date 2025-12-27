@@ -353,6 +353,10 @@ journal-rarity:
   # Whether to show the undiscovered-fish config below when a fish has not been caught by the player.
   hide-undiscovered-fish: true
 
+  # The message to display when a fish has no data.
+  # This does not support formatting.
+  unknown-message: "Unknown"
+
   # How undiscovered fish should look
   undiscovered-fish:
     item:
@@ -404,4 +408,4 @@ journal-rarity:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 3
+version: 4

@@ -87,6 +87,10 @@ public class FishJournalGui extends ConfigGui {
         );
     }
 
+    private @NotNull String getUnknownMessage() {
+        return getGuiConfig().getString("unknown-message", "Unknown");
+    }
+
     private ItemStack getFishItem(Fish fish, Section section) {
         final Database database = requireDatabase("Can not show fish in the Journal Menu, please enable the database!");
 
@@ -130,29 +134,36 @@ public class FishJournalGui extends ConfigGui {
         final UserFishStats userFishStats = EvenMoreFish.getInstance().getPluginDataManager().getUserFishStatsDataManager().get(UserFishRarityKey.of(userId, fish).toString());
         final FishStats fishStats = EvenMoreFish.getInstance().getPluginDataManager().getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
 
-        final String discoverDate = getValueOrUnknown(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE));
-        final String discoverer = getValueOrUnknown(() -> FishUtils.getPlayerName(fishStats.getDiscoverer()));
+        final String discoverDate = getValueOrDefault(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE), getUnknownMessage());
+        final String discoverer = getValueOrDefault(() -> FishUtils.getPlayerName(fishStats.getDiscoverer()), getUnknownMessage());
 
         EMFListMessage lore = EMFListMessage.fromStringList(
                 Optional.ofNullable(factory.getLore().getConfiguredValue())
                         .orElse(Collections.emptyList())
         );
 
-        lore.setVariable("{times-caught}", getValueOrUnknown(() -> Integer.toString(userFishStats.getQuantity())));
-        lore.setVariable("{largest-size}", getValueOrUnknown(() -> String.valueOf(userFishStats.getLongestLength())));
-        lore.setVariable("{smallest-size}", getValueOrUnknown(() -> String.valueOf(userFishStats.getShortestLength())));
+        lore.setVariable("{times-caught}", getValueOrDefault(() -> Integer.toString(userFishStats.getQuantity()), "0"));
+        lore.setVariable("{largest-size}", getValueOrDefault(() -> String.valueOf(userFishStats.getLongestLength()), "0"));
+        lore.setVariable("{smallest-size}", getValueOrDefault(() -> String.valueOf(userFishStats.getShortestLength()), "0"));
         lore.setVariable("{discover-date}", discoverDate);
         lore.setVariable("{discoverer}", discoverer);
-        lore.setVariable("{server-largest}", getValueOrUnknown(() -> String.valueOf(fishStats.getLongestLength())));
-        lore.setVariable("{server-smallest}", getValueOrUnknown(() -> String.valueOf(fishStats.getShortestLength())));
-        lore.setVariable("{server-caught}", getValueOrUnknown(() -> String.valueOf(fishStats.getQuantity())));
+        lore.setVariable("{server-largest}", getValueOrDefault(() -> String.valueOf(fishStats.getLongestLength()), "0"));
+        lore.setVariable("{server-smallest}", getValueOrDefault(() -> String.valueOf(fishStats.getShortestLength()), "0"));
+        lore.setVariable("{server-caught}", getValueOrDefault(() -> String.valueOf(fishStats.getQuantity()), "0"));
 
         return lore;
     }
 
-    @NotNull
-    private String getValueOrUnknown(Supplier<String> supplier) {
-        return Optional.ofNullable(supplier.get()).orElse("Unknown");
+    private @NotNull String getValueOrDefault(@NotNull Supplier<String> supplier, @NotNull String def) {
+        try {
+            return Optional.ofNullable(supplier.get()).orElse(def);
+        } catch (Exception exception) {
+            EvenMoreFish.getInstance().debug(
+                "An exception occurred while getting a value. Defaulting to " + def,
+                new RuntimeException()
+            );
+            return def;
+        }
     }
 
 
