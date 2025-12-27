@@ -30,9 +30,13 @@ repositories {
 // Note: The version shown here may not be the latest. Make sure to check the latest version before using!
 dependencies {
     // For the plugin artifact
-    compileOnly("com.oheers.evenmorefish:even-more-fish-plugin:2.0.6")
+    // The exclusions are required as your build will fail without them.
+    compileOnly("com.oheers.evenmorefish:even-more-fish-plugin:2.1.6") {
+        exclude("de.tr7zw", "item-nbt-api")
+        exclude("com.github.Anon8281", "UniversalScheduler")
+    }
     // For the api artifact
-    compileOnly("com.oheers.evenmorefish:even-more-fish-api:2.0.6")
+    compileOnly("com.oheers.evenmorefish:even-more-fish-api:2.1.6")
 }
 ```
 
@@ -50,12 +54,23 @@ dependencies {
     <!-- Note: The version shown here may not be the latest. Make sure to check the latest version before using! -->
     <dependencies>
         <!-- For the plugin artifact -->
+        <!-- The exclusions are required as your build will fail without them. -->
         <dependency>
             <groupId>com.oheers.evenmorefish</groupId>
             <artifactId>even-more-fish-plugin</artifactId>
             <version>2.0.12</version>
             <scope>provided</scope>
             <classifier>shadow</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>de.tr7zw</groupId>
+                    <artifactId>item-nbt-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.Anon8281</groupId>
+                    <artifactId>UniversalScheduler</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- For the api artifact -->
         <dependency>
