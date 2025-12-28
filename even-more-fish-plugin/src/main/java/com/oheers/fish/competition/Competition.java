@@ -185,6 +185,7 @@ public class Competition {
             EvenMoreFish.getInstance().getDecidedRarities().clear();
             return true;
         } catch (Exception ex) {
+            Logging.error("An exception was thrown while starting the competition.", ex);
             end(true);
             return false;
         }

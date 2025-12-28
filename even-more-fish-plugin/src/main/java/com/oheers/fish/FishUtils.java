@@ -353,11 +353,7 @@ public class FishUtils {
     }
 
     public static @Nullable DayOfWeek getDay(@NotNull String day) {
-        try {
-            return DayOfWeek.valueOf(day.toUpperCase());
-        } catch (IllegalArgumentException exception) {
-            return null;
-        }
+        return getEnumValue(DayOfWeek.class, day);
     }
 
     public static @Nullable Integer getInteger(@NotNull String intString) {
