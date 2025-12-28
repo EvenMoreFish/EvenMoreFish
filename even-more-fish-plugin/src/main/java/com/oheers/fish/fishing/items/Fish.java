@@ -106,10 +106,6 @@ public class Fish implements IFish {
 
         setSize();
 
-        checkEatEvent();
-        checkFishEvent();
-        checkIntEvent();
-        checkSellEvent();
         checkSilent();
 
         this.requirement = loadRequirements();
@@ -280,6 +276,11 @@ public class Fish implements IFish {
         generateSize();
         checkMessage();
         checkEffects();
+
+        checkEatEvent();
+        checkFishEvent();
+        checkIntEvent();
+        checkSellEvent();
     }
 
     /**
