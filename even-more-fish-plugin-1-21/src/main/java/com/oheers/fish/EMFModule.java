@@ -1,8 +1,6 @@
 package com.oheers.fish;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.oheers.fish.commands.admin.AdminCommandBrigadier;
-import com.oheers.fish.commands.main.MainCommandBrigadier;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.items.ItemConfigResolver;
 import com.oheers.fish.items.configs.FireResistantItemConfig;

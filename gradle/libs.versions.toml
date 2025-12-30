@@ -94,10 +94,6 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 
 # Commands
 commandsapi-bukkit = { module = "dev.jorel:commandapi-bukkit-shade", version = "10.1.2" }
-commandsapi-paper = { module = "dev.jorel:commandapi-paper-core", version = "11.1.0" }
-
-strokk-annotations = { module = "net.strokkur:commands-annotations", version.ref = "strokk-commands"}
-strokk-processor = { module = "net.strokkur:commands-processor", version.ref = "strokk-commands"}
 
 plugin-yml = { module = "de.eldoria.plugin-yml.bukkit:de.eldoria.plugin-yml.bukkit.gradle.plugin", version.ref = "plugin-yml"}
 shadow =  {module = "com.gradleup.shadow:com.gradleup.shadow.gradle.plugin", version.ref = "shadow"}
