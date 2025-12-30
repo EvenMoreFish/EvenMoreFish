@@ -1,7 +1,6 @@
 allprojects {
     repositories {
         mavenCentral()
-        maven("https://eldonexus.de/repository/maven-public/")
         maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
             mavenContent {
                 snapshotsOnly()

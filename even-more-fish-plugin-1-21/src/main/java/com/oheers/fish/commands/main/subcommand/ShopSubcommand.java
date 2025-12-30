@@ -1,17 +1,20 @@
 package com.oheers.fish.commands.main.subcommand;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.oheers.fish.api.economy.Economy;
-import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.commands.BrigCommandUtils;
-import com.oheers.fish.commands.main.MainCommand;
+import com.oheers.fish.commands.arguments.EMFPlayerArgument;
 import com.oheers.fish.gui.guis.SellGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.permissions.UserPerms;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
+import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import net.kyori.adventure.text.Component;
 import net.strokkur.commands.annotations.DefaultExecutes;
 import net.strokkur.commands.annotations.Executes;
@@ -25,35 +28,33 @@ import org.jetbrains.annotations.NotNull;
 // /emf shop - Opens the shop for the sender
 // /emf shop [target] - Opens the shop for the target. Requires admin permissions.
 @SuppressWarnings("UnstableApiUsage")
-@Permission(UserPerms.SHOP)
 public class ShopSubcommand {
 
-    @DefaultExecutes
-    public void onDefault(CommandSender sender) {
-        MainCommand.sendHelpMessage(sender);
+    private final String name;
+
+    public ShopSubcommand(@NotNull String name) {
+        this.name = name;
     }
 
-    @Executes
-    public void execute(CommandSender sender, Player target) throws CommandSyntaxException {
-        if (!sender.hasPermission(AdminPerms.ADMIN)) {
-            throw new SimpleCommandExceptionType(MessageComponentSerializer.message().serialize(
-                Component.text("You must be an admin to perform this command!")
-            )).create();
-        }
-        performCommand(sender, target);
+    public ArgumentBuilder<CommandSourceStack, ?> get() {
+        return Commands.literal(name)
+            .requires(stack -> stack.getSender().hasPermission(UserPerms.SHOP))
+            .executes(ctx -> {
+                Player player = BrigCommandUtils.requirePlayer(ctx);
+                execute(player, player);
+                return 1;
+            })
+            .then(
+                Commands.argument("target", new EMFPlayerArgument())
+                    .executes(ctx -> {
+                        Player target = ctx.getArgument("target", Player.class);
+                        execute(ctx.getSource().getSender(), target);
+                        return 1;
+                    })
+            );
     }
 
-    @Executes
-    public void execute(CommandSender sender) throws CommandSyntaxException {
-        if (!(sender instanceof Player executor)) {
-            throw new SimpleCommandExceptionType(MessageComponentSerializer.message().serialize(
-                Component.text("This command requires a player executor!")
-            )).create();
-        }
-        performCommand(executor, executor);
-    }
-
-    private void performCommand(@NotNull CommandSender sender, @NotNull Player target) {
+    private void execute(@NotNull CommandSender sender, @NotNull Player target) {
         if (!Economy.getInstance().isEnabled()) {
             ConfigMessage.ECONOMY_DISABLED.getMessage().send(sender);
             return;
