@@ -22,14 +22,8 @@ public record DurationFormatter(@NotNull TimeUnit timeUnit) {
         // Convert seconds to a Duration
         Duration duration = Duration.ofSeconds(seconds);
 
-        // Calculate years, months, days
-        LocalDateTime baseDate = LocalDateTime.now().minusSeconds(seconds);
-        LocalDateTime now = LocalDateTime.now();
-
-        Period period = Period.between(baseDate.toLocalDate(), now.toLocalDate());
-        long days = period.getDays();
-
         // Calculate hours, minutes, and remaining seconds
+        long days = duration.toDaysPart();
         long hours = duration.toHoursPart();
         long minutes = duration.toMinutesPart();
         long remainingSeconds = duration.toSecondsPart();
