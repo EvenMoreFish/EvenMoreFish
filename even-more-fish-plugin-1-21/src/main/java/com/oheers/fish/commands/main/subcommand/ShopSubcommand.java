@@ -9,6 +9,7 @@ import com.oheers.fish.commands.main.MainCommand;
 import com.oheers.fish.gui.guis.SellGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.permissions.UserPerms;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import net.kyori.adventure.text.Component;
@@ -20,6 +21,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+// Required branches:
+// /emf shop - Opens the shop for the sender
+// /emf shop [target] - Opens the shop for the target. Requires admin permissions.
+@SuppressWarnings("UnstableApiUsage")
 @Permission(UserPerms.SHOP)
 public class ShopSubcommand {
 
@@ -29,16 +34,15 @@ public class ShopSubcommand {
     }
 
     @Executes
-    public void execute(CommandSender sender, @Executor Player player, Player target) {
-        execute(player, target);
-    }
-
-    @Executes
-    public void execute(CommandSender sender, Player target) {
+    public void execute(CommandSender sender, Player target) throws CommandSyntaxException {
+        if (!sender.hasPermission(AdminPerms.ADMIN)) {
+            throw new SimpleCommandExceptionType(MessageComponentSerializer.message().serialize(
+                Component.text("You must be an admin to perform this command!")
+            )).create();
+        }
         performCommand(sender, target);
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     @Executes
     public void execute(CommandSender sender) throws CommandSyntaxException {
         if (!(sender instanceof Player executor)) {
