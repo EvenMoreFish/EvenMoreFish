@@ -4,10 +4,10 @@ worldedit = "7.3.0"
 redprotect = "7.7.3"
 flyway = "10.22.0"
 jooq = "3.19.29"
-junit = "5.14.1"
+junit = "5.14.2"
 craftengine = "0.0.66"
 
-shadow = "9.3.0"
+shadow = "9.3.1"
 plugin-yml = "0.8.0"
 grgit = "5.3.3"
 jooq-plugin = "9.0"
@@ -46,8 +46,8 @@ playerpoints = "org.black_ixx:playerpoints:3.3.3"
 headdatabase-api = "com.arcaniax:HeadDatabase-API:1.3.2"
 itemsadder-api = "com.github.LoneDev6:API-ItemsAdder:3.6.1"
 nbt-api = "de.tr7zw:item-nbt-api:2.15.5"
-oraxen = "io.th0rgal:oraxen:1.200.0"
-nexo = "com.nexomc:nexo:1.16.1"
+oraxen = "io.th0rgal:oraxen:1.203.2"
+nexo = "com.nexomc:nexo:1.17.0"
 
 # Craft Engine
 craftengine-core = { module = "net.momirealms:craft-engine-core", version.ref = "craftengine" }
@@ -112,7 +112,7 @@ flyway = ["flyway-core", "flyway-mysql"]
 connectors = ["connectors-mysql", "connectors-sqlite"]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "9.3.0" }
+shadow = { id = "com.gradleup.shadow", version = "9.3.1" }
 plugin-yml = { id = "de.eldoria.plugin-yml.bukkit", version.ref = "plugin-yml" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
 jooq = { id = "nu.studer.jooq", version = "9.0" }
