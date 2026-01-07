@@ -21,14 +21,14 @@ public class FishEatEvent {
         if (FishUtils.isFish(event.getItem())) {
             // Creates a replica of the fish we can use
             Fish fish = FishUtils.getFish(event.getItem());
-            if (fish != null) {
-                if (fish.hasEatRewards()) {
-                    // Runs through each eat-event
-                    fish.getActionRewards().forEach(r -> r.rewardPlayer(event.getPlayer(), null));
-                    return true;
-                }
+            if (fish == null) {
+                return false;
             }
-            return false;
+            if (fish.hasEatRewards()) {
+                // Runs through each eat-event
+                fish.getActionRewards().forEach(r -> r.rewardPlayer(event.getPlayer(), null));
+                return true;
+            }
         }
         return false;
     }

@@ -41,9 +41,9 @@ public class Fish implements IFish {
     private UUID fisherman;
     private float length;
 
-    private List<Reward> actionRewards;
-    private List<Reward> fishRewards;
-    private List<Reward> sellRewards;
+    private @Nullable List<Reward> actionRewards = null;
+    private @Nullable List<Reward> fishRewards = null;
+    private @Nullable List<Reward> sellRewards = null;
     private String eventType;
 
     private @NotNull Requirement requirement;
@@ -63,7 +63,6 @@ public class Fish implements IFish {
 
     private boolean showInJournal;
 
-    private int day = -1;
     private final double setWorth;
 
     private Fish(@NotNull Rarity rarity, @NotNull Section section) {
@@ -200,6 +199,7 @@ public class Fish implements IFish {
 
     @Override
     public boolean hasEatRewards() {
+        checkEatEvent();
         if (eventType != null) {
             return eventType.equals("eat");
         } else {
@@ -209,16 +209,19 @@ public class Fish implements IFish {
 
     @Override
     public boolean hasFishRewards() {
+        checkFishEvent();
         return !fishRewards.isEmpty();
     }
 
     @Override
     public boolean hasSellRewards() {
+        checkSellEvent();
         return !sellRewards.isEmpty();
     }
 
     @Override
     public boolean hasIntRewards() {
+        checkIntEvent();
         if (eventType != null) {
             return eventType.equals("int");
         } else {
@@ -276,11 +279,6 @@ public class Fish implements IFish {
         generateSize();
         checkMessage();
         checkEffects();
-
-        checkEatEvent();
-        checkFishEvent();
-        checkIntEvent();
-        checkSellEvent();
     }
 
     /**
@@ -332,11 +330,14 @@ public class Fish implements IFish {
     }
 
     private void checkEatEvent() {
+        if (this.actionRewards != null) {
+            return;
+        }
         List<String> configRewards = section.getStringList("eat-event");
         // Checks if the player has actually set reward for an eat event
         if (!configRewards.isEmpty()) {
             this.eventType = "eat";
-            actionRewards = new ArrayList<>();
+            this.actionRewards = new ArrayList<>();
 
             // Translates all the reward into Reward objects and adds them to the fish.
             configRewards.forEach(reward -> {
@@ -347,6 +348,9 @@ public class Fish implements IFish {
     }
 
     private void checkFishEvent() {
+        if (this.fishRewards != null) {
+            return;
+        }
         fishRewards = new ArrayList<>();
         List<String> configRewards = section.getStringList("catch-event");
         if (!configRewards.isEmpty()) {
@@ -359,6 +363,9 @@ public class Fish implements IFish {
     }
 
     private void checkSellEvent() {
+        if (this.sellRewards != null) {
+            return;
+        }
         sellRewards = new ArrayList<>();
         List<String> configRewards = section.getStringList("sell-event");
         if (!configRewards.isEmpty())  {
@@ -370,6 +377,9 @@ public class Fish implements IFish {
     }
 
     private void checkIntEvent() {
+        if (this.actionRewards != null) {
+            return;
+        }
         List<String> configRewards = section.getStringList("interact-event");
         // Checks if the player has actually set reward for an interact event
         if (!configRewards.isEmpty()) {
@@ -451,16 +461,20 @@ public class Fish implements IFish {
 
     @Override
     public @NotNull List<Reward> getActionRewards() {
+        checkIntEvent();
+        checkEatEvent();
         return actionRewards == null ? new ArrayList<>() : actionRewards;
     }
 
     @Override
     public @NotNull List<Reward> getFishRewards() {
+        checkFishEvent();
         return fishRewards == null ? new ArrayList<>() : fishRewards;
     }
 
     @Override
     public @NotNull List<Reward> getSellRewards() {
+        checkSellEvent();
         return sellRewards == null ? new ArrayList<>() : sellRewards;
     }
 
