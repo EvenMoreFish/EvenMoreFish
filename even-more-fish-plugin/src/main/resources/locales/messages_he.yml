@@ -167,7 +167,7 @@ emf-competition-fish-format: '{length}cm <b>{rarity}</b> {fish}'
 # How should the %emf_competition_place_fish_*% be formatted when there's no length on the fish?
 emf-lengthless-fish-format: '<b>{rarity}</b> {fish}'
 # How should %emf_competition_place_fish_*% be formatted during MOST/SPECIFIC_FISH competitions?
-emf-most-fish-format: '{amount} fish'
+emf-most-fish-format: '{amount} דגים'
 # What should be displayed for %emf_competition_place_size_*% during the MOST_FISH competition?
 emf-size-during-most-fish: N/A
 # How the %emf_competition_time_left% variable should be formatted.
