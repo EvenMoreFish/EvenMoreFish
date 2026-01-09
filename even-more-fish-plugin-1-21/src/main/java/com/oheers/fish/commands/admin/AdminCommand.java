@@ -1,16 +1,23 @@
 package com.oheers.fish.commands.admin;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.utils.ManifestUtil;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.baits.manager.BaitNBTManager;
+import com.oheers.fish.commands.AdminCommandProvider;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.CommandUtils;
-import com.oheers.fish.commands.HelpMessageBuilder;
+import com.oheers.fish.commands.admin.subcommand.BaitSubcommand;
+import com.oheers.fish.commands.admin.subcommand.ClearBaitsSubcommand;
 import com.oheers.fish.commands.admin.subcommand.CompetitionSubcommand;
+import com.oheers.fish.commands.admin.subcommand.CustomRodSubcommand;
 import com.oheers.fish.commands.admin.subcommand.DatabaseSubcommand;
 import com.oheers.fish.commands.admin.subcommand.FishSubcommand;
 import com.oheers.fish.commands.admin.subcommand.ListSubcommand;
@@ -28,164 +35,159 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.permissions.AdminPerms;
 import de.tr7zw.changeme.nbtapi.NBT;
 import dev.dejvokep.boostedyaml.YamlDocument;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.strokkur.commands.annotations.Command;
-import net.strokkur.commands.annotations.DefaultExecutes;
-import net.strokkur.commands.annotations.Executes;
-import net.strokkur.commands.annotations.Permission;
-import net.strokkur.commands.annotations.Subcommand;
-import net.strokkur.commands.annotations.arguments.CustomArg;
-import net.strokkur.commands.annotations.arguments.IntArg;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jspecify.annotations.NullMarked;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
-import java.util.List;
 import java.util.jar.Attributes;
 
 @SuppressWarnings("UnstableApiUsage")
-@NullMarked
-@Command("admin")
-@Permission(AdminPerms.ADMIN)
-public class AdminCommand {
+public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSourceStack>, ArgumentBuilder<CommandSourceStack, ?>> {
 
-    private static final HelpMessageBuilder HELP_MESSAGE = HelpMessageBuilder.create()
-        .addUsage("admin fish", ConfigMessage.HELP_ADMIN_FISH::getMessage)
-        .addUsage("admin custom-rod", ConfigMessage.HELP_ADMIN_CUSTOMROD::getMessage)
-        .addUsage("admin bait", ConfigMessage.HELP_ADMIN_BAIT::getMessage)
-        .addUsage("admin clearbaits", ConfigMessage.HELP_ADMIN_CLEARBAITS::getMessage)
-        .addUsage("admin reload", ConfigMessage.HELP_ADMIN_RELOAD::getMessage)
-        .addUsage("admin version", ConfigMessage.HELP_ADMIN_VERSION::getMessage)
-        .addUsage("admin migrate", ConfigMessage.HELP_ADMIN_MIGRATE::getMessage)
-        .addUsage("admin rawItem", ConfigMessage.HELP_ADMIN_RAWITEM::getMessage)
-        .addUsage("admin help", ConfigMessage.HELP_GENERAL_HELP::getMessage)
-        .addUsage("admin competition", ConfigMessage.HELP_ADMIN_COMPETITION::getMessage);
+    private final String name;
 
-    @Subcommand("database")
-    @Permission("emf.admin.debug.database")
-    DatabaseSubcommand databaseSubcommand;
-
-    @Subcommand("fish")
-    FishSubcommand fishSubcommand;
-
-    @Subcommand("list")
-    ListSubcommand listSubcommand;
-
-    @Subcommand("competition")
-    CompetitionSubcommand competitionSubcommand;
-
-    @DefaultExecutes
-    public void onDefault(CommandSender sender) {
-        sendHelpMessage(sender);
+    public AdminCommand(@NotNull String name) {
+        this.name = name;
     }
 
-    @Executes("custom-rod")
-    public void onCustomRod(CommandSender sender, @CustomArg(CustomRodArgument.class) CustomRod rod, List<Player> targets) throws CommandSyntaxException {
-        if (targets.isEmpty()) {
-            throw BrigCommandUtils.ERROR_NO_PLAYERS.create();
-        }
-
-        ItemStack rodItem = rod.create();
-
-        for (Player player : targets) {
-            FishUtils.giveItems(List.of(rodItem), player);
-        }
-
-        EMFMessage giveMessage = ConfigMessage.ADMIN_CUSTOM_ROD_GIVEN.getMessage();
-        giveMessage.setVariable("{player}", CommandUtils.getPlayersVariable(targets));
-
-        giveMessage.send(sender);
+    @Override
+    public @NonNull LiteralCommandNode<CommandSourceStack> get() {
+        return getAsArgument().build();
     }
 
-    @Executes("custom-rod")
-    public void onCustomRod(CommandSender sender, @CustomArg(CustomRodArgument.class) CustomRod rod) throws CommandSyntaxException {
-        if (sender instanceof Player player) {
-            onCustomRod(sender, rod, List.of(player));
-            return;
-        }
-        ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
+    @Override
+    public @NonNull LiteralArgumentBuilder<CommandSourceStack> getAsArgument() {
+        return Commands.literal(name)
+            .requires(source -> source.getSender().hasPermission(AdminPerms.ADMIN))
+            .then(database())
+            .then(fish())
+            .then(list())
+            .then(competition())
+            .then(customRod())
+            .then(bait())
+            .then(clearBaits())
+            .then(reload())
+            .then(version())
+            .then(rawItem())
+            .then(migrate())
+            .then(help());
     }
 
-    @Executes("bait")
-    public void onBait(CommandSender sender, @CustomArg(BaitArgument.class) BaitHandler bait, @IntArg(min = 1) int quantity, List<Player> targets) throws CommandSyntaxException {
-        if (targets.isEmpty()) {
-            throw BrigCommandUtils.ERROR_NO_PLAYERS.create();
-        }
-        for (Player target : targets) {
-            ItemStack baitItem = bait.create(target);
-            baitItem.setAmount(quantity);
-            FishUtils.giveItems(List.of(baitItem), target);
-        }
-        EMFMessage message = ConfigMessage.ADMIN_GIVE_PLAYER_BAIT.getMessage();
-        message.setVariable("{player}", CommandUtils.getPlayersVariable(targets));
-        message.setBait(bait.getId());
-        message.send(sender);
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> database() {
+        return new DatabaseSubcommand("database").get();
     }
 
-    @Executes("bait")
-    public void onBait(CommandSender sender, @CustomArg(BaitArgument.class) BaitHandler bait, @IntArg(min = 1) int quantity) throws CommandSyntaxException {
-        if (sender instanceof Player player) {
-            onBait(sender, bait, quantity, List.of(player));
-            return;
-        }
-        ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> fish() {
+        return new FishSubcommand("fish").get();
     }
 
-    @Executes("bait")
-    public void onBait(CommandSender sender, @CustomArg(BaitArgument.class) BaitHandler bait) throws CommandSyntaxException {
-        onBait(sender, bait, 1);
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> list() {
+        return new ListSubcommand("list").get();
     }
 
-    @Executes("clearbaits")
-    public void onClearBaits(CommandSender sender, List<Player> targets) throws CommandSyntaxException {
-        if (targets.isEmpty()) {
-            throw BrigCommandUtils.ERROR_NO_PLAYERS.create();
-        }
-        targets.forEach(player -> {
-            if (player.getInventory().getItemInMainHand().getType() != Material.FISHING_ROD) {
-                ConfigMessage.ADMIN_NOT_HOLDING_ROD.getMessage().send(player);
-                return;
-            }
-
-            ItemStack fishingRod = player.getInventory().getItemInMainHand();
-            if (!BaitNBTManager.isBaitedRod(fishingRod)) {
-                ConfigMessage.NO_BAITS.getMessage().send(player);
-                return;
-            }
-
-            int totalDeleted = BaitNBTManager.deleteAllBaits(fishingRod);
-            if (totalDeleted > 0) {
-                fishingRod.editMeta(meta -> meta.lore(BaitNBTManager.deleteOldLore(fishingRod)));
-            }
-
-            EMFMessage message = ConfigMessage.BAITS_CLEARED.getMessage();
-            message.setAmount(Integer.toString(totalDeleted));
-            message.send(player);
-        });
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> competition() {
+        return new CompetitionSubcommand("competition").get();
     }
 
-    @Executes("clearbaits")
-    public void onClearBaits(CommandSender sender) throws CommandSyntaxException {
-        if (sender instanceof Player player) {
-            onClearBaits(sender, List.of(player));
-            return;
-        }
-        ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> customRod() {
+        return new CustomRodSubcommand("custom-rod").get();
     }
 
-    @Executes("reload")
-    public void onReload(CommandSender sender) {
-        EvenMoreFish.getInstance().reload(sender);
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> bait() {
+        return new BaitSubcommand("bait").get();
     }
 
-    @Executes("version")
-    public void onVersion(CommandSender sender) {
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> clearBaits() {
+        return new ClearBaitsSubcommand("clearbaits").get();
+    }
+
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> reload() {
+        return Commands.literal("reload")
+            .executes(ctx -> {
+                EvenMoreFish.getInstance().reload(ctx.getSource().getSender());
+                return 1;
+            });
+    }
+
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> version() {
+        return Commands.literal("version")
+            .executes(ctx -> {
+                getVersionMessage().send(ctx.getSource().getSender());
+                return 1;
+            });
+    }
+
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> rawItem() {
+        return Commands.literal("rawItem")
+            .executes(ctx -> {
+                Player player = BrigCommandUtils.requirePlayer(ctx);
+                ItemStack handItem = player.getInventory().getItemInMainHand();
+                if (handItem.isEmpty()) {
+                    return 1;
+                }
+
+                String handItemNbt = NBT.itemStackToNBT(handItem).toString();
+
+                // Ensure the handItemNbt is escaped for use in YAML
+                // This could be slightly inefficient, but it is the only way I can currently think of.
+                YamlDocument document = new ConfigBase().getConfig();
+                document.set("rawItem", handItemNbt);
+                handItemNbt = document.dump().replaceFirst("rawItem: ", "");
+
+                TextComponent.Builder builder = Component.text().content(handItemNbt);
+                builder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Click to copy to clipboard.")));
+                builder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, handItemNbt));
+                player.sendMessage(builder.build());
+                return 1;
+            });
+    }
+
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> migrate() {
+        return Commands.literal("migrate")
+            .executes(ctx -> {
+                CommandSender sender = ctx.getSource().getSender();
+                if (!DatabaseUtil.isDatabaseOnline()) {
+                    sender.sendPlainMessage("You cannot run migrations when the database is disabled. Please set database.enabled: true. And restart the server.");
+                    return 1;
+                }
+                EvenMoreFish.getScheduler().runTaskAsynchronously(
+                    () -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().migrateLegacy(sender)
+                );
+                return 1;
+            });
+    }
+
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> help() {
+        return Commands.literal("help")
+            .executes(ctx -> {
+                sendHelpMessage(ctx.getSource().getSender());
+                return 1;
+            });
+    }
+
+    private EMFSingleMessage getVersionMessage() {
         int fishCount = FishManager.getInstance().getRarityMap().values().stream()
             .mapToInt(rarity -> rarity.getFishList().size())
             .sum();
@@ -227,32 +229,7 @@ public class AdminCommand {
         message.setVariable("{engine}", databaseEngine);
         message.setVariable("{type}", databaseType);
 
-        message.send(sender);
-    }
-
-    @Executes("rawItem")
-    public void onRawItem(CommandSender sender) {
-        if (!(sender instanceof Player player)) {
-            ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
-            return;
-        }
-        ItemStack handItem = player.getInventory().getItemInMainHand();
-        if (handItem.isEmpty()) {
-            return;
-        }
-
-        String handItemNbt = NBT.itemStackToNBT(handItem).toString();
-
-        // Ensure the handItemNbt is escaped for use in YAML
-        // This could be slightly inefficient, but it is the only way I can currently think of.
-        YamlDocument document = new ConfigBase().getConfig();
-        document.set("rawItem", handItemNbt);
-        handItemNbt = document.dump().replaceFirst("rawItem: ", "");
-
-        TextComponent.Builder builder = Component.text().content(handItemNbt);
-        builder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Click to copy to clipboard.")));
-        builder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, handItemNbt));
-        player.sendMessage(builder.build());
+        return message;
     }
 
     private String getFeatureBranchName() {
@@ -261,24 +238,6 @@ public class AdminCommand {
 
     private String getFeatureBranchBuildOrDate() {
         return ManifestUtil.getAttributeFromManifest(Attributes.Name.IMPLEMENTATION_VERSION.toString(), "");
-    }
-
-    @Executes("migrate")
-    public void onMigrate(CommandSender sender) {
-        if (!DatabaseUtil.isDatabaseOnline()) {
-            sender.sendPlainMessage("You cannot run migrations when the database is disabled. Please set database.enabled: true. And restart the server.");
-            return;
-        }
-        EvenMoreFish.getScheduler().runTaskAsynchronously(() -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().migrateLegacy(sender));
-    }
-
-    @Executes("help")
-    public void onHelp(CommandSender sender) {
-        sendHelpMessage(sender);
-    }
-
-    public static void sendHelpMessage(CommandSender sender) {
-        HELP_MESSAGE.sendMessage(sender);
     }
 
 }

@@ -1,63 +1,98 @@
 package com.oheers.fish.commands.admin.subcommand;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.commands.CommandUtils;
-import com.oheers.fish.commands.admin.AdminCommand;
-import net.strokkur.commands.annotations.DefaultExecutes;
-import net.strokkur.commands.annotations.Executes;
-import net.strokkur.commands.annotations.Permission;
+import com.oheers.fish.permissions.AdminPerms;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
-import org.jspecify.annotations.NullMarked;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
-@NullMarked
+@SuppressWarnings("UnstableApiUsage")
 public class DatabaseSubcommand {
 
-    @DefaultExecutes
-    public void onDefault(CommandSender sender) {
-        AdminCommand.sendHelpMessage(sender);
+    private final String name;
+
+    public DatabaseSubcommand(@NonNull String name) {
+        this.name = name;
     }
 
-    @Executes("drop-flyway")
-    @Permission("emf.admin.debug.database.flyway")
-    public void onDropFlyway(CommandSender sender) {
-        if (CommandUtils.isLogDbError(sender)) {
-            return;
-        }
-        EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().dropFlywaySchemaHistory();
-        sender.sendMessage("Dropped flyway schema history.");
+    public @NotNull LiteralArgumentBuilder<CommandSourceStack> get() {
+        return Commands.literal(name)
+            .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE))
+            .then(dropFlyway())
+            .then(repairFlyway())
+            .then(cleanFlyway())
+            .then(migrateToLatest())
+            .then(help());
     }
 
-    @Executes("repair-flyway")
-    @Permission("emf.admin.debug.database.flyway")
-    public void onRepairFlyway(CommandSender sender) {
-        if (CommandUtils.isLogDbError(sender)) {
-            return;
-        }
-        sender.sendMessage("Attempting to repair the migrations, check the logs.");
-        EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().repairFlyway();
+    private @NotNull ArgumentBuilder<CommandSourceStack, ?> dropFlyway() {
+        return Commands.literal("drop-flyway")
+            .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE_FLYWAY))
+            .executes(ctx -> {
+                CommandSender sender = ctx.getSource().getSender();
+                if (CommandUtils.isLogDbError(sender)) {
+                    return 1;
+                }
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().dropFlywaySchemaHistory();
+                sender.sendMessage("Dropped flyway schema history.");
+                return 1;
+            });
     }
 
-    @Executes("clean-flyway")
-    @Permission("emf.admin.debug.database.clean")
-    public void onCleanFlyway(CommandSender sender) {
-        if (CommandUtils.isLogDbError(sender)) {
-            return;
-        }
-        sender.sendMessage("Attempting to clean flyway, check the logs.");
-        EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().cleanFlyway();
+    private @NotNull ArgumentBuilder<CommandSourceStack, ?> repairFlyway() {
+        return Commands.literal("repair-flyway")
+            .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE_FLYWAY))
+            .executes(ctx -> {
+                CommandSender sender = ctx.getSource().getSender();
+                if (CommandUtils.isLogDbError(sender)) {
+                    return 1;
+                }
+                sender.sendMessage("Attempting to repair the migrations, check the logs.");
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().repairFlyway();
+                return 1;
+            });
     }
 
-    @Executes("migrate-to-latest")
-    @Permission("emf.admin.debug.database.migrate")
-    public void onMigrateToLatest(CommandSender sender) {
-        if (CommandUtils.isLogDbError(sender)) {
-            return;
-        }
-        EvenMoreFish.getInstance().getPluginDataManager().getDatabase().migrateFromDatabaseVersionToLatest();
+    private @NotNull ArgumentBuilder<CommandSourceStack, ?> cleanFlyway() {
+        return Commands.literal("clean-flyway")
+            .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE_CLEAN))
+            .executes(ctx -> {
+                CommandSender sender = ctx.getSource().getSender();
+                if (CommandUtils.isLogDbError(sender)) {
+                    return 1;
+                }
+                sender.sendMessage("Attempting to clean flyway, check the logs.");
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().cleanFlyway();
+                return 1;
+            });
     }
 
-    @DefaultExecutes
-    public void onHelp(CommandSender sender) {
-        sender.sendMessage("Available Commands: migrate-to-latest, clean-flyway, repair-flyway, drop-flyway");
+    private @NotNull ArgumentBuilder<CommandSourceStack, ?> migrateToLatest() {
+        return Commands.literal("migrate-to-latest")
+            .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE_MIGRATE))
+            .executes(ctx -> {
+                CommandSender sender = ctx.getSource().getSender();
+                if (CommandUtils.isLogDbError(sender)) {
+                    return 1;
+                }
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabase().migrateFromDatabaseVersionToLatest();
+                return 1;
+            });
     }
+
+    private @NotNull ArgumentBuilder<CommandSourceStack, ?> help() {
+        return Commands.literal("help")
+            .executes(ctx -> {
+                ctx.getSource().getSender().sendPlainMessage(
+                    "Available Commands: migrate-to-latest, clean-flyway, repair-flyway, drop-flyway"
+                );
+                return 1;
+            });
+    }
+
 }

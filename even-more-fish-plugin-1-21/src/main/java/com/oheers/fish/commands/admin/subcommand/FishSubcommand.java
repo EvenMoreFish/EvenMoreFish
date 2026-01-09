@@ -1,39 +1,87 @@
 package com.oheers.fish.commands.admin.subcommand;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.CommandUtils;
-import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.arguments.FishArgument;
 import com.oheers.fish.commands.arguments.RarityArgument;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.strokkur.commands.annotations.DefaultExecutes;
-import net.strokkur.commands.annotations.Executes;
-import net.strokkur.commands.annotations.arguments.CustomArg;
-import net.strokkur.commands.annotations.arguments.IntArg;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
+import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+// Branches:
+// [rarity] [fish-name]
+// [rarity] [fish-name] [quantity]
+// [rarity] [fish-name] [quantity] [targets]
+@SuppressWarnings("UnstableApiUsage")
 public class FishSubcommand {
 
-    @DefaultExecutes
-    public void onDefault(CommandSender sender) {
-        AdminCommand.sendHelpMessage(sender);
+    private final String name;
+
+    public FishSubcommand(@NotNull String name) {
+        this.name = name;
     }
 
-    @Executes
-    public void execute(CommandSender sender, @CustomArg(RarityArgument.class) Rarity rarity, @CustomArg(FishArgument.class) String fishStr, @IntArg(min = 1) int amount, List<Player> targets) throws CommandSyntaxException {
+    // Lots of nesting, but I tried to make it as clean as possible.
+    public LiteralArgumentBuilder<CommandSourceStack> get() {
+        return Commands.literal(name)
+            .then(
+                Commands.argument("rarity", new RarityArgument())
+                    .then(
+                        Commands.argument("fish", new FishArgument())
+                            // [rarity] [fish-name]
+                            .executes(ctx -> execute(ctx, false))
+                            .then(
+                                Commands.argument("amount", IntegerArgumentType.integer(1))
+                                    // [rarity] [fish-name] [quantity]
+                                    .executes(ctx -> execute(ctx, false))
+                                    .then(
+                                        Commands.argument("targets", ArgumentTypes.players())
+                                            // [rarity] [fish-name] [quantity] [targets]
+                                            .executes(ctx -> execute(ctx, true))
+                                    )
+                            )
+                    )
+            );
+    }
+
+    private int execute(@NotNull CommandContext<CommandSourceStack> ctx, boolean allowConsole) throws CommandSyntaxException {
+        CommandSender sender = allowConsole ? ctx.getSource().getSender() : BrigCommandUtils.requirePlayer(ctx);
+        Rarity rarity = ctx.getArgument("rarity", Rarity.class);
+        String fishStr = ctx.getArgument("fish", String.class);
+        int amount = BrigCommandUtils.getArgumentOrDefault(ctx, "amount", int.class, 1);
+        PlayerSelectorArgumentResolver targets = BrigCommandUtils.getArgumentOrNull(ctx, "targets", PlayerSelectorArgumentResolver.class);
+        return execute(
+            sender,
+            rarity,
+            fishStr,
+            amount,
+            BrigCommandUtils.resolvePlayers(ctx, targets)
+        );
+    }
+
+    private int execute(CommandSender sender, Rarity rarity, String fishStr, int amount, List<Player> targets) throws CommandSyntaxException {
         if (targets.isEmpty()) {
-            throw BrigCommandUtils.ERROR_NO_PLAYERS.create();
+            if (!(sender instanceof Player player)) {
+                throw BrigCommandUtils.ERROR_NO_PLAYERS.create();
+            }
+            targets = List.of(player);
         }
 
         Fish initialFish = FishArgument.resolveFish(rarity, fishStr);
@@ -62,20 +110,7 @@ public class FishSubcommand {
 
         message.setFishCaught(initialFish.getName());
         message.send(sender);
-    }
-
-    @Executes
-    public void execute(CommandSender sender, @CustomArg(RarityArgument.class) Rarity rarity, @CustomArg(FishArgument.class) String fishStr, @IntArg(min = 1) Integer amount) throws CommandSyntaxException {
-        if (sender instanceof Player player) {
-            execute(sender, rarity, fishStr, amount, List.of(player));
-            return;
-        }
-        ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
-    }
-
-    @Executes
-    public void execute(CommandSender sender, @CustomArg(RarityArgument.class) Rarity rarity, @CustomArg(FishArgument.class) String fishStr) throws CommandSyntaxException {
-        execute(sender, rarity, fishStr, 1);
+        return 1;
     }
 
 }

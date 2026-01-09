@@ -2,12 +2,14 @@ package com.oheers.fish.commands.main;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.oheers.fish.Checks;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.HelpMessageBuilder;
 import com.oheers.fish.commands.MainCommandProvider;
+import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.subcommand.JournalSubcommand;
 import com.oheers.fish.commands.main.subcommand.ShopSubcommand;
 import com.oheers.fish.commands.main.subcommand.ToggleSubcommand;
@@ -28,19 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 // Safe to suppress - Newer API versions are identical and stable.
 @SuppressWarnings("UnstableApiUsage")
-public class MainCommand extends MainCommandProvider<LiteralCommandNode<CommandSourceStack>, ArgumentBuilder<CommandSourceStack, ?>> {
-
-    private final HelpMessageBuilder helpMessage = HelpMessageBuilder.create()
-        .addUsage(MainConfig.getInstance().getAdminSubCommandName(), ConfigMessage.HELP_GENERAL_ADMIN::getMessage)
-        .addUsage(MainConfig.getInstance().getHelpSubCommandName(), ConfigMessage.HELP_GENERAL_HELP::getMessage)
-        .addUsage(MainConfig.getInstance().getGuiSubCommandName(), ConfigMessage.HELP_GENERAL_GUI::getMessage)
-        .addUsage(MainConfig.getInstance().getTopSubCommandName(), ConfigMessage.HELP_GENERAL_TOP::getMessage)
-        .addUsage(MainConfig.getInstance().getSellAllSubCommandName(), ConfigMessage.HELP_GENERAL_SELLALL::getMessage)
-        .addUsage(MainConfig.getInstance().getApplyBaitsSubCommandName(), ConfigMessage.HELP_GENERAL_APPLYBAITS::getMessage)
-        .addUsage(MainConfig.getInstance().getJournalSubCommandName(), ConfigMessage.HELP_GENERAL_JOURNAL::getMessage)
-        .addUsage(MainConfig.getInstance().getNextSubCommandName(), ConfigMessage.HELP_GENERAL_NEXT::getMessage)
-        .addUsage(MainConfig.getInstance().getToggleSubCommandName(), ConfigMessage.HELP_GENERAL_TOGGLE::getMessage)
-        .addUsage(MainConfig.getInstance().getShopSubCommandName(), ConfigMessage.HELP_GENERAL_SHOP::getMessage);
+public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceStack>, ArgumentBuilder<CommandSourceStack, ?>> {
 
     public @NotNull LiteralCommandNode<CommandSourceStack> get() {
         return Commands.literal(commandName())
@@ -72,8 +62,7 @@ public class MainCommand extends MainCommandProvider<LiteralCommandNode<CommandS
 
     @Override
     protected @NotNull ArgumentBuilder<CommandSourceStack, ?> admin() {
-        // TODO admin command.
-        return Commands.literal("admin");
+        return new AdminCommand(adminName()).getAsArgument();
     }
 
     @Override
