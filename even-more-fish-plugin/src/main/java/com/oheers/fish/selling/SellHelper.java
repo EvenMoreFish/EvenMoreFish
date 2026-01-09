@@ -95,6 +95,13 @@ public class SellHelper {
             return;
         }
 
+        // Give sell rewards
+        fish.forEach(fish ->
+            fish.getFish().getSellRewards().forEach(
+                reward -> reward.rewardPlayer(player, player.getLocation())
+            )
+        );
+
         logSoldFish(fish, saleValue, count);
 
         // Give money

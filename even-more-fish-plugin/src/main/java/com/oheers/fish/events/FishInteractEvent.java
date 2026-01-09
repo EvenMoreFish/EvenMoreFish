@@ -11,22 +11,15 @@ import org.bukkit.inventory.ItemStack;
 
 public class FishInteractEvent implements Listener {
 
-    private static final FishInteractEvent interactEvent = new FishInteractEvent();
-
-    private FishInteractEvent() {}
-
-    public static FishInteractEvent getInstance() {
-        return interactEvent;
-    }
-
     @EventHandler
     public void interactEvent(PlayerInteractEvent event) {
-        // If there is no item, or the player is sneaking (to place the head), the item isn't actually a fish, or the event fired for the off hand don't do anything
-        if (event.getItem() == null || event.getPlayer().isSneaking() || !FishUtils.isFish(event.getItem()) || event.getHand() == EquipmentSlot.OFF_HAND
+        // If the player is sneaking (to place the head), is using the offhand, or isn't clicking air, don't do anything
+        if (event.getPlayer().isSneaking()
+            || EquipmentSlot.OFF_HAND.equals(event.getHand())
             || !event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
             return;
         }
-        // Creates a replica of the fish we can use
+        // Creates a replica of the fish we can use. If the item is null or isn't a fish, the null check will pass.
         Fish fish = FishUtils.getFish(event.getItem());
         if (fish == null) {
             return;

@@ -210,13 +210,13 @@ public class Fish implements IFish {
     @Override
     public boolean hasFishRewards() {
         checkFishEvent();
-        return !fishRewards.isEmpty();
+        return fishRewards != null && !fishRewards.isEmpty();
     }
 
     @Override
     public boolean hasSellRewards() {
         checkSellEvent();
-        return !sellRewards.isEmpty();
+        return sellRewards != null && !sellRewards.isEmpty();
     }
 
     @Override
@@ -383,8 +383,6 @@ public class Fish implements IFish {
         List<String> configRewards = section.getStringList("interact-event");
         // Checks if the player has actually set reward for an interact event
         if (!configRewards.isEmpty()) {
-            // Informs the main class to load up an PlayerItemConsumeEvent listener
-            EvenMoreFish.getInstance().getEventManager().setCheckingIntEvent(true);
             this.eventType = "int";
             actionRewards = new ArrayList<>();
 
