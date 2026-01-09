@@ -216,7 +216,6 @@ public abstract class EvenMoreFish extends EMFPlugin {
         BaitManager.getInstance().reload();
         RodManager.getInstance().reload();
 
-        HandlerList.unregisterAll(FishInteractEvent.getInstance());
         HandlerList.unregisterAll(McMMOTreasureEvent.getInstance());
 
         this.eventManager.registerOptionalListeners();

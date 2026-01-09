@@ -20,8 +20,6 @@ public class EventManager {
     private final EvenMoreFish plugin;
     private final PluginManager pm;
 
-    private boolean checkingIntEvent;
-
     public EventManager(EvenMoreFish plugin) {
         this.plugin = plugin;
         this.pm = plugin.getServer().getPluginManager();
@@ -42,17 +40,11 @@ public class EventManager {
         pm.registerEvents(new UpdateNotify(), plugin);
         pm.registerEvents(new BaitApplicationListener(), plugin);
         pm.registerEvents(new ItemProtectionListener(), plugin);
+        pm.registerEvents(new FishInteractEvent(), plugin);
     }
 
     public void registerOptionalListeners() {
-        if (checkingIntEvent) {
-            pm.registerEvents(FishInteractEvent.getInstance(), plugin);
-        }
         plugin.getDependencyManager().checkOptionalDependencies();
-    }
-
-    public void setCheckingIntEvent(boolean checkingIntEvent) {
-        this.checkingIntEvent = checkingIntEvent;
     }
 
 }
