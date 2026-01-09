@@ -6,11 +6,6 @@ import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.permissions.UserPerms;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import net.strokkur.commands.annotations.DefaultExecutes;
-import net.strokkur.commands.annotations.Executes;
-import net.strokkur.commands.annotations.Executor;
-import net.strokkur.commands.annotations.Permission;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +27,7 @@ public class ToggleSubcommand {
                 return 1;
             })
             .then(fishing())
-            .then(bossBar());
+            .then(bossbar());
     }
 
     private ArgumentBuilder<CommandSourceStack, ?> fishing() {
@@ -44,8 +39,8 @@ public class ToggleSubcommand {
             });
     }
 
-    private ArgumentBuilder<CommandSourceStack, ?> bossBar() {
-        return Commands.literal("fishing")
+    private ArgumentBuilder<CommandSourceStack, ?> bossbar() {
+        return Commands.literal("bossbar")
             .executes(ctx -> {
                 Player player = BrigCommandUtils.requirePlayer(ctx);
                 EvenMoreFish.getInstance().getToggle().performBossBarToggle(player);
