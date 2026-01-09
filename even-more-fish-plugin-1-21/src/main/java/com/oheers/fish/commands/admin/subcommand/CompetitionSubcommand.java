@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.commands.arguments.CompetitionFileArgument;
+import com.oheers.fish.commands.arguments.CompetitionTypeArgument;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.configs.CompetitionFile;
@@ -98,7 +99,7 @@ public class CompetitionSubcommand {
                         return 1;
                     })
                     .then(
-                        Commands.argument("type", new CompetitionFileArgument())
+                        Commands.argument("type", new CompetitionTypeArgument())
                             // [duration] [type]
                             .executes(ctx -> {
                                 int duration = ctx.getArgument("duration", int.class);
