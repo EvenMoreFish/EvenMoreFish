@@ -1,33 +1,62 @@
 package com.oheers.fish.commands.admin.subcommand;
 
-import com.oheers.fish.EvenMoreFish;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.arguments.CompetitionFileArgument;
-import com.oheers.fish.commands.arguments.CompetitionTypeArgument;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import com.oheers.fish.utils.DurationFormatter;
-import net.strokkur.commands.annotations.DefaultExecutes;
-import net.strokkur.commands.annotations.Executes;
-import net.strokkur.commands.annotations.arguments.CustomArg;
-import net.strokkur.commands.annotations.arguments.IntArg;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
+@SuppressWarnings("UnstableApiUsage")
 public class CompetitionSubcommand {
 
-    @DefaultExecutes
-    public void onDefault(CommandSender sender) {
-        AdminCommand.sendHelpMessage(sender);
+    private final String name;
+
+    public CompetitionSubcommand(@NotNull String name) {
+        this.name = name;
     }
 
-    @Executes("start")
-    public void onStart(CommandSender sender, @CustomArg(CompetitionFileArgument.class) CompetitionFile file, @IntArg(min = 1) Integer duration) {
+    public LiteralArgumentBuilder<CommandSourceStack> get() {
+        return Commands.literal(name)
+            .then(start())
+            .then(end())
+            .then(test())
+            .then(extend());
+    }
+
+    private ArgumentBuilder<CommandSourceStack, ?> start() {
+        return Commands.literal("start")
+            .then(
+                Commands.argument("file", new CompetitionFileArgument())
+                    // [competition]
+                    .executes(ctx -> {
+                        CompetitionFile file = ctx.getArgument("file", CompetitionFile.class);
+                        start(ctx.getSource().getSender(), file, null);
+                        return 1;
+                    })
+                    .then(
+                        Commands.argument("duration", IntegerArgumentType.integer(1))
+                            // [competition] [duration]
+                            .executes(ctx -> {
+                                CompetitionFile file = ctx.getArgument("file", CompetitionFile.class);
+                                int duration = ctx.getArgument("duration", int.class);
+                                start(ctx.getSource().getSender(), file, duration);
+                                return 1;
+                            })
+                    )
+            );
+    }
+
+    private void start(@NotNull CommandSender sender, @NotNull CompetitionFile file, @Nullable Integer duration) {
         if (Competition.isActive()) {
             ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
             return;
@@ -40,23 +69,48 @@ public class CompetitionSubcommand {
         competition.begin();
     }
 
-    @Executes("start")
-    public void onStart(CommandSender sender, @CustomArg(CompetitionFileArgument.class) CompetitionFile file) {
-        onStart(sender, file, null);
+    private ArgumentBuilder<CommandSourceStack, ?> end() {
+        return Commands.literal("end")
+            .executes(ctx -> {
+                Competition active = Competition.getCurrentlyActive();
+                if (active == null) {
+                    ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(ctx.getSource().getSender());
+                    return 1;
+                }
+                active.end(false);
+                return 1;
+            });
     }
 
-    @Executes("end")
-    public void onEnd(CommandSender sender) {
-        Competition active = Competition.getCurrentlyActive();
-        if (active == null) {
-            ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(sender);
-            return;
-        }
-        active.end(false);
+    private ArgumentBuilder<CommandSourceStack, ?> test() {
+        return Commands.literal("test")
+            // No args
+            .executes(ctx -> {
+                test(ctx.getSource().getSender(), 60, CompetitionType.LARGEST_FISH);
+                return 1;
+            })
+            .then(
+                Commands.argument("duration", IntegerArgumentType.integer(1))
+                    // [duration]
+                    .executes(ctx -> {
+                        int duration = ctx.getArgument("duration", int.class);
+                        test(ctx.getSource().getSender(), duration, CompetitionType.LARGEST_FISH);
+                        return 1;
+                    })
+                    .then(
+                        Commands.argument("type", new CompetitionFileArgument())
+                            // [duration] [type]
+                            .executes(ctx -> {
+                                int duration = ctx.getArgument("duration", int.class);
+                                CompetitionType type = ctx.getArgument("type", CompetitionType.class);
+                                test(ctx.getSource().getSender(), duration, type);
+                                return 1;
+                            })
+                    )
+            );
     }
 
-    @Executes("test")
-    public void onTest(CommandSender sender, @IntArg(min = 1) int duration, @CustomArg(CompetitionTypeArgument.class) CompetitionType type) {
+    private void test(CommandSender sender, int duration, CompetitionType type) {
         if (Competition.isActive()) {
             ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
             return;
@@ -67,28 +121,25 @@ public class CompetitionSubcommand {
         competition.begin();
     }
 
-    @Executes("test")
-    public void onTest(CommandSender sender, @IntArg(min = 1) int duration) {
-        onTest(sender, duration, CompetitionType.LARGEST_FISH);
-    }
+    private ArgumentBuilder<CommandSourceStack, ?> extend() {
+        return Commands.literal("extend")
+            .then(
+                Commands.argument("duration", IntegerArgumentType.integer(1))
+                    .executes(ctx -> {
+                        int duration = ctx.getArgument("duration", int.class);
+                        Competition active = Competition.getCurrentlyActive();
+                        if (active == null) {
+                            ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(ctx.getSource().getSender());
+                            return 1;
+                        }
+                        active.addTime(duration);
 
-    @Executes("test")
-    public void onTest(CommandSender sender) {
-        onTest(sender, 60, CompetitionType.LARGEST_FISH);
-    }
-
-    @Executes("extend")
-    public void onExtend(CommandSender sender, @IntArg(min = 1) int duration) {
-        Competition active = Competition.getCurrentlyActive();
-        if (active == null) {
-            ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(sender);
-            return;
-        }
-        active.addTime(duration);
-
-        EMFMessage message = ConfigMessage.COMPETITION_TIME_EXTENDED.getMessage();
-        message.setVariable("{duration}", FishUtils.timeFormat(duration));
-        message.broadcast();
+                        EMFMessage message = ConfigMessage.COMPETITION_TIME_EXTENDED.getMessage();
+                        message.setVariable("{duration}", FishUtils.timeFormat(duration));
+                        message.broadcast();
+                        return 1;
+                    })
+            );
     }
 
 }
