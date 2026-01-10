@@ -190,6 +190,31 @@ Atlantic Cod:
     nearby-players: 5 # When there are 5 players within range of the player.
 ```
 
+### Placeholder
+This checks the output of a placeholder with the value you configure.
+
+Valid Operators:
+- == - Equals
+- = - Equals
+- != - Not Equals
+- \> - More than (Only works on numbers)
+- \>= - More than or equal to (Only works on numbers)
+- < - Less than (Only works on numbers)
+- <= - Less than or equal to (Only works on numbers)
+
+A config example of using the placeholder requirement:
+```yaml title="Placeholder Example"
+Atlantic Cod:
+  requirements:
+    placeholder:
+      # The requirement passes if the player name is KitterKatter.
+      - "%player_name% == KitterKatter"
+      # The requirement passes if the player is not in a desert biome.
+      - "%player_biome% != Desert"
+      # The requirement passes if the player's exp is more than or equal to 1000.
+      - "%player_current_exp% >= 1000"
+```
+
 ### World
 And finally, this limits fish to certain worlds. By default there's only three worlds, `overworld`, `nether` and `end`, but with a plugin like [Multiverse-Core](https://modrinth.com/plugin/multiverse-core), you can create worlds to allow fish to only be caught in. There probably isn't much point allowing `nether` since water can't be placed there and lava can't be fished in though.
 
