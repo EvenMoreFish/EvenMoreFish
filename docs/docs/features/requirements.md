@@ -191,7 +191,9 @@ Atlantic Cod:
 ```
 
 ### Placeholder
-This checks the output of a placeholder with the value you configure.
+This checks the output of a PlaceholderAPI placeholder against the value you choose.
+
+This will allow you to check values from plugins that EMF cannot hook into via their placeholders.
 
 Valid Operators:
 - == - Equals
@@ -199,8 +201,8 @@ Valid Operators:
 - != - Not Equals
 - \> - More than (Only works on numbers)
 - \>= - More than or equal to (Only works on numbers)
-- < - Less than (Only works on numbers)
-- <= - Less than or equal to (Only works on numbers)
+- \< - Less than (Only works on numbers)
+- \<= - Less than or equal to (Only works on numbers)
 
 A config example of using the placeholder requirement:
 ```yaml title="Placeholder Example"
