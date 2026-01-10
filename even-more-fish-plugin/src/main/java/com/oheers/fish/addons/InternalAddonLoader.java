@@ -17,6 +17,7 @@ import com.oheers.fish.addons.internal.requirement.IRLTimeRequirementType;
 import com.oheers.fish.addons.internal.requirement.InGameTimeRequirementType;
 import com.oheers.fish.addons.internal.requirement.MoonPhaseRequirementType;
 import com.oheers.fish.addons.internal.requirement.NearbyPlayersRequirementType;
+import com.oheers.fish.addons.internal.requirement.PlaceholderRequirementType;
 import com.oheers.fish.addons.internal.requirement.RegionRequirementType;
 import com.oheers.fish.addons.internal.requirement.WeatherRequirementType;
 import com.oheers.fish.addons.internal.requirement.WorldRequirementType;
@@ -102,6 +103,10 @@ public class InternalAddonLoader extends AddonLoader {
         Permission permission = EvenMoreFish.getInstance().getDependencyManager().getPermission();
         if (permission != null) {
             new GroupRequirementType(permission).register();
+        }
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new PlaceholderRequirementType().register();
         }
     }
 
