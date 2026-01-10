@@ -407,17 +407,17 @@ public class BaitNBTManager {
         EMFListMessage format = ConfigMessage.BAIT_ROD_LORE.getMessage().toListMessage();
 
         Supplier<EMFListMessage> baitVariable = () -> {
-            EMFListMessage message = EMFListMessage.empty();
+            List<Component> list = new ArrayList<>();
 
             String rodNBT = NbtUtils.getString(itemStack, NbtKeys.EMF_APPLIED_BAIT);
 
             if (rodNBT == null || rodNBT.isEmpty()) {
-                return message;
+                return EMFListMessage.empty();
             }
 
             final String[] baitRodNbt = rodNBT.split(BAIT_ENTRY_DELIMITER);
             for (String bait : baitRodNbt) {
-                EMFMessage baitFormat = ConfigMessage.BAIT_BAITS.getMessage();
+                EMFSingleMessage baitFormat = ConfigMessage.BAIT_BAITS.getMessage().toSingleMessage();
                 final String[] parts = bait.split(BAIT_SEPARATOR);
                 if (parts.length == 2) {
                     baitFormat.setAmount(parts[1]);
@@ -426,16 +426,16 @@ public class BaitNBTManager {
                 }
 
                 baitFormat.setBait(getBaitFormatted(parts[0]));
-                message.appendMessage(baitFormat);
+                list.add(baitFormat.getComponentMessage());
             }
 
             if (MainConfig.getInstance().getBaitShowUnusedSlots()) {
                 for (int i = baitRodNbt.length; i < MainConfig.getInstance().getBaitsPerRod(); i++) {
-                    message.appendMessage(ConfigMessage.BAIT_UNUSED_SLOT.getMessage());
+                    list.add(ConfigMessage.BAIT_UNUSED_SLOT.getMessage().getComponentMessage());
                 }
             }
 
-            return message;
+            return EMFListMessage.ofList(list);
         };
         format.setVariableWithListInsertion("{baits}", baitVariable.get());
 
