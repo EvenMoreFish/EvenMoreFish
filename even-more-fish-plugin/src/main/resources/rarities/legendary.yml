@@ -1,7 +1,8 @@
 id: Legendary
 disabled: false
 weight: 1
-material: yellow_concrete_powder
+item:
+  material: yellow_concrete_powder
 format: <gold>{name}
 worth-multiplier: 0.2
 broadcast: true

@@ -9,6 +9,7 @@ import com.oheers.fish.api.config.ConfigUtils;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.fishing.items.config.RarityFileUpdates;
+import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Material;
@@ -185,9 +186,15 @@ public class Rarity extends ConfigBase implements IRarity {
     }
 
     @Override
-    public @NotNull ItemStack getMaterial() {
-        ItemStack item = FishUtils.getItem(getConfig().getString("material"));
-        return item == null ? new ItemStack(Material.COD) : item;
+    public @NotNull ItemStack getJournalItem() {
+        // Old format for compatibility
+        ItemStack oldItem = FishUtils.getItem(getConfig().getString("material"));
+        if (oldItem != null) {
+            return oldItem;
+        }
+        // New format that accepts ItemFactory configs
+        ItemFactory factory = ItemFactory.itemFactory(getConfig());
+        return factory.createItem();
     }
 
     @Override
