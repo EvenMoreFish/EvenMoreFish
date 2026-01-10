@@ -67,36 +67,43 @@ public class BaitItemFactory {
     }
 
     private @NotNull EMFMessage createBoostsVariable() {
-        EMFMessage boostsMessage = EMFSingleMessage.empty();
-        appendRarityBoosts(boostsMessage);
-        appendFishBoosts(boostsMessage);
-        return boostsMessage;
+        Component boostsMessage = Component.empty();
+        boostsMessage = appendRarityBoosts(boostsMessage);
+        boostsMessage = appendFishBoosts(boostsMessage);
+        return EMFSingleMessage.of(boostsMessage);
     }
 
-    private void appendRarityBoosts(EMFMessage message) {
-        if (rarities.isEmpty()) return;
+    private Component appendRarityBoosts(Component message) {
+        if (rarities.isEmpty()) return message;
 
         ConfigMessage boostMessage = rarities.size() > 1
                 ? ConfigMessage.BAIT_BOOSTS_RARITIES
                 : ConfigMessage.BAIT_BOOSTS_RARITY;
-
-        message.appendMessage(boostMessage.getMessage());
-        message.setAmount(Integer.toString(rarities.size()));
+        EMFMessage boost = boostMessage.getMessage();
+        boost.setAmount(rarities.size());
+        return message.append(boost.getComponentMessage());
     }
 
-    private void appendFishBoosts(EMFMessage message) {
-        if (fish.isEmpty()) return;
+    private Component appendFishBoosts(Component message) {
+        if (fish.isEmpty()) return message;
 
-        message.appendMessage(ConfigMessage.BAIT_BOOSTS_FISH.getMessage());
-        message.setAmount(Integer.toString(fish.size()));
+        EMFMessage boost = ConfigMessage.BAIT_BOOSTS_FISH.getMessage();
+        boost.setAmount(fish.size());
+        return message.append(boost.getComponentMessage());
     }
 
 
     @Contract(pure = true)
     private @NotNull Supplier<EMFListMessage> createItemLoreVariable(ItemFactory factory) {
-        return () -> EMFListMessage.fromStringList(
+        return () -> {
+            List<String> configured = factory.getLore().getConfiguredValue();
+            if (configured == null) {
+                return EMFListMessage.empty();
+            }
+            return EMFListMessage.fromStringList(
                 factory.getLore().getConfiguredValue()
-        );
+            );
+        };
     }
 
 
