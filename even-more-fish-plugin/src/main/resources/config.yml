@@ -61,8 +61,8 @@ database:
   # (Or after, but only if you know what you're doing).
   table-prefix: emf_
   # Login information
-  username: root
-  password: ''
+  username: "emf"
+  password: "secret"
   advanced:
     disable-jooq-startup-comments: true
     save-interval:
