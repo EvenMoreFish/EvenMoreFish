@@ -18,6 +18,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -362,14 +363,14 @@ public class Competition {
         message.send(sender);
     }
 
-    private @NotNull EMFMessage buildLeaderboardMessage(List<CompetitionEntry> entries, List<String> competitionColours, boolean isConsole) {
+    private @NotNull EMFListMessage buildLeaderboardMessage(List<CompetitionEntry> entries, List<String> competitionColours, boolean isConsole) {
         if (entries == null) {
             entries = List.of();
         }
 
         int maxCount = MessageConfig.getInstance().getLeaderboardCount();
 
-        EMFListMessage builder = EMFListMessage.empty();
+        List<Component> leaderboard = new ArrayList<>();
         int pos = 0;
 
         for (CompetitionEntry entry : entries) {
@@ -403,10 +404,10 @@ public class Competition {
             message.setRarity(entry.getFish().getRarity().getDisplayName());
             message.setFishCaught(entry.getFish().getDisplayName());
 
-            builder.appendMessage(message);
+            leaderboard.add(message.getComponentMessage());
         }
 
-        return builder;
+        return EMFListMessage.ofList(leaderboard);
     }
 
     private void handleDatabaseUpdates(CompetitionEntry entry, boolean isTopEntry) {
