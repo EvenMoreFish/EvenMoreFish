@@ -40,7 +40,18 @@ public interface IRarity {
 
     double getWorthMultiplier();
 
-    @NotNull ItemStack getMaterial();
+    /**
+     * @deprecated Use {@link #getJournalItem()} instead.
+     */
+    @Deprecated
+    default ItemStack getMaterial() {
+        return getJournalItem();
+    }
+
+    /**
+     * @return The item to use in the journal menu, before display and lore is changed.
+     */
+    @NotNull ItemStack getJournalItem();
 
     boolean getShowInJournal();
 

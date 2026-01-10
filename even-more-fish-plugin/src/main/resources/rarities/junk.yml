@@ -1,7 +1,8 @@
 id: Junk
 disabled: false
 weight: 5
-material: white_concrete_powder
+item:
+  material: white_concrete_powder
 format: <#888888>{name}
 worth-multiplier: 0.2
 broadcast: false

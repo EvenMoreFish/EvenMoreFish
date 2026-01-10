@@ -206,7 +206,7 @@ public class FishJournalGui extends ConfigGui {
             return ItemFactory.itemFactory(section, "undiscovered-rarity").createItem(player.getUniqueId());
         }
 
-        final ItemStack rarityItem = rarity.getMaterial();
+        final ItemStack rarityItem = rarity.getJournalItem();
         final ItemStack configuredItem = ItemFactory.itemFactory(section, "rarity-item").createItem(player.getUniqueId());
 
         // Carry the configured item's lore and display name to the rarity item
