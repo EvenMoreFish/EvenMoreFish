@@ -37,6 +37,7 @@ public class ShopSubcommand {
             })
             .then(
                 Commands.argument("target", new EMFPlayerArgument())
+                    .requires(stack -> stack.getSender().hasPermission(AdminPerms.ADMIN))
                     .executes(ctx -> {
                         Player target = ctx.getArgument("target", Player.class);
                         execute(ctx.getSource().getSender(), target);
