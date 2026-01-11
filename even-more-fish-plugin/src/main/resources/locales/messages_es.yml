@@ -8,7 +8,7 @@ fish-caught: <b>{player}</b> ha pescado un {length}cm <b>{rarity}</b> {fish}!'
 # By setting a fish's minimum-length to less than 0, you can create a lengthless fish. This is used when a player fishes a lengthless fish.
 lengthless-fish-caught: <bold>{player} <reset>ha pescado un {rarity_colour}{fish} de {rarity_colour}<bold>{rarity}!
 # Sent to players when they hunt an EvenMoreFish fish
-fish-hunted: <b>{player}</b> has hunted a {length}cm <b>{rarity}</b> {fish}!
+fish-hunted:
 # This is used when a player hunts a lengthless fish.
 lengthless-fish-hunted: <b>{player}</b> has hunted a <b>{rarity}</b> {fish}!
 # Sent to a player when they don't have permission to execute a command.
