@@ -1,35 +1,51 @@
 package com.oheers.fish.commands.main.subcommand;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.permissions.UserPerms;
-import net.strokkur.commands.annotations.DefaultExecutes;
-import net.strokkur.commands.annotations.Executes;
-import net.strokkur.commands.annotations.Executor;
-import net.strokkur.commands.annotations.Permission;
-import org.bukkit.command.CommandSender;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-@Permission(UserPerms.TOGGLE)
+@SuppressWarnings("UnstableApiUsage")
 public class ToggleSubcommand {
 
-    @DefaultExecutes
-    public void onDefault(CommandSender sender, @Executor Player player) {
-        EvenMoreFish.getInstance().getToggle().performFishToggle(player);
+    private final String name;
+
+    public ToggleSubcommand(@NotNull String name) {
+        this.name = name;
     }
 
-    @Executes
-    public void executes(CommandSender sender, @Executor Player player) {
-        onDefault(sender, player);
+    public ArgumentBuilder<CommandSourceStack, ?> get() {
+        return Commands.literal(name)
+            .requires(stack -> stack.getSender().hasPermission(UserPerms.TOGGLE))
+            .executes(ctx -> {
+                Player player = BrigCommandUtils.requirePlayer(ctx);
+                EvenMoreFish.getInstance().getToggle().performFishToggle(player);
+                return 1;
+            })
+            .then(fishing())
+            .then(bossbar());
     }
 
-    @Executes("fishing")
-    public void onFishing(CommandSender sender, @Executor Player player) {
-        onDefault(sender, player);
+    private ArgumentBuilder<CommandSourceStack, ?> fishing() {
+        return Commands.literal("fishing")
+            .executes(ctx -> {
+                Player player = BrigCommandUtils.requirePlayer(ctx);
+                EvenMoreFish.getInstance().getToggle().performFishToggle(player);
+                return 1;
+            });
     }
 
-    @Executes("bossbar")
-    public void onBossBar(CommandSender sender, @Executor Player player) {
-        EvenMoreFish.getInstance().getToggle().performBossBarToggle(player);
+    private ArgumentBuilder<CommandSourceStack, ?> bossbar() {
+        return Commands.literal("bossbar")
+            .executes(ctx -> {
+                Player player = BrigCommandUtils.requirePlayer(ctx);
+                EvenMoreFish.getInstance().getToggle().performBossBarToggle(player);
+                return 1;
+            });
     }
 
 }
