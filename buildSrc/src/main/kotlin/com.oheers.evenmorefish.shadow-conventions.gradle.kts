@@ -30,6 +30,8 @@ afterEvaluate {
 
         if (variant == "core") {
             archiveFileName.set("even-more-fish-plugin-${project.version}.jar")
+        } else if (buildNumberOrDate == "RELEASE") {
+            archiveFileName.set("even-more-fish-${project.version}-${variant}.jar")
         } else {
             archiveFileName.set("even-more-fish-${project.version}-${variant}-${buildNumberOrDate}.jar")
         }
