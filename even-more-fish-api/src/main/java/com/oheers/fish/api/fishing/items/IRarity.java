@@ -43,7 +43,7 @@ public interface IRarity {
     /**
      * @deprecated Use {@link #getJournalItem()} instead.
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     default ItemStack getMaterial() {
         return getJournalItem();
     }
