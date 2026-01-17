@@ -100,12 +100,6 @@ not-enough-players: <reset>낚시 대회를 시작할만큼 사람이 충분하�
 # {time_formatted} shows the time (e.g. 5m left, 10m 30s left)
 # {time_raw} is what you input in competitions.yml
 time-alert: <reset>{type}대회가 \<time>만큼 남았습니다.
-# The sell price:
-# 0 – prints a digit if provided, 0 otherwise
-# # – prints a digit if provided, nothing otherwise
-# . – indicate where to put the decimal separator
-# , – indicate where to put the grouping separator
-sell-price-format: '$#,##0.0'
 # The message sent to players when they've sold their fish in the /emf shop
 fish-sale: <green>{amount} </green><white>fish 를</white><green>{sell-price}</green><white>에 판매했습니다.
 # The message sent to players when they attempt to sell and there are no sellable fish

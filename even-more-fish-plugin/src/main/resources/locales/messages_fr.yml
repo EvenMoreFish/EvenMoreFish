@@ -100,12 +100,6 @@ not-enough-players: <white>Il n'y a pas assez de joueurs en ligne pour commencer
 # {time_formatted} shows the time (e.g. 5m left, 10m 30s left)
 # {time_raw} is what you input in competitions.yml
 time-alert: <white>Il reste {time_formatted} à la compétition {type}
-# The sell price:
-# 0 – prints a digit if provided, 0 otherwise
-# # – prints a digit if provided, nothing otherwise
-# . – indicate where to put the decimal separator
-# , – indicate where to put the grouping separator
-sell-price-format: '$#.##0,0'
 # The message sent to players when they've sold their fish in the /emf shop
 fish-sale: <white>Vous avez vendu <green>{amount} <white>poisson(s) pour <green>{sell-price}<white>.
 # The message sent to players when they attempt to sell and there are no sellable fish
