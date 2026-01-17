@@ -2,6 +2,7 @@ package com.oheers.fish.api;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +61,7 @@ public class Logging {
         EMFPlugin.getInstance().getComponentLogger().warn(message, throwable);
     }
 
-    public static void warn(@NotNull  Component @NotNull ... message) {
+    public static void warn(@NotNull Component @NotNull ... message) {
         for (Component line : message) {
             warn(line);
         }
@@ -91,6 +92,36 @@ public class Logging {
     public static void error(@NotNull Component @NotNull ... message) {
         for (Component line : message) {
             error(line);
+        }
+    }
+
+    public static void debug(@NotNull String message) {
+        EMFPlugin.getInstance().debug(message);
+    }
+
+    public static void debug(@NotNull String message, @Nullable Throwable throwable) {
+        EMFPlugin.getInstance().debug(message, throwable);
+    }
+
+    public static void debug(@NotNull String @NotNull ... message) {
+        for (String line : message) {
+            debug(line);
+        }
+    }
+
+    public static void debug(@NotNull Component message) {
+        String str = PlainTextComponentSerializer.plainText().serialize(message);
+        EMFPlugin.getInstance().debug(str);
+    }
+
+    public static void debug(@NotNull Component message, @NotNull Throwable throwable) {
+        String str = PlainTextComponentSerializer.plainText().serialize(message);
+        EMFPlugin.getInstance().debug(str, throwable);
+    }
+
+    public static void debug(@NotNull Component @NotNull ... message) {
+        for (Component line : message) {
+            debug(line);
         }
     }
 
