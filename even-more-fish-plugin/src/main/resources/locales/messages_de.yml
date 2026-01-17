@@ -100,12 +100,6 @@ not-enough-players: <reset>Es sind nicht genug Spieler online, um den Angelwettb
 # {time_formatted} shows the time (e.g. 5m left, 10m 30s left)
 # {time_raw} is what you input in competitions.yml
 time-alert: <reset>Es sind noch {time_formatted} verbleibend vom Angelwettbewerb für {type}.
-# The sell price:
-# 0 – prints a digit if provided, 0 otherwise
-# # – prints a digit if provided, nothing otherwise
-# . – indicate where to put the decimal separator
-# , – indicate where to put the grouping separator
-sell-price-format: '$#,##0.0'
 # The message sent to players when they've sold their fish in the /emf shop
 fish-sale: <reset>Du hast <green>{amount} </green><white>Fische für </white><green>{sell-price} </green><white>verkauft.
 # The message sent to players when they attempt to sell and there are no sellable fish
