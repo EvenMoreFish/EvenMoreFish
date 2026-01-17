@@ -4,13 +4,8 @@ import br.net.fabiozumbi12.RedProtect.Bukkit.RedProtect;
 import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import com.oheers.fish.api.economy.Economy;
-import com.oheers.fish.api.economy.EconomyType;
 import com.oheers.fish.api.registry.EMFRegistry;
-import com.oheers.fish.competition.Competition;
-import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.config.MainConfig;
-import com.oheers.fish.economy.VaultEconomyType;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
@@ -30,7 +25,6 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import de.tr7zw.changeme.nbtapi.NBT;
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
@@ -56,17 +50,13 @@ import uk.firedev.messagelib.Utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 
 public class FishUtils {
@@ -466,18 +456,6 @@ public class FishUtils {
         return new BigDecimal(value)
             .setScale(places, RoundingMode.HALF_UP)
             .doubleValue();
-    }
-
-    /**
-     * Formats a double value by applying the configured decimal format.
-     *
-     * @param value The double value to be formatted.
-     * @return The formatted double
-     */
-    public static @NotNull Component formatDouble(@NotNull final String formatStr, final double value) {
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(MainConfig.getInstance().getDecimalLocale());
-        DecimalFormat format = new DecimalFormat(formatStr, symbols);
-        return Component.text(format.format(value));
     }
 
     /**
