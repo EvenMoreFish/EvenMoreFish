@@ -565,7 +565,6 @@ public class Fish implements IFish {
         }
         CatchType catchType = FishUtils.getEnumValue(CatchType.class, typeStr);
         if (catchType == null) {
-            EvenMoreFish.getInstance().getLogger().warning("Fish " + getName() + " has an incorrect catch-type. Defaulting to its rarity's catch-type.");
             return rarity.getCatchType();
         }
         return catchType;

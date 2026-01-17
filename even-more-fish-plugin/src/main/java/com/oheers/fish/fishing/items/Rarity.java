@@ -285,7 +285,6 @@ public class Rarity extends ConfigBase implements IRarity {
         String typeStr = getConfig().getString("catch-type");
         CatchType type = FishUtils.getEnumValue(CatchType.class, typeStr);
         if (type == null) {
-            EvenMoreFish.getInstance().getLogger().warning("Rarity " + getId() + " has an incorrect catch-type. Defaulting to BOTH.");
             return CatchType.BOTH;
         }
         return type;
