@@ -1,9 +1,9 @@
 package com.oheers.fish.fishing;
 
-import com.gmail.nossr50.config.experience.ExperienceConfig;
-import com.gmail.nossr50.util.player.UserManager;
+import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.competition.Competition;
@@ -22,58 +22,161 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.Listener;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.stream.Stream;
 
-public abstract class Processor<E extends Event> implements Listener {
+public abstract class Processor<E extends Event> {
 
-    protected abstract void process(E event);
-
+    // Used for formatting fish length.
     private final DecimalFormat decimalFormat = new DecimalFormat("#.0");
+    private final Random random = new Random();
 
-    protected boolean isSpaceForNewFish(Inventory inventory) {
-        return inventory != null && inventory.firstEmpty() != -1;
-    }
-
-    protected boolean isCustomFishAllowed(Player player) {
-        return isEnabled() && MainConfig.getInstance().getEnabled() && (competitionOnlyCheck() || EvenMoreFish.getInstance().isRaritiesCompCheckExempt())
-            && !EvenMoreFish.getInstance().getToggle().isCustomFishingDisabled(player);
-    }
+    protected abstract void process(@NotNull E event);
 
     protected abstract boolean isEnabled();
 
+    public @Nullable ItemStack getCaughtItem(@NotNull Player player, @NotNull Location location, @NotNull ItemStack fishingRod) {
+        // Check if fishing is allowed in this world.
+        if (!FishUtils.checkWorld(location)) {
+            return null;
+        }
+        // Check if fishing is allowed in this WorldGuard or RedProtect region.
+        if (!FishUtils.checkRegion(location, MainConfig.getInstance().getAllowedRegions())) {
+            return null;
+        }
+        // Check for mcMMO overfishing
+        if (Checks.isMcMMOOverfishing(player, location)) {
+            return null;
+        }
+
+        double baitCatchPercentage = MainConfig.getInstance().getBaitCatchPercentage();
+        if (shouldCatchBait() && baitCatchPercentage > 0 && random.nextDouble() * 100 < baitCatchPercentage) {
+            return getBaitItem(player);
+        }
+
+        CustomRod customRod = RodManager.getInstance().getRod(fishingRod);
+        BaitHandler bait = getBaitFromRod(fishingRod, customRod);
+
+        Fish fish = chooseFish(player, location, bait, customRod);
+        if (fish == null) {
+            return null;
+        }
+        if (bait != null) {
+            bait.handleFish(player, fish, fishingRod);
+        }
+
+        fish.init();
+        // Fire the fish event and check for cancellation.
+        if (!fireEvent(fish, player)) {
+            return null;
+        }
+        handleCaughtFish(player, location, fish);
+        leaderboardCheck(fish, player, location);
+        return fish.give();
+    }
+
+    private void handleCaughtFish(@NotNull Player player, @NotNull Location location, @NotNull Fish fish) {
+        if (fish.hasFishRewards()) {
+            fish.getFishRewards().forEach(fishReward -> fishReward.rewardPlayer(player, location));
+        }
+
+        EvenMoreFish.getInstance().getMetricsManager().incrementFishCaught(1);
+        if (fish.isSilent()) {
+            return;
+        }
+        String length = decimalFormat.format(fish.getLength());
+
+        EMFMessage message = fish.getLength() == -1 ?
+            getLengthlessCaughtMessage().getMessage() :
+            getCaughtMessage().getMessage();
+
+        message.setPlayer(player);
+        message.setLength(length);
+
+        fish.getDisplayName();
+        message.setFishCaught(fish.getDisplayName());
+        message.setRarity(fish.getRarity().getDisplayName());
+
+        if (fish.getRarity().getAnnounce()) {
+            broadcastFishMessage(message, player);
+        } else {
+            message.send(player);
+        }
+    }
+
+    private @Nullable BaitHandler getBaitFromRod(@NotNull ItemStack rod, @Nullable CustomRod customRod) {
+        if (customRod != null) {
+            return null;
+        }
+        if (MainConfig.getInstance().getBaitCompetitionDisable() && Competition.isActive()) {
+            return null;
+        }
+        return BaitNBTManager.isBaitedRod(rod) ? BaitNBTManager.randomBaitApplication(rod) : null;
+    }
+
+    private @Nullable ItemStack getBaitItem(@NotNull Player player) {
+        Optional<BaitHandler> caughtBait = BaitNBTManager.randomBaitCatch();
+        if (caughtBait.isEmpty()) {
+            Logging.debug("Could not determine bait for player " + player.getName() + ". This is usually a bug.");
+            return null;
+        }
+
+        final BaitHandler bait = caughtBait.get();
+
+        EMFMessage message = ConfigMessage.BAIT_CAUGHT.getMessage();
+        message.setBait(bait.format(bait.getId()));
+        message.setPlayer(player);
+        message.send(player);
+
+        return bait.create(player);
+    }
+
     /**
-     * Chooses a bait without needing to specify a bait to be used. randomWeightedRarity & getFish methods are used to
+     * Chooses a fish for the player. randomWeightedRarity & getFish methods are used to
      * choose the random fish.
      *
      * @param player   The fisher catching the fish.
      * @param location The location of the fisher.
-     *                 {@code @returns} A random fish without any bait application.
+     * @param bait The bait being used, null if no bait.
+     * @param customRod The custom rod being used, null if no custom rod.
+     * @return A random fish.
      */
-    protected Fish chooseFish(@NotNull Player player, @NotNull Location location, @Nullable BaitHandler bait, @Nullable CustomRod customRod) {
+    private @Nullable Fish chooseFish(@NotNull Player player, @NotNull Location location, @Nullable BaitHandler bait, @Nullable CustomRod customRod) {
+        // Check if the bait exists and a custom rod does not. Custom rods are not compatible with baits.
         if (bait != null && customRod == null) {
             return bait.chooseFish(player, location);
         }
 
-        final Rarity fishRarity = FishManager.getInstance().getRandomWeightedRarity(player, 1, Collections.emptySet(), Set.copyOf(FishManager.getInstance().getRarityMap().values()), customRod);
-        if (fishRarity == null) {
-            EvenMoreFish.getInstance().getLogger().severe("Could not determine a rarity for fish for " + player.getName());
+        Rarity rarity = FishManager.getInstance().getRandomWeightedRarity(
+            player,
+            1,
+            Set.of(),
+            Set.copyOf(FishManager.getInstance().getRarityMap().values()),
+            customRod
+        );
+        if (rarity == null) {
+            Logging.error("Could not determine a fish rarity for " + player.getName());
             return null;
         }
 
-        final Fish fish = FishManager.getInstance().getFish(fishRarity, location, player, 1, null, true, this, customRod);
+        Fish fish = FishManager.getInstance().getFish(
+            rarity,
+            location,
+            player,
+            1,
+            null,
+            true,
+            this,
+            customRod
+        );
         if (fish == null) {
             EvenMoreFish.getInstance().getLogger().severe("Could not determine a fish for " + player.getName());
             return null;
@@ -82,94 +185,48 @@ public abstract class Processor<E extends Event> implements Listener {
         return fish;
     }
 
-    protected ItemStack getFish(@NotNull Player player, @NotNull Location location, @NotNull ItemStack fishingRod) {
-        if (!FishUtils.checkRegion(location, MainConfig.getInstance().getAllowedRegions())) {
-            return null;
-        }
+    protected abstract boolean fireEvent(@NotNull Fish fish, @NotNull Player player);
 
-        if (!FishUtils.checkWorld(location)) {
-            return null;
-        }
+    protected abstract ConfigMessage getCaughtMessage();
 
-        if (EvenMoreFish.getInstance().getDependencyManager().isUsingMcMMO()
-                && ExperienceConfig.getInstance().isFishingExploitingPrevented()
-                && UserManager.getPlayer(player).getFishingManager().isExploitingFishing(location.toVector())) {
-            return null;
-        }
+    protected abstract ConfigMessage getLengthlessCaughtMessage();
 
-        double baitCatchPercentage = MainConfig.getInstance().getBaitCatchPercentage();
-        if (shouldCatchBait() && baitCatchPercentage > 0 && EvenMoreFish.getInstance().getRandom().nextDouble() * 100.0 < baitCatchPercentage) {
-            Optional<BaitHandler> caughtBait = BaitNBTManager.randomBaitCatch();
-            if (caughtBait.isEmpty()) {
-                EvenMoreFish.getInstance().debug(Level.WARNING, "Could not determine bait. This is usually a bug.");
-                return null;
-            }
+    // Checks
 
-            final BaitHandler bait = caughtBait.get();
-
-            EMFMessage message = ConfigMessage.BAIT_CAUGHT.getMessage();
-            message.setBait(bait.format(bait.getId()));
-            message.setPlayer(player);
-            message.send(player);
-
-            return bait.create(player);
-        }
-
-        BaitHandler applyingBait = null;
-        CustomRod customRod = RodManager.getInstance().getRod(fishingRod);
-
-        if (customRod == null && BaitNBTManager.isBaitedRod(fishingRod) && (!MainConfig.getInstance().getBaitCompetitionDisable() || !Competition.isActive())) {
-            applyingBait = BaitNBTManager.randomBaitApplication(fishingRod);
-        }
-
-        Fish fish = chooseFish(player, location, applyingBait, customRod);
-
-        if (fish == null) {
-            return null;
-        }
-
-        if (applyingBait != null) {
-            applyingBait.handleFish(player, fish, fishingRod);
-        }
-
-        fish.init();
-
-        // If the event is cancelled
-        if (!fireEvent(fish, player)) {
-            return null;
-        }
-
-        if (fish.hasFishRewards()) {
-            fish.getFishRewards().forEach(fishReward -> fishReward.rewardPlayer(player, location));
-        }
-
-        if (!fish.isSilent()) {
-            String length = decimalFormat.format(fish.getLength());
-
-            EMFMessage message = fish.getLength() == -1 ?
-                    getLengthlessCaughtMessage().getMessage() :
-                    getCaughtMessage().getMessage();
-
-            message.setPlayer(player);
-            message.setLength(length);
-
-            EvenMoreFish.getInstance().getMetricsManager().incrementFishCaught(1);
-
-            fish.getDisplayName();
-            message.setFishCaught(fish.getDisplayName());
-            message.setRarity(fish.getRarity().getDisplayName());
-
-            if (fish.getRarity().getAnnounce()) {
-                broadcastFishMessage(message, player);
-            } else {
-                message.send(player);
-            }
-        }
-
-        competitionCheck(fish, player, location);
-
-        return fish.give();
+    protected boolean isCustomFishAllowed(Player player) {
+        return isEnabled() && MainConfig.getInstance().getEnabled() && (competitionOnlyCheck() || EvenMoreFish.getInstance().isRaritiesCompCheckExempt())
+            && !EvenMoreFish.getInstance().getToggle().isCustomFishingDisabled(player);
     }
+
+    /**
+     * Checks if the player should get a fish, respecting the only-in-competition option in config.yml
+     */
+    protected abstract boolean competitionOnlyCheck();
+
+    protected abstract boolean shouldCatchBait();
+
+    public abstract boolean canUseFish(@NotNull Fish fish);
+
+    /**
+     * Checks if we need to update the competition leaderboard.
+     */
+    protected void leaderboardCheck(@NotNull Fish fish, @NotNull Player fisherman, @NotNull Location location) {
+        final Competition active = Competition.getCurrentlyActive();
+        if (active == null) {
+            return;
+        }
+
+        List<World> competitionWorlds = active.getCompetitionFile().getRequiredWorlds();
+        if (!competitionWorlds.isEmpty()) {
+            final World world = location.getWorld();
+            if (world == null || !competitionWorlds.contains(world)) {
+                return;
+            }
+        }
+        active.applyToLeaderboard(fish, fisherman);
+    }
+
+    // Message
 
     private void broadcastFishMessage(@NotNull EMFMessage message, @NotNull Player sourcePlayer) {
         if (message.isEmpty()) {
@@ -180,7 +237,7 @@ public abstract class Processor<E extends Event> implements Listener {
 
         Collection<? extends Player> validPlayers = getValidPlayers(sourcePlayer, activeComp);
         List<String> playerNames = validPlayers.stream().map(Player::getName).toList();
-        EvenMoreFish.getInstance().debug("Valid players: " + String.join(",", playerNames));
+        EvenMoreFish.getInstance().debug("Valid players: " + String.join(", ", playerNames));
 
         message.send(validPlayers);
     }
@@ -219,34 +276,5 @@ public abstract class Processor<E extends Event> implements Listener {
         return sourcePlayer.getWorld().equals(targetPlayer.getWorld())
             && sourcePlayer.getLocation().distanceSquared(targetPlayer.getLocation()) <= rangeSquared;
     }
-
-    // Checks if it should be giving the player the fish considering the fish-only-in-competition option in config.yml
-    protected abstract boolean competitionOnlyCheck();
-
-    protected void competitionCheck(@NotNull Fish fish, @NotNull Player fisherman, @NotNull Location location) {
-        final Competition active = Competition.getCurrentlyActive();
-        if (active == null) {
-            return;
-        }
-
-        List<World> competitionWorlds = active.getCompetitionFile().getRequiredWorlds();
-        if (!competitionWorlds.isEmpty()) {
-            final World world = location.getWorld();
-            if (world == null || !competitionWorlds.contains(world)) {
-                return;
-            }
-        }
-        active.applyToLeaderboard(fish, fisherman);
-    }
-
-    protected abstract boolean fireEvent(@NotNull Fish fish, @NotNull Player player);
-
-    protected abstract ConfigMessage getCaughtMessage();
-
-    protected abstract ConfigMessage getLengthlessCaughtMessage();
-
-    protected abstract boolean shouldCatchBait();
-
-    public abstract boolean canUseFish(@NotNull Fish fish);
 
 }

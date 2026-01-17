@@ -20,7 +20,7 @@ public abstract class EMFPlugin extends JavaPlugin {
 
     public static @NotNull EMFPlugin getInstance() {
         if (instance == null) {
-            throw new RuntimeException("EMFPlugin not found. This should not happen!");
+            throw new IllegalStateException("EMFPlugin not found. This should not happen!");
         }
         return instance;
     }
@@ -29,7 +29,7 @@ public abstract class EMFPlugin extends JavaPlugin {
         debug(Level.INFO, message);
     }
 
-    public void debug(final String message, Exception e) {
+    public void debug(final String message, Throwable e) {
         debug(Level.INFO, message, e);
     }
 
@@ -39,7 +39,7 @@ public abstract class EMFPlugin extends JavaPlugin {
         }
     }
 
-    public void debug(final Level level, final String message, Exception e) {
+    public void debug(final Level level, final String message, Throwable e) {
         if (isDebugSession()) {
             log(level, "DEBUG %s".formatted(message), e);
         }

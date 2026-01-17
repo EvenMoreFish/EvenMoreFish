@@ -11,17 +11,19 @@ import com.oheers.fish.permissions.UserPerms;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
 
-public class HuntingProcessor extends Processor<EntityDeathEvent> {
+public class HuntingProcessor extends Processor<EntityDeathEvent> implements Listener {
 
     @Override
     @EventHandler(priority = EventPriority.HIGHEST)
-    protected void process(EntityDeathEvent event) {
+    protected void process(@NonNull EntityDeathEvent event) {
         if (!(event.getEntity() instanceof org.bukkit.entity.Fish fishEntity)) {
             return;
         }
@@ -46,14 +48,14 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> {
         }
 
         //Event gets fired here
-        ItemStack fish = getFish(player, fishEntity.getLocation(), player.getInventory().getItemInMainHand());
+        ItemStack fish = getCaughtItem(player, fishEntity.getLocation(), player.getInventory().getItemInMainHand());
 
-        if (fish == null || fish.getType().isAir()) {
+        if (fish == null || fish.isEmpty()) {
             return;
         }
 
         event.getDrops().clear();
-        if (MainConfig.getInstance().isGiveStraightToInventory() && isSpaceForNewFish(player.getInventory())) {
+        if (MainConfig.getInstance().isGiveStraightToInventory() && FishUtils.inventoryHasSpace(player.getInventory())) {
             FishUtils.giveItem(fish, player);
         } else {
             // replaces the fishing item with a custom evenmorefish fish.

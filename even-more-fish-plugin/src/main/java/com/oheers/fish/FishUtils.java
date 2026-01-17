@@ -38,6 +38,7 @@ import org.bukkit.block.Skull;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
@@ -593,6 +594,10 @@ public class FishUtils {
             return null;
         }
         return registry.get(key);
+    }
+
+    public static boolean inventoryHasSpace(@Nullable Inventory inventory) {
+        return inventory != null && inventory.firstEmpty() != -1;
     }
 
 }

@@ -17,6 +17,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
-public class FishingProcessor extends Processor<PlayerFishEvent> {
+public class FishingProcessor extends Processor<PlayerFishEvent> implements Listener {
     private final EvenMoreFish plugin = EvenMoreFish.getInstance();
 
     @Override
@@ -37,6 +38,11 @@ public class FishingProcessor extends Processor<PlayerFishEvent> {
         }
 
         ItemStack rod = getRod(event);
+
+        if (rod == null) {
+            plugin.debug("Fishing blocked: could not find rod.");
+            return;
+        }
 
         if (!isCustomFishAllowed(event.getPlayer())) {
             plugin.debug("Fishing blocked: custom fish not allowed for player %s.".formatted(event.getPlayer().getName()));
@@ -72,14 +78,14 @@ public class FishingProcessor extends Processor<PlayerFishEvent> {
             return;
         }
 
-        ItemStack fish = getFish(event.getPlayer(), event.getHook().getLocation(), rod);
+        ItemStack fish = getCaughtItem(event.getPlayer(), event.getHook().getLocation(), rod);
 
         if (fish == null) {
             plugin.debug("Could not obtain fish.");
             return;
         }
 
-        if (MainConfig.getInstance().isGiveStraightToInventory() && isSpaceForNewFish(event.getPlayer().getInventory())) {
+        if (MainConfig.getInstance().isGiveStraightToInventory() && FishUtils.inventoryHasSpace(event.getPlayer().getInventory())) {
             FishUtils.giveItem(fish, event.getPlayer());
             nonCustom.remove();
             return;

@@ -14,7 +14,7 @@ public class RecipeUtil {
 
     public static @Nullable RecipeChoice getRecipeChoice(String materialStr) {
         ItemStack customItem = FishUtils.getItem(materialStr);
-        if (customItem == null || customItem.getType().isAir()) {
+        if (customItem == null || customItem.isEmpty()) {
             return null;
         }
         return new RecipeChoice.ExactChoice(customItem);
