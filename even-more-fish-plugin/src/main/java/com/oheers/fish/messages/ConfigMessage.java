@@ -181,7 +181,6 @@ public enum ConfigMessage {
     PLACEHOLDER_TIME_REMAINING_ACTIVE("Time left in competition: {time-left}.", PrefixType.NONE, "emf-time-remaining.active"),
 
     RELOAD_SUCCESS("<white>Successfully reloaded the plugin.", PrefixType.ADMIN, "admin.reload"),
-    SELL_PRICE_FORMAT("#,##0.0", PrefixType.NONE, "sell-price-format"),
     TIME_ALERT("<white>There is {time_formatted} left on the competition for {type}", PrefixType.DEFAULT, "time-alert"),
 
     TOGGLE_FISHING_ON("<white>You will now catch custom fish.", PrefixType.DEFAULT, "toggle.fishing.on"),

@@ -98,14 +98,14 @@ public class VaultEconomyType implements EconomyType {
             return null;
         }
         double worth = prepareValue(totalWorth, applyMultiplier);
-        Component worthFormatted = FishUtils.formatDouble(ConfigMessage.SELL_PRICE_FORMAT.getMessage().getPlainTextMessage(), worth);
+        String worthFormatted = economy.format(worth);
         String display = MainConfig.getInstance().getEconomyDisplay(this);
-        if (display != null) {
-            EMFSingleMessage message = EMFSingleMessage.fromString(display);
-            message.setVariable("{amount}", worthFormatted);
-            return message.getComponentMessage();
+        if (display == null) {
+            return Component.text(worthFormatted);
         }
-        return worthFormatted;
+        EMFSingleMessage message = EMFSingleMessage.fromString(display);
+        message.setVariable("{amount}", worthFormatted);
+        return message.getComponentMessage();
     }
 
 }

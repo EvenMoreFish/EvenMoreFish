@@ -4,10 +4,13 @@ import br.net.fabiozumbi12.RedProtect.Bukkit.RedProtect;
 import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import com.oheers.fish.api.economy.Economy;
+import com.oheers.fish.api.economy.EconomyType;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.economy.VaultEconomyType;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
@@ -60,6 +63,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -487,18 +491,6 @@ public class FishUtils {
         return BigDecimal.valueOf(value)
             .setScale(places, RoundingMode.HALF_UP)
             .floatValue();
-    }
-
-    /**
-     * Formats a float value by applying the configured decimal format.
-     *
-     * @param value The float value to be formatted.
-     * @return The formatted float
-     */
-    public static @NotNull String formatFloat(@NotNull final String formatStr, final float value) {
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(MainConfig.getInstance().getDecimalLocale());
-        DecimalFormat format = new DecimalFormat(formatStr, symbols);
-        return format.format(value);
     }
 
     /**
