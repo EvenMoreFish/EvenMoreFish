@@ -6,6 +6,7 @@ item:
 format: <aqua>{name}
 worth-multiplier: 0.2
 broadcast: false
+catch-type: both
 size:
   minSize: 20
   maxSize: 150

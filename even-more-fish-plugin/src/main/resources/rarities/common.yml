@@ -6,6 +6,7 @@ item:
 format: <gray>{name}
 worth-multiplier: 0.1
 broadcast: false
+catch-type: both
 size:
   minSize: 1
   maxSize: 30

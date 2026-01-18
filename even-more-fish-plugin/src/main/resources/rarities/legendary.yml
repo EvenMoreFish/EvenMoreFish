@@ -6,6 +6,7 @@ item:
 format: <gold>{name}
 worth-multiplier: 0.2
 broadcast: true
+catch-type: both
 size:
   minSize: 800
   maxSize: 4000

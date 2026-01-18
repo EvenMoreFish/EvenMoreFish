@@ -6,6 +6,7 @@ item:
 format: <light_purple>{name}
 worth-multiplier: 0.15
 broadcast: true
+catch-type: both
 size:
   minSize: 125
   maxSize: 800

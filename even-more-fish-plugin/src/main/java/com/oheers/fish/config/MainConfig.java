@@ -10,7 +10,6 @@ import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import net.kyori.adventure.bossbar.BossBar;
 import org.apache.commons.lang3.LocaleUtils;
 import org.bukkit.block.Biome;
-import org.bukkit.boss.BarStyle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
