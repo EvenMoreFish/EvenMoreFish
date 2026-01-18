@@ -17,6 +17,7 @@ import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.api.Logging;
 import de.themoep.inventorygui.DynamicGuiElement;
+import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.StaticGuiElement;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -43,10 +44,10 @@ public class FishJournalGui extends ConfigGui {
 
     public FishJournalGui(@NotNull HumanEntity player, @Nullable Rarity rarity) {
         super(
-                GuiConfig.getInstance().getConfig().getSection(
-                        rarity == null ? "journal-menu" : "journal-rarity"
-                ),
-                player
+            GuiConfig.getInstance().getConfig().getSection(
+                rarity == null ? "journal-menu" : "journal-rarity"
+            ),
+            player
         );
 
         this.rarity = rarity;
@@ -55,36 +56,36 @@ public class FishJournalGui extends ConfigGui {
 
         Section config = getGuiConfig();
         if (config != null) {
+            sortType = FishUtils.getEnumValue(
+                SortType.class,
+                config.getString("sort-type"),
+                SortType.ALPHABETICAL
+            );
             getGui().addElement(getGroup(config));
-            sortType = SortType.fromString(config.getString("sort-type"));
         } else {
             sortType = SortType.ALPHABETICAL;
         }
     }
 
-    private DynamicGuiElement getGroup(Section section) {
+    private GuiElement getGroup(Section section) {
         return (rarity == null) ? getRarityGroup(section) : getFishGroup(section);
     }
 
-    private DynamicGuiElement getFishGroup(Section section) {
+    private GuiElement getFishGroup(Section section) {
         char character = FishUtils.getCharFromString(section.getString("fish-character"), 'f');
 
-        return new DynamicGuiElement(
-                character, who -> {
-            GuiElementGroup group = new GuiElementGroup(character);
-            sortType.sortFish(this.rarity.getFishList()).forEach(fish -> {
-                if (!fish.getShowInJournal()) {
-                    return;
-                }
-                ItemStack item = getFishItem(fish, section);
-                if (item.isEmpty()) {
-                    return;
-                }
-                group.addElement(new StaticGuiElement(character, item));
-            });
-            return group;
-        }
-        );
+        GuiElementGroup group = new GuiElementGroup(character);
+        sortType.sortFish(this.rarity.getFishList()).forEach(fish -> {
+            if (!fish.getShowInJournal()) {
+                return;
+            }
+            ItemStack item = getFishItem(fish, section);
+            if (item.isEmpty()) {
+                return;
+            }
+            group.addElement(new StaticGuiElement(character, item));
+        });
+        return group;
     }
 
     private @NotNull String getUnknownMessage() {
@@ -138,8 +139,8 @@ public class FishJournalGui extends ConfigGui {
         final String discoverer = getValueOrDefault(() -> FishUtils.getPlayerName(fishStats.getDiscoverer()), getUnknownMessage());
 
         EMFListMessage lore = EMFListMessage.fromStringList(
-                Optional.ofNullable(factory.getLore().getConfiguredValue())
-                        .orElse(Collections.emptyList())
+            Optional.ofNullable(factory.getLore().getConfiguredValue())
+                .orElse(Collections.emptyList())
         );
 
         lore.setVariable("{times-caught}", getValueOrDefault(() -> Integer.toString(userFishStats.getQuantity()), "0"));
@@ -167,31 +168,26 @@ public class FishJournalGui extends ConfigGui {
     }
 
 
-    private DynamicGuiElement getRarityGroup(Section section) {
+    private GuiElement getRarityGroup(Section section) {
         char character = FishUtils.getCharFromString(section.getString("rarity-character"), 'r');
 
-        return new DynamicGuiElement(
-            character, who -> {
-            GuiElementGroup group = new GuiElementGroup(character);
-            sortType.sortRarities(FishManager.getInstance().getRarityMap().values()).forEach(rarity -> {
-                if (!rarity.getShowInJournal()) {
-                    return;
-                }
-                ItemStack item = getRarityItem(rarity, section);
-                if (item.isEmpty()) {
-                    return;
-                }
-                group.addElement(
-                    new StaticGuiElement(
-                        character, item, click -> {
-                        new FishJournalGui(player, rarity).open();
-                        return true;
-                    })
-                );
-            });
-            return group;
-        }
-        );
+        GuiElementGroup group = new GuiElementGroup(character);
+        sortType.sortRarities(FishManager.getInstance().getRarityMap().values()).forEach(rarity -> {
+            if (!rarity.getShowInJournal()) {
+                return;
+            }
+            ItemStack item = getRarityItem(rarity, section);
+            if (item.isEmpty()) {
+                return;
+            }
+            group.addElement(
+                new StaticGuiElement(character, item, click -> {
+                    new FishJournalGui(player, rarity).open();
+                    return true;
+                })
+            );
+        });
+        return group;
     }
 
     private ItemStack getRarityItem(Rarity rarity, Section section) {
@@ -263,17 +259,6 @@ public class FishJournalGui extends ConfigGui {
             TreeSet<Fish> set = new TreeSet<>(fishComparator);
             set.addAll(collection);
             return set;
-        }
-
-        public static SortType fromString(@Nullable String string) {
-            if (string == null) {
-                return ALPHABETICAL;
-            }
-            try {
-                return valueOf(string.toUpperCase());
-            } catch (IllegalArgumentException exception) {
-                return ALPHABETICAL;
-            }
         }
 
     }
