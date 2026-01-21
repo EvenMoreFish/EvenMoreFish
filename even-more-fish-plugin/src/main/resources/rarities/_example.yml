@@ -35,7 +35,10 @@ displayname: <yellow>Example Rarity
 permission: emf.rarity.example
 
 # The catch type for this rarity. Defaults to BOTH if missing.
-# Current supported values: CATCH, HUNT, BOTH
+# Current supported values:
+# CATCH - These fish are obtained by fishing with a rod.
+# HUNT - These fish are obtained by killing naturally spawning fish.
+# BOTH - These fish can be obtained by either method.
 catch-type: BOTH
 
 # You can set custom requirement for this rarity to appear, all possible requirement are on the wiki: https://evenmorefish.github.io/EvenMoreFish/docs/features/requirements
