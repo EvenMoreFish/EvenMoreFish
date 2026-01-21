@@ -15,7 +15,7 @@ lengthless-fish-hunted: <b>{player}</b> has hunted a <b>{rarity}</b> {fish}!
 no-permission: <red>У вас нет разрешения на выполнение этой команды.
 # The message to be sent when a competition starts and ends
 contest-start: <reset>Началось соревнование по рыбной ловле в категории {type}.
-contest-end: <reset>Соревнование по рыбной ловле закончилось.
+contest-end: <white>Рыболовное соревнование завершилось.
 # The message to be sent when a player joins whilst a competition is going on
 contest-join: <reset>Происходит соревнование по ловле рыбы в категории {type}.
 # Shown to players when a new player takes #1 spot, remove this value or set it to "-s" to disable this message
@@ -38,7 +38,7 @@ competition-types:
   # SHORTEST_TOTAL_FISH
   shortest-total: the shortest total fish length
   # SPECIFIC_FISH
-  specific: '{amount} {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}<reset>'
+  specific: '{amount} <b>{rarity}</b> {fish}'
   # SPECIFIC_RARITY
   specific-rarity: '{amount} <b>{rarity}</b> fish'
 # Segments shown in the bossbar when competitions run
@@ -49,10 +49,10 @@ bossbar:
   remaining: осталось
 # Formatting for time duration.
 duration:
-  day: <white>{day}d
-  hour: <white>{hour}h
-  minute: <white>{minute}m
-  second: <white>{second}s
+  day: <white>{day}д
+  hour: <white>{hour}ч
+  minute: <white>{minute}м
+  second: <white>{second}с
 # The prefix shown in commands. Keeping the space in is recommended.
 prefix-regular: '<green>[EvenMoreFish] '
 # The prefix shown in admin commands.
@@ -115,7 +115,7 @@ help-general:
   toggle: '[noPrefix]Toggles whether or not you receive custom fish.'
   gui: '[noPrefix]Opens the Main Menu GUI.'
   admin: '[noPrefix]Admin command help page.'
-  sellall: '[noPrefix]Sell all the fish in your inventory.'
+  sellall: '[noPrefix]Продать всю рыбу в вашем инвентаре.'
   next: '[noPrefix]Show how much time is until the next competition.'
   applybaits: '[noPrefix]Apply baits to your fishing rod.'
   journal: "[noPrefix]View a journal of caught fish and their stats."
@@ -129,9 +129,9 @@ help-competition:
 # Admin help (/emf admin help)
 help-admin:
   bait: '[noPrefix]Gives baits to a player.'
-  competition: '[noPrefix]Starts or stops a competition'
+  competition: '[noPrefix]Начать или остановить соревнование'
   clearbaits: '[noPrefix]Removes all applied baits from a fishing rod.'
-  fish: '[noPrefix]Gives a fish to a player.'
+  fish: '[noPrefix]Выдать рыбу игроку.'
   nbt-rod: '[noPrefix]Gives a custom NBT rod to a player required for catching EMF fish.'
   custom-rod: '[noPrefix]Gives a custom fishing rod to a player.'
   reload: '[noPrefix]Reloads the plugin''s config files.'
@@ -154,10 +154,10 @@ no-competition-running-size: No competition running right now.
 # Broadcasted to all players when a competition is extended.
 competition-time-extended: <white>The active competition has been extended by {duration}!
 # HOw should %emf_custom_fishing_status% be formatted?
-custom-fishing-enabled: <green>Enabled
-custom-fishing-disabled: <red>Disabled
+custom-fishing-enabled: <green>Включено
+custom-fishing-disabled: <red>Отключено
 # How should the %emf_competition_place_fish_*% be formatted?
-emf-competition-fish-format: '{length}cm <bold>{rarity}</bold> {fish}'
+emf-competition-fish-format: '{length}см <b>{rarity}</b> {fish}'
 # How should the %emf_competition_place_fish_*% be formatted when there's no length on the fish?
 emf-lengthless-fish-format: '<b>{rarity}</b> {fish}'
 # How should %emf_competition_place_fish_*% be formatted during MOST/SPECIFIC_FISH competitions?
@@ -167,11 +167,11 @@ emf-size-during-most-fish: N/A
 # How the %emf_competition_time_left% variable should be formatted.
 emf-time-remaining:
   # When there is not an active competition.
-  inactive: 'Time left until next competition: {days}d, {hours}h, {minutes}m.'
+  inactive: 'Осталось времени до следующего соревнования: {days}д, {hours}ч, {minutes}м.'
   # When there is an active competition.
   active: 'Time left in competition: {time-left}'
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
-max-baits-reached: Вы достигли максимального количества типов приманок для этой удочки.
+max-baits-reached: <white>Вы достигли максимального количества типов приманок для этой удочки.
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
 max-bait-reached: Вы достигли максимального количества {bait_theme}{bait} <reset> приманки, которое может быть применено к одной удочке.
 # Sent when a player catches a bait from fishing (this can be disabled by setting catch-percentage to 0 in baits.yml
@@ -183,15 +183,15 @@ bait-survival-limited: <white>You must be in <u>survival or adventure mode</u> t
 # Sent when someone tries to merge a baited rod into an unbaited rod
 bait-rod-protection: <white>Protected your baited fishing rod. If you are trying to repair it, please put it in the first slot instead.
 # Sent when someone tries to apply a bait to a fishing rod they cannot use to fish
-bait-invalid-rod: <white>You cannot apply bait to this fishing rod!
+bait-invalid-rod: <white>Вы не можете насадить приманку на эту удочку!
 # Sent when a bait is purchased from the menu.
-bait-purchased: <white>You have purchased {amount}x {bait} for {price}.
+bait-purchased: <white>Вы купили {amount}x {bait} за {price}.
 # Sent when a player attempts to purchase a bait, asking them to confirm.
 bait-confirm-purchase: "<white>Click again within 5 seconds to confirm bait purchase."
 # Sent when a player attempts to purchase a bait they cannot afford.
 bait-cannot-afford: <white>You cannot afford to purchase that bait. You need {price}.
 # Sent when a player attempts to purchase a bait that is not for sale.
-bait-not-for-sale: <white>That bait is not for sale.
+bait-not-for-sale: <white>Эта приманка не продаётся.
 toggle:
   fishing:
     off: <white>You will no longer catch custom fish.
@@ -209,7 +209,7 @@ admin:
   # When an admin runs /emf admin bait without a bait name.
   no-bait-specified: <white>You must specify a bait name.
   # When the admin tries the command /emf admin clearbaits whe not holding a fishing rod.
-  must-be-holding-rod: <white>You need to be holding a fishing rod to run that command.
+  must-be-holding-rod: <white>Для выполнения этой команды необходимо держать в руках удочку.
   # When /emf admin clearbaits command is run.
   all-baits-cleared: <white>You have removed all {amount} baits from your fishing rod.
   # /emf admin clearbaits is run, but there are no baits on the rod.
@@ -217,7 +217,7 @@ admin:
   # When economy is disabled for the plugin
   economy-disabled: <white>EvenMoreFish's economy features are disabled.
   # When the specified player can't be found when using -p: parameter.
-  player-not-found: <white>{player} could not be found.
+  player-not-found: <white>{player} не найден.
   # When the specified number in -q: is not a number.
   number-format-error: <white>{amount} is not a valid number.
   # When the specified number in -q: is not within the minecraft stack range (1-64)
@@ -235,7 +235,7 @@ admin:
   # When there's a modrinth update available, don't translate the URL otherwise it won't direct to the correct page.
   update-available: '<white>There is an update available: https://modrinth.com/plugin/evenmorefish/versions?l=paper'
   # When the plugin is reloaded
-  reload: <white>Successfully reloaded the plugin.
+  reload: <white>Плагин успешно перезагружен.
   # When checking a list of registered addons. The actual list is added to the end of this message.
   list-addons: '<white>Registered {addon-type}s: '
 # When an invalid rarity is provided for a command.
