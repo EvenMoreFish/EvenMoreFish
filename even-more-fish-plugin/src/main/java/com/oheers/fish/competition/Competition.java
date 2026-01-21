@@ -107,18 +107,34 @@ public class Competition {
 
     /**
      * Sets the maximum duration of the competition in seconds.
-     *
-     * @param duration The maximum duration of the competition in seconds.
+     * @param durationSeconds The maximum duration of the competition in seconds.
      */
-    public void setMaxDuration(int duration) {
-        this.maxDuration = duration;
+    public void setMaxDuration(long durationSeconds) {
+        this.maxDuration = durationSeconds;
+    }
+
+    /**
+     * Sets the time left in the competition in seconds.
+     * @param durationSeconds The time left of the competition in seconds.
+     */
+    public void setTimeLeft(long durationSeconds) {
+        this.timeLeft = durationSeconds;
+    }
+
+    /**
+     * Combines {@link #setMaxDuration(long)} and {@link #setTimeLeft(long)}.
+     * @param durationSeconds The time left of the competition in seconds.
+     */
+    public void setTime(long durationSeconds) {
+        setMaxDuration(durationSeconds);
+        setTimeLeft(durationSeconds);
     }
 
     /**
      * Adds more time to this competition.
      * @param durationSeconds The duration to add in seconds.
      */
-    public void addTime(int durationSeconds) {
+    public void addTime(long durationSeconds) {
         this.maxDuration += durationSeconds;
         this.timeLeft += durationSeconds;
     }

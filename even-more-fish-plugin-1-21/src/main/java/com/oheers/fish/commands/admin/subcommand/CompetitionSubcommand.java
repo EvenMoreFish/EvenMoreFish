@@ -65,7 +65,7 @@ public class CompetitionSubcommand {
         Competition competition = new Competition(file);
         competition.setAdminStarted(true);
         if (duration != null) {
-            competition.setMaxDuration(duration);
+            competition.setTime(duration);
         }
         competition.begin();
     }
