@@ -41,7 +41,8 @@ purchase:
   # This is automatically limited to the maximum stack size of the item.
   quantity: 1
 
-# Item configuration follows the same format as fish
+# What the item for this bait should look like.
+# See the wiki for all options: https://evenmorefish.github.io/EvenMoreFish/docs/configuration/items
 item:
   material: NAUTILUS_SHELL
   displayname: "<gray>Example Bait"
