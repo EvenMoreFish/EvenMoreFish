@@ -45,11 +45,11 @@ public class CompetitionSubcommand {
                         return 1;
                     })
                     .then(
-                        Commands.argument("duration", IntegerArgumentType.integer(1))
+                        Commands.argument("durationSeconds", IntegerArgumentType.integer(1))
                             // [competition] [duration]
                             .executes(ctx -> {
                                 CompetitionFile file = ctx.getArgument("file", CompetitionFile.class);
-                                int duration = ctx.getArgument("duration", int.class);
+                                int duration = ctx.getArgument("durationSeconds", int.class);
                                 start(ctx.getSource().getSender(), file, duration);
                                 return 1;
                             })
@@ -87,14 +87,14 @@ public class CompetitionSubcommand {
         return Commands.literal("test")
             // No args
             .executes(ctx -> {
-                test(ctx.getSource().getSender(), 60, CompetitionType.LARGEST_FISH);
+                test(ctx.getSource().getSender(), 1, CompetitionType.LARGEST_FISH);
                 return 1;
             })
             .then(
-                Commands.argument("duration", IntegerArgumentType.integer(1))
+                Commands.argument("durationMinutes", IntegerArgumentType.integer(1))
                     // [duration]
                     .executes(ctx -> {
-                        int duration = ctx.getArgument("duration", int.class);
+                        int duration = ctx.getArgument("durationMinutes", int.class);
                         test(ctx.getSource().getSender(), duration, CompetitionType.LARGEST_FISH);
                         return 1;
                     })
@@ -102,7 +102,7 @@ public class CompetitionSubcommand {
                         Commands.argument("type", new CompetitionTypeArgument())
                             // [duration] [type]
                             .executes(ctx -> {
-                                int duration = ctx.getArgument("duration", int.class);
+                                int duration = ctx.getArgument("durationMinutes", int.class);
                                 CompetitionType type = ctx.getArgument("type", CompetitionType.class);
                                 test(ctx.getSource().getSender(), duration, type);
                                 return 1;
@@ -125,9 +125,9 @@ public class CompetitionSubcommand {
     private ArgumentBuilder<CommandSourceStack, ?> extend() {
         return Commands.literal("extend")
             .then(
-                Commands.argument("duration", IntegerArgumentType.integer(1))
+                Commands.argument("durationSeconds", IntegerArgumentType.integer(1))
                     .executes(ctx -> {
-                        int duration = ctx.getArgument("duration", int.class);
+                        int duration = ctx.getArgument("durationSeconds", int.class);
                         Competition active = Competition.getCurrentlyActive();
                         if (active == null) {
                             ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(ctx.getSource().getSender());

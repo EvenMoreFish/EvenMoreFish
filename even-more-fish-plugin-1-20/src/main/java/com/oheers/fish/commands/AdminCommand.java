@@ -459,11 +459,11 @@ public class AdminCommand {
                     "competitionId",
                     info -> EvenMoreFish.getInstance().getCompetitionQueue().getItemMap().keySet().toArray(String[]::new)
                 ),
-                new IntegerArgument("duration", 1).setOptional(true)
+                new IntegerArgument("durationSeconds", 1).setOptional(true)
             )
             .executes((sender, arguments) -> {
                 final String id = Objects.requireNonNull(arguments.getUnchecked("competitionId"));
-                final Integer duration = arguments.getUnchecked("duration");
+                final Integer duration = arguments.getUnchecked("durationSeconds");
                 if (Competition.isActive()) {
                     ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
                     return;
@@ -497,7 +497,7 @@ public class AdminCommand {
     private CommandAPICommand getCompetitionTest() {
         return new CommandAPICommand("test")
             .withArguments(
-                new IntegerArgument("duration", 1).setOptional(true),
+                new IntegerArgument("durationMinutes", 1).setOptional(true),
                 CompetitionTypeArgument.create().setOptional(true)
             )
             .executes((sender, args) -> {
@@ -505,7 +505,7 @@ public class AdminCommand {
                     ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
                     return;
                 }
-                final int duration = (int) args.getOptional("duration").orElse(60);
+                final int duration = (int) args.getOptional("durationMinutes").orElse(1);
                 final CompetitionType type = (CompetitionType) args.getOptional("competitionType").orElse(CompetitionType.LARGEST_FISH);
                 CompetitionFile file = new CompetitionFile("adminTest", type, duration);
                 Competition competition = new Competition(file);
@@ -516,14 +516,14 @@ public class AdminCommand {
 
     private CommandAPICommand getCompetitionExtend() {
         return new CommandAPICommand("extend")
-            .withArguments(new IntegerArgument("duration", 1))
+            .withArguments(new IntegerArgument("durationSeconds", 1))
             .executes(info -> {
                 Competition active = Competition.getCurrentlyActive();
                 if (active == null) {
                     ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
                     return;
                 }
-                int duration = Objects.requireNonNull(info.args().getUnchecked("duration"));
+                int duration = Objects.requireNonNull(info.args().getUnchecked("durationSeconds"));
                 active.addTime(duration);
 
                 EMFMessage message = ConfigMessage.COMPETITION_TIME_EXTENDED.getMessage();
