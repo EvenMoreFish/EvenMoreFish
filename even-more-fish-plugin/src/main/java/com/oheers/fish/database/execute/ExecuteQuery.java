@@ -7,6 +7,8 @@ import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
 
 import java.sql.Connection;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 public abstract class ExecuteQuery<T> extends ExecuteBase {
@@ -27,6 +29,14 @@ public abstract class ExecuteQuery<T> extends ExecuteBase {
             EvenMoreFish.getInstance().getLogger().log(Level.SEVERE,"Query execution failed", e);
             return empty();
         }
+    }
+
+    /**
+     * Runs {@link #prepareAndRunQuery()} on the provided executor.
+     */
+    public CompletableFuture<T> prepareAndRunQueryAsync(DbExecutor executor) {
+        Objects.requireNonNull(executor, "executor");
+        return executor.queryAsync(this::prepareAndRunQuery);
     }
 
     /**
