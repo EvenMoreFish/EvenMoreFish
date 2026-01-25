@@ -121,4 +121,12 @@ public class Economy {
         return registered;
     }
 
+    /**
+     * Checks if this Economy instance has any relevant EconomyTypes.
+     * @return true if there are no relevant EconomyTypes.
+     */
+    public boolean isEmpty() {
+        return relevantTypes.isEmpty();
+    }
+
 }
