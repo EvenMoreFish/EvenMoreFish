@@ -93,9 +93,12 @@ public class BaitsGui extends ConfigGui {
     }
 
     private void applyLore(@NotNull ItemMeta meta, @NotNull BaitHandler bait) {
-        List<String> loreFormat = getPurchaseLoreFormat();
         Economy economy = bait.getEconomy();
-        if (loreFormat.isEmpty() || economy == null) {
+        if (economy == null || economy.isEmpty()) {
+            return;
+        }
+        List<String> loreFormat = getPurchaseLoreFormat();
+        if (loreFormat.isEmpty()) {
             return;
         }
         ComponentListMessage purchaseLore = ComponentMessage.componentMessage(loreFormat)

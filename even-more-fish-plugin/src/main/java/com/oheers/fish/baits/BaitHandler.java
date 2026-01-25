@@ -426,7 +426,7 @@ public class BaitHandler extends ConfigBase {
      * @return True if the purchase was successful, false otherwise.
      */
     public boolean attemptPurchase(@NotNull Player player) {
-        if (economy == null) {
+        if (economy == null || economy.isEmpty()) {
             ConfigMessage.BAIT_NOT_FOR_SALE.getMessage().send(player);
             return false;
         }
