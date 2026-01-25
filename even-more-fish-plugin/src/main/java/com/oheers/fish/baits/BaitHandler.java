@@ -2,6 +2,7 @@ package com.oheers.fish.baits;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.economy.EconomyType;
 import com.oheers.fish.api.registry.EMFRegistry;
@@ -112,9 +113,10 @@ public class BaitHandler extends ConfigBase {
             .map(EMFRegistry.ECONOMY_TYPE::get)
             .filter(Objects::nonNull)
             .toList();
-        // No valid economy types found, use global economy.
+        // No valid economy types configured, warn console and return null.
         if (types.isEmpty()) {
-            return Economy.getInstance();
+            Logging.warn("No valid economy types found for bait: " + getId() + ". This bait will not be purchasable.");
+            return null;
         }
         // Return new economy instance for specified types.
         return Economy.economy(types);
