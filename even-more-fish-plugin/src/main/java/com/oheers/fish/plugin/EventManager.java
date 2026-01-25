@@ -11,6 +11,7 @@ import com.oheers.fish.events.FishInteractEvent;
 import com.oheers.fish.fishing.EMFFishListener;
 import com.oheers.fish.fishing.FishingProcessor;
 import com.oheers.fish.fishing.HuntingProcessor;
+import com.oheers.fish.recipe.RecipeListener;
 import com.oheers.fish.update.UpdateNotify;
 import com.oheers.fish.utils.ItemProtectionListener;
 import org.bukkit.plugin.PluginManager;
@@ -41,6 +42,7 @@ public class EventManager {
         pm.registerEvents(new BaitApplicationListener(), plugin);
         pm.registerEvents(new ItemProtectionListener(), plugin);
         pm.registerEvents(new FishInteractEvent(), plugin);
+        pm.registerEvents(new RecipeListener(), plugin);
     }
 
     public void registerOptionalListeners() {
