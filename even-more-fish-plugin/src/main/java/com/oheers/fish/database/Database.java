@@ -152,11 +152,9 @@ public class Database implements DatabaseAPI {
         return new ExecuteQuery<Boolean>(connectionFactory, settings) {
             @Override
             protected Boolean onRunQuery(DSLContext dslContext) throws Exception {
-                return dslContext.select()
-                        .from(Tables.USERS)
-                        .where(Tables.USERS.UUID.eq(uuid.toString()))
-                        .fetch()
-                        .isNotEmpty();
+                return dslContext.fetchExists(
+                        Tables.USERS.where(Tables.USERS.UUID.eq(uuid.toString()))
+                );
             }
 
             @Override
@@ -271,13 +269,9 @@ public class Database implements DatabaseAPI {
         return new ExecuteQuery<Boolean>(connectionFactory, settings) {
             @Override
             protected Boolean onRunQuery(DSLContext dslContext) throws Exception {
-                return dslContext.select()
-                        .from(Tables.FISH)
-                        .where(Tables.FISH.FISH_NAME.eq(fish.getName())
-                                .and(Tables.FISH.FISH_RARITY.eq(fish.getRarity().getId())))
-                        .limit(1)
-                        .fetch()
-                        .isNotEmpty();
+                return dslContext.fetchExists(
+                        Tables.FISH.where(Tables.FISH.FISH_NAME.eq(fish.getName())
+                                .and(Tables.FISH.FISH_RARITY.eq(fish.getRarity().getId()))));
             }
 
             @Override
