@@ -26,7 +26,7 @@ public abstract class ExecuteUpdate extends ExecuteBase {
         try (Connection connection = getConnection()) {
             DSLContext dslContext = getContext(connection);
             return onRunUpdate(dslContext);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             EvenMoreFish.getInstance().getLogger().log(Level.SEVERE,"Update execution failed", e);
             return 0;
         }
