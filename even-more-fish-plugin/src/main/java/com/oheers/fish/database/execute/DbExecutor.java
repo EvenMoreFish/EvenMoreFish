@@ -1,5 +1,7 @@
 package com.oheers.fish.database.execute;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -18,17 +20,17 @@ public final class DbExecutor implements AutoCloseable {
         this.executor = Executors.newFixedThreadPool(threads, namedThreadFactory(threadNamePrefix));
     }
 
-    public <T> CompletableFuture<T> queryAsync(Supplier<T> work) {
+    public <T> @NotNull CompletableFuture<T> queryAsync(Supplier<T> work) {
         Objects.requireNonNull(work, "work");
         return CompletableFuture.supplyAsync(work, executor);
     }
 
-    public CompletableFuture<Integer> updateAsync(Supplier<Integer> work) {
+    public @NotNull CompletableFuture<Integer> updateAsync(Supplier<Integer> work) {
         Objects.requireNonNull(work, "work");
         return CompletableFuture.supplyAsync(work, executor);
     }
 
-    public CompletableFuture<Void> runAsync(Runnable work) {
+    public @NotNull CompletableFuture<Void> runAsync(Runnable work) {
         Objects.requireNonNull(work, "work");
         return CompletableFuture.runAsync(work, executor);
     }
@@ -42,7 +44,7 @@ public final class DbExecutor implements AutoCloseable {
         executor.shutdown();
     }
 
-    private static ThreadFactory namedThreadFactory(String prefix) {
+    private static @NotNull ThreadFactory namedThreadFactory(String prefix) {
         String safePrefix = (prefix == null || prefix.isBlank()) ? "emf-db" : prefix.trim();
         AtomicInteger counter = new AtomicInteger(1);
         return runnable -> {

@@ -515,8 +515,8 @@ public class Database implements DatabaseAPI {
                 Result<Record> result = dslContext.select()
                         .from(Tables.FISH_LOG)
                         .where(Tables.FISH_LOG.USER_ID.eq(userId))
-                        .and(Tables.FISH_LOG.FISH_NAME.eq(fishRarity))
-                        .and(Tables.FISH_LOG.FISH_RARITY.eq(fishName))
+                        .and(Tables.FISH_LOG.FISH_NAME.eq(fishName))
+                        .and(Tables.FISH_LOG.FISH_RARITY.eq(fishRarity))
                         .fetch();
                 if (result.isEmpty()) {
                     return empty();
