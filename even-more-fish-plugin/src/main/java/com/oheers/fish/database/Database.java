@@ -323,10 +323,11 @@ public class Database implements DatabaseAPI {
                 InsertSetMoreStep<CompetitionsRecord> common = dslContext.insertInto(Tables.COMPETITIONS)
                         .set(Tables.COMPETITIONS.COMPETITION_NAME, competition.getCompetitionName());
 
-                if (leaderboard.getSize() <= 0) {
-                    return common.set(Tables.COMPETITIONS.WINNER_UUID, leaderboard.getTopEntry().getPlayer().toString())
-                            .set(Tables.COMPETITIONS.WINNER_FISH, prepareRarityFishString(leaderboard.getEntry(0).getFish()))
-                            .set(Tables.COMPETITIONS.WINNER_SCORE, leaderboard.getTopEntry().getValue())
+                if (leaderboard.getSize() > 0) {
+                    final CompetitionEntry topEntry = leaderboard.getTopEntry();
+                    return common.set(Tables.COMPETITIONS.WINNER_UUID, topEntry.getPlayer().toString())
+                            .set(Tables.COMPETITIONS.WINNER_FISH, prepareRarityFishString(topEntry.getFish()))
+                            .set(Tables.COMPETITIONS.WINNER_SCORE, topEntry.getValue())
                             .set(Tables.COMPETITIONS.CONTESTANTS, prepareContestantsString(leaderboard.getEntries()))
                             .execute();
                 }
