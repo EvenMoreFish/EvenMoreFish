@@ -42,6 +42,15 @@ public class UserManager implements Listener {
     }
 
     public int getUserId(final UUID uuid) {
-        return userCache.get(uuid);
+        Integer id = userCache.get(uuid);
+        if (id != null) {
+            return id;
+        }
+
+        id = database.getUserId(uuid);
+        if (id != 0) {
+            userCache.put(uuid, id);
+        }
+        return id;
     }
 }
