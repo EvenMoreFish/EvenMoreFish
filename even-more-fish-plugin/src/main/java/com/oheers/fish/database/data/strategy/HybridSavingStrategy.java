@@ -7,7 +7,9 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class HybridSavingStrategy<T> implements DataSavingStrategy<T> {
@@ -23,7 +25,7 @@ public class HybridSavingStrategy<T> implements DataSavingStrategy<T> {
     ) {
         this.immediateSaveFunction = immediateSaveFunction;
         this.batchSaveFunction = batchSaveFunction;
-        this.scheduler = Executors.newSingleThreadScheduledExecutor();
+        this.scheduler = Executors.newSingleThreadScheduledExecutor(namedDaemonThreadFactory("emf-db-save"));
         scheduler.scheduleAtFixedRate(this::flush, interval, interval, unit);
     }
 
@@ -45,5 +47,21 @@ public class HybridSavingStrategy<T> implements DataSavingStrategy<T> {
             toSave.add(pendingSaves.poll());
         }
         batchSaveFunction.accept(toSave); // Batch save
+    }
+
+    public void shutdown() {
+        scheduler.shutdown();
+        flush();
+    }
+
+    private static ThreadFactory namedDaemonThreadFactory(String prefix) {
+        String safePrefix = (prefix == null || prefix.isBlank()) ? "emf-db-save" : prefix.trim();
+        AtomicInteger counter = new AtomicInteger(1);
+        return runnable -> {
+            Thread thread = new Thread(runnable);
+            thread.setName(safePrefix + "-" + counter.getAndIncrement());
+            thread.setDaemon(true);
+            return thread;
+        };
     }
 }

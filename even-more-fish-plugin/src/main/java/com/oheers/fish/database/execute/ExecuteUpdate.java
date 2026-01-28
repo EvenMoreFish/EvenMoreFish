@@ -8,6 +8,8 @@ import org.jooq.impl.DSL;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 public abstract class ExecuteUpdate extends ExecuteBase {
@@ -24,10 +26,18 @@ public abstract class ExecuteUpdate extends ExecuteBase {
         try (Connection connection = getConnection()) {
             DSLContext dslContext = getContext(connection);
             return onRunUpdate(dslContext);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             EvenMoreFish.getInstance().getLogger().log(Level.SEVERE,"Update execution failed", e);
             return 0;
         }
+    }
+
+    /**
+     * Runs {@link #executeUpdate()} on the provided executor.
+     */
+    public CompletableFuture<Integer> executeUpdateAsync(DbExecutor executor) {
+        Objects.requireNonNull(executor, "executor");
+        return executor.updateAsync(this::executeUpdate);
     }
 
     public void executeSmartUpdate() {

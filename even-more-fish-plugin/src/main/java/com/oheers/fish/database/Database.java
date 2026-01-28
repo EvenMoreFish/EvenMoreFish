@@ -152,11 +152,9 @@ public class Database implements DatabaseAPI {
         return new ExecuteQuery<Boolean>(connectionFactory, settings) {
             @Override
             protected Boolean onRunQuery(DSLContext dslContext) throws Exception {
-                return dslContext.select()
-                        .from(Tables.USERS)
-                        .where(Tables.USERS.UUID.eq(uuid.toString()))
-                        .fetch()
-                        .isNotEmpty();
+                return dslContext.fetchExists(
+                        Tables.USERS.where(Tables.USERS.UUID.eq(uuid.toString()))
+                );
             }
 
             @Override
@@ -271,13 +269,9 @@ public class Database implements DatabaseAPI {
         return new ExecuteQuery<Boolean>(connectionFactory, settings) {
             @Override
             protected Boolean onRunQuery(DSLContext dslContext) throws Exception {
-                return dslContext.select()
-                        .from(Tables.FISH)
-                        .where(Tables.FISH.FISH_NAME.eq(fish.getName())
-                                .and(Tables.FISH.FISH_RARITY.eq(fish.getRarity().getId())))
-                        .limit(1)
-                        .fetch()
-                        .isNotEmpty();
+                return dslContext.fetchExists(
+                        Tables.FISH.where(Tables.FISH.FISH_NAME.eq(fish.getName())
+                                .and(Tables.FISH.FISH_RARITY.eq(fish.getRarity().getId()))));
             }
 
             @Override
@@ -329,10 +323,11 @@ public class Database implements DatabaseAPI {
                 InsertSetMoreStep<CompetitionsRecord> common = dslContext.insertInto(Tables.COMPETITIONS)
                         .set(Tables.COMPETITIONS.COMPETITION_NAME, competition.getCompetitionName());
 
-                if (leaderboard.getSize() <= 0) {
-                    return common.set(Tables.COMPETITIONS.WINNER_UUID, leaderboard.getTopEntry().getPlayer().toString())
-                            .set(Tables.COMPETITIONS.WINNER_FISH, prepareRarityFishString(leaderboard.getEntry(0).getFish()))
-                            .set(Tables.COMPETITIONS.WINNER_SCORE, leaderboard.getTopEntry().getValue())
+                if (leaderboard.getSize() > 0) {
+                    final CompetitionEntry topEntry = leaderboard.getTopEntry();
+                    return common.set(Tables.COMPETITIONS.WINNER_UUID, topEntry.getPlayer().toString())
+                            .set(Tables.COMPETITIONS.WINNER_FISH, prepareRarityFishString(topEntry.getFish()))
+                            .set(Tables.COMPETITIONS.WINNER_SCORE, topEntry.getValue())
                             .set(Tables.COMPETITIONS.CONTESTANTS, prepareContestantsString(leaderboard.getEntries()))
                             .execute();
                 }
@@ -402,7 +397,7 @@ public class Database implements DatabaseAPI {
                         .from(Tables.FISH_LOG)
                         .where(Tables.FISH_LOG.USER_ID.eq(userId)
                                 .and(Tables.FISH_LOG.FISH_NAME.eq(fishName))
-                                .and(Tables.FISH_LOG.FISH_RARITY.eq(fishName))
+                                .and(Tables.FISH_LOG.FISH_RARITY.eq(fishRarity))
                                 .and(Tables.FISH_LOG.CATCH_TIME.eq(time))
                         ).fetchOne();
 
@@ -516,7 +511,7 @@ public class Database implements DatabaseAPI {
                         .from(Tables.FISH_LOG)
                         .where(Tables.FISH_LOG.USER_ID.eq(userId))
                         .and(Tables.FISH_LOG.FISH_NAME.eq(fishName))
-                        .and(Tables.FISH_LOG.FISH_RARITY.eq(fishName))
+                        .and(Tables.FISH_LOG.FISH_RARITY.eq(fishRarity))
                         .fetch();
                 if (result.isEmpty()) {
                     return empty();
