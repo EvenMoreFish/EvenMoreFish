@@ -233,6 +233,14 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("database.advanced.disable-jooq-startup-comments", true);
     }
 
+    public boolean isJooqExecuteLoggingEnabled() {
+        return getConfig().getBoolean("database.advanced.jooq-execute-logging", false);
+    }
+
+    public boolean isJooqRenderFormattedEnabled() {
+        return getConfig().getBoolean("database.advanced.jooq-render-formatted", false);
+    }
+
 
     public boolean useAdditionalAddons() {
         return getConfig().getBoolean("addons.additional-addons", true);

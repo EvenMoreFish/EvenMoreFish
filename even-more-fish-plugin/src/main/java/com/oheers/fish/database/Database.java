@@ -124,8 +124,8 @@ public class Database implements DatabaseAPI {
     }
 
     public void initSettings(final String tablePrefix, final String dbName) {
-        settings.setExecuteLogging(true);
-        settings.withRenderFormatted(true);
+        settings.setExecuteLogging(MainConfig.getInstance().isJooqExecuteLoggingEnabled());
+        settings.withRenderFormatted(MainConfig.getInstance().isJooqRenderFormattedEnabled());
         settings.withRenderMapping(
                 new RenderMapping().withSchemata(
                         new MappedSchema()
