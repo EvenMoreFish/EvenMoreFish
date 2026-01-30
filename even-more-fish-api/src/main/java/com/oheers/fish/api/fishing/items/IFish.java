@@ -10,6 +10,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * An abstract representation of a Fish for API use.
+ * This should only ever be implemented by EMF's Fish class.
+ */
 public interface IFish {
 
     @NotNull ItemStack give(int randomIndex);

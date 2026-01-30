@@ -10,6 +10,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.TreeMap;
 
+/**
+ * An abstract representation of FishManager for API use.
+ * This should only ever be extended by EMF's FishManager class.
+ */
 public abstract class AbstractFishManager<T extends IRarity> extends AbstractFileBasedManager<T> {
 
     private static AbstractFishManager<? extends IRarity> instance;
@@ -32,9 +36,15 @@ public abstract class AbstractFishManager<T extends IRarity> extends AbstractFil
 
     public abstract @Nullable IFish getFish(@NotNull String rarityName, @NotNull String fishName);
 
-    public abstract @Nullable IFish getFish(@NotNull ItemStack item);
+    public abstract @Nullable IFish getFish(@Nullable ItemStack item);
 
-    public abstract @Nullable IFish getFish(@NotNull Entity itemEntity);
+    public abstract @Nullable IFish getFish(@Nullable Entity itemEntity);
+
+    public abstract @Nullable IFish getFish(@Nullable Skull skull, @Nullable Player fisher);
+
+    public abstract boolean isFish(@Nullable ItemStack item);
+
+    public abstract boolean isFish(@Nullable Skull skull);
 
     public abstract @NotNull TreeMap<String, ? extends IRarity> getRarityMap();
 

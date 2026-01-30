@@ -8,6 +8,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * An abstract representation of a Rarity for API use.
+ * This should only ever be implemented by EMF's Rarity class.
+ */
 public interface IRarity {
 
     @NotNull String getId();
