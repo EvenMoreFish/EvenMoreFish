@@ -40,6 +40,10 @@ purchase:
   # The amount of this bait that is given when purchased.
   # This is automatically limited to the maximum stack size of the item.
   quantity: 1
+  # A list of specific economy types that this bait can be purchased with.
+  # Defaults to all enabled economy types if missing or empty.
+  economy-types:
+    - Vault
 
 # What the item for this bait should look like.
 # See the wiki for all options: https://evenmorefish.github.io/EvenMoreFish/docs/configuration/items
