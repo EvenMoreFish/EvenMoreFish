@@ -1,12 +1,14 @@
 package com.oheers.fish.baits.manager;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.AbstractFileBasedManager;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.configs.BaitConversions;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BaitManager extends AbstractFileBasedManager<BaitHandler> {
@@ -59,4 +61,9 @@ public class BaitManager extends AbstractFileBasedManager<BaitHandler> {
     public @Nullable BaitHandler getBait(@Nullable ItemStack itemStack) {
         return itemStack != null ? getBait(BaitNBTManager.getBaitName(itemStack)) : null;
     }
+
+    public boolean isBait(@NotNull ItemStack item) {
+        return FishUtils.isBaitObject(item);
+    }
+
 }
