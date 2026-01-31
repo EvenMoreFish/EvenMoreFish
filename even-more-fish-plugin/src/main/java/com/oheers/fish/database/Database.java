@@ -27,7 +27,6 @@ import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.database.strategies.DatabaseStrategyFactory;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.Rarity;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -729,7 +728,7 @@ public class Database implements DatabaseAPI {
         return new ExecuteUpdate(connectionFactory, settings) {
             @Override
             protected int onRunUpdate(DSLContext dslContext) {
-                return dslContext.insertInto(Tables.USERS)
+                Integer id = dslContext.insertInto(Tables.USERS)
                         .set(Tables.USERS.UUID, report.getUuid().toString())
                         .set(Tables.USERS.COMPETITIONS_JOINED, report.getCompetitionsJoined())
                         .set(Tables.USERS.COMPETITIONS_WON, report.getCompetitionsWon())
@@ -756,7 +755,19 @@ public class Database implements DatabaseAPI {
                         .set(Tables.USERS.LAST_FISH, report.getLargestFish().toString())
                         .set(Tables.USERS.SHORTEST_FISH, report.getShortestFish().toString())
                         .set(Tables.USERS.SHORTEST_LENGTH, report.getShortestLength())
-                        .execute();
+                        .returning(Tables.USERS.ID)
+                        .fetchOne(Tables.USERS.ID);
+
+                if (id != null) {
+                    return id;
+                }
+
+                Integer fallbackId = dslContext.select(Tables.USERS.ID)
+                        .from(Tables.USERS)
+                        .where(Tables.USERS.UUID.eq(report.getUuid().toString()))
+                        .fetchOne(Tables.USERS.ID);
+
+                return fallbackId == null ? 0 : fallbackId;
             }
         }.executeUpdate();
     }

@@ -208,6 +208,7 @@ public interface DatabaseAPI {
      * Performs an upsert operation (insert if not exists, update if exists).
      *
      * @param report The UserReport containing all fishing statistics
+     * @return The new userId or existing one.
      */
     Integer upsertUserReport(UserReport report);
 
