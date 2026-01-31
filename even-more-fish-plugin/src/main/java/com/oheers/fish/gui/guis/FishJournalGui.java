@@ -38,7 +38,7 @@ import java.util.TreeSet;
 import java.util.function.Supplier;
 
 public class FishJournalGui extends ConfigGui {
-
+    private final int userId;
     private final Rarity rarity;
     private final SortType sortType;
 
@@ -51,7 +51,7 @@ public class FishJournalGui extends ConfigGui {
         );
 
         this.rarity = rarity;
-
+        this.userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(player.getUniqueId());
         createGui();
 
         Section config = getGuiConfig();
@@ -101,7 +101,7 @@ public class FishJournalGui extends ConfigGui {
 
         boolean hideUndiscovered = section.getBoolean("hide-undiscovered-fish", true);
         // If undiscovered fish should be hidden
-        if (hideUndiscovered && !database.userHasFish(fish, player)) {
+        if (hideUndiscovered && !database.userHasFish(fish.getRarity().getId(), fish.getName(), userId)) {
             return ItemFactory.itemFactory(section, "undiscovered-fish").createItem(player.getUniqueId());
         }
 
@@ -130,8 +130,6 @@ public class FishJournalGui extends ConfigGui {
     }
 
     private @NotNull EMFListMessage prepareLore(@NotNull ItemFactory factory, @NotNull Fish fish) {
-        final int userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(player.getUniqueId());
-
         final UserFishStats userFishStats = EvenMoreFish.getInstance().getPluginDataManager().getUserFishStatsDataManager().get(UserFishRarityKey.of(userId, fish).toString());
         final FishStats fishStats = EvenMoreFish.getInstance().getPluginDataManager().getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
 
@@ -198,7 +196,7 @@ public class FishJournalGui extends ConfigGui {
         }
 
         boolean hideUndiscovered = section.getBoolean("hide-undiscovered-rarity", true);
-        if (hideUndiscovered && !database.userHasRarity(rarity, player)) {
+        if (hideUndiscovered && !database.userHasRarity(rarity.getId(), userId)) {
             return ItemFactory.itemFactory(section, "undiscovered-rarity").createItem(player.getUniqueId());
         }
 
