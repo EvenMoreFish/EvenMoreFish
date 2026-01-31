@@ -163,7 +163,7 @@ public class ConfigBase {
         }
         try {
             getConfig().update();
-        } catch (IOException exception) {
+        } catch (IOException | UnsupportedOperationException exception) {
             plugin.getLogger().warning("Failed to update " + getFileName());
         }
     }
