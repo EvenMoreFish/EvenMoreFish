@@ -39,6 +39,9 @@ public class MainConfig extends ConfigBase {
     private final String applyBaitsSubCommandName;
     private final String journalSubCommandName;
 
+    private Map<String, List<Biome>> biomeSets;
+    private Map<String, Map<String, Double>> regionBoosts;
+
     public MainConfig() {
         super("config.yml", "config.yml", EvenMoreFish.getInstance(), true);
         instance = this;
@@ -58,6 +61,17 @@ public class MainConfig extends ConfigBase {
         this.sellAllSubCommandName = getConfig().getString("command.subcommands.sellall", "sellall");
         this.applyBaitsSubCommandName = getConfig().getString("command.subcommands.applybaits", "applybaits");
         this.journalSubCommandName = getConfig().getString("command.subcommands.journal", "journal");
+
+        this.biomeSets = loadBiomeSets();
+        this.regionBoosts = loadRegionBoosts();
+    }
+
+    @Override
+    public void reload() {
+        super.reload();
+
+        this.biomeSets = loadBiomeSets();
+        this.regionBoosts = loadRegionBoosts();
     }
 
     public static MainConfig getInstance() {
@@ -314,7 +328,7 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("command.old-base-command-behavior", false);
     }
 
-    public Map<String, List<Biome>> getBiomeSets() {
+    private Map<String, List<Biome>> loadBiomeSets() {
         Map<String, List<Biome>> biomeSetMap = new HashMap<>();
         Section section = getConfig().getSection("biome-sets");
         if (section == null) {
@@ -334,27 +348,54 @@ public class MainConfig extends ConfigBase {
         return biomeSetMap;
     }
 
+    private Map<String, Map<String, Double>> loadRegionBoosts() {
+        Section regionBoostsSection = getConfig().getSection("region-boosts");
+        if (regionBoostsSection == null) {
+            return Map.of();
+        }
+
+        Map<String, Map<String, Double>> boosts = new HashMap<>();
+        regionBoostsSection.getRoutesAsStrings(false).forEach(regionKey -> {
+            Section regionSection = regionBoostsSection.getSection(regionKey);
+            if (regionSection == null) {
+                return;
+            }
+
+            Map<String, Double> rarityBoosts = new HashMap<>();
+            regionSection.getRoutesAsStrings(false).forEach(rarityKey ->
+                    rarityBoosts.put(rarityKey, regionSection.getDouble(rarityKey, 1.0))
+            );
+
+            boosts.put(regionKey, rarityBoosts);
+        });
+
+        return boosts;
+    }
+
+    public Map<String, List<Biome>> getBiomeSets() {
+        return biomeSets;
+    }
+
     public double getRegionBoost(String region, String rarity) {
         double defaultBoostRate = 1.0;
         if (region == null || rarity == null) {
             return defaultBoostRate; // Default boost rate is 1.0 if region or rarity is null
         }
 
-        Section regionBoosts = getConfig().getSection("region-boosts");
-        if (regionBoosts == null) {
+        if (regionBoosts == null || regionBoosts.isEmpty()) {
             return defaultBoostRate; // Default boost rate is 1.0 if not specified
         }
 
-        Section regionSection = regionBoosts.getSection(region);
-        if (regionSection == null) {
+        Map<String, Double> regionMap = regionBoosts.get(region);
+        if (regionMap == null) {
             return defaultBoostRate; // Default boost rate is 1.0 if not specified
         }
 
-        return regionSection.getDouble(rarity, defaultBoostRate); // Default boost rate is 1.0 if not specified
+        return regionMap.getOrDefault(rarity, defaultBoostRate); // Default boost rate is 1.0 if not specified
     }
 
     public boolean isRegionBoostsEnabled() {
-        return getConfig().contains("region-boosts") && getConfig().isSection("region-boosts");
+        return regionBoosts != null && !regionBoosts.isEmpty();
     }
 
     public boolean isEconomyEnabled(@NotNull EconomyType type) {
