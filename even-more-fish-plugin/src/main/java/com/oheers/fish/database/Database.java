@@ -295,24 +295,6 @@ public class Database implements DatabaseAPI {
         }.executeUpdate();
     }
 
-
-    @Override
-    public boolean userHasFish(@NotNull Fish fish, @NotNull HumanEntity user) {
-        return userHasFish(fish.getRarity().getId(), fish.getName(), getUserId(user.getUniqueId()));
-    }
-
-    /**
-     * Checks if a player has caught a specific rarity.
-     *
-     * @param rarity The rarity to check
-     * @param user   The player to check
-     * @return true if the player has caught the rarity, false otherwise
-     */
-    @Override
-    public boolean userHasRarity(@NotNull Rarity rarity, @NotNull HumanEntity user) {
-        return userHasRarity(rarity.getId(), getUserId(user.getUniqueId()));
-    }
-
     @Override
     public void createCompetitionReport(@NotNull Competition competition) {
         new ExecuteUpdate(connectionFactory, settings) {
