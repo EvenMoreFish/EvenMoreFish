@@ -153,7 +153,7 @@ public class ConfigBase {
         try {
             getConfig().save();
         } catch (IOException exception) {
-            plugin.getLogger().warning("Failed to save " + getFileName());
+            plugin.getLogger().log(Level.WARNING, "Failed to update " + getFileName(), exception);
         }
     }
 
