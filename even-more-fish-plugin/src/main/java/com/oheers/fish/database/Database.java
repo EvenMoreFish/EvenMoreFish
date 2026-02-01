@@ -324,7 +324,6 @@ public class Database implements DatabaseAPI {
     }
 
     private String prepareContestantsString(@NotNull List<CompetitionEntry> entries) {
-        // Cleaned up to use Stream#collect instead of Stream#toList and String#join
         return entries.stream()
             .map(CompetitionEntry::getPlayer)
             .map(UUID::toString)
@@ -367,7 +366,6 @@ public class Database implements DatabaseAPI {
         }.executeUpdate();
     }
 
-    //todo should be cached and fetched only when a player asks for it?
     @Override
     public FishLog getFishLog(int userId, String fishName, String fishRarity, LocalDateTime time) {
         return new ExecuteQuery<FishLog>(connectionFactory, settings) {
