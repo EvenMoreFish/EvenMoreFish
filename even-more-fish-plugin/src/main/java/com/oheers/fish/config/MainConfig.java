@@ -228,7 +228,7 @@ public class MainConfig extends ConfigBase {
     }
 
     public String getSaveIntervalUnit() {
-        return getConfig().getString(Route.from("database", "advanced", "save-interval", "units"), "SECONDS");
+        return getConfig().getString("database.advanced.save-interval.units", "SECONDS");
     }
 
     public int getCompetitionSaveInterval() {
@@ -240,7 +240,7 @@ public class MainConfig extends ConfigBase {
     }
 
     private int getSaveInterval(final String path) {
-        return getConfig().getInt(Route.from("database", "advanced", "save-interval", path), 5);
+        return getConfig().getInt("database.advanced.save-interval." + path, 5);
     }
 
     public boolean isDisableJooqStartupCommments() {
@@ -259,12 +259,6 @@ public class MainConfig extends ConfigBase {
     public boolean useAdditionalAddons() {
         return getConfig().getBoolean("addons.additional-addons", true);
     }
-
-    public Locale getDecimalLocale() {
-        final String locale = getConfig().getString(Route.fromString("decimal-locale"), "en-US");
-        return LocaleUtils.toLocale(locale);
-    }
-
 
     public int getNearbyPlayersRequirementRange() { return getConfig().getInt("requirement.nearby-players.range", 0); }
 

@@ -10,12 +10,6 @@ debug: false
 # Delete messages.yml before changing this
 locale: en
 
-# The decimal format of the plugin
-# Used to change default formatting for numbers, for example: en_US for 1,000.99 or de_DE for 1.000,99
-# Note: all locales supported by the jvm are available.
-# Only relevant if you use vault
-decimal-locale: en_US
-
 fishing:
   # Gives the fish directly to the player instead of creating an item entity.
   # This only happens if the player has space in their inventory.
