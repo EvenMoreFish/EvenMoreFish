@@ -65,23 +65,6 @@ public interface DatabaseAPI {
      */
     void incrementFish(@NotNull Fish fish);
 
-    /**
-     * Checks if a player has caught a specific fish.
-     *
-     * @param fish The fish to check
-     * @param user The player to check
-     * @return true if the player has caught the fish, false otherwise
-     */
-    boolean userHasFish(@NotNull Fish fish, @NotNull HumanEntity user);
-
-    /**
-     * Checks if a player has caught a specific rarity.
-     *
-     * @param rarity The rarity to check
-     * @param user The player to check
-     * @return true if the player has caught the rarity, false otherwise
-     */
-    boolean userHasRarity(@NotNull Rarity rarity, @NotNull HumanEntity user);
 
     /**
      * Checks if a player has caught a specific fish by rarity and name.
@@ -208,6 +191,7 @@ public interface DatabaseAPI {
      * Performs an upsert operation (insert if not exists, update if exists).
      *
      * @param report The UserReport containing all fishing statistics
+     * @return The new userId or existing one.
      */
     Integer upsertUserReport(UserReport report);
 

@@ -27,7 +27,6 @@ import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.database.strategies.DatabaseStrategyFactory;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.Rarity;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -124,8 +123,8 @@ public class Database implements DatabaseAPI {
     }
 
     public void initSettings(final String tablePrefix, final String dbName) {
-        settings.setExecuteLogging(true);
-        settings.withRenderFormatted(true);
+        settings.setExecuteLogging(MainConfig.getInstance().isJooqExecuteLoggingEnabled());
+        settings.withRenderFormatted(MainConfig.getInstance().isJooqRenderFormattedEnabled());
         settings.withRenderMapping(
                 new RenderMapping().withSchemata(
                         new MappedSchema()
@@ -296,24 +295,6 @@ public class Database implements DatabaseAPI {
         }.executeUpdate();
     }
 
-
-    @Override
-    public boolean userHasFish(@NotNull Fish fish, @NotNull HumanEntity user) {
-        return userHasFish(fish.getRarity().getId(), fish.getName(), getUserId(user.getUniqueId()));
-    }
-
-    /**
-     * Checks if a player has caught a specific rarity.
-     *
-     * @param rarity The rarity to check
-     * @param user   The player to check
-     * @return true if the player has caught the rarity, false otherwise
-     */
-    @Override
-    public boolean userHasRarity(@NotNull Rarity rarity, @NotNull HumanEntity user) {
-        return userHasRarity(rarity.getId(), getUserId(user.getUniqueId()));
-    }
-
     @Override
     public void createCompetitionReport(@NotNull Competition competition) {
         new ExecuteUpdate(connectionFactory, settings) {
@@ -343,7 +324,6 @@ public class Database implements DatabaseAPI {
     }
 
     private String prepareContestantsString(@NotNull List<CompetitionEntry> entries) {
-        // Cleaned up to use Stream#collect instead of Stream#toList and String#join
         return entries.stream()
             .map(CompetitionEntry::getPlayer)
             .map(UUID::toString)
@@ -386,7 +366,6 @@ public class Database implements DatabaseAPI {
         }.executeUpdate();
     }
 
-    //todo should be cached and fetched only when a player asks for it?
     @Override
     public FishLog getFishLog(int userId, String fishName, String fishRarity, LocalDateTime time) {
         return new ExecuteQuery<FishLog>(connectionFactory, settings) {
@@ -729,7 +708,7 @@ public class Database implements DatabaseAPI {
         return new ExecuteUpdate(connectionFactory, settings) {
             @Override
             protected int onRunUpdate(DSLContext dslContext) {
-                return dslContext.insertInto(Tables.USERS)
+                Integer id = dslContext.insertInto(Tables.USERS)
                         .set(Tables.USERS.UUID, report.getUuid().toString())
                         .set(Tables.USERS.COMPETITIONS_JOINED, report.getCompetitionsJoined())
                         .set(Tables.USERS.COMPETITIONS_WON, report.getCompetitionsWon())
@@ -756,7 +735,19 @@ public class Database implements DatabaseAPI {
                         .set(Tables.USERS.LAST_FISH, report.getLargestFish().toString())
                         .set(Tables.USERS.SHORTEST_FISH, report.getShortestFish().toString())
                         .set(Tables.USERS.SHORTEST_LENGTH, report.getShortestLength())
-                        .execute();
+                        .returning(Tables.USERS.ID)
+                        .fetchOne(Tables.USERS.ID);
+
+                if (id != null) {
+                    return id;
+                }
+
+                Integer fallbackId = dslContext.select(Tables.USERS.ID)
+                        .from(Tables.USERS)
+                        .where(Tables.USERS.UUID.eq(report.getUuid().toString()))
+                        .fetchOne(Tables.USERS.ID);
+
+                return fallbackId == null ? 0 : fallbackId;
             }
         }.executeUpdate();
     }

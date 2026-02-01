@@ -123,3 +123,4 @@ build
 .settings
 !gradle/*
 
+/.vscode

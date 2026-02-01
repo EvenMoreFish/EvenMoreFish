@@ -123,6 +123,30 @@ database:
     // highlight-end
 ```
 
+---
+
+### Advanced: JOOQ Logging `advanced.jooq-execute-logging`
+Controls whether JOOQ logs executed SQL queries. This is useful for debugging but can increase log noise and impact performance.
+
+```yaml advanced.jooq-execute-logging
+database:
+  advanced:
+    // highlight-next-line
+    jooq-execute-logging: false
+```
+
+---
+
+### Advanced: JOOQ Render Formatting `advanced.jooq-render-formatted`
+Controls whether SQL is rendered in a formatted (pretty-printed) style. Helpful for readability when debugging, but adds overhead.
+
+```yaml advanced.jooq-render-formatted
+database:
+  advanced:
+    // highlight-next-line
+    jooq-render-formatted: false
+```
+
 --- 
 
 

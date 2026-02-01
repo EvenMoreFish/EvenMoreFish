@@ -59,6 +59,10 @@ database:
   password: "secret"
   advanced:
     disable-jooq-startup-comments: true
+    # Enable JOOQ query execution logging. Useful for debugging but can impact performance.
+    jooq-execute-logging: false
+    # Render SQL in a formatted (pretty-printed) style. Useful for debugging but adds overhead.
+    jooq-render-formatted: false
     save-interval:
       unit: SECONDS
       user-fish-stats: 5

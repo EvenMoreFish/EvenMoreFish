@@ -20,6 +20,7 @@ import java.util.logging.Level;
  * We can add additional factories to allow for multiple database support in the future.
  */
 public abstract class ConnectionFactory {
+    private final static int DEFAULT_PORT = 3306;
     protected HikariDataSource dataSource;
     private final Logger logger = LoggerFactory.getLogger(ConnectionFactory.class);
     private Boolean supportsTransaction;
@@ -43,12 +44,12 @@ public abstract class ConnectionFactory {
 
     private int getDatabasePort() {
         if (!MainConfig.getInstance().getAddress().contains(":")) {
-            return 3306;
+            return DEFAULT_PORT;
         }
         try {
             return Integer.parseInt(MainConfig.getInstance().getAddress().split(":")[1]);
         } catch (NumberFormatException e) {
-            return 3306;
+            return DEFAULT_PORT;
         }
     }
 
