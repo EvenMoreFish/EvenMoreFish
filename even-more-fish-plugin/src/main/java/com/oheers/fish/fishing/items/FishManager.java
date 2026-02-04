@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.ToDoubleFunction;
@@ -174,7 +175,15 @@ public class FishManager extends AbstractFishManager<Rarity> {
         );
 
         final List<Fish> available = rarity.getFishList().stream()
-                .filter(fish -> isFishAllowed(fish, boostRate, boostedFish, processor, customRod, context, doRequirementChecks))
+                .filter(fish -> isFishAllowed(
+                    fish,
+                    boostRate,
+                    boostedFish,
+                    processor,
+                    customRod,
+                    context,
+                    doRequirementChecks
+                ))
                 .toList();
 
         if (available.isEmpty()) {
@@ -264,10 +273,20 @@ public class FishManager extends AbstractFishManager<Rarity> {
     private boolean isFishAllowed(Fish fish, double boostRate, List<Fish> boostedFish,
                                   Processor<?> processor, CustomRod customRod,
                                   RequirementContext context, boolean doRequirements) {
-        return isFishAllowedByCustomRod(fish, customRod) &&
-                isFishBoosted(fish, boostRate, boostedFish) &&
-                isFishAllowedByProcessor(fish, processor) &&
-                meetsRequirements(fish, doRequirements, context);
+        if (fish.isCatchLimitReached(context.getPlayer())) {
+            System.out.println("Fish " + fish.getName() + " catch limit reached for player " + Optional.ofNullable(context.getPlayer()).map(Player::getName).orElse("N/A"));
+            return false;
+        }
+        if (!isFishAllowedByCustomRod(fish, customRod)) {
+            return false;
+        }
+        if (!isFishBoosted(fish, boostRate, boostedFish)) {
+            return false;
+        }
+        if (!isFishAllowedByProcessor(fish, processor)) {
+            return false;
+        }
+        return meetsRequirements(fish, doRequirements, context);
     }
 
     private boolean isFishAllowedByCustomRod(Fish fish, CustomRod rod) {
