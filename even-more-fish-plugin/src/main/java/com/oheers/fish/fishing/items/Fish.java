@@ -6,6 +6,12 @@ import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.api.config.ConfigUtils;
+import com.oheers.fish.database.data.FishRarityKey;
+import com.oheers.fish.database.data.UserFishRarityKey;
+import com.oheers.fish.database.data.manager.DataManager;
+import com.oheers.fish.database.data.manager.UserManager;
+import com.oheers.fish.database.model.fish.FishStats;
+import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.items.ItemFactory;
@@ -13,6 +19,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import com.oheers.fish.plugin.PluginDataManager;
 import com.oheers.fish.selling.WorthNBT;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
@@ -564,10 +571,7 @@ public class Fish implements IFish {
             return rarity.getCatchType();
         }
         CatchType catchType = FishUtils.getEnumValue(CatchType.class, typeStr);
-        if (catchType == null) {
-            return rarity.getCatchType();
-        }
-        return catchType;
+        return catchType == null ? rarity.getCatchType() : catchType;
     }
 
     @Override
@@ -578,6 +582,37 @@ public class Fish implements IFish {
     @Override
     public void setShowInJournal(boolean showInJournal) {
         this.showInJournal = showInJournal;
+    }
+
+    @Override
+    public int getCatchLimit() {
+        return section.getInt("catch-limit", -1);
+    }
+
+    @Override
+    public boolean isCatchLimitReached(@Nullable Player player) {
+        if (player == null) {
+            return false;
+        }
+        PluginDataManager manager = EvenMoreFish.getInstance().getPluginDataManager();
+        if (manager == null) {
+            return false;
+        }
+        UserManager userManager = manager.getUserManager();
+        if (userManager == null) {
+            return false;
+        }
+        int userId = userManager.getUserId(player.getUniqueId());
+        DataManager<UserFishStats> statsManager = manager.getUserFishStatsDataManager();
+        if (statsManager == null) {
+            return false;
+        }
+        UserFishStats stats = statsManager.get(UserFishRarityKey.of(userId, this).toString());
+        if (stats == null) {
+            return false;
+        }
+        System.out.println("Currently caught: " + stats.getQuantity() + " / " + getCatchLimit());
+        return stats.getQuantity() >= getCatchLimit();
     }
 
     @Override
