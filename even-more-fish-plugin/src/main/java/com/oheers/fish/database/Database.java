@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.DSLContext;
 import org.jooq.InsertSetMoreStep;
+import org.jooq.Query;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.conf.MappedSchema;
@@ -757,25 +758,28 @@ public class Database implements DatabaseAPI {
         new ExecuteUpdate(connectionFactory, settings) {
             @Override
             protected int onRunUpdate(DSLContext dslContext) {
-                List<UserFishStatsRecord> records = userFishStats.stream()
-                        .map(stats -> {
-                            UserFishStatsRecord userFishStatsRecord = new UserFishStatsRecord();
-                            userFishStatsRecord.setUserId(stats.getUserId());
-                            userFishStatsRecord.setFishName(stats.getFishName());
-                            userFishStatsRecord.setFishRarity(stats.getFishRarity());
-                            userFishStatsRecord.setFirstCatchTime(stats.getFirstCatchTime());
-                            userFishStatsRecord.setLongestLength(stats.getLongestLength());
-                            userFishStatsRecord.setShortestLength(stats.getShortestLength());
-                            userFishStatsRecord.setQuantity(stats.getQuantity());
+                List<Query> queries = userFishStats.stream()
+                        .map(stats -> dslContext.insertInto(Tables.USER_FISH_STATS)
+                                .set(Tables.USER_FISH_STATS.USER_ID, stats.getUserId())
+                                .set(Tables.USER_FISH_STATS.FISH_NAME, stats.getFishName())
+                                .set(Tables.USER_FISH_STATS.FISH_RARITY, stats.getFishRarity())
+                                .set(Tables.USER_FISH_STATS.FIRST_CATCH_TIME, stats.getFirstCatchTime())
+                                .set(Tables.USER_FISH_STATS.LONGEST_LENGTH, stats.getLongestLength())
+                                .set(Tables.USER_FISH_STATS.SHORTEST_LENGTH, stats.getShortestLength())
+                                .set(Tables.USER_FISH_STATS.QUANTITY, stats.getQuantity())
+                                .onDuplicateKeyUpdate()
+                                .set(Tables.USER_FISH_STATS.SHORTEST_LENGTH, stats.getShortestLength())
+                                .set(Tables.USER_FISH_STATS.LONGEST_LENGTH, stats.getLongestLength())
+                                .set(Tables.USER_FISH_STATS.QUANTITY, stats.getQuantity()))
+                        .collect(Collectors.toList());
 
-                            return userFishStatsRecord;
-                        })
-                        .toList();
+                if (queries.isEmpty()) {
+                    return 0;
+                }
 
-                //upsert
-                dslContext.batchStore(records).execute();
+                dslContext.batch(queries).execute();
 
-                return records.size();
+                return queries.size();
             }
         }.executeUpdate();
 
