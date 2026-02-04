@@ -77,6 +77,11 @@ fish:
     # The catch type for this fish. This overrides the rarity's value.
     catch-type: BOTH
 
+    # The maximum amount of times this fish can be caught.
+    # Only works if the database is enabled.
+    # 0 or below means no limit.
+    catch-limit: 0
+
     # Should the fisherman be removed from the fish lore?
     # This overrides the rarity's setting.
     disable-fisherman: false
