@@ -3,6 +3,7 @@ package com.oheers.fish.api.fishing.items;
 import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -79,5 +80,15 @@ public interface IFish {
     boolean getShowInJournal();
 
     void setShowInJournal(boolean showInJournal);
+
+    /**
+     * @return The maximum amount of this fish that can be caught.
+     */
+    int getCatchLimit();
+
+    /**
+     * @return Whether the catch limit for this fish has been reached.
+     */
+    boolean isCatchLimitReached(@Nullable Player player);
 
 }
