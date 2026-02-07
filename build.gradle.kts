@@ -1,5 +1,7 @@
 allprojects {
     repositories {
+        // For testing local snapshots.
+        //mavenLocal()
         mavenCentral()
         maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
             mavenContent {
@@ -29,7 +31,5 @@ allprojects {
             }
         }
         maven("https://jitpack.io")
-        // For testing local snapshots.
-        //mavenLocal()
     }
 }
