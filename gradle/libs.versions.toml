@@ -4,14 +4,14 @@ worldedit = "7.3.0"
 redprotect = "7.7.3"
 flyway = "10.22.0"
 jooq = "3.19.29"
-junit = "5.14.2"
+junit = "6.0.2"
 craftengine = "0.0.67"
 
 shadow = "9.3.1"
 plugin-yml = "0.8.0"
 grgit = "5.3.3"
 jooq-plugin = "9.0"
-sonar = "6.3.1.5724"
+sonar = "7.2.2.6593"
 foojay-resolver = "0.8.0"
 
 strokk-commands = "1.5.0"
@@ -113,4 +113,4 @@ plugin-yml = { id = "de.eldoria.plugin-yml.bukkit", version.ref = "plugin-yml" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
 jooq = { id = "nu.studer.jooq", version = "9.0" }
 sonar = { id = "org.sonarqube", version.ref = "sonar" }
-run-paper = { id = "xyz.jpenilla.run-paper", version = "2.3.1"}
+run-paper = { id = "xyz.jpenilla.run-paper", version = "3.0.2"}
