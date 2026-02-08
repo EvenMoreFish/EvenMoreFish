@@ -512,7 +512,7 @@ public class FishUtils {
 
         String[] split = effectString.split(separator);
         if (split.length != 3) {
-            Logging.error("Potion effect string is formatted incorrectly. Use \"potion:amplifier:duration\".");
+            Logging.error("Potion effect string is formatted incorrectly. Use \"potion,amplifier,duration\".");
             return null;
         }
         PotionEffectType type = PotionEffectType.getByName(split[0].toUpperCase());
@@ -539,7 +539,7 @@ public class FishUtils {
     }
 
     public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString) {
-        return getPotionEffect(effectString, ":");
+        return getPotionEffect(effectString, ",");
     }
 
     public static @Nullable Enchantment getEnchantment(@NotNull String namespace) {
