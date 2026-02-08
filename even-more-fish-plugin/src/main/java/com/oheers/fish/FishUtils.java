@@ -520,14 +520,14 @@ public class FishUtils {
             Logging.error("Potion effect type " + split[0] + " is not valid.");
             return null;
         }
-        Integer duration = FishUtils.getInteger(split[2]);
-        if (duration == null || duration < 1) {
-            Logging.error("Potion effect duration " + split[2] + " is not valid.");
-            return null;
-        }
         Integer amplifier = FishUtils.getInteger(split[1]);
         if (amplifier == null || amplifier < 1) {
             Logging.error("Potion effect amplifier " + split[1] + " is not valid.");
+            return null;
+        }
+        Integer duration = FishUtils.getInteger(split[2]);
+        if (duration == null || duration < 1) {
+            Logging.error("Potion effect duration " + split[2] + " is not valid.");
             return null;
         }
         return new PotionEffect(

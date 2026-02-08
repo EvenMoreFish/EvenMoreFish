@@ -1,10 +1,13 @@
 package com.oheers.fish.database.model.fish;
 
 
+import com.oheers.fish.FishUtils;
 import com.oheers.fish.fishing.items.Fish;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 public class FishStats {
@@ -17,12 +20,15 @@ public class FishStats {
     private final LocalDateTime firstCatchTime;
     @NotNull
     private final UUID discoverer;
+    private String discovererName;
     private float shortestLength;
     @NotNull
     private UUID shortestFisher;
+    private String shortestFisherName;
     private float longestLength;
     @NotNull
     private UUID longestFisher;
+    private String longestFisherName;
     private int quantity;
 
     public FishStats(@NotNull String fishName, @NotNull String fishRarity, @NotNull LocalDateTime firstCatchTime, @NotNull UUID discoverer, float shortestLength, @NotNull UUID shortestFisher, float longestLength, @NotNull UUID longestFisher, int quantity) {
@@ -30,23 +36,28 @@ public class FishStats {
         this.fishRarity = fishRarity;
         this.firstCatchTime = firstCatchTime;
         this.discoverer = discoverer;
+        this.discovererName = FishUtils.getPlayerName(discoverer);
         this.shortestLength = shortestLength;
         this.shortestFisher = shortestFisher;
+        this.shortestFisherName = FishUtils.getPlayerName(shortestFisher);
         this.longestLength = longestLength;
         this.longestFisher = longestFisher;
+        this.longestFisherName = FishUtils.getPlayerName(longestFisher);
         this.quantity = quantity;
     }
 
     public FishStats(Fish fish, @NotNull LocalDateTime firstCatchTime, @NotNull UUID discoverer, float shortestLength, @NotNull UUID shortestFisher, float longestLength, @NotNull UUID longestFisher, int quantity) {
-        this.fishName = fish.getName();
-        this.fishRarity = fish.getRarity().getId();
-        this.firstCatchTime = firstCatchTime;
-        this.discoverer = discoverer;
-        this.shortestLength = shortestLength;
-        this.shortestFisher = shortestFisher;
-        this.longestLength = longestLength;
-        this.longestFisher = longestFisher;
-        this.quantity = quantity;
+        this(
+            fish.getName(),
+            fish.getRarity().getId(),
+            firstCatchTime,
+            discoverer,
+            shortestLength,
+            shortestFisher,
+            longestLength,
+            longestFisher,
+            quantity
+        );
     }
 
     public static FishStats empty(Fish fish, LocalDateTime firstCatchTime) {
@@ -73,12 +84,20 @@ public class FishStats {
         return shortestFisher;
     }
 
+    public @Nullable String getShortestFisherName() {
+        return shortestFisherName;
+    }
+
     public float getLongestLength() {
         return longestLength;
     }
 
     public @NotNull UUID getLongestFisher() {
         return longestFisher;
+    }
+
+    public @Nullable String getLongestFisherName() {
+        return longestFisherName;
     }
 
     public int getQuantity() {
@@ -89,12 +108,17 @@ public class FishStats {
         return discoverer;
     }
 
+    public @Nullable String getDiscovererName() {
+        return discovererName;
+    }
+
     public void setShortestLength(float shortestLength) {
         this.shortestLength = shortestLength;
     }
 
     public void setShortestFisher(@NotNull UUID shortestFisher) {
         this.shortestFisher = shortestFisher;
+        this.shortestFisherName = FishUtils.getPlayerName(shortestFisher);
     }
 
     public void setLongestLength(float longestLength) {
@@ -103,6 +127,7 @@ public class FishStats {
 
     public void setLongestFisher(@NotNull UUID longestFisher) {
         this.longestFisher = longestFisher;
+        this.longestFisherName = FishUtils.getPlayerName(longestFisher);
     }
 
     public void incrementQuantity() {
