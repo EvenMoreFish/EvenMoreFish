@@ -3,15 +3,15 @@ worldguard = "7.0.9"
 worldedit = "7.3.0"
 redprotect = "7.7.3"
 flyway = "10.22.0"
-jooq = "3.19.29"
-junit = "5.14.2"
+jooq = "3.19.30"
+junit = "6.0.2"
 craftengine = "0.0.67"
 
 shadow = "9.3.1"
 plugin-yml = "0.8.0"
 grgit = "5.3.3"
 jooq-plugin = "9.0"
-sonar = "6.3.1.5724"
+sonar = "7.2.2.6593"
 foojay-resolver = "0.8.0"
 
 strokk-commands = "1.5.0"
@@ -20,10 +20,10 @@ strokk-commands = "1.5.0"
 # Paper & Core APIs
 paper-api = {module = "io.papermc.paper:paper-api", version = {strictly="[1.20,)"}}
 vault-api = "com.github.MilkBowl:VaultAPI:1.7.1"
-placeholder-api = "me.clip:placeholderapi:2.11.7"
+placeholder-api = "me.clip:placeholderapi:2.12.1"
 bstats = "org.bstats:bstats-bukkit:3.1.0"
 
-kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.0"
+kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.10"
 
 # World Management
 worldguard-core = { module = "com.sk89q.worldguard:worldguard-core", version.ref = "worldguard" }
@@ -37,7 +37,7 @@ redprotect-spigot = { module = "br.net.fabiozumbi12.RedProtect:RedProtect-Spigot
 griefprevention = "com.github.TechFortress:GriefPrevention:16.18.4"
 
 # Skills & Economy
-mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.2.048"
+mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.2.049"
 aurelium-skills = "com.github.Archy-X:AureliumSkills:Beta1.2.8"
 aura-skills = "dev.aurelium:auraskills-api-bukkit:2.3.9"
 playerpoints = "org.black_ixx:playerpoints:3.3.3"
@@ -46,7 +46,7 @@ playerpoints = "org.black_ixx:playerpoints:3.3.3"
 headdatabase-api = "com.arcaniax:HeadDatabase-API:1.3.2"
 itemsadder-api = "com.github.LoneDev6:API-ItemsAdder:3.6.1"
 nbt-api = "de.tr7zw:item-nbt-api:2.15.5"
-oraxen = "io.th0rgal:oraxen:1.205.0"
+oraxen = "io.th0rgal:oraxen:1.207.0"
 nexo = "com.nexomc:nexo:1.18.0"
 
 # Craft Engine
@@ -85,7 +85,7 @@ jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
 jooq-meta-extensions = { module = "org.jooq:jooq-meta-extensions", version.ref = "jooq" }
 
 # Database Connectors
-connectors-mysql = "com.mysql:mysql-connector-j:9.5.0"
+connectors-mysql = "com.mysql:mysql-connector-j:9.6.0"
 connectors-sqlite = "org.xerial:sqlite-jdbc:3.47.0.0"
 
 # Testing
@@ -113,4 +113,4 @@ plugin-yml = { id = "de.eldoria.plugin-yml.bukkit", version.ref = "plugin-yml" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
 jooq = { id = "nu.studer.jooq", version = "9.0" }
 sonar = { id = "org.sonarqube", version.ref = "sonar" }
-run-paper = { id = "xyz.jpenilla.run-paper", version = "2.3.1"}
+run-paper = { id = "xyz.jpenilla.run-paper", version = "3.0.2"}
