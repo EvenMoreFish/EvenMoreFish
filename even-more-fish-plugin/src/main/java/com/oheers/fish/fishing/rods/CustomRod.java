@@ -123,12 +123,24 @@ public class CustomRod extends ConfigBase {
         return getConfig().getBoolean("disabled");
     }
 
+    /**
+     * Fetches the ItemFactory for this rod.
+     * NOTE: Creating an ItemStack from this factory will not add the necessary NBT to identify the rod. Use {@link #create()} instead.
+     */
     public ItemFactory getFactory() {
         return this.factory;
     }
 
+    /**
+     * Creates an ItemStack of this rod, with the necessary NBT to identify it.
+     */
     public ItemStack create() {
-        return factory.createItem();
+        ItemStack item = factory.createItem();
+        NBT.modify(item, nbt -> {
+            ReadWriteNBT emfCompound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
+            emfCompound.setString(NbtKeys.EMF_ROD_ID, getId());
+        });
+        return item;
     }
 
     public List<Rarity> getAllowedRarities() {
