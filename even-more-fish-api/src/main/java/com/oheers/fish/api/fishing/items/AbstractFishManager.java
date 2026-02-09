@@ -32,11 +32,15 @@ public abstract class AbstractFishManager<T extends IRarity> extends AbstractFil
 
     public abstract @Nullable IFish getFish(@NotNull String rarityName, @NotNull String fishName);
 
-    public abstract @Nullable IFish getFish(@NotNull ItemStack item);
+    public abstract @Nullable IFish getFish(@Nullable ItemStack item);
 
-    public abstract @Nullable IFish getFish(@NotNull Entity itemEntity);
+    public abstract @Nullable IFish getFish(@Nullable Skull skull, @Nullable Player fisher);
+
+    public abstract @Nullable IFish getFish(@Nullable Entity itemEntity);
 
     public abstract boolean isFish(@Nullable ItemStack item);
+
+    public abstract boolean isFish(@Nullable Skull skull);
 
     public abstract boolean isFish(@Nullable Entity itemEntity);
 
