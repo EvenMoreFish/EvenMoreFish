@@ -8,6 +8,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Internal implementation only. Extending this interface WILL cause issues.
+ */
 public interface IRarity {
 
     @NotNull String getId();
