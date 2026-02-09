@@ -2,6 +2,7 @@ package com.oheers.fish.fishing.rods;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.api.fishing.rods.ICustomRod;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
@@ -18,13 +19,14 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public class CustomRod extends ConfigBase {
+public class CustomRod extends ConfigBase implements ICustomRod {
 
     private final List<Rarity> allowedRarities;
     private final List<Fish> allowedFish;
@@ -111,6 +113,7 @@ public class CustomRod extends ConfigBase {
 
     // Config getters
 
+    @Override
     public @NotNull String getId() {
         return Objects.requireNonNull(getConfig().getString("id"));
     }
@@ -119,6 +122,7 @@ public class CustomRod extends ConfigBase {
         return new NamespacedKey(EvenMoreFish.getInstance(), "customrod-" + getId());
     }
 
+    @Override
     public boolean isDisabled() {
         return getConfig().getBoolean("disabled");
     }
@@ -134,7 +138,8 @@ public class CustomRod extends ConfigBase {
     /**
      * Creates an ItemStack of this rod, with the necessary NBT to identify it.
      */
-    public ItemStack create() {
+    @Override
+    public @NotNull ItemStack create() {
         ItemStack item = factory.createItem();
         NBT.modify(item, nbt -> {
             ReadWriteNBT emfCompound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
@@ -143,11 +148,13 @@ public class CustomRod extends ConfigBase {
         return item;
     }
 
-    public List<Rarity> getAllowedRarities() {
+    @Override
+    public @NotNull List<Rarity> getAllowedRarities() {
         return this.allowedRarities;
     }
 
-    public List<Fish> getAllowedFish() {
+    @Override
+    public @NotNull List<Fish> getAllowedFish() {
         return this.allowedFish;
     }
 
