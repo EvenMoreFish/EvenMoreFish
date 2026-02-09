@@ -275,8 +275,10 @@ public class CompetitionFile extends ConfigBase {
         if (soundString.equalsIgnoreCase("none")) {
             return null;
         }
-        Sound sound = FishUtils.getEnumValue(Sound.class, soundString);
-        if (sound == null) {
+        Sound sound;
+        try {
+            sound = Sound.valueOf(soundString.toUpperCase());
+        } catch (IllegalArgumentException exception) {
             EvenMoreFish.getInstance().getLogger().warning(soundString + " is not a valid sound. Defaulting to NONE.");
             return null;
         }
