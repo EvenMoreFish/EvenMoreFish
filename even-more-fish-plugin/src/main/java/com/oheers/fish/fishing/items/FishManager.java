@@ -8,6 +8,7 @@ import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.config.FishConversions;
 import com.oheers.fish.fishing.items.config.RarityConversions;
@@ -90,12 +91,21 @@ public class FishManager extends AbstractFishManager<Rarity> {
     }
 
     @Override
-    public @Nullable IFish getFish(@NotNull ItemStack item) {
+    public @Nullable IFish getFish(@Nullable ItemStack item) {
         return FishUtils.getFish(item);
     }
 
     @Override
-    public @Nullable IFish getFish(@NotNull Entity itemEntity) {
+    public @Nullable IFish getFish(@Nullable Skull skull, @Nullable Player fisher) {
+        try {
+            return FishUtils.getFish(skull, fisher);
+        } catch (InvalidFishException exception) {
+            return null;
+        }
+    }
+
+    @Override
+    public @Nullable IFish getFish(@Nullable Entity itemEntity) {
         if (!(itemEntity instanceof Item item)) {
             return null;
         }
@@ -105,6 +115,11 @@ public class FishManager extends AbstractFishManager<Rarity> {
     @Override
     public boolean isFish(@Nullable ItemStack item) {
         return FishUtils.isFish(item);
+    }
+
+    @Override
+    public boolean isFish(@Nullable Skull skull) {
+        return FishUtils.isFish(skull);
     }
 
     @Override
