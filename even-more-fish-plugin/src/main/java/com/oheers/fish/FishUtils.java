@@ -63,6 +63,7 @@ import java.util.concurrent.TimeUnit;
 public class FishUtils {
 
     private static final DurationFormatter durationFormatter = new DurationFormatter(TimeUnit.SECONDS);
+    private static final UUID B64_SKULL_UUID = UUID.fromString("07cd5534-e542-4fbf-861c-67a144ecf776");
 
     private FishUtils() {
         throw new UnsupportedOperationException();
@@ -422,7 +423,7 @@ public class FishUtils {
     public static @NotNull ItemStack getSkullFromBase64(@NotNull String base64) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         skull.editMeta(SkullMeta.class, meta -> {
-            PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID(), "EMFSkull");
+            PlayerProfile profile = Bukkit.createProfile(B64_SKULL_UUID, "EMFSkull");
             profile.setProperty(new ProfileProperty("textures", base64));
             meta.setPlayerProfile(profile);
         });
