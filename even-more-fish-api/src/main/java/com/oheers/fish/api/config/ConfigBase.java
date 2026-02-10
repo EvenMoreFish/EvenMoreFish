@@ -21,7 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
-@ApiStatus.Internal
+/**
+ * For internal use only. This class is used internally and for official addons, and may be changed or removed without notice.
+ */
 public class ConfigBase {
 
     private final boolean preventIO;
