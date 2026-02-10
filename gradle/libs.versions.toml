@@ -70,7 +70,7 @@ universalscheduler = "com.github.Anon8281:UniversalScheduler:0.1.7"
 vanishchecker = "uk.firedev:VanishChecker:1.0.6"
 inventorygui = "de.themoep:inventorygui:1.6.4-SNAPSHOT"
 boostedyaml = "dev.dejvokep:boosted-yaml:1.3.7"
-messagelib = "uk.firedev:MessageLib:1.0.7"
+messagelib = "uk.firedev:MessageLib:1.0.8-SNAPSHOT"
 guava = "com.google.guava:guava:33.5.0-jre"
 maven-artifact = "org.apache.maven:maven-artifact:4.0.0-rc-5"
 
