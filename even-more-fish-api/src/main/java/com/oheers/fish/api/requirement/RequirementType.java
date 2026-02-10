@@ -11,7 +11,6 @@ import java.util.Map;
 
 /**
  * A way to check if a player meets a certain requirement.
- * This interface can be implemented by third party plugins to register their own Requirement.
  */
 public abstract class RequirementType implements RegistryItem {
 

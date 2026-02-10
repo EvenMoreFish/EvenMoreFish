@@ -7,6 +7,9 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A way to register custom economies for EMF.
+ */
 public interface EconomyType extends RegistryItem {
 
     String getIdentifier();
