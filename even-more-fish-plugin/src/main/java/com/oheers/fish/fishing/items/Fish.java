@@ -2,6 +2,7 @@ package com.oheers.fish.fishing.items;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
@@ -265,8 +266,7 @@ public class Fish implements IFish {
 
         PotionEffect effect = FishUtils.getPotionEffect(effectConfig);
         if (effect == null) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 1));
-            EvenMoreFish.getInstance().getLogger().warning("Invalid potion effect specified. Defaulting to Speed 2 for 5 seconds.");
+            Logging.warn(effectConfig + " is not a valid potion effect for fish: " + getName());
             return;
         }
 
