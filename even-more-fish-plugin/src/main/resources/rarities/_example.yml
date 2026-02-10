@@ -90,6 +90,9 @@ fish:
     # Should lore be disabled on the fish?
     disable-lore: false
 
+    # Sends an additional message to the player when the fish is caught.
+    message: <green>You caught the Example fish!
+
     # Should the catch message be hidden?
     silent: true
 
