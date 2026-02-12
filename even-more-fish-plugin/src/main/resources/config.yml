@@ -163,8 +163,8 @@ sell-gui:
 # Prevents mcMMO from overriding fishing loot, this means treasure won't appear when fish can.
 disable-mcmmo-loot: true
 
-# Prevents AureliumSkills from overriding fishing loot, this means treasure won't appear when fish can.
-disable-aureliumskills-loot: true
+# Prevents AuraSkills from overriding fishing loot, this means treasure won't appear when fish can.
+disable-auraskills-loot: true
 
 # Whether to protect baited fishing rods in an anvil.
 protect-baited-rods: true
@@ -255,5 +255,5 @@ biome-sets:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 4
+version: 5
 
