@@ -540,7 +540,12 @@ public class FishUtils {
     }
 
     public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString) {
-        return getPotionEffect(effectString, ",");
+        PotionEffect effect = getPotionEffect(effectString, ",");
+        if (effect != null) {
+            return effect;
+        }
+        // Compatibility with configs using the wrong format we accidentally had in default files.
+        return getPotionEffect(effectString, ":");
     }
 
     public static @Nullable Enchantment getEnchantment(@NotNull String namespace) {
