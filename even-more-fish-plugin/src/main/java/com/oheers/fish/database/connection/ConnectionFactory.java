@@ -6,12 +6,15 @@ import com.oheers.fish.config.MainConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;
+import org.jooq.SQLDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -24,6 +27,7 @@ public abstract class ConnectionFactory {
     protected HikariDataSource dataSource;
     private final Logger logger = LoggerFactory.getLogger(ConnectionFactory.class);
     private Boolean supportsTransaction;
+    private SQLDialect sqlDialect;
 
 
     /**
@@ -141,5 +145,44 @@ public abstract class ConnectionFactory {
         return this.supportsTransaction;
     }
 
+    public @NotNull SQLDialect getSQLDialect(@NotNull Connection connection) {
+        if (this.sqlDialect != null) {
+            return this.sqlDialect;
+        }
+
+        SQLDialect detectedDialect = getDefaultDialect();
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            String productName = toLowerCase(metaData.getDatabaseProductName());
+            String productVersion = toLowerCase(metaData.getDatabaseProductVersion());
+            String url = toLowerCase(metaData.getURL());
+
+            if (productName.contains("mariadb")
+                    || productVersion.contains("mariadb")
+                    || url.contains("mariadb")) {
+                detectedDialect = SQLDialect.MARIADB;
+            } else if (productName.contains("mysql") || url.contains("mysql")) {
+                detectedDialect = SQLDialect.MYSQL;
+            }
+        } catch (SQLException e) {
+            logger.debug("Could not detect SQL dialect from JDBC metadata, using configured type", e);
+        }
+
+        this.sqlDialect = detectedDialect;
+        return detectedDialect;
+    }
+
+    private @NotNull SQLDialect getDefaultDialect() {
+        return switch (getType().toUpperCase(Locale.ROOT)) {
+            case "MYSQL" -> SQLDialect.MYSQL;
+            case "SQLITE" -> SQLDialect.SQLITE;
+            case "H2" -> SQLDialect.H2;
+            default -> SQLDialect.DEFAULT;
+        };
+    }
+
+    private @NotNull String toLowerCase(String value) {
+        return value == null ? "" : value.toLowerCase(Locale.ROOT);
+    }
 
 }

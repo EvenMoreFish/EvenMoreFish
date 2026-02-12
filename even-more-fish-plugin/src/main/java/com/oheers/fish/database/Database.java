@@ -144,7 +144,7 @@ public class Database implements DatabaseAPI {
 
     @NotNull
     public DSLContext getContext(Connection connection) {
-        return DSL.using(connection, DatabaseUtil.getSQLDialect(this.connectionFactory.getType()), this.settings);
+        return DSL.using(connection, this.connectionFactory.getSQLDialect(connection), this.settings);
     }
 
     @Override

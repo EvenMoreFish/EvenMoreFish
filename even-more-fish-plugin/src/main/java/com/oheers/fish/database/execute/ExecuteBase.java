@@ -1,6 +1,5 @@
 package com.oheers.fish.database.execute;
 
-import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.connection.ConnectionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
@@ -21,9 +20,9 @@ public abstract class ExecuteBase {
 
     protected @NotNull DSLContext getContext(Connection connection) {
         if (settings == null) {
-            return DSL.using(connection, DatabaseUtil.getSQLDialect(connectionFactory.getType()));
+            return DSL.using(connection, connectionFactory.getSQLDialect(connection));
         }
-        return DSL.using(connection, DatabaseUtil.getSQLDialect(connectionFactory.getType()), settings);
+        return DSL.using(connection, connectionFactory.getSQLDialect(connection), settings);
     }
 
     protected Connection getConnection() throws SQLException {
