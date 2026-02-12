@@ -3,8 +3,10 @@ package com.oheers.fish;
 import com.github.Anon8281.universalScheduler.UniversalScheduler;
 import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
 import com.oheers.fish.api.EMFAPI;
+import com.oheers.fish.api.baits.AbstractBaitManager;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.events.EMFPluginReloadEvent;
+import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.baits.manager.BaitManager;
@@ -265,6 +267,10 @@ public abstract class EvenMoreFish extends EMFPlugin {
         return isUpdateAvailable;
     }
 
+    /**
+     * @deprecated The methods this class provided can now be found in {@link AbstractFishManager} and {@link AbstractBaitManager}.
+     */
+    @Deprecated(forRemoval = true)
     public EMFAPI getApi() {
         return api;
     }
