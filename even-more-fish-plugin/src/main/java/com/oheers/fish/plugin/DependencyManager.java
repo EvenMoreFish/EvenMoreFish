@@ -6,7 +6,6 @@ import com.oheers.fish.economy.GriefPreventionEconomyType;
 import com.oheers.fish.economy.PlayerPointsEconomyType;
 import com.oheers.fish.economy.VaultEconomyType;
 import com.oheers.fish.events.AuraSkillsFishingEvent;
-import com.oheers.fish.events.AureliumSkillsFishingEvent;
 import com.oheers.fish.events.DeprecatedEventListener;
 import com.oheers.fish.events.EconomyServiceRegisterEvent;
 import com.oheers.fish.events.McMMOTreasureEvent;
@@ -33,7 +32,6 @@ public class DependencyManager implements Listener {
     private boolean usingHeadsDB;
     private boolean usingPlayerPoints;
     private boolean usingGriefPrevention;
-    private boolean usingAureliumSkills;
     private boolean usingAuraSkills;
 
     public DependencyManager(EvenMoreFish plugin) {
@@ -49,7 +47,6 @@ public class DependencyManager implements Listener {
         this.usingMcMMO = pm.isPluginEnabled("mcMMO");
         this.usingHeadsDB = pm.isPluginEnabled("HeadDatabase");
         this.usingPAPI = pm.isPluginEnabled("PlaceholderAPI");
-        this.usingAureliumSkills = pm.isPluginEnabled("AureliumSkills");
         this.usingAuraSkills = pm.isPluginEnabled("AuraSkills");
 
         if (usingVault) {
@@ -74,11 +71,7 @@ public class DependencyManager implements Listener {
             pm.registerEvents(new HeadDBIntegration(), plugin);
         }
 
-        if (usingAureliumSkills && MainConfig.getInstance().disableAureliumSkills()) {
-            pm.registerEvents(new AureliumSkillsFishingEvent(), plugin);
-        }
-
-        if (usingAuraSkills && MainConfig.getInstance().disableAureliumSkills()) {
+        if (usingAuraSkills && MainConfig.getInstance().disableAuraSkills()) {
             pm.registerEvents(new AuraSkillsFishingEvent(), plugin);
         }
 
@@ -129,10 +122,6 @@ public class DependencyManager implements Listener {
 
     public HeadDatabaseAPI getHdbapi() {
         return hdbapi;
-    }
-
-    public boolean isUsingAureliumSkills() {
-        return usingAureliumSkills;
     }
 
     public boolean isUsingAuraSkills() {

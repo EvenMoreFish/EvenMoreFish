@@ -159,8 +159,8 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("disable-mcmmo-loot", true);
     }
 
-    public boolean disableAureliumSkills() {
-        return getConfig().getBoolean("disable-aureliumskills-loot", true);
+    public boolean disableAuraSkills() {
+        return getConfig().getBoolean("disable-auraskills-loot", true);
     }
 
     public boolean doDBVerbose() {
@@ -445,6 +445,8 @@ public class MainConfig extends ConfigBase {
                 "disable-db-verbose", "database.disable-verbose",
                 "give-straight-to-inventory", "fishing.give-straight-to-inventory"
             ), '.')
+            // Config Version 5: Rename AureliumSkills setting to AuraSkills
+            .addRelocation("5", "disable-aurelium-skills", "disable-aura-skills", '.')
             .build();
     }
 

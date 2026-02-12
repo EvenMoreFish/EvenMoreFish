@@ -22,7 +22,6 @@ afterEvaluate {
 
         softDepend = listOf(
             "AuraSkills",
-            "AureliumSkills",
             "Denizen",
             "EcoItems",
             "GriefPrevention",

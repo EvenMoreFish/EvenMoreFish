@@ -59,7 +59,6 @@ dependencies {
     }
 
     compileOnly(libs.aura.skills)
-    compileOnly(libs.aurelium.skills)
 
     compileOnly(libs.griefprevention)
     compileOnly(libs.mcmmo) {
