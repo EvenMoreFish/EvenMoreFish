@@ -189,10 +189,12 @@ public class Database implements DatabaseAPI {
         return new ExecuteQuery<Integer>(connectionFactory, settings) {
             @Override
             protected Integer onRunQuery(DSLContext dslContext) {
-                Integer id = dslContext.select()
+                Integer id = dslContext.select(Tables.USERS.ID)
                         .from(Tables.USERS)
                         .where(Tables.USERS.UUID.eq(uuid.toString()))
-                        .fetchOne(Tables.USERS.ID);
+                        .orderBy(Tables.USERS.ID.asc())
+                        .limit(1)
+                        .fetchAny(Tables.USERS.ID);
 
                 if (id == null) {
                     return empty();
@@ -216,7 +218,9 @@ public class Database implements DatabaseAPI {
                 org.jooq.Record tableRecord = dslContext.select()
                         .from(Tables.USERS)
                         .where(Tables.USERS.UUID.eq(uuid.toString()))
-                        .fetchOne();
+                        .orderBy(Tables.USERS.ID.asc())
+                        .limit(1)
+                        .fetchAny();
                 if (tableRecord == null) {
                     return empty();
                 }
@@ -709,44 +713,56 @@ public class Database implements DatabaseAPI {
         return new ExecuteUpdate(connectionFactory, settings) {
             @Override
             protected int onRunUpdate(DSLContext dslContext) {
-                Integer id = dslContext.insertInto(Tables.USERS)
-                        .set(Tables.USERS.UUID, report.getUuid().toString())
-                        .set(Tables.USERS.COMPETITIONS_JOINED, report.getCompetitionsJoined())
-                        .set(Tables.USERS.COMPETITIONS_WON, report.getCompetitionsWon())
-                        .set(Tables.USERS.TOTAL_FISH_LENGTH, report.getTotalFishLength())
-                        .set(Tables.USERS.FIRST_FISH, report.getFirstFish().toString())
-                        .set(Tables.USERS.MONEY_EARNED, report.getMoneyEarned())
-                        .set(Tables.USERS.FISH_SOLD, report.getFishSold())
-                        .set(Tables.USERS.NUM_FISH_CAUGHT, report.getNumFishCaught())
-                        .set(Tables.USERS.LARGEST_FISH, report.getLargestFish().toString())
-                        .set(Tables.USERS.LARGEST_LENGTH, report.getLargestLength())
-                        .set(Tables.USERS.LAST_FISH, report.getLargestFish().toString())
-                        .set(Tables.USERS.SHORTEST_FISH, report.getShortestFish().toString())
-                        .set(Tables.USERS.SHORTEST_LENGTH, report.getShortestLength())
-                        .onDuplicateKeyUpdate()
-                        .set(Tables.USERS.COMPETITIONS_JOINED, report.getCompetitionsJoined())
-                        .set(Tables.USERS.COMPETITIONS_WON, report.getCompetitionsWon())
-                        .set(Tables.USERS.TOTAL_FISH_LENGTH, report.getTotalFishLength())
-                        .set(Tables.USERS.FIRST_FISH, report.getFirstFish().toString())
-                        .set(Tables.USERS.MONEY_EARNED, report.getMoneyEarned())
-                        .set(Tables.USERS.FISH_SOLD, report.getFishSold())
-                        .set(Tables.USERS.NUM_FISH_CAUGHT, report.getNumFishCaught())
-                        .set(Tables.USERS.LARGEST_FISH, report.getLargestFish().toString())
-                        .set(Tables.USERS.LARGEST_LENGTH, report.getLargestLength())
-                        .set(Tables.USERS.LAST_FISH, report.getLargestFish().toString())
-                        .set(Tables.USERS.SHORTEST_FISH, report.getShortestFish().toString())
-                        .set(Tables.USERS.SHORTEST_LENGTH, report.getShortestLength())
-                        .returning(Tables.USERS.ID)
-                        .fetchOne(Tables.USERS.ID);
+                final String userUuid = report.getUuid().toString();
+
+                Integer id = dslContext.select(Tables.USERS.ID)
+                        .from(Tables.USERS)
+                        .where(Tables.USERS.UUID.eq(userUuid))
+                        .orderBy(Tables.USERS.ID.asc())
+                        .limit(1)
+                        .fetchAny(Tables.USERS.ID);
 
                 if (id != null) {
+                    dslContext.update(Tables.USERS)
+                            .set(Tables.USERS.COMPETITIONS_JOINED, report.getCompetitionsJoined())
+                            .set(Tables.USERS.COMPETITIONS_WON, report.getCompetitionsWon())
+                            .set(Tables.USERS.TOTAL_FISH_LENGTH, report.getTotalFishLength())
+                            .set(Tables.USERS.FIRST_FISH, report.getFirstFish().toString())
+                            .set(Tables.USERS.MONEY_EARNED, report.getMoneyEarned())
+                            .set(Tables.USERS.FISH_SOLD, report.getFishSold())
+                            .set(Tables.USERS.NUM_FISH_CAUGHT, report.getNumFishCaught())
+                            .set(Tables.USERS.LARGEST_FISH, report.getLargestFish().toString())
+                            .set(Tables.USERS.LARGEST_LENGTH, report.getLargestLength())
+                            .set(Tables.USERS.LAST_FISH, report.getLargestFish().toString())
+                            .set(Tables.USERS.SHORTEST_FISH, report.getShortestFish().toString())
+                            .set(Tables.USERS.SHORTEST_LENGTH, report.getShortestLength())
+                            .where(Tables.USERS.ID.eq(id))
+                            .execute();
                     return id;
                 }
 
+                dslContext.insertInto(Tables.USERS)
+                        .set(Tables.USERS.UUID, userUuid)
+                        .set(Tables.USERS.COMPETITIONS_JOINED, report.getCompetitionsJoined())
+                        .set(Tables.USERS.COMPETITIONS_WON, report.getCompetitionsWon())
+                        .set(Tables.USERS.TOTAL_FISH_LENGTH, report.getTotalFishLength())
+                        .set(Tables.USERS.FIRST_FISH, report.getFirstFish().toString())
+                        .set(Tables.USERS.MONEY_EARNED, report.getMoneyEarned())
+                        .set(Tables.USERS.FISH_SOLD, report.getFishSold())
+                        .set(Tables.USERS.NUM_FISH_CAUGHT, report.getNumFishCaught())
+                        .set(Tables.USERS.LARGEST_FISH, report.getLargestFish().toString())
+                        .set(Tables.USERS.LARGEST_LENGTH, report.getLargestLength())
+                        .set(Tables.USERS.LAST_FISH, report.getLargestFish().toString())
+                        .set(Tables.USERS.SHORTEST_FISH, report.getShortestFish().toString())
+                        .set(Tables.USERS.SHORTEST_LENGTH, report.getShortestLength())
+                        .execute();
+
                 Integer fallbackId = dslContext.select(Tables.USERS.ID)
                         .from(Tables.USERS)
-                        .where(Tables.USERS.UUID.eq(report.getUuid().toString()))
-                        .fetchOne(Tables.USERS.ID);
+                        .where(Tables.USERS.UUID.eq(userUuid))
+                        .orderBy(Tables.USERS.ID.asc())
+                        .limit(1)
+                        .fetchAny(Tables.USERS.ID);
 
                 return fallbackId == null ? 0 : fallbackId;
             }
