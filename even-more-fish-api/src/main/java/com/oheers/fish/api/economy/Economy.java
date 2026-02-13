@@ -70,7 +70,7 @@ public class Economy {
      */
     public boolean isEnabled() {
         if (relevantTypes.isEmpty()) {
-            Logging.warn("There are no relevant economies.");
+            Logging.warn("There are no EconomyTypes loaded into this Economy instance.");
             return false;
         }
         return relevantTypes.stream().anyMatch(EconomyType::isAvailable);
