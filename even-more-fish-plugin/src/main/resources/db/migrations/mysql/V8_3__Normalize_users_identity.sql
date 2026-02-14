@@ -1,0 +1,5 @@
+ALTER TABLE `${table.prefix}users`
+MODIFY COLUMN id INT NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `${table.prefix}users`
+AUTO_INCREMENT = 1;
