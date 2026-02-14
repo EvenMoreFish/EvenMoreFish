@@ -5,7 +5,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@ApiStatus.Internal
+/**
+ * For internal use only. This class is used internally and for official addons, and may be changed or removed without notice.
+ */
 public class ConfigUtils {
 
     public static @NotNull Section getOrCreateSection(@NotNull Section section, @NotNull String path) {

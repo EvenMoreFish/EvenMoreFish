@@ -12,6 +12,9 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Internal use only.
+ */
 public abstract class AbstractFileBasedManager<T> {
     protected AbstractFileBasedManager<?> dependency;
 

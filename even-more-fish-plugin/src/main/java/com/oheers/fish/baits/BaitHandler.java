@@ -3,8 +3,10 @@ package com.oheers.fish.baits;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.baits.IBait;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.economy.EconomyType;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.baits.configs.BaitFileUpdates;
 import com.oheers.fish.baits.manager.BaitNBTManager;
@@ -30,18 +32,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BaitHandler extends ConfigBase {
+public class BaitHandler extends ConfigBase implements IBait {
     private final @NotNull String id;
     private BaitData baitData;
     private ItemFactory itemFactory;
@@ -128,7 +130,8 @@ public class BaitHandler extends ConfigBase {
      *
      * @return An item stack representing the bait object, with nbt.
      */
-    public ItemStack create(@NotNull OfflinePlayer player) {
+    @Override
+    public @NotNull ItemStack create(@NotNull OfflinePlayer player) {
         return itemFactory.createItem(player.getUniqueId());
     }
 
@@ -154,6 +157,7 @@ public class BaitHandler extends ConfigBase {
     /**
      * @return All configured rarities from this bait's configuration.
      */
+    @Override
     public @NotNull List<Rarity> getRarities() {
         return baitData.rarities();
     }
@@ -201,7 +205,8 @@ public class BaitHandler extends ConfigBase {
      *
      * @return The selected fish, or null if no valid fish was found
      */
-    public Fish chooseFish(@NotNull Player player, @NotNull Location location) {
+    @Override
+    public @NotNull Fish chooseFish(@NotNull Player player, @NotNull Location location) {
         // Step 1: Determine which rarities are boosted by this bait
         Set<Rarity> boostedRarities = determineBoostedRarities();
 
@@ -291,7 +296,12 @@ public class BaitHandler extends ConfigBase {
                 (!getFish().isEmpty() && getFish().contains(fish));
     }
 
-    public void handleFish(@NotNull Player player, @NotNull Fish fish, @NotNull ItemStack fishingRod) {
+    @Override
+    public void handleFish(@NotNull Player player, @NotNull IFish iFish, @NotNull ItemStack fishingRod) {
+        if (!(iFish instanceof Fish fish)) {
+            Logging.debug("Fish: " + iFish.getName() + " is not a Fish object, ignoring..");
+            return;
+        }
         if (!fish.isWasBaited()) {
             EvenMoreFish.getInstance().debug("Fish: %s was not baited, ignoring..".formatted(FishRarityKey.of(fish)));
             return;
@@ -346,6 +356,7 @@ public class BaitHandler extends ConfigBase {
     /**
      * @return The name identifier of the bait.
      */
+    @Override
     public @NotNull String getId() {
         return baitData.id();
     }
@@ -364,7 +375,8 @@ public class BaitHandler extends ConfigBase {
     /**
      * @return The displayname setting for the bait.
      */
-    public String getDisplayName() {
+    @Override
+    public @NonNull String getDisplayName() {
         return baitData.displayName();
     }
 
@@ -403,6 +415,7 @@ public class BaitHandler extends ConfigBase {
      * Fetches the purchase price of the bait from the config.
      * Defaults to -1 to allow baits to be given for free.
      */
+    @Override
     public double getPurchasePrice() {
         return getConfig().getDouble("purchase.price", -1.0D);
     }
@@ -411,6 +424,7 @@ public class BaitHandler extends ConfigBase {
      * Fetches the purchase quantity of the bait from the config.
      * Defaults to 0.
      */
+    @Override
     public int getPurchaseQuantity() {
         return getConfig().getInt("purchase.quantity", 0);
     }
@@ -418,7 +432,8 @@ public class BaitHandler extends ConfigBase {
     /**
      * Fetches the economy that this bait is purchased with.
      */
-    public Economy getEconomy() {
+    @Override
+    public @NotNull Economy getEconomy() {
         return this.economy;
     }
 
@@ -427,6 +442,7 @@ public class BaitHandler extends ConfigBase {
      * @param player The player purchasing the bait.
      * @return True if the purchase was successful, false otherwise.
      */
+    @Override
     public boolean attemptPurchase(@NotNull Player player) {
         if (economy == null || economy.isEmpty()) {
             ConfigMessage.BAIT_NOT_FOR_SALE.getMessage().send(player);

@@ -1,23 +1,22 @@
 package com.oheers.fish.fishing.rods;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.api.AbstractFileBasedManager;
-import com.oheers.fish.baits.manager.BaitManager;
+import com.oheers.fish.api.fishing.rods.AbstractRodManager;
 import com.oheers.fish.utils.nbt.NbtKeys;
 import com.oheers.fish.utils.nbt.NbtUtils;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RodManager extends AbstractFileBasedManager<CustomRod> {
+public class RodManager extends AbstractRodManager<CustomRod> {
 
     private static final RodManager instance = new RodManager();
 
     private RodManager() {
-        super(BaitManager.getInstance());
+        super();
     }
 
-    public static RodManager getInstance() {
+    public static @NotNull RodManager getInstance() {
         return instance;
     }
 
@@ -62,6 +61,7 @@ public class RodManager extends AbstractFileBasedManager<CustomRod> {
         super.clearMap(reload);
     }
 
+    @Override
     public @Nullable CustomRod getRod(@NotNull ItemStack item) {
         String rodId = NbtUtils.getString(item, NbtKeys.EMF_ROD_ID);
         if (rodId != null) {
@@ -73,4 +73,10 @@ public class RodManager extends AbstractFileBasedManager<CustomRod> {
         }
         return null;
     }
+
+    @Override
+    public @Nullable CustomRod getRod(@NotNull String rodId) {
+        return getItem(rodId);
+    }
+
 }

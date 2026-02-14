@@ -12,6 +12,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * A way to reward a player for certain actions.
+ */
 public abstract class RewardType implements RegistryItem {
 
     public RewardType() {}

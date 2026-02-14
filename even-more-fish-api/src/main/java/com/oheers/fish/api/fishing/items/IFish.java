@@ -10,6 +10,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Internal implementation only. Extending this interface WILL cause issues.
+ */
 public interface IFish {
 
     @NotNull ItemStack give(int randomIndex);

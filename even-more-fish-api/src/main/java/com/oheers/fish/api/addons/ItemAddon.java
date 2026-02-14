@@ -9,10 +9,12 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * A way to add your own items into EMF's ItemFactory.
+ */
 public abstract class ItemAddon implements Listener, RegistryItem {
 
     /**
