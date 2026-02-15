@@ -31,5 +31,6 @@ allprojects {
             }
         }
         maven("https://jitpack.io")
+        maven("https://repo.triumphteam.dev/snapshots")
     }
 }
