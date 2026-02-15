@@ -27,13 +27,15 @@ import com.oheers.fish.plugin.IntegrationManager;
 import com.oheers.fish.plugin.MetricsManager;
 import com.oheers.fish.plugin.PluginDataManager;
 import com.oheers.fish.update.UpdateChecker;
-import de.themoep.inventorygui.InventoryGui;
 import de.tr7zw.changeme.nbtapi.NBT;
 
+import dev.triumphteam.gui.TriumphGui;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.vanishchecker.VanishChecker;
@@ -103,6 +105,8 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
     @Override
     public void onEnable() {
+        TriumphGui.init(this);
+
         enableCommands();
 
         scheduler = UniversalScheduler.getScheduler(this);
@@ -171,7 +175,6 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
         disableCommands();
 
-        terminateGuis();
         // Ends the current competition in case the plugin is being disabled when the server will continue running
         Competition active = Competition.getCurrentlyActive();
         if (active != null) {
@@ -198,19 +201,8 @@ public abstract class EvenMoreFish extends EMFPlugin {
         return MainConfig.getInstance().shouldDebug();
     }
 
-    // gets called on server shutdown to simulate all players closing their Guis
-    private void terminateGuis() {
-        getServer().getOnlinePlayers().forEach(player -> {
-            InventoryGui inventoryGui = InventoryGui.getOpen(player);
-            if (inventoryGui != null) {
-                inventoryGui.close();
-            }
-        });
-    }
-
     @Override
     public void reload(@Nullable CommandSender sender) {
-        terminateGuis();
 
         this.configurationManager.reloadConfigurations();
 
