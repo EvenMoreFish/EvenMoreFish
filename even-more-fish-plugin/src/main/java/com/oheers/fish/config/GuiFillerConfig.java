@@ -3,19 +3,18 @@ package com.oheers.fish.config;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.config.ConfigBase;
-import com.oheers.fish.gui.ConfigGui;
-import com.oheers.fish.gui.GuiUtils;
+import com.oheers.fish.gui.EMFGuiItem;
 import com.oheers.fish.items.ItemFactory;
-import de.themoep.inventorygui.GuiElement;
-import de.themoep.inventorygui.StaticGuiElement;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import dev.triumphteam.gui.BaseGui;
+import dev.triumphteam.gui.paper.Gui;
+import dev.triumphteam.gui.paper.builder.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.Objects;
 
 public class GuiFillerConfig extends ConfigBase {
 
@@ -30,22 +29,16 @@ public class GuiFillerConfig extends ConfigBase {
 
     // TODO these were copied from ConfigGui and won't be needed after the switch to Triumph
 
-    public List<GuiElement> getDefaultFillerItems(@NotNull ConfigGui gui) {
-        List<GuiElement> elements = new ArrayList<>();
-        getConfig().getRoutesAsStrings(false).forEach(key -> {
-            Section itemSection = getConfig().getSection(key);
-            if (itemSection == null || !itemSection.contains("item")) {
-                return;
-            }
-            StaticGuiElement element = getGuiItem(gui, itemSection);
-            if (element != null) {
-                elements.add(element);
-            }
-        });
-        return elements;
+    public List<EMFGuiItem> getDefaultFillerItems(@NotNull Gui gui) {
+        return getConfig().getRoutesAsStrings(false).stream()
+            .map(getConfig()::getSection)
+            .filter(section -> section != null && section.contains("item"))
+            .map(section -> getGuiItem(gui, section))
+            .filter(Objects::nonNull)
+            .toList();
     }
 
-    private StaticGuiElement getGuiItem(@NotNull ConfigGui gui, @NotNull Section itemSection) {
+    private EMFGuiItem getGuiItem(@NotNull Gui gui, @NotNull Section itemSection) {
         char character = FishUtils.getCharFromString(itemSection.getString("character", "#"), '#');
         if (character == '#') {
             return null;
@@ -55,6 +48,8 @@ public class GuiFillerConfig extends ConfigBase {
         if (item.getType() == Material.AIR) {
             return null;
         }
+        return new EMFGuiItem(ItemBuilder.from(item).asGuiItem(), character);
+        /* TODO come back to this once actions are done
         Section actionSection = itemSection.getSection("click-action");
         if (actionSection != null) {
             return new StaticGuiElement(character, item, click -> {
@@ -79,6 +74,7 @@ public class GuiFillerConfig extends ConfigBase {
                 return true;
             });
         }
+         */
     }
 
 }

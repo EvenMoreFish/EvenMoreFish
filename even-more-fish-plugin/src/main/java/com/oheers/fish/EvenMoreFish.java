@@ -14,7 +14,6 @@ import com.oheers.fish.competition.AutoRunner;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionQueue;
 import com.oheers.fish.config.MainConfig;
-import com.oheers.fish.events.FishInteractEvent;
 import com.oheers.fish.events.McMMOTreasureEvent;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
@@ -29,13 +28,11 @@ import com.oheers.fish.plugin.PluginDataManager;
 import com.oheers.fish.update.UpdateChecker;
 import de.tr7zw.changeme.nbtapi.NBT;
 
-import dev.triumphteam.gui.TriumphGui;
+import dev.triumphteam.gui.paper.PaperGuiSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.vanishchecker.VanishChecker;
@@ -105,7 +102,7 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
     @Override
     public void onEnable() {
-        TriumphGui.init(this);
+        PaperGuiSettings.init(this);
 
         enableCommands();
 

@@ -10,8 +10,6 @@ import com.oheers.fish.database.data.manager.DataManager;
 import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import de.themoep.inventorygui.GuiStorageElement;
-import de.themoep.inventorygui.InventoryGui;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -198,7 +196,7 @@ public class SellHelper {
         userReportDataManager.update(uuid.toString(), report);
     }
 
-    public static void sellInventoryGui(@NotNull InventoryGui gui, @NotNull HumanEntity humanEntity) {
+    public static void sellInventory(@NotNull Inventory inventory, @NotNull HumanEntity humanEntity) {
         if (!(humanEntity instanceof Player player)) {
             return;
         }
@@ -208,12 +206,7 @@ public class SellHelper {
             return;
         }
 
-        gui.getElements().forEach(element -> {
-            if (!(element instanceof GuiStorageElement storageElement)) {
-                return;
-            }
-            new SellHelper(storageElement.getStorage(), player).sell();
-        });
+        new SellHelper(inventory, player).sell();
     }
 
     public static double calculateInventoryWorth(@NotNull Inventory inventory) {
