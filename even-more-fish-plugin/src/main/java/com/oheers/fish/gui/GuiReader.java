@@ -50,8 +50,8 @@ public class GuiReader {
             // Calculate characters that should be air/filler
             int airChars = MAX_LINE_LENGTH - line.length();
             for (char character : line.toCharArray()) {
-                // If the character is air, increment slot and skip.
-                if (character == ' ') {
+                // If the character is air or hashtag, increment slot and skip.
+                if (character == ' ' || character == '#') {
                     slot++;
                     continue;
                 }
