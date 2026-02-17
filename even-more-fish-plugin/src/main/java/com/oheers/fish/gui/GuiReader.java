@@ -1,7 +1,7 @@
 package com.oheers.fish.gui;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import dev.triumphteam.gui.element.GuiItem;
+import dev.triumphteam.gui.guis.GuiItem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +64,7 @@ public class GuiReader {
         return mappedSlots;
     }
 
-    private Map<Character, GuiItem<Player, ItemStack>> readItems() {
+    private Map<Character, GuiItem> readItems() {
         return this.section.getRoutesAsStrings(false).stream()
             .map(this.section::getSection)
             .filter(section -> section != null && section.contains("item"))

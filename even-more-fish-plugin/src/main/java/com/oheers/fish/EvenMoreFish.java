@@ -28,7 +28,7 @@ import com.oheers.fish.plugin.PluginDataManager;
 import com.oheers.fish.update.UpdateChecker;
 import de.tr7zw.changeme.nbtapi.NBT;
 
-import dev.triumphteam.gui.paper.PaperGuiSettings;
+import dev.triumphteam.gui.TriumphGui;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -102,6 +102,8 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
     @Override
     public void onEnable() {
+        TriumphGui.init(this);
+
         enableCommands();
 
         scheduler = UniversalScheduler.getScheduler(this);

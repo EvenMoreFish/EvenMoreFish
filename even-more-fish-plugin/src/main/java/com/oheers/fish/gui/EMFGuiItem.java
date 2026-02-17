@@ -3,14 +3,14 @@ package com.oheers.fish.gui;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.items.ItemFactory;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import dev.triumphteam.gui.element.GuiItem;
-import dev.triumphteam.gui.paper.builder.item.ItemBuilder;
+import dev.triumphteam.gui.builder.item.ItemBuilder;
+import dev.triumphteam.gui.guis.GuiItem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public record EMFGuiItem(@NotNull GuiItem<Player, ItemStack> item, char character) {
+public record EMFGuiItem(@NotNull GuiItem item, char character) {
 
     public static @Nullable EMFGuiItem create(@NotNull EMFGui gui, @NotNull Section section) {
         char character = FishUtils.getCharFromString(section.getString("character", "#"), '#');
@@ -22,7 +22,7 @@ public record EMFGuiItem(@NotNull GuiItem<Player, ItemStack> item, char characte
         if (item.isEmpty()) {
             return null;
         }
-        GuiItem<Player, ItemStack> guiItem = ItemBuilder.from(item).asGuiItem();
+        GuiItem guiItem = ItemBuilder.from(item).asGuiItem();
         return new EMFGuiItem(guiItem, character);
         /* TODO come back to this once actions are done
         Section actionSection = itemSection.getSection("click-action");

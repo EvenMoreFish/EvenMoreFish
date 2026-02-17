@@ -1,9 +1,8 @@
 package com.oheers.fish.gui;
 
-import com.oheers.fish.api.config.ConfigBase;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import dev.triumphteam.gui.BaseGui;
-import dev.triumphteam.gui.paper.Gui;
+import dev.triumphteam.gui.guis.BaseGui;
+import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -17,7 +16,7 @@ public abstract class EMFGui {
 
     protected final Section config;
     protected final Player player;
-    protected final BaseGui<Player> gui;
+    protected final BaseGui gui;
 
     private final Map<String, ?> replacements = new HashMap<>();
 
@@ -45,8 +44,8 @@ public abstract class EMFGui {
     }
 
     // TODO create Gui and give to GuiReader
-    private @NotNull BaseGui<Player> createGui() {
-        return Gui.of(1).build();
+    private @NotNull BaseGui createGui() {
+        return Gui.gui().create();
     }
 
 }
