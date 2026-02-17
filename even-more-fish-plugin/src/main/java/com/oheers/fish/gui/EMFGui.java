@@ -44,13 +44,12 @@ public abstract class EMFGui {
         return this.replacements;
     }
 
-    public abstract @NotNull BaseGui buildGui();
+    public abstract @NotNull BaseGuiBuilder<?, ?> buildGui();
 
     // TODO create Gui and give to GuiReader
     private @NotNull BaseGui createGui() {
-        BaseGui gui = buildGui();
-        new GuiReader(this, gui).addItems();
-        return gui;
+        BaseGuiBuilder<?, ?> builder = buildGui();
+        return new GuiReader(this, builder).createGui();
     }
 
 }

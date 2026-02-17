@@ -3,6 +3,7 @@ package com.oheers.fish.gui;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.items.ItemConfigResolver;
 import com.oheers.fish.items.configs.ItemConfig;
+import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
 import dev.triumphteam.gui.guis.BaseGui;
@@ -26,28 +27,32 @@ public class GuiReader {
     private static final int MAX_LINE_LENGTH = 9;
 
     private final EMFGui gui;
-    private final BaseGui base;
+    private final BaseGuiBuilder<?, ?> builder;
     private final Section section;
 
-    protected GuiReader(@NotNull EMFGui gui, @NotNull BaseGui base) {
+    protected GuiReader(@NotNull EMFGui gui, @NotNull BaseGuiBuilder<?, ?> builder) {
         this.gui = gui;
-        this.base = base;
+        this.builder = builder;
         this.section = gui.getConfig();
     }
 
-    protected void addItems() {
-        Map<Character, List<Integer>> mappedSlots = readSlots();
-        Map<Character, GuiItem> items = readItems();
+    protected BaseGui createGui() {
+        applyTitle();
 
-        mappedSlots.forEach((character, slots) -> {
-            GuiItem item = items.get(character);
-            if (item == null) {
-                return;
-            }
-            slots.forEach(slot -> this.base.setItem(slot, item));
-        });
+        BaseGui base = builder.create();
 
-        applyFiller();
+        applyItems(base);
+        applyFiller(base);
+
+        return base;
+    }
+
+    private void applyTitle() {
+        String titleStr = section.getString("title");
+        EMFSingleMessage message = EMFSingleMessage.fromString(titleStr);
+
+        Component title = message.getComponentMessage(gui.player);
+        builder.title(title);
     }
 
     // I have to comment each line so I can keep track of what it's doing, I may be able to clean this up at some point.
@@ -95,7 +100,20 @@ public class GuiReader {
             .collect(Collectors.toMap(EMFGuiItem::character, EMFGuiItem::item));
     }
 
-    private void applyFiller() {
+    private void applyItems(@NotNull BaseGui base) {
+        Map<Character, List<Integer>> mappedSlots = readSlots();
+        Map<Character, GuiItem> items = readItems();
+
+        mappedSlots.forEach((character, slots) -> {
+            GuiItem item = items.get(character);
+            if (item == null) {
+                return;
+            }
+            slots.forEach(slot -> base.setItem(slot, item));
+        });
+    }
+
+    private void applyFiller(@NotNull BaseGui base) {
         String fillerName = section.getString("filler");
         ItemStack filler = FishUtils.getItem(fillerName);
         if (filler == null) {
