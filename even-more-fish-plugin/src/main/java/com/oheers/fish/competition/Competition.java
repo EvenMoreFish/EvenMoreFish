@@ -457,8 +457,9 @@ public class Competition {
 
         List<CompetitionEntry> entries = leaderboard.getEntries();
 
+        CompetitionEntry topEntry = leaderboard.getTopEntry();
         if (DatabaseUtil.isDatabaseOnline() && !entries.isEmpty()) {
-            handleDatabaseUpdates(leaderboard.getTopEntry(), true); // Top entry
+            handleDatabaseUpdates(topEntry, true); // Top entry
         }
 
         for (CompetitionEntry entry : entries) {
@@ -481,7 +482,10 @@ public class Competition {
                 }
             }
 
-            handleDatabaseUpdates(entry, false);
+            // Checking if the top entry is this one, as we handle database for the top entry above.
+            if (!topEntry.getPlayer().equals(entry.getPlayer())) {
+                handleDatabaseUpdates(entry, false);
+            }
 
             // Increment the place
             rewardPlace++;
