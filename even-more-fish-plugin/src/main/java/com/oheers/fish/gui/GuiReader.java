@@ -1,11 +1,17 @@
 package com.oheers.fish.gui;
 
+import dev.dejvokep.boostedyaml.block.implementation.Section;
+import dev.triumphteam.gui.element.GuiItem;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Reads InventoryGui formats and maps each character to a slot for use with TriumphGui.
@@ -14,29 +20,21 @@ public class GuiReader {
 
     private static final int MAX_LINE_LENGTH = 9;
 
-    private final Map<Character, ArrayList<Integer>> mappedSlots;
+    private final EMFGui gui;
+    private final Section section;
 
-    public static void test() {
-        // [EvenMoreFish] [STDOUT] a: [18, 21, 24]
-        // [EvenMoreFish] [STDOUT] b: [19, 22, 25]
-        // [EvenMoreFish] [STDOUT] c: [20, 23, 26]
-        // [EvenMoreFish] [STDOUT] x: [0, 3, 6, 11]
-        // [EvenMoreFish] [STDOUT] y: [1, 4, 7]
-        // [EvenMoreFish] [STDOUT] z: [2, 5, 8]
-        List<String> layout = List.of(
-            "xyzxyzxyz",
-            "  x",
-            "abcabcabc"
-        );
-        new GuiReader(layout);
-    }
-
-    public GuiReader(@NotNull List<@NotNull String> layout) {
-        this.mappedSlots = read(layout);
+    private GuiReader(@NotNull EMFGui gui) {
+        this.gui = gui;
+        this.section = gui.getConfig();
     }
 
     // I have to comment each line so I can keep track of what it's doing, I may be able to clean this up at some point.
-    private Map<Character, ArrayList<Integer>> read(List<String> layout) {
+    private Map<Character, ArrayList<Integer>> readSlots() {
+        List<String> layout = section.getStringList("layout");
+        if (layout.isEmpty()) {
+            throw new EMFGuiException("No layout is configured.");
+        }
+
         Map<Character, ArrayList<Integer>> mappedSlots = new HashMap<>();
         int slot = 0;
 
