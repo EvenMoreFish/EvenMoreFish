@@ -1,9 +1,14 @@
 package com.oheers.fish.gui;
 
+import com.oheers.fish.FishUtils;
+import com.oheers.fish.items.ItemConfigResolver;
+import com.oheers.fish.items.configs.ItemConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.GuiItem;
+import net.kyori.adventure.text.Component;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -41,6 +46,8 @@ public class GuiReader {
             }
             slots.forEach(slot -> this.base.setItem(slot, item));
         });
+
+        applyFiller();
     }
 
     // I have to comment each line so I can keep track of what it's doing, I may be able to clean this up at some point.
@@ -86,6 +93,24 @@ public class GuiReader {
             .map(section -> EMFGuiItem.create(this.gui, section))
             .filter(Objects::nonNull)
             .collect(Collectors.toMap(EMFGuiItem::character, EMFGuiItem::item));
+    }
+
+    private void applyFiller() {
+        String fillerName = section.getString("filler");
+        ItemStack filler = FishUtils.getItem(fillerName);
+        if (filler == null) {
+            return;
+        }
+
+        // Set the name to empty.
+        filler.editMeta(meta -> meta.displayName(Component.empty()));
+
+        // Hide item tooltips if the server allows it.
+        ItemConfig<Boolean> hideTooltip = ItemConfigResolver.getInstance().getHideTooltip(section);
+        hideTooltip.setOverride(true);
+        hideTooltip.apply(filler, null);
+
+        base.getFiller().fill(new GuiItem(filler));
     }
 
 }

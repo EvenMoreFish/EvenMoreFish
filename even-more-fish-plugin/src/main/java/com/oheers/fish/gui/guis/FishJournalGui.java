@@ -4,6 +4,8 @@ import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.gui.EMFGui;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import dev.triumphteam.gui.guis.BaseGui;
+import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +26,11 @@ public class FishJournalGui extends EMFGui {
     @Override
     public void open() {
 
+    }
+
+    @Override
+    public @NotNull BaseGui buildGui() {
+        return Gui.gui().create();
     }
 
 }
