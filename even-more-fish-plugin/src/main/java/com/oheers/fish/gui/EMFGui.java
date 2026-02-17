@@ -1,6 +1,7 @@
 package com.oheers.fish.gui;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.HumanEntity;
@@ -43,9 +44,13 @@ public abstract class EMFGui {
         return this.replacements;
     }
 
+    public abstract @NotNull BaseGui buildGui();
+
     // TODO create Gui and give to GuiReader
     private @NotNull BaseGui createGui() {
-        return Gui.gui().create();
+        BaseGui gui = buildGui();
+        new GuiReader(this, gui).addItems();
+        return gui;
     }
 
 }

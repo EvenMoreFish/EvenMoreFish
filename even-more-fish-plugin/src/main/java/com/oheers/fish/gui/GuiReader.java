@@ -1,9 +1,9 @@
 package com.oheers.fish.gui;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
+import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.GuiItem;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -21,21 +21,36 @@ public class GuiReader {
     private static final int MAX_LINE_LENGTH = 9;
 
     private final EMFGui gui;
+    private final BaseGui base;
     private final Section section;
 
-    private GuiReader(@NotNull EMFGui gui) {
+    protected GuiReader(@NotNull EMFGui gui, @NotNull BaseGui base) {
         this.gui = gui;
+        this.base = base;
         this.section = gui.getConfig();
     }
 
+    protected void addItems() {
+        Map<Character, List<Integer>> mappedSlots = readSlots();
+        Map<Character, GuiItem> items = readItems();
+
+        mappedSlots.forEach((character, slots) -> {
+            GuiItem item = items.get(character);
+            if (item == null) {
+                return;
+            }
+            slots.forEach(slot -> this.base.setItem(slot, item));
+        });
+    }
+
     // I have to comment each line so I can keep track of what it's doing, I may be able to clean this up at some point.
-    private Map<Character, ArrayList<Integer>> readSlots() {
+    private Map<Character, List<Integer>> readSlots() {
         List<String> layout = section.getStringList("layout");
         if (layout.isEmpty()) {
             throw new EMFGuiException("No layout is configured.");
         }
 
-        Map<Character, ArrayList<Integer>> mappedSlots = new HashMap<>();
+        Map<Character, List<Integer>> mappedSlots = new HashMap<>();
         int slot = 0;
 
         // Loop over every line
@@ -54,7 +69,7 @@ public class GuiReader {
                     continue;
                 }
                 // Fetch the list related to this character, insert the slot, and increment slot.
-                ArrayList<Integer> list = mappedSlots.computeIfAbsent(character, ArrayList::new);
+                List<Integer> list = mappedSlots.computeIfAbsent(character, ArrayList::new);
                 list.add(slot);
                 slot++;
             }
