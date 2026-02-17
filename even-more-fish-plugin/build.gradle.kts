@@ -79,7 +79,6 @@ dependencies {
     implementation(libs.jooq)
     implementation(libs.jooq.codegen)
     implementation(libs.jooq.meta)
-    implementation(libs.bundles.connectors)
     implementation(libs.hikaricp)
 
     compileOnly(libs.bundles.flyway) {

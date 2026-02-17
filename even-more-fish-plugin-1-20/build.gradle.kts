@@ -38,6 +38,8 @@ dependencies {
 
     api(project(":even-more-fish-plugin"))
     implementation(libs.commandsapi.bukkit)
+
+    library(libs.bundles.connectors)
 }
 
 tasks.named<ShadowJar>("shadowJar") {

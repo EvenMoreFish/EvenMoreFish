@@ -32,6 +32,8 @@ dependencies {
 
     library(libs.boostedyaml)
     compileOnlyApi(libs.boostedyaml)
+
+    library(libs.bundles.connectors)
 }
 
 afterEvaluate {
