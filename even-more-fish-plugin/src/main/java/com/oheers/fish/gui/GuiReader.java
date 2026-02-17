@@ -5,7 +5,9 @@ import com.oheers.fish.items.ItemConfigResolver;
 import com.oheers.fish.items.configs.ItemConfig;
 import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import dev.triumphteam.gui.builder.gui.BaseChestGuiBuilder;
 import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
+import dev.triumphteam.gui.builder.gui.ChestGuiBuilder;
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.GuiItem;
 import net.kyori.adventure.text.Component;
@@ -29,22 +31,33 @@ public class GuiReader {
     private final EMFGui gui;
     private final BaseGuiBuilder<?, ?> builder;
     private final Section section;
+    private final List<String> layout;
 
     protected GuiReader(@NotNull EMFGui gui, @NotNull BaseGuiBuilder<?, ?> builder) {
         this.gui = gui;
         this.builder = builder;
         this.section = gui.getConfig();
+        this.layout = section.getStringList("layout");
     }
 
     protected BaseGui createGui() {
+        // Methods that require a builder.
+        applyRows();
         applyTitle();
 
         BaseGui base = builder.create();
 
+        // Methods that require an actual gui.
         applyItems(base);
         applyFiller(base);
 
         return base;
+    }
+
+    private void applyRows() {
+        if (this.builder instanceof BaseChestGuiBuilder<?, ?> chest) {
+            chest.rows(this.layout.size());
+        }
     }
 
     private void applyTitle() {
@@ -57,8 +70,7 @@ public class GuiReader {
 
     // I have to comment each line so I can keep track of what it's doing, I may be able to clean this up at some point.
     private Map<Character, List<Integer>> readSlots() {
-        List<String> layout = section.getStringList("layout");
-        if (layout.isEmpty()) {
+        if (this.layout.isEmpty()) {
             throw new EMFGuiException("No layout is configured.");
         }
 
@@ -66,7 +78,7 @@ public class GuiReader {
         int slot = 0;
 
         // Loop over every line
-        for (String line : layout) {
+        for (String line : this.layout) {
             int length = line.length();
             // Check if the line length goes over the max
             if (length > MAX_LINE_LENGTH) {
