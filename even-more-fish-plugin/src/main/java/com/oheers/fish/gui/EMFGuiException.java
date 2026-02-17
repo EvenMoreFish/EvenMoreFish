@@ -6,4 +6,8 @@ public class EMFGuiException extends RuntimeException {
         super(message);
     }
 
+    public EMFGuiException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
+
 }

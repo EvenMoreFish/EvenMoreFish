@@ -2,6 +2,7 @@ package com.oheers.fish.gui;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
+import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.HumanEntity;
@@ -30,7 +31,9 @@ public abstract class EMFGui {
         this.gui = createGui();
     }
 
-    public abstract void open();
+    public void open() {
+        gui.open(player);
+    }
 
     public @NotNull Section getConfig() {
         return this.config;
@@ -49,7 +52,15 @@ public abstract class EMFGui {
     // TODO create Gui and give to GuiReader
     private @NotNull BaseGui createGui() {
         BaseGuiBuilder<?, ?> builder = buildGui();
-        return new GuiReader(this, builder).createGui();
+        builder.disableAllInteractions();
+        try {
+            return new GuiReader(this, builder).createGui();
+        } catch (GuiException exception) {
+            throw new EMFGuiException(
+                "Failed to create " + getClass().getName() + " for " + player.getName(),
+                exception
+            );
+        }
     }
 
 }

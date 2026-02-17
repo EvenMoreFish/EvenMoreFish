@@ -18,11 +18,6 @@ public class MainMenuGui extends EMFGui {
     }
 
     @Override
-    public void open() {
-
-    }
-
-    @Override
     public @NotNull BaseGuiBuilder<?, ?> buildGui() {
         return Gui.gui();
     }
