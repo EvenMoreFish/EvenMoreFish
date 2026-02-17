@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.jooq.meta)
     implementation(libs.bundles.connectors)
     implementation(libs.hikaricp)
+    implementation(libs.triumphgui)
 
     compileOnly(libs.bundles.flyway) {
         exclude("org.xerial", "sqlite-jdbc")

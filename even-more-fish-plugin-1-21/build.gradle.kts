@@ -32,8 +32,6 @@ dependencies {
 
     library(libs.boostedyaml)
     compileOnlyApi(libs.boostedyaml)
-
-    library(libs.triumphgui)
 }
 
 afterEvaluate {

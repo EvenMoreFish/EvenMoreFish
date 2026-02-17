@@ -46,6 +46,7 @@ afterEvaluate {
         relocate("uk.firedev.messagelib", "com.oheers.fish.libs.messagelib")
         relocate("org.jooq", "com.oheers.fish.libs.jooq")
         relocate("com.zaxxer", "com.oheers.fish.libs.hikaricp")
+        relocate("dev.triumphteam.gui", "com.oheers.fish.libs.gui")
     }
     tasks.named<Jar>("jar") {
         enabled = false
