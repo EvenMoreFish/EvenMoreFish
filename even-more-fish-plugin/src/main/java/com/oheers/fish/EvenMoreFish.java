@@ -102,8 +102,6 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
     @Override
     public void onEnable() {
-        PaperGuiSettings.init(this);
-
         enableCommands();
 
         scheduler = UniversalScheduler.getScheduler(this);
