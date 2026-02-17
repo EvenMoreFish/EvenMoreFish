@@ -112,6 +112,11 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
                             Priority.GENERAL_PATTERN,
                             this::handleTotalCompetitionsWon
                         ),
+                        new HandlerDefinition(
+                            id -> id.startsWith("total_competitions_joined_"),
+                            Priority.GENERAL_PATTERN,
+                            this::handleTotalCompetitionsJoined
+                        ),
 
                         // Exact match placeholders
                         new HandlerDefinition(
@@ -316,6 +321,24 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
             UUID uuid = UUID.fromString(substring);
             UserReport userReport = plugin.getPluginDataManager().getUserReportDataManager().get(uuid.toString());
             return userReport != null ? String.valueOf(userReport.getCompetitionsWon()) : null;
+        } catch (NullPointerException | IllegalArgumentException exception) {
+            return null;
+        }
+    }
+
+    private @Nullable String handleTotalCompetitionsJoined(Player player, @NotNull String identifier) {
+        try {
+            String substring = identifier.substring("total_competitions_joined_".length());
+            if (substring.equalsIgnoreCase("player")) {
+                if (player == null) {
+                    return null;
+                }
+                UserReport userReport = plugin.getPluginDataManager().getUserReportDataManager().get(player.getUniqueId().toString());
+                return userReport != null ? String.valueOf(userReport.getCompetitionsJoined()) : null;
+            }
+            UUID uuid = UUID.fromString(substring);
+            UserReport userReport = plugin.getPluginDataManager().getUserReportDataManager().get(uuid.toString());
+            return userReport != null ? String.valueOf(userReport.getCompetitionsJoined()) : null;
         } catch (NullPointerException | IllegalArgumentException exception) {
             return null;
         }
