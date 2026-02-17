@@ -66,9 +66,13 @@ public class GuiReader {
         return mappedSlots;
     }
 
-    // I don't think I used enough NotNull annotations here...
-    public @NotNull Map<@NotNull Character, @NotNull List<@NotNull Integer>> getMappedSlots() {
-        return Map.copyOf(this.mappedSlots);
+    private Map<Character, GuiItem<Player, ItemStack>> readItems() {
+        return this.section.getRoutesAsStrings(false).stream()
+            .map(this.section::getSection)
+            .filter(section -> section != null && section.contains("item"))
+            .map(section -> EMFGuiItem.create(this.gui, section))
+            .filter(Objects::nonNull)
+            .collect(Collectors.toMap(EMFGuiItem::character, EMFGuiItem::item));
     }
 
 }
