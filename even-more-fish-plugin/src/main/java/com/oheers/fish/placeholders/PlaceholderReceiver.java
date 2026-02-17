@@ -102,6 +102,11 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
                                 Priority.GENERAL_PATTERN,
                                 this::handleTotalFishSold
                         ),
+                        new HandlerDefinition(
+                            id -> id.startsWith("total_fish_caught_"),
+                            Priority.GENERAL_PATTERN,
+                            this::handleTotalFishCaught
+                        ),
 
                         // Exact match placeholders
                         new HandlerDefinition(
@@ -270,6 +275,24 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
             UUID uuid = UUID.fromString(substring);
             UserReport userReport = plugin.getPluginDataManager().getUserReportDataManager().get(uuid.toString());
             return userReport != null ? String.valueOf(userReport.getFishSold()) : null;
+        } catch (NullPointerException | IllegalArgumentException exception) {
+            return null;
+        }
+    }
+
+    private @Nullable String handleTotalFishCaught(Player player, @NotNull String identifier) {
+        try {
+            String substring = identifier.substring("total_fish_caught_".length());
+            if (substring.equalsIgnoreCase("player")) {
+                if (player == null) {
+                    return null;
+                }
+                UserReport userReport = plugin.getPluginDataManager().getUserReportDataManager().get(player.getUniqueId().toString());
+                return userReport != null ? String.valueOf(userReport.getNumFishCaught()) : null;
+            }
+            UUID uuid = UUID.fromString(substring);
+            UserReport userReport = plugin.getPluginDataManager().getUserReportDataManager().get(uuid.toString());
+            return userReport != null ? String.valueOf(userReport.getNumFishCaught()) : null;
         } catch (NullPointerException | IllegalArgumentException exception) {
             return null;
         }
