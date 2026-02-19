@@ -1,9 +1,7 @@
 package com.oheers.fish.api;
 
 import com.oheers.fish.api.events.EMFFishCaughtEvent;
-import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.fishing.items.Fish;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

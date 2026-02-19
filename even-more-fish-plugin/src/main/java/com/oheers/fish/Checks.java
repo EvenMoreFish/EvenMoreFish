@@ -2,7 +2,6 @@ package com.oheers.fish;
 
 import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.gmail.nossr50.datatypes.player.McMMOPlayer;
-import com.gmail.nossr50.skills.fishing.FishingManager;
 import com.gmail.nossr50.util.player.UserManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.rods.CustomRod;

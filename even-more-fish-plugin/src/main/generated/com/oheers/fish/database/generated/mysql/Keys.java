@@ -18,7 +18,6 @@ import com.oheers.fish.database.generated.mysql.tables.records.TransactionsRecor
 import com.oheers.fish.database.generated.mysql.tables.records.UserFishStatsRecord;
 import com.oheers.fish.database.generated.mysql.tables.records.UsersRecord;
 import com.oheers.fish.database.generated.mysql.tables.records.UsersSalesRecord;
-
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;

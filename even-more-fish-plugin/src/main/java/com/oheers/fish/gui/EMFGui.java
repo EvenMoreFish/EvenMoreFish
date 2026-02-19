@@ -4,7 +4,6 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.guis.BaseGui;
-import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -21,6 +20,7 @@ public abstract class EMFGui {
     protected final BaseGui gui;
 
     private final Map<String, ?> replacements = new HashMap<>();
+    protected final GuiActions actions = new GuiActions(this);
 
     public EMFGui(@NotNull Section config, @NotNull HumanEntity human) {
         this.config = config;
@@ -49,7 +49,6 @@ public abstract class EMFGui {
 
     public abstract @NotNull BaseGuiBuilder<?, ?> buildGui();
 
-    // TODO create Gui and give to GuiReader
     private @NotNull BaseGui createGui() {
         BaseGuiBuilder<?, ?> builder = buildGui();
         builder.disableAllInteractions();

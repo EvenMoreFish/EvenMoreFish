@@ -3,10 +3,8 @@ package com.oheers.fish.database;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.connection.ConnectionFactory;
-import org.eclipse.sisu.launch.Main;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.SQLDialect;
 

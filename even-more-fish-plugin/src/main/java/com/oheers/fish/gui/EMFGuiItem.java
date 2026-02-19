@@ -3,12 +3,14 @@ package com.oheers.fish.gui;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.items.ItemFactory;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.GuiItem;
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 public record EMFGuiItem(@NotNull GuiItem item, char character) {
 
@@ -22,43 +24,43 @@ public record EMFGuiItem(@NotNull GuiItem item, char character) {
         if (item.isEmpty()) {
             return null;
         }
-        GuiItem guiItem = ItemBuilder.from(item).asGuiItem();
+        GuiItem guiItem = getGuiItem(gui, item, section);
         return new EMFGuiItem(guiItem, character);
-        /* TODO come back to this once actions are done
-        Section actionSection = itemSection.getSection("click-action");
+    }
+
+    private static GuiItem getGuiItem(@NotNull EMFGui gui, @NotNull ItemStack item, @NotNull Section section) {
+        Section actionSection = section.getSection("click-action");
+        // If the click-action key is a section, we need to figure out based on the click type.
         if (actionSection != null) {
-            StaticGuiElement actionElement = new StaticGuiElement(character, item, click -> {
-                BiConsumer<ConfigGui, GuiElement.Click> action = switch (click.getType()) {
-                    case LEFT -> actions.get(actionSection.getString("left", ""));
-                    case RIGHT -> actions.get(actionSection.getString("right", ""));
-                    case MIDDLE -> actions.get(actionSection.getString("middle", ""));
-                    case DROP -> actions.get(actionSection.getString("drop", ""));
-                    default -> null;
+            return new GuiItem(item, event -> {
+                String actionString = switch (event.getClick()) {
+                    case LEFT -> actionSection.getString("left", "");
+                    case RIGHT -> actionSection.getString("right", "");
+                    case MIDDLE -> actionSection.getString("middle", "");
+                    case DROP -> actionSection.getString("drop", "");
+                    default -> "";
                 };
+                Consumer<InventoryClickEvent> action = gui.actions.getAction(actionString);
                 if (action != null) {
-                    action.accept(this, click);
+                    action.accept(event);
                 }
-                itemSection.getStringList("click-commands").forEach(command ->
-                    Bukkit.dispatchCommand(click.getWhoClicked(), command)
+                section.getStringList("click-commands").forEach(command ->
+                    Bukkit.dispatchCommand(event.getWhoClicked(), command)
                 );
-                return true;
             });
-            gui.addElement(actionElement);
-        } else {
-            StaticGuiElement element = new StaticGuiElement(character, item, click -> {
-                BiConsumer<ConfigGui, GuiElement.Click> action = actions.get(itemSection.getString("click-action", ""));
-                if (action != null) {
-                    action.accept(this, click);
-                }
-                itemSection.getStringList("click-commands").forEach(command ->
-                    Bukkit.dispatchCommand(click.getWhoClicked(), command)
-                );
-                return true;
-            });
-            gui.addElement(element);
         }
 
-         */
+        // If click-action is not a key, parse the String and perform on any click instead.
+        return new GuiItem(item, event -> {
+            String actionString = section.getString("click-action", "");
+            Consumer<InventoryClickEvent> action = gui.actions.getAction(actionString);
+            if (action != null) {
+                action.accept(event);
+            }
+            section.getStringList("click-commands").forEach(command ->
+                Bukkit.dispatchCommand(event.getWhoClicked(), command)
+            );
+        });
     }
 
 }

@@ -6,7 +6,6 @@ import dev.aurelium.auraskills.api.event.loot.LootDropEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.List;
 import java.util.Set;
 
 public class AuraSkillsFishingEvent implements Listener {

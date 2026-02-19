@@ -3,12 +3,10 @@ package com.oheers.fish.config;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.fishing.items.Rarity;
-import com.oheers.fish.gui.EMFGui;
 import com.oheers.fish.gui.EMFGuiException;
 import com.oheers.fish.gui.guis.SellGui;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
-import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

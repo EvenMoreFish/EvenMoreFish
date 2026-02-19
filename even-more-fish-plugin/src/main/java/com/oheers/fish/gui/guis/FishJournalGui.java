@@ -3,12 +3,9 @@ package com.oheers.fish.gui.guis;
 import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.gui.EMFGui;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
-import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
