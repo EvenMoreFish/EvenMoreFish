@@ -33,6 +33,7 @@ public record EMFGuiItem(@NotNull GuiItem item, char character) {
         // If the click-action key is a section, we need to figure out based on the click type.
         if (actionSection != null) {
             return new GuiItem(item, event -> {
+                event.setCancelled(true);
                 String actionString = switch (event.getClick()) {
                     case LEFT -> actionSection.getString("left", "");
                     case RIGHT -> actionSection.getString("right", "");
