@@ -20,8 +20,6 @@ public class GuiFillerConfig extends ConfigBase {
 
     public static GuiFillerConfig getInstance() { return instance; }
 
-    // TODO these were copied from ConfigGui and won't be needed after the switch to Triumph
-
     public List<EMFGuiItem> getDefaultFillerItems(@NotNull EMFGui gui) {
         return getConfig().getRoutesAsStrings(false).stream()
             .map(getConfig()::getSection)

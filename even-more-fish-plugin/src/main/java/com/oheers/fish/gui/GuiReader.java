@@ -1,6 +1,7 @@
 package com.oheers.fish.gui;
 
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.config.GuiFillerConfig;
 import com.oheers.fish.items.ItemConfigResolver;
 import com.oheers.fish.items.configs.ItemConfig;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -114,7 +115,13 @@ public class GuiReader {
 
     private void applyItems(@NotNull BaseGui base) {
         Map<Character, List<Integer>> mappedSlots = readSlots();
+
+        // Load items.
         Map<Character, GuiItem> items = readItems();
+        // Add filler items from filler config.
+        GuiFillerConfig.getInstance().getDefaultFillerItems(gui).forEach(emfGuiItem ->
+            items.putIfAbsent(emfGuiItem.character(), emfGuiItem.item())
+        );
 
         mappedSlots.forEach((character, slots) -> {
             GuiItem item = items.get(character);
