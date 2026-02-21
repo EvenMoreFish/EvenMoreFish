@@ -51,11 +51,11 @@ duration:
   minute: <white>{minute}m
   second: <white>{second}s
 # The prefix shown in commands. Keeping the space in is recommended.
-prefix-regular: '<bold><aqua>更多的鱼 <reset></aqua></bold><gray>>> '
+prefix-regular: '<bold><aqua>更多的鱼 <reset><gray>>> '
 # The prefix shown in admin commands.
-prefix-admin: '<bold><aqua>更多的鱼 <reset></aqua></bold><gray>>> '
+prefix-admin: '<bold><aqua>更多的鱼 <reset><gray>>> '
 # The prefix shown when errors occur e.g. no permission to run a command.
-prefix-error: '<bold><aqua>更多的鱼 <reset></aqua></bold><gray>>> '
+prefix-error: '<bold><aqua>更多的鱼 <reset><gray>>> '
 # This is the format of the lore given to fish when they're caught.
 # {custom-lore} is specified in the fish configs under the lore: section, if the fish has a lore, the lore's lines will
 # replace the {fish_lore}, however if it's empty the line will be removed. DO NOT ADD ANYTHING OTHER THAN THIS VARIABLE
