@@ -33,7 +33,7 @@ public class GuiActions {
         actionMap.put("sell-inventory", event -> {
             Player player = gui.player;
             if (gui instanceof SellGui sell) {
-                new SellGui(player, SellGui.SellState.CONFIRM, sell.gui.getInventory());
+                new SellGui(player, SellGui.SellState.CONFIRM, sell.gui.getInventory()).open();;
                 return;
             }
             new SellHelper(player.getInventory(), player).sell();
@@ -47,7 +47,7 @@ public class GuiActions {
         actionMap.put("sell-shop", event -> {
             Player player = gui.player;
             if (gui instanceof SellGui sell) {
-                new SellGui(player, SellGui.SellState.CONFIRM, sell.gui.getInventory());
+                new SellGui(player, SellGui.SellState.CONFIRM, sell.gui.getInventory()).open();
                 return;
             }
             new SellHelper(gui.gui.getInventory(), player).sell();
