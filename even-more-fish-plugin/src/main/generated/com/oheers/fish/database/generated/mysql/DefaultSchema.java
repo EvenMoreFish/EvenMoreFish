@@ -11,12 +11,13 @@ import com.oheers.fish.database.generated.mysql.tables.Transactions;
 import com.oheers.fish.database.generated.mysql.tables.UserFishStats;
 import com.oheers.fish.database.generated.mysql.tables.Users;
 import com.oheers.fish.database.generated.mysql.tables.UsersSales;
-import org.jooq.Catalog;
-import org.jooq.Table;
-import org.jooq.impl.SchemaImpl;
 
 import java.util.Arrays;
 import java.util.List;
+
+import org.jooq.Catalog;
+import org.jooq.Table;
+import org.jooq.impl.SchemaImpl;
 
 
 /**

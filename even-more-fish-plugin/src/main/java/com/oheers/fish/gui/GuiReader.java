@@ -52,24 +52,9 @@ public class GuiReader {
 
         // Methods that require an actual gui.
         Map<Character, List<Integer>> mappedSlots = readSlots();
-        applyItems(base, mappedSlots);
         applyFiller(base);
-
-        // If the gui does not have specific slots for depositing items, we can return here.
-        String itemCharacterKey = gui.getItemCharacterKey();
-        if (itemCharacterKey != null) {
-            char itemCharacter = FishUtils.getCharFromString(section.getString(gui.getItemCharacterKey()), '#');
-            List<Integer> slots = mappedSlots.get(itemCharacter);
-            if (slots != null) {
-                slots.forEach(slot -> base.setItem(
-                    slot,
-                    new GuiItem(
-                        Material.AIR,
-                        event -> event.setCancelled(false))
-                    )
-                );
-            }
-        }
+        applyItems(base, mappedSlots);
+        applyEmptySlots(base, mappedSlots);
 
         return base;
     }
@@ -164,15 +149,20 @@ public class GuiReader {
         hideTooltip.setOverride(true);
         hideTooltip.apply(fillerItem, null);
 
-        GuiFiller filler = base.getFiller();
-        GuiItem item =  new GuiItem(fillerItem);
+        base.getFiller().fillBetweenPoints(
+            1, 1,
+            base.getRows(), 9,
+            new GuiItem(fillerItem)
+        );
+    }
 
-        // Due to Triumph throwing an exception with paginated guis, we only fill the border.
-        if (base instanceof PaginatedGui) {
-            filler.fillBorder(item);
-        } else {
-            filler.fill(item);
+    private void applyEmptySlots(BaseGui base, Map<Character, List<Integer>> mappedSlots) {
+        Character emptyChar = gui.getItemCharacter();
+        if (emptyChar == null) {
+            return;
         }
+        List<Integer> emptySlots = mappedSlots.get(emptyChar);
+        emptySlots.forEach(base::removeItem);
     }
 
 }

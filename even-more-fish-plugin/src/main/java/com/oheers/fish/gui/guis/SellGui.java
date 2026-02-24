@@ -2,6 +2,7 @@ package com.oheers.fish.gui.guis;
 
 import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.gui.EMFGui;
+import com.oheers.fish.gui.EMFGuiItem;
 import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
 import dev.triumphteam.gui.components.nbt.NbtWrapper;
 import dev.triumphteam.gui.components.nbt.Pdc;
@@ -70,6 +71,7 @@ public class SellGui extends EMFGui {
         public @NotNull String getConfigLocation() {
             return configLocation;
         }
+
     }
 
 }

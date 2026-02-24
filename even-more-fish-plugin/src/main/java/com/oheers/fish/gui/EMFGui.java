@@ -1,5 +1,6 @@
 package com.oheers.fish.gui;
 
+import com.oheers.fish.FishUtils;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
 import dev.triumphteam.gui.components.exception.GuiException;
@@ -56,6 +57,14 @@ public abstract class EMFGui {
      * For example: deposit-character in the sell menu.
      */
     public abstract @Nullable String getItemCharacterKey();
+
+    public @Nullable Character getItemCharacter() {
+        String key = getItemCharacterKey();
+        if (key == null) {
+            return null;
+        }
+        return config.getChar(key);
+    }
 
     private @NotNull BaseGui createGui() {
         BaseGuiBuilder<?, ?> builder = buildGui();
