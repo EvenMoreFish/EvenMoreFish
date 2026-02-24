@@ -26,6 +26,25 @@ public class SellGui extends EMFGui {
             GuiConfig.getInstance().getSellMenuConfig(state),
             human
         );
+        if (fishInventory != null) {
+            ItemStack[] items = getItemsFromInventory(fishInventory);
+            gui.getInventory().addItem(items);
+        }
+    }
+
+    private static ItemStack[] getItemsFromInventory(Inventory inventory) {
+        return Arrays.stream(inventory.getContents())
+            .filter(Objects::nonNull)
+            .filter(item -> !hasGuiItemNbt(item))
+            .toArray(ItemStack[]::new);
+    }
+
+    private static boolean hasGuiItemNbt(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return false;
+        }
+        return meta.getPersistentDataContainer().has(guiItemKey);
     }
 
     @Override
