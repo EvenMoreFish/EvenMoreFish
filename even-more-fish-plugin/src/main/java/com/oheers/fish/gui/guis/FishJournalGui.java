@@ -23,7 +23,12 @@ public class FishJournalGui extends EMFGui {
 
     @Override
     public @NotNull BaseGuiBuilder<?, ?> buildGui() {
-        return Gui.gui();
+        return Gui.paginated().disableAllInteractions();
+    }
+
+    @Override
+    public @Nullable String getItemCharacterKey() {
+        return rarity == null ? "rarity-character" : "fish-character";
     }
 
 }

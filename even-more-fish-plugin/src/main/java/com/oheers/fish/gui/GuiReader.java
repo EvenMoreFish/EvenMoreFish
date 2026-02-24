@@ -8,9 +8,12 @@ import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.triumphteam.gui.builder.gui.BaseChestGuiBuilder;
 import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
+import dev.triumphteam.gui.components.util.GuiFiller;
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.GuiItem;
+import dev.triumphteam.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,8 +51,25 @@ public class GuiReader {
         BaseGui base = builder.create();
 
         // Methods that require an actual gui.
-        applyItems(base);
+        Map<Character, List<Integer>> mappedSlots = readSlots();
+        applyItems(base, mappedSlots);
         applyFiller(base);
+
+        // If the gui does not have specific slots for depositing items, we can return here.
+        String itemCharacterKey = gui.getItemCharacterKey();
+        if (itemCharacterKey != null) {
+            char itemCharacter = FishUtils.getCharFromString(section.getString(gui.getItemCharacterKey()), '#');
+            List<Integer> slots = mappedSlots.get(itemCharacter);
+            if (slots != null) {
+                slots.forEach(slot -> base.setItem(
+                    slot,
+                    new GuiItem(
+                        Material.AIR,
+                        event -> event.setCancelled(false))
+                    )
+                );
+            }
+        }
 
         return base;
     }
@@ -112,9 +132,7 @@ public class GuiReader {
             .collect(Collectors.toMap(EMFGuiItem::character, EMFGuiItem::item));
     }
 
-    private void applyItems(@NotNull BaseGui base) {
-        Map<Character, List<Integer>> mappedSlots = readSlots();
-
+    private void applyItems(BaseGui base, Map<Character, List<Integer>> mappedSlots) {
         // Load items.
         Map<Character, GuiItem> items = readItems();
         // Add filler items from filler config.
@@ -133,20 +151,28 @@ public class GuiReader {
 
     private void applyFiller(@NotNull BaseGui base) {
         String fillerName = section.getString("filler");
-        ItemStack filler = FishUtils.getItem(fillerName);
-        if (filler == null) {
+        ItemStack fillerItem = FishUtils.getItem(fillerName);
+        if (fillerItem == null) {
             return;
         }
 
         // Set the name to empty.
-        filler.editMeta(meta -> meta.displayName(Component.empty()));
+        fillerItem.editMeta(meta -> meta.displayName(Component.empty()));
 
         // Hide item tooltips if the server allows it.
         ItemConfig<Boolean> hideTooltip = ItemConfigResolver.getInstance().getHideTooltip(section);
         hideTooltip.setOverride(true);
-        hideTooltip.apply(filler, null);
+        hideTooltip.apply(fillerItem, null);
 
-        base.getFiller().fill(new GuiItem(filler));
+        GuiFiller filler = base.getFiller();
+        GuiItem item =  new GuiItem(fillerItem);
+
+        // Due to Triumph throwing an exception with paginated guis, we only fill the border.
+        if (base instanceof PaginatedGui) {
+            filler.fillBorder(item);
+        } else {
+            filler.fill(item);
+        }
     }
 
 }

@@ -8,6 +8,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,9 +50,15 @@ public abstract class EMFGui {
 
     public abstract @NotNull BaseGuiBuilder<?, ?> buildGui();
 
+    /**
+     * The key with the character that needs to remain air.
+     * <p>
+     * For example: deposit-character in the sell menu.
+     */
+    public abstract @Nullable String getItemCharacterKey();
+
     private @NotNull BaseGui createGui() {
         BaseGuiBuilder<?, ?> builder = buildGui();
-        builder.disableAllInteractions();
         try {
             return new GuiReader(this, builder).createGui();
         } catch (GuiException exception) {

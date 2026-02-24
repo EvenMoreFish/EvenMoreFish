@@ -53,6 +53,7 @@ public record EMFGuiItem(@NotNull GuiItem item, char character) {
 
         // If click-action is not a key, parse the String and perform on any click instead.
         return new GuiItem(item, event -> {
+            event.setCancelled(true);
             String actionString = section.getString("click-action", "");
             Consumer<InventoryClickEvent> action = gui.actions.getAction(actionString);
             if (action != null) {

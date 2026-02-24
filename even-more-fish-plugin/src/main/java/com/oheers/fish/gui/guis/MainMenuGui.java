@@ -6,6 +6,7 @@ import dev.triumphteam.gui.builder.gui.BaseGuiBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MainMenuGui extends EMFGui {
 
@@ -18,6 +19,12 @@ public class MainMenuGui extends EMFGui {
 
     @Override
     public @NotNull BaseGuiBuilder<?, ?> buildGui() {
-        return Gui.gui();
+        return Gui.gui().disableAllInteractions();
     }
+
+    @Override
+    public @Nullable String getItemCharacterKey() {
+        return null;
+    }
+
 }

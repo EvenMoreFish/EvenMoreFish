@@ -23,4 +23,9 @@ public class ApplyBaitsGui extends EMFGui {
         return Gui.gui();
     }
 
+    @Override
+    public @Nullable String getItemCharacterKey() {
+        return "bait-character";
+    }
+
 }
