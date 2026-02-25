@@ -1,8 +1,10 @@
 package com.oheers.fish.api.config;
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.libs.org.snakeyaml.engine.v2.exceptions.ScannerException;
 import dev.dejvokep.boostedyaml.settings.Settings;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
@@ -92,6 +94,9 @@ public class ConfigBase {
             this.file = configFile;
         } catch (IOException ex) {
             plugin.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+            this.config = empty();
+        } catch (ScannerException ex) {
+            plugin.getLogger().log(Level.WARNING, "Failed to reload " + getFileName() + " due to invalid YAML syntax. Please check the file for errors.");
             this.config = empty();
         }
     }
