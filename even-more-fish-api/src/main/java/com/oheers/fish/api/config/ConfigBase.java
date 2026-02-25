@@ -35,6 +35,14 @@ public class ConfigBase {
     private YamlDocument config = null;
     private File file = null;
 
+    private static YamlDocument empty() {
+        try {
+            return YamlDocument.create(InputStream.nullInputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ConfigBase(@NotNull File file, @NotNull Plugin plugin, boolean configUpdater) {
         this.preventIO = false;
         this.fileName = file.getName();
@@ -64,12 +72,7 @@ public class ConfigBase {
         this.resourceName = null;
         this.plugin = EMFPlugin.getInstance();
         this.configUpdater = false;
-
-        try {
-            this.config = YamlDocument.create(InputStream.nullInputStream(), getSettings());
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+        this.config = empty();
     }
 
     public void reload(@NotNull File configFile) {
@@ -89,6 +92,7 @@ public class ConfigBase {
             this.file = configFile;
         } catch (IOException ex) {
             plugin.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+            this.config = empty();
         }
     }
 
@@ -99,7 +103,7 @@ public class ConfigBase {
         reload(this.file);
     }
 
-    public final YamlDocument getConfig() {
+    public final @NotNull YamlDocument getConfig() {
         if (this.config == null) {
             throw new IllegalStateException("Config " + getFileName() + " is not loaded. Please check for startup errors.");
         }
