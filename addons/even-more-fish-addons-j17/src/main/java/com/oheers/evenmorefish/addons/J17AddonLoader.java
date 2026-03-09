@@ -23,7 +23,6 @@ public class J17AddonLoader extends AddonLoader {
     @Override
     public void loadAddons() {
         new DenizenItemAddon().register();
-        new EcoItemsItemAddon().register();
         new HeadDatabaseItemAddon().register();
         new ItemsAdderItemAddon().register();
     }

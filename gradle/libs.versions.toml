@@ -53,9 +53,10 @@ craftengine-core = { module = "net.momirealms:craft-engine-core", version.ref = 
 craftengine-bukkit = { module = "net.momirealms:craft-engine-bukkit", version.ref = "craftengine" }
 
 # EcoItems
-ecoitems-api = "com.willfp:EcoItems:5.46.0"
-ecoitems-libreforge = "com.willfp:libreforge:4.21.1"
-ecoitems-eco = "com.willfp:eco:6.56.0"
+ecoitems = "com.willfp:EcoItems:5.66.0"
+# Libreforge is added directly to build.gradle.kts because the dev can't set up proper maven artifacts.
+# libreforge = "com.willfp:libreforge:4.81.0"
+eco = "com.willfp:eco:6.77.5"
 
 # Scripting
 denizen-api = "com.denizenscript:denizen:1.3.1-SNAPSHOT"
@@ -102,7 +103,6 @@ worldguard = ["worldguard-core", "worldguard-bukkit"]
 worldedit = ["worldedit-core", "worldedit-bukkit"]
 redprotect = ["redprotect-core", "redprotect-spigot"]
 craftengine = ["craftengine-core", "craftengine-bukkit"]
-ecoitems = ["ecoitems-api", "ecoitems-libreforge", "ecoitems-eco"]
 flyway = ["flyway-core", "flyway-mysql"]
 connectors = ["connectors-mysql", "connectors-sqlite"]
 

@@ -11,14 +11,12 @@ emfAddon {
     website = "https://github.com/EvenMoreFish/EvenMoreFish"
     dependencies = listOf(
         "Denizen",
-        "EcoItems",
         "HeadDatabase",
         "ItemsAdder"
     )
 }
 
 repositories {
-    maven("https://repo.auxilor.io/repository/maven-public/")
     maven("https://maven.citizensnpcs.co/repo")
 }
 
@@ -28,9 +26,6 @@ dependencies {
             strictly("1.20.1-R0.1-SNAPSHOT")
         }
     }
-    compileOnly(libs.ecoitems.api)
-    compileOnly(libs.ecoitems.libreforge)
-    compileOnly(libs.ecoitems.eco)
     compileOnly(libs.denizen.api)
     compileOnly(libs.itemsadder.api)
     compileOnly(libs.headdatabase.api)

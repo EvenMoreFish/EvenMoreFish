@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.mavenCentral
-
 rootProject.name = "even-more-fish"
 
 pluginManagement {

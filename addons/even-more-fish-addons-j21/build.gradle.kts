@@ -11,6 +11,7 @@ emfAddon {
     description = "Bundled Java 21 Addons"
     dependencies = listOf(
         "CraftEngine",
+        "EcoItems",
         "Nexo",
         "Oraxen"
     )
@@ -18,6 +19,7 @@ emfAddon {
 
 repositories {
     maven("https://repo.nexomc.com/releases/")
+    maven("https://repo.auxilor.io/repository/maven-public/")
     maven("https://repo.oraxen.com/releases/")
     maven("https://repo.momirealms.net/releases/")
 }
@@ -27,6 +29,9 @@ dependencies {
     compileOnly(libs.nexo)
     compileOnly(libs.oraxen)
     compileOnly(libs.bundles.craftengine)
+    compileOnly(libs.ecoitems)
+    compileOnly("com.willfp:libreforge:4.81.0:all")
+    compileOnly(libs.eco)
     compileOnly(project(":even-more-fish-api"))
 }
 
