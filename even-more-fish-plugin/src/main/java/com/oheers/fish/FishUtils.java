@@ -65,6 +65,12 @@ public class FishUtils {
     private static final DurationFormatter durationFormatter = new DurationFormatter(TimeUnit.SECONDS);
     private static final UUID B64_SKULL_UUID = UUID.fromString("07cd5534-e542-4fbf-861c-67a144ecf776");
 
+    // Enums in 1.20.1 API that are not enums in modern versions.
+    // Used in getEnumValue and will throw if any of these match.
+    private static final List<Class<?>> BAD_ENUMS = List.of(
+        Sound.class
+    );
+
     private FishUtils() {
         throw new UnsupportedOperationException();
     }
@@ -586,6 +592,11 @@ public class FishUtils {
     }
 
     public static @Nullable <E extends Enum<E>> E getEnumValue(@NotNull Class<E> enumClass, @Nullable String value) {
+        // Safety check - These classes are interfaces in newer Paper versions.
+        if (BAD_ENUMS.contains(enumClass)) {
+            throw new IllegalArgumentException(enumClass.getName() + " cannot be used in FishUtils#getEnumValue.");
+        }
+
         if (value == null) {
             return null;
         }
