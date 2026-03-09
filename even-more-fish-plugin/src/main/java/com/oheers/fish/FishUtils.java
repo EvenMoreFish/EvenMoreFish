@@ -32,7 +32,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Registry;
-import org.bukkit.Sound;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Skull;
 import org.bukkit.boss.BarStyle;
@@ -190,7 +190,7 @@ public class FishUtils {
         }
 
         // Play item pickup sound
-        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.5f, 1.5f);
+        player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_ITEM_PICKUP, 0.5f, 1.5f);
 
         // Add items to the player's inventory
         Map<Integer, ItemStack> leftoverItems = player.getInventory().addItem(filteredItems.toArray(new ItemStack[0]));
@@ -607,9 +607,9 @@ public class FishUtils {
         }
     }
 
-    public static @Nullable Sound getSound(@Nullable String name) {
+    public static @Nullable Sound.Type getSound(@Nullable String name) {
         try {
-            return Sound.valueOf(name);
+            return org.bukkit.Sound.valueOf(name);
         } catch (IllegalArgumentException exception) {
             return null;
         }

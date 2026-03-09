@@ -21,7 +21,7 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +60,7 @@ public class Competition {
     private final List<Long> alertTimes;
     private final Map<Integer, List<Reward>> rewards;
     private int playersNeeded;
-    private Sound startSound;
+    private Sound.Type startSound;
     private CompetitionTimer timingSystem;
     private CompetitionFile competitionFile;
     private int numberNeeded = 0;
@@ -353,7 +353,12 @@ public class Competition {
         startMessage.broadcast();
 
         if (startSound != null) {
-            Bukkit.getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), startSound, 10f, 1f));
+            Sound sound = Sound.sound()
+                .type(startSound)
+                .volume(10f)
+                .pitch(1f)
+                .build();
+            Bukkit.getOnlinePlayers().forEach(player -> player.playSound(sound, net.kyori.adventure.sound.Sound.Emitter.self()));
         }
     }
 
