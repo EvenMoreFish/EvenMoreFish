@@ -19,7 +19,7 @@ item:
 # How likely is the rarity to be chosen? Having a greater weight means the rarity is more likely to be chosen (the total weights don't have to add to 100)
 weight: 5
 
-# Broadcast settings - These are separate from Competition settings, and
+# Broadcast settings
 broadcast:
   # Should a catch of this fish be broadcasted to everyone (true) or just the fisher (false)?
   enabled: true
