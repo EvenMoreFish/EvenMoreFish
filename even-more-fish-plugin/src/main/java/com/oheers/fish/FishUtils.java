@@ -596,6 +596,14 @@ public class FishUtils {
         }
     }
 
+    public static @Nullable Sound getSound(@Nullable String name) {
+        try {
+            return Sound.valueOf(name);
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
+    }
+
     private static <T extends Keyed> @Nullable T getFromBukkitRegistry(@NotNull String namespace, @NotNull Registry<T> registry) {
         namespace = namespace.toLowerCase();
         NamespacedKey key = NamespacedKey.fromString(namespace);
