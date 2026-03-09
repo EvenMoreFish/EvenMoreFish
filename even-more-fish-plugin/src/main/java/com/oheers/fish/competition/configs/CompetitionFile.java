@@ -11,7 +11,7 @@ import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.jetbrains.annotations.NotNull;
@@ -270,19 +270,16 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return The sound to play when this competition starts. Returns null if no sound should be played.
      */
-    public @Nullable Sound getStartSound() {
+    public @Nullable Sound.Type getStartSound() {
         String soundString = getConfig().getString("start-sound", "NONE");
-        if (soundString.equalsIgnoreCase("none")) {
+        if (soundString.equalsIgnoreCase("NONE")) {
             return null;
         }
-        Sound sound;
-        try {
-            sound = Sound.valueOf(soundString.toUpperCase());
-        } catch (IllegalArgumentException exception) {
+        Sound.Type type = FishUtils.getSound(soundString);
+        if (type == null) {
             EvenMoreFish.getInstance().getLogger().warning(soundString + " is not a valid sound. Defaulting to NONE.");
-            return null;
         }
-        return sound;
+        return type;
     }
 
     /**

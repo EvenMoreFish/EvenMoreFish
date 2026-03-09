@@ -32,7 +32,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Registry;
-import org.bukkit.Sound;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Skull;
 import org.bukkit.boss.BarStyle;
@@ -64,6 +64,12 @@ public class FishUtils {
 
     private static final DurationFormatter durationFormatter = new DurationFormatter(TimeUnit.SECONDS);
     private static final UUID B64_SKULL_UUID = UUID.fromString("07cd5534-e542-4fbf-861c-67a144ecf776");
+
+    // Enums in 1.20.1 API that are not enums in modern versions.
+    // Used in getEnumValue and will throw if any of these match.
+    private static final List<Class<?>> BAD_ENUMS = List.of(
+        Sound.class
+    );
 
     private FishUtils() {
         throw new UnsupportedOperationException();
@@ -184,7 +190,7 @@ public class FishUtils {
         }
 
         // Play item pickup sound
-        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.5f, 1.5f);
+        player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_ITEM_PICKUP, 0.5f, 1.5f);
 
         // Add items to the player's inventory
         Map<Integer, ItemStack> leftoverItems = player.getInventory().addItem(filteredItems.toArray(new ItemStack[0]));
@@ -586,11 +592,24 @@ public class FishUtils {
     }
 
     public static @Nullable <E extends Enum<E>> E getEnumValue(@NotNull Class<E> enumClass, @Nullable String value) {
+        // Safety check - These classes are interfaces in newer Paper versions.
+        if (BAD_ENUMS.contains(enumClass)) {
+            throw new IllegalArgumentException(enumClass.getName() + " cannot be used in FishUtils#getEnumValue.");
+        }
+
         if (value == null) {
             return null;
         }
         try {
             return Enum.valueOf(enumClass, value.toUpperCase());
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
+    }
+
+    public static @Nullable Sound.Type getSound(@Nullable String name) {
+        try {
+            return org.bukkit.Sound.valueOf(name);
         } catch (IllegalArgumentException exception) {
             return null;
         }
