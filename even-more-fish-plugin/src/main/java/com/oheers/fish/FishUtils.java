@@ -503,17 +503,12 @@ public class FishUtils {
         return colour.substring(0, openingTagEnd + 1) + "{name}";
     }
 
-    /**
-     * Fetches a PotionEffect from a String.
-     * @param effectString The String to fetch the PotionEffect from.
-     * @param separator The string that separates the individual parts of the effect.
-     * @return A PotionEffect built from the provided String, or null if invalid.
-     */
-    public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString, @NotNull String separator) {
+    private static @Nullable PotionEffect getPotionEffect(@NotNull String effectString, @NotNull String separator) {
 
         String[] split = effectString.split(separator);
         if (split.length != 3) {
-            Logging.error("Potion effect string is formatted incorrectly. Use \"potion,amplifier,duration\".");
+            Logging.error("Invalid potion effect string: " + effectString);
+            Logging.error("The correct format is \"potion,amplifier,duration\".");
             return null;
         }
         PotionEffectType type = PotionEffectType.getByName(split[0].toUpperCase());
@@ -539,13 +534,21 @@ public class FishUtils {
         );
     }
 
+    /**
+     * Fetches a PotionEffect from a String.
+     * @param effectString The String to fetch the PotionEffect from.
+     * @return A PotionEffect built from the provided String, or null if invalid.
+     */
     public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString) {
-        PotionEffect effect = getPotionEffect(effectString, ",");
-        if (effect != null) {
-            return effect;
+        // Correct format using commas
+        if (effectString.contains(",")) {
+            return getPotionEffect(effectString, ",");
+        // Incorrect format that was shipped with default configs for a long time
+        } else if (effectString.contains(":")) {
+            return getPotionEffect(effectString, ":");
+        } else {
+            return null;
         }
-        // Compatibility with configs using the wrong format we accidentally had in default files.
-        return getPotionEffect(effectString, ":");
     }
 
     public static @Nullable Enchantment getEnchantment(@NotNull String namespace) {
