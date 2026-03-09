@@ -85,8 +85,18 @@ public class Rarity extends ConfigBase implements IRarity {
     }
 
     @Override
-    public boolean getAnnounce() {
-        return getConfig().getBoolean("broadcast", true);
+    public boolean getBroadcastEnabled() {
+        return getConfig().getBoolean("broadcast.enabled", true);
+    }
+
+    @Override
+    public boolean getBroadcastOnlyRods() {
+        return getConfig().getBoolean("broadcast.only-rods", false);
+    }
+
+    @Override
+    public int getBroadcastRange() {
+        return getConfig().getInt("broadcast.range", -1);
     }
 
     @Override

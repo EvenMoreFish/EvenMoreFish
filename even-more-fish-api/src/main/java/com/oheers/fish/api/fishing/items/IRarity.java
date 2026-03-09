@@ -1,7 +1,6 @@
 package com.oheers.fish.api.fishing.items;
 
 import com.oheers.fish.api.requirement.Requirement;
-import org.bukkit.entity.Fish;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +18,19 @@ public interface IRarity {
 
     double getWeight();
 
-    boolean getAnnounce();
+    /**
+     * @deprecated Use {@link #getBroadcastEnabled()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    default boolean getAnnounce() {
+        return getBroadcastEnabled();
+    }
+
+    boolean getBroadcastEnabled();
+
+    boolean getBroadcastOnlyRods();
+
+    int getBroadcastRange();
 
     boolean getUseConfigCasing();
 
