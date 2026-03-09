@@ -19,8 +19,15 @@ item:
 # How likely is the rarity to be chosen? Having a greater weight means the rarity is more likely to be chosen (the total weights don't have to add to 100)
 weight: 5
 
-# Should a catch of this fish be broadcasted to everyone (true) or just the fisher (false)?
-broadcast: true
+# Broadcast settings
+broadcast:
+  # Should a catch of this fish be broadcasted to everyone (true) or just the fisher (false)?
+  enabled: true
+  # Should the broadcast only show for players holding fishing rods?
+  only-rods: false
+  # Controls the broadcast range in blocks squared. Set to -1 for unlimited range.
+  # A value of 100 means the message would be sent to players 10 blocks in each direction.
+  range: -1
 
 # Should this rarity be shown in the journal? (Default: true)
 journal: true

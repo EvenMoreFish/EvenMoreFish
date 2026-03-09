@@ -7,8 +7,8 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.competition.Competition;
-import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.fishing.broadcast.FishBroadcast;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
@@ -16,9 +16,7 @@ import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -27,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -105,8 +102,8 @@ public abstract class Processor<E extends Event> {
         message.setFishCaught(fish.getDisplayName());
         message.setRarity(fish.getRarity().getDisplayName());
 
-        if (fish.getRarity().getAnnounce()) {
-            broadcastFishMessage(message, player);
+        if (fish.getRarity().getBroadcastEnabled()) {
+            new FishBroadcast(message, player, fish).broadcast();
         } else {
             message.send(player);
         }
@@ -224,57 +221,6 @@ public abstract class Processor<E extends Event> {
             }
         }
         active.applyToLeaderboard(fish, fisherman);
-    }
-
-    // Message
-
-    private void broadcastFishMessage(@NotNull EMFMessage message, @NotNull Player sourcePlayer) {
-        if (message.isEmpty()) {
-            return;
-        }
-
-        Competition activeComp = Competition.getCurrentlyActive();
-
-        Collection<? extends Player> validPlayers = getValidPlayers(sourcePlayer, activeComp);
-        List<String> playerNames = validPlayers.stream().map(Player::getName).toList();
-        EvenMoreFish.getInstance().debug("Valid players: " + String.join(", ", playerNames));
-
-        message.send(validPlayers);
-    }
-
-    private @NotNull Collection<? extends Player> getValidPlayers(@NotNull Player sourcePlayer, @Nullable Competition activeComp) {
-        if (activeComp == null) {
-            return Bukkit.getOnlinePlayers().stream().toList();
-        }
-
-        CompetitionFile activeCompetitionFile = activeComp.getCompetitionFile();
-
-        // Combine checks for fishing rod and broadcast range, to avoid unnecessary filtering.
-        if (activeCompetitionFile.shouldBroadcastOnlyRods() || activeCompetitionFile.getBroadcastRange() > -1) {
-            return Bukkit.getOnlinePlayers().stream()
-                .filter(player -> checkRodRequirement(activeCompetitionFile, player))
-                .filter(player -> isWithinRange(activeCompetitionFile, sourcePlayer, player, activeCompetitionFile.getBroadcastRange()))
-                .toList();
-        }
-
-        return Bukkit.getOnlinePlayers();
-    }
-
-    private boolean checkRodRequirement(@NotNull CompetitionFile competition, @NotNull Player player) {
-        if (!competition.shouldBroadcastOnlyRods()) {
-            return true;
-        }
-        Material rodMaterial = Material.FISHING_ROD;
-        return player.getInventory().getItemInMainHand().getType().equals(rodMaterial)
-            || player.getInventory().getItemInOffHand().getType().equals(rodMaterial);
-    }
-
-    private boolean isWithinRange(@NotNull CompetitionFile competition, @NotNull Player sourcePlayer, @NotNull Player targetPlayer, int rangeSquared) {
-        if (competition.getBroadcastRange() <= 0) {
-            return true;
-        }
-        return sourcePlayer.getWorld().equals(targetPlayer.getWorld())
-            && sourcePlayer.getLocation().distanceSquared(targetPlayer.getLocation()) <= rangeSquared;
     }
 
 }
