@@ -16,7 +16,7 @@ public class EffectRewardType extends RewardType {
 
     @Override
     public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location hookLocation) {
-        PotionEffect effect = FishUtils.getPotionEffect(value, ",");
+        PotionEffect effect = FishUtils.getPotionEffect(value);
         if (effect == null) {
             EvenMoreFish.getInstance().getLogger().warning("Invalid effect specified for RewardType " + getIdentifier() + ": " + value);
             return;
