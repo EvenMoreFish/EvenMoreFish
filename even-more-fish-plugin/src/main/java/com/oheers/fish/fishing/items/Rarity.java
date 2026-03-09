@@ -40,9 +40,8 @@ public class Rarity extends ConfigBase implements IRarity {
      */
     public Rarity(@NotNull File file) throws InvalidConfigurationException {
         super(file, EvenMoreFish.getInstance(), false);
-        RarityFileUpdates.update(this);
+        new RarityFileUpdates(this).update();
         performRequiredConfigChecks();
-        updateRequirementFormats();
         this.requirement = loadRequirements();
         this.fishList = loadFish();
         this.showInJournal = getConfig().getBoolean("journal", true);
@@ -255,40 +254,6 @@ public class Rarity extends ConfigBase implements IRarity {
     private Requirement loadRequirements() {
         Section requirementSection = ConfigUtils.getSectionOfMany(getConfig(), "requirements", "requirement");
         return new Requirement(requirementSection);
-    }
-
-    private void updateRequirementFormats() {
-        updateRequirementFormats(getConfig());
-        Section fishSect = getConfig().getSection("fish");
-        if (fishSect != null) {
-            fishSect.getRoutesAsStrings(false).forEach(fishName -> {
-                Section section = fishSect.getSection(fishName);
-                if (section == null) {
-                    return;
-                }
-                updateRequirementFormats(section);
-            });
-        }
-        save();
-    }
-
-    private void updateRequirementFormats(@NotNull Section section) {
-        Section ingameSection = section.getSection("requirement.ingame-time");
-        if (ingameSection != null) {
-            int min = ingameSection.getInt("minTime");
-            int max = ingameSection.getInt("maxTime");
-            ingameSection.remove("minTime");
-            ingameSection.remove("maxTime");
-            section.set("requirement.ingame-time", min + "-" + max);
-        }
-        Section irlSection = section.getSection("requirement.irl-time");
-        if (irlSection != null) {
-            String min = irlSection.getString("minTime");
-            String max = irlSection.getString("maxTime");
-            irlSection.remove("minTime");
-            irlSection.remove("maxTime");
-            section.set("requirement.irl-time", min + "-" + max);
-        }
     }
 
     protected @NotNull CatchType getCatchType() {
