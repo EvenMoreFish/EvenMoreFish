@@ -25,8 +25,8 @@ public class CommandRewardType extends RewardType {
         }
 
         // running the command
-        String finalCommand = inputCommand;
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
+        final String finalCommand = inputCommand;
+        EvenMoreFish.getScheduler().runTask(() -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand));
     }
 
     @Override
