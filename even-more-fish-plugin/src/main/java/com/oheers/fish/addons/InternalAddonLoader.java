@@ -31,6 +31,7 @@ import com.oheers.fish.addons.internal.reward.message.ActionBarRewardType;
 import com.oheers.fish.addons.internal.reward.message.MessageRewardType;
 import com.oheers.fish.addons.internal.reward.SoundRewardType;
 import com.oheers.fish.addons.internal.reward.message.SubtitleRewardType;
+import com.oheers.fish.addons.internal.reward.message.TitleRewardType;
 import com.oheers.fish.api.addons.AddonLoader;
 import com.oheers.fish.api.addons.AddonMetadata;
 import com.oheers.fish.api.plugin.EMFPlugin;
@@ -84,6 +85,7 @@ public class InternalAddonLoader extends AddonLoader {
         new ActionBarRewardType().register();
         new MessageRewardType().register();
         new SubtitleRewardType().register();
+        new TitleRewardType().register();
         new EXPRewardType().register();
         new SoundRewardType().register();
         loadExternalRewardTypes();
