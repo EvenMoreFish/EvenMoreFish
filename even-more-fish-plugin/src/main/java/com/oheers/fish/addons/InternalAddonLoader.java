@@ -27,7 +27,8 @@ import com.oheers.fish.addons.internal.reward.EffectRewardType;
 import com.oheers.fish.addons.internal.reward.HealthRewardType;
 import com.oheers.fish.addons.internal.reward.HungerRewardType;
 import com.oheers.fish.addons.internal.reward.ItemRewardType;
-import com.oheers.fish.addons.internal.reward.MessageRewardType;
+import com.oheers.fish.addons.internal.reward.message.ActionBarRewardType;
+import com.oheers.fish.addons.internal.reward.message.MessageRewardType;
 import com.oheers.fish.addons.internal.reward.SoundRewardType;
 import com.oheers.fish.api.addons.AddonLoader;
 import com.oheers.fish.api.addons.AddonMetadata;
@@ -79,6 +80,7 @@ public class InternalAddonLoader extends AddonLoader {
         new HealthRewardType().register();
         new HungerRewardType().register();
         new ItemRewardType().register();
+        new ActionBarRewardType().register();
         new MessageRewardType().register();
         new EXPRewardType().register();
         new SoundRewardType().register();
