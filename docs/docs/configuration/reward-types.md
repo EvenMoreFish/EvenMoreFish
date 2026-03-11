@@ -19,7 +19,10 @@ rewards:
 | Health      | `HEALTH:5`                          | Adds health.                                      | -                                          |
 | Hunger      | `HUNGER:20`                         | Sets hunger level                                 | -                                          |
 | Items       | `ITEM:cobblestone,1`                | Gives an item. This supports Item Addons.         | -                                          |
-| Message     | `MESSAGE:<green>Reward Type!`       | Sends a message                                   | `{player}`, PlaceholderAPI                 |
+| Message     | `MESSAGE:<green>Reward Type!`       | Sends a chat message                              | `{player}`, PlaceholderAPI                 |
+| ActionBar   | `ACTIONBAR:<green>Reward Type!`     | Sends an actionbar message                        | `{player}`, PlaceholderAPI                 |
+| Title       | `TITLE:<green>Reward Type!`         | Sends a title message                             | `{player}`, PlaceholderAPI                 |
+| Subtitle    | `SUBTITLE:<green>Reward Type!`      | Sends a subtitle message                          | `{player}`, PlaceholderAPI                 |
 | Exp         | `EXP:5000`                          | Gives experience points.                          | -                                          |
 | Sound       | `SOUND:ENTITY_WOLF_GROWL,1,5`       | Plays a sound to the player. (sound,volume,pitch) | -                                          |
 
