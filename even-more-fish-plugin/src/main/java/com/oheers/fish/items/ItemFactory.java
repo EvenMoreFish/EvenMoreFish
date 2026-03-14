@@ -18,6 +18,7 @@ import com.oheers.fish.utils.ItemUtils;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NbtApiException;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -344,7 +345,11 @@ public class ItemFactory {
         if (materialStr == null) {
             return null;
         }
-        ItemStack item = EvenMoreFish.getInstance().getDependencyManager().getHdbapi().getItemHead(materialStr);
+        HeadDatabaseAPI api = EvenMoreFish.getInstance().getDependencyManager().getHdbapi();
+        if (api == null) {
+            return null;
+        }
+        ItemStack item = api.getItemHead(materialStr);
         if (item == null) {
             EvenMoreFish.getInstance().debug(configuration.getRouteAsString() + " has invalid headdb: " + materialStr);
             return null;
@@ -360,10 +365,14 @@ public class ItemFactory {
         if (materialStrs.isEmpty()) {
             return null;
         }
-        if (materialStrs.size() == 1) {
-            return EvenMoreFish.getInstance().getDependencyManager().getHdbapi().getItemHead(materialStrs.get(0));
+        HeadDatabaseAPI api = EvenMoreFish.getInstance().getDependencyManager().getHdbapi();
+        if (api == null) {
+            return null;
         }
-        return getRandomItem(materialStrs, EvenMoreFish.getInstance().getDependencyManager().getHdbapi()::getItemHead);
+        if (materialStrs.size() == 1) {
+            return api.getItemHead(materialStrs.get(0));
+        }
+        return getRandomItem(materialStrs, api::getItemHead);
     }
 
     // Head 64
