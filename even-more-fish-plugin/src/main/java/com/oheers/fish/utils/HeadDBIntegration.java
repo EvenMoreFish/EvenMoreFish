@@ -10,7 +10,13 @@ public class HeadDBIntegration implements Listener {
 
     @EventHandler
     public void onHDBLoad(DatabaseLoadEvent event) {
-        EvenMoreFish.getInstance().getDependencyManager().setHdbapi(new HeadDatabaseAPI());
+        EvenMoreFish plugin = EvenMoreFish.getInstance();
+        plugin.getDependencyManager().setHdbapi(new HeadDatabaseAPI());
+
+        plugin.getLogger().info("Detected that HeadDatabase has finished loading all items...");
+        plugin.getLogger().info("Reloading EMF.");
+        // We need to reload the plugin when head database is loaded.
+        plugin.reload(null);
     }
 
 }
