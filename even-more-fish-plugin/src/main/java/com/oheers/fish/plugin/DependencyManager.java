@@ -1,6 +1,7 @@
 package com.oheers.fish.plugin;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.FishUtils;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.economy.GriefPreventionEconomyType;
 import com.oheers.fish.economy.PlayerPointsEconomyType;
@@ -45,7 +46,7 @@ public class DependencyManager implements Listener {
         this.usingGriefPrevention = pm.isPluginEnabled("GriefPrevention");
         this.usingPlayerPoints = pm.isPluginEnabled("PlayerPoints");
         this.usingMcMMO = pm.isPluginEnabled("mcMMO");
-        this.usingHeadsDB = pm.isPluginEnabled("HeadDatabase");
+        this.usingHeadsDB = pm.isPluginEnabled("HeadDatabase") && FishUtils.classExists("me.arcaniax.hdb.api.HeadDatabaseAPI");
         this.usingPAPI = pm.isPluginEnabled("PlaceholderAPI");
         this.usingAuraSkills = pm.isPluginEnabled("AuraSkills");
 

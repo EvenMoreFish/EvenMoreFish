@@ -628,4 +628,13 @@ public class FishUtils {
         return inventory != null && inventory.firstEmpty() != -1;
     }
 
+    public static boolean classExists(@NotNull String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
 }
