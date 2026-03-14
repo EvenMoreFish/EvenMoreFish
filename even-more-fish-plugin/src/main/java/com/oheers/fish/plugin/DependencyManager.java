@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.logging.Level;
 
@@ -117,11 +118,11 @@ public class DependencyManager implements Listener {
         return usingGriefPrevention;
     }
 
-    public Permission getPermission() {
+    public @Nullable Permission getPermission() {
         return permission;
     }
 
-    public HeadDatabaseAPI getHdbapi() {
+    public @Nullable HeadDatabaseAPI getHdbapi() {
         return hdbapi;
     }
 
