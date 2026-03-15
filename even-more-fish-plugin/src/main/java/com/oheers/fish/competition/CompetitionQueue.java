@@ -124,26 +124,8 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
 
     public TimeCode getNextCompetition() {
         TimeCode now = TimeCode.now();
-        if (competitions.containsKey(now)) {
-            return now;
-        }
-
-        competitions.put(now, null);
-        TimeCode nextCode = findNextCode(now);
-        competitions.remove(now);
-
-        return nextCode;
-    }
-
-    private TimeCode findNextCode(@NotNull TimeCode now) {
-        List<TimeCode> timeCodes = new ArrayList<>(competitions.keySet());
-        int position = timeCodes.indexOf(now);
-
-        if (position == competitions.size() - 1) {
-            return timeCodes.get(0);
-        }
-
-        return timeCodes.get(position + 1);
+        TimeCode next = competitions.ceilingKey(now);
+        return next == null ? competitions.firstKey() : next;
     }
 
 }
