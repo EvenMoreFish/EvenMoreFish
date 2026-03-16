@@ -150,7 +150,7 @@ public class EMFSingleMessage extends EMFMessage {
 
     @Override
     public boolean containsString(@NotNull String string) {
-        return underlying.containsString(string);
+        return underlying.contains(string);
     }
 
 }

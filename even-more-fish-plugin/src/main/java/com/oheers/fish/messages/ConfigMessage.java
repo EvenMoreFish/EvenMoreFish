@@ -331,12 +331,12 @@ public enum ConfigMessage {
     private EMFMessage processList(ComponentListMessage list) {
         list = list.editAllLines(line -> {
             // If silent, return null to remove the line.
-            if (line.containsString("-s")) {
+            if (line.contains("-s")) {
                 return null;
             }
 
             // If hide prefix, remove the [noPrefix] tag and don't add a prefix.
-            if (line.containsString("[noPrefix]")) {
+            if (line.contains("[noPrefix]")) {
                 return line.replace("[noPrefix]", "");
             }
             // Otherwise, add the prefix.
@@ -347,12 +347,12 @@ public enum ConfigMessage {
 
     private EMFMessage processSingle(ComponentSingleMessage single) {
         // If silent, return an empty message.
-        if (single.containsString("-s")) {
+        if (single.contains("-s")) {
             return EMFSingleMessage.empty();
         }
 
         // If hide prefix, remove the [noPrefix] tag and don't add a prefix.
-        if (single.containsString("[noPrefix]")) {
+        if (single.contains("[noPrefix]")) {
             single = single.replace("[noPrefix]", "");
         // Otherwise, add the prefix.
         } else {

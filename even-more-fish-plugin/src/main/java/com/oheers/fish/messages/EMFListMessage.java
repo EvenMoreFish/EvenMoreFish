@@ -132,7 +132,7 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public boolean containsString(@NotNull String string) {
-        return underlying.toSingleMessages().stream().anyMatch(singleMessage -> singleMessage.containsString(string));
+        return underlying.getAsPlainText().stream().anyMatch(line -> line.contains(string));
     }
 
     public void setVariableWithListInsertion(@NotNull String variable, @NotNull Object replacement) {
