@@ -1,6 +1,7 @@
 package com.oheers.fish.messages.abstracted;
 
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.EMFListMessage;
@@ -10,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentListMessage;
@@ -334,6 +336,16 @@ public abstract class EMFMessage {
      */
     public void setTimeRaw(@NotNull final Object timeRaw) {
         setVariable("{time_raw}", timeRaw);
+    }
+
+    /**
+     * Sets the bait in the message to replace the {bait} variable.
+     *
+     * @param bait The bait.
+     */
+    public void setBait(@NotNull final BaitHandler bait) {
+        setVariable("{bait_theme}", "");
+        setVariable("{bait}", bait.format(bait.getDisplayName()));
     }
 
     /**

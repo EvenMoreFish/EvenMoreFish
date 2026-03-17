@@ -260,7 +260,7 @@ public class AdminCommand {
                 }
                 EMFMessage message = ConfigMessage.ADMIN_GIVE_PLAYER_BAIT.getMessage();
                 message.setVariable("{player}", CommandUtils.getPlayersVariable(targets));
-                message.setBait(bait.getId());
+                message.setBait(bait);
                 message.send(sender);
             });
     }

@@ -349,7 +349,7 @@ public class BaitHandler extends ConfigBase implements IBait {
         }
 
         EMFMessage message = ConfigMessage.BAIT_USED.getMessage();
-        message.setBait(format(getDisplayName()));
+        message.setBait(this);
         message.send(player);
     }
 
@@ -475,7 +475,7 @@ public class BaitHandler extends ConfigBase implements IBait {
         EMFMessage message = ConfigMessage.BAIT_PURCHASED.getMessage();
         message.setAmount(finalQuantity);
         message.setVariable("{price}", economy.getWorthFormat(price, false));
-        message.setBait(getDisplayName());
+        message.setBait(this);
         message.send(player);
 
         return true;

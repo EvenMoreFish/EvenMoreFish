@@ -75,7 +75,7 @@ public class ApplyBaitsGui extends ConfigGui {
                 // When a specific bait is maxed.
             } catch (MaxBaitReachedException exception) {
                 EMFMessage message = ConfigMessage.BAITS_MAXED_ON_ROD.getMessage();
-                message.setBait(bait.format(bait.getId()));
+                message.setBait(bait);
                 message.send(this.player);
                 // We should now start to ignore this bait.
                 ignoredBaits.add(bait.getId());
