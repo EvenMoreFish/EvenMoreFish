@@ -342,6 +342,19 @@ public abstract class EMFMessage {
      * Sets the bait in the message to replace the {bait} variable.
      *
      * @param bait The bait.
+     * @param baitItem The item to show when hovering over the variable.
+     */
+    public void setBait(@NotNull final BaitHandler bait, @Nullable final ItemStack baitItem) {
+        setVariable("{bait_theme}", "");
+
+        Component display = bait.format(bait.getDisplayName()).getComponentMessage().hoverEvent(baitItem);
+        setVariable("{bait}", display);
+    }
+
+    /**
+     * Sets the bait in the message to replace the {bait} variable.
+     *
+     * @param bait The bait.
      */
     public void setBait(@NotNull final BaitHandler bait) {
         setVariable("{bait_theme}", "");
