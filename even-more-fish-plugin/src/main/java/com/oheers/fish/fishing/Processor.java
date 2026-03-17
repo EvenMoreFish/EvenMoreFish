@@ -33,7 +33,7 @@ import java.util.Set;
 public abstract class Processor<E extends Event> {
 
     // Used for formatting fish length.
-    private final DecimalFormat decimalFormat = new DecimalFormat("#.0");
+    public static final DecimalFormat LENGTH_FORMAT = new DecimalFormat("#.0");
     private final Random random = new Random();
 
     protected abstract void process(@NotNull E event);
@@ -89,18 +89,15 @@ public abstract class Processor<E extends Event> {
         if (fish.isSilent()) {
             return;
         }
-        String length = decimalFormat.format(fish.getLength());
 
         EMFMessage message = fish.getLength() == -1 ?
             getLengthlessCaughtMessage().getMessage() :
             getCaughtMessage().getMessage();
 
         message.setPlayer(player);
-        message.setLength(length);
 
-        fish.getDisplayName();
-        message.setFishCaught(fish.getDisplayName());
-        message.setRarity(fish.getRarity().getDisplayName());
+        // Sets rarity, length, and fish display name variables
+        message.setFishCatchVariables(fish);
 
         if (fish.getRarity().getBroadcastEnabled()) {
             new FishBroadcast(message, player, fish).broadcast();
