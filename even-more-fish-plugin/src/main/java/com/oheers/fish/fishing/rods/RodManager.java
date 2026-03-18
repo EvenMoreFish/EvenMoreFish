@@ -62,7 +62,10 @@ public class RodManager extends AbstractRodManager<CustomRod> {
     }
 
     @Override
-    public @Nullable CustomRod getRod(@NotNull ItemStack item) {
+    public @Nullable CustomRod getRod(@Nullable ItemStack item) {
+        if (item == null) {
+            return null;
+        }
         String rodId = NbtUtils.getString(item, NbtKeys.EMF_ROD_ID);
         if (rodId != null) {
             return getItem(rodId);

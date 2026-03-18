@@ -40,7 +40,7 @@ public abstract class Processor<E extends Event> {
 
     protected abstract boolean isEnabled();
 
-    public @Nullable ItemStack getCaughtItem(@NotNull Player player, @NotNull Location location, @NotNull ItemStack fishingRod) {
+    public @Nullable ItemStack getCaughtItem(@NotNull Player player, @NotNull Location location, @Nullable ItemStack fishingRod) {
         // Check if fishing is allowed in this world.
         if (!FishUtils.checkWorld(location)) {
             return null;
@@ -59,8 +59,12 @@ public abstract class Processor<E extends Event> {
             return getBaitItem(player);
         }
 
-        CustomRod customRod = RodManager.getInstance().getRod(fishingRod);
-        BaitHandler bait = getBaitFromRod(fishingRod, customRod);
+        CustomRod customRod = null;
+        BaitHandler bait = null;
+        if (fishingRod != null && !fishingRod.isEmpty()) {
+            customRod = RodManager.getInstance().getRod(fishingRod);
+            bait = getBaitFromRod(fishingRod, customRod);
+        }
 
         Fish fish = chooseFish(player, location, bait, customRod);
         if (fish == null) {
