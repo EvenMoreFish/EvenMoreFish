@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentMessage;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Exists solely to switch to 2.0's new competition config files.
@@ -33,7 +34,7 @@ public class CompetitionConversions {
             return;
         }
         Section rewards = config.getConfig().getSection("rewards");
-        Section leaderboard = config.getConfig().getSection("leaderboard");
+        List<String> leaderboard = config.getConfig().getStringList("leaderboard.position-colours");
         Section general = config.getConfig().getSection("general");
         for (String competitionKey : competitionSection.getRoutesAsStrings(false)) {
             Section section = competitionSection.getSection(competitionKey);
@@ -62,7 +63,7 @@ public class CompetitionConversions {
         return new File(EvenMoreFish.getInstance().getDataFolder(), "competitions");
     }
 
-    private void convertSectionToFile(@NotNull Section section, @Nullable Section general, @Nullable Section leaderboard, @Nullable Section rewards) {
+    private void convertSectionToFile(@NotNull Section section, @Nullable Section general, @NotNull List<String> leaderboard, @Nullable Section rewards) {
         String id = section.getNameAsString();
         if (id == null) {
             return;
@@ -79,7 +80,7 @@ public class CompetitionConversions {
         configBase.save();
     }
 
-    private void applyGeneralSection(@NotNull YamlDocument config, @Nullable Section general, @Nullable Section leaderboard, @Nullable Section rewards) {
+    private void applyGeneralSection(@NotNull YamlDocument config, @Nullable Section general, @NotNull List<String> leaderboard, @Nullable Section rewards) {
         // Account for the "general" section.
         if (general != null) {
             for (String key : general.getRoutesAsStrings(true)) {
@@ -95,7 +96,7 @@ public class CompetitionConversions {
         }
 
         // Add "leaderboard" section if needed
-        if (leaderboard != null && !config.contains("leaderboard")) {
+        if (!leaderboard.isEmpty() && !config.contains("leaderboard")) {
             config.set("leaderboard", leaderboard);
         }
     }
