@@ -3,6 +3,7 @@ package com.oheers.fish.config;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.messages.EMFConfigLoader;
+import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 
 public class MessageConfig extends ConfigBase {
@@ -10,11 +11,19 @@ public class MessageConfig extends ConfigBase {
     private static MessageConfig instance = null;
 
     private EMFConfigLoader messageLoader;
+    private final EMFConfigLoader defaultMessageLoader;
 
     public MessageConfig() {
         super("messages.yml", "locales/" + "messages_" + MainConfig.getInstance().getLocale() + ".yml", EvenMoreFish.getInstance(), true);
         instance = this;
         this.messageLoader = new EMFConfigLoader(getConfig());
+
+        // Defaults should always exist for this file.
+        YamlDocument defaults = getConfig().getDefaults();
+        if (defaults == null) {
+            throw new IllegalStateException("MessageConfig has no assigned defaults.");
+        }
+        this.defaultMessageLoader = new EMFConfigLoader(defaults);
     }
 
     public static MessageConfig getInstance() {
@@ -23,6 +32,10 @@ public class MessageConfig extends ConfigBase {
 
     public EMFConfigLoader getMessageLoader() {
         return messageLoader;
+    }
+
+    public EMFConfigLoader getDefaultMessageLoader() {
+        return defaultMessageLoader;
     }
 
     @Override
