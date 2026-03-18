@@ -96,16 +96,14 @@ bossbar-prefix: '<bold><green>Fishing Contest: '
 required-worlds:
   - FishingWorld
 
-# Allows control over the competition's leaderboard.
+# Allows control over the leaderboard's player format.
+# Start from #1 then go down as many as you like
 leaderboard:
-  # These are the colours displayed on the leaderboard.
-  # Start from #1 then go down as many as you like
-  position-colours:
-    - <gold>
-    - <yellow>
-    - <gray>
-    - <gray>
-    - <#888888>
+  - <gold>{name}</gold>
+  - <yellow>{name}</yellow>
+  - <gray>{name}</gray>
+  - <gray>{name}</gray>
+  - <#888888>{name}</#888888>
 
 # When to broadcast the time remaining in this competition in the MM:SS format.
 # This example will broadcast when there are 10, 7, and 5 minutes left.
