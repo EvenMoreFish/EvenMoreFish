@@ -70,7 +70,7 @@ public enum ConfigMessage {
     COMPETITION_TYPE_SHORTEST(PrefixType.NONE, "competition-types.shortest"),
     COMPETITION_TYPE_SHORTEST_TOTAL(PrefixType.NONE, "competition-types.shortest-total"),
 
-    COMPETITION_SINGLE_WINNER(PrefixType.DEFAULT, "single-winner"),
+    COMPETITION_SINGLE_WINNER(PrefixType.DEFAULT, "leaderboard.single-winner"),
 
 
 
@@ -122,31 +122,33 @@ public enum ConfigMessage {
     HELP_LIST_RARITIES(PrefixType.ADMIN, "help-list.rarities"),
     HELP_COMPETITION_START(PrefixType.ADMIN, "help-competition.start"),
     HELP_COMPETITION_END(PrefixType.ADMIN, "help-competition.end"),
+    HELP_COMPETITION_TEST(PrefixType.ADMIN, "help-competition.test"),
+    HELP_COMPETITION_EXTEND(PrefixType.ADMIN, "help-competition.extend"),
     INVALID_COMPETITION_TYPE(PrefixType.ADMIN, "admin.competition-type-invalid"),
     INVALID_COMPETITION_ID(PrefixType.ADMIN, "admin.competition-id-invalid"),
 
     LEADERBOARD_LARGEST_FISH(
         PrefixType.DEFAULT,
-        "leaderboard-largest-fish"
+        "leaderboard.largest-fish"
     ),
-    LEADERBOARD_LARGEST_TOTAL(PrefixType.DEFAULT, "leaderboard-largest-total"),
-    LEADERBOARD_MOST_FISH(PrefixType.DEFAULT, "leaderboard-most-fish"),
-    LEADERBOARD_TOTAL_PLAYERS(PrefixType.DEFAULT, "total-players"),
+    LEADERBOARD_LARGEST_TOTAL(PrefixType.DEFAULT, "leaderboard.largest-total"),
+    LEADERBOARD_MOST_FISH(PrefixType.DEFAULT, "leaderboard.most-fish"),
+    LEADERBOARD_TOTAL_PLAYERS(PrefixType.DEFAULT, "leaderboard.total-players"),
     LEADERBOARD_SHORTEST_FISH(
         PrefixType.DEFAULT,
-        "leaderboard-shortest-fish"
+        "leaderboard.shortest-fish"
     ),
-    LEADERBOARD_SHORTEST_TOTAL(PrefixType.DEFAULT, "leaderboard-shortest-total"),
+    LEADERBOARD_SHORTEST_TOTAL(PrefixType.DEFAULT, "leaderboard.shortest-total"),
 
     NEW_FIRST_PLACE_NOTIFICATION(PrefixType.DEFAULT, "new-first"),
 
     NO_BAITS(PrefixType.ERROR, "admin.no-baits-on-rod"),
     NO_COMPETITION_RUNNING(PrefixType.ERROR, "no-competition-running"),
     COMPETITION_TIME_EXTENDED(PrefixType.DEFAULT, "competition-time-extended"),
-    NO_FISH_CAUGHT(PrefixType.DEFAULT, "no-record"),
+    NO_FISH_CAUGHT(PrefixType.DEFAULT, "leaderboard.no-record"),
     NO_PERMISSION_FISHING(PrefixType.DEFAULT, "no-permission-fishing"),
     NO_PERMISSION(PrefixType.ERROR, "no-permission"),
-    NO_WINNERS(PrefixType.DEFAULT, "no-winners"),
+    NO_WINNERS(PrefixType.DEFAULT, "leaderboard.no-winners"),
     NOT_ENOUGH_PLAYERS(PrefixType.ERROR, "not-enough-players"),
 
     CUSTOM_FISHING_ENABLED(PrefixType.NONE, "custom-fishing-enabled"),
