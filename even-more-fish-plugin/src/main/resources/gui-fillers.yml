@@ -2,6 +2,7 @@ seagrass-filler:
   item:
     material: seagrass
     displayname: ' '
+    hide-tooltip: true
   character: '1'
   click-action: none
 
@@ -9,6 +10,7 @@ light_blue_stained_glass_pane-filler:
   item:
     material: light_blue_stained_glass_pane
     displayname: ' '
+    hide-tooltip: true
   character: '2'
   click-action: none
 
@@ -16,6 +18,7 @@ cyan_stained_glass_pane-filler:
   item:
     material: cyan_stained_glass_pane
     displayname: ' '
+    hide-tooltip: true
   character: '3'
   click-action: none
 
@@ -23,6 +26,7 @@ gray_stained_glass_pane-filler:
   item:
     material: gray_stained_glass_pane
     displayname: ' '
+    hide-tooltip: true
   character: '4'
   click-action: none
 
@@ -30,6 +34,7 @@ kelp-filler:
   item:
     material: kelp
     displayname: ' '
+    hide-tooltip: true
   character: '5'
   click-action: none
 
@@ -37,6 +42,7 @@ grass-filler:
   item:
     material: short_grass
     displayname: ' '
+    hide-tooltip: true
   character: '6'
   click-action: none
 
