@@ -127,7 +127,7 @@ no-sellable-fish: <white>You have nothing to sell!
 help-format: "[noPrefix]<aqua>{command} <yellow>- <white>{description}"
 
 help-general:
-  title: "[noPrefix]<gradient:#f1ffed:#f1ffed><st>         </st><b> <gradient:#E6F9FF:#8FD9FB>EvenMoreFish </green></b><st><gradient:#73ff6b:#f1ffed>         "
+  title: "[noPrefix]<gradient:#f1ffed:#73ff6b><st>         </st> <b><gradient:#E6F9FF:#8FD9FB>EvenMoreFish </b><st><gradient:#73ff6b:#f1ffed>         "
   top: "[noPrefix]Shows an ongoing competition's leaderboard."
   help: "[noPrefix]Shows you this page."
   shop: "[noPrefix]Opens a shop to sell your fish."
