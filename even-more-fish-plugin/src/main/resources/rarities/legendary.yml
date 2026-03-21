@@ -5,7 +5,10 @@ item:
   material: yellow_concrete_powder
 format: <gold>{name}
 worth-multiplier: 0.2
-broadcast: true
+broadcast:
+  enabled: true
+  only-rods: false
+  range: -1
 catch-type: both
 size:
   minSize: 800

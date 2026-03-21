@@ -5,14 +5,18 @@ item:
   material: light_gray_concrete_powder
 format: <gray>{name}
 worth-multiplier: 0.1
-broadcast: false
+broadcast:
+  enabled: false
+  only-rods: false
+  range: -1
 catch-type: both
 size:
   minSize: 1
   maxSize: 30
 
 fish:
-  Cod: ''
+  # Setting a fish to [] will make the item default to raw cod.
+  Cod: []
   Atlantic Cod:
     requirements:
       biome:
@@ -23,9 +27,9 @@ fish:
         - LUKEWARM_OCEAN
         - OCEAN
         - WARM_OCEAN
-  Rockfish: ''
-  Tuna: ''
-  Mackerel: ''
+  Rockfish: []
+  Tuna: []
+  Mackerel: []
   Spanish Mackerel:
     item:
       lore:
@@ -40,21 +44,21 @@ fish:
   Tropical Fish:
     item:
       material: TROPICAL_FISH
-  Red Mullet: ''
-  Anchovy: ''
-  Haddock: ''
-  Bluefish: ''
-  Carp: ''
-  Silver Carp: ''
-  Grass Carp: ''
-  Koi Carp: ''
-  Black Carp: ''
-  Lemon Shark: ''
+  Red Mullet: []
+  Anchovy: []
+  Haddock: []
+  Bluefish: []
+  Carp: []
+  Silver Carp: []
+  Grass Carp: []
+  Koi Carp: []
+  Black Carp: []
+  Lemon Shark: []
   Sea Snail:
     item:
       material: NAUTILUS_SHELL
-  Eel: ''
-  Tadpole: ''
+  Eel: []
+  Tadpole: []
   Seagull Feather:
     item:
       material: FEATHER

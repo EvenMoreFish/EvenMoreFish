@@ -5,7 +5,10 @@ item:
   material: light_blue_concrete_powder
 format: <aqua>{name}
 worth-multiplier: 0.2
-broadcast: false
+broadcast:
+  enabled: false
+  only-rods: false
+  range: -1
 catch-type: both
 size:
   minSize: 20
