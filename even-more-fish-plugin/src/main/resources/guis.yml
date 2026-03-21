@@ -1,8 +1,8 @@
-# This file is for the 1.7 release of EvenMoreFish, if you are using this before your plugin is using version 1.7.2 there
-# will likely be a few issues or changes to the file won't take effect on the plugin.
+# Configuration for all EMF GUIs.
+# This file will soon be split into multiple, just like the rest of the configs.
 
 # An example button, to hopefully help with understanding what they can do.
-# The items can be configured just like fish can.
+# See the wiki for all item options: https://evenmorefish.github.io/EvenMoreFish/docs/configuration/items
 button-example:
   item:
     material: diamond
@@ -50,7 +50,7 @@ general:
         - <yellow>Go to the last page
 
 main-menu:
-  title: <dark_blue>EvenMoreFish
+  title: <#006F86>EvenMoreFish - Main Menu
   layout:
     - "126515621"
     - "23     32"
@@ -66,10 +66,10 @@ main-menu:
       material: tropical_fish
       displayname: <gold>» Toggle Custom Fish
       lore:
-        - <white>----------------------------------
+        - ""
         - <gray>Click this button to
         - <gray>toggle custom fish.
-        - <white>----------------------------------
+        - ""
     character: t
     click-action: fish-toggle
 
@@ -78,10 +78,10 @@ main-menu:
       material: gold_ingot
       displayname: <gold>» Open Fish Shop
       lore:
-        - <white>----------------------------------
+        - ""
         - <gray>Sell the fish you catch to
         - <gray>earn a bit of extra money.
-        - <white>----------------------------------
+        - ""
     character: s
     click-action: open-shop
 
@@ -90,11 +90,10 @@ main-menu:
       material: COMPASS
       displayname: <gold>» Command Help
       lore:
-        - <white>----------------------------------
+        - ""
         - <gray>Shows a list of commands
-        - <gray>that can be used to use
-        - <gray>this plugin.
-        - <white>----------------------------------
+        - <gray>you can use for this plugin.
+        - ""
     character: h
     click-action: show-command-help
 
@@ -103,9 +102,9 @@ main-menu:
       material: nautilus_shell
       displayname: "<gold>» View Baits"
       lore:
-        - <white>----------------------------------
+        - ""
         - <gray>Shows all loaded baits
-        - <white>----------------------------------
+        - ""
     character: b
     click-action: open-baits-menu
 
@@ -114,10 +113,10 @@ main-menu:
       material: writable_book
       displayname: "<gold>» Fish Journal"
       lore:
-        - <white>----------------------------------
+        - ""
         - <gray>Keep track of all the
         - <gray>fish you have caught.
-        - <white>----------------------------------
+        - ""
     character: j
     click-action: open-journal-menu
 
@@ -132,25 +131,25 @@ main-menu:
     click-action: full-exit
 
 sell-menu-normal:
-  title: <bold><dark_blue>Sell Fish
+  title: <#006F86>EvenMoreFish - Sell Fish
   layout:
     - "iiiiiiiii"
     - "iiiiiiiii"
     - "iiiiiiiii"
     - "   s a   "
-  filler: gray_stained_glass_pane
+  filler: light_blue_stained_glass_pane
   # The character to use for the slots where players can place fish.
   deposit-character: i
 
   sell-item:
     item:
       material: GOLD_INGOT
-      displayname: <bold><gold>SELL
+      displayname: <bold><gold>Sell
       lore:
         - <dark_gray>Fish Shop
         - ''
-        - <gray>Sell your fish here to make
-        - <gray>some extra money.
+        - <gray>Click this button to sell all
+        - <gray>the fish inside the shop menu.
         - ''
         - <yellow>» (Left-click) sell the fish.
         - <gray>» (Right-click) cancel.
@@ -162,33 +161,35 @@ sell-menu-normal:
   sell-all-item:
     item:
       material: COD_BUCKET
-      displayname: <bold><gold>SELL ALL
+      displayname: <bold><gold>Sell All
       lore:
         - <dark_gray>Inventory
         - ''
-        - <gray>Click this button to sell
-        - <gray>the fish in your inventory to
-        - <gray>make some extra money.
+        - <gray>Click this button to sell all
+        - <gray>the fish in your inventory.
         - ''
         - <yellow>» (Left-click) sell the fish.
+        - <gray>» (Right-click) cancel.
     character: a
-    click-action: sell-inventory
+    click-action:
+      left: sell-inventory
+      right: full-exit
 
 sell-menu-confirm:
-  title: <bold><green>Confirm
+  title: <#006F86>EvenMoreFish - Sell Fish (Confirm)
   layout:
     - "iiiiiiiii"
     - "iiiiiiiii"
     - "iiiiiiiii"
     - "   s a   "
-  filler: lime_stained_glass_pane
+  filler: light_blue_stained_glass_pane
   # The character to use for the slots where players can place fish.
   deposit-character: i
 
   sell-item:
     item:
       material: GOLD_INGOT
-      displayname: <bold><gold>CONFIRM SELL
+      displayname: <bold><gold>Confirm Sell
       lore:
         - <dark_gray>Fish Shop
         - ''
@@ -205,7 +206,7 @@ sell-menu-confirm:
   sell-all-item:
     item:
       material: COD_BUCKET
-      displayname: <bold><gold>CONFIRM SELL ALL
+      displayname: <bold><gold>Confirm Sell All
       lore:
         - <dark_gray>Inventory
         - ''
@@ -214,11 +215,14 @@ sell-menu-confirm:
         - <gray>make some extra money.
         - ''
         - <yellow>» (Left-click) sell the fish.
+        - <gray>» (Right-click) cancel.
     character: a
-    click-action: sell-inventory-confirm
+    click-action:
+      left: sell-inventory-confirm
+      right: full-exit
 
 baits-menu:
-  title: <dark_blue>View Loaded Baits
+  title: <#006F86>EvenMoreFish - Baits
   layout:
     - "  23232  "
     - "23 4 4 32"
@@ -262,13 +266,13 @@ baits-menu:
     click-action: previous-page
 
 apply-baits-menu:
-  title: <bold><dark_blue>Apply Baits
+  title: <#006F86>EvenMoreFish - Apply Baits
   layout:
     - "bbbbbbbbb"
     - "bbbbbbbbb"
     - "bbbbbbbbb"
     - "    x    "
-  filler: gray_stained_glass_pane
+  filler: light_blue_stained_glass_pane
   # The character to use for the bait slots.
   bait-character: b
 
@@ -286,9 +290,9 @@ apply-baits-menu:
 
 # The main menu for selecting the rarity you'd like to view
 journal-menu:
-  title: <dark_blue>Fish Journal
+  title: <#006F86>EvenMoreFish - Fish Journal
   layout:
-    - " 2323232 "
+    - "232323232"
     - "3rrrrrrr3"
     - "2rrrrrrr2"
     - "3rrrrrrr3"
@@ -302,7 +306,7 @@ journal-menu:
   sort-type: alphabetical
 
   # Whether to show the undiscovered-rarity config below when a rarity has not been discovered by the player.
-  hide-undiscovered-rarity: true
+  hide-undiscovered-rarity: false
 
   # How undiscovered rarities should look
   undiscovered-rarity:
@@ -351,7 +355,7 @@ journal-rarity:
   sort-type: alphabetical
 
   # Whether to show the undiscovered-fish config below when a fish has not been caught by the player.
-  hide-undiscovered-fish: true
+  hide-undiscovered-fish: false
 
   # The message to display when a fish has no data.
   # This does not support formatting.
