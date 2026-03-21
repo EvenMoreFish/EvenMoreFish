@@ -3,9 +3,9 @@ disabled: false
 allowed-rarities: ALL
 item:
   material: FISHING_ROD
-  displayname: <yellow>EvenMoreFish Fishing Rod
+  displayname: <gradient:#E6F9FF:#8FD9FB>EvenMoreFish <yellow>Fishing Rod
   glowing: true
   lore:
     - ''
-    - <gray>Catch </gray><yellow>custom </yellow><gray>fish using this
-    - <gray>fishing rod.
+    - <gray>Catch </gray><yellow>custom </yellow><gray>fish using
+    - <gray>this fishing rod.
