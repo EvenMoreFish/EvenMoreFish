@@ -217,6 +217,20 @@ Atlantic Cod:
       - "%player_current_exp% >= 1000"
 ```
 
+### Reward Type
+This checks that all provided RewardTypes are available.
+
+```yaml title="Reward Type Example"
+Atlantic Cod:
+  requirements:
+    reward-type:
+      # The requirement passes if the MONEY RewardType is available.
+      - MONEY
+  catch-event:
+    # Because our requirement passed, we can safely use the MONEY RewardType.
+    - MONEY:5000
+```
+
 ### World
 And finally, this limits fish to certain worlds. By default there's only three worlds, `overworld`, `nether` and `end`, but with a plugin like [Multiverse-Core](https://modrinth.com/plugin/multiverse-core), you can create worlds to allow fish to only be caught in. There probably isn't much point allowing `nether` since water can't be placed there and lava can't be fished in though.
 
