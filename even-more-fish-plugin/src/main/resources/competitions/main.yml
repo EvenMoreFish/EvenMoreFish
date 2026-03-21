@@ -1,7 +1,11 @@
+# The default main competition
+# See _example.yml for all options.
+
 id: mainCompetition
 disabled: false
 type: LARGEST_FISH
 duration: 10
+minimum-players: 5
 times:
   - 00:00
   - 06:00
@@ -9,20 +13,21 @@ times:
   - 18:00
 blacklisted-days:
   - Sunday
-bossbar-colour: GREEN
-bossbar-prefix: '<bold><green>Fishing Contest: '
+bossbar-colour: BLUE
+bossbar-prefix: '<bold><aqua>Fishing Contest: '
 
 rewards:
   '1':
-    - MESSAGE:<green>Congratulations for coming 1st! You have received $5000 and 2 diamonds!
-    - MONEY:5000
-    - ITEM:DIAMOND,2
+    - MESSAGE:<green>Congratulations for coming 1st! You have received 5000 exp and 3 diamonds!
+    - EXP:5000
+    - ITEM:DIAMOND,3
   '2':
-    - MESSAGE:<green>Congratulations for coming 1st! You have received $2500 and a diamond!
-    - MONEY:2500
-    - ITEM:DIAMOND,1
+    - MESSAGE:<green>Congratulations for coming 1st! You have received 2500 exp and 2 diamonds!
+    - EXP:2500
+    - ITEM:DIAMOND,2
   '3':
-    - MESSAGE:<yellow>Congratulations for coming 3rd! You have received $1000!
-    - MONEY:1000
+    - MESSAGE:<yellow>Congratulations for coming 3rd! You have received 1000 exp and a diamond!
+    - EXP:1000
+    - ITEM:DIAMOND,1
   participation:
     - MESSAGE:<yellow>Unfortunately only the top 3 players receive awards for fishing. Better luck next time. :)
