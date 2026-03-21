@@ -275,8 +275,7 @@ public class FishUtils {
 
             return region.getName();
         }
-
-        plugin.getLogger().warning("Please install WorldGuard or RedProtect to use region-boosts.");
+        
         return null;
     }
 
