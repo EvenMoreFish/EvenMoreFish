@@ -173,6 +173,12 @@ public class ItemFactory {
         if (randomMaterial != null) {
             return randomMaterial;
         }
+        // item.raw-materials
+        ItemStack randomRawMaterial = checkRandomRawMaterial();
+        if (randomRawMaterial != null) {
+            rawItem = true;
+            return randomRawMaterial;
+        }
         // item.headdb
         ItemStack headDB = checkHeadDB();
         if (headDB != null) {
@@ -333,6 +339,18 @@ public class ItemFactory {
             return null;
         }
         return getItemFromMaterialString(materialStr);
+    }
+
+    private @Nullable ItemStack checkRandomRawMaterial() {
+        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("item.raw-materials"));
+        if (materialStrs.isEmpty()) {
+            return null;
+        }
+        // If there's only one material, skip randomization
+        if (materialStrs.size() == 1) {
+            return getItemFromMaterialString(materialStrs.get(0));
+        }
+        return getRandomItem(materialStrs, this::getItemFromMaterialString);
     }
 
     // HeadDB
