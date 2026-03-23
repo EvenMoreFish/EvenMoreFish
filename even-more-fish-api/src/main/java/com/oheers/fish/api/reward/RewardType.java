@@ -37,7 +37,7 @@ public abstract class RewardType implements RegistryItem {
     }
 
     public boolean unregister() {
-        return unregister(getIdentifier());
+        return EMFRegistry.REWARD_TYPE.unregister(this);
     }
 
     @Override

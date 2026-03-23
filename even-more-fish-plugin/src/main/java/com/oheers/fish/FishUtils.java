@@ -174,15 +174,14 @@ public class FishUtils {
         return fish;
     }
 
-    public static void giveItems(@NotNull List<ItemStack> items, @NotNull Player player) {
+    public static void giveItems(@NotNull List<@Nullable ItemStack> items, @NotNull Player player) {
         if (items.isEmpty()) {
             return; // Early return if the list is null or empty
         }
 
-        // Remove null items and avoid modifying the original list
         List<ItemStack> filteredItems = items.stream()
-                .filter(Objects::nonNull)
-                .toList();
+            .filter(Objects::nonNull)
+            .toList();
 
         // Do not proceed if there are no valid items to give
         if (filteredItems.isEmpty()) {
@@ -193,14 +192,14 @@ public class FishUtils {
         player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_ITEM_PICKUP, 0.5f, 1.5f);
 
         // Add items to the player's inventory
-        Map<Integer, ItemStack> leftoverItems = player.getInventory().addItem(filteredItems.toArray(new ItemStack[0]));
+        Map<Integer, ItemStack> leftoverItems = player.getInventory().addItem(items.toArray(ItemStack[]::new));
 
         // Drop any leftover items in the world
         leftoverItems.values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
     }
 
 
-    public static void giveItems(@NotNull ItemStack[] items, @NotNull Player player) {
+    public static void giveItems(@Nullable ItemStack @NotNull [] items, @NotNull Player player) {
         giveItems(Arrays.asList(items), player);
     }
 

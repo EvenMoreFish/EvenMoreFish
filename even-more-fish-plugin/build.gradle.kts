@@ -23,7 +23,7 @@ description = "A fishing extension bringing an exciting new experience to fishin
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
         vendor.set(JvmVendorSpec.ADOPTIUM)
     }
 }
@@ -117,7 +117,6 @@ sourceSets {
 val copyAddons by tasks.registering(Copy::class) {
     // Make sure the plugin waits for the addons to be built first
     dependsOn(
-        ":addons:even-more-fish-addons-j17:build",
         ":addons:even-more-fish-addons-j21:build",
         ":addons:even-more-fish-addons-itemmodel:build"
     )

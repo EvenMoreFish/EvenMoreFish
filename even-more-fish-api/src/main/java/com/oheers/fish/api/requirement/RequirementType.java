@@ -43,7 +43,7 @@ public abstract class RequirementType implements RegistryItem {
     }
 
     public boolean unregister() {
-        return unregister(getIdentifier());
+        return EMFRegistry.REQUIREMENT_TYPE.unregister(this);
     }
 
     @Override

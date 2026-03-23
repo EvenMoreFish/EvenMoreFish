@@ -3,16 +3,10 @@ package com.oheers.fish.database.data;
 import com.oheers.fish.fishing.items.Fish;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 //For use with caching only
-public class FishRarityKey {
-    private final String fishName;
-    private final String fishRarity;
-
-    public FishRarityKey(final String fishName, final String fishRarity) {
-        this.fishName = fishName;
-        this.fishRarity = fishRarity;
-    }
+public record FishRarityKey(@NotNull String fishName, @NotNull String fishRarity) {
 
 
     @Contract(value = "_, _ -> new", pure = true)
@@ -35,24 +29,16 @@ public class FishRarityKey {
         return new FishRarityKey("", "");
     }
 
-    public String getFishName() {
-        return fishName;
-    }
-
-    public String getFishRarity() {
-        return fishRarity;
-    }
-
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return fishName + "." + fishRarity;
     }
 
     public String toStringDefault() {
         return "FishRarityKey{" +
-                "fishName='" + fishName + '\'' +
-                ", fishRarity='" + fishRarity + '\'' +
-                '}';
+            "fishName='" + fishName + '\'' +
+            ", fishRarity='" + fishRarity + '\'' +
+            '}';
     }
 
 }

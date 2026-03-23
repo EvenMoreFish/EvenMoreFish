@@ -2,7 +2,6 @@ package com.oheers.fish.fishing;
 
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.api.EMFFishEvent;
 import com.oheers.fish.api.events.EMFFishCaughtEvent;
 import com.oheers.fish.api.events.EMFFishHuntEvent;
 import com.oheers.fish.competition.Competition;

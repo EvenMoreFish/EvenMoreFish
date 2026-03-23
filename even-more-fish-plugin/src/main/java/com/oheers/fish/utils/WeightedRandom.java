@@ -81,7 +81,7 @@ public final class WeightedRandom {
         }
 
         // Should never reach here
-        return elements.get(elements.size() - 1);
+        return elements.getLast();
     }
 
     /**

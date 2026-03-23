@@ -52,7 +52,7 @@ public class CommandUtils {
         if (size == 0) {
             return "No Players.";
         } else if (size == 1) {
-            return players.get(0).getName();
+            return players.getFirst().getName();
         } else if (size == Bukkit.getOnlinePlayers().size()) {
             return "All Players";
         } else {

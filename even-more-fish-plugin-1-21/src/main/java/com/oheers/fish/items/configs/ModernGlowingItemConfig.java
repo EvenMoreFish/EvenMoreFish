@@ -21,9 +21,8 @@ public class ModernGlowingItemConfig extends ItemConfig<Boolean> {
 
     @Override
     protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable Map<String, ?> replacements) {
-        return (item, value) -> {
+        return (item, value) ->
             item.editMeta(meta -> meta.setEnchantmentGlintOverride(value));
-        };
     }
 
 }
