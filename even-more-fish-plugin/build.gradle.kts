@@ -121,7 +121,6 @@ val copyAddons by tasks.registering(Copy::class) {
         ":addons:even-more-fish-addons-itemmodel:build"
     )
 
-    from(project(":addons:even-more-fish-addons-j17").layout.buildDirectory.dir("libs"))
     from(project(":addons:even-more-fish-addons-j21").layout.buildDirectory.dir("libs"))
     from(project(":addons:even-more-fish-addons-itemmodel").layout.buildDirectory.dir("libs"))
 
