@@ -134,7 +134,7 @@ public abstract class AddonLoader {
         if (meta == null) {
             throw new IllegalStateException("Addon metadata cannot be null");
         }
-        if (meta.name() == null || meta.name().isBlank()) {
+        if (meta.name().isBlank()) {
             throw new IllegalStateException("Addon name cannot be null or blank");
         }
     }

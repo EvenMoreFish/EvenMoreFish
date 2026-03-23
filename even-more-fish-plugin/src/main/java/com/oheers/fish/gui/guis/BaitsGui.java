@@ -94,7 +94,7 @@ public class BaitsGui extends ConfigGui {
 
     private void applyLore(@NotNull ItemMeta meta, @NotNull BaitHandler bait) {
         Economy economy = bait.getEconomy();
-        if (economy == null || economy.isEmpty()) {
+        if (economy.isEmpty()) {
             return;
         }
         List<String> loreFormat = getPurchaseLoreFormat();

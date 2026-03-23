@@ -317,11 +317,11 @@ public class BaitHandler extends ConfigBase implements IBait {
 
         try {
             ApplicationResult result = BaitNBTManager.applyBaitedRodNBT(fishingRod, this, -1); //updates the state of the rod, if the correct fish was baited
-            if (result.getFishingRod() == null) {
+            if (result.fishingRod() == null) {
                 return;
             }
 
-            fishingRod.setItemMeta(result.getFishingRod().getItemMeta());
+            fishingRod.setItemMeta(result.fishingRod().getItemMeta());
             EvenMoreFish.getInstance().getMetricsManager().incrementBaitsUsed(1);
         } catch (MaxBaitReachedException | MaxBaitsReachedException e) {
             logger.log(Level.WARNING, e.getMessage());

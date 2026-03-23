@@ -87,14 +87,10 @@ public class ApplyBaitsGui extends ConfigGui {
                 return;
             }
 
-            if (result == null || result.getFishingRod() == null) {
-                continue;
-            }
-
             // Remove the bait items from the inventory.
             this.baitInventory.remove(item);
             // Set the handItem variable.
-            handItem = result.getFishingRod();
+            handItem = result.fishingRod();
             changedRod = true;
         }
 

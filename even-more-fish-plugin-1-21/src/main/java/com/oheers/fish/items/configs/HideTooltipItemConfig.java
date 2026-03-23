@@ -21,9 +21,8 @@ public class HideTooltipItemConfig extends ItemConfig<Boolean> {
 
     @Override
     protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable Map<String, ?> replacements) {
-        return (item, value) -> {
+        return (item, value) ->
             item.editMeta(meta -> meta.setHideTooltip(value));
-        };
     }
 
 }

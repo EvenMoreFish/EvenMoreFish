@@ -46,7 +46,7 @@ public class UpdateChecker {
                 return plugin.getPluginMeta().getVersion();
             }
 
-            JSONObject latestVersion = (JSONObject) versions.get(0);
+            JSONObject latestVersion = (JSONObject) versions.getFirst();
             String version = latestVersion.get("version_number").toString();
             int mcVersionSeparatorIndex = version.lastIndexOf("-");
             return version.substring(0, mcVersionSeparatorIndex);

@@ -530,7 +530,7 @@ public class BaitNBTManager {
             int maxBaits = MainConfig.getInstance().getBaitsPerRod() + ConfigMessage.BAIT_ROD_LORE.getMessage().getPlainTextListMessage().size();
             for (int i = 1; i < maxBaits; i++) {
                 try {
-                    lore.remove(lore.size() - 1);
+                    lore.removeLast();
                 } catch (IndexOutOfBoundsException exception) {
                     break;
                 }
@@ -541,7 +541,7 @@ public class BaitNBTManager {
             //compliant version
             for (int i = 1; i < numBaitsApplied; i++) {
                 try {
-                lore.remove(lore.size() - 1);
+                lore.removeLast();
                 } catch (IndexOutOfBoundsException exception) {
                     break;
                 }

@@ -119,7 +119,7 @@ public class Leaderboard implements LeaderboardHandler {
 
     @Override
     public CompetitionEntry getTopEntry() {
-        return getEntries().isEmpty() ? null : getEntries().get(0);
+        return getEntries().isEmpty() ? null : getEntries().getFirst();
     }
 
     /**

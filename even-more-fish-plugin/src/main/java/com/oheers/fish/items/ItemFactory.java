@@ -328,7 +328,7 @@ public class ItemFactory {
         }
         // If there's only one material, skip randomization
         if (materialStrs.size() == 1) {
-            return getItemFromMaterialString(materialStrs.get(0));
+            return getItemFromMaterialString(materialStrs.getFirst());
         }
         return getRandomItem(materialStrs, this::getItemFromMaterialString);
     }
@@ -348,7 +348,7 @@ public class ItemFactory {
         }
         // If there's only one material, skip randomization
         if (materialStrs.size() == 1) {
-            return getItemFromMaterialString(materialStrs.get(0));
+            return getItemFromMaterialString(materialStrs.getFirst());
         }
         return getRandomItem(materialStrs, this::getItemFromMaterialString);
     }
@@ -388,7 +388,7 @@ public class ItemFactory {
             return null;
         }
         if (materialStrs.size() == 1) {
-            return api.getItemHead(materialStrs.get(0));
+            return api.getItemHead(materialStrs.getFirst());
         }
         return getRandomItem(materialStrs, api::getItemHead);
     }
@@ -409,7 +409,7 @@ public class ItemFactory {
             return null;
         }
         if (materialStrs.size() == 1) {
-            return FishUtils.getSkullFromBase64(materialStrs.get(0));
+            return FishUtils.getSkullFromBase64(materialStrs.getFirst());
         }
         return getRandomItem(materialStrs, FishUtils::getSkullFromBase64);
     }
@@ -430,7 +430,7 @@ public class ItemFactory {
             return null;
         }
         if (materialStrs.size() == 1) {
-            return FishUtils.getSkullFromUUIDString(materialStrs.get(0));
+            return FishUtils.getSkullFromUUIDString(materialStrs.getFirst());
         }
         return getRandomItem(materialStrs, FishUtils::getSkullFromUUIDString);
     }

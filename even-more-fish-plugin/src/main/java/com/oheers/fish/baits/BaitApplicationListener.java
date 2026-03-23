@@ -97,7 +97,7 @@ public class BaitApplicationListener implements Listener {
             message.send(event.getWhoClicked());
         }
 
-        ItemStack resultRod = result.getFishingRod();
+        ItemStack resultRod = result.fishingRod();
         if (resultRod == null || resultRod.isEmpty()) {
             return;
         }
@@ -105,7 +105,7 @@ public class BaitApplicationListener implements Listener {
         event.setCancelled(true);
         event.setCurrentItem(resultRod);
 
-        int cursorModifier = result.getCursorItemModifier();
+        int cursorModifier = result.cursorItemModifier();
 
         if (cursor.getAmount() - cursorModifier == 0) {
             event.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
