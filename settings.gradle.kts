@@ -7,7 +7,6 @@ pluginManagement {
 }
 
 // Addons
-include(":addons:even-more-fish-addons-j17")
 include(":addons:even-more-fish-addons-j21")
 include(":addons:even-more-fish-addons-itemmodel")
 
