@@ -1,4 +1,4 @@
-package com.oheers.evenmorefish.addons;
+package com.oheers.evenmorefish.addons.item;
 
 
 import com.oheers.fish.api.addons.ItemAddon;

@@ -22,6 +22,7 @@ repositories {
     maven("https://repo.auxilor.io/repository/maven-public/")
     maven("https://repo.oraxen.com/releases/")
     maven("https://repo.momirealms.net/releases/")
+    maven("https://maven.citizensnpcs.co/repo")
 }
 
 dependencies {
@@ -32,6 +33,9 @@ dependencies {
     compileOnly(libs.ecoitems)
     compileOnly("com.willfp:libreforge:4.81.0:all")
     compileOnly(libs.eco)
+    compileOnly(libs.denizen.api)
+    compileOnly(libs.itemsadder.api)
+    compileOnly(libs.headdatabase.api)
     compileOnly(project(":even-more-fish-api"))
 }
 
