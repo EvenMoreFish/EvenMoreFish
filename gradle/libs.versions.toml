@@ -8,7 +8,7 @@ junit = "6.0.3"
 craftengine = "0.0.67"
 
 shadow = "9.4.0"
-plugin-yml = "0.8.0"
+plugin-yml = "0.9.0"
 grgit = "5.3.3"
 jooq-plugin = "9.0"
 sonar = "7.2.3.7755"
