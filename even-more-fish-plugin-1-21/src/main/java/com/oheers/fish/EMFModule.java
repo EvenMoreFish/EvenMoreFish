@@ -30,7 +30,7 @@ public class EMFModule extends EvenMoreFish{
     @Override
     public void loadCommands() {
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(event -> {
-            event.registrar().register(new MainCommand().get());
+            event.registrar().register(new MainCommand().get(), MainConfig.getInstance().getMainCommandAliases());
             if (MainConfig.getInstance().isAdminShortcutCommandEnabled()) {
                 String shortcut = MainConfig.getInstance().getAdminShortcutCommandName();
                 event.registrar().register(new AdminCommand(shortcut).get());
