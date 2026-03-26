@@ -4,23 +4,28 @@ weight: 5
 item:
   material: white_concrete_powder
 format: <#888888>{name}
-worth-multiplier: 0.2
-broadcast: false
+worth-multiplier: 0
+broadcast:
+  enabled: false
+  only-rods: false
+  range: -1
 catch-type: both
+# Junk has no size.
 size:
-  minSize: 15
-  maxSize: 45
+  minSize: -1
+  maxSize: -1
 
 fish:
   Rusty Bucket:
     item:
-      raw-material: BUCKET
+      material: BUCKET
   Rusty Spoon:
     item:
       material: IRON_SHOVEL
-  Fishing Rod:
+  Lost Fishing Rod:
     item:
       material: FISHING_ROD
+      displayname: Lost Fishing Rod
   Explorers Boat:
     item:
       displayname: Explorer's Boat

@@ -45,7 +45,7 @@ public class MessageConfig extends ConfigBase {
     }
 
     public int getLeaderboardCount() {
-        return getConfig().getInt("leaderboard-count", 5);
+        return getConfig().getInt("leaderboard.leaderboard-count", 5);
     }
 
     @Override
@@ -111,6 +111,20 @@ public class MessageConfig extends ConfigBase {
             .addCustomLogic("9", document -> {
                 document.move("emf-time-remaining", "emf-time-remaining.inactive");
                 document.remove("emf-time-remaining-during-comp");
+            })
+
+            // Config Version 10 - Overhaul
+            .addCustomLogic("10", document -> {
+                document.move("leaderboard-largest-fish", "leaderboard.largest-fish");
+                document.move("leaderboard-largest-total",  "leaderboard.largest-total");
+                document.move("leaderboard-most-fish",  "leaderboard.most-fish");
+                document.move("leaderboard-shortest-fish", "leaderboard.shortest-fish");
+                document.move("leaderboard-shortest-total", "leaderboard.shortest-total");
+                document.move("single-winner", "leaderboard.single-winner");
+                document.move("total-players",  "leaderboard.total-players");
+                document.move("leaderboard-count", "leaderboard.leaderboard-count");
+                document.move("no-winners", "leaderboard.no-winners");
+                document.move("no-records", "leaderboard.no-records");
             })
 
             .build();

@@ -85,18 +85,16 @@ economy:
     multiplier: 1.0
     display: '{amount} Player Point(s)'
   # Allows fish to pay out with claim blocks
-  # Allows fish to pay out with claim blocks
   griefprevention:
     enabled: false
     multiplier: 1.0
     display: '{amount} Claim Block(s)'
 
-# Setting this to change the boosbar style
-# you can use like: NOTCHED_6 NOTCHED_10 NOTCHED_12 NOTCHED_20 PROGRESS
+# Setting this to change the bossbar style
+# Valid options are listed here: https://jd.advntr.dev/api/4.26.1/net/kyori/adventure/bossbar/BossBar.Overlay.html
 barstyle: NOTCHED_10
 
-# Should the user need emf.use_rod permission in order to catch default custom fish. This requires
-# Vault and a permission manager such as LuckPerms.
+# Should the user require the emf.use_rod permission to catch custom fish?
 requires-fishing-permission: false
 
 # Various protections for EMF items.
@@ -123,42 +121,24 @@ sell-gui:
   # Should the items be dropped(false) or sold(true) when a player exits an inventory?
   sell-over-drop: false
 
-# Uncomment the below section to enable these feature. They sett the plugin to only give custom fish when users are
-# in a list of set defined regions (this requires the worldguard/redprotect plugin) and/or in a list of set defined
-# worlds. EvenMoreFish automatically detects your protection plugin so it's important you don't run both at once.
-# Note- Changing this value requires a SERVER RESTART NOT A RELOAD.
-# Uncomment the below section to enable these feature.
-#allowed-regions:
-#  - "fishing"
+# Determines which WorldGuard/RedProtect regions players can catch custom fish inside.
+# This is a list of region names, and is undefined by default.
+allowed-regions: []
+# Determines which worlds players can catch custom fish inside.
+# This is a list of world names, and is undefined by default.
+allowed-worlds: []
 
-#allowed-worlds:
-#  - "world"
-
-# This section defines the boost settings for different regions.
-# Each rarity of fish has a boost multiplier that adjusts its weight in the specified region.
-# To disable a boost, comment out the corresponding line.
-# Region boost settings the rarity is case-sensitive.
-#region-boosts:
-#fishing:
-# The boost multiplier for the "Common" rarity in the "fishing" region.
-# This means the weight of "Common" fish will be multiplied by 0.5.
-# To enable, comment out the line below.
-#Common: 0.5
-
-# The boost multiplier for the "Rare" rarity in the "fishing" region.
-# This means the weight of "Rare" fish will be multiplied by 1.0 (no change).
-# To enable, comment out the line below.
-#Rare: 1.0
-
-# The boost multiplier for the "Epic" rarity in the "fishing" region.
-# This means the weight of "Epic" fish will be multiplied by 3.0.
-# To enable, comment out the line below.
-#Epic: 3.0
-
-# The boost multiplier for the "Legendary" rarity in the "fishing" region.
-# This means the weight of "Legendary" fish will be multiplied by 15.0.
-# To enable, comment out the line below.
-#Legendary: 15.0
+# Defines specific WorldGuard/RedProtect regions which boost certain rarities.
+# This multiplies the catch weight of the configured rarities inside the specified regions.
+region-boosts:
+  # The region named "exampleFishingRegion"
+  exampleFishingRegion:
+    # Multiplies the weight of the "Common" rarity by 0.5. (Half)
+    Common: 0.5
+    # Multiplies the weight of the "Rare" rarity by 1.0. (No change)
+    Rare: 1.0
+    # Multiplies the weight of the "Legendary" rarity by 15.0. (15x)
+    Legendary: 15.0
 
 # Prevents mcMMO from overriding fishing loot, this means treasure won't appear when fish can.
 disable-mcmmo-loot: true
@@ -167,6 +147,7 @@ disable-mcmmo-loot: true
 disable-auraskills-loot: true
 
 # Whether to protect baited fishing rods in an anvil.
+# Prevents effectively voiding the baits applied to the rod.
 protect-baited-rods: true
 
 # General bait configuration
@@ -202,7 +183,7 @@ requirements:
     range: 20
 
 # Customize the plugin's command. Requires a server restart to take effect.
-# NOTE: All names and aliases must use English letters only, as the command library does not support other characters.
+# NOTE: All names and aliases must use English letters only, as modern Minecraft commands do not support other characters.
 command:
   # The /emf admin shortcut command
   admin-shortcut:

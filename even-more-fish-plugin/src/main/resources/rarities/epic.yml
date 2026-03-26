@@ -5,7 +5,10 @@ item:
   material: magenta_concrete_powder
 format: <light_purple>{name}
 worth-multiplier: 0.15
-broadcast: true
+broadcast:
+  enabled: true
+  only-rods: false
+  range: -1
 catch-type: both
 size:
   minSize: 125
@@ -71,6 +74,9 @@ fish:
       material: SUNFLOWER
       lore:
         - <italic><gray>Gives $50 when flipped
+    # Requires the MONEY RewardType to be caught.
+    requirements:
+      reward-type: MONEY
     interact-event:
       - MONEY:50
   Kelpfish:

@@ -1,0 +1,35 @@
+# The default sunday competition.
+# This is a special competition that only runs twice every sunday.
+# See _example.yml for all options.
+
+id: sundayCompetition
+disabled: false
+type: MOST_FISH
+duration: 45
+minimum-players: 5
+days:
+  Sunday:
+    - 00:00
+    - 12:00
+alerts:
+  - 30:00
+  - 15:00
+  - 5:00
+bossbar-colour: RED
+bossbar-prefix: '<bold><red>Sunday Fishing Contest: '
+
+rewards:
+  '1':
+    - MESSAGE:<green>Congratulations for coming 1st! You have received 10000 exp and 12 diamonds!
+    - EXP:10000
+    - ITEM:DIAMOND,12
+  '2':
+    - MESSAGE:<green>Congratulations for coming 1st! You have received 5000 exp and 8 diamonds!
+    - EXP:5000
+    - ITEM:DIAMOND,8
+  '3':
+    - MESSAGE:<yellow>Congratulations for coming 3rd! You have received 2500 exp and 4 diamonds!
+    - EXP:2500
+    - ITEM:DIAMOND,4
+  participation:
+    - MESSAGE:<yellow>Unfortunately only the top 3 players receive awards for fishing. Better luck next time. :)
