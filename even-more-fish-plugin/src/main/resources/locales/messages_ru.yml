@@ -1,22 +1,32 @@
 # EMF's messages are formatted with MiniMessage.
 # For help with the MiniMessage format, see the Adventure Docs: https://docs.papermc.io/adventure/minimessage/format/
-# Sent to players when they fish an EvenMoreFish fish
-fish-caught: <bold>{player} <reset>выловил рыбу {rarity_colour}{length}cm <bold>{rarity}</bold> {rarity_colour}{fish}!
-# By setting a fish's minimum-length to less than 0, you can create a lengthless fish. This is used when a player fishes a lengthless fish.
-lengthless-fish-caught: <bold>{player} <reset>выловил рыбу {rarity_colour}<bold>{rarity}</bold> {rarity_colour}{fish}!
-# Sent to players when they hunt an EvenMoreFish fish
-fish-hunted: <b>{player}</b> has hunted a {length}cm <b>{rarity}</b> {fish}!
-# This is used when a player hunts a lengthless fish.
-lengthless-fish-hunted: <b>{player}</b> has hunted a <b>{rarity}</b> {fish}!
+# Valid Message Tags
+# -s - The message will not be sent. Setting the message to "" has the same effect.
+# [noPrefix] - The message will not have a prefix.
+# The prefix shown in player-facing messages. Keeping the space in is recommended.
+prefix-regular: '<gradient:#E6F9FF:#8FD9FB>[EvenMoreFish] '
+# The prefix shown in admin commands.
+prefix-admin: '<gradient:#FFECEC:#FF5555>[EvenMoreFish] '
+# The prefix shown when errors occur e.g. no permission to run a command.
+prefix-error: '<gradient:#FFECEC:#FF5555>[EvenMoreFish] '
+# Sent to players when they catch a fish with a length.
+fish-caught: <white><b>{player}</b> has fished a {length}cm <b>{rarity}</b> {fish}!
+# Sent to players when they catch a fish without a length.
+lengthless-fish-caught: <white><b>{player}</b> has fished a <b>{rarity}</b> {fish}!
+# Sent to players when they hunt a fish with a length.
+fish-hunted: <white><b>{player}</b> has hunted a {length}cm <b>{rarity}</b> {fish}!
+# Sent to players when they hunt a fish without a length.
+lengthless-fish-hunted: <white><b>{player}</b> has hunted a <b>{rarity}</b> {fish}!
 # Sent to a player when they don't have permission to execute a command.
 no-permission: <red>У вас нет разрешения на выполнение этой команды.
-# The message to be sent when a competition starts and ends
+# Sent when a competition starts.
 contest-start: <reset>Началось соревнование по рыбной ловле в категории {type}.
+# Sent when a competition ends.
 contest-end: <white>Рыболовное соревнование завершилось.
-# The message to be sent when a player joins whilst a competition is going on
+# Sent when a player joins while a competition is active.
 contest-join: <reset>Происходит соревнование по ловле рыбы в категории {type}.
-# Shown to players when a new player takes #1 spot, remove this value or set it to "-s" to disable this message
-new-first: '<reset>{player} теперь №1'
+# Sent when a new player takes the #1 spot in a competition.
+new-first: "<reset>{player} теперь №1"
 # Should this message appear in chat (false) or above the exp bar (true)
 action-bar-message: true
 # What competition types should the action bar be used for? (recommended: MOST_FISH)
@@ -40,9 +50,11 @@ competition-types:
   specific-rarity: '{amount} <b>{rarity}</b> fish'
 # Segments shown in the bossbar when competitions run
 bossbar:
+  # {prefix} is defined inside the competition files.
+  # {time-formatted} is the remaining time, formatted using the values under the "duration" key.
+  # {remaining} is defined below
   layout: '{prefix}<reset>{time-formatted}<reset>{remaining}'
   # For translating the "left" at the end e.g. "5s left" -> "5s kvar"
-  # This is the {remaining} variable.
   remaining: осталось
 # Formatting for time duration.
 duration:
@@ -50,12 +62,6 @@ duration:
   hour: <white>{hour}ч
   minute: <white>{minute}м
   second: <white>{second}с
-# The prefix shown in commands. Keeping the space in is recommended.
-prefix-regular: '<green>[EvenMoreFish] '
-# The prefix shown in admin commands.
-prefix-admin: '<red>[EvenMoreFish] '
-# The prefix shown when errors occur e.g. no permission to run a command.
-prefix-error: '<red>[EvenMoreFish] '
 # This is the format of the lore given to fish when they're caught.
 # {custom-lore} is specified in the fish configs under the lore: section, if the fish has a lore, the lore's lines will
 # replace the {fish_lore}, however if it's empty the line will be removed. DO NOT ADD ANYTHING OTHER THAN THIS VARIABLE
@@ -71,107 +77,108 @@ fisherman-lore:
   - <white>Caught by {player}
 length-lore:
   - <white>Measures {length}cm.
-# The format of the leaderboard after a competition is over (this message doesn't support papi placeholders)
-leaderboard-largest-fish: '<white>#{position} | {player} (<b>{rarity}</b> {fish}, {length}cm)'
-leaderboard-largest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
-leaderboard-most-fish: '<white>#{position} | {player} <white>({amount} <white>fish)'
-leaderboard-shortest-fish: '<white>#{position} | {player} <white>(<b>{rarity}</b> {fish}<white>, {length}cm<white>)'
-leaderboard-shortest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
-# If you're running a competition where there's no leaderboard, this message is sent when there's a winner
-single-winner: <reset>{player} выиграл в соревнование в категории {type}. Поздравляю!
-# This shows the number of players currently in the competition, set to "" to disable.
-total-players: <reset>В таблице лидеров всего {amount} игроков.
-# The number of positions shown in the leaderboard - can't be less than 1.
-leaderboard-count: 5
-# If the player doesn't appear on /emf top, should their position be displayed at the bottom?
-always-show-pos: true
-# Sent to players when nobody got a record during a competition
-no-winners: <reset>Рекорда в рыбалке не было.
-# When an individual player didn't get a record
-no-record: <reset>Ты не поймал ни одной рыбы.
-# Sent when an admin tries to start a competition where the type doesn't exist e.g. /emf admin competition start 600 ABCDEFGH
-invalid-type: '<reset>Это не тип типа конкуренции, доступные типы: MOST_FISH, LARGEST_FISH, SPECIFIC_FISH'
+# The format of the leaderboard after a competition is over
+leaderboard:
+  largest-fish: '<white>#{position} | {player} (<b>{rarity}</b> {fish}, {length}cm)'
+  largest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
+  most-fish: '<white>#{position} | {player} <white>({amount} <white>fish)'
+  shortest-fish: '<white>#{position} | {player} <white>(<b>{rarity}</b> {fish}<white>, {length}cm<white>)'
+  shortest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
+  # Sent when a competition only has a single winner, in place of the leaderboard.
+  single-winner: <white>{player} has won the competition for {type}. Congratulations!
+  # This shows the number of players currently in the competition, set to "" to disable.
+  total-players: <white>There are a total of {amount} player(s) in the leaderboard.
+  # The number of positions shown in the leaderboard - can't be less than 1.
+  leaderboard-count: 5
+  # Sent to players when nobody got a record during a competition
+  no-winners: <white>There were no fishing records.
+  # When an individual player didn't get a record
+  no-record: <white>You didn't catch any fish.
+# Sent when an admin tries to start a competition where the type doesn't exist.
+invalid-type: "<white>That isn't a valid competition type. Click <click:open_url:'https://evenmorefish.github.io/EvenMoreFish/docs/features/competitions/types'><u>here</u></click> for available types."
 # Sent to all online players when not enough players are on to start a competition
-not-enough-players: <reset>В сети недостаточно игроков, чтобы начать запланированное соревнование по рыбной ловле.
+not-enough-players: <white>There are not enough players online to start the scheduled fishing competition.
 # Sent to all players at specific times to show the remaining time left
 # {time_formatted} shows the time (e.g. 5m left, 10m 30s left)
-# {time_raw} is what you input in competitions.yml
+# {time_raw} is the amount of seconds remaining
 time-alert: <reset>До оконцания соревнования в категории {type} осталось {time_formatted}
 # The message sent to players when they've sold their fish in the /emf shop
 fish-sale: <white>Вы продали </white><green>{amount} </green><white>рыбы за </white><green>{sell-price}</green><white>.
 # The message sent to players when they attempt to sell and there are no sellable fish
 no-sellable-fish: <white>You have nothing to sell!
 # Help messages
-# General help (/emf help) - permission node dependant commands will only show if they are formatted with the forward-slash.
-help-format: '[noPrefix]<aqua>{command} <yellow>- {description}'
+# General help (/emf help) - Commands locked behind permissions will not show for players.
+help-format: "[noPrefix]<aqua>{command} <yellow>- <white>{description}"
 help-general:
-  title: '[noPrefix]<gradient:#f1ffed:#f1ffed><st>         </st><b><green> EvenMoreFish </green></b><st><gradient:#73ff6b:#f1ffed>         '
-  top: '[noPrefix]Shows an ongoing competition''s leaderboard.'
-  help: '[noPrefix]Shows you this page.'
-  shop: '[noPrefix]Opens a shop to sell your fish.'
-  toggle: '[noPrefix]Toggles whether or not you receive custom fish.'
-  gui: '[noPrefix]Opens the Main Menu GUI.'
-  admin: '[noPrefix]Admin command help page.'
-  sellall: '[noPrefix]Продать всю рыбу в вашем инвентаре.'
-  next: '[noPrefix]Show how much time is until the next competition.'
-  applybaits: '[noPrefix]Apply baits to your fishing rod.'
+  title: "[noPrefix]<gradient:#f1ffed:#73ff6b><st>         </st> <b><gradient:#E6F9FF:#8FD9FB>EvenMoreFish </b><st><gradient:#73ff6b:#f1ffed>         "
+  top: "[noPrefix]Shows an ongoing competition's leaderboard."
+  help: "[noPrefix]Shows you this page."
+  shop: "[noPrefix]Opens a shop to sell your fish."
+  toggle: "[noPrefix]Toggles various features of the plugin."
+  gui: "[noPrefix]Opens the Main Menu GUI."
+  admin: "[noPrefix]Admin command help page."
+  sellall: "[noPrefix]Продать всю рыбу в вашем инвентаре."
+  next: "[noPrefix]Shows when the next competition will start."
+  applybaits: "[noPrefix]Apply baits to your fishing rod."
   journal: "[noPrefix]View a journal of caught fish and their stats."
 help-list:
-  fish: '[noPrefix]Display all fish in a specific rarity.'
-  rarities: '[noPrefix]Display all rarities.'
+  fish: "[noPrefix]Display all fish in a specific rarity."
+  rarities: "[noPrefix]Display all rarities."
 # Competition help (/emf admin competition help)
 help-competition:
-  start: '[noPrefix]Starts a competition of a specified duration'
-  end: '[noPrefix]Ends the current competition (if there is one)'
+  start: "[noPrefix]Starts a configured competition."
+  end: "[noPrefix]Ends the current competition."
+  test: "[noPrefix]Allows testing a competition with the chosen type."
+  extend: "[noPrefix]Extends the active competition by the chosen duration."
 # Admin help (/emf admin help)
 help-admin:
-  bait: '[noPrefix]Gives baits to a player.'
-  competition: '[noPrefix]Начать или остановить соревнование'
-  clearbaits: '[noPrefix]Removes all applied baits from a fishing rod.'
-  fish: '[noPrefix]Выдать рыбу игроку.'
-  nbt-rod: '[noPrefix]Gives a custom NBT rod to a player required for catching EMF fish.'
-  custom-rod: '[noPrefix]Gives a custom fishing rod to a player.'
-  reload: '[noPrefix]Reloads the plugin''s config files.'
-  migrate: '[noPrefix]Migrate the database from Legacy (V2) to V3'
-  addons: '[noPrefix]Display all addons.'
-  version: '[noPrefix]Displays plugin information.'
-  rawitem: '[noPrefix]Displays the item in your main hand as raw NBT.'
-# Shown when the emf %emf_competition_place_player_*% placeholder requests a position in the leaderboard that doesn't exist
-no-player-in-place: Начните ловить рыбу, чтобы занять это место
-# Shown when the emf %emf_competition_place_fish_*% placeholder requests a position in the leaderboard that doesn't exist
-no-fish-in-place: Start fishing to take this place
-# Shown when the emf %emf_competition_place_size_*% placeholder requests a position in the leaderboard that doesn't exist
-no-size-in-place: Start fishing to take this place
-# Shown when the emf %emf_competition_place_player_*% placeholder is used when there's no competition running
-no-competition-running: Прямо сейчас никаких соревнований не проводится.
-# Shown when the emf %emf_competition_place_fish_*% placeholder is used when there's no competition running
-no-competition-running-fish: No competition running right now.
-# Shown when the emf %emf_competition_place_size_*% placeholder is used when there's no competition running
-no-competition-running-size: No competition running right now.
+  bait: "[noPrefix]Gives baits to a player."
+  competition: "[noPrefix]Начать или остановить соревнование"
+  clearbaits: "[noPrefix]Removes all applied baits from a fishing rod."
+  fish: "[noPrefix]Выдать рыбу игроку."
+  nbt-rod: "[noPrefix]Gives a custom NBT rod to a player required for catching EMF fish."
+  custom-rod: "[noPrefix]Gives a custom fishing rod to a player."
+  reload: "[noPrefix]Reloads the plugin's config files."
+  migrate: "[noPrefix]Migrate the database from Legacy (V2) to V3"
+  addons: "[noPrefix]Display all addons."
+  version: "[noPrefix]Displays plugin information."
+  rawitem: "[noPrefix]Displays the item in your main hand as raw NBT."
+# Shown when the %emf_competition_place_player_*% placeholder requests a position in the leaderboard that doesn't exist
+no-player-in-place: <white>Start fishing to take this place
+# Shown when the %emf_competition_place_fish_*% placeholder requests a position in the leaderboard that doesn't exist
+no-fish-in-place: <white>Start fishing to take this place
+# Shown when the %emf_competition_place_size_*% placeholder requests a position in the leaderboard that doesn't exist
+no-size-in-place: <white>Start fishing to take this place
+# Shown when the %emf_competition_place_player_*% placeholder is used when there's no competition running
+no-competition-running: <white>No competition running right now.
+# Shown when the %emf_competition_place_fish_*% placeholder is used when there's no competition running
+no-competition-running-fish: <white>No competition running right now.
+# Shown when the %emf_competition_place_size_*% placeholder is used when there's no competition running
+no-competition-running-size: <white>No competition running right now.
 # Broadcasted to all players when a competition is extended.
 competition-time-extended: <white>The active competition has been extended by {duration}!
-# HOw should %emf_custom_fishing_status% be formatted?
+# How should %emf_custom_fishing_status% be formatted?
 custom-fishing-enabled: <green>Включено
 custom-fishing-disabled: <red>Отключено
-# How should the %emf_competition_place_fish_*% be formatted?
-emf-competition-fish-format: '{length}см <b>{rarity}</b> {fish}'
-# How should the %emf_competition_place_fish_*% be formatted when there's no length on the fish?
-emf-lengthless-fish-format: '<b>{rarity}</b> {fish}'
+# How should the %emf_competition_place_fish_*% placeholder be formatted when the fish has length?
+emf-competition-fish-format: "<white>{length}cm <b>{rarity}</b> {fish}"
+# How should the %emf_competition_place_fish_*% placeholder be formatted when the fish has no length?
+emf-lengthless-fish-format: "<white><b>{rarity}</b> {fish}"
 # How should %emf_competition_place_fish_*% be formatted during MOST/SPECIFIC_FISH competitions?
-emf-most-fish-format: '{amount} fish'
+emf-most-fish-format: "<white>{amount} fish"
 # What should be displayed for %emf_competition_place_size_*% during the MOST_FISH competition?
 emf-size-during-most-fish: N/A
-# How the %emf_competition_time_left% variable should be formatted.
+# How the %emf_competition_time_left% placeholder should be formatted.
 emf-time-remaining:
   # When there is not an active competition.
-  inactive: 'Осталось времени до следующего соревнования: {days}д, {hours}ч, {minutes}м.'
+  inactive: "<white>Time left until next competition: {days}d, {hours}h, {minutes}m."
   # When there is an active competition.
-  active: 'Time left in competition: {time-left}'
+  active: "<white>Time left in competition: {time-left}"
 # Sent when a player tries to apply too many types of baits to a fishing rod, set in the general section of baits.yml
-max-baits-reached: <white>Вы достигли максимального количества типов приманок для этой удочки.
+max-baits-reached: <white>You have reached the maximum number of unique baits for this fishing rod.
 # Not to be confused with the above, this is sent when the maximum of a specific bait is reached. Define this in baits.yml using "max-baits".
-max-bait-reached: Вы достигли максимального количества {bait_theme}{bait} <reset> приманки, которое может быть применено к одной удочке.
-# Sent when a player catches a bait from fishing (this can be disabled by setting catch-percentage to 0 in baits.yml
+max-bait-reached: <white>You have reached the maximum number of {bait} <white>on this fishing rod.
+# Sent when a player catches a bait from fishing
 bait-catch: <bold>{player} <reset>has caught a {bait_theme}<bold>{bait} <reset>bait!
 # Sent when a bait is applied and a fish is caught.
 bait-use: You have used one of your rod's {bait_theme}<bold>{bait} <reset>bait.
@@ -184,7 +191,7 @@ bait-invalid-rod: <white>Вы не можете насадить приманк�
 # Sent when a bait is purchased from the menu.
 bait-purchased: <white>Вы купили {amount}x {bait} за {price}.
 # Sent when a player attempts to purchase a bait, asking them to confirm.
-bait-confirm-purchase: "<white>Click again within 5 seconds to confirm bait purchase."
+bait-confirm-purchase: <white>Click again within 5 seconds to confirm bait purchase.
 # Sent when a player attempts to purchase a bait they cannot afford.
 bait-cannot-afford: <white>You cannot afford to purchase that bait. You need {price}.
 # Sent when a player attempts to purchase a bait that is not for sale.
@@ -213,48 +220,47 @@ admin:
   no-baits-on-rod: <white>The fishing rod does not have any baits applied.
   # When economy is disabled for the plugin
   economy-disabled: <white>EvenMoreFish's economy features are disabled.
-  # When the specified player can't be found when using -p: parameter.
+  # When the specified player can't be found .
   player-not-found: <white>{player} не найден.
-  # When the specified number in -q: is not a number.
+  # When the specified number is not a number.
   number-format-error: <white>{amount} is not a valid number.
-  # When the specified number in -q: is not within the minecraft stack range (1-64)
+  # When the specified number in item quantity is too large.
   number-range-error: <white>{amount} is not a number between 1-64.
-  # When a command cannot be run from the console
+  # When a command cannot be run from the console.
   cannot-run-on-console: <white>Command cannot be run from console.
   # Sent when a competition is already running when using /emf admin competition start
   competition-already-running: <white>There's already a competition running.
   # When an invalid competition type is provided
-  competition-type-invalid: '<white>That isn''t a competition type. Available Types: https://evenmorefish.github.io/EvenMoreFish/docs/features/competitions/types'
+  competition-type-invalid: "<white>That isn't a valid competition type. Click <click:open_url:'https://evenmorefish.github.io/EvenMoreFish/docs/features/competitions/types'><u>here</u></click> for available types."
   # When an invalid competition id is provided
   competition-id-invalid: <white>That isn't a valid competition id.
   # When the command /emf admin custom-rod is run.
   custom-rod-given: <white>You have given {player} a custom fishing rod.
   # When there's a modrinth update available, don't translate the URL otherwise it won't direct to the correct page.
-  update-available: '<white>There is an update available: https://modrinth.com/plugin/evenmorefish/versions?l=paper'
+  update-available: "<white>There is an update available: https://modrinth.com/plugin/evenmorefish/versions?l=paper"
   # When the plugin is reloaded
   reload: <white>Плагин успешно перезагружен.
   # When checking a list of registered addons. The actual list is added to the end of this message.
-  list-addons: '<white>Registered {addon-type}s: '
+  list-addons: "<white>Registered {addon-type}s: "
 # When an invalid rarity is provided for a command.
 rarity-invalid: <white>That is not a valid rarity!
 # When the player can't access the Fishing Journal
 journal-disabled: <white>The Fishing Journal is not accessible. Please enable the plugin's database.
 # Bait messages
 bait:
-  # How the lore should look ({baits} takes up multiple lines)
+  # How the lore should look ({baits} is a multi-line variable)
   rod-lore:
     - <white>
-    - '<gray>Bait Slots: <yellow>({current_baits}/{max_baits})'
+    - "<gray>Bait Slots: <yellow>({current_baits}/{max_baits})"
     - <white>
-    - '{baits}'
+    - "{baits}"
     - <white>
-  # The default lore of the bait, changing this will not modify existing baits, but with an /emf admin reload, new baits
-  # given out will have this lore. Bait themes can be set as a colour or prefix and be used in this lore.
+  # The default lore of the bait, changing this will not modify existing baits, but any new baits will have this format.
   bait-lore:
     - <white>
-    - 'Increases the catch rates for:'
-    - '{boosts}'
-    - '{lore}'
+    - "Increases the catch rates for:"
+    - "{boosts}"
+    - "{lore}"
     - <white>
     - '<#dadada>Drop onto a fishing rod to apply,'
     - '<#dadada>or hold <u>SHIFT</u> to apply all.'
@@ -272,4 +278,4 @@ bait:
   unused-slot: <gray>► ? <i>Available Slot
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 9
+version: 10
