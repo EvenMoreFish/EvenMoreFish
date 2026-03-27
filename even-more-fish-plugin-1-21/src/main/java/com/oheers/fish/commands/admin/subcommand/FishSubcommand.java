@@ -21,7 +21,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -97,7 +96,7 @@ public class FishSubcommand {
                 fish.getFishRewards().forEach(reward -> reward.rewardPlayer(target, target.getLocation()));
             }
 
-            fish.setFisherman(target.getUniqueId());
+            fish.setFisherman(target);
 
             final ItemStack fishItem = fish.give();
             fishItem.setAmount(amount);

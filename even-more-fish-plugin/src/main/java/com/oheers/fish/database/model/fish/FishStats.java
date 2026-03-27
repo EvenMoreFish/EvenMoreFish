@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 public class FishStats {
@@ -61,7 +60,7 @@ public class FishStats {
     }
 
     public static FishStats empty(Fish fish, LocalDateTime firstCatchTime) {
-        return new FishStats(fish,firstCatchTime,fish.getFisherman(), fish.getLength(),fish.getFisherman(),fish.getLength(), fish.getFisherman(), 0);
+        return new FishStats(fish,firstCatchTime,fish.getFishermanUUID(), fish.getLength(),fish.getFishermanUUID(),fish.getLength(), fish.getFishermanUUID(), 0);
     }
 
     public @NotNull String getFishName() {

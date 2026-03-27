@@ -4,10 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.EMFTimer;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.utils.TimeCode;
-import org.jetbrains.annotations.NotNull;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;

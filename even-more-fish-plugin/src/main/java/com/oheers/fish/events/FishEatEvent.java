@@ -2,8 +2,6 @@ package com.oheers.fish.events;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.fishing.items.Fish;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
 public class FishEatEvent {

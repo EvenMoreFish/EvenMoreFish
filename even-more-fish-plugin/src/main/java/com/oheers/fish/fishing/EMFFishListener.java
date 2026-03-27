@@ -89,12 +89,12 @@ public class EMFFishListener implements Listener {
 
         if (stats.getLongestLength() < fish.getLength()) {
             stats.setLongestLength(fish.getLength());
-            stats.setLongestFisher(fish.getFisherman());
+            stats.setLongestFisher(fish.getFishermanUUID());
         }
 
         if (stats.getShortestLength() > fish.getLength()) {
             stats.setShortestLength(fish.getLength());
-            stats.setShortestFisher(fish.getFisherman());
+            stats.setShortestFisher(fish.getFishermanUUID());
         }
 
         stats.incrementQuantity();

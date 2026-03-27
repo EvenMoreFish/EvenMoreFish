@@ -181,7 +181,7 @@ public abstract class Processor<E extends Event> {
             EvenMoreFish.getInstance().getLogger().severe("Could not determine a fish for " + player.getName());
             return null;
         }
-        fish.setFisherman(player.getUniqueId());
+        fish.setFisherman(player);
         return fish;
     }
 

@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.baits.IBait;
+import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.economy.EconomyType;
 import com.oheers.fish.api.fishing.items.IFish;
@@ -12,7 +13,6 @@ import com.oheers.fish.baits.configs.BaitFileUpdates;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.baits.model.ApplicationResult;
 import com.oheers.fish.baits.model.BaitData;
-import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.exceptions.MaxBaitReachedException;
@@ -281,7 +281,7 @@ public class BaitHandler extends ConfigBase implements IBait {
         }
 
         fish.setWasBaited(true);
-        fish.setFisherman(player.getUniqueId());
+        fish.setFisherman(player);
 
         if (shouldAlertUsage(rarity, fish)) {
             alertUsage(player);
@@ -308,7 +308,7 @@ public class BaitHandler extends ConfigBase implements IBait {
         }
 
         EvenMoreFish.getInstance().debug("Fish: %s was baited".formatted(FishRarityKey.of(fish)));
-        fish.setFisherman(player.getUniqueId());
+        fish.setFisherman(player);
 
         // Only consume bait if this bait actually affected the catch
         if (!shouldConsumeBait(fish)) {
@@ -317,9 +317,6 @@ public class BaitHandler extends ConfigBase implements IBait {
 
         try {
             ApplicationResult result = BaitNBTManager.applyBaitedRodNBT(fishingRod, this, -1); //updates the state of the rod, if the correct fish was baited
-            if (result.fishingRod() == null) {
-                return;
-            }
 
             fishingRod.setItemMeta(result.fishingRod().getItemMeta());
             EvenMoreFish.getInstance().getMetricsManager().incrementBaitsUsed(1);

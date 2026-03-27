@@ -1,8 +1,6 @@
 package com.oheers.fish.selling;
 
 import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.utils.nbt.NbtKeys;
 import com.oheers.fish.utils.nbt.NbtUtils;
 import de.tr7zw.changeme.nbtapi.NBT;
@@ -36,8 +34,8 @@ public class WorthNBT {
             }
 
             // Set Fisherman
-            if (!fish.hasFishermanDisabled() && fish.getFisherman() != null) {
-                emfCompound.setString(NbtKeys.EMF_FISH_PLAYER, fish.getFisherman().toString());
+            if (!fish.hasFishermanDisabled() && fish.getFishermanUUID() != null) {
+                emfCompound.setString(NbtKeys.EMF_FISH_PLAYER, fish.getFishermanUUID().toString());
             }
 
             // Set Fish Name
@@ -68,7 +66,7 @@ public class WorthNBT {
 
         // Set Fisherman
         if (!fish.hasFishermanDisabled()) {
-            UUID fisherman = fish.getFisherman();
+            UUID fisherman = fish.getFishermanUUID();
             if (fisherman != null) {
                 pdc.set(playerKey, PersistentDataType.STRING, fisherman.toString());
             }

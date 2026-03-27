@@ -1,7 +1,6 @@
 package com.oheers.fish.api.config;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

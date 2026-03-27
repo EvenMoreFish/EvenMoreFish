@@ -1,6 +1,5 @@
 package com.oheers.fish.api.reward;
 
-import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.api.registry.RegistryItem;
 import org.bukkit.Location;
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * A way to reward a player for certain actions.

@@ -3,6 +3,7 @@ package com.oheers.fish.api.fishing.items;
 import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,9 +38,19 @@ public interface IFish {
 
     boolean hasFishermanDisabled();
 
-    @Nullable UUID getFisherman();
+    /**
+     * @deprecated Use {@link #getFishermanUUID()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    default @Nullable UUID getFisherman() {
+        return getFishermanUUID();
+    }
+
+    @Nullable UUID getFishermanUUID();
 
     void setFisherman(@Nullable UUID uuid);
+
+    void setFisherman(@Nullable OfflinePlayer fisherman);
 
     boolean isCompExemptFish();
 

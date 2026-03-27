@@ -9,7 +9,6 @@ import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.arguments.BaitArgument;
-import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import io.papermc.paper.command.brigadier.CommandSourceStack;

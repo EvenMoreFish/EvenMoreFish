@@ -4,6 +4,7 @@ import br.net.fabiozumbi12.RedProtect.Bukkit.RedProtect;
 import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.exceptions.InvalidFishException;
@@ -14,7 +15,6 @@ import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.DurationFormatter;
 import com.oheers.fish.utils.ItemUtils;
-import com.oheers.fish.api.Logging;
 import com.oheers.fish.utils.nbt.NbtKeys;
 import com.oheers.fish.utils.nbt.NbtUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -25,6 +25,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import de.tr7zw.changeme.nbtapi.NBT;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
@@ -32,7 +33,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Registry;
-import net.kyori.adventure.sound.Sound;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Skull;
 import org.bukkit.boss.BarStyle;
@@ -125,7 +125,7 @@ public class FishUtils {
             try {
                 fish.setFisherman(UUID.fromString(playerString));
             } catch (IllegalArgumentException exception) {
-                fish.setFisherman(null);
+                fish.setFisherman((OfflinePlayer) null);
             }
         }
         return fish;
@@ -165,10 +165,10 @@ public class FishUtils {
             try {
                 fish.setFisherman(UUID.fromString(playerString));
             } catch (IllegalArgumentException exception) {
-                fish.setFisherman(null);
+                fish.setFisherman((OfflinePlayer) null);
             }
         } else if (fisher != null) {
-            fish.setFisherman(fisher.getUniqueId());
+            fish.setFisherman(fisher);
         }
 
         return fish;

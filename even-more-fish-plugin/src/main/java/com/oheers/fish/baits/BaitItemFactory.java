@@ -4,7 +4,6 @@ import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.items.ItemFactory;
-import com.oheers.fish.items.configs.DisplayNameItemConfig;
 import com.oheers.fish.items.configs.ItemConfig;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;

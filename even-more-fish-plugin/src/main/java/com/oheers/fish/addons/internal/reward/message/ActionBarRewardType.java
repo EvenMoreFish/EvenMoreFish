@@ -1,7 +1,5 @@
 package com.oheers.fish.addons.internal.reward.message;
 
-import com.oheers.fish.api.reward.RewardType;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import uk.firedev.messagelib.message.MessageType;
 
