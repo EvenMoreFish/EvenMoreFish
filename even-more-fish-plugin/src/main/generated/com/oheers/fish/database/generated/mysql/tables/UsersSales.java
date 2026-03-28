@@ -7,6 +7,9 @@ package com.oheers.fish.database.generated.mysql.tables;
 import com.oheers.fish.database.generated.mysql.DefaultSchema;
 import com.oheers.fish.database.generated.mysql.Keys;
 import com.oheers.fish.database.generated.mysql.tables.records.UsersSalesRecord;
+
+import java.util.Collection;
+
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.Identity;
@@ -24,8 +27,6 @@ import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
-
-import java.util.Collection;
 
 
 /**
