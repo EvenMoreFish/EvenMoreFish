@@ -3,12 +3,14 @@ package com.oheers.fish.placeholders.abstracted;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.database.model.user.UserReport;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.function.Function;
 
+@ApiStatus.Internal
 public abstract class UserReportPlaceholder implements EMFPlaceholder {
 
     private final String prefix;
