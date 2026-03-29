@@ -33,7 +33,7 @@ public class CompetitionTypeFormatPlaceholder implements EMFPlaceholder {
     public @Nullable String parsePAPI(@Nullable Player player, @NotNull String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
-            return ConfigMessage.NO_COMPETITION_RUNNING.getMessage().getLegacyMessage();
+            return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage();
         }
 
         CompetitionType type = activeComp.getCompetitionType();
