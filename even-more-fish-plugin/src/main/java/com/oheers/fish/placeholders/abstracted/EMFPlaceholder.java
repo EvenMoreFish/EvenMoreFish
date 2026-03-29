@@ -1,4 +1,4 @@
-package com.oheers.fish.placeholders;
+package com.oheers.fish.placeholders.abstracted;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;

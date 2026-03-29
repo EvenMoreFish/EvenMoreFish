@@ -4,7 +4,7 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.messages.ConfigMessage;
-import com.oheers.fish.placeholders.EMFPlaceholder;
+import com.oheers.fish.placeholders.abstracted.EMFPlaceholder;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
