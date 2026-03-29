@@ -1,6 +1,7 @@
 package com.oheers.fish.placeholders.impl.competition;
 
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.messages.ConfigMessage;
@@ -33,12 +34,7 @@ public class CompetitionPlaceSizePlaceholder implements EMFPlaceholder {
         if (entry == null) {
             return ConfigMessage.PLACEHOLDER_NO_SIZE_IN_PLACE.getMessage().getLegacyMessage();
         }
-        float value = entry.getValue();
-        if (value <= 0) {
-            return null;
-        }
-
-        return String.valueOf(FishUtils.roundDouble(value, 1));
+        return String.valueOf(FishUtils.roundDouble(entry.getValue(), 1));
     }
 
 }
