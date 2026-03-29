@@ -1,4 +1,4 @@
-package com.oheers.fish.placeholders.impl.database;
+package com.oheers.fish.placeholders.impl.database.player;
 
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.database.model.user.UserReport;
