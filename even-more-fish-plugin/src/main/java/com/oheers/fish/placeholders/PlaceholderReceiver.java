@@ -9,6 +9,7 @@ import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import com.oheers.fish.placeholders.impl.CompetitionPlaceSizePlaceholder;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -160,7 +161,7 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage();
         }
 
-        int place = parsePlace(identifier, "competition_place_player_".length());
+        int place = 1;
         if (!leaderboardContainsPlace(activeComp, place)) {
             return ConfigMessage.PLACEHOLDER_NO_PLAYER_IN_PLACE.getMessage().getLegacyMessage();
         }
@@ -209,7 +210,7 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
             return ConfigMessage.PLACEHOLDER_SIZE_DURING_MOST_FISH.getMessage().getLegacyMessage();
         }
 
-        int place = parsePlace(identifier, "competition_place_size_".length());
+        int place = 1;
         if (!leaderboardContainsPlace(activeComp, place)) {
             return ConfigMessage.PLACEHOLDER_NO_SIZE_IN_PLACE.getMessage().getLegacyMessage();
         }
@@ -228,7 +229,7 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING_FISH.getMessage().getLegacyMessage();
         }
 
-        int place = parsePlace(identifier, "competition_place_fish_".length());
+        int place = 1;
 
         CompetitionEntry entry = activeComp.getLeaderboard().getEntry(place);
         if (entry == null) {
@@ -369,13 +370,6 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
     }
 
     /* Helper Methods */
-    private int parsePlace(String identifier, int prefixLength) {
-        try {
-            return Integer.parseInt(identifier.substring(prefixLength));
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-    }
 
     private @NotNull String formatFishMessage(@NotNull Fish fish) {
         EMFMessage message = fish.getLength() == -1
@@ -396,14 +390,11 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player player, @NotNull String identifier) {
-        if (player == null) return "";
-
-        for (HandlerDefinition def : handlers) {
-            if (def.matcher().test(identifier)) {
-                return def.handler().apply(player, identifier);
-            }
+        EMFPlaceholder placeholder = new CompetitionPlaceSizePlaceholder();
+        if (!placeholder.shouldProcess(identifier)) {
+            return "Invalid :D";
         }
-        return null;
+        return placeholder.parsePAPI(player, identifier);
     }
 
     private record HandlerDefinition(
