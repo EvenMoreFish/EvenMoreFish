@@ -58,7 +58,7 @@ give baits to players using the **-p:** variable.
 
 Competitions are scheduled, or staff-triggered events where players compete to get the biggest, fattest fish. It's
 recommended to change the rewards to your liking, and multiple reward types can be given (Command, Message, Money,
-Effect & Item). A customizable bossbar also exists, and kindly vanishes once the competition is up. The permission node
+Effect, Item, [and more](https://evenmorefish.github.io/EvenMoreFish/docs/configuration/reward-types)). A customizable bossbar also exists, and kindly vanishes once the competition is up. The permission node
 for being able to start competitions via /emf admin competition start is: `emf.admin` (defaulting to op)
 
 * ### Shop
@@ -82,8 +82,9 @@ Contributions of any size will be massively appreciated, and help support the pl
 
 ### Translating
 
-To contribute to translations, please create a pull request with a new messages.yml file e.g. `messages_sv.yml`
-or `messages_fr.yml`
+To contribute to translations, please visit our Crowdin page and suggest changes over there.
+
+If Crowdin doesn't have the language you want, feel free to request it, and we will add it as soon as we can.
 
 Cheers, Oheers 
 
