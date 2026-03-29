@@ -1,11 +1,11 @@
-package com.oheers.fish.placeholders.impl;
+package com.oheers.fish.placeholders.impl.competition;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.placeholders.EMFPlaceholder;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +19,7 @@ public class CompetitionPlaceSizePlaceholder implements EMFPlaceholder {
     }
 
     @Override
-    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+    public @Nullable String parsePAPI(@Nullable Player player, @NotNull String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING_SIZE.getMessage().getLegacyMessage();
@@ -29,9 +29,9 @@ public class CompetitionPlaceSizePlaceholder implements EMFPlaceholder {
             return ConfigMessage.PLACEHOLDER_SIZE_DURING_MOST_FISH.getMessage().getLegacyMessage();
         }
 
-        CompetitionEntry entry = fetchEntry(activeComp, identifier, PREFIX_LENGTH, ConfigMessage.PLACEHOLDER_NO_SIZE_IN_PLACE);
+        CompetitionEntry entry = fetchEntry(activeComp, identifier, PREFIX_LENGTH);
         if (entry == null) {
-            return null;
+            return ConfigMessage.PLACEHOLDER_NO_SIZE_IN_PLACE.getMessage().getLegacyMessage();
         }
         float value = entry.getValue();
         if (value <= 0) {
