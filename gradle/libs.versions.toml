@@ -3,11 +3,11 @@ worldguard = "7.0.9"
 worldedit = "7.3.0"
 redprotect = "7.7.3"
 flyway = "10.22.0"
-jooq = "3.19.30"
+jooq = "3.19.31"
 junit = "6.0.3"
 craftengine = "0.0.67"
 
-shadow = "9.4.0"
+shadow = "9.4.1"
 plugin-yml = "0.9.0"
 grgit = "5.3.3"
 jooq-plugin = "9.0"
@@ -45,7 +45,7 @@ playerpoints = "org.black_ixx:playerpoints:3.3.3"
 headdatabase-api = "com.arcaniax:HeadDatabase-API:1.3.2"
 itemsadder-api = "com.github.LoneDev6:API-ItemsAdder:3.6.1"
 nbt-api = "de.tr7zw:item-nbt-api:2.15.6"
-oraxen = "io.th0rgal:oraxen:1.210.0"
+oraxen = "io.th0rgal:oraxen:1.211.0"
 nexo = "com.nexomc:nexo:1.21.0"
 
 # Craft Engine
@@ -107,7 +107,7 @@ flyway = ["flyway-core", "flyway-mysql"]
 connectors = ["connectors-mysql", "connectors-sqlite"]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "9.4.0" }
+shadow = { id = "com.gradleup.shadow", version = "9.4.1" }
 plugin-yml = { id = "de.eldoria.plugin-yml.bukkit", version.ref = "plugin-yml" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
 jooq = { id = "nu.studer.jooq", version = "9.0" }
