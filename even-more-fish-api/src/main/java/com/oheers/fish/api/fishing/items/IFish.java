@@ -94,4 +94,8 @@ public interface IFish {
 
     void setShowInJournal(boolean showInJournal);
 
+    default RarityKey getRarityKey() {
+        return RarityKey.of(this);
+    }
+
 }
