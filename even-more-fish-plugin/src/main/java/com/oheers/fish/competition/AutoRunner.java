@@ -2,6 +2,7 @@ package com.oheers.fish.competition;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.EMFTimer;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.utils.TimeCode;
 
@@ -28,11 +29,13 @@ public class AutoRunner extends EMFTimer {
                     return;
                 }
                 TimeCode now = TimeCode.now();
+                Logging.debug("AutoRunner checking TimeCode: " + now.code());
 
                 // Beginning the competition set for schedule
                 Map<TimeCode, CompetitionFile> competitions = EvenMoreFish.getInstance().getCompetitionQueue().getCompetitions();
                 CompetitionFile file = competitions.get(now);
                 if (file != null && !Competition.isActive()) {
+                    Logging.debug("AutoRunner found a competition with this TimeCode. Starting.");
                     new Competition(file).begin();
                 }
             }
@@ -42,6 +45,7 @@ public class AutoRunner extends EMFTimer {
     private boolean hasMinuteBeenChecked() {
         int nowMinute = LocalTime.now().getMinute();
         if (this.lastMinute != nowMinute) {
+            Logging.debug("AutoRunner minute changed from " + lastMinute + " to " + nowMinute);
             this.lastMinute = nowMinute;
             return false;
         }
