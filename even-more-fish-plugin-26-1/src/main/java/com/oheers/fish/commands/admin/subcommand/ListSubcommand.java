@@ -44,7 +44,7 @@ public class ListSubcommand {
     }
 
     private ArgumentBuilder<CommandSourceStack, ?> fish() {
-        return Commands.literal("com/oheers/fish")
+        return Commands.literal("fish")
             .then(
                 Commands.argument("rarity", new RarityArgument())
                     .executes(ctx -> {

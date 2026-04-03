@@ -79,7 +79,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
 
     @Override
     protected @NonNull ArgumentBuilder<CommandSourceStack, ?> fish() {
-        return new FishSubcommand("com/oheers/fish").get();
+        return new FishSubcommand("fish").get();
     }
 
     @Override

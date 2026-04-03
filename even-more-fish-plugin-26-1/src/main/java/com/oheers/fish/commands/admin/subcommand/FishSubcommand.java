@@ -43,7 +43,7 @@ public class FishSubcommand {
             .then(
                 Commands.argument("rarity", new RarityArgument())
                     .then(
-                        Commands.argument("com/oheers/fish", new FishArgument())
+                        Commands.argument("fish", new FishArgument())
                             // [rarity] [fish-name]
                             .executes(ctx -> execute(ctx, false))
                             .then(
@@ -63,7 +63,7 @@ public class FishSubcommand {
     private int execute(@NotNull CommandContext<CommandSourceStack> ctx, boolean allowConsole) throws CommandSyntaxException {
         CommandSender sender = allowConsole ? ctx.getSource().getSender() : BrigCommandUtils.requirePlayer(ctx);
         Rarity rarity = ctx.getArgument("rarity", Rarity.class);
-        String fishStr = ctx.getArgument("com/oheers/fish", String.class);
+        String fishStr = ctx.getArgument("fish", String.class);
         int amount = BrigCommandUtils.getArgumentOrDefault(ctx, "amount", int.class, 1);
         PlayerSelectorArgumentResolver targets = BrigCommandUtils.getArgumentOrNull(ctx, "targets", PlayerSelectorArgumentResolver.class);
         return execute(
