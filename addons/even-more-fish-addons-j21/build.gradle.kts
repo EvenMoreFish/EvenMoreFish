@@ -26,7 +26,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly(libs.paper.api)
+    compileOnly(libs.paper.api) {
+        version {
+            strictly("1.20.1-R0.1-SNAPSHOT")
+        }
+    }
     compileOnly(libs.nexo)
     compileOnly(libs.oraxen)
     compileOnly(libs.bundles.craftengine)

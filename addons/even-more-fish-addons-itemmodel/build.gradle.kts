@@ -13,7 +13,11 @@ emfAddon {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
+    compileOnly(libs.paper.api) {
+        version {
+            strictly("1.21.3-R0.1-SNAPSHOT")
+        }
+    }
     compileOnly(project(":even-more-fish-plugin"))
 }
 
