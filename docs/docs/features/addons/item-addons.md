@@ -12,6 +12,7 @@ description: Third Party Plugins & Internal addons
 | Oraxen          | oraxen      | `oraxen:id`                | 21       |
 | Nexo            | nexo        | `nexo:id`                  | 21       |
 | CraftEngine     | craftengine | `craftengine:namespace:id` | 21       |
+| MMOItems        | mmoitems    | `mmoitems:type:id`         | 21       |
 
 Example (ItemsAdder):
 ```yaml
