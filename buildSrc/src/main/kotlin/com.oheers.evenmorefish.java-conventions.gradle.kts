@@ -3,13 +3,6 @@ plugins {
     id("maven-publish")
 }
 
-repositories {
-    mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://repo.codemc.io/repository/maven-public/")
-    maven("https://jitpack.io")
-}
-
 //todo, should be in its own plugin
 tasks {
     if (project.name.contains("addons")) {

@@ -9,7 +9,6 @@ allprojects {
             }
         }
         maven("https://repo.papermc.io/repository/maven-public/")
-        maven("https://jitpack.io")
         maven("https://repo.codemc.io/repository/maven-public/")
         maven("https://github.com/deanveloper/SkullCreator/raw/mvn-repo/")
         maven("https://maven.enginehub.org/repo/")

@@ -42,6 +42,7 @@ dependencies {
     compileOnly(libs.itemsadder.api)
     compileOnly(libs.headdatabase.api)
     compileOnly(libs.mmoitems.api)
+    compileOnly(libs.mythic.lib)
     compileOnly(project(":even-more-fish-api"))
 }
 
