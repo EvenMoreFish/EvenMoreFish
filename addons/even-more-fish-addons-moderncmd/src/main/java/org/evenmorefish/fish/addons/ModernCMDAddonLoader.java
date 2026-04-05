@@ -1,4 +1,4 @@
-package org.evenmorefish.addons;
+package org.evenmorefish.fish.addons;
 
 import com.oheers.fish.api.addons.AddonLoader;
 import com.oheers.fish.api.plugin.EMFPlugin;
@@ -6,7 +6,7 @@ import com.oheers.fish.api.utils.system.JavaSpecVersion;
 import com.oheers.fish.api.utils.system.SystemUtils;
 import com.oheers.fish.items.ItemConfigResolver;
 import com.oheers.fish.utils.MinecraftVersionHelper;
-import org.evenmorefish.addons.itemconfig.ModernCustomModelDataItemConfig;
+import org.evenmorefish.fish.addons.itemconfig.ModernCustomModelDataItemConfig;
 
 import java.io.File;
 

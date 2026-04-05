@@ -1,5 +1,5 @@
 plugins {
-    id("com.oheers.evenmorefish.java-conventions")
+    id("org.evenmorefish.fish.java-conventions")
 }
 
 

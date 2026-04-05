@@ -1,4 +1,4 @@
-package com.oheers.evenmorefish.addons;
+package org.evenmorefish.fish.addons;
 
 import com.oheers.fish.items.configs.ItemConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;

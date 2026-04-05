@@ -1,13 +1,13 @@
-package com.oheers.evenmorefish.addons;
+package org.evenmorefish.fish.addons;
 
-import com.oheers.evenmorefish.addons.item.CraftEngineItemAddon;
-import com.oheers.evenmorefish.addons.item.DenizenItemAddon;
-import com.oheers.evenmorefish.addons.item.EcoItemsItemAddon;
-import com.oheers.evenmorefish.addons.item.HeadDatabaseItemAddon;
-import com.oheers.evenmorefish.addons.item.ItemsAdderItemAddon;
-import com.oheers.evenmorefish.addons.item.MMOItemsItemAddon;
-import com.oheers.evenmorefish.addons.item.NexoItemAddon;
-import com.oheers.evenmorefish.addons.item.OraxenItemAddon;
+import org.evenmorefish.fish.addons.item.CraftEngineItemAddon;
+import org.evenmorefish.fish.addons.item.DenizenItemAddon;
+import org.evenmorefish.fish.addons.item.EcoItemsItemAddon;
+import org.evenmorefish.fish.addons.item.HeadDatabaseItemAddon;
+import org.evenmorefish.fish.addons.item.ItemsAdderItemAddon;
+import org.evenmorefish.fish.addons.item.MMOItemsItemAddon;
+import org.evenmorefish.fish.addons.item.NexoItemAddon;
+import org.evenmorefish.fish.addons.item.OraxenItemAddon;
 import com.oheers.fish.api.addons.AddonLoader;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.utils.system.JavaSpecVersion;

@@ -1,4 +1,4 @@
-package com.oheers.evenmorefish.addons.item;
+package org.evenmorefish.fish.addons.item;
 
 import com.oheers.fish.api.addons.ItemAddon;
 import com.willfp.ecoitems.items.EcoItem;

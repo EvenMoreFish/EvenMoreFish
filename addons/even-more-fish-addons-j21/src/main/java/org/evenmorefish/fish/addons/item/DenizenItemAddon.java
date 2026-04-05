@@ -1,4 +1,4 @@
-package com.oheers.evenmorefish.addons.item;
+package org.evenmorefish.fish.addons.item;
 
 
 import com.denizenscript.denizen.objects.ItemTag;

@@ -2,8 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("java-library")
-    id("com.oheers.evenmorefish.plugin-yml-conventions")
-    id("com.oheers.evenmorefish.shadow-conventions")
+    id("org.evenmorefish.fish.plugin-yml-conventions")
+    id("org.evenmorefish.fish.shadow-conventions")
     alias(libs.plugins.run.paper)
 }
 

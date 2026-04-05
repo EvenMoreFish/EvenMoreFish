@@ -10,8 +10,8 @@ plugins {
     //alias(libs.plugins.grgit)
     alias(libs.plugins.jooq)
     alias(libs.plugins.sonar)
-    //id("com.oheers.evenmorefish.shadow-conventions")
-    id("com.oheers.evenmorefish.publishing-conventions")
+    //id("org.evenmorefish.fish.shadow-conventions")
+    id("org.evenmorefish.fish.publishing-conventions")
 }
 
 group = "com.oheers.evenmorefish"

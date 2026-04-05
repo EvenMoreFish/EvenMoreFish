@@ -1,4 +1,4 @@
-package com.oheers.evenmorefish
+package org.evenmorefish.fish
 
 import org.gradle.api.Project
 import org.gradle.api.provider.ListProperty
