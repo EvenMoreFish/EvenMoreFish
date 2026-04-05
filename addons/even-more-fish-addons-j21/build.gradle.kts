@@ -23,6 +23,7 @@ repositories {
     maven("https://repo.oraxen.com/releases/")
     maven("https://repo.momirealms.net/releases/")
     maven("https://maven.citizensnpcs.co/repo")
+    maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
 }
 
 dependencies {
@@ -40,6 +41,7 @@ dependencies {
     compileOnly(libs.denizen.api)
     compileOnly(libs.itemsadder.api)
     compileOnly(libs.headdatabase.api)
+    compileOnly(libs.mmoitems.api)
     compileOnly(project(":even-more-fish-api"))
 }
 
