@@ -9,6 +9,7 @@ pluginManagement {
 // Addons
 include(":addons:even-more-fish-addons-j21")
 include(":addons:even-more-fish-addons-itemmodel")
+include("addons:even-more-fish-addons-moderncmd")
 
 // Plugin Stuff
 include(":even-more-fish-api")

@@ -35,7 +35,7 @@ public class ItemFactory {
     private Consumer<ItemStack> finalChanges = null;
     private @NotNull ItemStack baseItem;
 
-    private final ItemConfig<Float> customModelData;
+    private final ItemConfig<Number> customModelData;
     private final ItemConfig<Integer> itemDamage;
     private final ItemConfig<String> displayName;
     private final ItemConfig<Color> dyeColour;
@@ -212,7 +212,7 @@ public class ItemFactory {
 
     // Customization Methods //
 
-    public ItemConfig<Float> getCustomModelData() {
+    public ItemConfig<Number> getCustomModelData() {
         return customModelData;
     }
 

@@ -27,7 +27,7 @@ public class ItemConfigResolver {
 
     private static final ItemConfigResolver instance = new ItemConfigResolver();
 
-    private @NotNull Function<Section, ItemConfig<Float>> customModelDataResolver = CustomModelDataItemConfig::new;
+    private @NotNull Function<Section, ItemConfig<Number>> customModelDataResolver = CustomModelDataItemConfig::new;
     private @NotNull Function<Section, ItemConfig<String>> displayNameResolver = DisplayNameItemConfig::new;
     private @NotNull Function<Section, ItemConfig<Color>> dyeColourResolver = DyeColourItemConfig::new;
     private @NotNull Function<Section, ItemConfig<Map<Enchantment, Integer>>> enchantmentsResolver = EnchantmentsItemConfig::new;
@@ -54,11 +54,11 @@ public class ItemConfigResolver {
         return resolver == null ? null : resolver.apply(section);
     }
 
-    public @NotNull ItemConfig<Float> getCustomModelData(@NotNull Section section) {
+    public ItemConfig<Number> getCustomModelData(@NotNull Section section) {
         return resolve(customModelDataResolver, section);
     }
 
-    public void setCustomModelDataResolver(@NotNull Function<Section, ItemConfig<Float>> customModelDataResolver) {
+    public void setCustomModelDataResolver(@NotNull Function<Section, ItemConfig<Number>> customModelDataResolver) {
         this.customModelDataResolver = customModelDataResolver;
     }
 
