@@ -12,14 +12,6 @@ emfAddon {
     dependencies = listOf()
 }
 
-repositories {
-    maven("https://repo.nexomc.com/releases/")
-    maven("https://repo.auxilor.io/repository/maven-public/")
-    maven("https://repo.oraxen.com/releases/")
-    maven("https://repo.momirealms.net/releases/")
-    maven("https://maven.citizensnpcs.co/repo")
-}
-
 dependencies {
     compileOnly(libs.paper.api) {
         version {

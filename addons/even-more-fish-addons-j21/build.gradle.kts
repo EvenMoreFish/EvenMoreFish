@@ -17,15 +17,6 @@ emfAddon {
     )
 }
 
-repositories {
-    maven("https://repo.nexomc.com/releases/")
-    maven("https://repo.auxilor.io/repository/maven-public/")
-    maven("https://repo.oraxen.com/releases/")
-    maven("https://repo.momirealms.net/releases/")
-    maven("https://maven.citizensnpcs.co/repo")
-    maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
-}
-
 dependencies {
     compileOnly(libs.paper.api) {
         version {
