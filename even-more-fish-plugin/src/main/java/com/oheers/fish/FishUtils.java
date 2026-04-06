@@ -192,7 +192,7 @@ public class FishUtils {
         player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_ITEM_PICKUP, 0.5f, 1.5f);
 
         // Add items to the player's inventory
-        Map<Integer, ItemStack> leftoverItems = player.getInventory().addItem(items.toArray(ItemStack[]::new));
+        Map<Integer, ItemStack> leftoverItems = player.getInventory().addItem(filteredItems.toArray(ItemStack[]::new));
 
         // Drop any leftover items in the world
         leftoverItems.values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
