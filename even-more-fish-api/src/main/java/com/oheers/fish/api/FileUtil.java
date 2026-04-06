@@ -371,7 +371,11 @@ public class FileUtil {
     }
 
     private static List<String> getFilesFromFileSystem(URL dirURL, String dirPath) {
-        return Arrays.stream(new File(dirURL.getPath()).listFiles())
+        File[] files = new File(dirURL.getPath()).listFiles();
+        if (files == null || files.length == 0) {
+            return List.of();
+        }
+        return Arrays.stream(files)
                 .map(File::getName)
                 .map(name -> dirPath + "/" + name)
                 .toList();

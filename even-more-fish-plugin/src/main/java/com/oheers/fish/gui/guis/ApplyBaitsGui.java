@@ -59,6 +59,9 @@ public class ApplyBaitsGui extends ConfigGui {
         boolean changedRod = false;
         List<String> ignoredBaits = new ArrayList<>();
         for (ItemStack item : baitInventory.getContents()) {
+            if (item == null || item.isEmpty()) {
+                continue;
+            }
             BaitHandler bait = BaitManager.getInstance().getBait(item);
             if (bait == null) {
                 continue;

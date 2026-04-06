@@ -10,11 +10,13 @@ import com.oheers.fish.utils.TimeCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
@@ -51,7 +53,7 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
             }
             EvenMoreFish.getInstance().debug(
                     Level.WARNING,
-                    file.getFile().getName() + "'s timings are not configured properly. " +
+                Optional.ofNullable(file.getFile()).map(File::getName).orElse("Competition") + "'s timings are not configured properly. " +
                             "This competition will never automatically start."
             );
         });

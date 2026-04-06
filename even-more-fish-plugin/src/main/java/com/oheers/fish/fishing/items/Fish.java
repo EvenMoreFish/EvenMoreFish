@@ -37,7 +37,7 @@ public class Fish implements IFish {
     private final String name;
     private final Rarity rarity;
     private final ItemFactory factory;
-    private OfflinePlayer fisherman;
+    private @Nullable OfflinePlayer fisherman;
     private float length;
 
     private @Nullable List<Reward> actionRewards = null;
@@ -152,10 +152,13 @@ public class Fish implements IFish {
      */
     @Override
     public @NotNull ItemStack give() {
+        if (fisherman == null) {
+            return factory.createItem();
+        }
         return factory.createItem(fisherman.getUniqueId());
     }
 
-    private OfflinePlayer getFishermanPlayer() {
+    private @Nullable OfflinePlayer getFishermanPlayer() {
         return fisherman;
     }
 
@@ -412,7 +415,7 @@ public class Fish implements IFish {
 
     @Override
     public @Nullable UUID getFishermanUUID() {
-        return fisherman.getUniqueId();
+        return fisherman == null ? null : fisherman.getUniqueId();
     }
 
     @Override

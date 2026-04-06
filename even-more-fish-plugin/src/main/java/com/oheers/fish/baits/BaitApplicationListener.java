@@ -98,7 +98,7 @@ public class BaitApplicationListener implements Listener {
         }
 
         ItemStack resultRod = result.fishingRod();
-        if (resultRod == null || resultRod.isEmpty()) {
+        if (resultRod.isEmpty()) {
             return;
         }
 

@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.requirement.RequirementType;
+import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +14,11 @@ public class RegionRequirementType extends RequirementType {
 
     @Override
     public boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values) {
-        return FishUtils.checkRegion(context.getHookOrPlayerLocation(), values);
+        Location location = context.getHookOrPlayerLocation();
+        if (location == null) {
+            return false;
+        }
+        return FishUtils.checkRegion(location, values);
     }
 
     @Override

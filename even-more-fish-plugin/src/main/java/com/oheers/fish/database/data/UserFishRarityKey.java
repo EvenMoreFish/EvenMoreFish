@@ -2,6 +2,7 @@ package com.oheers.fish.database.data;
 
 import com.oheers.fish.fishing.items.Fish;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public record UserFishRarityKey(int userId, @NotNull String fishName, @NotNull String fishRarity) {
 
@@ -34,7 +35,7 @@ public record UserFishRarityKey(int userId, @NotNull String fishName, @NotNull S
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return userId + "." + fishName + "." + fishRarity;
     }
 
