@@ -85,10 +85,7 @@ public abstract class EvenMoreFish extends EMFPlugin {
     @Override
     public void onLoad() {
         if (!NBT.preloadApi()) {
-            // Temporarily ignore for 26.1.1 servers. NBT-API works but currently isn't marked as supporting this version.
-            if (!MinecraftVersion.isNewerThan(MinecraftVersion.MC1_21_R7)) {
-                throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
-            }
+            throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
         }
         instance = this;
         loadCommands();
