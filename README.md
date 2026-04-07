@@ -82,9 +82,9 @@ Contributions of any size will be massively appreciated, and help support the pl
 
 ### Translating
 
-To contribute to translations, please visit our Crowdin page and suggest changes over there.
+To contribute to translations, please visit our [Crowdin page](https://crowdin.com/project/evenmorefish) and suggest changes over there.
 
 If Crowdin doesn't have the language you want, feel free to request it, and we will add it as soon as we can.
 
-Cheers, Oheers 
+Cheers, Oheers
 
