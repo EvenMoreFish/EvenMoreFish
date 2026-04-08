@@ -5,6 +5,7 @@ import com.oheers.fish.commands.MainCommand;
 import com.oheers.fish.config.MainConfig;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import org.bukkit.Bukkit;
 
 public class EMFModule extends EvenMoreFish {
     @Override
@@ -30,6 +31,11 @@ public class EMFModule extends EvenMoreFish {
         }
         String adminShortcut = MainConfig.getInstance().getAdminShortcutCommandName();
         new AdminCommand(adminShortcut).getCommand().register(this);
+    }
+
+    @Override
+    public void resendCommands() {
+        Bukkit.getOnlinePlayers().forEach(CommandAPI::updateRequirements);
     }
 
     @Override

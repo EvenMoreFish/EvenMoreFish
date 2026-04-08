@@ -1,5 +1,6 @@
 package com.oheers.fish.commands;
 
+import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.messages.ConfigMessage;
 import org.bukkit.command.CommandSender;

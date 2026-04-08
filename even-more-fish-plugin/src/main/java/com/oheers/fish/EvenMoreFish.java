@@ -100,6 +100,8 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
     public abstract void registerCommands();
 
+    public abstract void resendCommands();
+
     @Override
     public void onEnable() {
         enableCommands();

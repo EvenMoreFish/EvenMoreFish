@@ -75,6 +75,7 @@ public class MainCommand {
             ConfigMessage.HELP_GENERAL_NEXT::getMessage
         );
         return new CommandAPICommand(name)
+            .withRequirement(sender -> sender.hasPermission(UserPerms.NEXT) && EvenMoreFish.getInstance().getCompetitionQueue().hasTimings())
             .withPermission(UserPerms.NEXT)
             .executes(info -> {
                 EMFMessage message = Competition.getNextCompetitionMessage();

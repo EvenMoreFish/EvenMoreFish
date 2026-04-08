@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.oheers.fish.Checks;
+import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.MainCommandProvider;
@@ -81,7 +82,7 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
     @Override
     public @NotNull ArgumentBuilder<CommandSourceStack, ?> next() {
         return Commands.literal(nextName())
-            .requires(stack -> stack.getSender().hasPermission(UserPerms.NEXT))
+            .requires(stack -> stack.getSender().hasPermission(UserPerms.NEXT) && EvenMoreFish.getInstance().getCompetitionQueue().hasTimings())
             .executes(ctx -> {
                 EMFMessage message = Competition.getNextCompetitionMessage();
                 message.prependMessage(PrefixType.DEFAULT.getPrefix());

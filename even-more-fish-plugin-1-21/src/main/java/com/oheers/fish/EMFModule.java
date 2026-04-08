@@ -9,6 +9,8 @@ import com.oheers.fish.items.configs.HideTooltipItemConfig;
 import com.oheers.fish.items.configs.ItemRarityItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 @SuppressWarnings("UnstableApiUsage")
 public class EMFModule extends EvenMoreFish{
@@ -46,6 +48,11 @@ public class EMFModule extends EvenMoreFish{
     @Override
     public void registerCommands() {
         //nothing, we register in onLoad()
+    }
+
+    @Override
+    public void resendCommands() {
+        Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
     }
 
     @Override

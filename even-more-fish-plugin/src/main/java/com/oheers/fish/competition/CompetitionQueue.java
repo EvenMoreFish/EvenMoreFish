@@ -124,5 +124,9 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
         return next == null ? competitions.firstKey() : next;
     }
 
+    public boolean hasTimings() {
+        return !competitions.isEmpty();
+    }
+
 }
 
