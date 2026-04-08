@@ -232,6 +232,8 @@ public abstract class EvenMoreFish extends EMFPlugin {
             ConfigMessage.RELOAD_SUCCESS.getMessage().send(sender);
         }
 
+        resendCommands();
+
         // This event is not cancellable.
         new EMFPluginReloadEvent().callEvent();
     }
