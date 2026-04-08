@@ -430,7 +430,7 @@ public class BaitHandler extends ConfigBase implements IBait {
      * Fetches the economy that this bait is purchased with.
      */
     @Override
-    public @NotNull Economy getEconomy() {
+    public @Nullable Economy getEconomy() {
         return this.economy;
     }
 
