@@ -38,6 +38,9 @@ public final class RarityKey {
         }
         IFish fish = rarity.getFish(fishStr);
         if (fish == null) {
+            fish = rarity.getFish(fishStr.replace("_", " "));
+        }
+        if (fish == null) {
             throw new IllegalArgumentException("Rarity " + rarityStr + " has no fish named " + fishStr);
         }
         return new RarityKey(rarity, fish);
@@ -55,6 +58,16 @@ public final class RarityKey {
      */
     public @NotNull IRarity getRarity() {
         return this.rarity;
+    }
+
+    /**
+     * @return A String to represent this key.
+     */
+    public String toString() {
+        return String.join(":",
+            this.rarity.getId().toLowerCase(),
+            this.fish.getName().toLowerCase().replace(" ", "_")
+        );
     }
 
 }
