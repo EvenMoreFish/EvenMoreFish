@@ -57,11 +57,4 @@ public final class RarityKey {
         return this.rarity;
     }
 
-    /**
-     * @return A {@link NamespacedKey} with the rarity ID as the namespace and the fish name as the key.
-     */
-    public @NotNull NamespacedKey toNamespacedKey() {
-        return new NamespacedKey(this.rarity.getId(), this.fish.getName());
-    }
-
 }
