@@ -4,9 +4,12 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.EMFCompetitionEndEvent;
 import com.oheers.fish.api.EMFCompetitionStartEvent;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
+import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.model.CompetitionReport;
@@ -18,6 +21,8 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -27,6 +32,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -37,10 +43,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Competition {
+
+    private static final File dataFile = new File(EvenMoreFish.getInstance().getDataFolder(), "competition-data.yml.tmp");
 
     private static Competition active;
     private boolean originallyRandom;
@@ -208,6 +217,10 @@ public class Competition {
     }
 
     public void end(boolean startFail) {
+        end(startFail, false);
+    }
+
+    public void end(boolean startFail, boolean pluginDisable) {
         if (ended()) {
             return;
         }
@@ -224,6 +237,11 @@ public class Competition {
             return;
         }
 
+        if (pluginDisable && MainConfig.getInstance().shouldCompetitionResume()) {
+            saveToFile();
+            return;
+        }
+
         try {
             fireEndEvent();
             notifyPlayers();
@@ -233,9 +251,9 @@ public class Competition {
             leaderboard.clear();
         } catch (Exception exception) {
             EvenMoreFish.getInstance().getLogger().log(
-                    Level.SEVERE,
-                    "An exception was thrown while the competition was being ended!",
-                    exception
+                Level.SEVERE,
+                "An exception was thrown while the competition was being ended!",
+                exception
             );
         } finally {
             active = null;
@@ -678,6 +696,75 @@ public class Competition {
             return null;
         }
         return configRarities;
+    }
+
+    public void saveToFile() {
+        EvenMoreFish plugin = EvenMoreFish.getInstance();
+        ConfigBase base = new ConfigBase(dataFile, plugin, false);
+
+        YamlDocument config = base.getConfig();
+        config.set("comp-id", getCompetitionFile().getId());
+        config.set("total-duration", maxDuration);
+        config.set("time-left", timeLeft);
+        for (CompetitionEntry entry : leaderboard.getEntries()) {
+            UUID uuid = entry.getPlayer();
+            config.set("leaderboard." + uuid + ".fish", entry.getFish().getRarityKey().toString());
+            config.set("leaderboard." + uuid + ".value", entry.getValue());
+            config.set("leaderboard." + uuid + ".time", entry.getTime());
+        }
+        base.save();
+    }
+
+    public static void resumeFromFile() {
+        EvenMoreFish plugin = EvenMoreFish.getInstance();
+        if (!dataFile.exists()) {
+            System.out.println("File did not exist.");
+            return;
+        }
+        System.out.println("File did exist. Attempting to rebuild competition.");
+        ConfigBase base = new ConfigBase(dataFile, plugin, false);
+
+        YamlDocument config = base.getConfig();
+        String id = config.getString("comp-id");
+        long totalDuration = config.getLong("total-duration");
+        long timeLeft = config.getLong("time-left");
+
+        CompetitionFile file = plugin.getCompetitionQueue().getFileFromId(id);
+        if (file == null) {
+            Logging.warn("Failed to resume competition. It is no longer configured?");
+            //dataFile.delete();
+            return;
+        }
+
+        Competition competition = new Competition(file);
+        competition.timeLeft = timeLeft;
+        competition.maxDuration = totalDuration;
+        competition.adminStarted = true;
+
+        competition.begin();
+
+        Section leaderboardSection = config.createSection("leaderboard");
+        leaderboardSection.getRoutesAsStrings(false).forEach(key -> {
+            Section entrySection = leaderboardSection.createSection(key);
+            UUID player;
+            try {
+                player = UUID.fromString(key);
+            } catch (IllegalArgumentException exception) {
+                //dataFile.delete();
+                return;
+            }
+            String fishStr = entrySection.getString("fish");
+            RarityKey rarityKey = RarityKey.of(fishStr);
+            if (rarityKey == null) {
+                Logging.warn("Failed to restore leaderboard entry. Fish " + fishStr + " is no longer configured?");
+                return;
+            }
+            CompetitionEntry entry = new CompetitionEntry(player, (Fish) rarityKey.getFish(), competition.competitionType);
+            entry.value = entrySection.getFloat("value");
+            entry.time = entrySection.getLong("time");
+            competition.leaderboard.addEntry(entry);
+        });
+        //dataFile.delete();
     }
 
 }
