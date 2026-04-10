@@ -732,7 +732,7 @@ public class Competition {
         CompetitionFile file = plugin.getCompetitionQueue().getFileFromId(id);
         if (file == null) {
             Logging.warn("Failed to resume competition. It is no longer configured?");
-            //dataFile.delete();
+            dataFile.delete();
             return;
         }
 
@@ -750,7 +750,7 @@ public class Competition {
             try {
                 player = UUID.fromString(key);
             } catch (IllegalArgumentException exception) {
-                //dataFile.delete();
+                dataFile.delete();
                 return;
             }
             String fishStr = entrySection.getString("fish");
@@ -764,7 +764,7 @@ public class Competition {
             entry.time = entrySection.getLong("time");
             competition.leaderboard.addEntry(entry);
         });
-        //dataFile.delete();
+        dataFile.delete();
     }
 
 }
