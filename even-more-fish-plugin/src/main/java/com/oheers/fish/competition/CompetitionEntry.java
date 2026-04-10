@@ -9,8 +9,8 @@ public class CompetitionEntry {
 
     private final UUID player;
     private final Fish fish;
-    private long time;
-    private float value;
+    protected long time;
+    protected float value;
     private final CompetitionType type;
 
     public CompetitionEntry(UUID player, Fish fish, CompetitionType type) {

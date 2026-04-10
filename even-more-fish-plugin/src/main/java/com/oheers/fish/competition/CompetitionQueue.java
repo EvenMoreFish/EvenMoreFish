@@ -128,5 +128,17 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
         return !competitions.isEmpty();
     }
 
+    public @Nullable CompetitionFile getFileFromId(@Nullable String id) {
+        if (id == null) {
+            return null;
+        }
+        for (CompetitionFile file : competitions.values()) {
+            if (file.getId().equalsIgnoreCase(id)) {
+                return file;
+            }
+        }
+        return null;
+    }
+
 }
 

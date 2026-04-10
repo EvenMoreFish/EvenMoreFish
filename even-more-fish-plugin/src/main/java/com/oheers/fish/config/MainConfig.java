@@ -401,6 +401,10 @@ public class MainConfig extends ConfigBase {
         return getConfig().getString("economy." + type.getIdentifier().toLowerCase() + ".display");
     }
 
+    public boolean shouldCompetitionResume() {
+        return getConfig().getBoolean("fishing.resume-competition-on-restart", false);
+    }
+
     @Override
     public UpdaterSettings getUpdaterSettings() {
         return UpdaterSettings.builder(super.getUpdaterSettings())
