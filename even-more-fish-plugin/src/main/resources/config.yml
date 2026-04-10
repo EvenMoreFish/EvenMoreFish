@@ -17,6 +17,7 @@ fishing:
 
   # Makes competitions resume after a server restart.
   # This does not work if the server crashes.
+  # Experimental. May be changed or removed at any time.
   resume-competition-on-restart: false
 
   # Should fish be caught from fishing rods?

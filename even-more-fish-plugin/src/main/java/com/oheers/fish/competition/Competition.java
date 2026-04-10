@@ -29,6 +29,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -698,6 +699,7 @@ public class Competition {
         return configRarities;
     }
 
+    @ApiStatus.Experimental
     public void saveToFile() {
         EvenMoreFish plugin = EvenMoreFish.getInstance();
         ConfigBase base = new ConfigBase(dataFile, plugin, false);
@@ -715,13 +717,12 @@ public class Competition {
         base.save();
     }
 
+    @ApiStatus.Experimental
     public static void resumeFromFile() {
         EvenMoreFish plugin = EvenMoreFish.getInstance();
         if (!dataFile.exists()) {
-            System.out.println("File did not exist.");
             return;
         }
-        System.out.println("File did exist. Attempting to rebuild competition.");
         ConfigBase base = new ConfigBase(dataFile, plugin, false);
 
         YamlDocument config = base.getConfig();

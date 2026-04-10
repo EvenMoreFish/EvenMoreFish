@@ -161,7 +161,6 @@ public abstract class EvenMoreFish extends EMFPlugin {
         registerCommands();
 
         // Attempt to resume a competition if the temporary file exists.
-        System.out.println("Attempting to resume competition.");
         Competition.resumeFromFile();
 
         getLogger().info(() -> "EvenMoreFish by Oheers : Enabled");
