@@ -10,6 +10,8 @@ import com.oheers.fish.items.configs.FireResistantItemConfig;
 import com.oheers.fish.items.configs.HideTooltipItemConfig;
 import com.oheers.fish.items.configs.ItemRarityItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
+import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -77,6 +79,13 @@ public class EMFModule extends EvenMoreFish{
             PlayerProfile profile = Bukkit.createProfile(uuid, null);
             meta.setPlayerProfile(profile);
         });
+        if (MinecraftVersion.isAtLeastVersion(MinecraftVersion.MC1_21_R4)) {
+            NBT.modifyComponents(skull, nbt -> {
+                nbt.getOrCreateCompound("minecraft:tooltip_display")
+                    .getStringList("hidden_components")
+                    .add("minecraft:profile");
+            });
+        }
         return skull;
     }
 
