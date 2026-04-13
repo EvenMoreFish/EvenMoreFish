@@ -235,7 +235,11 @@ public class FishJournalGui extends ConfigGui {
 
     public enum SortType {
         ALPHABETICAL(Comparator.comparing(Rarity::getId), Comparator.comparing(Fish::getName)),
-        WEIGHT(Comparator.comparingDouble(Rarity::getWeight).reversed(), Comparator.comparingDouble(Fish::getWeight).reversed());
+        // First sort by weight, and then sort alphabetically as a fallback.
+        WEIGHT(
+            Comparator.comparingDouble(Rarity::getWeight).reversed().thenComparing(Rarity::getId),
+            Comparator.comparingDouble(Fish::getWeight).reversed().thenComparing(Fish::getName)
+        );
 
         private final Comparator<Rarity> rarityComparator;
         private final Comparator<Fish> fishComparator;
