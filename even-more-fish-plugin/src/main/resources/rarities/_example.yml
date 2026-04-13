@@ -140,3 +140,12 @@ fish:
         - LUKEWARM_OCEAN
         - OCEAN
         - WARM_OCEAN
+
+    # You can override the lore configured in messages.yml's fish-lore for each fish.
+    # All variables from the fish-lore message are supported.
+    lore-override:
+      - '{fisherman_lore}'
+      - '{length_lore}'
+      - ''
+      - '{fish_lore}'
+      - '<b>{rarity}'
