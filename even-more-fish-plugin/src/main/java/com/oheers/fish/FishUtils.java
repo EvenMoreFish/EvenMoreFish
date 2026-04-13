@@ -63,7 +63,7 @@ import java.util.concurrent.TimeUnit;
 public class FishUtils {
 
     private static final DurationFormatter durationFormatter = new DurationFormatter(TimeUnit.SECONDS);
-    private static final UUID B64_SKULL_UUID = UUID.fromString("07cd5534-e542-4fbf-861c-67a144ecf776");
+    public static final UUID B64_SKULL_UUID = UUID.fromString("07cd5534-e542-4fbf-861c-67a144ecf776");
 
     // Enums in 1.20.1 API that are not enums in modern versions.
     // Used in getEnumValue and will throw if any of these match.
@@ -425,22 +425,11 @@ public class FishUtils {
     }
 
     public static @NotNull ItemStack getSkullFromBase64(@NotNull String base64) {
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        skull.editMeta(SkullMeta.class, meta -> {
-            PlayerProfile profile = Bukkit.createProfile(B64_SKULL_UUID, "EMFSkull");
-            profile.setProperty(new ProfileProperty("textures", base64));
-            meta.setPlayerProfile(profile);
-        });
-        return skull;
+        return EvenMoreFish.getInstance().getSkullFromBase64(base64);
     }
 
     public static @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        skull.editMeta(SkullMeta.class, meta -> {
-            PlayerProfile profile = Bukkit.createProfile(uuid, "EMFSkull");
-            meta.setPlayerProfile(profile);
-        });
-        return skull;
+        return EvenMoreFish.getInstance().getSkullFromUUID(uuid);
     }
 
     public static @NotNull ItemStack getSkullFromUUIDString(@NotNull String uuidString) {

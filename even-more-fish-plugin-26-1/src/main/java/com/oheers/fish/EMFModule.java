@@ -1,5 +1,7 @@
 package com.oheers.fish;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.MainCommand;
 import com.oheers.fish.config.MainConfig;
@@ -8,9 +10,18 @@ import com.oheers.fish.items.configs.FireResistantItemConfig;
 import com.oheers.fish.items.configs.HideTooltipItemConfig;
 import com.oheers.fish.items.configs.ItemRarityItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 public class EMFModule extends EvenMoreFish {
 
@@ -57,6 +68,40 @@ public class EMFModule extends EvenMoreFish {
     @Override
     public void disableCommands() {
         //nothing
+    }
+
+    // Can probably be moved somewhere else, but they're here for now.
+
+    @SuppressWarnings("UnstableApiUsage")
+    @Override
+    public @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
+        ResolvableProfile profile = ResolvableProfile.resolvableProfile()
+            .uuid(uuid)
+            .build();
+        TooltipDisplay tooltip = TooltipDisplay.tooltipDisplay()
+            .addHiddenComponents(DataComponentTypes.PROFILE)
+            .build();
+
+        System.out.println("Dynamic? " + profile.dynamic());
+
+        ItemStack skull = ItemStack.of(Material.PLAYER_HEAD);
+        skull.setData(DataComponentTypes.PROFILE, profile);
+        skull.setData(DataComponentTypes.TOOLTIP_DISPLAY, tooltip);
+        return skull;
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    @NotNull
+    @Override
+    public ItemStack getSkullFromBase64(@NotNull String base64) {
+        ResolvableProfile profile = ResolvableProfile.resolvableProfile()
+            .uuid(FishUtils.B64_SKULL_UUID)
+            .addProperty(new ProfileProperty("textures", base64))
+            .build();
+
+        ItemStack skull = ItemStack.of(Material.PLAYER_HEAD);
+        skull.setData(DataComponentTypes.PROFILE, profile);
+        return skull;
     }
 
 }

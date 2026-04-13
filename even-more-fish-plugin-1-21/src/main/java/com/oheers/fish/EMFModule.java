@@ -1,5 +1,7 @@
 package com.oheers.fish;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.MainCommand;
 import com.oheers.fish.config.MainConfig;
@@ -10,7 +12,13 @@ import com.oheers.fish.items.configs.ItemRarityItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 @SuppressWarnings("UnstableApiUsage")
 public class EMFModule extends EvenMoreFish{
@@ -58,6 +66,30 @@ public class EMFModule extends EvenMoreFish{
     @Override
     public void disableCommands() {
         //nothing
+    }
+
+    // Can probably be moved somewhere else, but they're here for now.
+
+    @Override
+    public @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        skull.editMeta(SkullMeta.class, meta -> {
+            PlayerProfile profile = Bukkit.createProfile(uuid, null);
+            meta.setPlayerProfile(profile);
+        });
+        return skull;
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getSkullFromBase64(@NotNull String base64) {
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        skull.editMeta(SkullMeta.class, meta -> {
+            PlayerProfile profile = Bukkit.createProfile(FishUtils.B64_SKULL_UUID, null);
+            profile.setProperty(new ProfileProperty("textures", base64));
+            meta.setPlayerProfile(profile);
+        });
+        return skull;
     }
 
 }

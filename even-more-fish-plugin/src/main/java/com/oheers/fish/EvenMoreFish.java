@@ -33,6 +33,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.vanishchecker.VanishChecker;
@@ -303,5 +305,13 @@ public abstract class EvenMoreFish extends EMFPlugin {
     public MetricsManager getMetricsManager() {
         return metricsManager;
     }
+
+    // Can probably be moved somewhere else, but they're here for now.
+
+    @ApiStatus.Internal
+    public abstract @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid);
+
+    @ApiStatus.Internal
+    public abstract @NotNull ItemStack getSkullFromBase64(@NotNull String base64);
 
 }
