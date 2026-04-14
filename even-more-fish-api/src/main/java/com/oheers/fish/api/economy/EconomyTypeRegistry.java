@@ -84,6 +84,9 @@ public class EconomyTypeRegistry implements EMFRegistry<EconomyType> {
         if (!force && registry.containsKey(value.getKey())) {
             return false;
         }
+        if (!value.isAvailable()) {
+            return false;
+        }
         registry.put(value.getKey(), value);
         EMFPlugin.getInstance().debug("Registered " + value.getKey() + " EconomyType");
         return true;
