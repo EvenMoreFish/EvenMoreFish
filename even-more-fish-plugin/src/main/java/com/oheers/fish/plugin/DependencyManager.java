@@ -2,6 +2,7 @@ package com.oheers.fish.plugin;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.economy.EconomyType;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.economy.GriefPreventionEconomyType;
 import com.oheers.fish.economy.PlayerPointsEconomyType;
@@ -18,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.logging.Level;
@@ -55,7 +57,9 @@ public class DependencyManager implements Listener {
             setupVaultPermissions();
         }
 
-        loadEconomy();
+        loadVaultEconomy();
+        loadPlayerPointsEconomy();
+        loadGriefPreventionEconomy();
         checkPapi();
 
         // Handle deprecated events.
@@ -142,20 +146,28 @@ public class DependencyManager implements Listener {
         return usingVault && permission != null;
     }
 
-    public void loadEconomy() {
+    public void loadVaultEconomy() {
         if (isUsingVault()) {
-            boolean state = new VaultEconomyType().register();
-            if (state) {
-                EvenMoreFish.getInstance().getLogger().info("EvenMoreFish has successfully hooked into vault.");
-            }
+            loadEconomyType(new VaultEconomyType(), "Vault");
         }
+    }
 
+    public void loadPlayerPointsEconomy() {
         if (isUsingPlayerPoints()) {
-            new PlayerPointsEconomyType().register();
+            loadEconomyType(new PlayerPointsEconomyType(), "PlayerPoints");
         }
+    }
 
+    public void loadGriefPreventionEconomy() {
         if (isUsingGriefPrevention()) {
-            new GriefPreventionEconomyType().register();
+            loadEconomyType(new GriefPreventionEconomyType(), "GriefPrevention");
+        }
+    }
+
+    private void loadEconomyType(@NotNull EconomyType type, @NotNull String name) {
+        type.load();
+        if (type.register()) {
+            EvenMoreFish.getInstance().getLogger().info("EvenMoreFish has successfully hooked into " + name + ".");
         }
     }
 
