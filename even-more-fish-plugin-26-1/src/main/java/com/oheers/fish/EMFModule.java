@@ -82,8 +82,6 @@ public class EMFModule extends EvenMoreFish {
             .addHiddenComponents(DataComponentTypes.PROFILE)
             .build();
 
-        System.out.println("Dynamic? " + profile.dynamic());
-
         ItemStack skull = ItemStack.of(Material.PLAYER_HEAD);
         skull.setData(DataComponentTypes.PROFILE, profile);
         skull.setData(DataComponentTypes.TOOLTIP_DISPLAY, tooltip);
