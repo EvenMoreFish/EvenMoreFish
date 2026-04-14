@@ -37,7 +37,7 @@ public class VaultEconomyType implements EconomyType {
         Logging.info("Economy attempting to hook into Vault.");
         RegisteredServiceProvider<Economy> rsp = emf.getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-            Logging.warn("Could not obtain Economy service.");
+            Logging.warn("Could not obtain Vault Economy service.");
             return;
         }
         economy = rsp.getProvider();
