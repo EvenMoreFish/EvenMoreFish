@@ -9,7 +9,7 @@ import com.oheers.fish.economy.PlayerPointsEconomyType;
 import com.oheers.fish.economy.VaultEconomyType;
 import com.oheers.fish.events.AuraSkillsFishingEvent;
 import com.oheers.fish.events.DeprecatedEventListener;
-import com.oheers.fish.events.EconomyServiceRegisterEvent;
+import com.oheers.fish.events.EconomyServiceRegisterListener;
 import com.oheers.fish.events.McMMOTreasureEvent;
 import com.oheers.fish.placeholders.PlaceholderReceiver;
 import com.oheers.fish.utils.HeadDBIntegration;
@@ -82,7 +82,7 @@ public class DependencyManager implements Listener {
         }
 
         if (usingVault) {
-            pm.registerEvents(new EconomyServiceRegisterEvent(this),plugin);
+            pm.registerEvents(new EconomyServiceRegisterListener(this),plugin);
         }
 
     }
