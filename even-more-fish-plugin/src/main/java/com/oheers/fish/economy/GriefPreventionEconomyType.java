@@ -18,18 +18,22 @@ public class GriefPreventionEconomyType implements EconomyType {
 
     private GriefPrevention economy = null;
 
-    public GriefPreventionEconomyType() {
+    @Override
+    public String getIdentifier() {
+        return "GriefPrevention";
+    }
+
+    @Override
+    public void load() {
+        if (!MainConfig.getInstance().isEconomyEnabled(this)) {
+            return;
+        }
         EvenMoreFish emf = EvenMoreFish.getInstance();
         emf.getLogger().log(Level.INFO, "Economy attempting to hook into GriefPrevention.");
         if (Bukkit.getPluginManager().isPluginEnabled("GriefPrevention")) {
             economy = GriefPrevention.instance;
             emf.getLogger().log(Level.INFO, "Economy hooked into GriefPrevention.");
         }
-    }
-
-    @Override
-    public String getIdentifier() {
-        return "GriefPrevention";
     }
 
     @Override

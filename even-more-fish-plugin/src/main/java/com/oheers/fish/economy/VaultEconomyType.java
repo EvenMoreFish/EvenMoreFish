@@ -7,6 +7,7 @@ import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.messages.EMFSingleMessage;
 import net.kyori.adventure.text.Component;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
@@ -17,13 +18,19 @@ import java.util.logging.Level;
 public class VaultEconomyType implements EconomyType {
 
     private Economy economy;
+    
+    @Override
+    public String getIdentifier() {
+        return "Vault";
+    }
 
-    public VaultEconomyType() {
+    @Override
+    public void load() {
         if (!MainConfig.getInstance().isEconomyEnabled(this)) {
             return;
         }
         EvenMoreFish emf = EvenMoreFish.getInstance();
-        if (!EvenMoreFish.getInstance().getDependencyManager().isUsingVault()) {
+        if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             EvenMoreFish.getInstance().debug("Attempting to register Vault but it is not available.. ignoring");
             return;
         }
@@ -35,11 +42,6 @@ public class VaultEconomyType implements EconomyType {
         }
         economy = rsp.getProvider();
         emf.getLogger().log(Level.INFO, "Economy hooked into Vault.");
-    }
-
-    @Override
-    public String getIdentifier() {
-        return "Vault";
     }
 
     @Override

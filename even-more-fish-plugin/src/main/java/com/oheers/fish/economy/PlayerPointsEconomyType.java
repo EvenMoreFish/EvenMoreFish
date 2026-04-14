@@ -18,18 +18,22 @@ public class PlayerPointsEconomyType implements EconomyType {
 
     private PlayerPointsAPI economy = null;
 
-    public PlayerPointsEconomyType() {
+    @Override
+    public String getIdentifier() {
+        return "PlayerPoints";
+    }
+
+    @Override
+    public void load() {
+        if (!MainConfig.getInstance().isEconomyEnabled(this)) {
+            return;
+        }
         EvenMoreFish emf = EvenMoreFish.getInstance();
         emf.getLogger().log(Level.INFO, "Economy attempting to hook into PlayerPoints.");
         if (Bukkit.getPluginManager().isPluginEnabled("PlayerPoints")) {
             economy = PlayerPoints.getInstance().getAPI();
             emf.getLogger().log(Level.INFO, "Economy hooked into PlayerPoints.");
         }
-    }
-
-    @Override
-    public String getIdentifier() {
-        return "PlayerPoints";
     }
 
     @Override
