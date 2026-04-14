@@ -42,7 +42,6 @@ public class EventManager {
         pm.registerEvents(new ItemProtectionListener(), plugin);
         pm.registerEvents(new FishInteractEvent(), plugin);
         pm.registerEvents(new RecipeListener(), plugin);
-        pm.registerEvents(new ServerLoadListener(), plugin);
     }
 
     public void registerOptionalListeners() {

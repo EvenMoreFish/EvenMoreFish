@@ -19,6 +19,8 @@ public interface EconomyType extends RegistryItem {
         return getIdentifier();
     }
 
+    void load();
+
     double getMultiplier();
 
     boolean deposit(@NotNull OfflinePlayer player, double amount, boolean allowMultiplier);
