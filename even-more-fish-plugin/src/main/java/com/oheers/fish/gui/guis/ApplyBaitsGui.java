@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ApplyBaitsGui extends ConfigGui {
 
@@ -35,7 +36,7 @@ public class ApplyBaitsGui extends ConfigGui {
             GuiConfig.getInstance().getConfig().getSection("apply-baits-menu"),
             player
         );
-        this.baitInventory = Objects.requireNonNullElseGet(baitInventory, () -> Bukkit.createInventory(player, 54));
+        this.baitInventory = Optional.ofNullable(baitInventory).orElse(Bukkit.createInventory(player, 54));
 
         setCloseAction(close -> {
             processBaits();
