@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 // TODO look into dynamically updating the sell items when a fish is added/removed - AFTER we switch to TriumphGui
 public class SellGui extends ConfigGui {
@@ -24,7 +25,7 @@ public class SellGui extends ConfigGui {
     public SellGui(@NotNull Player player, @NotNull SellState sellState, @Nullable Inventory fishInventory) {
         super(sellState.getGuiConfig(), player);
 
-        this.fishInventory = Objects.requireNonNullElseGet(fishInventory, () -> Bukkit.createInventory(player, 54));
+        this.fishInventory = Optional.ofNullable(fishInventory).orElse(Bukkit.createInventory(player, 54));
 
         Economy economy = Economy.getInstance();
 
