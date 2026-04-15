@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class EMFMessage {
 
@@ -249,7 +250,7 @@ public abstract class EMFMessage {
             return;
         }
         this.relevantPlayer = player;
-        setVariable("{player}", Objects.requireNonNullElse(player.getName(), "N/A"));
+        setVariable("{player}", Optional.ofNullable(player.getName()).orElse("N/A"));
     }
 
     /**
