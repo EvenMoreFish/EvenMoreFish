@@ -28,6 +28,8 @@ public class Rarity extends ConfigBase implements IRarity {
 
     private static final Logger logger = EvenMoreFish.getInstance().getLogger();
 
+    private final @NotNull String id;
+
     private boolean fishWeighted;
     private boolean showInJournal = true;
     private final Requirement requirement;
@@ -40,25 +42,25 @@ public class Rarity extends ConfigBase implements IRarity {
     public Rarity(@NotNull File file) throws InvalidConfigurationException {
         super(file, EvenMoreFish.getInstance(), false);
         new RarityFileUpdates(this).update();
-        performRequiredConfigChecks();
+        this.id = validateId();
         this.requirement = loadRequirements();
         this.fishList = loadFish();
         this.showInJournal = getConfig().getBoolean("journal", true);
     }
 
-    // Current required config: id
-    private void performRequiredConfigChecks() throws InvalidConfigurationException {
-        if (getConfig().getString("id") == null) {
-            logger.warning("Rarity invalid: 'id' missing in " + getFileName());
-            throw new InvalidConfigurationException("An ID has not been found in " + getFileName() + ". Please correct this.");
+    private String validateId() throws InvalidConfigurationException {
+        String id = getConfig().getString("id");
+        if (id == null) {
+            throw new InvalidConfigurationException("Rarity " + getFileName() + " has no configured id.");
         }
+        return id;
     }
 
     // Config getters
 
     @Override
     public @NotNull String getId() {
-        return Objects.requireNonNull(getConfig().getString("id"));
+        return this.id;
     }
 
     @Override
@@ -103,8 +105,8 @@ public class Rarity extends ConfigBase implements IRarity {
     }
 
     public @NotNull EMFSingleMessage getDisplayName() {
-        String displayName = getConfig().getString("displayname");
-        return format(Objects.requireNonNullElseGet(displayName, this::getId));
+        String displayName = getConfig().getString("displayname", this.id);
+        return format(displayName);
     }
 
     public @NotNull EMFSingleMessage getLorePrep() {
