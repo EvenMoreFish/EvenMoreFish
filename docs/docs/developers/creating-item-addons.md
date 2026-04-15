@@ -65,11 +65,10 @@ public class ItemsAdderItemAddon extends ItemAddon implements Listener {
 
     @EventHandler
     public void onItemsLoad(ItemsAdderLoadDataEvent event) {
-        getLogger().info("Detected that itemsadder has finished loading all items...");
+        getLogger().info("Detected that ItemsAdder has finished loading all items...");
         getLogger().info("Reloading EMF.");
-        this.itemsAdderLoaded = true;
 
-        ((EMFPlugin) Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("EvenMoreFish"))).reload();
+        EMFPlugin.getInstance().reload(null);
     }
 }
 ```
