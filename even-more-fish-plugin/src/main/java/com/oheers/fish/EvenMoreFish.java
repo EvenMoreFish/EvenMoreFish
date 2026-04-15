@@ -73,7 +73,10 @@ public abstract class EvenMoreFish extends EMFPlugin {
     private EMFAPI api;
 
     public static @NotNull EvenMoreFish getInstance() {
-        return Objects.requireNonNull(instance, "Plugin not initialized yet!");
+        if (instance == null) {
+            throw new IllegalStateException("Plugin not initialized yet!");
+        }
+        return instance;
     }
 
     public static TaskScheduler getScheduler() {
