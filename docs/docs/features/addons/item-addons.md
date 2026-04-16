@@ -13,3 +13,9 @@ description: Third Party Plugins & Internal addons
 | Nexo            | nexo        | `nexo:id`                  | `nexo:forest_trident`            | 21       |
 | CraftEngine     | craftengine | `craftengine:namespace:id` | `craftengine:default:drill`      | 21       |
 | MMOItems        | mmoitems    | `mmoitems:type:id`         | `mmoitems:sword:cutlass`         | 21       |
+
+Item Config Example (Nexo):
+```yaml
+item:
+  material: "nexo:forest_trident"
+```
