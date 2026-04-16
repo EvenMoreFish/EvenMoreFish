@@ -3,6 +3,7 @@ package com.oheers.fish.items.configs;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.utils.Pair;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +50,7 @@ public class EnchantmentsItemConfig extends ItemConfig<Map<Enchantment, Integer>
     }
 
     @Override
-    protected BiConsumer<ItemStack, Map<Enchantment, Integer>> applyToItem(@Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, Map<Enchantment, Integer>> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return ItemStack::addUnsafeEnchantments;
     }
 

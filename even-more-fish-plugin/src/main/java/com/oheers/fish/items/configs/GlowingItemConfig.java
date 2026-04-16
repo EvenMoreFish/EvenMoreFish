@@ -1,6 +1,7 @@
 package com.oheers.fish.items.configs;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +23,7 @@ public class GlowingItemConfig extends ItemConfig<Boolean> {
     }
 
     @Override
-    protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) -> {
             if (value) {
                 item.editMeta(meta -> {

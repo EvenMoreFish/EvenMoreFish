@@ -2,6 +2,7 @@ package com.oheers.fish.items.configs;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Color;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -32,7 +33,7 @@ public class DyeColourItemConfig extends ItemConfig<Color> {
     }
 
     @Override
-    protected BiConsumer<ItemStack, Color> applyToItem(@Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, Color> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) -> {
             if (value == null) {
                 return;

@@ -1,6 +1,7 @@
 package com.oheers.fish.items.configs;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +21,7 @@ public class EmptyItemConfig<T> extends ItemConfig<T> {
     }
 
     @Override
-    protected BiConsumer<ItemStack, T> applyToItem(@Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, T> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) -> {
             // Do nothing
         };

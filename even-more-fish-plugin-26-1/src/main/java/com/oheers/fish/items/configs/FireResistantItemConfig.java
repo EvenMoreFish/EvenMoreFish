@@ -2,6 +2,7 @@ package com.oheers.fish.items.configs;
 
 import com.oheers.fish.items.configs.ItemConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +22,7 @@ public class FireResistantItemConfig extends ItemConfig<Boolean> {
     }
 
     @Override
-    protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) ->
             item.editMeta(meta -> meta.setFireResistant(value));
     }

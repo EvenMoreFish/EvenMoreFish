@@ -3,6 +3,7 @@ package com.oheers.fish.items.configs;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.items.configs.ItemConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +24,7 @@ public class ItemRarityItemConfig extends ItemConfig<String> {
     }
 
     @Override
-    protected BiConsumer<ItemStack, String> applyToItem(@Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, String> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) -> {
             ItemRarity rarity = FishUtils.getEnumValue(ItemRarity.class, value);
             if (rarity != null) {

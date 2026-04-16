@@ -9,9 +9,11 @@ import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NbtApiException;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -107,20 +109,21 @@ public class ItemFactory {
         ItemStack item = baseItem.clone();
 
         if (!rawItem) {
-            customModelData.apply(item, replacements);
-            itemDamage.apply(item, replacements);
-            displayName.apply(item, replacements);
-            dyeColour.apply(item, replacements);
-            glowing.apply(item, replacements);
-            lore.apply(item, replacements);
-            potionMeta.apply(item, replacements);
-            enchantments.apply(item, replacements);
-            unbreakable.apply(item, replacements);
-            quantity.apply(item, replacements);
-            itemModel.apply(item, replacements);
-            fireResistant.apply(item, replacements);
-            hideTooltip.apply(item, replacements);
-            itemRarity.apply(item, replacements);
+            OfflinePlayer player = relevantPlayer == null ? null : Bukkit.getOfflinePlayer(relevantPlayer);
+            customModelData.apply(item, player, replacements);
+            itemDamage.apply(item, player, replacements);
+            displayName.apply(item, player, replacements);
+            dyeColour.apply(item, player, replacements);
+            glowing.apply(item, player, replacements);
+            lore.apply(item, player, replacements);
+            potionMeta.apply(item, player, replacements);
+            enchantments.apply(item, player, replacements);
+            unbreakable.apply(item, player, replacements);
+            quantity.apply(item, player, replacements);
+            itemModel.apply(item, player, replacements);
+            fireResistant.apply(item, player, replacements);
+            hideTooltip.apply(item, player, replacements);
+            itemRarity.apply(item, player, replacements);
 
             if (finalChanges != null) {
                 finalChanges.accept(item);

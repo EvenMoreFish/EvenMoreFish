@@ -3,6 +3,7 @@ package com.oheers.fish.items.configs;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.MainConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,7 @@ public class ItemDamageItemConfig extends ItemConfig<Integer> {
     }
 
     @Override
-    protected BiConsumer<ItemStack, Integer> applyToItem(@Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, Integer> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) -> {
             int maxDurability = item.getType().getMaxDurability();
             item.editMeta(Damageable.class, meta -> {

@@ -2,6 +2,7 @@ package com.oheers.fish.items.configs;
 
 import com.oheers.fish.messages.EMFListMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,14 +23,14 @@ public class LoreItemConfig extends ItemConfig<List<String>> {
     }
 
     @Override
-    protected BiConsumer<ItemStack, List<String>> applyToItem(@Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, List<String>> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) -> {
             if (value.isEmpty()) {
                 return;
             }
             EMFListMessage lore = EMFListMessage.fromStringList(value);
             lore.setVariables(replacements);
-            item.editMeta(meta -> meta.lore(lore.getComponentListMessage()));
+            item.editMeta(meta -> meta.lore(lore.getComponentListMessage(player)));
         };
     }
 

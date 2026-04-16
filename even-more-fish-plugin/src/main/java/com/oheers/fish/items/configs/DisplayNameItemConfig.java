@@ -3,6 +3,7 @@ package com.oheers.fish.items.configs;
 import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +23,7 @@ public class DisplayNameItemConfig extends ItemConfig<String> {
     }
 
     @Override
-    protected BiConsumer<ItemStack, String> applyToItem(@Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, String> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) -> {
             if (value == null || value.isEmpty()) {
                 item.editMeta(meta -> meta.displayName(Component.empty()));
@@ -30,7 +31,7 @@ public class DisplayNameItemConfig extends ItemConfig<String> {
             }
             EMFSingleMessage display = EMFSingleMessage.fromString(value);
             display.setVariables(replacements);
-            item.editMeta(meta -> meta.displayName(display.getComponentMessage()));
+            item.editMeta(meta -> meta.displayName(display.getComponentMessage(player)));
         };
     }
 

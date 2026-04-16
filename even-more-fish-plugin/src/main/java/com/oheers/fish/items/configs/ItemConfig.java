@@ -1,6 +1,7 @@
 package com.oheers.fish.items.configs;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,19 +35,19 @@ public abstract class ItemConfig<T> {
      * Applies the actual value to the item if this config is enabled.
      * @param item The item to apply the config to.
      */
-    public void apply(@NotNull ItemStack item, @Nullable Map<String, ?> replacements) {
+    public void apply(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         if (!enabled) {
             return;
         }
         T value = getActualValue();
         if (value != null) {
-            applyToItem(replacements).accept(item, value);
+            applyToItem(player, replacements).accept(item, value);
         }
     }
 
     public abstract @Nullable T getConfiguredValue();
 
-    protected abstract BiConsumer<ItemStack, T> applyToItem(@Nullable Map<String, ?> replacements);
+    protected abstract BiConsumer<ItemStack, T> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements);
 
     public void setDefault(@Nullable T def) {
         this.def = def;
