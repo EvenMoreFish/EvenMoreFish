@@ -95,6 +95,7 @@ connectors-sqlite = "org.xerial:sqlite-jdbc:3.47.0.0"
 # Testing
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+mockito-core = "org.mockito:mockito-core:5.20.0"
 
 # Commands
 commandsapi-bukkit = { module = "dev.jorel:commandapi-bukkit-shade", version = "10.1.2" }
