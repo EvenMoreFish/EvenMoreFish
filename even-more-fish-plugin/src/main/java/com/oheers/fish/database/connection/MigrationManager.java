@@ -15,23 +15,17 @@ import org.flywaydb.core.api.MigrationVersion;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jooq.DSLContext;
-import org.jooq.conf.MappedSchema;
-import org.jooq.conf.MappedTable;
-import org.jooq.conf.RenderMapping;
-import org.jooq.conf.Settings;
-import org.jooq.exception.DataAccessException;
-import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class MigrationManager {
     private final String latestBaselineVersion;
@@ -39,29 +33,12 @@ public class MigrationManager {
     private final FluentConfiguration baseFlywayConfiguration;
     private final Flyway defaultFlyway;
     private final ConnectionFactory connectionFactory;
-    private final Settings migrationSettings;
 
     public MigrationManager(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
         this.baseFlywayConfiguration = getBaseFlywayConfiguration(connectionFactory);
         this.defaultFlyway = this.baseFlywayConfiguration.load();
         this.latestBaselineVersion = ManifestUtil.getAttributeFromManifest("Database-Baseline-Version", "8.1");
-
-        this.migrationSettings = new Settings();
-        this.migrationSettings.setExecuteLogging(true);
-        this.migrationSettings.withRenderMapping(
-                new RenderMapping().withSchemata(
-                        new MappedSchema().withInput("")
-                                .withOutput(MainConfig.getInstance().getDatabase())
-                                .withTables(
-                                        new MappedTable()
-                                                .withInputExpression(Pattern.compile("\\$\\{table.prefix}(.*)"))
-                                                .withOutput(MainConfig.getInstance().getPrefix() + "$1"
-                                                )
-                                )
-
-                )
-        );
 
         DatabaseUtil.debugDatabaseTypeVersion(this.connectionFactory);
     }
@@ -100,17 +77,35 @@ public class MigrationManager {
 
     public boolean queryTableExistence(final String tableName) {
         try (Connection connection = connectionFactory.getConnection()) {
-             DSLContext dsl = DSL.using(connection, migrationSettings);
-
-            return dsl.fetchExists(
-                    DSL.select()
-                            .from("information_schema.tables")
-                            .where(DSL.field("table_name").eq(tableName))
-                            .and(DSL.noCondition())
-            );
-        } catch (SQLException | DataAccessException e) {
+            return tableExists(connection, resolveLegacyTableName(tableName));
+        } catch (SQLException e) {
             return false;
         }
+    }
+
+    private boolean tableExists(@NotNull Connection connection, @NotNull String tableName) throws SQLException {
+        DatabaseMetaData metaData = connection.getMetaData();
+        String[] tableTypes = {"TABLE"};
+        for (String candidate : new String[]{tableName, tableName.toLowerCase(), tableName.toUpperCase()}) {
+            try (ResultSet tables = metaData.getTables(connection.getCatalog(), null, candidate, tableTypes)) {
+                if (tables.next()) {
+                    return true;
+                }
+            }
+            try (ResultSet tables = metaData.getTables(null, null, candidate, tableTypes)) {
+                if (tables.next()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private @NotNull String resolveLegacyTableName(@NotNull String tableName) {
+        if (tableName.contains("${table.prefix}")) {
+            return tableName.replace("${table.prefix}", MainConfig.getInstance().getPrefix());
+        }
+        return tableName;
     }
 
     public void dropFlywaySchemaHistory() {
@@ -226,9 +221,5 @@ public class MigrationManager {
                 .table(MainConfig.getInstance().getPrefix() + "flyway_schema_history");
 
         return DatabaseStrategyFactory.getStrategy(connectionFactory).configureFlyway(baseConfig);
-    }
-
-    public Settings getMigrationSettings() {
-        return migrationSettings;
     }
 }

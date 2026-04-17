@@ -7,76 +7,54 @@ import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.Database;
 import com.oheers.fish.database.connection.ConnectionFactory;
 import com.oheers.fish.database.connection.MigrationManager;
-import com.oheers.fish.database.execute.ExecuteUpdate;
-import com.oheers.fish.database.generated.mysql.Tables;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.PrefixType;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
+import org.jdbi.v3.core.Jdbi;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class LegacyToV3DatabaseMigration {
     private final Database database;
     private final MigrationManager migrationManager;
-    private final ConnectionFactory connectionFactory;
-    
+    private final Jdbi jdbi;
+
     public LegacyToV3DatabaseMigration(final Database database, final MigrationManager migrationManager, final ConnectionFactory connectionFactory) {
         this.database = database;
         this.migrationManager = migrationManager;
-        this.connectionFactory = connectionFactory;
+        this.jdbi = Jdbi.create((org.jdbi.v3.core.ConnectionFactory) connectionFactory::getConnection);
     }
-    
-    /**
-     * This causes a renaming of the table "Fish2" to "emf_fish", no data internally changes, but it's good to have a clean
-     * format for all the tables and to have a more descriptive name for this stuff.
-     */
+
     private void translateFishDataV2() {
-        if (migrationManager.queryTableExistence("${table.prefix}fish")) {
+        if (migrationManager.queryTableExistence(prefixed("fish"))) {
             return;
         }
-        
+
         if (migrationManager.queryTableExistence("Fish2")) {
-            executeStatement(c -> c.alterTable("Fish2")
-                    .renameTo("${table.prefix}fish")
-                    .execute());
+            execute("alter table Fish2 rename to " + prefixed("fish"));
             return;
         }
         migrationManager.legacyInitVersion();
     }
-    
-    /**
-     * Loops through each fish report passed through and sets all the default values for the user in the database. Note
-     * that the user must already have a field within the database. All data regarding competitions and the total size does
-     * not exist within the V2 and V1 recording system so are set to 0 by default, as this lost data cannot be recovered.
-     * Similarly, the latest fish cannot be retrieved, so the "None" fish is left, to reference there is no value here yet.
-     * <p>
-     * This should only be used during the V1/2 -> V3 migration process.
-     *
-     * @param uuid    The user
-     * @param reports The V2 fish reports associated with the user.
-     */
+
     private void translateFishReportsV2(final UUID uuid, final @NotNull List<LegacyFishReport> reports) {
         String firstFishID = "";
         long epochFirst = Long.MAX_VALUE;
         String largestFishID = "";
         float largestSize = 0f;
-        
         int totalFish = 0;
-        
+        int userId = database.getUserId(uuid);
+
         for (LegacyFishReport report : reports) {
             if (report.getTimeEpoch() < epochFirst) {
                 epochFirst = report.getTimeEpoch();
@@ -86,57 +64,40 @@ public class LegacyToV3DatabaseMigration {
                 largestSize = report.getLargestLength();
                 largestFishID = report.getRarity() + ":" + report.getName();
             }
-            
-            totalFish += report.getNumCaught();
-            var fishLog = DSL.table(MainConfig.getInstance().getPrefix() + "fish_log");
-            var id = DSL.field("id", Integer.class);
-            var rarity = DSL.field("rarity", String.class);
-            var fish = DSL.field("fish", String.class);
-            var quantity = DSL.field("quantity", Integer.class);
-            var fishCatchTime = DSL.field("first_catch_time", Long.class);
-            var largestLength = DSL.field("largest_length", Float.class);
 
-            executeStatement(c -> c.insertInto(fishLog)
-                    .set(id, database.getUserId(uuid))
-                    .set(rarity, report.getRarity())
-                    .set(fish, report.getName())
-                    .set(quantity, report.getNumCaught())
-                    .set(fishCatchTime, report.getTimeEpoch())
-                    .set(largestLength, report.getLargestLength())
+            totalFish += report.getNumCaught();
+
+            jdbi.useHandle(handle -> handle.createUpdate(
+                            "insert into " + prefixed("fish_log") +
+                                    " (id, rarity, fish, quantity, first_catch_time, largest_length) " +
+                                    "values (:id, :rarity, :fish, :quantity, :first_catch_time, :largest_length)"
+                    )
+                    .bind("id", userId)
+                    .bind("rarity", report.getRarity())
+                    .bind("fish", report.getName())
+                    .bind("quantity", report.getNumCaught())
+                    .bind("first_catch_time", report.getTimeEpoch())
+                    .bind("largest_length", report.getLargestLength())
                     .execute());
-            // starts a field for the new fish for the user that's been fished for the first time
-            
         }
-        
+
         createFieldForFishFirstTimeFished(uuid, firstFishID, largestFishID, totalFish, largestSize);
     }
-    
-    private void createFieldForFishFirstTimeFished(final UUID uuid, final String firstFishID, final String largestFishID, int totalFish, float largestSize) {
-        var usersTable = DSL.table(MainConfig.getInstance().getPrefix() + "users");
-        var firstFishField = DSL.field("first_fish", String.class);
-        var largestFishField = DSL.field("largest_fish", String.class);
-        var totalFishField = DSL.field("num_fish_caught", Integer.class);
-        var largestLengthField = DSL.field("largest_length", Float.class);
-        var uuidField = DSL.field("uuid", String.class);
 
-        // starts a field for the new fish that's been fished for the first time
-        executeStatement(c -> c.update(usersTable)
-                .set(firstFishField,firstFishID)
-                .set(largestFishField, largestFishID)
-                .set(totalFishField, totalFish)
-                .set(largestLengthField, largestSize)
-                .where(uuidField.eq(uuid.toString()))
+    private void createFieldForFishFirstTimeFished(final UUID uuid, final String firstFishID, final String largestFishID, int totalFish, float largestSize) {
+        jdbi.useHandle(handle -> handle.createUpdate(
+                        "update " + prefixed("users") +
+                                " set first_fish = :first_fish, largest_fish = :largest_fish, num_fish_caught = :num_fish_caught, largest_length = :largest_length " +
+                                "where uuid = :uuid"
+                )
+                .bind("first_fish", firstFishID)
+                .bind("largest_fish", largestFishID)
+                .bind("num_fish_caught", totalFish)
+                .bind("largest_length", largestSize)
+                .bind("uuid", uuid.toString())
                 .execute());
     }
-    
-    /**
-     * Converts a V2 database system to a V3 database system. The server must not crash during this process as this may
-     * lead to data loss, but honestly, I'm not 100% sure on that one. Data is read from the /data/ folder and is
-     * inserted into the new database system then the /data/ folder is renamed to /data-old/.
-     *
-     * @param initiator The person who started the migration.
-     *
-     */
+
     public void migrate(CommandSender initiator) {
         if (!migrationManager.usingV2()) {
             EMFSingleMessage msg = EMFSingleMessage.fromString("EvenMoreFish is already using the latest V3 database engine.");
@@ -144,15 +105,15 @@ public class LegacyToV3DatabaseMigration {
             msg.send(initiator);
             return;
         }
-        
+
         EvenMoreFish.getInstance().getLogger().info(() -> initiator.getName() + " has begun the migration to EMF database V3 from V2.");
         EMFSingleMessage msg = EMFSingleMessage.fromString("Beginning conversion to V3 database engine.");
         msg.prependMessage(PrefixType.ADMIN.getPrefix());
         msg.send(initiator);
-        
+
         File oldDataFolder = new File(EvenMoreFish.getInstance().getDataFolder(), "data");
         File dataFolder = new File(EvenMoreFish.getInstance().getDataFolder(), "data-archived");
-        
+
         if (oldDataFolder.renameTo(dataFolder)) {
             EMFSingleMessage message = EMFSingleMessage.fromString("Archived /data/ folder.");
             message.prependMessage(PrefixType.ADMIN.getPrefix());
@@ -163,83 +124,81 @@ public class LegacyToV3DatabaseMigration {
             message.send(initiator);
             return;
         }
-        
+
         EMFSingleMessage fishReportMSG = EMFSingleMessage.fromString("Beginning FishReport migrations. This may take a while.");
         fishReportMSG.prependMessage(PrefixType.ADMIN.getPrefix());
         fishReportMSG.send(initiator);
-        
+
         try {
             translateFishDataV2();
             this.migrationManager.legacyFlywayBaseline();
-            
+
             for (File file : Objects.requireNonNull(dataFolder.listFiles())) {
                 Type fishReportList = new TypeToken<List<LegacyFishReport>>() {
                 }.getType();
-                
+
                 Gson gson = new Gson();
                 List<LegacyFishReport> reports;
-                try(FileReader reader = new FileReader(file)) {
+                try (FileReader reader = new FileReader(file)) {
                     reports = gson.fromJson(reader, fishReportList);
                 }
 
                 UUID playerUUID = UUID.fromString(file.getName().substring(0, file.getName().lastIndexOf(".")));
                 createEmptyUserReport(playerUUID);
                 translateFishReportsV2(playerUUID, reports);
-                
+
                 EMFSingleMessage migratedMSG = EMFSingleMessage.fromString("Migrated " + reports.size() + " fish for: " + playerUUID);
                 migratedMSG.prependMessage(PrefixType.ADMIN.getPrefix());
                 migratedMSG.send(initiator);
             }
-            
+
         } catch (NullPointerException | FileNotFoundException exception) {
             EMFSingleMessage message = EMFSingleMessage.fromString("Fatal error whilst upgrading to V3 database engine.");
             message.prependMessage(PrefixType.ERROR.getPrefix());
             message.send(initiator);
-            
+
             EvenMoreFish.getInstance().getLogger().log(Level.SEVERE, "Critical SQL/interruption error whilst upgrading to v3 engine.", exception);
         } catch (IOException e) {
             EvenMoreFish.getInstance().getLogger().log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
-        
+
         EMFSingleMessage migratedMSG = EMFSingleMessage.fromString("Migration completed. Your database is now using the V3 database engine: to complete the migration, it is recommended to restart your server.");
         migratedMSG.prependMessage(PrefixType.ADMIN.getPrefix());
         migratedMSG.send(initiator);
-        
-        EMFSingleMessage thankyou = EMFSingleMessage.fromString("Now that migration is complete, you will be able to use functionality in upcoming" +
-            " updates such as quests, deliveries and a fish log. - Oheers");
+
+        EMFSingleMessage thankyou = EMFSingleMessage.fromString("Now that migration is complete, you will be able to use functionality in upcoming updates such as quests, deliveries and a fish log. - Oheers");
         thankyou.prependMessage(PrefixType.ERROR.getPrefix());
         thankyou.send(initiator);
 
-        //Run the rest of the migrations, and ensure it's properly setup.
         migrationManager.migrateFromV5ToLatest();
     }
 
     public void createEmptyUserReport(@NotNull UUID uuid) {
-        new ExecuteUpdate(connectionFactory, migrationManager.getMigrationSettings()) {
-            @Override
-            protected int onRunUpdate(DSLContext dslContext) {
-                return dslContext.insertInto(Tables.USERS)
-                        .set(Tables.USERS.UUID, uuid.toString())
-                        .set(Tables.USERS.FIRST_FISH, "None")
-                        .set(Tables.USERS.LAST_FISH, "None")
-                        .set(Tables.USERS.LARGEST_FISH, "None")
-                        .set(Tables.USERS.LARGEST_LENGTH, 0F)
-                        .set(Tables.USERS.NUM_FISH_CAUGHT, 0)
-                        .set(Tables.USERS.COMPETITIONS_WON, 0)
-                        .set(Tables.USERS.COMPETITIONS_JOINED, 0)
-                        .set(Tables.USERS.TOTAL_FISH_LENGTH, 0F)
-                        .execute();
-            }
-        }.executeUpdate();
+        jdbi.useHandle(handle -> {
+            var update = handle.createUpdate(
+                    "insert into " + prefixed("users") +
+                            " (uuid, first_fish, last_fish, largest_fish, largest_length, num_fish_caught, total_fish_length, competitions_won, competitions_joined) " +
+                            "values (:uuid, :first_fish, :last_fish, :largest_fish, :largest_length, :num_fish_caught, :total_fish_length, :competitions_won, :competitions_joined)"
+            );
+            update.bind("uuid", uuid.toString())
+                    .bind("first_fish", "None")
+                    .bind("last_fish", "None")
+                    .bind("largest_fish", "None")
+                    .bind("largest_length", 0F)
+                    .bind("num_fish_caught", 0)
+                    .bind("total_fish_length", 0F)
+                    .bind("competitions_won", 0)
+                    .bind("competitions_joined", 0);
+            update.execute();
+        });
     }
 
-    public void executeStatement(@NotNull Consumer<DSLContext> consumer) {
-        try (Connection connection = this.connectionFactory.getConnection()) {
-            consumer.accept(database.getContext(connection));
-        } catch (SQLException e) {
-            EvenMoreFish.getInstance().getLogger().log(Level.SEVERE, e.getMessage(), e);
-        }
+    private void execute(@NotNull String sql) {
+        jdbi.useHandle(handle -> handle.execute(sql));
+    }
 
+    private @NotNull String prefixed(@NotNull String tableName) {
+        return MainConfig.getInstance().getPrefix() + tableName;
     }
 }

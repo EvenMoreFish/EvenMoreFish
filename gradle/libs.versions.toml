@@ -4,6 +4,7 @@ worldedit = "7.3.0"
 redprotect = "7.7.3"
 flyway = "10.22.0"
 jooq = "3.19.31"
+jdbi = "3.49.1"
 junit = "6.0.3"
 craftengine = "0.0.67"
 
@@ -81,11 +82,10 @@ maven-artifact = "org.apache.maven:maven-artifact:4.0.0-rc-5"
 # Database
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
+jdbi3-core = { module = "org.jdbi:jdbi3-core", version.ref = "jdbi" }
+jdbi3-sqlobject = { module = "org.jdbi:jdbi3-sqlobject", version.ref = "jdbi" }
 
 # JOOQ
-jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
-jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
-jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
 jooq-meta-extensions = { module = "org.jooq:jooq-meta-extensions", version.ref = "jooq" }
 
 # Database Connectors
