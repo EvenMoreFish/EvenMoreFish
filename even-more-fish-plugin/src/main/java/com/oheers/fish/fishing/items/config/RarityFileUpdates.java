@@ -30,6 +30,13 @@ public class RarityFileUpdates {
             this.updated = true;
         }
 
+        // display -> displayname
+        if (config.contains("display") && !config.contains("displayname")) {
+            config.set("displayname", config.getString("display"));
+            config.remove("display");
+            this.updated = true;
+        }
+
         // Extended broadcast settings
         if (config.contains("broadcast")) {
             Section broadcast = config.getSection("broadcast");

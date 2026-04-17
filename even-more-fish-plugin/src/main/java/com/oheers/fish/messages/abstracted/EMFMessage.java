@@ -4,6 +4,7 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import net.kyori.adventure.audience.Audience;
@@ -264,15 +265,37 @@ public abstract class EMFMessage {
 
     /**
      * Sets all relevant variables for the fish caught message.
-     * Performs {@link #setLength(Object)}, {@link #setFishCaught(Object)}, and {@link #setRarity(Object)}.
+     * Performs {@link #setLength(Object)}, {@link #setFishCaught(Object)}, and {@link #setRarity(Rarity)}.
      * @param fish The fish that was caught.
      */
     public void setFishCatchVariables(@NotNull Fish fish) {
         setLength(Processor.LENGTH_FORMAT.format(fish.getLength()));
-        setRarity(fish.getRarity().getDisplayName());
+        setRarity(fish.getRarity());
 
         Component display = fish.getDisplayName().getComponentMessage().hoverEvent(fish.give());
         setFishCaught(display);
+    }
+
+    /**
+     * Sets all rarity-related placeholders from a {@link Rarity} object.
+     * <ul>
+     *   <li>{@code {rarity}} — display name without color</li>
+     *   <li>{@code {rarity_uppercase}} — display name in uppercase</li>
+     *   <li>{@code {rarity_colour}} — color tag from the rarity format</li>
+     *   <li>{@code {rarity_id}} — rarity ID</li>
+     *   <li>{@code {rarity_id_uppercase}} — rarity ID in uppercase</li>
+     * </ul>
+     *
+     * @param rarity The rarity.
+     */
+    public void setRarity(@NotNull final Rarity rarity) {
+        String displayName = rarity.getPlainDisplayName();
+        String id = rarity.getId();
+        setVariable("{rarity}", displayName);
+        setVariable("{rarity_uppercase}", displayName.toUpperCase());
+        setVariable("{rarity_colour}", rarity.getColour());
+        setVariable("{rarity_id}", id);
+        setVariable("{rarity_id_uppercase}", id.toUpperCase());
     }
 
     /**
@@ -283,6 +306,9 @@ public abstract class EMFMessage {
     public void setRarity(@NotNull final Object rarity) {
         setVariable("{rarity}", rarity);
         setVariable("{rarity_colour}", "");
+        setVariable("{rarity_id}", "");
+        setVariable("{rarity_uppercase}", "");
+        setVariable("{rarity_id_uppercase}", "");
     }
 
     /**

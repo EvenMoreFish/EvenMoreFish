@@ -109,6 +109,15 @@ public class Rarity extends ConfigBase implements IRarity {
         return format(displayName);
     }
 
+    public @NotNull String getPlainDisplayName() {
+        return getConfig().getString("displayname", this.id);
+    }
+
+    public @NotNull String getColour() {
+        String format = getConfig().getString("format", "");
+        return format.replace("{name}", "");
+    }
+
     public @NotNull EMFSingleMessage getLorePrep() {
         String loreOverride = getConfig().getString("override-lore");
         if (loreOverride != null) {

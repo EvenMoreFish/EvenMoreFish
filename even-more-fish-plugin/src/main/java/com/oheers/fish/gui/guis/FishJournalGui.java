@@ -208,7 +208,7 @@ public class FishJournalGui extends ConfigGui {
                 Component configuredDisplay = configuredMeta.displayName();
                 if (configuredDisplay != null) {
                     EMFSingleMessage display = EMFSingleMessage.of(configuredDisplay);
-                    display.setRarity(rarity.getDisplayName());
+                    display.setRarity(rarity);
                     meta.displayName(display.getComponentMessage(player));
                 }
                 meta.lore(configuredMeta.lore());

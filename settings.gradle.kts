@@ -1,11 +1,15 @@
 rootProject.name = "even-more-fish"
 
 pluginManagement {
-    plugins {
-        id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
     }
 }
 
+plugins {
+        id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
 // Addons
 include(":addons:even-more-fish-addons-j21")
 include(":addons:even-more-fish-addons-itemmodel")
