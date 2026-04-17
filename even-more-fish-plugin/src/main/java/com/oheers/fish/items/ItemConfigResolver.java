@@ -43,6 +43,7 @@ public class ItemConfigResolver {
     private @NotNull Function<Section, ItemConfig<Boolean>> fireResistantResolver = EmptyItemConfig::new;
     private @NotNull Function<Section, ItemConfig<Boolean>> hideTooltipResolver = EmptyItemConfig::new;
     private @NotNull Function<Section, ItemConfig<String>> itemRarityResolver = EmptyItemConfig::new;
+    private @NotNull Function<Section, ItemConfig<NamespacedKey>> tooltipStyleResolver = EmptyItemConfig::new;
 
     private ItemConfigResolver() {}
 
@@ -164,6 +165,14 @@ public class ItemConfigResolver {
 
     public void setItemRarityResolver(@NotNull Function<Section, ItemConfig<String>> itemRarityResolver) {
         this.itemRarityResolver = itemRarityResolver;
+    }
+
+    public @NotNull ItemConfig<NamespacedKey> getTooltipStyle(@NotNull Section section) {
+        return resolve(tooltipStyleResolver, section);
+    }
+
+    public void setTooltipStyleResolver(@NotNull Function<Section, ItemConfig<NamespacedKey>> tooltipStyleResolver) {
+        this.tooltipStyleResolver = tooltipStyleResolver;
     }
 
 }
