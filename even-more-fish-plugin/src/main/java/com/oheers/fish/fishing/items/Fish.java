@@ -321,7 +321,7 @@ public class Fish implements IFish {
             newLoreLine.setVariableWithListInsertion("{length_lore}", EMFListMessage.empty());
         }
 
-        newLoreLine.setRarity(this.rarity.getLorePrep());
+        newLoreLine.setRarity(this.rarity);
 
         if (disableFisherman || fishermanPlayer == null) {
             return newLoreLine.getComponentListMessage();

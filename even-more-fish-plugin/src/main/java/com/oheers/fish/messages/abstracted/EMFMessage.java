@@ -4,6 +4,7 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import net.kyori.adventure.audience.Audience;
@@ -269,7 +270,7 @@ public abstract class EMFMessage {
      */
     public void setFishCatchVariables(@NotNull Fish fish) {
         setLength(Processor.LENGTH_FORMAT.format(fish.getLength()));
-        setRarity(fish.getRarity().getDisplayName());
+        setRarity(fish.getRarity());
 
         Component display = fish.getDisplayName().getComponentMessage().hoverEvent(fish.give());
         setFishCaught(display);
@@ -280,9 +281,35 @@ public abstract class EMFMessage {
      *
      * @param rarity The fish's rarity.
      */
+    public void setRarity(@NotNull final Rarity rarity) {
+        setVariable("{rarity}", rarity.getLorePrep());
+        setColour(rarity.getColour());
+    }
+
     public void setRarity(@NotNull final Object rarity) {
         setVariable("{rarity}", rarity);
-        setVariable("{rarity_colour}", "");
+        setColour("");
+    }
+
+    /**
+     * Replaces the {color} variable by operating on the raw MiniMessage string so that
+     * colour tags (e.g. {@code <#6dff4b>}) are parsed by MiniMessage instead of being
+     * treated as literal text.
+     *
+     * @param colour A MiniMessage colour tag such as {@code <#6dff4b>}, or empty string to clear.
+     */
+    public void setColour(@NotNull String colour) {
+        ComponentMessage underlying = getUnderlying();
+        MessageType messageType = underlying.messageType();
+        if (underlying instanceof ComponentSingleMessage csm) {
+            String mm = csm.getAsMiniMessage().replace("{color}", colour);
+            setUnderlying(ComponentMessage.componentMessage(mm).messageType(messageType));
+        } else if (underlying instanceof ComponentListMessage clm) {
+            List<String> replaced = clm.getAsMiniMessage().stream()
+                .map(s -> s.replace("{color}", colour))
+                .toList();
+            setUnderlying(ComponentMessage.componentMessage(replaced).messageType(messageType));
+        }
     }
 
     /**

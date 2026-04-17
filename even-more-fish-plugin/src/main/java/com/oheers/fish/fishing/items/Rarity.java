@@ -73,6 +73,19 @@ public class Rarity extends ConfigBase implements IRarity {
         return EMFSingleMessage.fromString(format);
     }
 
+    public @NotNull String getColour() {
+        String color = getConfig().getString("color");
+        if (color != null) {
+            return color;
+        }
+        String format = getConfig().getString("format", "<white>{name}");
+        int nameIndex = format.indexOf("{name}");
+        if (nameIndex <= 0) {
+            return "<white>";
+        }
+        return format.substring(0, nameIndex);
+    }
+
     public @NotNull EMFSingleMessage format(@NotNull String name) {
         EMFSingleMessage message = getFormat();
         message.setVariable("{name}", name);
