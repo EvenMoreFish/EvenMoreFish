@@ -557,6 +557,10 @@ public class Competition {
         return competitionName;
     }
 
+    public @Nullable LocalDateTime getStartTime() {
+        return startTime;
+    }
+
     public @NotNull CompetitionFile getCompetitionFile() {
         return this.competitionFile;
     }
