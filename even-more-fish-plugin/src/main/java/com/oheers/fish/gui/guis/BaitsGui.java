@@ -8,6 +8,7 @@ import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.utils.CooldownHelper;
+import com.oheers.fish.utils.Sortable;
 import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.StaticGuiElement;
@@ -27,6 +28,7 @@ public class BaitsGui extends ConfigGui {
 
     private final CooldownHelper confirmation = CooldownHelper.create();
     private final CooldownHelper cooldown = CooldownHelper.create();
+    private final Sortable.SortType sortType;
 
     public BaitsGui(@NotNull HumanEntity player) {
         super(
@@ -37,6 +39,9 @@ public class BaitsGui extends ConfigGui {
         createGui();
 
         Section config = getGuiConfig();
+
+        // TODO fetch sort type from config after baits have weight.
+        this.sortType = Sortable.SortType.ALPHABETICAL;
         if (config != null) {
             getGui().addElements(getBaitsGroup(config));
         }
@@ -47,7 +52,7 @@ public class BaitsGui extends ConfigGui {
 
         return new DynamicGuiElement(character, who -> {
             GuiElementGroup group = new GuiElementGroup(character);
-            BaitManager.getInstance().getItemMap().values()
+            sortType.sort(BaitManager.getInstance().getItemMap().values())
                 .forEach(bait -> group.addElement(createBaitElement(character, bait)));
             return group;
         });
