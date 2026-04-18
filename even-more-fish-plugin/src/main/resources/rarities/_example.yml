@@ -58,6 +58,16 @@ requirements:
 # This can be overridden by each fish.
 disable-fisherman: false
 
+# You can override the lore configured in messages.yml's fish-lore for each fish.
+# All variables from the fish-lore message are supported.
+# This can be overridden by each fish.
+lore-override:
+  - '{fisherman_lore}'
+  - '{length_lore}'
+  - ''
+  - '{fish_lore}'
+  - '<b>{rarity}'
+
 # Change the sizing ranges of the fish that belong to this rarity.
 # This can be overridden by each fish.
 size:
@@ -130,7 +140,7 @@ fish:
     # How likely is this fish to be chosen? Having a greater weight means the rarity is more likely to be chosen (the total weights don't have to add to 100)
     weight: 10
 
-    # You can set custom requirement for this fish to appear, all possible requirement are on the wiki: https://evenmorefish.github.io/EvenMoreFish/docs/features/requirements
+    # You can set custom requirement for this fish to appear, all possible requirements are on the wiki: https://evenmorefish.github.io/EvenMoreFish/docs/features/requirements
     requirements:
       biome:
         - COLD_OCEAN
@@ -143,6 +153,7 @@ fish:
 
     # You can override the lore configured in messages.yml's fish-lore for each fish.
     # All variables from the fish-lore message are supported.
+    # This overrides the rarity's setting.
     lore-override:
       - '{fisherman_lore}'
       - '{length_lore}'

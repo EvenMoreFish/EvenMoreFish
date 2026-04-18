@@ -123,6 +123,10 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
         return format(finalName);
     }
 
+    protected List<String> getLoreOverride() {
+        return getConfig().getStringList("lore-override");
+    }
+
     @Override
     public @Nullable String getPermission() {
         return getConfig().getString("permission");

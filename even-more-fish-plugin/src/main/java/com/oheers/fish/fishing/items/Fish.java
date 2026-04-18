@@ -283,6 +283,10 @@ public class Fish implements IFish, Sortable {
         checkEffects();
     }
 
+    private List<String> getLoreOverride() {
+        return section.getStringList("lore-override", rarity.getLoreOverride());
+    }
+
     /**
      * From the new method of fetching the lore, where the admin specifies exactly how they want the lore to be set up,
      * letting them modify the order, add a twist to how they want extra details and so on.
@@ -293,7 +297,7 @@ public class Fish implements IFish, Sortable {
      * @return A lore to be used by fetching data from the old messages.yml set-up.
      */
     private List<Component> getFishLore() {
-        List<String> loreOverride = section.getStringList("lore-override");
+        List<String> loreOverride = getLoreOverride();
         EMFListMessage newLoreLine;
         if (!loreOverride.isEmpty()) {
             newLoreLine = EMFListMessage.fromStringList(loreOverride);
@@ -309,26 +313,22 @@ public class Fish implements IFish, Sortable {
 
         if (!disableFisherman && fishermanPlayer != null) {
             EMFMessage message = ConfigMessage.FISHERMAN_LORE.getMessage();
-            message.setRelevantPlayer(fishermanPlayer);
-            newLoreLine.setVariableWithListInsertion("{fisherman_lore}", message.toListMessage());
+            newLoreLine.setVariableWithListInsertion("{fisherman_lore}", message.toListMessage().getUnderlying());
         } else {
             newLoreLine.setVariableWithListInsertion("{fisherman_lore}", EMFListMessage.empty());
         }
 
         if (length > 0) {
             newLoreLine.setVariableWithListInsertion("{length_lore}", ConfigMessage.LENGTH_LORE.getMessage().toListMessage());
-            newLoreLine.setLength(Float.toString(length));
         } else {
             newLoreLine.setVariableWithListInsertion("{length_lore}", EMFListMessage.empty());
         }
 
+        newLoreLine.setRelevantPlayer(fishermanPlayer);
+        newLoreLine.setLength(length);
         newLoreLine.setRarity(this.rarity.getLorePrep());
 
-        if (disableFisherman || fishermanPlayer == null) {
-            return newLoreLine.getComponentListMessage();
-        } else {
-            return newLoreLine.getComponentListMessage(fishermanPlayer);
-        }
+        return newLoreLine.getComponentListMessage();
     }
 
     private void checkEatEvent() {
