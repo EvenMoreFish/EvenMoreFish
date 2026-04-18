@@ -26,7 +26,7 @@ rewards:
     - EXP:7500
     - ITEM:DIAMOND,6
   '2':
-    - MESSAGE:<green>Congratulations for coming 1st! You have received 5000 exp and 4 diamonds!
+    - MESSAGE:<green>Congratulations for coming 2nd! You have received 5000 exp and 4 diamonds!
     - EXP:5000
     - ITEM:DIAMOND,4
   '3':
