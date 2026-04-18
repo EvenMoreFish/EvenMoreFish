@@ -1,5 +1,7 @@
 package com.oheers.fish.events;
 
+import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.Toggle;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import dev.aurelium.auraskills.api.event.loot.LootDropEvent;
@@ -19,12 +21,11 @@ public class AuraSkillsFishingEvent implements Listener {
 
     @EventHandler
     public void fishCatch(LootDropEvent event) {
-        if (!causes.contains(event.getCause())) {
+        Toggle toggle = EvenMoreFish.getInstance().getToggle();
+        if (!causes.contains(event.getCause()) || !MainConfig.getInstance().disableAuraSkills() || toggle.isCustomFishingDisabled(event.getPlayer())) {
             return;
         }
-        if (!MainConfig.getInstance().disableAuraSkills()) {
-            return;
-        }
+
         if (!MainConfig.getInstance().isFishCatchOnlyInCompetition()) {
             event.setCancelled(true);
             return;
