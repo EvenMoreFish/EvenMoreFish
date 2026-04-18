@@ -16,7 +16,8 @@ import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
-import com.oheers.fish.utils.Sortable;
+import com.oheers.fish.utils.sort.SortType;
+import com.oheers.fish.utils.sort.Sortable;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.StaticGuiElement;
@@ -29,17 +30,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Optional;
-import java.util.TreeSet;
 import java.util.function.Supplier;
 
 public class FishJournalGui extends ConfigGui {
     private final int userId;
     private final Rarity rarity;
-    private final Sortable.SortType sortType;
+    private final SortType sortType;
 
     public FishJournalGui(@NotNull HumanEntity player, @Nullable Rarity rarity) {
         super(
@@ -56,13 +54,13 @@ public class FishJournalGui extends ConfigGui {
         Section config = getGuiConfig();
         if (config != null) {
             sortType = FishUtils.getEnumValue(
-                Sortable.SortType.class,
+                SortType.class,
                 config.getString("sort-type"),
-                Sortable.SortType.ALPHABETICAL
+                SortType.ALPHABETICAL
             );
             getGui().addElement(getGroup(config));
         } else {
-            sortType = Sortable.SortType.ALPHABETICAL;
+            sortType = SortType.ALPHABETICAL;
         }
     }
 
