@@ -313,7 +313,7 @@ public class Fish implements IFish, Sortable {
 
         if (!disableFisherman && fishermanPlayer != null) {
             EMFMessage message = ConfigMessage.FISHERMAN_LORE.getMessage();
-            newLoreLine.setVariableWithListInsertion("{fisherman_lore}", message.toListMessage());
+            newLoreLine.setVariableWithListInsertion("{fisherman_lore}", message.toListMessage().getUnderlying());
         } else {
             newLoreLine.setVariableWithListInsertion("{fisherman_lore}", EMFListMessage.empty());
         }
