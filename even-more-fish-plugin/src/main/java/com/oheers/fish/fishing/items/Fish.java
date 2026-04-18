@@ -283,6 +283,10 @@ public class Fish implements IFish, Sortable {
         checkEffects();
     }
 
+    private List<String> getLoreOverride() {
+        return section.getStringList("lore-override", rarity.getLoreOverride());
+    }
+
     /**
      * From the new method of fetching the lore, where the admin specifies exactly how they want the lore to be set up,
      * letting them modify the order, add a twist to how they want extra details and so on.
@@ -293,7 +297,7 @@ public class Fish implements IFish, Sortable {
      * @return A lore to be used by fetching data from the old messages.yml set-up.
      */
     private List<Component> getFishLore() {
-        List<String> loreOverride = section.getStringList("lore-override");
+        List<String> loreOverride = getLoreOverride();
         EMFListMessage newLoreLine;
         if (!loreOverride.isEmpty()) {
             newLoreLine = EMFListMessage.fromStringList(loreOverride);
