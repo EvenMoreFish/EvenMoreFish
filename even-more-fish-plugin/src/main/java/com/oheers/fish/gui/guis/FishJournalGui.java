@@ -131,7 +131,9 @@ public class FishJournalGui extends ConfigGui {
         final FishStats fishStats = EvenMoreFish.getInstance().getPluginDataManager().getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
 
         final String discoverDate = getValueOrDefault(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE), getUnknownMessage());
-        final String discoverer = getValueOrDefault(fishStats::getDiscovererName, getUnknownMessage());
+
+        @SuppressWarnings("Convert2MethodRef") // Suppressed as it introduces an unwanted Objects#requireNonNull when compiled.
+        final String discoverer = getValueOrDefault(() -> fishStats.getDiscovererName(), getUnknownMessage());
 
         EMFListMessage lore = EMFListMessage.fromStringList(
             Optional.ofNullable(factory.getLore().getConfiguredValue())
