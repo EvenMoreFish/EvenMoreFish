@@ -309,7 +309,6 @@ public class Fish implements IFish, Sortable {
 
         if (!disableFisherman && fishermanPlayer != null) {
             EMFMessage message = ConfigMessage.FISHERMAN_LORE.getMessage();
-            message.setRelevantPlayer(fishermanPlayer);
             newLoreLine.setVariableWithListInsertion("{fisherman_lore}", message.toListMessage());
         } else {
             newLoreLine.setVariableWithListInsertion("{fisherman_lore}", EMFListMessage.empty());
@@ -317,18 +316,15 @@ public class Fish implements IFish, Sortable {
 
         if (length > 0) {
             newLoreLine.setVariableWithListInsertion("{length_lore}", ConfigMessage.LENGTH_LORE.getMessage().toListMessage());
-            newLoreLine.setLength(Float.toString(length));
         } else {
             newLoreLine.setVariableWithListInsertion("{length_lore}", EMFListMessage.empty());
         }
 
+        newLoreLine.setRelevantPlayer(fishermanPlayer);
+        newLoreLine.setLength(length);
         newLoreLine.setRarity(this.rarity.getLorePrep());
 
-        if (disableFisherman || fishermanPlayer == null) {
-            return newLoreLine.getComponentListMessage();
-        } else {
-            return newLoreLine.getComponentListMessage(fishermanPlayer);
-        }
+        return newLoreLine.getComponentListMessage();
     }
 
     private void checkEatEvent() {
