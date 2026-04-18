@@ -16,6 +16,7 @@ import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
+import com.oheers.fish.utils.Sortable;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.StaticGuiElement;
@@ -38,7 +39,7 @@ import java.util.function.Supplier;
 public class FishJournalGui extends ConfigGui {
     private final int userId;
     private final Rarity rarity;
-    private final SortType sortType;
+    private final Sortable.SortType sortType;
 
     public FishJournalGui(@NotNull HumanEntity player, @Nullable Rarity rarity) {
         super(
@@ -55,13 +56,13 @@ public class FishJournalGui extends ConfigGui {
         Section config = getGuiConfig();
         if (config != null) {
             sortType = FishUtils.getEnumValue(
-                SortType.class,
+                Sortable.SortType.class,
                 config.getString("sort-type"),
-                SortType.ALPHABETICAL
+                Sortable.SortType.ALPHABETICAL
             );
             getGui().addElement(getGroup(config));
         } else {
-            sortType = SortType.ALPHABETICAL;
+            sortType = Sortable.SortType.ALPHABETICAL;
         }
     }
 
@@ -73,7 +74,7 @@ public class FishJournalGui extends ConfigGui {
         char character = FishUtils.getCharFromString(section.getString("fish-character"), 'f');
 
         GuiElementGroup group = new GuiElementGroup(character);
-        sortType.sortFish(this.rarity.getFishList()).forEach(fish -> {
+        sortType.sort(this.rarity.getFishList()).forEach(fish -> {
             if (!fish.getShowInJournal()) {
                 return;
             }
@@ -168,7 +169,7 @@ public class FishJournalGui extends ConfigGui {
         char character = FishUtils.getCharFromString(section.getString("rarity-character"), 'r');
 
         GuiElementGroup group = new GuiElementGroup(character);
-        sortType.sortRarities(FishManager.getInstance().getRarityMap().values()).forEach(rarity -> {
+        sortType.sort(FishManager.getInstance().getRarityMap().values()).forEach(rarity -> {
             if (!rarity.getShowInJournal()) {
                 return;
             }
@@ -231,36 +232,6 @@ public class FishJournalGui extends ConfigGui {
             Logging.warn(logMessage);
         }
         return db;
-    }
-
-    public enum SortType {
-        ALPHABETICAL(Comparator.comparing(Rarity::getId), Comparator.comparing(Fish::getName)),
-        // First sort by weight, and then sort alphabetically as a fallback.
-        WEIGHT(
-            Comparator.comparingDouble(Rarity::getWeight).reversed().thenComparing(Rarity::getId),
-            Comparator.comparingDouble(Fish::getWeight).reversed().thenComparing(Fish::getName)
-        );
-
-        private final Comparator<Rarity> rarityComparator;
-        private final Comparator<Fish> fishComparator;
-
-        SortType(Comparator<Rarity> rarityComparator, Comparator<Fish> fishComparator) {
-            this.rarityComparator = rarityComparator;
-            this.fishComparator = fishComparator;
-        }
-
-        public TreeSet<Rarity> sortRarities(@NotNull Collection<Rarity> collection) {
-            TreeSet<Rarity> set = new TreeSet<>(rarityComparator);
-            set.addAll(collection);
-            return set;
-        }
-
-        public TreeSet<Fish> sortFish(@NotNull Collection<Fish> collection) {
-            TreeSet<Fish> set = new TreeSet<>(fishComparator);
-            set.addAll(collection);
-            return set;
-        }
-
     }
 
 }

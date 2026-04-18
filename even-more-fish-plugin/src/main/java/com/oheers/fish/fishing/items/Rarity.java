@@ -11,6 +11,7 @@ import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.config.RarityFileUpdates;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFSingleMessage;
+import com.oheers.fish.utils.Sortable;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
@@ -22,11 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class Rarity extends ConfigBase implements IRarity {
-
-    private static final Logger logger = EvenMoreFish.getInstance().getLogger();
+public class Rarity extends ConfigBase implements IRarity, Sortable {
 
     private final @NotNull String id;
 
