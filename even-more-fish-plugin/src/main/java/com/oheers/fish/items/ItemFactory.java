@@ -51,6 +51,7 @@ public class ItemFactory {
     private final ItemConfig<Boolean> fireResistant;
     private final ItemConfig<Boolean> hideTooltip;
     private final ItemConfig<String> itemRarity;
+    private final ItemConfig<NamespacedKey> tooltipStyle;
 
     private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation) {
         if (configLocation == null) {
@@ -78,6 +79,7 @@ public class ItemFactory {
         this.fireResistant = resolver.getFireResistant(this.configuration);
         this.hideTooltip = resolver.getHideTooltip(this.configuration);
         this.itemRarity = resolver.getItemRarity(this.configuration);
+        this.tooltipStyle = resolver.getTooltipStyle(this.configuration);
 
         this.baseItem = getBaseItem();
     }
@@ -124,6 +126,7 @@ public class ItemFactory {
             fireResistant.apply(item, player, replacements);
             hideTooltip.apply(item, player, replacements);
             itemRarity.apply(item, player, replacements);
+            tooltipStyle.apply(item, player, replacements);
 
             if (finalChanges != null) {
                 finalChanges.accept(item);
@@ -269,6 +272,10 @@ public class ItemFactory {
 
     public ItemConfig<String> getItemRarity() {
         return itemRarity;
+    }
+
+    public ItemConfig<NamespacedKey> getTooltipStyle() {
+        return tooltipStyle;
     }
 
     // Base Item Methods //

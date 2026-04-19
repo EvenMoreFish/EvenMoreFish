@@ -181,3 +181,14 @@ Example:
 item:
   item-rarity: RARE
 ```
+
+### Tooltip Style
+On 1.21.3 and above, you can set a custom tooltip style using the `tooltip-style` setting.
+
+This requires a valid style key, or it will be a broken texture.
+
+Example:
+```yaml
+item:
+  tooltip-style: my:key
+```

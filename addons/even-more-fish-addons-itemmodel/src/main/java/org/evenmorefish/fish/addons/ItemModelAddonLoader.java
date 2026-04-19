@@ -24,6 +24,7 @@ public class ItemModelAddonLoader extends AddonLoader {
     @Override
     public void loadAddons() {
         ItemConfigResolver.getInstance().setItemModelResolver(ItemModelItemConfig::new);
+        ItemConfigResolver.getInstance().setTooltipStyleResolver(TooltipStyleItemConfig::new);
     }
 
 

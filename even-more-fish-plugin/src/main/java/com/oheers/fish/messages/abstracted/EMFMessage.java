@@ -128,7 +128,10 @@ public abstract class EMFMessage {
      * Sets the relevant player for this message. If the relevant player exists, per-player placeholders will NOT be parsed.
      * @param relevantPlayer The relevant player for this message
      */
-    public final void setRelevantPlayer(@NotNull OfflinePlayer relevantPlayer) {
+    public final void setRelevantPlayer(@Nullable OfflinePlayer relevantPlayer) {
+        if (relevantPlayer == null) {
+            return;
+        }
         this.relevantPlayer = relevantPlayer;
     }
 

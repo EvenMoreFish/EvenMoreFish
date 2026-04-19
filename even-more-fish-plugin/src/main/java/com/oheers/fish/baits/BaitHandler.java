@@ -24,6 +24,7 @@ import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import com.oheers.fish.utils.sort.Sortable;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -43,7 +44,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BaitHandler extends ConfigBase implements IBait {
+public class BaitHandler extends ConfigBase implements IBait, Sortable {
     private final @NotNull String id;
     private BaitData baitData;
     private ItemFactory itemFactory;
@@ -348,6 +349,12 @@ public class BaitHandler extends ConfigBase implements IBait {
         EMFMessage message = ConfigMessage.BAIT_USED.getMessage();
         message.setBait(this);
         message.send(player);
+    }
+
+    @Override
+    public double getWeight() {
+        // TODO allow baits to have weight.
+        return 0;
     }
 
     /**
