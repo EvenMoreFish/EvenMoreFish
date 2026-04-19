@@ -148,6 +148,7 @@ testing {
                 implementation(project(":even-more-fish-api"))
                 implementation(libs.junit.jupiter.api)
                 implementation(libs.mockito.core)
+                implementation(libs.boostedyaml)
                 implementation(libs.paper.api) {
                     version {
                         strictly("1.20.1-R0.1-SNAPSHOT")

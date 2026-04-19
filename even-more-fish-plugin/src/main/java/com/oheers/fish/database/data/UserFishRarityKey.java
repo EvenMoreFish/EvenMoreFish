@@ -15,15 +15,16 @@ public record UserFishRarityKey(int userId, @NotNull String fishName, @NotNull S
     }
 
     public static @NotNull UserFishRarityKey from(final @NotNull String pattern) {
-        String[] parts = pattern.split("\\.");
-        if (parts.length != 3) {
+        int firstSeparator = pattern.indexOf('.');
+        int lastSeparator = pattern.lastIndexOf('.');
+        if (firstSeparator <= 0 || lastSeparator <= firstSeparator || lastSeparator == pattern.length() - 1) {
             return empty();
         }
 
         try {
-            int userId = Integer.parseInt(parts[0]);
-            String fishName = parts[1];
-            String fishRarity = parts[2];
+            int userId = Integer.parseInt(pattern.substring(0, firstSeparator));
+            String fishName = pattern.substring(firstSeparator + 1, lastSeparator);
+            String fishRarity = pattern.substring(lastSeparator + 1);
             return new UserFishRarityKey(userId, fishName, fishRarity);
         } catch (NumberFormatException e) {
             return empty();
