@@ -1,0 +1,46 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: emf-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: evenmorefish
+      MYSQL_USER: emf
+      MYSQL_PASSWORD: secret
+      TZ: UTC
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  minecraft:
+    image: itzg/minecraft-server:java21
+    container_name: emf-paper
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "1.21.11"
+      MEMORY: "4G"
+      ONLINE_MODE: "FALSE"
+      TZ: UTC
+      RCON_PASSWORD: "secret"
+    ports:
+      - "25565:25565"
+      - "25575:25575"
+    volumes:
+      - mc-data:/data
+      - ./docker/plugins:/data/plugins
+
+volumes:
+  mysql-data:
+  mc-data:

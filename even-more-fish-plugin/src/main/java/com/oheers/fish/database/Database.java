@@ -58,7 +58,6 @@ public class Database implements DatabaseAPI {
     private DatabaseSqlDialect sqlDialect;
 
     public Database() {
-        setJooqStartupProperties();
         this.connectionFactory = getConnectionFactory(MainConfig.getInstance().getDatabaseType().toLowerCase());
         this.connectionFactory.init();
         this.migrationManager = new MigrationManager(connectionFactory);
@@ -71,12 +70,6 @@ public class Database implements DatabaseAPI {
         initSettings(MainConfig.getInstance().getPrefix(), MainConfig.getInstance().getDatabase());
     }
 
-    private void setJooqStartupProperties() {
-        if (MainConfig.getInstance().isDisableJooqStartupCommments()) {
-            System.setProperty("org.jooq.no-logo", "true");
-            System.setProperty("org.jooq.no-tips", "true");
-        }
-    }
 
     public void migrateFromDatabaseVersionToLatest() {
         switch (version) {
@@ -116,7 +109,7 @@ public class Database implements DatabaseAPI {
     }
 
     private Jdbi createJdbi() {
-        Jdbi database = Jdbi.create((org.jdbi.v3.core.ConnectionFactory) connectionFactory::getConnection);
+        Jdbi database = Jdbi.create(connectionFactory::getConnection);
         database.installPlugin(new SqlObjectPlugin());
         database.registerRowMapper(UserReport.class, new UserReportMapper());
         database.registerRowMapper(FishLog.class, new FishLogMapper());

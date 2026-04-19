@@ -2,8 +2,7 @@
 worldguard = "7.0.9"
 worldedit = "7.3.0"
 redprotect = "7.7.3"
-flyway = "10.22.0"
-jooq = "3.19.31"
+flyway = "12.2.0"
 jdbi = "3.49.1"
 junit = "6.0.3"
 craftengine = "0.0.67"
@@ -85,9 +84,6 @@ flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
 jdbi3-core = { module = "org.jdbi:jdbi3-core", version.ref = "jdbi" }
 jdbi3-sqlobject = { module = "org.jdbi:jdbi3-sqlobject", version.ref = "jdbi" }
 
-# JOOQ
-jooq-meta-extensions = { module = "org.jooq:jooq-meta-extensions", version.ref = "jooq" }
-
 # Database Connectors
 connectors-mysql = "com.mysql:mysql-connector-j:9.6.0"
 connectors-sqlite = "org.xerial:sqlite-jdbc:3.47.0.0"
@@ -115,6 +111,5 @@ connectors = ["connectors-mysql", "connectors-sqlite"]
 shadow = { id = "com.gradleup.shadow", version = "9.4.1" }
 plugin-yml = { id = "de.eldoria.plugin-yml.bukkit", version.ref = "plugin-yml" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
-jooq = { id = "nu.studer.jooq", version = "9.0" }
 sonar = { id = "org.sonarqube", version.ref = "sonar" }
 run-paper = { id = "xyz.jpenilla.run-paper", version = "3.0.2"}
