@@ -2,6 +2,7 @@ package com.oheers.fish.events;
 
 import com.gmail.nossr50.events.McMMOReplaceVanillaTreasureEvent;
 import com.gmail.nossr50.events.skills.fishing.McMMOPlayerFishingTreasureEvent;
+import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.Toggle;
 import com.oheers.fish.competition.Competition;
@@ -9,6 +10,9 @@ import com.oheers.fish.config.MainConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 public class McMMOTreasureEvent implements Listener {
 
@@ -39,6 +43,12 @@ public class McMMOTreasureEvent implements Listener {
     @EventHandler
     public void mcmmoTreasure(McMMOPlayerFishingTreasureEvent event) {
         if (!MainConfig.getInstance().disableMcMMOTreasure()) {
+            return;
+        }
+        PlayerInventory inventory = event.getPlayer().getInventory();
+        ItemStack main = inventory.getItemInMainHand();
+        ItemStack off = inventory.getItemInOffHand();
+        if (!Checks.canUseRod(main) && !Checks.canUseRod(off)) {
             return;
         }
         Toggle toggle = EvenMoreFish.getInstance().getToggle();
