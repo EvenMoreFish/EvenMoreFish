@@ -57,6 +57,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     private final @NotNull String id;
     private BaitData baitData;
     private ItemFactory itemFactory;
+    private boolean warnedLegacyFormat;
 
     private final Logger logger = EvenMoreFish.getInstance().getLogger();
     private final FishManager fishManager;
@@ -185,6 +186,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
             return Map.of();
         }
 
+        warnLegacyFormat();
         final WeightModifier legacyModifier = WeightModifier.multiply(mainConfig.getBaitBoostRate());
         final Map<Rarity, WeightModifier> resolved = new LinkedHashMap<>();
         for (String rarityName : legacyRarities) {
@@ -228,6 +230,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
             return Map.of();
         }
 
+        warnLegacyFormat();
         final Map<Fish, WeightModifier> resolved = new LinkedHashMap<>();
         final WeightModifier legacyModifier = WeightModifier.multiply(mainConfig.getBaitBoostRate());
         for (String rarityName : fishSection.getRoutesAsStrings(false)) {
@@ -466,6 +469,9 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     @Override
     public void reload(@NotNull File configFile) {
         super.reload(configFile);
+        if (fishManager == null || mainConfig == null || id == null) {
+            return;
+        }
         this.baitData = loadBaitData();
         this.itemFactory = new BaitItemFactory(
                 baitData.id(),
@@ -478,6 +484,9 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     @Override
     public void reload() {
         super.reload();
+        if (fishManager == null || mainConfig == null || id == null) {
+            return;
+        }
         this.baitData = loadBaitData();
         this.itemFactory = new BaitItemFactory(
             baitData.id(),
@@ -489,6 +498,14 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
 
     public BaitData getBaitData() {
         return baitData;
+    }
+
+    private void warnLegacyFormat() {
+        if (warnedLegacyFormat) {
+            return;
+        }
+        warnedLegacyFormat = true;
+        logger.warning("Bait file '" + getFileName() + "' is using the old bait format. Please migrate it to 'rarity-modifiers' and/or 'fish-modifiers'.");
     }
 
     public @NotNull List<Component> createDebugMessages(@NotNull Player player) {
