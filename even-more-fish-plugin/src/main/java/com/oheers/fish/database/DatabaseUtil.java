@@ -2,11 +2,9 @@ package com.oheers.fish.database;
 
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.FishUtils;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.connection.ConnectionFactory;
 import org.jetbrains.annotations.NotNull;
-import org.jooq.SQLDialect;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,23 +13,6 @@ public class DatabaseUtil {
 
     private DatabaseUtil() {
         throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the corresponding SQLDialect for the given string.
-     *
-     * @param dialectString the string representing the SQL dialect
-     * @return the corresponding SQLDialect, or SQLDialect.DEFAULT if no match is found
-     */
-    public static SQLDialect getSQLDialect(String dialectString) {
-        if (dialectString == null || dialectString.isBlank()) {
-            return SQLDialect.DEFAULT;
-        }
-        SQLDialect dialect = FishUtils.getEnumValue(SQLDialect.class, dialectString);
-        if (dialect == null) {
-            return SQLDialect.DEFAULT;
-        }
-        return dialect;
     }
 
     public static void writeDbVerbose(final String message) {

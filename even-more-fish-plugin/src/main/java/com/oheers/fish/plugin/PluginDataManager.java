@@ -24,6 +24,7 @@ import com.oheers.fish.database.model.user.UserReport;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 public class PluginDataManager {
@@ -65,13 +66,23 @@ public class PluginDataManager {
             return database.getFishStats(fishRarityKey.fishName(),fishRarityKey.fishRarity());
         });
 
-        this.userFishStatsDataManager = new DataManager<>(new UserFishStatsSavingStrategy(MainConfig.getInstance().getUserFishStatsSaveInterval()), key -> {
-            final UserFishRarityKey userFishRarityKey = UserFishRarityKey.from(key);
-            return database.getUserFishStats(userFishRarityKey.userId(), userFishRarityKey.fishName(), userFishRarityKey.fishRarity());
-        });
+        this.userFishStatsDataManager = new DataManager<UserFishStats>(
+            new UserFishStatsSavingStrategy(),
+            key -> {
+                final UserFishRarityKey userFishRarityKey = UserFishRarityKey.from(key);
+                return database.getUserFishStats(userFishRarityKey.userId(), userFishRarityKey.fishName(), userFishRarityKey.fishRarity());
+            },
+            Long.valueOf(MainConfig.getInstance().getUserFishStatsSaveInterval()),
+            TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
+        );
 
         this.userReportDataManager = new DataManager<>(new UserReportsSavingStrategy(), uuid -> database.getUserReport(UUID.fromString(uuid)));
-        this.competitionDataManager = new DataManager<>(new CompetitionSavingStrategy(MainConfig.getInstance().getCompetitionSaveInterval()), key -> database.getCompetitionReport(Integer.parseInt(key)));
+        this.competitionDataManager = new DataManager<CompetitionReport>(
+            new CompetitionSavingStrategy(),
+            key -> database.getCompetitionReport(Integer.parseInt(key)),
+            Long.valueOf(MainConfig.getInstance().getCompetitionSaveInterval()),
+            TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
+        );
     }
 
     public void shutdown() {
@@ -81,10 +92,10 @@ public class PluginDataManager {
 
         try {
             // Flush all pending data
-            userReportDataManager.flush();
-            userFishStatsDataManager.flush();
-            fishStatsDataManager.flush();
-            competitionDataManager.flush();
+            userReportDataManager.shutdown();
+            userFishStatsDataManager.shutdown();
+            fishStatsDataManager.shutdown();
+            competitionDataManager.shutdown();
 
             // Close database connection
             database.shutdown();

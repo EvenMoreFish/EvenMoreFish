@@ -126,3 +126,5 @@ build
 /.vscode
 
 .PR-REQUEST.md
+
+docker

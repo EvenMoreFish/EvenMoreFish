@@ -1,6 +1,3 @@
-import nu.studer.gradle.jooq.JooqExtension
-import org.jooq.meta.jaxb.Property
-
 plugins {
     `java-library`
     `maven-publish`
@@ -8,7 +5,6 @@ plugins {
     //alias(libs.plugins.plugin.yml)
     //alias(libs.plugins.shadow)
     //alias(libs.plugins.grgit)
-    alias(libs.plugins.jooq)
     alias(libs.plugins.sonar)
     //id("org.evenmorefish.fish.shadow-conventions")
     id("org.evenmorefish.fish.publishing-conventions")
@@ -76,9 +72,9 @@ dependencies {
     implementation(libs.messagelib)
 
     implementation(libs.caffeine)
-    implementation(libs.jooq)
-    implementation(libs.jooq.codegen)
-    implementation(libs.jooq.meta)
+    implementation(libs.jdbi3.core)
+    implementation(libs.jdbi3.sqlobject)
+
     implementation(libs.hikaricp)
 
     compileOnly(libs.bundles.flyway) {
@@ -91,10 +87,6 @@ dependencies {
     compileOnly(libs.guava)
 
     compileOnlyApi(libs.boostedyaml)
-
-    jooqGenerator(project(":even-more-fish-database-extras"))
-    jooqGenerator(libs.jooq.meta.extensions)
-    jooqGenerator(libs.connectors.mysql)
 }
 
 
@@ -103,14 +95,6 @@ sonar {
         property("sonar.projectKey", "EvenMoreFish_EvenMoreFish")
         property("sonar.organization", "evenmorefish")
         property("sonar.host.url", "https://sonarcloud.io")
-    }
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir("src/main/generated")
-        }
     }
 }
 
@@ -131,23 +115,8 @@ val copyAddons by tasks.registering(Copy::class) {
 
 
 tasks {
-    compileJava {
-        dependsOn(":even-more-fish-plugin:generateMysqlJooq")
-    }
-
     processResources {
         dependsOn(copyAddons)
-    }
-
-    jooq {
-        version.set(libs.versions.jooq.asProvider().get())
-
-        val dialects = listOf("mysql")
-        val latestSchema = "V8_1__Create_Tables.sql"
-        dialects.forEach { dialect ->
-            val schemaPath = "src/main/resources/db/migrations/${dialect}/${latestSchema}"
-            configureDialect(dialect, schemaPath)
-        }
     }
 
     clean {
@@ -178,6 +147,13 @@ testing {
             dependencies {
                 implementation(project(":even-more-fish-api"))
                 implementation(libs.junit.jupiter.api)
+                implementation(libs.mockito.core)
+                implementation(libs.boostedyaml)
+                implementation(libs.paper.api) {
+                    version {
+                        strictly("1.20.1-R0.1-SNAPSHOT")
+                    }
+                }
                 runtimeOnly(libs.junit.jupiter.engine)
             }
 
@@ -200,34 +176,6 @@ publishing {
             version = project.version.toString()
 
             from(components["java"])
-        }
-    }
-}
-
-
-
-fun JooqExtension.configureDialect(dialect: String, latestSchema: String) {
-    configurations {
-        create(dialect) {
-            generateSchemaSourceOnCompilation.set(false)
-            jooqConfiguration.apply {
-                jdbc = null
-                generator.apply {
-                    //https://www.jooq.org/doc/latest/manual/sql-building/dsl-context/custom-settings/settings-parser/
-                    strategy.name = "com.oheers.fish.database.extras.PrefixNamingStrategy"
-                    database.apply {
-                        name = "org.jooq.meta.extensions.ddl.DDLDatabase"
-                        properties.add(Property().withKey("scripts").withValue(latestSchema))
-                        properties.add(Property().withKey("dialect").withValue(dialect.uppercase()))
-                        properties.add(Property().withKey("sort").withValue("flyway"))
-                        properties.add(Property().withKey("unqualifiedSchema").withValue("none"))
-                    }
-                    target.apply {
-                        packageName = "com.oheers.fish.database.generated.${dialect}"
-                        directory = "src/main/generated/"
-                    }
-                }
-            }
         }
     }
 }

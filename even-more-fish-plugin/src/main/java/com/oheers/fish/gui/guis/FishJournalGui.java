@@ -140,14 +140,14 @@ public class FishJournalGui extends ConfigGui {
                 .orElse(Collections.emptyList())
         );
 
-        lore.setVariable("{times-caught}", getValueOrDefault(() -> Integer.toString(userFishStats.getQuantity()), "0"));
-        lore.setVariable("{largest-size}", getValueOrDefault(() -> String.valueOf(userFishStats.getLongestLength()), "0"));
-        lore.setVariable("{smallest-size}", getValueOrDefault(() -> String.valueOf(userFishStats.getShortestLength()), "0"));
+        lore.setVariable("{times-caught}", getValueOrDefault(() -> userFishStats == null ? null : Integer.toString(userFishStats.getQuantity()), "0"));
+        lore.setVariable("{largest-size}", getValueOrDefault(() -> userFishStats == null ? null : String.valueOf(userFishStats.getLongestLength()), "0"));
+        lore.setVariable("{smallest-size}", getValueOrDefault(() -> userFishStats == null ? null : String.valueOf(userFishStats.getShortestLength()), "0"));
         lore.setVariable("{discover-date}", discoverDate);
         lore.setVariable("{discoverer}", discoverer);
-        lore.setVariable("{server-largest}", getValueOrDefault(() -> String.valueOf(fishStats.getLongestLength()), "0"));
-        lore.setVariable("{server-smallest}", getValueOrDefault(() -> String.valueOf(fishStats.getShortestLength()), "0"));
-        lore.setVariable("{server-caught}", getValueOrDefault(() -> String.valueOf(fishStats.getQuantity()), "0"));
+        lore.setVariable("{server-largest}", getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getLongestLength()), "0"));
+        lore.setVariable("{server-smallest}", getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getShortestLength()), "0"));
+        lore.setVariable("{server-caught}", getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getQuantity()), "0"));
 
         return lore;
     }
