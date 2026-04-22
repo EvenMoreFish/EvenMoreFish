@@ -13,6 +13,9 @@ import com.oheers.fish.baits.configs.BaitFileUpdates;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.baits.model.ApplicationResult;
 import com.oheers.fish.baits.model.BaitData;
+import com.oheers.fish.baits.model.FishChance;
+import com.oheers.fish.baits.model.RarityChance;
+import com.oheers.fish.baits.model.WeightModifier;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.exceptions.MaxBaitReachedException;
@@ -24,6 +27,7 @@ import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import net.kyori.adventure.text.Component;
 import com.oheers.fish.utils.sort.Sortable;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Location;
@@ -36,11 +40,16 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,7 +58,6 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     private BaitData baitData;
     private ItemFactory itemFactory;
 
-    private static final double DEFAULT_BOOST_RATE = 1.0;
     private final Logger logger = EvenMoreFish.getInstance().getLogger();
     private final FishManager fishManager;
     private final MainConfig mainConfig;
@@ -69,11 +77,10 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         super(file, EvenMoreFish.getInstance(), false);
         BaitFileUpdates.update(this);
 
-        this.id = validateAndGetId();
-        this.baitData = loadBaitData();
-
         this.fishManager = fishManager;
         this.mainConfig = mainConfig;
+        this.id = validateAndGetId();
+        this.baitData = loadBaitData();
 
         this.economy = fetchEconomyInstance();
 
@@ -137,13 +144,17 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     }
 
     private BaitData loadBaitData() {
-        List<Rarity> rarities = resolveRarity();
-        List<Fish> fish = resolveFish();
+        Map<Rarity, WeightModifier> rarityModifiers = resolveRarityModifiers();
+        Map<Fish, WeightModifier> fishModifiers = resolveFishModifiers();
+        List<Rarity> rarities = List.copyOf(rarityModifiers.keySet());
+        List<Fish> fish = List.copyOf(fishModifiers.keySet());
         return new BaitData(
                 id,
                 getConfig().getString("item.displayname", this.id),
                 rarities,
                 fish,
+                rarityModifiers,
+                fishModifiers,
                 getConfig().getBoolean("disabled", false),
                 getConfig().getBoolean("infinite", false),
                 getConfig().getInt("max-applications", -1),
@@ -163,28 +174,110 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return baitData.rarities();
     }
 
-    private List<Rarity> resolveRarity() {
-        List<String> rarityStrings = getConfig().getStringList("rarities");
-        return rarityStrings.stream()
-                .map(FishManager.getInstance()::getRarity)
-                .filter(Objects::nonNull)
-                .toList();
+    private @NotNull Map<Rarity, WeightModifier> resolveRarityModifiers() {
+        final Section rarityModifiers = getConfig().getSection("rarity-modifiers");
+        if (rarityModifiers != null) {
+            return parseRarityModifiers(rarityModifiers);
+        }
+
+        final List<String> legacyRarities = getConfig().getStringList("rarities");
+        if (legacyRarities.isEmpty()) {
+            return Map.of();
+        }
+
+        final WeightModifier legacyModifier = WeightModifier.multiply(mainConfig.getBaitBoostRate());
+        final Map<Rarity, WeightModifier> resolved = new LinkedHashMap<>();
+        for (String rarityName : legacyRarities) {
+            final Rarity rarity = FishManager.getInstance().getRarity(rarityName);
+            if (rarity == null) {
+                logger.warning("Invalid rarity '" + rarityName + "' found in bait " + getId() + ".");
+                continue;
+            }
+            resolved.put(rarity, legacyModifier);
+        }
+        return Map.copyOf(resolved);
     }
 
-    private List<Fish> resolveFish() {
+    private @NotNull Map<Rarity, WeightModifier> parseRarityModifiers(@NotNull Section section) {
+        final Map<Rarity, WeightModifier> resolved = new LinkedHashMap<>();
+        for (String rarityName : section.getRoutesAsStrings(false)) {
+            final Rarity rarity = FishManager.getInstance().getRarity(rarityName);
+            if (rarity == null) {
+                logger.warning("Invalid rarity '" + rarityName + "' found in bait " + getId() + ".");
+                continue;
+            }
+
+            try {
+                resolved.put(rarity, WeightModifier.parse(section.get(rarityName)));
+            } catch (IllegalArgumentException exception) {
+                logger.warning(exception.getMessage());
+            }
+        }
+        return Map.copyOf(resolved);
+    }
+
+    private @NotNull Map<Fish, WeightModifier> resolveFishModifiers() {
+        final Section fishModifiers = getConfig().getSection("fish-modifiers");
+        if (fishModifiers != null) {
+            return parseFishModifiers(fishModifiers);
+        }
+
         final Section fishSection = getConfig().getSection("fish");
         if (fishSection == null) {
             EvenMoreFish.getInstance().debug("Fish section was null in bait. Returning empty list..");
-            return Collections.emptyList();
+            return Map.of();
         }
 
-        return getConfig().getSection("fish").getRoutesAsStrings(false).stream()
-                .map(FishManager.getInstance()::getRarity)
-                .filter(Objects::nonNull)
-                .flatMap(rarity -> rarity.getFishList().stream())
-                .filter(fish -> getConfig().getStringList("fish." + fish.getRarity().getId())
-                        .contains(fish.getName()))
-                .toList();
+        final Map<Fish, WeightModifier> resolved = new LinkedHashMap<>();
+        final WeightModifier legacyModifier = WeightModifier.multiply(mainConfig.getBaitBoostRate());
+        for (String rarityName : fishSection.getRoutesAsStrings(false)) {
+            final Rarity rarity = FishManager.getInstance().getRarity(rarityName);
+            if (rarity == null) {
+                logger.warning("Invalid rarity '" + rarityName + "' found in legacy fish config for bait " + getId() + ".");
+                continue;
+            }
+            for (String fishName : getConfig().getStringList("fish." + rarityName)) {
+                final Fish fish = FishManager.getInstance().getFish(rarity.getId(), fishName);
+                if (fish == null) {
+                    logger.warning("Invalid fish '" + fishName + "' found under rarity '" + rarityName + "' in bait " + getId() + ".");
+                    continue;
+                }
+                resolved.put(fish, legacyModifier);
+            }
+        }
+        return Map.copyOf(resolved);
+    }
+
+    private @NotNull Map<Fish, WeightModifier> parseFishModifiers(@NotNull Section section) {
+        final Map<Fish, WeightModifier> resolved = new LinkedHashMap<>();
+        for (String rarityName : section.getRoutesAsStrings(false)) {
+            final Section raritySection = section.getSection(rarityName);
+            if (raritySection == null) {
+                logger.warning("Invalid fish-modifiers section '" + rarityName + "' in bait " + getId() + ".");
+                continue;
+            }
+
+            final Rarity rarity = FishManager.getInstance().getRarity(rarityName);
+            if (rarity == null) {
+                logger.warning("Invalid rarity '" + rarityName + "' found in fish-modifiers for bait " + getId() + ".");
+                continue;
+            }
+
+            for (String fishName : raritySection.getRoutesAsStrings(false)) {
+                final Fish fish = FishManager.getInstance().getFish(rarity.getId(), fishName);
+                if (fish == null) {
+                    logger.warning("Invalid fish '" + fishName + "' found under rarity '" + rarityName + "' in bait " + getId() + ".");
+                    continue;
+                }
+
+                try {
+                    resolved.put(fish, WeightModifier.parse(raritySection.get(fishName)));
+                } catch (IllegalArgumentException exception) {
+                    logger.warning(exception.getMessage());
+                }
+            }
+        }
+        return Map.copyOf(resolved);
     }
 
     private @NotNull List<Fish> getFish() {
@@ -208,75 +301,55 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      */
     @Override
     public @NotNull Fish chooseFish(@NotNull Player player, @NotNull Location location) {
-        // Step 1: Determine which rarities are boosted by this bait
-        Set<Rarity> boostedRarities = determineBoostedRarities();
-
-        // Step 2: Select a rarity considering the boosts
-        Rarity selectedRarity = selectRarityWithBoosts(player, boostedRarities);
-
-        // Step 3: Select a fish from the chosen rarity
+        Rarity selectedRarity = selectRarityWithModifiers(player);
         Fish selectedFish = selectFishFromRarity(selectedRarity, player, location);
 
-        // Step 4: Handle bait consumption and metadata
         processBaitUsage(player, selectedRarity, selectedFish);
 
         return selectedFish;
     }
 
-    private @NotNull Set<Rarity> determineBoostedRarities() {
-        Set<Rarity> boosted = new HashSet<>(getRarities());
-        getFish().stream()
-                .map(Fish::getRarity)
-                .forEach(boosted::add);
-        return boosted;
+    private @NotNull Map<Rarity, WeightModifier> getRarityModifiers() {
+        return baitData.rarityModifiers();
     }
 
-    private Rarity selectRarityWithBoosts(Player player, Set<Rarity> boostedRarities) {
-        return fishManager.getRandomWeightedRarity(
-                player,
-                mainConfig.getBaitBoostRate(),
-                boostedRarities,
-                Set.copyOf(fishManager.getRarityMap().values()),
-                null
+    private @NotNull Map<Fish, WeightModifier> getFishModifiers() {
+        return baitData.fishModifiers();
+    }
+
+    private @Nullable Rarity selectRarityWithModifiers(@NotNull Player player) {
+        return fishManager.getWeightedRarity(
+            player,
+            Set.copyOf(fishManager.getRarityMap().values()),
+            this::getEffectiveRarityWeight,
+            null
         );
     }
 
-    private Fish selectFishFromRarity(Rarity rarity, Player player, Location location) {
-        List<Fish> eligibleFish = getEligibleFishForRarity(rarity);
-        double boostRate = shouldApplyBoost(rarity) ? mainConfig.getBaitBoostRate() : DEFAULT_BOOST_RATE;
-
-        return fishManager.getFish(
+    private @Nullable Fish selectFishFromRarity(@Nullable Rarity rarity, @NotNull Player player, @NotNull Location location) {
+        if (rarity == null) {
+            return null;
+        }
+        return fishManager.getWeightedFish(
             rarity,
             location,
             player,
-            boostRate,
-            eligibleFish,
+            this::getEffectiveFishWeight,
             true,
             null,
             null
         );
     }
 
-    private @Nullable List<Fish> getEligibleFishForRarity(Rarity rarity) {
-        if (getFish().isEmpty()) {
-            return null; // Let fishManager use all fish in rarity
-        }
-
-        // If this rarity has specifically boosted fish, use them
-        if (getFish().stream().anyMatch(f -> f.getRarity().equals(rarity))) {
-            return getFish();
-        }
-
-        // Otherwise use all fish from this rarity
-        return rarity.getFishList();
+    private double getEffectiveRarityWeight(@NotNull Rarity rarity) {
+        return getRarityModifiers().getOrDefault(rarity, WeightModifier.IDENTITY).apply(rarity.getWeight());
     }
 
-    private boolean shouldApplyBoost(Rarity rarity) {
-        return getRarities().contains(rarity) ||
-                getFish().stream().anyMatch(f -> f.getRarity().equals(rarity));
+    private double getEffectiveFishWeight(@NotNull Fish fish) {
+        return getFishModifiers().getOrDefault(fish, WeightModifier.IDENTITY).apply(FishManager.getBaseFishWeight(fish));
     }
 
-    private void processBaitUsage(Player player, Rarity rarity, Fish fish) {
+    private void processBaitUsage(@NotNull Player player, @Nullable Rarity rarity, @Nullable Fish fish) {
         if (fish == null) {
             return;
         }
@@ -289,12 +362,8 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         }
     }
 
-    private boolean shouldAlertUsage(Rarity rarity, Fish fish) {
-        // Alert if either:
-        // 1. The rarity was directly boosted, or
-        // 2. The specific fish was boosted
-        return getRarities().contains(rarity) ||
-                (!getFish().isEmpty() && getFish().contains(fish));
+    private boolean shouldAlertUsage(@Nullable Rarity rarity, @NotNull Fish fish) {
+        return (rarity != null && hasRarityModifier(rarity)) || hasFishModifier(fish);
     }
 
     @Override
@@ -330,10 +399,19 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     }
 
     private boolean shouldConsumeBait(@NotNull Fish fish) {
-        // Consume bait if:
-        // 1. The fish's rarity is directly boosted by this bait, or
-        // 2. The specific fish is in this bait's fish list
-        return getRarities().contains(fish.getRarity()) || getFish().contains(fish);
+        return hasRarityModifier(fish.getRarity()) || hasFishModifier(fish);
+    }
+
+    private boolean hasRarityModifier(@NotNull Rarity rarity) {
+        return getRarityModifiers().containsKey(rarity);
+    }
+
+    private boolean hasFishModifier(@NotNull Fish fish) {
+        return getFishModifiers().containsKey(fish);
+    }
+
+    private boolean hasModifiersInRarity(@NotNull Rarity rarity) {
+        return hasRarityModifier(rarity) || getFishModifiers().keySet().stream().anyMatch(fish -> fish.getRarity().equals(rarity));
     }
 
     /**
@@ -411,6 +489,137 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
 
     public BaitData getBaitData() {
         return baitData;
+    }
+
+    public @NotNull List<Component> createDebugMessages(@NotNull Player player) {
+        return createDebugMessages(player, player.getLocation());
+    }
+
+    public @NotNull List<Component> createDebugMessages(@NotNull Player player, @NotNull Location location) {
+        final List<Component> messages = new ArrayList<>();
+        final List<RarityChance> rarityChances = calculateRarityChances(player, location);
+
+        messages.add(Component.text("Bait debug for " + getId() + " at " + formatLocation(location) + " on " + player.getName()));
+
+        if (rarityChances.isEmpty()) {
+            messages.add(Component.text("No eligible rarities matched this player and location."));
+            return messages;
+        }
+
+        messages.add(Component.text("Rarity chances:"));
+        for (RarityChance rarityChance : rarityChances) {
+            messages.add(Component.text(" - %s: %s [base=%s, effective=%s, modifier=%s]".formatted(
+                rarityChance.rarity().getId(),
+                formatPercent(rarityChance.chance()),
+                formatNumber(rarityChance.baseWeight()),
+                formatNumber(rarityChance.effectiveWeight()),
+                rarityChance.modifier().describe()
+            )));
+        }
+
+        final List<RarityChance> modifiedRarities = rarityChances.stream()
+            .filter(rarityChance -> hasModifiersInRarity(rarityChance.rarity()))
+            .toList();
+
+        if (modifiedRarities.isEmpty()) {
+            messages.add(Component.text("This bait does not modify any currently eligible rarity or fish."));
+            return messages;
+        }
+
+        messages.add(Component.text("Fish chances in affected rarities:"));
+        for (RarityChance rarityChance : modifiedRarities) {
+            messages.add(Component.text(" * " + rarityChance.rarity().getId()));
+            for (FishChance fishChance : rarityChance.fishChances()) {
+                messages.add(Component.text("   - %s: overall=%s, in-rarity=%s [base=%s, effective=%s, modifier=%s]".formatted(
+                    fishChance.fish().getName(),
+                    formatPercent(fishChance.overallChance()),
+                    formatPercent(fishChance.conditionalChance()),
+                    formatNumber(fishChance.baseWeight()),
+                    formatNumber(fishChance.effectiveWeight()),
+                    fishChance.modifier().describe()
+                )));
+            }
+        }
+
+        return messages;
+    }
+
+    private @NotNull List<RarityChance> calculateRarityChances(@NotNull Player player, @NotNull Location location) {
+        final List<Rarity> availableRarities = fishManager.getAvailableRarities(
+            player,
+            Set.copyOf(fishManager.getRarityMap().values()),
+            null
+        );
+        if (availableRarities.isEmpty()) {
+            return List.of();
+        }
+
+        final Map<Rarity, Long> rarityCounts = availableRarities.stream()
+            .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
+        final double totalRarityWeight = rarityCounts.entrySet().stream()
+            .mapToDouble(entry -> getEffectiveRarityWeight(entry.getKey()) * entry.getValue())
+            .sum();
+
+        return rarityCounts.entrySet().stream()
+            .map(entry -> buildRarityChance(entry.getKey(), player, location, totalRarityWeight, availableRarities.size(), entry.getValue()))
+            .sorted(Comparator.comparingDouble(RarityChance::chance).reversed())
+            .toList();
+    }
+
+    private @NotNull RarityChance buildRarityChance(@NotNull Rarity rarity,
+                                                    @NotNull Player player,
+                                                    @NotNull Location location,
+                                                    double totalRarityWeight,
+                                                    int totalCandidateCount,
+                                                    long multiplicity) {
+        final double baseWeight = rarity.getWeight() * multiplicity;
+        final WeightModifier rarityModifier = getRarityModifiers().getOrDefault(rarity, WeightModifier.IDENTITY);
+        final double effectiveWeight = rarityModifier.apply(rarity.getWeight()) * multiplicity;
+        final double rarityChance = totalRarityWeight > 0.0D
+            ? effectiveWeight / totalRarityWeight
+            : (double) multiplicity / totalCandidateCount;
+        final List<FishChance> fishChances = calculateFishChances(rarity, player, location, rarityChance);
+
+        return new RarityChance(rarity, baseWeight, effectiveWeight, rarityChance, rarityModifier, fishChances);
+    }
+
+    private @NotNull List<FishChance> calculateFishChances(@NotNull Rarity rarity, @NotNull Player player, @NotNull Location location, double rarityChance) {
+        final List<Fish> availableFish = fishManager.getAvailableFish(rarity, location, player, true, null, null);
+        if (availableFish.isEmpty()) {
+            return List.of();
+        }
+
+        final double totalFishWeight = availableFish.stream()
+            .mapToDouble(this::getEffectiveFishWeight)
+            .sum();
+
+        return availableFish.stream()
+            .map(fish -> {
+                final double baseWeight = FishManager.getBaseFishWeight(fish);
+                final WeightModifier modifier = getFishModifiers().getOrDefault(fish, WeightModifier.IDENTITY);
+                final double effectiveWeight = modifier.apply(baseWeight);
+                final double conditionalChance = totalFishWeight > 0.0D
+                    ? effectiveWeight / totalFishWeight
+                    : 1.0D / availableFish.size();
+                return new FishChance(fish, baseWeight, effectiveWeight, conditionalChance, rarityChance * conditionalChance, modifier);
+            })
+            .sorted(Comparator.comparingDouble(FishChance::overallChance).reversed())
+            .toList();
+    }
+
+    private @NotNull String formatLocation(@NotNull Location location) {
+        final String world = location.getWorld() != null ? location.getWorld().getName() : "unknown";
+        return "%s %.1f %.1f %.1f".formatted(world, location.getX(), location.getY(), location.getZ());
+    }
+
+    private @NotNull String formatPercent(double value) {
+        return String.format(Locale.ROOT, "%.2f%%", value * 100.0D);
+    }
+
+    private @NotNull String formatNumber(double value) {
+        return String.format(Locale.ROOT, "%.3f", value)
+            .replaceAll("0+$", "")
+            .replaceAll("\\.$", "");
     }
 
     // Bait Shop

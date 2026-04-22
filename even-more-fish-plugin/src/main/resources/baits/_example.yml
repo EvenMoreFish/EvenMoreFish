@@ -54,18 +54,19 @@ item:
   lore:
     - "<gray>Boosts Epic & Legendary fish."
 
-# This lists the fish that are attracted to this bait (make sure to specify the rarity and ensure there's no typos)
-fish:
-  Common:
-    - "Carp"
-    - "Bluefish"
-    - "Haddock"
-  Rare:
-    - "Sunfish"
-    - "Goldfish"
-    - "Nemo"
+# Modify rarity weights directly. Bare numbers are treated as additive boosts.
+# Supports +N, -N, *N and /N.
+rarity-modifiers:
+  Epic: "+50"
+  Legendary: "*2"
 
-# This specifies just the rarities, any fish in this rarity will be attracted to this bait.
-rarities:
-  - "Epic"
-  - "Legendary"
+# Modify individual fish weights inside their rarity.
+fish-modifiers:
+  Common:
+    Carp: "+25"
+    Bluefish: "*2"
+    Haddock: "-5"
+  Rare:
+    Sunfish: "+15"
+    Goldfish: "/2"
+    Nemo: "*3"
