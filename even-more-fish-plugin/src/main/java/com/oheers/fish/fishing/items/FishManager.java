@@ -178,6 +178,28 @@ public class FishManager extends AbstractFishManager<Rarity> {
         return selected != null && isRarityAllowedInCompetition(selected) ? selected : null;
     }
 
+    public @Nullable Rarity getWeightedRarity(@Nullable Player fisher,
+                                              @NotNull Set<Rarity> totalRarities,
+                                              @NotNull ToDoubleFunction<Rarity> weightFunction,
+                                              @Nullable CustomRod customRod) {
+        Rarity preDecided = getPreDecidedRarity(fisher);
+        if (preDecided != null) {
+            return preDecided;
+        }
+
+        List<Rarity> allowedRarities = getAvailableRarities(fisher, totalRarities, customRod);
+        if (allowedRarities.isEmpty()) {
+            return null;
+        }
+
+        Rarity selected = WeightedRandom.pick(
+            allowedRarities,
+            weightFunction,
+            EvenMoreFish.getInstance().getRandom()
+        );
+        return selected != null && isRarityAllowedInCompetition(selected) ? selected : null;
+    }
+
     public Fish getFish(Rarity rarity, Location location, Player player,
                         double boostRate, List<Fish> boostedFish,
                         boolean doRequirementChecks,
@@ -213,6 +235,31 @@ public class FishManager extends AbstractFishManager<Rarity> {
         return isFishAllowedOutsideCompetition(selected) ? selected : null;
     }
 
+    public @Nullable Fish getWeightedFish(@Nullable Rarity rarity,
+                                          @Nullable Location location,
+                                          @Nullable Player player,
+                                          @NotNull ToDoubleFunction<Fish> weightFunction,
+                                          boolean doRequirementChecks,
+                                          @Nullable Processor<?> processor,
+                                          @Nullable CustomRod customRod) {
+        if (rarity == null) {
+            return null;
+        }
+
+        List<Fish> available = getAvailableFish(rarity, location, player, doRequirementChecks, processor, customRod);
+        if (available.isEmpty()) {
+            logNoFishAvailable(rarity, location, customRod);
+            return null;
+        }
+
+        Fish selected = WeightedRandom.pick(
+            available,
+            weightFunction,
+            EvenMoreFish.getInstance().getRandom()
+        );
+        return isFishAllowedOutsideCompetition(selected) ? selected : null;
+    }
+
     /* Helper Methods */
 
     private Rarity getPreDecidedRarity(Player player) {
@@ -234,6 +281,15 @@ public class FishManager extends AbstractFishManager<Rarity> {
                 boostRate,
                 boosted,
                 EvenMoreFish.getInstance().getRandom()
+        );
+    }
+
+    public @NotNull List<Rarity> getAvailableRarities(@Nullable Player fisher,
+                                                      @NotNull Set<Rarity> totalRarities,
+                                                      @Nullable CustomRod customRod) {
+        return filterByCustomRod(
+            getAllowedRarities(fisher, 1.0D, Collections.emptySet(), totalRarities),
+            customRod
         );
     }
 
@@ -276,7 +332,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
     public @Nullable Fish getRandomWeightedFish(@NotNull List<Fish> fishList, double boostRate, @Nullable List<Fish> boostedFish) {
         if (fishList.isEmpty()) return null;
 
-        ToDoubleFunction<Fish> weightFunction = fish -> fish.getWeight() == 0 ? 1 : fish.getWeight();
+        ToDoubleFunction<Fish> weightFunction = FishManager::getBaseFishWeight;
         Set<Fish> boostedSet = boostedFish != null ? new HashSet<>(boostedFish) : Collections.emptySet();
 
         return WeightedRandom.pick(
@@ -286,6 +342,31 @@ public class FishManager extends AbstractFishManager<Rarity> {
                 boostedSet,
                 EvenMoreFish.getInstance().getRandom()
         );
+    }
+
+    public @NotNull List<Fish> getAvailableFish(@NotNull Rarity rarity,
+                                                @Nullable Location location,
+                                                @Nullable Player player,
+                                                boolean doRequirementChecks,
+                                                @Nullable Processor<?> processor,
+                                                @Nullable CustomRod customRod) {
+        final RequirementContext context = new RequirementContext(
+            location != null ? location.getWorld() : null,
+            location,
+            player,
+            null,
+            null
+        );
+
+        return rarity.getFishList().stream()
+            .filter(fish -> isFishAllowedByCustomRod(fish, customRod))
+            .filter(fish -> isFishAllowedByProcessor(fish, processor))
+            .filter(fish -> meetsRequirements(fish, doRequirementChecks, context))
+            .toList();
+    }
+
+    public static double getBaseFishWeight(@NotNull Fish fish) {
+        return fish.getWeight() == 0 ? 1.0D : fish.getWeight();
     }
 
     private boolean isFishAllowed(Fish fish, double boostRate, List<Fish> boostedFish,

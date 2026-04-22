@@ -1,6 +1,7 @@
 package com.oheers.fish.commands;
 
 import com.oheers.fish.messages.ConfigMessage;
+import com.oheers.fish.messages.EMFSingleMessage;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +15,7 @@ public abstract class AdminCommandProvider<C, A> {
         .addUsage("admin fish", ConfigMessage.HELP_ADMIN_FISH::getMessage)
         .addUsage("admin custom-rod", ConfigMessage.HELP_ADMIN_CUSTOMROD::getMessage)
         .addUsage("admin bait", ConfigMessage.HELP_ADMIN_BAIT::getMessage)
+        .addUsage("admin bait debug", () -> EMFSingleMessage.fromString("Shows the resolved bait chances for a player."))
         .addUsage("admin clearbaits", ConfigMessage.HELP_ADMIN_CLEARBAITS::getMessage)
         .addUsage("admin reload", ConfigMessage.HELP_ADMIN_RELOAD::getMessage)
         .addUsage("admin version", ConfigMessage.HELP_ADMIN_VERSION::getMessage)
