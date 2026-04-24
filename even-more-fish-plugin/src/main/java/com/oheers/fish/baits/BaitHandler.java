@@ -443,7 +443,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      */
     @Override
     public @NotNull String getId() {
-        return baitData.id();
+        return id;
     }
 
     public @NotNull EMFSingleMessage getFormat() {
