@@ -5,8 +5,8 @@ item:
   material: GOLDEN_CARROT
   displayname: <gold>Legendary Lure
   glowing: true
-rarities:
-  - Legendary
+rarity-modifiers:
+  Legendary: "*2"
 catch-weight: 2
 application-weight: 40
 max-baits: 20

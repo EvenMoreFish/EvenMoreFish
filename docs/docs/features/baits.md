@@ -13,7 +13,48 @@ To create a new bait, you need to create a new yml file in the baits folder.
 The following configs are required in each bait config file:
 - `id` - Allows the plugin to identify this bait.
 
-All other configs are optional, however you will most likely want to add fish and rarities to your bait. You can see how to do this in the example file.
+All other configs are optional, however you will most likely want to add fish and rarities to your bait. The current format uses `rarity-modifiers` and `fish-modifiers` so you can directly control how weights are changed.
+
+## Modifiers
+Baits can modify either whole rarities or specific fish.
+
+Bare numbers are treated as additive boosts. Modifier expressions also support:
+- `+N` to add weight
+- `-N` to subtract weight
+- `*N` to multiply weight
+- `/N` to divide weight
+
+Example:
+```yaml
+# Modify rarity weights directly.
+rarity-modifiers:
+  Epic: "+50"
+  Legendary: "*2"
+
+# Modify individual fish weights inside their rarity.
+fish-modifiers:
+  Common:
+    Carp: "+25"
+    Bluefish: "*2"
+    Haddock: "-5"
+  Rare:
+    Sunfish: "+15"
+    Goldfish: "/2"
+    Nemo: "*3"
+```
+
+## Pre-2.3.0 Format Migration
+Bait files created before `2.3.0` may still use the old `rarities` and `fish` sections.
+
+Those files are now migrated automatically when the bait is loaded. Pre-`2.3.0` entries are converted to the new modifier format using the global `bait.boost` value from `config.yml`, then the old keys are removed from the file.
+
+## Debug Commands
+You can inspect the resolved bait chances with the admin debug command:
+
+- `/emf admin bait debug <bait>` shows the debug output for yourself.
+- `/emf admin bait debug <bait> <target>` shows the debug output for another player.
+
+This is useful for checking the final rarity and fish chances after bait modifiers are applied.
 
 ## Disabling Baits
 To disable a bait, you have two choices:

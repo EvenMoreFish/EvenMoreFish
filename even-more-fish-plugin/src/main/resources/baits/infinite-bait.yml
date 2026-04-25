@@ -5,8 +5,8 @@ item:
   material: ENDER_PEARL
   displayname: <light_purple>Infinite Bait
   glowing: true
-rarities:
-  - Legendary
+rarity-modifiers:
+  Legendary: "*2"
 catch-weight: 1
 application-weight: 1
 max-baits: 1
