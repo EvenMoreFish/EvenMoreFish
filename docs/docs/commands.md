@@ -37,6 +37,8 @@ The main command (`/emf`) can have custom aliases configured in `MainConfig`.
 | `/emf admin list itemAddons`            | None                                | `emf.admin`                        | Lists item addons                     |
 | `/emf admin nbt-rod`                    | `[target]`                          | `emf.admin`                        | Gives NBT fishing rod                 |
 | `/emf admin bait`                       | `<bait> [quantity] [target]`        | `emf.admin`                        | Gives bait to player                  |
+| `/emf admin bait debug`                 | `<bait>`                            | `emf.admin`                        | Shows resolved bait chances for you   |
+| `/emf admin bait debug`                 | `<bait> <target>`                   | `emf.admin`                        | Shows resolved bait chances for target |
 | `/emf admin clearbaits`                 | `[target]`                          | `emf.admin`                        | Clears baits from held rod            |
 | `/emf admin reload`                     | None                                | `emf.admin`                        | Reloads plugin config                 |
 | `/emf admin version`                    | None                                | `emf.admin`                        | Shows plugin version info             |

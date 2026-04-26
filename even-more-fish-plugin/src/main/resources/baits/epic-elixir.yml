@@ -6,6 +6,6 @@ item:
   displayname: <light_purple>Epic Elixir
   glowing: true
 application-weight: 7
-rarities:
-  - Epic
+rarity-modifiers:
+  Epic: "*2"
 max-baits: 64

@@ -41,10 +41,10 @@ Total Weight = Weight of Common + Weight of Epic + Weight of Junk
 ```text
 Probability = Weight of Common / Total Weight
             = 100 / 108
-            ≈ 0.9259
+            ~= 0.9259
 
-Percentage = 0.9259 × 100
-           ≈ 92.59%
+Percentage = 0.9259 x 100
+           ~= 92.59%
 ```
 
 #### Epic
@@ -52,10 +52,10 @@ Percentage = 0.9259 × 100
 ```text
 Probability = Weight of Epic / Total Weight
             = 3 / 108
-            ≈ 0.0278
+            ~= 0.0278
 
-Percentage = 0.0278 × 100
-           ≈ 2.78%
+Percentage = 0.0278 x 100
+           ~= 2.78%
 ```
 
 #### Junk
@@ -63,10 +63,10 @@ Percentage = 0.0278 × 100
 ```text
 Probability = Weight of Junk / Total Weight
             = 5 / 108
-            ≈ 0.0463
+            ~= 0.0463
 
-Percentage = 0.0463 × 100
-           ≈ 4.63%
+Percentage = 0.0463 x 100
+           ~= 4.63%
 ```
 
 ---
@@ -89,18 +89,18 @@ This system ensures that objects with higher weights are prioritized in the sele
 
 ---
 
-## Baits and Boosted Weights
+## Baits and Modified Weights
 
-Baits modify the selection chances of specific items by boosting their weights. When a bait is applied, it multiplies the base weight of the affected items, effectively increasing their likelihood of being selected.
+Baits modify the selection chances of specific items by changing their weights. A bait can add, subtract, multiply, or divide the base weight of affected rarities and fish.
 
 ---
 
 ### How It Works
 
 1. **Each item has a base weight**, which defines its normal chance of being selected.
-2. **Baits can boost specific items** by increasing their effective weight.
-3. **The boost is applied** by multiplying the item's base weight by a `boostRate` if the item is in the list of `boosted` items.
-4. **Items not boosted** retain their original base weight.
+2. **Baits can target whole rarities or specific fish**.
+3. **Each configured modifier** is applied to the base weight to produce the effective weight.
+4. **Items without a modifier** retain their original base weight.
 
 ---
 
@@ -108,25 +108,17 @@ Baits modify the selection chances of specific items by boosting their weights. 
 
 The effective weight of an item is determined using the following logic:
 
-```java
-private static <T> double getEffectiveWeight(
-        T element,
-        @NotNull ToDoubleFunction<T> weightFunction,
-        double boostRate,
-        Set<T> boosted
-) {
-    double baseWeight = weightFunction.applyAsDouble(element);
-    if (baseWeight <= 0.0) return 0.0;
-
-    return (boostRate != -1 && boosted.contains(element))
-            ? baseWeight * boostRate
-            : baseWeight;
-}
+```text
++N  -> baseWeight + N
+-N  -> baseWeight - N
+*N  -> baseWeight * N
+/N  -> baseWeight / N
 ```
 
-* If the item’s base weight is `0` or less, it will not be considered.
-* If the item is **in the `boosted` set** and `boostRate` is not `-1`, its weight is multiplied by the `boostRate`.
-* Otherwise, the base weight remains unchanged.
+Bare numbers are treated the same as `+N`.
+
+* If the item's base weight is `0` or less, it will not be considered.
+* Results are clamped to `0`, so negative outcomes never produce a negative effective weight.
 
 ---
 
@@ -134,8 +126,14 @@ private static <T> double getEffectiveWeight(
 
 Suppose you have the following bait configuration:
 
-* **Boost Rate**: `2.0`
-* **Boosted Items**: `{Epic}`
+```yaml
+rarity-modifiers:
+  Epic: "*2"
+
+fish-modifiers:
+  Rare:
+    Nemo: "+15"
+```
 
 And the base weights are:
 
@@ -146,7 +144,7 @@ And the base weights are:
 The **effective weights** would be:
 
 * **Common**: 100
-* **Epic**: 3 × 2.0 = 6
+* **Epic**: 3 x 2 = 6
 * **Junk**: 5
 
 ### Recalculated Total Weight
@@ -158,16 +156,16 @@ Total Weight = 100 (Common) + 6 (Epic) + 5 (Junk)
 
 ### New Selection Chances
 
-* **Common**: 100 / 111 ≈ 90.09%
-* **Epic**: 6 / 111 ≈ 5.41%
-* **Junk**: 5 / 111 ≈ 4.50%
+* **Common**: 100 / 111 ~= 90.09%
+* **Epic**: 6 / 111 ~= 5.41%
+* **Junk**: 5 / 111 ~= 4.50%
 
 ---
 
 ### Summary
 
-* Baits dynamically shift the probability distribution by increasing the weight of specific items.
-* This system allows targeted promotion of certain items without altering the base configuration.
-* It preserves the fairness and transparency of the weight system while offering additional control through boosting.
+* Baits dynamically shift the probability distribution by changing the weight of specific rarities and fish.
+* This system allows both promotion and reduction without altering the base configuration.
+* Bait configs from before `2.3.0` are automatically migrated to the modifier-based format using `bait.boost`.
 
 ---

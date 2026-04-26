@@ -9,6 +9,7 @@ import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.arguments.BaitArgument;
+import com.oheers.fish.commands.arguments.EMFPlayerArgument;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -33,6 +34,17 @@ public class BaitSubcommand {
 
     public LiteralArgumentBuilder<CommandSourceStack> get() {
         return Commands.literal(name)
+            .then(
+                Commands.literal("debug")
+                    .then(
+                        Commands.argument("bait", new BaitArgument())
+                            .executes(this::executeDebug)
+                            .then(
+                                Commands.argument("target", new EMFPlayerArgument())
+                                    .executes(this::executeDebug)
+                            )
+                    )
+            )
             .then(
                 Commands.argument("bait", new BaitArgument())
                     // [bait]
@@ -79,6 +91,18 @@ public class BaitSubcommand {
         message.setVariable("{player}", CommandUtils.getPlayersVariable(targets));
         message.setBait(bait);
         message.send(sender);
+        return 1;
+    }
+
+    private int executeDebug(@NotNull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        CommandSender sender = ctx.getSource().getSender();
+        BaitHandler bait = ctx.getArgument("bait", BaitHandler.class);
+        Player target = BrigCommandUtils.getArgumentOrNull(ctx, "target", Player.class);
+        if (target == null) {
+            target = BrigCommandUtils.requirePlayer(ctx);
+        }
+
+        bait.createDebugMessages(target).forEach(sender::sendMessage);
         return 1;
     }
 

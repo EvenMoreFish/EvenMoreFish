@@ -236,7 +236,34 @@ public class AdminCommand {
             "admin bait",
             ConfigMessage.HELP_ADMIN_BAIT::getMessage
         );
+        HELP_MESSAGE.addUsage(
+            "admin bait debug",
+            () -> EMFSingleMessage.fromString("Shows the resolved bait chances for a player.")
+        );
         return new CommandAPICommand("bait")
+            .withSubcommands(
+                new CommandAPICommand("debug")
+                    .withArguments(
+                        BaitArgument.create(),
+                        ArgumentHelper.getPlayerArgument("target").setOptional(true)
+                    )
+                    .executes((sender, args) -> {
+                        final BaitHandler bait = Objects.requireNonNull(args.getUnchecked("bait"));
+                        final Player target = (Player) args.getOptional("target").orElseGet(() -> {
+                            if (sender instanceof Player player) {
+                                return player;
+                            }
+                            return null;
+                        });
+
+                        if (target == null) {
+                            ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
+                            return;
+                        }
+
+                        bait.createDebugMessages(target).forEach(sender::sendMessage);
+                    })
+            )
             .withArguments(
                 BaitArgument.create(),
                 new IntegerArgument("quantity", 1).setOptional(true),

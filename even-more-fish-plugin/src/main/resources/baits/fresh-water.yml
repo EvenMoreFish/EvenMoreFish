@@ -7,10 +7,9 @@ item:
   lore:
     - <gray>Boosts Epic & Legendary fish.
 format: <aqua>{name}</aqua>
-# This specifies just the rarities, any fish in this rarity will be attracted to this bait.
-rarities:
-  - Epic
-  - Legendary
+rarity-modifiers:
+  Epic: "*2"
+  Legendary: "*2"
 catch-weight: 2
 application-weight: 5
 max-baits: 64
