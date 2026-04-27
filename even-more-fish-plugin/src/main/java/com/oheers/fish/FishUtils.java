@@ -67,8 +67,8 @@ public class FishUtils {
 
     // Enums in 1.20.1 API that are not enums in modern versions.
     // Used in getEnumValue and will throw if any of these match.
-    private static final List<Class<?>> BAD_ENUMS = List.of(
-        Sound.class
+    private static final List<Class<? extends Enum<?>>> BAD_ENUMS = List.of(
+        org.bukkit.Sound.class
     );
 
     private FishUtils() {
