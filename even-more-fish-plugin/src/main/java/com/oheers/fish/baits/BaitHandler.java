@@ -385,6 +385,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
 
         // Only consume bait if this bait actually affected the catch
         if (!shouldConsumeBait(fish)) {
+            Logging.debug("Fish does not affect bait");
             return;
         }
 
@@ -469,7 +470,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     @Override
     public void reload(@NotNull File configFile) {
         super.reload(configFile);
-        if (fishManager == null || mainConfig == null || id == null) {
+        if (fishManager == null || mainConfig == null) {
             return;
         }
         this.baitData = loadBaitData();
@@ -484,7 +485,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     @Override
     public void reload() {
         super.reload();
-        if (fishManager == null || mainConfig == null || id == null) {
+        if (fishManager == null || mainConfig == null) {
             return;
         }
         this.baitData = loadBaitData();
