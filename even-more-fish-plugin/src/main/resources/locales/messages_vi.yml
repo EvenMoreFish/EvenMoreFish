@@ -80,8 +80,8 @@ length-lore:
 # The format of the leaderboard after a competition is over
 leaderboard:
   largest-fish: '<white>#{position} | {player} (<b>{rarity}</b> {fish}, {length}cm)'
-  largest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
-  most-fish: '<white>#{position} | {player} <white>({amount} <white>fish)'
+  largest-total:
+  most-fish:
   shortest-fish: '<white>#{position} | {player} <white>(<b>{rarity}</b> {fish}<white>, {length}cm<white>)'
   shortest-total: '<white>#{position} | {player} <white>({amount}cm<white>)'
   # Sent when a competition only has a single winner, in place of the leaderboard.
