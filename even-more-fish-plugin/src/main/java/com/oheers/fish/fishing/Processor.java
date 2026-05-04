@@ -43,19 +43,23 @@ public abstract class Processor<E extends Event> {
     public @Nullable ItemStack getCaughtItem(@NotNull Player player, @NotNull Location location, @Nullable ItemStack fishingRod) {
         // Check if fishing is allowed in this world.
         if (!FishUtils.checkWorld(location)) {
+            Logging.debug("Fish cannot be caught in this world.");
             return null;
         }
         // Check if fishing is allowed in this WorldGuard or RedProtect region.
         if (!FishUtils.checkRegion(location, MainConfig.getInstance().getAllowedRegions())) {
+            Logging.debug("Fish cannot be caught in this region.");
             return null;
         }
         // Check for mcMMO overfishing
         if (Checks.isMcMMOOverfishing(player, location)) {
+            Logging.debug("McMMO Overfishing is active.");
             return null;
         }
 
         double baitCatchPercentage = MainConfig.getInstance().getBaitCatchPercentage();
         if (shouldCatchBait() && baitCatchPercentage > 0 && random.nextDouble() * 100 < baitCatchPercentage) {
+            Logging.debug("Bait should be caught.");
             return getBaitItem(player);
         }
 
@@ -68,15 +72,18 @@ public abstract class Processor<E extends Event> {
 
         Fish fish = chooseFish(player, location, bait, customRod);
         if (fish == null) {
+            Logging.debug("Could not choose a fish.");
             return null;
         }
         if (bait != null) {
+            Logging.debug("Handling bait.");
             bait.handleFish(player, fish, fishingRod);
         }
 
         fish.init();
         // Fire the fish event and check for cancellation.
         if (!fireEvent(fish, player)) {
+            Logging.debug("Event has been cancelled.");
             return null;
         }
         handleCaughtFish(player, location, fish);
