@@ -30,9 +30,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 public class Fish implements IFish, Sortable {
+
+    private static final Random random = new Random();
 
     private final @NotNull Section section;
     private final String name;
@@ -52,9 +56,6 @@ public class Fish implements IFish, Sortable {
     private boolean silent;
 
     private double weight;
-
-    private double minSize;
-    private double maxSize;
 
     private boolean isCompExemptFish;
 
@@ -98,8 +99,6 @@ public class Fish implements IFish, Sortable {
         this.showInJournal = section.getBoolean("journal", true);
 
         factory.getLore().setEnabled(!section.getBoolean("disable-lore", false));
-
-        setSize();
 
         checkSilent();
 
@@ -159,35 +158,22 @@ public class Fish implements IFish, Sortable {
         return fisherman;
     }
 
-    private void setSize() {
-        this.minSize = section.getDouble("size.minSize");
-        this.maxSize = section.getDouble("size.maxSize");
-
-        // are min & max size changed? If not, there's no fish-specific value. Check the rarity's value
-        if (minSize == 0.0 && maxSize == 0.0) {
-            this.minSize = rarity.getMinSize();
-            this.maxSize = rarity.getMaxSize();
-        }
-
-        // If there's no rarity-specific value (or max is smaller than min), to avoid being in a pickle we just set min default to 0 and max default to 10
-        if ((minSize == 0.0 && maxSize == 0.0) || minSize > maxSize) {
-            this.minSize = 0.0;
-            this.maxSize = 10.0;
-        }
-    }
-
+    // Generates the fish size and rounds to 1 decimal place.
     private void generateSize() {
+        Optional<Double> set = getSetSize();
+        if (set.isPresent()) {
+            this.length = set.get().floatValue();
+            return;
+        }
+        double minSize = getMinSize();
+        double maxSize = getMaxSize();
         if (minSize < 0) {
             this.length = -1f;
+        } else if (minSize == maxSize) {
+            this.length = (float) minSize;
         } else {
-            // Calculate the range for the random number (scaled by 10 to preserve decimal precision)
-            int range = (int) ((maxSize - minSize) * 10);
-
-            // Generate a random integer within the range (0 to range-1)
-            int randomValue = EvenMoreFish.getInstance().getRandom().nextInt(range + 1); // nextInt(bound) ensures a positive value
-
-            // Calculate the length, scaling back down by dividing by 10
-            this.length = (float) (randomValue + minSize * 10) / 10;
+            double size = random.nextDouble(minSize, maxSize);
+            this.length = (float) FishUtils.roundDouble(size, 1);
         }
     }
 
@@ -411,6 +397,22 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
+    public @NotNull Optional<Double> getSetSize() {
+        Double size = section.getDouble("size", null);
+        return size == null ? rarity.getSetSize() : Optional.of(size);
+    }
+
+    @Override
+    public double getMinSize() {
+        return section.getDouble("size.minSize", rarity.getMinSize());
+    }
+
+    @Override
+    public double getMaxSize() {
+        return section.getDouble("size.maxSize", rarity.getMaxSize());
+    }
+
+    @Override
     public @Nullable UUID getFishermanUUID() {
         return fisherman == null ? null : fisherman.getUniqueId();
     }
@@ -457,7 +459,7 @@ public class Fish implements IFish, Sortable {
 
     @Override
     public void setLength(Float length) {
-        this.length = length == null ? -1 : length;
+        this.length = Optional.ofNullable(length).orElse(-1F);
     }
 
     @Override

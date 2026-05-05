@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class Rarity extends ConfigBase implements IRarity, Sortable {
@@ -148,13 +149,18 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     }
 
     @Override
+    public @NotNull Optional<Double> getSetSize() {
+        return getConfig().getOptionalDouble("size");
+    }
+
+    @Override
     public double getMinSize() {
-        return getConfig().getDouble("size.minSize");
+        return getConfig().getDouble("size.minSize", 0D);
     }
 
     @Override
     public double getMaxSize() {
-        return getConfig().getDouble("size.maxSize");
+        return getConfig().getDouble("size.maxSize", 10D);
     }
 
     // TODO this was set to always be false at some point, we need to re-add the removed code.

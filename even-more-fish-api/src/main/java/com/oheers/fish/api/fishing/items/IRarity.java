@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Internal implementation only. Extending this interface WILL cause issues.
@@ -39,6 +40,10 @@ public interface IRarity {
     @NotNull Requirement getRequirement();
 
     boolean isShouldDisableFisherman();
+
+    double getSetWorth();
+
+    @NotNull Optional<Double> getSetSize();
 
     double getMinSize();
 

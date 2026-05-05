@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -37,6 +38,12 @@ public interface IFish {
     @NotNull IFish createCopy();
 
     boolean hasFishermanDisabled();
+
+    @NotNull Optional<Double> getSetSize();
+
+    double getMinSize();
+
+    double getMaxSize();
 
     /**
      * @deprecated Use {@link #getFishermanUUID()} instead.
