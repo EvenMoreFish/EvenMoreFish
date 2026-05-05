@@ -63,8 +63,6 @@ public class Fish implements IFish, Sortable {
 
     private boolean showInJournal;
 
-    private final double setWorth;
-
     private Fish(@NotNull Rarity rarity, @NotNull Section section) {
         this.section = section;
         this.rarity = rarity;
@@ -79,8 +77,6 @@ public class Fish implements IFish, Sortable {
         this.length = -1F;
 
         this.disableFisherman = section.getBoolean("disable-fisherman", rarity.isShouldDisableFisherman());
-
-        this.setWorth = section.getDouble("set-worth");
 
         ItemFactory factory = ItemFactory.itemFactory(section);
         factory.setFinalChanges(fish -> {
@@ -441,7 +437,7 @@ public class Fish implements IFish, Sortable {
 
     @Override
     public double getSetWorth() {
-        return setWorth;
+        return section.getDouble("set-worth", rarity.getSetWorth());
     }
 
     @Override

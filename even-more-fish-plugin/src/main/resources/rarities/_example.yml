@@ -35,6 +35,10 @@ journal: true
 # Should lore use the casing of `id`, or be fully uppercase?
 use-this-casing: false
 
+# Optionally choose an exact worth for this fish. If unspecified or set to 0, the normal maths are applied.
+# This can be overridden by each fish.
+set-worth: 0
+
 # Changes how this rarity is displayed to players, this overrides `use-this-casing`.
 displayname: <yellow>Example Rarity
 
@@ -102,6 +106,7 @@ fish:
     journal: true
 
     # Optionally choose an exact worth for this fish. If unspecified or set to 0, the normal maths are applied.
+    # This overrides the rarity's setting.
     set-worth: 0
 
     # Should lore be disabled on the fish?

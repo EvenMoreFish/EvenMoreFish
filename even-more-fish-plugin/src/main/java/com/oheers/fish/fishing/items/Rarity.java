@@ -143,6 +143,11 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     }
 
     @Override
+    public double getSetWorth() {
+        return getConfig().getDouble("set-worth");
+    }
+
+    @Override
     public double getMinSize() {
         return getConfig().getDouble("size.minSize");
     }
