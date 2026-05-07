@@ -143,6 +143,7 @@ help-admin:
   addons: "[noPrefix]모든 애드온을 표시합니다."
   version: "[noPrefix]플러그인 정보를 표시합니다."
   rawitem: "[noPrefix]주로 사용하는 손에 있는 아이템의 생 NBT를 표시합니다."
+  database: "[noPrefix]Manage the plugin's database."
 # Shown when the %emf_competition_place_player_*% placeholder requests a position in the leaderboard that doesn't exist
 no-player-in-place: <white>이 자리를 차지하기 위해 낚시를 시작하세요
 # Shown when the %emf_competition_place_fish_*% placeholder requests a position in the leaderboard that doesn't exist
@@ -278,4 +279,4 @@ bait:
   unused-slot: <gray>► ? <i>가능한 슬롯
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 10
+version: 11

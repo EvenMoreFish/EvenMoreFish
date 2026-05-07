@@ -143,6 +143,7 @@ help-admin:
   addons: "[noPrefix]Afficher tous les modules complémentaires."
   version: "[noPrefix]Affiche les informations du plugin."
   rawitem: "[noPrefix]Affiche l'objet dans votre main principale en tant que NBT brut."
+  database: "[noPrefix]Manage the plugin's database."
 # Shown when the %emf_competition_place_player_*% placeholder requests a position in the leaderboard that doesn't exist
 no-player-in-place: <white>Start fishing to take this place
 # Shown when the %emf_competition_place_fish_*% placeholder requests a position in the leaderboard that doesn't exist
@@ -278,4 +279,4 @@ bait:
   unused-slot: <gray>► ? <i>Emplacement disponible
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 10
+version: 11
