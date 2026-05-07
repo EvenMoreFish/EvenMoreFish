@@ -118,6 +118,7 @@ public enum ConfigMessage {
     HELP_ADMIN_MIGRATE(PrefixType.ADMIN, "help-admin.migrate"),
     HELP_ADMIN_ADDONS(PrefixType.ADMIN, "help-admin.addons"),
     HELP_ADMIN_RAWITEM(PrefixType.ADMIN, "help-admin.rawitem"),
+    HELP_ADMIN_DATABASE(PrefixType.ADMIN, "help-admin.database"),
     HELP_LIST_FISH(PrefixType.ADMIN, "help-list.fish"),
     HELP_LIST_RARITIES(PrefixType.ADMIN, "help-list.rarities"),
     HELP_COMPETITION_START(PrefixType.ADMIN, "help-competition.start"),

@@ -26,7 +26,8 @@ public abstract class AdminCommandProvider<C, A> {
         .addEntry("migrate", ConfigMessage.HELP_ADMIN_MIGRATE::getMessage, AdminPerms.MIGRATE)
         .addEntry("rawItem", ConfigMessage.HELP_ADMIN_RAWITEM::getMessage)
         .addEntry("help", ConfigMessage.HELP_GENERAL_HELP::getMessage)
-        .addEntry("competition", ConfigMessage.HELP_ADMIN_COMPETITION::getMessage);
+        .addEntry("competition", ConfigMessage.HELP_ADMIN_COMPETITION::getMessage)
+        .addEntry("database", ConfigMessage.HELP_ADMIN_DATABASE::getMessage, AdminPerms.DATABASE);
 
     public abstract @NotNull C get();
 

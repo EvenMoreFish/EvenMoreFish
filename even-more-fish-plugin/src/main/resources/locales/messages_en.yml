@@ -163,6 +163,7 @@ help-admin:
   addons: "[noPrefix]Display all addons."
   version: "[noPrefix]Displays plugin information."
   rawitem: "[noPrefix]Displays the item in your main hand as raw NBT."
+  database: "[noPrefix]Manage the plugin's database."
 
 # Shown when the %emf_competition_place_player_*% placeholder requests a position in the leaderboard that doesn't exist
 no-player-in-place: <white>Start fishing to take this place
@@ -317,4 +318,4 @@ bait:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 10
+version: 11
