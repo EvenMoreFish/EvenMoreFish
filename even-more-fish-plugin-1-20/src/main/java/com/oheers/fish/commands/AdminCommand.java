@@ -48,10 +48,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.jar.Attributes;
 
+import static com.oheers.fish.commands.AdminCommandProvider.sendHelpMessage;
+
 @SuppressWarnings("unchecked")
 public class AdminCommand {
-
-    public static final HelpMessageBuilder HELP_MESSAGE = HelpMessageBuilder.create();
 
     private final CommandAPICommand command;
 
@@ -81,15 +81,7 @@ public class AdminCommand {
         return command;
     }
 
-    private void sendHelpMessage(@NotNull CommandSender sender) {
-        HELP_MESSAGE.sendMessage(sender);
-    }
-
     private CommandAPICommand getFish() {
-        HELP_MESSAGE.addUsage(
-            "admin fish",
-            ConfigMessage.HELP_ADMIN_FISH::getMessage
-        );
         return new CommandAPICommand("fish")
             .withArguments(
                 RarityArgument.create(),
@@ -195,10 +187,6 @@ public class AdminCommand {
     }
 
     private CommandAPICommand getCustomRod() {
-        HELP_MESSAGE.addUsage(
-            "admin custom-rod",
-            ConfigMessage.HELP_ADMIN_CUSTOMROD::getMessage
-        );
         return new CommandAPICommand("custom-rod")
             .withArguments(
                 CustomRodArgument.create(),
@@ -232,14 +220,6 @@ public class AdminCommand {
     }
 
     private CommandAPICommand getBait() {
-        HELP_MESSAGE.addUsage(
-            "admin bait",
-            ConfigMessage.HELP_ADMIN_BAIT::getMessage
-        );
-        HELP_MESSAGE.addUsage(
-            "admin bait debug",
-            () -> EMFSingleMessage.fromString("Shows the resolved bait chances for a player.")
-        );
         return new CommandAPICommand("bait")
             .withSubcommands(
                 new CommandAPICommand("debug")
@@ -297,10 +277,6 @@ public class AdminCommand {
     }
 
     private CommandAPICommand getClearBaits() {
-        HELP_MESSAGE.addUsage(
-            "admin clearbaits",
-            ConfigMessage.HELP_ADMIN_CLEARBAITS::getMessage
-        );
         return new CommandAPICommand("clearbaits")
             .withArguments(
                 ArgumentHelper.getPlayerArgument("target").setOptional(true)
@@ -341,10 +317,6 @@ public class AdminCommand {
     }
 
     private CommandAPICommand getReload() {
-        HELP_MESSAGE.addUsage(
-            "admin reload",
-            ConfigMessage.HELP_ADMIN_RELOAD::getMessage
-        );
         return new CommandAPICommand("reload")
             .executes(info -> {
                 EvenMoreFish.getInstance().reload(info.sender());
@@ -353,10 +325,6 @@ public class AdminCommand {
 
     @SuppressWarnings("UnstableApiUsage")
     private CommandAPICommand getVersion() {
-        HELP_MESSAGE.addUsage(
-            "admin version",
-            ConfigMessage.HELP_ADMIN_VERSION::getMessage
-        );
         return new CommandAPICommand("version")
             .executes(info -> {
                 int fishCount = FishManager.getInstance().getRarityMap().values().stream()
@@ -413,10 +381,6 @@ public class AdminCommand {
     }
 
     private CommandAPICommand getMigrate() {
-        HELP_MESSAGE.addUsage(
-            "admin migrate",
-            ConfigMessage.HELP_ADMIN_MIGRATE::getMessage
-        );
         return new CommandAPICommand("migrate")
             .executes(info -> {
                 if (!DatabaseUtil.isDatabaseOnline()) {
@@ -429,10 +393,6 @@ public class AdminCommand {
     }
 
     private CommandAPICommand getRawItem() {
-        HELP_MESSAGE.addUsage(
-            "admin rawItem",
-            ConfigMessage.HELP_ADMIN_RAWITEM::getMessage
-        );
         return new CommandAPICommand("rawItem")
             .executesPlayer(info -> {
                 ItemStack handItem = info.sender().getInventory().getItemInMainHand();
@@ -456,10 +416,6 @@ public class AdminCommand {
     }
 
     private CommandAPICommand getHelp() {
-        HELP_MESSAGE.addUsage(
-            "admin help",
-            ConfigMessage.HELP_GENERAL_HELP::getMessage
-        );
         return new CommandAPICommand("help")
             .executes(info -> {
                 sendHelpMessage(info.sender());
@@ -469,10 +425,6 @@ public class AdminCommand {
     // COMPETITION BRANCH
 
     private CommandAPICommand getCompetition() {
-        HELP_MESSAGE.addUsage(
-            "admin competition",
-            ConfigMessage.HELP_ADMIN_COMPETITION::getMessage
-        );
         return new CommandAPICommand("competition")
             .withSubcommands(
                 getCompetitionStart(),

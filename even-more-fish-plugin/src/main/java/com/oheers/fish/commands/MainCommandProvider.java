@@ -1,8 +1,9 @@
 package com.oheers.fish.commands;
 
-import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.messages.ConfigMessage;
+import com.oheers.fish.permissions.AdminPerms;
+import com.oheers.fish.permissions.UserPerms;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,17 +13,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class MainCommandProvider<C, A> {
 
-    private static final HelpMessageBuilder HELP_MESSAGE = HelpMessageBuilder.create()
-        .addUsage(MainConfig.getInstance().getAdminSubCommandName(), ConfigMessage.HELP_GENERAL_ADMIN::getMessage)
-        .addUsage(MainConfig.getInstance().getHelpSubCommandName(), ConfigMessage.HELP_GENERAL_HELP::getMessage)
-        .addUsage(MainConfig.getInstance().getGuiSubCommandName(), ConfigMessage.HELP_GENERAL_GUI::getMessage)
-        .addUsage(MainConfig.getInstance().getTopSubCommandName(), ConfigMessage.HELP_GENERAL_TOP::getMessage)
-        .addUsage(MainConfig.getInstance().getSellAllSubCommandName(), ConfigMessage.HELP_GENERAL_SELLALL::getMessage)
-        .addUsage(MainConfig.getInstance().getApplyBaitsSubCommandName(), ConfigMessage.HELP_GENERAL_APPLYBAITS::getMessage)
-        .addUsage(MainConfig.getInstance().getJournalSubCommandName(), ConfigMessage.HELP_GENERAL_JOURNAL::getMessage)
-        .addUsage(MainConfig.getInstance().getNextSubCommandName(), ConfigMessage.HELP_GENERAL_NEXT::getMessage)
-        .addUsage(MainConfig.getInstance().getToggleSubCommandName(), ConfigMessage.HELP_GENERAL_TOGGLE::getMessage)
-        .addUsage(MainConfig.getInstance().getShopSubCommandName(), ConfigMessage.HELP_GENERAL_SHOP::getMessage);
+    private static final HelpMessage HELP_MESSAGE = HelpMessage.helpMessage()
+        .addEntry(MainConfig.getInstance().getAdminSubCommandName(), ConfigMessage.HELP_GENERAL_ADMIN::getMessage, AdminPerms.ADMIN)
+        .addEntry(MainConfig.getInstance().getHelpSubCommandName(), ConfigMessage.HELP_GENERAL_HELP::getMessage, UserPerms.HELP)
+        .addEntry(MainConfig.getInstance().getGuiSubCommandName(), ConfigMessage.HELP_GENERAL_GUI::getMessage, UserPerms.GUI)
+        .addEntry(MainConfig.getInstance().getTopSubCommandName(), ConfigMessage.HELP_GENERAL_TOP::getMessage, UserPerms.TOP)
+        .addEntry(MainConfig.getInstance().getSellAllSubCommandName(), ConfigMessage.HELP_GENERAL_SELLALL::getMessage, UserPerms.SELL_ALL)
+        .addEntry(MainConfig.getInstance().getApplyBaitsSubCommandName(), ConfigMessage.HELP_GENERAL_APPLYBAITS::getMessage, UserPerms.APPLYBAITS)
+        .addEntry(MainConfig.getInstance().getJournalSubCommandName(), ConfigMessage.HELP_GENERAL_JOURNAL::getMessage, UserPerms.JOURNAL)
+        .addEntry(MainConfig.getInstance().getNextSubCommandName(), ConfigMessage.HELP_GENERAL_NEXT::getMessage, UserPerms.NEXT)
+        .addEntry(MainConfig.getInstance().getToggleSubCommandName(), ConfigMessage.HELP_GENERAL_TOGGLE::getMessage, UserPerms.TOGGLE)
+        .addEntry(MainConfig.getInstance().getShopSubCommandName(), ConfigMessage.HELP_GENERAL_SHOP::getMessage, UserPerms.SHOP);
 
     public abstract @NotNull C get();
 
@@ -91,7 +92,7 @@ public abstract class MainCommandProvider<C, A> {
     }
 
     public static void sendHelpMessage(CommandSender sender) {
-        HELP_MESSAGE.sendMessage(sender);
+        HELP_MESSAGE.send(sender);
     }
 
 }

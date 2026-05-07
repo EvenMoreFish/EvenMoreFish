@@ -24,19 +24,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class MainCommand {
+import static com.oheers.fish.commands.MainCommandProvider.sendHelpMessage;
 
-    public static final HelpMessageBuilder HELP_MESSAGE = HelpMessageBuilder.create();
+public class MainCommand {
 
     private final CommandAPICommand command;
 
     public MainCommand() {
         // Add the admin command to the help message
         String adminName = MainConfig.getInstance().getAdminSubCommandName();
-        HELP_MESSAGE.addUsage(
-            adminName,
-            ConfigMessage.HELP_GENERAL_ADMIN::getMessage
-        );
 
         this.command = new CommandAPICommand(MainConfig.getInstance().getMainCommandName())
                 .withAliases(MainConfig.getInstance().getMainCommandAliases().toArray(String[]::new))
@@ -70,10 +66,6 @@ public class MainCommand {
 
     private CommandAPICommand getNext() {
         String name = MainConfig.getInstance().getNextSubCommandName();
-        HELP_MESSAGE.addUsage(
-            name,
-            ConfigMessage.HELP_GENERAL_NEXT::getMessage
-        );
         return new CommandAPICommand(name)
             .withRequirement(sender -> sender.hasPermission(UserPerms.NEXT) && EvenMoreFish.getInstance().getCompetitionQueue().hasTimings())
             .withPermission(UserPerms.NEXT)
@@ -86,10 +78,6 @@ public class MainCommand {
 
     private CommandAPICommand getToggle() {
         String name = MainConfig.getInstance().getToggleSubCommandName();
-        HELP_MESSAGE.addUsage(
-            name,
-            ConfigMessage.HELP_GENERAL_TOGGLE::getMessage
-        );
         return new CommandAPICommand(name)
             .withPermission(UserPerms.TOGGLE)
             .withArguments(new MultiLiteralArgument("toggle", "fishing", "bossbar").setOptional(true))
@@ -107,10 +95,6 @@ public class MainCommand {
 
     private CommandAPICommand getGui() {
         String name = MainConfig.getInstance().getGuiSubCommandName();
-        HELP_MESSAGE.addUsage(
-            name,
-            ConfigMessage.HELP_GENERAL_GUI::getMessage
-        );
         return new CommandAPICommand(name)
             .withPermission(UserPerms.GUI)
             .executesPlayer(info -> {
@@ -120,10 +104,6 @@ public class MainCommand {
 
     private CommandAPICommand getHelp() {
         String name = MainConfig.getInstance().getHelpSubCommandName();
-        HELP_MESSAGE.addUsage(
-            name,
-            ConfigMessage.HELP_GENERAL_HELP::getMessage
-        );
         return new CommandAPICommand(name)
             .withPermission(UserPerms.HELP)
             .executes(info -> {
@@ -133,10 +113,6 @@ public class MainCommand {
 
     private CommandAPICommand getTop() {
         String name = MainConfig.getInstance().getTopSubCommandName();
-        HELP_MESSAGE.addUsage(
-            name,
-            ConfigMessage.HELP_GENERAL_TOP::getMessage
-        );
         return new CommandAPICommand(name)
             .withPermission(UserPerms.TOP)
             .executes(info -> {
@@ -152,10 +128,6 @@ public class MainCommand {
 
     private CommandAPICommand getShop() {
         String name = MainConfig.getInstance().getShopSubCommandName();
-        HELP_MESSAGE.addUsage(
-            name,
-            ConfigMessage.HELP_GENERAL_SHOP::getMessage
-        );
         return new CommandAPICommand(name)
             .withPermission(UserPerms.SHOP)
             .withArguments(
@@ -191,10 +163,6 @@ public class MainCommand {
 
     private CommandAPICommand getSellAll() {
         String name = MainConfig.getInstance().getSellAllSubCommandName();
-        HELP_MESSAGE.addUsage(
-            name,
-            ConfigMessage.HELP_GENERAL_SELLALL::getMessage
-        );
         return new CommandAPICommand(name)
             .withPermission(UserPerms.SELL_ALL)
             .executesPlayer(info -> {
@@ -208,10 +176,6 @@ public class MainCommand {
 
     private CommandAPICommand getApplyBaits() {
         String name = MainConfig.getInstance().getApplyBaitsSubCommandName();
-        HELP_MESSAGE.addUsage(
-            name,
-            ConfigMessage.HELP_GENERAL_APPLYBAITS::getMessage
-        );
         return new CommandAPICommand(name)
             .withPermission(UserPerms.APPLYBAITS)
             .executesPlayer(info -> {
@@ -227,10 +191,6 @@ public class MainCommand {
 
     private CommandAPICommand getJournal() {
         String name = MainConfig.getInstance().getJournalSubCommandName();
-        HELP_MESSAGE.addUsage(
-            name,
-            ConfigMessage.HELP_GENERAL_JOURNAL::getMessage
-        );
         return new CommandAPICommand(name)
             .withPermission(UserPerms.JOURNAL)
             .withArguments(
@@ -246,7 +206,4 @@ public class MainCommand {
             });
     }
 
-    private void sendHelpMessage(@NotNull CommandSender sender) {
-        HELP_MESSAGE.sendMessage(sender);
-    }
 }
