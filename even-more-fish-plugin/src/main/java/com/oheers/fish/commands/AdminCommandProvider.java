@@ -1,9 +1,13 @@
 package com.oheers.fish.commands;
 
+import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
+import com.oheers.fish.permissions.AdminPerms;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Predicate;
 
 /**
  * @param <C> The command class.
@@ -11,18 +15,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AdminCommandProvider<C, A> {
 
-    private static final HelpMessageBuilder HELP_MESSAGE = HelpMessageBuilder.create()
-        .addUsage("admin fish", ConfigMessage.HELP_ADMIN_FISH::getMessage)
-        .addUsage("admin custom-rod", ConfigMessage.HELP_ADMIN_CUSTOMROD::getMessage)
-        .addUsage("admin bait", ConfigMessage.HELP_ADMIN_BAIT::getMessage)
-        .addUsage("admin bait debug", () -> EMFSingleMessage.fromString("Shows the resolved bait chances for a player."))
-        .addUsage("admin clearbaits", ConfigMessage.HELP_ADMIN_CLEARBAITS::getMessage)
-        .addUsage("admin reload", ConfigMessage.HELP_ADMIN_RELOAD::getMessage)
-        .addUsage("admin version", ConfigMessage.HELP_ADMIN_VERSION::getMessage)
-        .addUsage("admin migrate", ConfigMessage.HELP_ADMIN_MIGRATE::getMessage)
-        .addUsage("admin rawItem", ConfigMessage.HELP_ADMIN_RAWITEM::getMessage)
-        .addUsage("admin help", ConfigMessage.HELP_GENERAL_HELP::getMessage)
-        .addUsage("admin competition", ConfigMessage.HELP_ADMIN_COMPETITION::getMessage);
+    public static final HelpMessage HELP_MESSAGE = HelpMessage.helpMessage(MainConfig.getInstance().getAdminSubCommandName())
+        .setDefaultRequirement(AdminPerms.ADMIN)
+        .addEntry("fish", ConfigMessage.HELP_ADMIN_FISH::getMessage)
+        .addEntry("custom-rod", ConfigMessage.HELP_ADMIN_CUSTOMROD::getMessage)
+        .addEntry("bait", ConfigMessage.HELP_ADMIN_CUSTOMROD::getMessage)
+        .addEntry("clearbaits", ConfigMessage.HELP_ADMIN_CLEARBAITS::getMessage)
+        .addEntry("reload", ConfigMessage.HELP_ADMIN_RELOAD::getMessage)
+        .addEntry("version", ConfigMessage.HELP_ADMIN_VERSION::getMessage)
+        .addEntry("migrate", ConfigMessage.HELP_ADMIN_MIGRATE::getMessage, AdminPerms.MIGRATE)
+        .addEntry("rawItem", ConfigMessage.HELP_ADMIN_RAWITEM::getMessage)
+        .addEntry("help", ConfigMessage.HELP_GENERAL_HELP::getMessage)
+        .addEntry("competition", ConfigMessage.HELP_ADMIN_COMPETITION::getMessage)
+        .addEntry("database", ConfigMessage.HELP_ADMIN_DATABASE::getMessage, AdminPerms.DATABASE);
 
     public abstract @NotNull C get();
 
@@ -53,7 +58,7 @@ public abstract class AdminCommandProvider<C, A> {
     protected abstract @NotNull A help();
 
     public static void sendHelpMessage(CommandSender sender) {
-        HELP_MESSAGE.sendMessage(sender);
+        HELP_MESSAGE.send(sender);
     }
 
 }
