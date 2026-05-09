@@ -247,6 +247,9 @@ admin:
 rarity-invalid: <white>Ce n'est pas une rareté valide !
 # When the player can't access the Fishing Journal
 journal-disabled: <white>The Fishing Journal is not accessible. Please enable the plugin's database.
+# Reward messages
+reward:
+  catch-up: <white>You received rewards while you were offline. Delivering them now."
 # Bait messages
 bait:
   # How the lore should look ({baits} is a multi-line variable)
@@ -279,4 +282,4 @@ bait:
   unused-slot: <gray>► ? <i>Emplacement disponible
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 11
+version: 12
