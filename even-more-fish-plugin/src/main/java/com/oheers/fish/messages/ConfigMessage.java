@@ -190,6 +190,7 @@ public enum ConfigMessage {
     WORTH_GUI_SELL_LORE(PrefixType.NONE, "sell-gui-lore"),
     RARITY_INVALID(PrefixType.ERROR, "rarity-invalid"),
     JOURNAL_DISABLED(PrefixType.ERROR, "journal-disabled"),
+    REWARD_CATCHUP(PrefixType.DEFAULT, "reward.catch-up"),
     BAIT_ROD_LORE(PrefixType.NONE, "bait.rod-lore"),
     BAIT_BAIT_LORE(PrefixType.NONE, "bait.bait-lore"),
     BAIT_BAITS(PrefixType.NONE, "bait.baits"),

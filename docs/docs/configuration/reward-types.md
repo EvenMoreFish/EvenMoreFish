@@ -36,3 +36,7 @@ _These will only load if the relevant external plugin is installed._
 | McMMO XP                     | McMMO                     | `MCMMO_XP:Woodcutting,15`               | Gives McMMO xp.        |
 | Permission                   | Vault + Permission Plugin | `PERMISSION:emf.example`                | Gives a permission.    |
 | Money                        | Vault + Economy Plugin    | `MONEY:1000`                            | Gives money.           |
+
+## Notes
+- If a player is offline when given a reward, it will be held until they rejoin.
+- Held rewards will only last until the next restart, then they will be forgotten about.

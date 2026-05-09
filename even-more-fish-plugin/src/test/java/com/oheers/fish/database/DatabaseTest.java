@@ -11,13 +11,13 @@ import org.jdbi.v3.core.HandleConsumer;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Update;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Answers;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -200,12 +200,12 @@ class DatabaseTest {
         }
 
         @Override
-        public ItemStack getSkullFromUUID(UUID uuid) {
+        public @NonNull ItemStack getSkullFromUUID(@NonNull UUID uuid) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public ItemStack getSkullFromBase64(String base64) {
+        public @NonNull ItemStack getSkullFromBase64(@NonNull String base64) {
             throw new UnsupportedOperationException();
         }
     }

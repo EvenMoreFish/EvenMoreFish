@@ -1,7 +1,9 @@
 package com.oheers.fish.api.plugin;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,5 +71,11 @@ public abstract class EMFPlugin extends JavaPlugin {
             getInstance().getLogger().log(level, "[" + caller + "] " + message, throwable);
         }
     }
+
+    /**
+     * Temporary and for internal use only. Will be removed once API methods for messages are added.
+     */
+    @ApiStatus.Internal
+    public abstract @NotNull Component getRewardCatchupMessage();
 
 }
