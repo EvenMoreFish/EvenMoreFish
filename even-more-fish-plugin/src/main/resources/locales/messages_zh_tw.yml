@@ -247,6 +247,9 @@ admin:
 rarity-invalid: <white>那不是有效的稀有度！
 # When the player can't access the Fishing Journal
 journal-disabled: <white>釣魚記錄無法存取。請啟用外掛的資料庫。
+# Reward messages
+reward:
+  catch-up: <white>You received rewards while you were offline. Delivering them now."
 # Bait messages
 bait:
   # How the lore should look ({baits} is a multi-line variable)
@@ -279,4 +282,4 @@ bait:
   unused-slot: <gray>► ? <i>可用欄位
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 11
+version: 12
