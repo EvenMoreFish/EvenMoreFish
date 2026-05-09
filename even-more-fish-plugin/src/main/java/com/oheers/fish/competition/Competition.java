@@ -486,13 +486,7 @@ public class Competition {
         }
 
         for (CompetitionEntry entry : entries) {
-            Player player = Bukkit.getPlayer(entry.getPlayer());
-
-            // If the player is null, increment the place and continue
-            if (player == null) {
-                rewardPlace++;
-                continue;
-            }
+            OfflinePlayer player = Bukkit.getOfflinePlayer(entry.getPlayer());
 
             // Does the player's place have reward?
             if (rewards.containsKey(rewardPlace)) {
