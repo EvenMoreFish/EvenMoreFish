@@ -29,6 +29,7 @@ import com.oheers.fish.update.UpdateChecker;
 import de.themoep.inventorygui.InventoryGui;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -310,5 +311,10 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
     @ApiStatus.Internal
     public abstract @NotNull ItemStack getSkullFromBase64(@NotNull String base64);
+
+    @Override
+    public @NotNull Component getRewardCatchupMessage() {
+        return ConfigMessage.REWARD_CATCHUP.getMessage().getComponentMessage();
+    }
 
 }

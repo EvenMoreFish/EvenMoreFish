@@ -96,6 +96,7 @@ public class Reward {
             return;
         }
         Logging.debug("Found cached rewards for " + uuid + ". Giving them all now.");
+        player.sendMessage(EMFPlugin.getInstance().getRewardCatchupMessage());
         List<RewardData> cached = rewardCache.remove(uuid);
         cached.forEach(data -> data.reward().rewardPlayer(player, data.hookLocation()));
     }
