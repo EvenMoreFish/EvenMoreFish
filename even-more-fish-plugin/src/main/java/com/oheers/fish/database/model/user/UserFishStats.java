@@ -2,7 +2,9 @@ package com.oheers.fish.database.model.user;
 
 
 import com.oheers.fish.fishing.items.Fish;
+import net.kyori.adventure.title.Title;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class UserFishStats {
@@ -50,6 +52,10 @@ public class UserFishStats {
 
     public LocalDateTime getFirstCatchTime() {
         return firstCatchTime;
+    }
+
+    public Timestamp getFirstCatchTimestamp() {
+        return Timestamp.valueOf(firstCatchTime);
     }
 
     public float getShortestLength() {

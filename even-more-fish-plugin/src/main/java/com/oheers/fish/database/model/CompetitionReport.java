@@ -4,6 +4,7 @@ import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.database.data.FishRarityKey;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,7 +78,16 @@ public class CompetitionReport {
         return startTime;
     }
 
+    public Timestamp getStartTimestamp() {
+        return Timestamp.valueOf(startTime);
+    }
+
     public LocalDateTime getEndTime() {
         return endTime;
     }
+
+    public Timestamp getEndTimestamp() {
+        return Timestamp.valueOf(endTime);
+    }
+
 }

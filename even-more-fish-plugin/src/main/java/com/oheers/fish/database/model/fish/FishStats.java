@@ -6,6 +6,7 @@ import com.oheers.fish.fishing.items.Fish;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -73,6 +74,10 @@ public class FishStats {
 
     public @NotNull LocalDateTime getFirstCatchTime() {
         return firstCatchTime;
+    }
+
+    public @NotNull Timestamp getFirstCatchTimestamp() {
+        return Timestamp.valueOf(firstCatchTime);
     }
 
     public float getShortestLength() {

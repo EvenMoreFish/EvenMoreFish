@@ -4,6 +4,7 @@ package com.oheers.fish.database.model.fish;
 import com.oheers.fish.fishing.items.Fish;
 
 import javax.annotation.Nullable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class FishLog {
@@ -48,6 +49,10 @@ public class FishLog {
 
     public LocalDateTime getCatchTime() {
         return catchTime;
+    }
+
+    public Timestamp getCatchTimestamp() {
+        return Timestamp.valueOf(catchTime);
     }
 
     public float getLength() {

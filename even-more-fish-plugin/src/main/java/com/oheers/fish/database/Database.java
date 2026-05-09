@@ -176,8 +176,9 @@ public class Database implements DatabaseAPI {
             winnerScore = 0f;
             contestants = "None";
         }
-        LocalDateTime endTime = LocalDateTime.now();
-        LocalDateTime startTime = competition.getStartTime();
+        Timestamp endTime = Timestamp.valueOf(LocalDateTime.now());
+        LocalDateTime start = competition.getStartTime();
+        Timestamp startTime = start == null ? endTime : Timestamp.valueOf(start);
         useHandle(handle -> handle.createUpdate("insert into " + competitionsTable + " (competition_name, winner_uuid, winner_fish, winner_score, contestants, start_time, end_time) values (:competition_name, :winner_uuid, :winner_fish, :winner_score, :contestants, :start_time, :end_time)").bind("competition_name", competition.getCompetitionName()).bind("winner_uuid", winnerUuid).bind("winner_fish", winnerFish).bind("winner_score", winnerScore).bind("contestants", contestants).bind("start_time", startTime == null ? endTime : startTime).bind("end_time", endTime).execute());
     }
 
@@ -391,15 +392,15 @@ public class Database implements DatabaseAPI {
     }
 
     private org.jdbi.v3.core.statement.Update bindUserFishStatsUpdate(Handle handle, String sql, UserFishStats stats) {
-        return handle.createUpdate(sql).bind("user_id", stats.getUserId()).bind("fish_name", stats.getFishName()).bind("fish_rarity", stats.getFishRarity()).bind("first_catch_time", stats.getFirstCatchTime()).bind("shortest_length", stats.getShortestLength()).bind("longest_length", stats.getLongestLength()).bind("quantity", stats.getQuantity());
+        return handle.createUpdate(sql).bind("user_id", stats.getUserId()).bind("fish_name", stats.getFishName()).bind("fish_rarity", stats.getFishRarity()).bind("first_catch_time", stats.getFirstCatchTimestamp()).bind("shortest_length", stats.getShortestLength()).bind("longest_length", stats.getLongestLength()).bind("quantity", stats.getQuantity());
     }
 
     private void bindUserFishStatsBatch(PreparedBatch batch, UserFishStats stats) {
-        batch.bind("user_id", stats.getUserId()).bind("fish_name", stats.getFishName()).bind("fish_rarity", stats.getFishRarity()).bind("first_catch_time", stats.getFirstCatchTime()).bind("shortest_length", stats.getShortestLength()).bind("longest_length", stats.getLongestLength()).bind("quantity", stats.getQuantity());
+        batch.bind("user_id", stats.getUserId()).bind("fish_name", stats.getFishName()).bind("fish_rarity", stats.getFishRarity()).bind("first_catch_time", stats.getFirstCatchTimestamp()).bind("shortest_length", stats.getShortestLength()).bind("longest_length", stats.getLongestLength()).bind("quantity", stats.getQuantity());
     }
 
     private org.jdbi.v3.core.statement.Update bindFishLogInsert(Handle handle, FishLog fishLogEntry) {
-        org.jdbi.v3.core.statement.Update update = handle.createUpdate("insert into " + fishLogTable + " (user_id, fish_name, fish_rarity, fish_length, catch_time, competition_id) values (:user_id, :fish_name, :fish_rarity, :fish_length, :catch_time, :competition_id)").bind("user_id", fishLogEntry.getUserId()).bind("fish_name", fishLogEntry.getFishName()).bind("fish_rarity", fishLogEntry.getFishRarity()).bind("fish_length", fishLogEntry.getLength()).bind("catch_time", fishLogEntry.getCatchTime());
+        org.jdbi.v3.core.statement.Update update = handle.createUpdate("insert into " + fishLogTable + " (user_id, fish_name, fish_rarity, fish_length, catch_time, competition_id) values (:user_id, :fish_name, :fish_rarity, :fish_length, :catch_time, :competition_id)").bind("user_id", fishLogEntry.getUserId()).bind("fish_name", fishLogEntry.getFishName()).bind("fish_rarity", fishLogEntry.getFishRarity()).bind("fish_length", fishLogEntry.getLength()).bind("catch_time", fishLogEntry.getCatchTimestamp());
         if (fishLogEntry.getCompetitionId() == null) {
             update.bindNull("competition_id", Types.VARCHAR);
         } else {
@@ -409,7 +410,7 @@ public class Database implements DatabaseAPI {
     }
 
     private void bindFishLogBatch(PreparedBatch batch, FishLog fishLogEntry) {
-        batch.bind("user_id", fishLogEntry.getUserId()).bind("fish_name", fishLogEntry.getFishName()).bind("fish_rarity", fishLogEntry.getFishRarity()).bind("fish_length", fishLogEntry.getLength()).bind("catch_time", fishLogEntry.getCatchTime());
+        batch.bind("user_id", fishLogEntry.getUserId()).bind("fish_name", fishLogEntry.getFishName()).bind("fish_rarity", fishLogEntry.getFishRarity()).bind("fish_length", fishLogEntry.getLength()).bind("catch_time", fishLogEntry.getCatchTimestamp());
         if (fishLogEntry.getCompetitionId() == null) {
             batch.bindNull("competition_id", Types.VARCHAR);
         } else {
@@ -418,7 +419,7 @@ public class Database implements DatabaseAPI {
     }
 
     private org.jdbi.v3.core.statement.Update bindFishStatsUpdate(Handle handle, FishStats fishStats) {
-        return handle.createUpdate(fishStatsUpsertSql()).bind("fish_name", fishStats.getFishName()).bind("fish_rarity", fishStats.getFishRarity()).bind("first_fisher", fishStats.getDiscoverer().toString()).bind("discoverer", fishStats.getDiscoverer().toString()).bind("total_caught", fishStats.getQuantity()).bind("largest_fish", fishStats.getLongestLength()).bind("largest_fisher", fishStats.getLongestFisher().toString()).bind("shortest_length", fishStats.getShortestLength()).bind("shortest_fisher", fishStats.getShortestFisher().toString()).bind("first_catch_time", fishStats.getFirstCatchTime());
+        return handle.createUpdate(fishStatsUpsertSql()).bind("fish_name", fishStats.getFishName()).bind("fish_rarity", fishStats.getFishRarity()).bind("first_fisher", fishStats.getDiscoverer().toString()).bind("discoverer", fishStats.getDiscoverer().toString()).bind("total_caught", fishStats.getQuantity()).bind("largest_fish", fishStats.getLongestLength()).bind("largest_fisher", fishStats.getLongestFisher().toString()).bind("shortest_length", fishStats.getShortestLength()).bind("shortest_fisher", fishStats.getShortestFisher().toString()).bind("first_catch_time", fishStats.getFirstCatchTimestamp());
     }
 
     private org.jdbi.v3.core.statement.Update bindUserReportInsert(Handle handle, UserReport report) {
@@ -430,11 +431,11 @@ public class Database implements DatabaseAPI {
     }
 
     private org.jdbi.v3.core.statement.Update bindCompetitionInsert(Handle handle, CompetitionReport competition) {
-        return handle.createUpdate("insert into " + competitionsTable + " (competition_name, winner_fish, winner_uuid, winner_score, contestants, start_time, end_time) values (:competition_name, :winner_fish, :winner_uuid, :winner_score, :contestants, :start_time, :end_time)").bind("competition_name", competition.getCompetitionConfigId()).bind("winner_fish", competition.getWinnerFish()).bind("winner_uuid", competition.getWinnerUuid() == null ? "None" : competition.getWinnerUuid().toString()).bind("winner_score", competition.getWinnerScore()).bind("contestants", competition.getContestants().isEmpty() ? "None" : competition.getContestants().stream().map(UUID::toString).collect(Collectors.joining(","))).bind("start_time", competition.getStartTime()).bind("end_time", competition.getEndTime());
+        return handle.createUpdate("insert into " + competitionsTable + " (competition_name, winner_fish, winner_uuid, winner_score, contestants, start_time, end_time) values (:competition_name, :winner_fish, :winner_uuid, :winner_score, :contestants, :start_time, :end_time)").bind("competition_name", competition.getCompetitionConfigId()).bind("winner_fish", competition.getWinnerFish()).bind("winner_uuid", competition.getWinnerUuid() == null ? "None" : competition.getWinnerUuid().toString()).bind("winner_score", competition.getWinnerScore()).bind("contestants", competition.getContestants().isEmpty() ? "None" : competition.getContestants().stream().map(UUID::toString).collect(Collectors.joining(","))).bind("start_time", competition.getStartTimestamp()).bind("end_time", competition.getEndTimestamp());
     }
 
     private void bindCompetitionBatch(PreparedBatch batch, CompetitionReport competition) {
-        batch.bind("competition_name", competition.getCompetitionConfigId()).bind("winner_fish", competition.getWinnerFish()).bind("winner_uuid", competition.getWinnerUuid() == null ? "None" : competition.getWinnerUuid().toString()).bind("winner_score", competition.getWinnerScore()).bind("contestants", competition.getContestants().isEmpty() ? "None" : competition.getContestants().stream().map(UUID::toString).collect(Collectors.joining(","))).bind("start_time", competition.getStartTime()).bind("end_time", competition.getEndTime());
+        batch.bind("competition_name", competition.getCompetitionConfigId()).bind("winner_fish", competition.getWinnerFish()).bind("winner_uuid", competition.getWinnerUuid() == null ? "None" : competition.getWinnerUuid().toString()).bind("winner_score", competition.getWinnerScore()).bind("contestants", competition.getContestants().isEmpty() ? "None" : competition.getContestants().stream().map(UUID::toString).collect(Collectors.joining(","))).bind("start_time", competition.getStartTimestamp()).bind("end_time", competition.getEndTimestamp());
     }
 
     @FunctionalInterface
