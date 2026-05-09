@@ -249,7 +249,7 @@ rarity-invalid: <white>유효한 등급이 아닙니다!
 journal-disabled: <white>낚시 일지에 접근할 수 없습니다. 플러그인 데이터베이스에서 켜주세요.
 # Reward messages
 reward:
-  catch-up: <white>You received rewards while you were offline. Delivering them now."
+  catch-up: <white>You received rewards while you were offline. Delivering them now.
 # Bait messages
 bait:
   # How the lore should look ({baits} is a multi-line variable)

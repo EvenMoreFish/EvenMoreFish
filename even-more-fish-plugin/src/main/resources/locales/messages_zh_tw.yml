@@ -249,7 +249,7 @@ rarity-invalid: <white>那不是有效的稀有度！
 journal-disabled: <white>釣魚記錄無法存取。請啟用外掛的資料庫。
 # Reward messages
 reward:
-  catch-up: <white>You received rewards while you were offline. Delivering them now."
+  catch-up: <white>You received rewards while you were offline. Delivering them now.
 # Bait messages
 bait:
   # How the lore should look ({baits} is a multi-line variable)

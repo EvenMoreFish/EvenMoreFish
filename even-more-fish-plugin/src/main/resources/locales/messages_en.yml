@@ -283,7 +283,7 @@ journal-disabled: <white>The Fishing Journal is not accessible. Please enable th
 
 # Reward messages
 reward:
-  catch-up: <white>You received rewards while you were offline. Delivering them now."
+  catch-up: <white>You received rewards while you were offline. Delivering them now.
 
 # Bait messages
 bait:
