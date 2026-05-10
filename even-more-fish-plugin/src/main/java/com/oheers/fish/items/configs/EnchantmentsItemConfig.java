@@ -24,7 +24,7 @@ public class EnchantmentsItemConfig extends ItemConfig<Map<Enchantment, Integer>
     public Map<Enchantment, Integer> getConfiguredValue() {
         List<String> strings = section.getStringList("item.enchantments");
         if (strings.isEmpty()) {
-            return Map.of();
+            return null;
         }
         Map<Enchantment, Integer> enchantments = new HashMap<>();
         for (String string : strings) {

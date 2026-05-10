@@ -19,7 +19,8 @@ public class LoreItemConfig extends ItemConfig<List<String>> {
 
     @Override
     public List<String> getConfiguredValue() {
-        return section.getStringList("item.lore");
+        List<String> lore = section.getStringList("item.lore");
+        return lore.isEmpty() ? null : lore;
     }
 
     @Override
