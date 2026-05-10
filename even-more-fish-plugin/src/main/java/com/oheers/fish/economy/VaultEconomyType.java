@@ -110,7 +110,7 @@ public class VaultEconomyType implements EconomyType {
 
         String display = MainConfig.getInstance().getEconomyDisplay(this);
         if (display == null) {
-            return Component.text(worthFormatted);
+            return EMFSingleMessage.fromString(worthFormatted).getComponentMessage();
         }
         EMFSingleMessage message = EMFSingleMessage.fromString(display);
         message.setVariable("{amount}", worthFormatted);
