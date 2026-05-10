@@ -61,4 +61,8 @@ public abstract class ItemConfig<T> {
         this.enabled = enabled;
     }
 
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
 }

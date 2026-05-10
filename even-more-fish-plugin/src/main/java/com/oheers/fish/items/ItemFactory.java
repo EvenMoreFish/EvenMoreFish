@@ -308,8 +308,10 @@ public class ItemFactory {
         }
         EvenMoreFish.getInstance().debug(materialString + " is not a valid material, checking for custom item.");
 
-        ItemStack customItem = FishUtils.getItem(materialString);
+        ItemStack customItem = FishUtils.getCustomItem(materialString);
         if (customItem != null) {
+            this.lore.setEnabled(false);
+            this.displayName.setEnabled(false);
             return customItem;
         }
 

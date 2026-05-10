@@ -10,6 +10,7 @@ import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.items.ItemFactory;
+import com.oheers.fish.items.configs.ItemConfig;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -95,7 +96,10 @@ public class Fish implements IFish, Sortable {
 
         this.showInJournal = section.getBoolean("journal", true);
 
-        factory.getLore().setEnabled(!section.getBoolean("disable-lore", false));
+        ItemConfig<List<String>> lore = factory.getLore();
+        if (lore.isEnabled()) {
+            factory.getLore().setEnabled(!section.getBoolean("disable-lore", false));
+        }
 
         checkSilent();
 
