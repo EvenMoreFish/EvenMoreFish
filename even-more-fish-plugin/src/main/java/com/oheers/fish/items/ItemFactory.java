@@ -84,6 +84,10 @@ public class ItemFactory {
         this.baseItem = getBaseItem();
     }
 
+    public ItemFactory createCopy() {
+        return new ItemFactory(this.configuration, null);
+    }
+
     /**
      * Creates a new ItemFactory instance with the given configuration.
      * @param configuration The configuration to use.

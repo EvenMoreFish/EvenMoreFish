@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.firedev.messagelib.message.ComponentMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,10 +83,6 @@ public class Fish implements IFish, Sortable {
         ItemFactory factory = ItemFactory.itemFactory(section);
         factory.setFinalChanges(fish -> {
             fish.editMeta(meta -> {
-                meta.displayName(getDisplayName().getComponentMessage());
-                if (!section.getBoolean("disable-lore", false)) {
-                    meta.lore(getFishLore());
-                }
                 meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -148,6 +145,12 @@ public class Fish implements IFish, Sortable {
      */
     @Override
     public @NotNull ItemStack give() {
+        ItemFactory factory = this.factory.createCopy();
+
+        // TODO figure out how to make these use EMFMessage/Components to avoid MM serialization.
+        // TODO Maybe also figure out a more efficient way to do this...
+        factory.getDisplayName().setDefault(getDisplayName().getUnderlying().getAsMiniMessage());
+        factory.getLore().setDefault(ComponentMessage.componentMessage(getFishLore()).getAsMiniMessage());
         if (fisherman == null) {
             return factory.createItem();
         }
