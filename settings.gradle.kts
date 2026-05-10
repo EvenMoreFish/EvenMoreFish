@@ -17,3 +17,4 @@ include(":even-more-fish-plugin") //"core"
 include(":even-more-fish-plugin-1-20")
 include(":even-more-fish-plugin-1-21")
 include("even-more-fish-plugin-26-1")
+include("addons:even-more-fish-addons-crafterfix")

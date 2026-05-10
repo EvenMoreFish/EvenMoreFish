@@ -103,12 +103,14 @@ val copyAddons by tasks.registering(Copy::class) {
     dependsOn(
         ":addons:even-more-fish-addons-j21:build",
         ":addons:even-more-fish-addons-itemmodel:build",
-        ":addons:even-more-fish-addons-moderncmd:build"
+        ":addons:even-more-fish-addons-moderncmd:build",
+        ":addons:even-more-fish-addons-crafterfix:build"
     )
 
     from(project(":addons:even-more-fish-addons-j21").layout.buildDirectory.dir("libs"))
     from(project(":addons:even-more-fish-addons-itemmodel").layout.buildDirectory.dir("libs"))
     from(project(":addons:even-more-fish-addons-moderncmd").layout.buildDirectory.dir("libs"))
+    from(project(":addons:even-more-fish-addons-crafterfix").layout.buildDirectory.dir("libs"))
 
     into(file("src/main/resources/addons"))
 }
