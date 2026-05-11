@@ -39,7 +39,7 @@ griefprevention = "com.github.TechFortress:GriefPrevention:16.18.4"
 # Skills & Economy
 mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.2.049"
 aura-skills = "dev.aurelium:auraskills-api-bukkit:2.3.12"
-playerpoints = "org.black_ixx:playerpoints:3.3.3"
+playerpoints = "org.black_ixx:playerpoints:3.3.4"
 
 # Items & Customization
 headdatabase-api = "com.arcaniax:HeadDatabase-API:1.3.2"
