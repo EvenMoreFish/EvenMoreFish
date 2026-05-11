@@ -60,7 +60,8 @@ public class ItemFactory {
             this.configuration = ConfigUtils.getOrCreateSection(initialSection, configLocation);
         }
 
-        // Updates the configuration to put everything in the correct place
+        // Internally updates the configuration to put everything in the correct place.
+        // As of 2.3.1, this no longer overwrites the file to avoid conflicting with fish display names.
         new ItemFactoryConversion().performConversions(this.configuration);
 
         ItemConfigResolver resolver = ItemConfigResolver.getInstance();

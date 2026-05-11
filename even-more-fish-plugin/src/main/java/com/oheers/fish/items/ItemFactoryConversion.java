@@ -5,29 +5,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemFactoryConversion {
 
-    private boolean changed = false;
-
     public void performConversions(@NotNull Section section) {
-        moveIfPresent(section, "glowing", "item.glowing");
-        moveIfPresent(section, "dye-colour", "item.dye-colour");
-        moveIfPresent(section, "durability", "item.durability");
-        moveIfPresent(section, "lore", "item.lore");
-        moveIfPresent(section, "displayname", "item.displayname");
-
-        if (changed) {
-            try {
-                section.getRoot().save();
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to save item config", e);
-            }
-        }
+        copyIfPresent(section, "glowing", "item.glowing");
+        copyIfPresent(section, "dye-colour", "item.dye-colour");
+        copyIfPresent(section, "durability", "item.durability");
+        copyIfPresent(section, "lore", "item.lore");
+        copyIfPresent(section, "displayname", "item.displayname");
     }
 
-    private void moveIfPresent(@NotNull Section section, @NotNull String from, @NotNull String to) {
+    private void copyIfPresent(@NotNull Section section, @NotNull String from, @NotNull String to) {
         if (section.contains(from) && !section.contains(to)) {
             section.set(to, section.get(from));
-            section.remove(from);
-            changed = true;
         }
     }
 

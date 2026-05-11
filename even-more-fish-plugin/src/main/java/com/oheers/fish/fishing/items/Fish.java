@@ -92,13 +92,13 @@ public class Fish implements IFish, Sortable {
         });
         this.factory = factory;
 
-        this.displayName = factory.getDisplayName().getConfiguredValue();
+        this.displayName = section.getString("displayname", factory.getDisplayName().getConfiguredValue());
 
         this.showInJournal = section.getBoolean("journal", true);
 
         ItemConfig<List<String>> lore = factory.getLore();
         if (lore.isEnabled()) {
-            factory.getLore().setEnabled(!section.getBoolean("disable-lore", false));
+            lore.setEnabled(!section.getBoolean("disable-lore", false));
         }
 
         checkSilent();
