@@ -36,6 +36,14 @@ fishing:
   # Allows spawner fish to be ignored for hunting
   hunt-ignore-spawner-fish: true
 
+# Backs up active competitions to a file.
+# Useful for crashes and such.
+competition-backup:
+  # Should this be enabled?
+  enabled: false
+  # How frequently should backups be made? (in seconds)
+  interval: 5
+
 # Should competition player requirement respect vanished players?
 # Supports EssentialsX and CMI.
 respect-vanished: true
@@ -241,5 +249,5 @@ biome-sets:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 5
+version: 6
 

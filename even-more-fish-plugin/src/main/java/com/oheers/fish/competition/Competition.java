@@ -71,6 +71,7 @@ public class Competition {
     private int playersNeeded;
     private Sound.Type startSound;
     private CompetitionTimer timingSystem;
+    private CompetitionBackupTimer backupSystem;
     private CompetitionFile competitionFile;
     private int numberNeeded = 0;
     private Player singleWinner = null;
@@ -221,13 +222,16 @@ public class Competition {
         end(startFail, false);
     }
 
-    public void end(boolean startFail, boolean pluginDisable) {
+    public void end(boolean startFail, boolean save) {
         if (ended()) {
             return;
         }
         // Print leaderboard
         if (timingSystem != null) {
             timingSystem.stop();
+        }
+        if (backupSystem != null) {
+            backupSystem.stop();
         }
         if (statusBar != null) {
             statusBar.hide();
@@ -238,12 +242,14 @@ public class Competition {
             return;
         }
 
-        if (pluginDisable && MainConfig.getInstance().shouldCompetitionResume()) {
+        if (save && MainConfig.getInstance().shouldCompetitionResume()) {
             saveToFile();
             return;
         }
 
         try {
+            // Delete the backup file in case it still exists for whatever reason.
+            dataFile.delete();
             fireEndEvent();
             notifyPlayers();
             processRewards();
@@ -309,6 +315,13 @@ public class Competition {
         CompetitionTimer timer = new CompetitionTimer(this);
         timer.start();
         this.timingSystem = timer;
+
+        // Also init the backup timer if enabled.
+        if (MainConfig.getInstance().isCompetitionBackupEnabled()) {
+            CompetitionBackupTimer backupTimer = new CompetitionBackupTimer(this);
+            backupTimer.start();
+            this.backupSystem = backupTimer;
+        }
     }
 
     /**

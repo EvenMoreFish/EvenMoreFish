@@ -224,6 +224,14 @@ public class MainConfig extends ConfigBase {
         return getConfig().getString("database.type", "sqlite");
     }
 
+    public boolean isCompetitionBackupEnabled() {
+        return getConfig().getBoolean("competition-backup.enabled", false);
+    }
+
+    public int getCompetitionBackupInterval() {
+        return getConfig().getInt("competition-backup.interval", 5);
+    }
+
     public String getSaveIntervalUnit() {
         return getConfig().getString("database.advanced.save-interval.units", "SECONDS");
     }
