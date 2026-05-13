@@ -86,7 +86,11 @@ public class ItemFactory {
     }
 
     public ItemFactory createCopy() {
-        return new ItemFactory(this.configuration, null);
+        ItemFactory newFactory = new ItemFactory(this.configuration, null);
+        newFactory.relevantPlayer = this.relevantPlayer;
+        newFactory.randomIndex = this.randomIndex;
+        newFactory.finalChanges = this.finalChanges;
+        return newFactory;
     }
 
     /**
