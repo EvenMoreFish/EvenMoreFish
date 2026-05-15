@@ -156,6 +156,8 @@ no-competition-running: <white>개최된 대회가 없습니다.
 no-competition-running-fish: <white>개최된 대회가 없습니다.
 # Shown when the %emf_competition_place_size_*% placeholder is used when there's no competition running
 no-competition-running-size: <white>개최된 대회가 없습니다.
+# Shown in %emf_competition_time_left% when there are no scheduled competitions.
+no-competitions-scheduled: <white>No competitions are scheduled.
 # Broadcasted to all players when a competition is extended.
 competition-time-extended: <white>진행 중인 대회가 {duration}만큼 연장되었습니다!
 # How should %emf_custom_fishing_status% be formatted?
