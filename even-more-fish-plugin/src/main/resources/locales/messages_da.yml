@@ -156,6 +156,8 @@ no-competition-running: <white>No competition running right now.
 no-competition-running-fish: <white>No competition running right now.
 # Shown when the %emf_competition_place_size_*% placeholder is used when there's no competition running
 no-competition-running-size: <white>No competition running right now.
+# Shown in %emf_competition_time_left% when there are no scheduled competitions.
+no-competitions-scheduled: <white>No competitions are scheduled.
 # Broadcasted to all players when a competition is extended.
 competition-time-extended: <white>The active competition has been extended by {duration}!
 # How should %emf_custom_fishing_status% be formatted?
