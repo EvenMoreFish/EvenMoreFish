@@ -21,6 +21,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import com.oheers.fish.utils.TimeCode;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.sound.Sound;
@@ -578,6 +579,9 @@ public class Competition {
         }
 
         long remainingTime = getRemainingTime();
+        if (remainingTime == -1) {
+            return ConfigMessage.PLACEHOLDER_NO_COMPETITIONS_SCHEDULED.getMessage();
+        }
 
         EMFMessage message = ConfigMessage.PLACEHOLDER_TIME_REMAINING_INACTIVE.getMessage();
         message.setDays(Long.toString(remainingTime / 1440));
@@ -588,7 +592,11 @@ public class Competition {
     }
 
     private static long getRemainingTime() {
-        long startTime = EvenMoreFish.getInstance().getCompetitionQueue().getNextCompetition().toMillis();
+        TimeCode next = EvenMoreFish.getInstance().getCompetitionQueue().getNextCompetition();
+        if (next == null) {
+            return -1L;
+        }
+        long startTime = next.toMillis();
         long currentTime = System.currentTimeMillis();
         return Duration.ofMillis(startTime - currentTime).toMinutes();
     }

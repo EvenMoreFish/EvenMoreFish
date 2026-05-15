@@ -161,6 +161,7 @@ public enum ConfigMessage {
     PLACEHOLDER_NO_COMPETITION_RUNNING(PrefixType.NONE, "no-competition-running"),
     PLACEHOLDER_NO_COMPETITION_RUNNING_FISH(PrefixType.NONE, "no-competition-running-fish"),
     PLACEHOLDER_NO_COMPETITION_RUNNING_SIZE(PrefixType.NONE, "no-competition-running-size"),
+    PLACEHOLDER_NO_COMPETITIONS_SCHEDULED(PrefixType.NONE, "no-competitions-scheduled"),
 
     PLACEHOLDER_NO_PLAYER_IN_PLACE(PrefixType.NONE, "no-player-in-place"),
     PLACEHOLDER_NO_FISH_IN_PLACE(PrefixType.NONE, "no-fish-in-place"),

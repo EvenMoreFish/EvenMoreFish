@@ -118,7 +118,10 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
         return competitions.size();
     }
 
-    public TimeCode getNextCompetition() {
+    public @Nullable TimeCode getNextCompetition() {
+        if (competitions.isEmpty()) {
+            return null;
+        }
         TimeCode now = TimeCode.now();
         TimeCode next = competitions.ceilingKey(now);
         return next == null ? competitions.firstKey() : next;
