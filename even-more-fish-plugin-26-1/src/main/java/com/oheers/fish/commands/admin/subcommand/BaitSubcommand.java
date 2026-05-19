@@ -35,17 +35,6 @@ public class BaitSubcommand {
     public LiteralArgumentBuilder<CommandSourceStack> get() {
         return Commands.literal(name)
             .then(
-                Commands.literal("debug")
-                    .then(
-                        Commands.argument("bait", new BaitArgument())
-                            .executes(this::executeDebug)
-                            .then(
-                                Commands.argument("target", new EMFPlayerArgument())
-                                    .executes(this::executeDebug)
-                            )
-                    )
-            )
-            .then(
                 Commands.argument("bait", new BaitArgument())
                     // [bait]
                     .executes(ctx -> execute(ctx, false))

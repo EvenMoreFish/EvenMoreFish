@@ -66,6 +66,7 @@ public class AdminCommand {
                 getList(),
                 getCompetition(),
                 getCustomRod(),
+                getDebug(),
                 getBait(),
                 getClearBaits(),
                 getReload(),
@@ -219,10 +220,10 @@ public class AdminCommand {
             }));
     }
 
-    private CommandAPICommand getBait() {
-        return new CommandAPICommand("bait")
+    private CommandAPICommand getDebug() {
+        return new CommandAPICommand("debug")
             .withSubcommands(
-                new CommandAPICommand("debug")
+                new CommandAPICommand("bait")
                     .withArguments(
                         BaitArgument.create(),
                         ArgumentHelper.getPlayerArgument("target").setOptional(true)
@@ -243,7 +244,11 @@ public class AdminCommand {
 
                         bait.createDebugMessages(target).forEach(sender::sendMessage);
                     })
-            )
+            );
+    }
+
+    private CommandAPICommand getBait() {
+        return new CommandAPICommand("bait")
             .withArguments(
                 BaitArgument.create(),
                 new IntegerArgument("quantity", 1).setOptional(true),

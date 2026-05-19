@@ -15,6 +15,7 @@ import com.oheers.fish.commands.admin.subcommand.ClearBaitsSubcommand;
 import com.oheers.fish.commands.admin.subcommand.CompetitionSubcommand;
 import com.oheers.fish.commands.admin.subcommand.CustomRodSubcommand;
 import com.oheers.fish.commands.admin.subcommand.DatabaseSubcommand;
+import com.oheers.fish.commands.admin.subcommand.DebugSubcommand;
 import com.oheers.fish.commands.admin.subcommand.FishSubcommand;
 import com.oheers.fish.commands.admin.subcommand.ListSubcommand;
 import com.oheers.fish.database.Database;
@@ -63,6 +64,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
             .then(list())
             .then(competition())
             .then(customRod())
+            .then(debug())
             .then(bait())
             .then(clearBaits())
             .then(reload())
@@ -95,6 +97,11 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     @Override
     protected @NonNull ArgumentBuilder<CommandSourceStack, ?> customRod() {
         return new CustomRodSubcommand("custom-rod").get();
+    }
+
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> debug() {
+        return new DebugSubcommand("debug").get();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.oheers.fish.commands;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
+import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.permissions.AdminPerms;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,7 @@ public abstract class AdminCommandProvider<C, A> {
         .addEntry("version", ConfigMessage.HELP_ADMIN_VERSION::getMessage)
         .addEntry("migrate", ConfigMessage.HELP_ADMIN_MIGRATE::getMessage, AdminPerms.MIGRATE)
         .addEntry("rawItem", ConfigMessage.HELP_ADMIN_RAWITEM::getMessage)
+        .addEntry("debug", () -> EMFSingleMessage.fromString("Shows debug information for some features."))
         .addEntry("help", ConfigMessage.HELP_GENERAL_HELP::getMessage)
         .addEntry("competition", ConfigMessage.HELP_ADMIN_COMPETITION::getMessage)
         .addEntry("database", ConfigMessage.HELP_ADMIN_DATABASE::getMessage, AdminPerms.DATABASE);
@@ -42,6 +44,8 @@ public abstract class AdminCommandProvider<C, A> {
     protected abstract @NotNull A competition();
 
     protected abstract @NotNull A customRod();
+
+    protected abstract @NotNull A debug();
 
     protected abstract @NotNull A bait();
 
