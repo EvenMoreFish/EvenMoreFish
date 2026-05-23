@@ -36,6 +36,7 @@ public class ItemFactory {
     private int randomIndex = -1;
     private Consumer<ItemStack> finalChanges = null;
     private @NotNull ItemStack baseItem;
+    private boolean usingItemAddon = false;
 
     private final ItemConfig<Number> customModelData;
     private final ItemConfig<Integer> itemDamage;
@@ -121,12 +122,20 @@ public class ItemFactory {
 
         if (!rawItem) {
             OfflinePlayer player = relevantPlayer == null ? null : Bukkit.getOfflinePlayer(relevantPlayer);
+
+            if (this.usingItemAddon) {
+                System.out.println("Using item addon.");
+                ItemFactoryConfig.getAddonDisplayBehavior().applyDisplay(item, player, replacements, displayName);
+                ItemFactoryConfig.getAddonLoreBehavior().applyLore(item, player, replacements, lore);
+            } else {
+                displayName.apply(item, player, replacements);
+                lore.apply(item, player, replacements);
+            }
+
             customModelData.apply(item, player, replacements);
             itemDamage.apply(item, player, replacements);
-            displayName.apply(item, player, replacements);
             dyeColour.apply(item, player, replacements);
             glowing.apply(item, player, replacements);
-            lore.apply(item, player, replacements);
             potionMeta.apply(item, player, replacements);
             enchantments.apply(item, player, replacements);
             unbreakable.apply(item, player, replacements);
@@ -315,8 +324,8 @@ public class ItemFactory {
 
         ItemStack customItem = FishUtils.getCustomItem(materialString);
         if (customItem != null) {
-            this.lore.setEnabled(false);
-            this.displayName.setEnabled(false);
+            System.out.println("Using item addon. Setting variable.");
+            this.usingItemAddon = true;
             return customItem;
         }
 

@@ -189,6 +189,21 @@ bait:
   # NOTE: THIS WILL BREAK RODS THAT ALREADY HAVE BAITS APPLIED.
   show-unused-slots: true
 
+# Defines behavior for the plugin's item factory.
+items:
+  addons:
+    # How should lore behave?
+    # NOTHING: Does nothing
+    # APPEND: Inserts the custom lore after the item's original lore
+    # PREPEND: Inserts the custom lore before the item's original lore
+    # REPLACE: Completely replaces the item's original lore
+    lore-behavior: REPLACE
+
+    # How should the display name behave?
+    # NOTHING: Does nothing
+    # REPLACE: Replaces the item's original display name
+    display-behavior: REPLACE
+
 # Requirement configs
 requirements:
   nearby-players:
@@ -249,5 +264,5 @@ biome-sets:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 6
+version: 7
 
