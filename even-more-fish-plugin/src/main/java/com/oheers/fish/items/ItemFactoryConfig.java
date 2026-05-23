@@ -1,6 +1,8 @@
 package com.oheers.fish.items;
 
+import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.items.configs.ItemConfig;
 import net.kyori.adventure.text.Component;
@@ -40,7 +42,7 @@ public class ItemFactoryConfig {
         REPLACE;
 
         public void applyDisplay(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements, @NotNull ItemConfig<String> display) {
-            System.out.println("Addon Display configured to " + this);
+            Logging.debug("AddonBehavior for the Display Name is set to: " + this);
             if (this.equals(REPLACE)) {
                 display.apply(item, player, replacements);
             }
@@ -48,7 +50,7 @@ public class ItemFactoryConfig {
 
         // Could be slightly confusing. May need to be rewritten.
         public void applyLore(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements, @NotNull ItemConfig<List<String>> lore) {
-            System.out.println("Addon Lore configured to " + this);
+            Logging.debug("AddonBehavior for the Lore is set to: " + this);
             switch (this) {
                 case REPLACE -> lore.apply(item, player, replacements);
                 case NOTHING -> {}

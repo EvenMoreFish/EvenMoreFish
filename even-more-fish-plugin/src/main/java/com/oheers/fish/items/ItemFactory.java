@@ -2,6 +2,7 @@ package com.oheers.fish.items;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigUtils;
 import com.oheers.fish.items.configs.ItemConfig;
 import com.oheers.fish.utils.ItemUtils;
@@ -124,7 +125,6 @@ public class ItemFactory {
             OfflinePlayer player = relevantPlayer == null ? null : Bukkit.getOfflinePlayer(relevantPlayer);
 
             if (this.usingItemAddon) {
-                System.out.println("Using item addon.");
                 ItemFactoryConfig.getAddonDisplayBehavior().applyDisplay(item, player, replacements, displayName);
                 ItemFactoryConfig.getAddonLoreBehavior().applyLore(item, player, replacements, lore);
             } else {
@@ -230,7 +230,7 @@ public class ItemFactory {
         }
         // Default item if no checks pass
         // This should ALWAYS be last
-        EvenMoreFish.getInstance().debug(configuration.getRouteAsString() + " has no valid item, returning default.");
+        Logging.debug(configuration.getRouteAsString() + " has no valid item, returning default.");
         return new ItemStack(Material.COD);
     }
 
@@ -320,11 +320,11 @@ public class ItemFactory {
         if (material != null) {
             return new ItemStack(material);
         }
-        EvenMoreFish.getInstance().debug(materialString + " is not a valid material, checking for custom item.");
+        Logging.debug(materialString + " is not a valid material, checking for custom item.");
 
         ItemStack customItem = FishUtils.getCustomItem(materialString);
         if (customItem != null) {
-            System.out.println("Using item addon. Setting variable.");
+            Logging.debug(materialString + " was a valid ItemAddon.");
             this.usingItemAddon = true;
             return customItem;
         }
@@ -389,7 +389,7 @@ public class ItemFactory {
         }
         ItemStack item = api.getItemHead(materialStr);
         if (item == null) {
-            EvenMoreFish.getInstance().debug(configuration.getRouteAsString() + " has invalid headdb: " + materialStr);
+            Logging.debug(configuration.getRouteAsString() + " has invalid headdb: " + materialStr);
             return null;
         }
         return item;
@@ -470,7 +470,7 @@ public class ItemFactory {
 
     private @Nullable ItemStack getRandomItem(@NotNull List<String> strings, @NotNull Function<String, ItemStack> function) {
         if (randomIndex != -1) {
-            EvenMoreFish.getInstance().debug("Random index is set to " + randomIndex + ", trying to use it.");
+            Logging.debug("Random index is set to " + randomIndex + ", trying to use it.");
             try {
                 String randomStr = strings.get(randomIndex);
                 ItemStack randomItem = function.apply(randomStr);
@@ -478,7 +478,7 @@ public class ItemFactory {
                     return randomItem;
                 }
             } catch (IndexOutOfBoundsException exception) {
-                EvenMoreFish.getInstance().debug("Random index " + randomIndex + " is out of bounds, getting a new one.");
+                Logging.debug("Random index " + randomIndex + " is out of bounds, getting a new one.");
             }
         }
 
@@ -496,12 +496,12 @@ public class ItemFactory {
                 return randomItem;
             }
 
-            EvenMoreFish.getInstance().debug(
+            Logging.debug(
                 configuration.getRouteAsString() + " has an invalid name in its list: " + randomStr
             );
         }
 
-        EvenMoreFish.getInstance().debug(
+        Logging.debug(
             configuration.getRouteAsString() + " has no valid items in its list."
         );
         return null;
