@@ -20,7 +20,7 @@ public abstract class AdminCommandProvider<C, A> {
         .setDefaultRequirement(AdminPerms.ADMIN)
         .addEntry("fish", ConfigMessage.HELP_ADMIN_FISH::getMessage)
         .addEntry("custom-rod", ConfigMessage.HELP_ADMIN_CUSTOMROD::getMessage)
-        .addEntry("bait", ConfigMessage.HELP_ADMIN_CUSTOMROD::getMessage)
+        .addEntry("bait", ConfigMessage.HELP_ADMIN_BAIT::getMessage)
         .addEntry("clearbaits", ConfigMessage.HELP_ADMIN_CLEARBAITS::getMessage)
         .addEntry("reload", ConfigMessage.HELP_ADMIN_RELOAD::getMessage)
         .addEntry("version", ConfigMessage.HELP_ADMIN_VERSION::getMessage)
