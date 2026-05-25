@@ -27,7 +27,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import uk.firedev.messagelib.message.ComponentMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +81,7 @@ public class Fish implements IFish, Sortable {
         this.disableFisherman = section.getBoolean("disable-fisherman", rarity.isShouldDisableFisherman());
 
         ItemFactory factory = ItemFactory.itemFactory(section);
+
         factory.setFinalChanges(fish -> {
             fish.editMeta(meta -> {
                 meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
@@ -96,7 +96,7 @@ public class Fish implements IFish, Sortable {
 
         this.showInJournal = section.getBoolean("journal", true);
 
-        ItemConfig<List<String>> lore = factory.getLore();
+        ItemConfig<List<Component>> lore = factory.getLore();
         if (lore.isEnabled()) {
             lore.setEnabled(!section.getBoolean("disable-lore", false));
         }
@@ -150,11 +150,9 @@ public class Fish implements IFish, Sortable {
     @Override
     public @NotNull ItemStack give() {
         ItemFactory factory = this.factory.createCopy();
-
-        // TODO figure out how to make these use EMFMessage/Components to avoid MM serialization.
-        // TODO Maybe also figure out a more efficient way to do this...
+        // Build custom fish lore and include the configured lore.
+        factory.getLore().setTransformer(this::buildFishLore);
         factory.getDisplayName().setDefault(getDisplayName().getUnderlying().getAsMiniMessage());
-        factory.getLore().setDefault(ComponentMessage.componentMessage(getFishLore()).getAsMiniMessage());
         if (fisherman == null) {
             return factory.createItem();
         }
@@ -285,19 +283,18 @@ public class Fish implements IFish, Sortable {
      *
      * @return A lore to be used by fetching data from the old messages.yml set-up.
      */
-    private List<Component> getFishLore() {
+    private List<Component> buildFishLore(@NotNull List<Component> configured) {
         List<String> loreOverride = getLoreOverride();
         EMFListMessage newLoreLine;
-        if (!loreOverride.isEmpty()) {
-            newLoreLine = EMFListMessage.fromStringList(loreOverride);
-        } else {
+        if (loreOverride == null || loreOverride.isEmpty()) {
             newLoreLine = ConfigMessage.FISH_LORE.getMessage().toListMessage();
+        } else  {
+            newLoreLine = EMFListMessage.fromStringList(loreOverride);
         }
 
         OfflinePlayer fishermanPlayer = getFishermanPlayer();
 
-        List<String> fishLore = factory.getLore().getConfiguredValue();
-        EMFListMessage fishLoreReplacement = (fishLore == null || fishLore.isEmpty()) ? EMFListMessage.empty() : EMFListMessage.fromStringList(fishLore);
+        EMFListMessage fishLoreReplacement = (configured.isEmpty()) ? EMFListMessage.empty() : EMFListMessage.ofList(configured);
         newLoreLine.setVariableWithListInsertion("{fish_lore}", fishLoreReplacement);
 
         if (!disableFisherman && fishermanPlayer != null) {
