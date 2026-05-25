@@ -11,6 +11,9 @@ disabled: false
 # This can be used in the lore format to create a consistent colour theme. Defaults to yellow.
 format: <yellow>{name}</yellow>
 
+# Optional: Used for sorting the bait menu/shop if the sort type is index.
+sort-index: 0
+
 # When more than 1 types of baits are applied, how likely is it that this one should be used?
 application-weight: 150
 

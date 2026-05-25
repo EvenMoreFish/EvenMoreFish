@@ -39,11 +39,15 @@ public class BaitsGui extends ConfigGui {
         createGui();
 
         Section config = getGuiConfig();
-
-        // TODO fetch sort type from config after baits have weight.
-        this.sortType = SortType.ALPHABETICAL;
         if (config != null) {
+            sortType = FishUtils.getEnumValue(
+                SortType.class,
+                config.getString("sort-type"),
+                SortType.ALPHABETICAL
+            );
             getGui().addElements(getBaitsGroup(config));
+        } else {
+            sortType = SortType.ALPHABETICAL;
         }
     }
 

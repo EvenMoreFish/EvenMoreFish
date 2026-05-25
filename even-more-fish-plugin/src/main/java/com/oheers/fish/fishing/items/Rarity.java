@@ -79,6 +79,11 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     }
 
     @Override
+    public int getIndex() {
+        return getConfig().getInt("sort-index");
+    }
+
+    @Override
     public double getWeight() {
         return getConfig().getDouble("weight");
     }

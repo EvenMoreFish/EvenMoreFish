@@ -489,6 +489,11 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
+    public int getIndex() {
+        return section.getInt("sort-index");
+    }
+
+    @Override
     public double getWeight() {
         return weight;
     }

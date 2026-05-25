@@ -10,7 +10,9 @@ public enum SortType {
 
     ALPHABETICAL(Comparator.comparing(Sortable::getId)),
     // First sort by weight, and then sort alphabetically as a fallback.
-    WEIGHT(Comparator.comparing(Sortable::getWeight).reversed().thenComparing(Sortable::getId));
+    WEIGHT(Comparator.comparing(Sortable::getWeight).reversed().thenComparing(Sortable::getId)),
+    // First sort by index, and then sort alphabetically as a fallback.
+    INDEX(Comparator.comparing(Sortable::getIndex).thenComparing(Sortable::getId));
 
     private final Comparator<Sortable> comparator;
 

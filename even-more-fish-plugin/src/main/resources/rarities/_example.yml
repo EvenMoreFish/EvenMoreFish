@@ -19,6 +19,9 @@ item:
 # How likely is the rarity to be chosen? Having a greater weight means the rarity is more likely to be chosen (the total weights don't have to add to 100)
 weight: 5
 
+# Optional: Used for sorting the fish journal if the sort type is index.
+sort-index: 0
+
 # Broadcast settings
 broadcast:
   # Should a catch of this fish be broadcasted to everyone (true) or just the fisher (false)?
@@ -97,6 +100,9 @@ fish:
 
     # The catch type for this fish. This overrides the rarity's value.
     catch-type: BOTH
+
+    # Optional: Used for sorting the fish journal if the sort type is index.
+    sort-index: 0
 
     # Should the fisherman be removed from the fish lore?
     # This overrides the rarity's setting.

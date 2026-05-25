@@ -10,6 +10,7 @@ broadcast:
   only-rods: false
   range: -1
 catch-type: both
+sort-index: 1
 # Junk has no size.
 size:
   minSize: -1

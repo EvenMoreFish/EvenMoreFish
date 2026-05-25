@@ -54,6 +54,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class BaitHandler extends ConfigBase implements IBait, Sortable {
+
     private final @NotNull String id;
     private BaitData baitData;
     private ItemFactory itemFactory;
@@ -431,6 +432,11 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         EMFMessage message = ConfigMessage.BAIT_USED.getMessage();
         message.setBait(this);
         message.send(player);
+    }
+
+    @Override
+    public int getIndex() {
+        return getConfig().getInt("sort-index");
     }
 
     @Override

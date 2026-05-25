@@ -10,6 +10,7 @@ broadcast:
   only-rods: false
   range: -1
 catch-type: both
+sort-index: 2
 size:
   minSize: 1
   maxSize: 30

@@ -232,6 +232,10 @@ baits-menu:
   filler: black_stained_glass_pane
   # The character to use for the bait items.
   bait-character: b
+
+  # How to sort the baits. Valid options are: alphabetical, index. (Default: alphabetical)
+  sort-type: alphabetical
+
   # The lore to use when a bait can be purchased.
   # Supported variables: {quantity}, {price}, {bait}
   purchase-lore:
@@ -302,8 +306,8 @@ journal-menu:
   # The character to use for rarity items
   rarity-character: r
 
-  # How to sort the rarities. Valid options are: alphabetical, weight. (Default: alphabetical)
-  sort-type: alphabetical
+  # How to sort the rarities. Valid options are: alphabetical, weight, index. (Default: index)
+  sort-type: index
 
   # Whether to show the undiscovered-rarity config below when a rarity has not been discovered by the player.
   hide-undiscovered-rarity: false
@@ -351,7 +355,7 @@ journal-rarity:
   # The character to use for fish items
   fish-character: f
 
-  # How to sort the fish. Valid options are: alphabetical, weight. (Default: alphabetical)
+  # How to sort the fish. Valid options are: alphabetical, weight, index. (Default: alphabetical)
   sort-type: alphabetical
 
   # Whether to show the undiscovered-fish config below when a fish has not been caught by the player.
