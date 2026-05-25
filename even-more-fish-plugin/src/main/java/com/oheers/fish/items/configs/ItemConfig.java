@@ -8,11 +8,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public abstract class ItemConfig<T> {
 
     private T def;
-    private T override;
+    private Function<T, T> transformer;
     protected final Section section;
     protected boolean enabled = true;
 
@@ -21,9 +22,6 @@ public abstract class ItemConfig<T> {
     }
 
     public @Nullable T getActualValue() {
-        if (override != null) {
-            return override;
-        }
         T configured = getConfiguredValue();
         if (configured == null) {
             return def;
@@ -39,7 +37,7 @@ public abstract class ItemConfig<T> {
         if (!enabled) {
             return;
         }
-        T value = getActualValue();
+        T value = transformer == null ? getActualValue() : transformer.apply(getActualValue());
         if (value != null) {
             applyToItem(player, replacements).accept(item, value);
         }
@@ -53,8 +51,8 @@ public abstract class ItemConfig<T> {
         this.def = def;
     }
 
-    public void setOverride(@Nullable T override) {
-        this.override = override;
+    public void setTransformer(@Nullable Function<T, T> transformer) {
+        this.transformer = transformer;
     }
 
     public void setEnabled(boolean enabled) {
