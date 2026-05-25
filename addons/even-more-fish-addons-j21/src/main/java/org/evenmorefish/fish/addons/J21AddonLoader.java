@@ -1,5 +1,9 @@
 package org.evenmorefish.fish.addons;
 
+import com.oheers.fish.api.addons.AddonLoader;
+import com.oheers.fish.api.plugin.EMFPlugin;
+import com.oheers.fish.api.utils.system.JavaSpecVersion;
+import com.oheers.fish.api.utils.system.SystemUtils;
 import org.evenmorefish.fish.addons.item.CraftEngineItemAddon;
 import org.evenmorefish.fish.addons.item.DenizenItemAddon;
 import org.evenmorefish.fish.addons.item.EcoItemsItemAddon;
@@ -8,10 +12,6 @@ import org.evenmorefish.fish.addons.item.ItemsAdderItemAddon;
 import org.evenmorefish.fish.addons.item.MMOItemsItemAddon;
 import org.evenmorefish.fish.addons.item.NexoItemAddon;
 import org.evenmorefish.fish.addons.item.OraxenItemAddon;
-import com.oheers.fish.api.addons.AddonLoader;
-import com.oheers.fish.api.plugin.EMFPlugin;
-import com.oheers.fish.api.utils.system.JavaSpecVersion;
-import com.oheers.fish.api.utils.system.SystemUtils;
 
 import java.io.File;
 

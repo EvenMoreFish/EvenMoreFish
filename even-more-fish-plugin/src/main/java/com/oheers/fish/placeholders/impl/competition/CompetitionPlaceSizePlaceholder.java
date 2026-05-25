@@ -1,12 +1,11 @@
 package com.oheers.fish.placeholders.impl.competition;
 
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.api.Logging;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.placeholders.abstracted.EMFPlaceholder;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +19,7 @@ public class CompetitionPlaceSizePlaceholder implements EMFPlaceholder {
     }
 
     @Override
-    public @Nullable String parsePAPI(@Nullable Player player, @NotNull String identifier) {
+    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING_SIZE.getMessage().getLegacyMessage();

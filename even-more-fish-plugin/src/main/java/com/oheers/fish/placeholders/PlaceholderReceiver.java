@@ -1,11 +1,6 @@
 package com.oheers.fish.placeholders;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.FishUtils;
-import com.oheers.fish.competition.Competition;
-import com.oheers.fish.database.model.user.UserReport;
-import com.oheers.fish.messages.ConfigMessage;
-import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.placeholders.abstracted.EMFPlaceholder;
 import com.oheers.fish.placeholders.impl.competition.CompetitionActivePlaceholder;
 import com.oheers.fish.placeholders.impl.competition.CompetitionPlaceFishPlaceholder;
@@ -22,15 +17,11 @@ import com.oheers.fish.placeholders.impl.database.player.TotalMoneyEarnedPlaceho
 import com.oheers.fish.placeholders.impl.player.CustomFishingBooleanPlaceholder;
 import com.oheers.fish.placeholders.impl.player.CustomFishingStatusPlaceholder;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
-import java.util.function.BiFunction;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -98,7 +89,7 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(@Nullable Player player, @NotNull String identifier) {
+    public @Nullable String onRequest(@Nullable OfflinePlayer player, @NotNull final String identifier) {
         for (EMFPlaceholder handler : handlers) {
             if (handler.shouldProcess(identifier)) {
                 return handler.parsePAPI(player, identifier);

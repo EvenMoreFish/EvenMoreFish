@@ -6,7 +6,7 @@ import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.model.user.UserReport;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +18,7 @@ public interface EMFPlaceholder {
 
     boolean shouldProcess(@NotNull String identifier);
 
-    @Nullable String parsePAPI(@Nullable Player player, @NotNull String identifier);
+    @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier);
 
     default @Nullable CompetitionEntry fetchEntry(@NotNull Competition active, @NotNull String identifier, int prefixLength) {
         Integer place = FishUtils.getInteger(identifier.substring(prefixLength));
@@ -28,7 +28,7 @@ public interface EMFPlaceholder {
         return active.getLeaderboard().getEntry(place);
     }
 
-    default @Nullable UUID fetchPlayerOrUUIDString(@Nullable Player player, @NotNull String substring) {
+    default @Nullable UUID fetchPlayerOrUUIDString(@Nullable OfflinePlayer player, @NotNull String substring) {
         if (substring.equalsIgnoreCase("player")) {
             return player == null ? null : player.getUniqueId();
         }

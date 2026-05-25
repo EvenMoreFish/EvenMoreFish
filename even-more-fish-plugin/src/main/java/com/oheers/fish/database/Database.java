@@ -25,11 +25,11 @@ import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.database.sql.DatabaseSqlDialect;
 import com.oheers.fish.database.sql.DatabaseSqlDialectFactory;
 import com.oheers.fish.fishing.items.Fish;
-import org.jetbrains.annotations.NotNull;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.PreparedBatch;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
 import java.sql.Types;

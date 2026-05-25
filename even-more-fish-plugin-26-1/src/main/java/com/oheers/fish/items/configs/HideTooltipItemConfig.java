@@ -1,6 +1,5 @@
 package com.oheers.fish.items.configs;
 
-import com.oheers.fish.items.configs.ItemConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;

@@ -22,7 +22,6 @@ import uk.firedev.messagelib.message.MessageType;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 public abstract class EMFMessage {

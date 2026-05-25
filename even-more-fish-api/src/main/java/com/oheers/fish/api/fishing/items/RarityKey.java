@@ -1,12 +1,8 @@
 package com.oheers.fish.api.fishing.items;
 
 import com.oheers.fish.api.Logging;
-import net.kyori.adventure.key.Key;
-import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
 
 /**
  * An immutable key that uniquely identifies a fish by its rarity and name.

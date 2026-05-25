@@ -5,7 +5,6 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.Toggle;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
-import com.oheers.fish.fishing.rods.CustomRod;
 import dev.aurelium.auraskills.api.event.loot.LootDropEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

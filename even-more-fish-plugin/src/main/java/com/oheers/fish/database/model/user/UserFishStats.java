@@ -2,7 +2,6 @@ package com.oheers.fish.database.model.user;
 
 
 import com.oheers.fish.fishing.items.Fish;
-import net.kyori.adventure.title.Title;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

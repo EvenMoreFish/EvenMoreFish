@@ -9,7 +9,6 @@ import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.utils.CooldownHelper;
 import com.oheers.fish.utils.sort.SortType;
-import com.oheers.fish.utils.sort.Sortable;
 import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.StaticGuiElement;

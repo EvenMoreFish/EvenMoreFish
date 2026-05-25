@@ -2,7 +2,6 @@ package com.oheers.fish.database.data;
 
 import com.oheers.fish.fishing.items.Fish;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
 
 public record UserFishRarityKey(int userId, @NotNull String fishName, @NotNull String fishRarity) {
 

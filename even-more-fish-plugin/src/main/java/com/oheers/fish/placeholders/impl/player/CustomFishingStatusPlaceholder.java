@@ -3,6 +3,7 @@ package com.oheers.fish.placeholders.impl.player;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.placeholders.abstracted.EMFPlaceholder;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,11 +16,11 @@ public class CustomFishingStatusPlaceholder implements EMFPlaceholder {
     }
 
     @Override
-    public @Nullable String parsePAPI(@Nullable Player player, @NotNull String identifier) {
-        if (player == null) {
+    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+        if (!(player instanceof Player online)) {
             return null;
         }
-        return EvenMoreFish.getInstance().getToggle().isCustomFishingDisabled(player)
+        return EvenMoreFish.getInstance().getToggle().isCustomFishingDisabled(online)
             ? ConfigMessage.CUSTOM_FISHING_DISABLED.getMessage().getLegacyMessage()
             : ConfigMessage.CUSTOM_FISHING_ENABLED.getMessage().getLegacyMessage();
     }

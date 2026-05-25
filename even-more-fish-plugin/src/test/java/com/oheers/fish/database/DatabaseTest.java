@@ -1,20 +1,20 @@
 package com.oheers.fish.database;
 
+import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.database.model.user.UserReport;
-import com.oheers.fish.EvenMoreFish;
+import org.bukkit.inventory.ItemStack;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.HandleConsumer;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Update;
-import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Answers;
+import org.mockito.ArgumentCaptor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

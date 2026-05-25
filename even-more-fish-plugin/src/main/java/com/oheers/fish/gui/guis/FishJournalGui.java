@@ -17,7 +17,6 @@ import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.utils.sort.SortType;
-import com.oheers.fish.utils.sort.Sortable;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.StaticGuiElement;

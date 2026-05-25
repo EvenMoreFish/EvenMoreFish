@@ -14,7 +14,6 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Optional;
 
 // TODO look into dynamically updating the sell items when a fish is added/removed - AFTER we switch to TriumphGui

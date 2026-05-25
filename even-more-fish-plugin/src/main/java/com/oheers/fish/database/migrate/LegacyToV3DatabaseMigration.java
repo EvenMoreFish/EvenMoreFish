@@ -10,15 +10,14 @@ import com.oheers.fish.database.connection.MigrationManager;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.PrefixType;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 import org.jdbi.v3.core.Jdbi;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.sql.Types;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
