@@ -13,16 +13,19 @@ import com.oheers.fish.items.configs.PotionMetaItemConfig;
 import com.oheers.fish.items.configs.QuantityItemConfig;
 import com.oheers.fish.items.configs.UnbreakableItemConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+@ApiStatus.Internal
 public class ItemConfigResolver {
 
     private static final ItemConfigResolver instance = new ItemConfigResolver();
@@ -33,7 +36,7 @@ public class ItemConfigResolver {
     private @NotNull Function<Section, ItemConfig<Map<Enchantment, Integer>>> enchantmentsResolver = EnchantmentsItemConfig::new;
     private @NotNull Function<Section, ItemConfig<Boolean>> glowingResolver = GlowingItemConfig::new;
     private @NotNull Function<Section, ItemConfig<Integer>> damageResolver = ItemDamageItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<List<String>>> loreResolver = LoreItemConfig::new;
+    private @NotNull Function<Section, ItemConfig<List<Component>>> loreResolver = LoreItemConfig::new;
     private @NotNull Function<Section, ItemConfig<PotionEffect>> potionMetaResolver = PotionMetaItemConfig::new;
     private @NotNull Function<Section, ItemConfig<Integer>> quantityResolver = QuantityItemConfig::new;
     private @NotNull Function<Section, ItemConfig<Boolean>> unbreakableResolver = UnbreakableItemConfig::new;
@@ -103,11 +106,11 @@ public class ItemConfigResolver {
         this.damageResolver = damageResolver;
     }
 
-    public @NotNull ItemConfig<List<String>> getLore(@NotNull Section section) {
+    public @NotNull ItemConfig<List<Component>> getLore(@NotNull Section section) {
         return resolve(loreResolver, section);
     }
 
-    public void setLoreResolver(@NotNull Function<Section, ItemConfig<List<String>>> loreResolver) {
+    public void setLoreResolver(@NotNull Function<Section, ItemConfig<List<Component>>> loreResolver) {
         this.loreResolver = loreResolver;
     }
 

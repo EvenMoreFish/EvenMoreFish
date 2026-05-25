@@ -95,13 +95,11 @@ public class BaitItemFactory {
     @Contract(pure = true)
     private @NotNull Supplier<EMFListMessage> createItemLoreVariable(ItemFactory factory) {
         return () -> {
-            List<String> configured = factory.getLore().getConfiguredValue();
+            List<Component> configured = factory.getLore().getConfiguredValue();
             if (configured == null) {
                 return EMFListMessage.empty();
             }
-            return EMFListMessage.fromStringList(
-                factory.getLore().getConfiguredValue()
-            );
+            return EMFListMessage.ofList(configured);
         };
     }
 

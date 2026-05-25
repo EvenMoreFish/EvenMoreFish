@@ -134,7 +134,7 @@ public class FishJournalGui extends ConfigGui {
         @SuppressWarnings("Convert2MethodRef") // Suppressed as it introduces an unwanted Objects#requireNonNull when compiled.
         final String discoverer = getValueOrDefault(() -> fishStats.getDiscovererName(), getUnknownMessage());
 
-        EMFListMessage lore = EMFListMessage.fromStringList(
+        EMFListMessage lore = EMFListMessage.ofList(
             Optional.ofNullable(factory.getLore().getConfiguredValue())
                 .orElse(Collections.emptyList())
         );

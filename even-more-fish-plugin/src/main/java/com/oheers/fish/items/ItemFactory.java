@@ -10,6 +10,7 @@ import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NbtApiException;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -44,7 +45,7 @@ public class ItemFactory {
     private final ItemConfig<String> displayName;
     private final ItemConfig<Color> dyeColour;
     private final ItemConfig<Boolean> glowing;
-    private final ItemConfig<List<String>> lore;
+    private final ItemConfig<List<Component>> lore;
     private final ItemConfig<PotionEffect> potionMeta;
     private final ItemConfig<Map<Enchantment, Integer>> enchantments;
     private final ItemConfig<Boolean> unbreakable;
@@ -256,7 +257,7 @@ public class ItemFactory {
         return glowing;
     }
 
-    public ItemConfig<List<String>> getLore() {
+    public ItemConfig<List<Component>> getLore() {
         return lore;
     }
 

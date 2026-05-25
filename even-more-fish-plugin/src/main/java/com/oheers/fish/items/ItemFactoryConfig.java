@@ -47,7 +47,7 @@ public class ItemFactoryConfig {
         }
 
         // Could be slightly confusing. May need to be rewritten.
-        public void applyLore(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements, @NotNull ItemConfig<List<String>> lore) {
+        public void applyLore(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements, @NotNull ItemConfig<List<Component>> lore) {
             Logging.debug("AddonBehavior for the Lore is set to: " + this);
             switch (this) {
                 case REPLACE -> lore.apply(item, player, replacements);
