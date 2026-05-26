@@ -283,7 +283,7 @@ public class Fish implements IFish, Sortable {
      *
      * @return A lore to be used by fetching data from the old messages.yml set-up.
      */
-    private List<Component> buildFishLore(@NotNull List<Component> configured) {
+    private List<Component> buildFishLore(@Nullable List<Component> configured) {
         List<String> loreOverride = getLoreOverride();
         EMFListMessage newLoreLine;
         if (loreOverride == null || loreOverride.isEmpty()) {
@@ -294,7 +294,7 @@ public class Fish implements IFish, Sortable {
 
         OfflinePlayer fishermanPlayer = getFishermanPlayer();
 
-        EMFListMessage fishLoreReplacement = (configured.isEmpty()) ? EMFListMessage.empty() : EMFListMessage.ofList(configured);
+        EMFListMessage fishLoreReplacement = (configured == null || configured.isEmpty()) ? EMFListMessage.empty() : EMFListMessage.ofList(configured);
         newLoreLine.setVariableWithListInsertion("{fish_lore}", fishLoreReplacement);
 
         if (!disableFisherman && fishermanPlayer != null) {
