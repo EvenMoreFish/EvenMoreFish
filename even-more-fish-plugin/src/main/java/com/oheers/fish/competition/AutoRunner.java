@@ -34,8 +34,14 @@ public class AutoRunner extends EMFTimer {
                 // Beginning the competition set for schedule
                 Map<TimeCode, CompetitionFile> competitions = EvenMoreFish.getInstance().getCompetitionQueue().getCompetitions();
                 CompetitionFile file = competitions.get(now);
-                if (file != null && !Competition.isActive()) {
-                    Logging.debug("AutoRunner found a competition with this TimeCode. Starting.");
+                if (file == null) {
+                    return;
+                }
+                Logging.debug("AutoRunner found a competition with this TimeCode. Attempting to start.");
+                if (Competition.isActive()) {
+                    Logging.debug("AutoRunner cannot start a competition as one is active. Holding until active is finished.");
+                    Competition.holdCompetition(file);
+                } else {
                     new Competition(file).begin();
                 }
             }

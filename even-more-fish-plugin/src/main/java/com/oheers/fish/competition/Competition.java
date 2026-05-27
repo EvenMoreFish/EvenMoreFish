@@ -52,6 +52,7 @@ import java.util.logging.Logger;
 public class Competition {
 
     private static final File dataFile = new File(EvenMoreFish.getInstance().getDataFolder(), "competition-data.yml.tmp");
+    private static final List<CompetitionFile> held = new ArrayList<>();
 
     private static Competition active;
     private boolean originallyRandom;
@@ -162,6 +163,10 @@ public class Competition {
         return active;
     }
 
+    public static void holdCompetition(@NotNull CompetitionFile file) {
+        held.add(file);
+    }
+
     public boolean isPlayerRequirementMet() {
         return EvenMoreFish.getInstance().getVisibleOnlinePlayers().size() >= playersNeeded;
     }
@@ -265,6 +270,19 @@ public class Competition {
             );
         } finally {
             active = null;
+            checkHeldCompetition();
+        }
+    }
+
+    private static void checkHeldCompetition() {
+        if (held.isEmpty()) {
+            System.out.println("No competitions were held.");
+            return;
+        }
+        CompetitionFile file = held.removeFirst();
+        if (file != null) {
+            Logging.info("A competition was held back during this one. It will now be started.");
+            new Competition(file).begin();
         }
     }
 
