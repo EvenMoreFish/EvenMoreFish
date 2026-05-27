@@ -164,6 +164,10 @@ public class Competition {
     }
 
     public static void holdCompetition(@NotNull CompetitionFile file) {
+        if (!MainConfig.getInstance().shouldCompetitionHold()) {
+            Logging.debug("Could not hold a competition as the feature is disabled.");
+            return;
+        }
         held.add(file);
     }
 

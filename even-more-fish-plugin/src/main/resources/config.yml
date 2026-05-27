@@ -20,6 +20,9 @@ fishing:
   # Experimental. May be changed or removed at any time.
   resume-competition-on-restart: false
 
+  # Holds back any scheduled competitions if one is already active.
+  hold-competition-if-active: true
+
   # Should fish be caught from fishing rods?
   catch-enabled: true
   # Should EMF fish only be given during a competition?
@@ -264,5 +267,5 @@ biome-sets:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 7
+version: 8
 

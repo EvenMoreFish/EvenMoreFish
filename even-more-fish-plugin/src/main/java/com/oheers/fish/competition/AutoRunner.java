@@ -39,7 +39,7 @@ public class AutoRunner extends EMFTimer {
                 }
                 Logging.debug("AutoRunner found a competition with this TimeCode. Attempting to start.");
                 if (Competition.isActive()) {
-                    Logging.debug("AutoRunner cannot start a competition as one is active. Holding until active is finished.");
+                    Logging.debug("AutoRunner cannot start a competition as one is active. Attempting to hold until active is finished.");
                     Competition.holdCompetition(file);
                 } else {
                     new Competition(file).begin();

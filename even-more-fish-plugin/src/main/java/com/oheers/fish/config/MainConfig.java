@@ -119,10 +119,6 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("fishing.hunt-ignore-spawner-fish", true);
     }
 
-    public boolean isCompetitionUnique() {
-        return getConfig().getBoolean("fish-only-in-competition", false);
-    }
-
     public boolean getEnabled() {
         return getConfig().getBoolean("enabled", true);
     }
@@ -411,6 +407,10 @@ public class MainConfig extends ConfigBase {
 
     public boolean shouldCompetitionResume() {
         return getConfig().getBoolean("fishing.resume-competition-on-restart", false);
+    }
+
+    public boolean shouldCompetitionHold() {
+        return getConfig().getBoolean("fishing.hold-competition-if-active", true);
     }
 
     @Override
