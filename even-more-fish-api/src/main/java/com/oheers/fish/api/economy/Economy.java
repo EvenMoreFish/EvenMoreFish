@@ -88,6 +88,7 @@ public class Economy {
 
     public boolean has(@NotNull OfflinePlayer player, double amount) {
         return relevantTypes.stream()
+            .filter(EconomyType::isAvailable)
             .allMatch(type -> type.has(player, amount));
     }
 
