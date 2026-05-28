@@ -1,5 +1,6 @@
 id: infiniteBait
 disabled: false
+silent: false
 
 item:
   material: ENDER_PEARL

@@ -1,5 +1,7 @@
 id: shrimp
 disabled: false
+silent: false
+
 item:
   material: NAUTILUS_SHELL
   # How should this be displayed in game?

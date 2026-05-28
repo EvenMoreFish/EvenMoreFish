@@ -472,6 +472,10 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return baitData.displayName();
     }
 
+    @Override
+    public boolean isSilent() {
+        return getConfig().getBoolean("silent", false);
+    }
 
     @Override
     public void reload(@NotNull File configFile) {

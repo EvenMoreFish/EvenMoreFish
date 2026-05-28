@@ -8,6 +8,9 @@ id: exampleBait
 # Should this bait be disabled?
 disabled: false
 
+# Should the catch message be hidden?
+silent: true
+
 # This can be used in the lore format to create a consistent colour theme. Defaults to yellow.
 format: <yellow>{name}</yellow>
 

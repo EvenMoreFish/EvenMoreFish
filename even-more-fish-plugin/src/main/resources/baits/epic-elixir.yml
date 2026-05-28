@@ -1,5 +1,6 @@
 id: epicElixir
 disabled: false
+silent: false
 
 item:
   material: HONEY_BOTTLE

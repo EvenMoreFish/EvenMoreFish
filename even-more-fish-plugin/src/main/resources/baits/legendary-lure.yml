@@ -1,5 +1,6 @@
 id: legendaryLure
 disabled: false
+silent: false
 
 item:
   material: GOLDEN_CARROT

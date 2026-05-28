@@ -33,6 +33,8 @@ public interface IBait {
 
     @NotNull String getDisplayName();
 
+    boolean isSilent();
+
     double getPurchasePrice();
 
     int getPurchaseQuantity();

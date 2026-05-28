@@ -138,10 +138,12 @@ public abstract class Processor<E extends Event> {
 
         ItemStack baitItem = bait.create(player);
 
-        EMFMessage message = ConfigMessage.BAIT_CAUGHT.getMessage();
-        message.setBait(bait, baitItem);
-        message.setPlayer(player);
-        message.send(player);
+        if (!bait.isSilent()) {
+            EMFMessage message = ConfigMessage.BAIT_CAUGHT.getMessage();
+            message.setBait(bait, baitItem);
+            message.setPlayer(player);
+            message.send(player);
+        }
 
         return baitItem;
     }
