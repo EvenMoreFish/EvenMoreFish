@@ -45,9 +45,24 @@ public class BaitManager extends AbstractBaitManager<BaitHandler> {
                         EvenMoreFish.getInstance().debug("Skipping disabled bait: " + bait.getId());
                         return true;
                     }
+                    if (bait.getRecipe() != null) {
+                        bait.getRecipe().register();
+                    }
                     return false;
                 }
         );
+    }
+
+    @Override
+    protected void clearMap(boolean reload) {
+        if (reload) {
+            itemMap.forEach((id, bait) -> {
+                if (bait.getRecipe() != null) {
+                    bait.getRecipe().unregister();
+                }
+            });
+        }
+        super.clearMap(reload);
     }
 
     @Override

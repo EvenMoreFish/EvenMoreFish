@@ -27,10 +27,13 @@ import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import com.oheers.fish.recipe.EMFRecipe;
+import com.oheers.fish.recipe.RecipeUtil;
 import com.oheers.fish.utils.sort.Sortable;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -65,6 +68,8 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     private final MainConfig mainConfig;
     private final Economy economy;
 
+    private final EMFRecipe<?> recipe;
+
     /**
      * This represents a bait, which can be used to boost the likelihood that a certain fish or fish rarity appears from
      * the rod. All data is fetched from the config when the Bait object is created and then can be given out using
@@ -92,6 +97,8 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
                 baitData.fish(),
                 getConfig()
         ).createFactory();
+
+        this.recipe = loadRecipe();
     }
 
     // Current required config: id
@@ -143,6 +150,17 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     @Override
     public @NotNull ItemStack create(@NotNull OfflinePlayer player) {
         return itemFactory.createItem(player.getUniqueId());
+    }
+
+    /**
+     * This creates an item based on random settings in the yml files, adding things such as custom model data and glowing
+     * effects.
+     *
+     * @return An item stack representing the bait object, with nbt.
+     */
+    @Override
+    public @NotNull ItemStack create() {
+        return itemFactory.createItem();
     }
 
     private BaitData loadBaitData() {
@@ -720,6 +738,26 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         message.send(player);
 
         return true;
+    }
+
+    private @NotNull NamespacedKey getRecipeKey() {
+        return new NamespacedKey(EvenMoreFish.getInstance(), "bait-" + getId());
+    }
+
+    private EMFRecipe<?> loadRecipe() {
+        Section section = getConfig().getSection("recipe");
+        if (section == null) {
+            return null;
+        }
+        return RecipeUtil.getRecipe(
+            section,
+            getRecipeKey(),
+            create()
+        );
+    }
+
+    public @Nullable EMFRecipe<?> getRecipe() {
+        return this.recipe;
     }
 
 }

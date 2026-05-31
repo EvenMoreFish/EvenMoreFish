@@ -19,6 +19,8 @@ public interface IBait {
 
     @NotNull ItemStack create(@NotNull OfflinePlayer player);
 
+    @NotNull ItemStack create();
+
     @NotNull List<? extends IRarity> getRarities();
 
     @NotNull IFish chooseFish(@NotNull Player player, @NotNull Location location);
