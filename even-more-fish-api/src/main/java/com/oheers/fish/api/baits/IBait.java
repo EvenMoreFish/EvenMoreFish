@@ -3,6 +3,7 @@ package com.oheers.fish.api.baits;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
+import com.oheers.fish.api.reward.Reward;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -36,6 +37,10 @@ public interface IBait {
     @NotNull String getDisplayName();
 
     boolean isSilent();
+
+    boolean hasCatchRewards();
+
+    @NotNull List<Reward> getCatchRewards();
 
     double getPurchasePrice();
 

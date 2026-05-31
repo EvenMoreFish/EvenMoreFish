@@ -60,7 +60,7 @@ public abstract class Processor<E extends Event> {
         double baitCatchPercentage = MainConfig.getInstance().getBaitCatchPercentage();
         if (shouldCatchBait() && baitCatchPercentage > 0 && random.nextDouble() * 100 < baitCatchPercentage) {
             Logging.debug("Bait should be caught.");
-            return getBaitItem(player);
+            return getBaitItem(player, location);
         }
 
         CustomRod customRod = null;
@@ -127,7 +127,7 @@ public abstract class Processor<E extends Event> {
         return BaitNBTManager.isBaitedRod(rod) ? BaitNBTManager.randomBaitApplication(rod) : null;
     }
 
-    private @Nullable ItemStack getBaitItem(@NotNull Player player) {
+    private @Nullable ItemStack getBaitItem(@NotNull Player player, @NotNull Location location) {
         Optional<BaitHandler> caughtBait = BaitNBTManager.randomBaitCatch();
         if (caughtBait.isEmpty()) {
             Logging.debug("Could not determine bait for player " + player.getName() + ". This is usually a bug.");
@@ -137,6 +137,10 @@ public abstract class Processor<E extends Event> {
         final BaitHandler bait = caughtBait.get();
 
         ItemStack baitItem = bait.create(player);
+
+        if (bait.hasCatchRewards()) {
+            bait.getCatchRewards().forEach(reward -> reward.rewardPlayer(player, location));
+        }
 
         if (!bait.isSilent()) {
             EMFMessage message = ConfigMessage.BAIT_CAUGHT.getMessage();

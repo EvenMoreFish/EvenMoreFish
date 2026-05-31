@@ -9,6 +9,7 @@ import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.economy.EconomyType;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.registry.EMFRegistry;
+import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.baits.configs.BaitFileUpdates;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.baits.model.ApplicationResult;
@@ -496,6 +497,19 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     }
 
     @Override
+    public boolean hasCatchRewards() {
+        return !getConfig().getStringList("catch-event").isEmpty();
+    }
+
+    @Override
+    public @NotNull List<Reward> getCatchRewards() {
+        return getConfig().getStringList("catch-event").stream()
+            .map(this::parseEventPlaceholders)
+            .map(Reward::new)
+            .toList();
+    }
+
+    @Override
     public void reload(@NotNull File configFile) {
         super.reload(configFile);
         if (fishManager == null || mainConfig == null) {
@@ -758,6 +772,16 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
 
     public @Nullable EMFRecipe<?> getRecipe() {
         return this.recipe;
+    }
+
+    private String parseEventPlaceholders(String rewardString) {
+        // {displayname} Placeholder
+        rewardString = rewardString.replace("{displayname}", getDisplayName());
+
+        // {name} Placeholder
+        rewardString = rewardString.replace("{name}", getId());
+
+        return rewardString;
     }
 
 }
