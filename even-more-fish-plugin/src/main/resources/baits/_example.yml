@@ -76,3 +76,12 @@ fish-modifiers:
     Sunfish: "+15"
     Goldfish: "/2"
     Nemo: "*3"
+
+# Should this bait have a recipe?
+# This is optional. If you do not want a recipe, don't add this section.
+recipe:
+  type: shapeless
+  ingredients:
+    - paper
+    - string
+    - emerald
