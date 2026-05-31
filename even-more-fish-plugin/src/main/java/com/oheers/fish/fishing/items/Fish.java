@@ -47,7 +47,7 @@ public class Fish implements IFish, Sortable {
     private float length;
 
     private @Nullable List<Reward> actionRewards = null;
-    private @Nullable List<Reward> fishRewards = null;
+    private @Nullable List<Reward> catchRewards = null;
     private @Nullable List<Reward> sellRewards = null;
     private String eventType;
 
@@ -198,9 +198,9 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public boolean hasFishRewards() {
-        checkFishEvent();
-        return fishRewards != null && !fishRewards.isEmpty();
+    public boolean hasCatchRewards() {
+        checkCatchEvent();
+        return catchRewards != null && !catchRewards.isEmpty();
     }
 
     @Override
@@ -335,17 +335,17 @@ public class Fish implements IFish, Sortable {
         }
     }
 
-    private void checkFishEvent() {
-        if (this.fishRewards != null) {
+    private void checkCatchEvent() {
+        if (this.catchRewards != null) {
             return;
         }
-        fishRewards = new ArrayList<>();
+        catchRewards = new ArrayList<>();
         List<String> configRewards = section.getStringList("catch-event");
         if (!configRewards.isEmpty()) {
             // Translates all the reward into Reward objects and adds them to the fish.
             configRewards.forEach(reward -> {
                 reward = parseEventPlaceholders(reward);
-                this.fishRewards.add(new Reward(reward));
+                this.catchRewards.add(new Reward(reward));
             });
         }
     }
@@ -474,9 +474,9 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public @NotNull List<Reward> getFishRewards() {
-        checkFishEvent();
-        return fishRewards == null ? new ArrayList<>() : fishRewards;
+    public @NotNull List<Reward> getCatchRewards() {
+        checkCatchEvent();
+        return catchRewards == null ? new ArrayList<>() : catchRewards;
     }
 
     @Override

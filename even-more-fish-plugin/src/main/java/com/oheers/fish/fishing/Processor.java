@@ -92,8 +92,8 @@ public abstract class Processor<E extends Event> {
     }
 
     private void handleCaughtFish(@NotNull Player player, @NotNull Location location, @NotNull Fish fish) {
-        if (fish.hasFishRewards()) {
-            fish.getFishRewards().forEach(fishReward -> fishReward.rewardPlayer(player, location));
+        if (fish.hasCatchRewards()) {
+            fish.getCatchRewards().forEach(fishReward -> fishReward.rewardPlayer(player, location));
         }
 
         EvenMoreFish.getInstance().getMetricsManager().incrementFishCaught(1);

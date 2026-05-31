@@ -25,7 +25,12 @@ public interface IFish {
 
     boolean hasEatRewards();
 
-    boolean hasFishRewards();
+    @Deprecated(forRemoval = true, since = "2.3.5")
+    default boolean hasFishRewards() {
+        return hasCatchRewards();
+    }
+
+    boolean hasCatchRewards();
 
     boolean hasSellRewards();
 
@@ -75,7 +80,12 @@ public interface IFish {
 
     @NotNull List<Reward> getActionRewards();
 
-    @NotNull List<Reward> getFishRewards();
+    @Deprecated(forRemoval = true, since = "2.3.5")
+    default @NotNull List<Reward> getFishRewards() {
+        return getCatchRewards();
+    }
+
+    @NotNull List<Reward> getCatchRewards();
 
     @NotNull List<Reward> getSellRewards();
 
