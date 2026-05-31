@@ -38,6 +38,10 @@ disable-use-alert: false
 # The amount of this bait to drop when it is acquired
 drop-quantity: 1
 
+# A list of rewards to give when a player catches this bait.
+catch-event:
+  - HEALTH:10
+
 # Control whether this bait can be sold in the bait menu.
 purchase:
   # The price this bait can be purchased for.
