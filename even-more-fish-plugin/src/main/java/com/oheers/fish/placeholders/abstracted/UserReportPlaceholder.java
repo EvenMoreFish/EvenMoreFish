@@ -32,14 +32,19 @@ public abstract class UserReportPlaceholder implements EMFPlaceholder {
 
     @Override
     public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
-        UUID uuid = fetchPlayerOrUUIDString(player, identifier.substring(prefixLength));
+        String target = identifier.substring(prefixLength);
+        UUID uuid = fetchPlayerOrUUIDString(player, target);
         if (uuid == null) {
-            Logging.debug("Could not resolve UUID from placeholder: " + identifier);
+            if (target.equalsIgnoreCase("player")) {
+                Logging.debug("Placeholder %s could not resolve player context for identifier: %s".formatted(getClass().getSimpleName(), identifier));
+            } else {
+                Logging.debug("Placeholder %s received an invalid UUID target '%s' for identifier: %s".formatted(getClass().getSimpleName(), target, identifier));
+            }
             return null;
         }
         UserReport report = fetchUserReport(uuid);
         if (report == null) {
-            Logging.debug("Could not find user report for placeholder: " + identifier + " with UUID: " + uuid);
+            Logging.debug("Placeholder %s could not find user report for identifier: %s with UUID: %s".formatted(getClass().getSimpleName(), identifier, uuid));
             return def;
         }
         return this.func.apply(report);
