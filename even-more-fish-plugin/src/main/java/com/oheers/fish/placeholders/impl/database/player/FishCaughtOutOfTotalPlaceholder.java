@@ -2,7 +2,6 @@ package com.oheers.fish.placeholders.impl.database.player;
 
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.placeholders.abstracted.UniqueFishCaughtProgressPlaceholder;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -27,12 +26,5 @@ public class FishCaughtOutOfTotalPlaceholder extends UniqueFishCaughtProgressPla
 
         List<Fish> fishList = getAllFish();
         return formatProgress(countCaughtFish(uuid, fishList), fishList.size());
-    }
-
-    protected @NotNull List<Fish> getAllFish() {
-        return FishManager.getInstance().getRarityMap().values().stream()
-            .map(Rarity::getOriginalFishList)
-            .flatMap(List::stream)
-            .toList();
     }
 }

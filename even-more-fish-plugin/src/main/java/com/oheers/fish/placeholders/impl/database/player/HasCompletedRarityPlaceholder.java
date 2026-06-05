@@ -1,20 +1,14 @@
 package com.oheers.fish.placeholders.impl.database.player;
 
-import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.placeholders.abstracted.UniqueFishCaughtProgressPlaceholder;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.UUID;
+public class HasCompletedRarityPlaceholder extends UniqueFishCaughtProgressPlaceholder {
 
-public class FishCaughtOutOfRarityPlaceholder extends UniqueFishCaughtProgressPlaceholder {
-
-    public FishCaughtOutOfRarityPlaceholder() {
-        super("fish_caught_out_of_rarity_");
+    public HasCompletedRarityPlaceholder() {
+        super("has_completed_rarity_");
     }
 
     @Override
@@ -23,6 +17,6 @@ public class FishCaughtOutOfRarityPlaceholder extends UniqueFishCaughtProgressPl
         if (target == null) {
             return null;
         }
-        return formatProgress(countCaughtFish(target.uuid(), target.fishList()), target.fishList().size());
+        return String.valueOf(countCaughtFish(target.uuid(), target.fishList()) >= target.fishList().size());
     }
 }
