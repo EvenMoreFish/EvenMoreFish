@@ -10,6 +10,7 @@ import styles from './index.module.css';
 
 const modrinthUrl = 'https://modrinth.com/plugin/evenmorefish';
 const discordUrl = 'https://discord.gg/9fRbqWTnHS';
+const jenkinsUrl = 'https://ci.codemc.io/job/EvenMoreFish/job/EvenMoreFish/';
 const docsUrl = '/docs/intro';
 
 const whyUseIt = [
@@ -24,6 +25,9 @@ const marketStats = {
   spigotDownloads: 62423,
   spigotRating: 4.6,
   spigotRatings: 136,
+  activeServers: 1436,
+  activePlayers: 6275,
+  playersRecord: 8186,
 };
 
 const totalDownloads =
@@ -130,6 +134,17 @@ function HomepageHeader() {
                 {formatNumber(marketStats.spigotDownloads)} on Spigot.
               </p>
             </div>
+            <div className={styles.marketStatsGrid}>
+              <div className={styles.marketStat}>
+                <span className={styles.marketStatLabel}>Active servers</span>
+                <strong>{formatNumber(marketStats.activeServers)}</strong>
+              </div>
+              <div className={styles.marketStat}>
+                <span className={styles.marketStatLabel}>Active players</span>
+                <strong>{formatNumber(marketStats.activePlayers)}</strong>
+                <p>Peak in sampled history: {formatNumber(marketStats.playersRecord)}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -193,7 +208,7 @@ export default function Home(): ReactNode {
                 </div>
               ))}
             </div>
-            <div className={styles.sectionActions}>
+            <div className={clsx(styles.sectionActions, styles.installActions)}>
               <Link className={clsx('button', styles.docsButton)} to={docsUrl}>
                 Open installation guide
               </Link>
@@ -263,14 +278,14 @@ export default function Home(): ReactNode {
                   Download now
                 </Link>
                 <Link
-                  className={clsx('button button--lg', styles.docsButton)}
-                  to="/docs/downloads">
-                  View all downloads
-                </Link>
-                <Link
                   className={clsx('button button--lg', styles.discordButton)}
                   href={discordUrl}>
                   Join Discord
+                </Link>
+                <Link
+                  className={clsx('button button--lg', styles.docsButton)}
+                  href={jenkinsUrl}>
+                  Dev Builds
                 </Link>
               </div>
             </div>
