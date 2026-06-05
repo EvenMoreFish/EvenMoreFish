@@ -6,44 +6,66 @@
 
 /* You can override the default Infima variables here. */
 :root {
-    --ifm-color-primary: #EC8F4Cff;
-    --ifm-color-primary-dark: #e08442;
-    --ifm-color-primary-darker: #d47a38;
-    --ifm-color-primary-darkest: #c86f2e;
-    --ifm-color-primary-light: #FDC16Aff;
-    --ifm-color-primary-lighter: #FEC26Bff;
-    --ifm-color-primary-lightest: #fef0d7;
+    --emf-orange: #EC8F4C;
+    --ifm-color-primary: #d8732b;
+    --ifm-color-primary-dark: #c96825;
+    --ifm-color-primary-darker: #bc6223;
+    --ifm-color-primary-darkest: #9b4f1d;
+    --ifm-color-primary-light: #e88943;
+    --ifm-color-primary-lighter: #ee9d5e;
+    --ifm-color-primary-lightest: #f9e3d2;
     --ifm-code-font-size: 95%;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 
+    --emf-brand-modrinth: #1bd96a;
+    --emf-brand-modrinth-strong: #16bf5d;
+    --emf-brand-discord: #5865f2;
+    --emf-brand-discord-strong: #4752c4;
+
     --emf-background-color: #ffffff;
-    --emf-background-color-secondary: #a4adbd;
-    --emf-background-color-alt: #6d758b;
+    --emf-background-color-secondary: #f5f5f5;
+    --emf-background-color-alt: #e9e9e9;
     --emf-background-color-gradient: linear-gradient(
             180deg,
             var(--emf-background-color) 0%,
-            color-mix(in srgb, var(--emf-background-color) 75%, var(--emf-background-color-alt) 25%) 25%,
-            color-mix(in srgb, var(--emf-background-color) 50%, var(--emf-background-color-alt) 50%) 50%,
-            color-mix(in srgb, var(--emf-background-color) 25%, var(--emf-background-color-alt) 75%) 75%,
-            color-mix(in srgb, var(--emf-background-color) 15%, var(--emf-background-color-alt) 90%) 90%,
-            color-mix(in srgb, var(--emf-background-color) 0%, var(--emf-background-color-alt) 100%) 100%,
+            color-mix(in srgb, var(--emf-background-color) 72%, var(--emf-background-color-secondary) 28%) 30%,
+            color-mix(in srgb, var(--emf-background-color-secondary) 55%, var(--emf-background-color-alt) 45%) 68%,
             var(--emf-background-color-alt) 100%
     );
+
+    --emf-home-start: #ffffff;
+    --emf-home-end: #f5f5f5;
+    --emf-surface: rgba(255, 255, 255, 0.86);
+    --emf-surface-strong: rgba(255, 255, 255, 0.96);
+    --emf-border: rgba(0, 0, 0, 0.12);
+    --emf-border-strong: rgba(0, 0, 0, 0.18);
+    --emf-shadow-md: 0 16px 34px rgba(0, 0, 0, 0.08);
+    --emf-shadow-lg: 0 22px 48px rgba(0, 0, 0, 0.12);
+    --emf-text-muted: #4f4f4f;
+    --emf-text-muted-strong: #444444;
+    --emf-text-soft: #737373;
+    --emf-section-title: #1f1f1f;
+    --emf-section-subtitle: #5f5f5f;
 
     --badge-background-color: #fef0d7;
     --badge-color: #131313;
 }
 
 [data-theme='dark'] {
-    /* Dark mode - adjusted for better contrast and readability */
-    --ifm-color-primary: #FDC16Aff;
-    --ifm-color-primary-dark: #EC8F4Cff;
-    --ifm-color-primary-darker: #d47a38;
-    --ifm-color-primary-darkest: #b86524;
-    --ifm-color-primary-light: #FEC26Bff;
-    --ifm-color-primary-lighter: #fed89d;
-    --ifm-color-primary-lightest: #fff4e5;
+    --emf-orange: #EC8F4C;
+    --ifm-color-primary: #f3a35c;
+    --ifm-color-primary-dark: #ef9441;
+    --ifm-color-primary-darker: #ec8a33;
+    --ifm-color-primary-darkest: #dd7313;
+    --ifm-color-primary-light: #f7b277;
+    --ifm-color-primary-lighter: #f9bc89;
+    --ifm-color-primary-lightest: #fce1c5;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+    --emf-brand-modrinth: #1bd96a;
+    --emf-brand-modrinth-strong: #38ec82;
+    --emf-brand-discord: #5865f2;
+    --emf-brand-discord-strong: #7280ff;
 
     --emf-background-color: #2e384d;
     --emf-background-color-secondary: #283143;
@@ -51,13 +73,24 @@
     --emf-background-color-gradient: linear-gradient(
             180deg,
             var(--emf-background-color) 0%,
-            color-mix(in srgb, var(--emf-background-color) 75%, var(--emf-background-color-alt) 25%) 25%,
-            color-mix(in srgb, var(--emf-background-color) 50%, var(--emf-background-color-alt) 50%) 50%,
-            color-mix(in srgb, var(--emf-background-color) 25%, var(--emf-background-color-alt) 75%) 75%,
-            color-mix(in srgb, var(--emf-background-color) 15%, var(--emf-background-color-alt) 90%) 90%,
-            color-mix(in srgb, var(--emf-background-color) 0%, var(--emf-background-color-alt) 100%) 100%,
+            color-mix(in srgb, var(--emf-background-color) 74%, var(--emf-background-color-secondary) 26%) 28%,
+            color-mix(in srgb, var(--emf-background-color-secondary) 48%, var(--emf-background-color-alt) 52%) 70%,
             var(--emf-background-color-alt) 100%
     );
+
+    --emf-home-start: #151923;
+    --emf-home-end: #1c2230;
+    --emf-surface: rgba(21, 25, 35, 0.78);
+    --emf-surface-strong: rgba(30, 36, 50, 0.94);
+    --emf-border: rgba(255, 255, 255, 0.12);
+    --emf-border-strong: rgba(255, 255, 255, 0.18);
+    --emf-shadow-md: 0 18px 40px rgba(0, 0, 0, 0.24);
+    --emf-shadow-lg: 0 26px 56px rgba(0, 0, 0, 0.32);
+    --emf-text-muted: #c8ced8;
+    --emf-text-muted-strong: #d8dde5;
+    --emf-text-soft: #9aa3b3;
+    --emf-section-title: #f5f7fa;
+    --emf-section-subtitle: #c8ced8;
 
     --badge-background-color: #131313;
     --badge-color: #fef0d7;
