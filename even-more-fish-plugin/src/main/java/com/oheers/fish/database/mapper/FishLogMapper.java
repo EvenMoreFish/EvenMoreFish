@@ -6,10 +6,16 @@ import org.jdbi.v3.core.statement.StatementContext;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 
 public class FishLogMapper implements RowMapper<FishLog> {
+    private final String tableName;
+    private final boolean normalizeLegacyText;
+
+    public FishLogMapper(String tableName, boolean normalizeLegacyText) {
+        this.tableName = tableName;
+        this.normalizeLegacyText = normalizeLegacyText;
+    }
 
     @Override
     public FishLog map(ResultSet rs, StatementContext ctx) throws SQLException {
@@ -17,14 +23,15 @@ public class FishLogMapper implements RowMapper<FishLog> {
                 rs.getInt("user_id"),
                 rs.getString("fish_name"),
                 rs.getString("fish_rarity"),
-                getLocalDateTime(rs, "catch_time"),
+                CompatibleLocalDateTimeReader.read(rs, tableName, "catch_time", identityFor(rs), normalizeLegacyText),
                 rs.getFloat("fish_length"),
                 rs.getString("competition_id")
         );
     }
 
-    private LocalDateTime getLocalDateTime(ResultSet rs, String column) throws SQLException {
-        Timestamp timestamp = rs.getTimestamp(column);
-        return timestamp == null ? null : timestamp.toLocalDateTime();
+    private LinkedHashMap<String, Object> identityFor(ResultSet rs) throws SQLException {
+        LinkedHashMap<String, Object> identity = new LinkedHashMap<>();
+        identity.put("id", rs.getInt("id"));
+        return identity;
     }
 }

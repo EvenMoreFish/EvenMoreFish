@@ -86,6 +86,16 @@ public class DataManager<T> {
         return get(key, defaultLoader);
     }
 
+    public T peek(String key) {
+        return cache.get(key);
+    }
+
+    public void cacheLoadedValue(String key, T data) {
+        if (data != null) {
+            cache.putIfAbsent(key, data);
+        }
+    }
+
     public void update(String key, T data) {
         cache.put(key, data);
         if (savingStrategy.writesThrough()) {
