@@ -20,8 +20,10 @@ services:
       retries: 12
 
   minecraft:
-    image: itzg/minecraft-server:java21
+    image: itzg/minecraft-server:java25
     container_name: emf-paper
+    # For test-time admin commands, use:
+    # docker exec -it emf-paper rcon-cli
     restart: unless-stopped
     depends_on:
       mysql:
@@ -29,11 +31,18 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: "PAPER"
-      VERSION: "1.21.11"
+      VERSION: "26.1.2"
       MEMORY: "4G"
       ONLINE_MODE: "FALSE"
       TZ: UTC
       RCON_PASSWORD: "secret"
+      # Auto-install default test dependencies/plugins on startup.
+      # Vault is fetched from Spigot via the supported Spiget integration.
+      SPIGET_RESOURCES: "34315"
+      # EssentialsX and PlaceholderAPI are fetched from Modrinth.
+      MODRINTH_PROJECTS: |
+        essentialsx
+        placeholderapi
     ports:
       - "25565:25565"
       - "25575:25575"
