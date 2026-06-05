@@ -9,6 +9,8 @@ import com.oheers.fish.placeholders.impl.competition.CompetitionPlaceSizePlaceho
 import com.oheers.fish.placeholders.impl.competition.CompetitionTimeLeftPlaceholder;
 import com.oheers.fish.placeholders.impl.competition.CompetitionTypeFormatPlaceholder;
 import com.oheers.fish.placeholders.impl.competition.CompetitionTypePlaceholder;
+import com.oheers.fish.placeholders.impl.database.player.FishCaughtOutOfRarityPlaceholder;
+import com.oheers.fish.placeholders.impl.database.player.FishCaughtOutOfTotalPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.TotalCompetitionsJoinedPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.TotalCompetitionsWonPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.TotalFishCaughtPlaceholder;
@@ -76,6 +78,8 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
             new CompetitionTypePlaceholder(),
 
             // Database - Player
+            new FishCaughtOutOfRarityPlaceholder(),
+            new FishCaughtOutOfTotalPlaceholder(),
             new TotalCompetitionsJoinedPlaceholder(),
             new TotalCompetitionsWonPlaceholder(),
             new TotalFishCaughtPlaceholder(),
