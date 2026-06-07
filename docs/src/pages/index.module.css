@@ -4,38 +4,327 @@
  */
 :global(.navbar) {
     opacity: 0.95;
+    backdrop-filter: blur(14px);
 }
 
 .heroBanner {
-    padding: 4rem 0;
-    text-align: center;
+    padding: 5rem 0 4rem;
     position: relative;
     overflow: hidden;
+    background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--emf-orange) 22%, transparent), transparent 34%),
+        radial-gradient(circle at top right, color-mix(in srgb, var(--emf-brand-discord) 14%, transparent), transparent 28%),
+        var(--emf-background-color-gradient);
+}
 
-    background: var(--emf-background-color);
-    background: var(--emf-background-color-gradient);
+.heroContainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
 
+.heroCopy {
+    color: var(--ifm-font-color-base);
+    max-width: 72rem;
+}
+
+.heroTitle {
+    font-size: clamp(3rem, 7vw, 5rem);
+    line-height: 0.92;
+    margin-bottom: 1rem;
+    letter-spacing: -0.04em;
+}
+
+.heroSubtitle {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    max-width: 48rem;
+    margin-bottom: 1rem;
+    color: var(--ifm-color-emphasis-900);
+}
+
+.heroDescription {
+    font-size: 1rem;
+    line-height: 1.75;
+    max-width: 48rem;
+    margin-bottom: 1.75rem;
+    color: var(--emf-text-muted);
+}
+
+.heroActions,
+.sectionActions {
     display: flex;
-    justify-content: center; /* horizontal */
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.installActions {
+    margin-top: 1.5rem;
+}
+
+.marketPanel {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid var(--emf-border-strong);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--emf-surface-strong) 92%, transparent), color-mix(in srgb, var(--emf-surface) 92%, transparent)),
+        radial-gradient(circle at right top, color-mix(in srgb, var(--ifm-color-primary) 16%, transparent), transparent 35%);
+    box-shadow: var(--emf-shadow-lg);
+}
+
+.marketSummary {
+    margin-bottom: 1.25rem;
+}
+
+.marketSummary strong {
+    display: block;
+    font-size: clamp(2rem, 6vw, 3rem);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    color: var(--emf-section-title);
+}
+
+.marketSummary p {
+    margin: 0;
+    color: var(--emf-text-muted);
+}
+
+.marketStatsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.marketStat {
+    padding: 1rem 1.1rem;
+    border-radius: 1.15rem;
+    border: 1px solid var(--emf-border);
+    background: color-mix(in srgb, var(--emf-surface) 88%, transparent);
+}
+
+.marketStatLabel {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--emf-text-soft);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.marketStat strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--emf-section-title);
+    font-size: 1.35rem;
+    line-height: 1.15;
+}
+
+.marketStat p {
+    margin: 0;
+    color: var(--emf-text-muted);
+    font-size: 0.95rem;
+}
+
+.modrinthButton,
+.discordButton,
+.docsButton {
+    border: 0;
+    box-shadow: none;
+}
+
+.modrinthButton {
+    background: var(--emf-brand-modrinth);
+    color: #06210f;
+}
+
+.modrinthButton:hover,
+.modrinthButton:focus {
+    background: var(--emf-brand-modrinth-strong);
+    color: #04160a;
+}
+
+.discordButton {
+    background: var(--emf-brand-discord);
+    color: #fff;
+}
+
+.discordButton:hover,
+.discordButton:focus {
+    background: var(--emf-brand-discord-strong);
+    color: #fff;
+}
+
+.docsButton {
+    background: color-mix(in srgb, var(--emf-surface-strong) 88%, transparent);
+    color: var(--ifm-font-color-base);
+    border: 1px solid var(--emf-border-strong);
+}
+
+.docsButton:hover,
+.docsButton:focus {
+    background: color-mix(in srgb, var(--emf-surface-strong) 96%, transparent);
+    color: var(--ifm-font-color-base);
 }
 
 .emfHome {
-    background: var(--emf-background-color-alt);
+    background:
+        linear-gradient(
+            180deg,
+            var(--emf-home-start) 0%,
+            var(--emf-home-end) 100%
+        );
 }
 
-.heroBanner img {
-    border-radius: 10px;
+.section {
+    padding: 4rem 0;
+}
+
+.sectionHeading {
+    max-width: 46rem;
+    margin: 0 auto 2rem;
+    text-align: center;
+    color: var(--emf-section-title);
+}
+
+.sectionHeading h2 {
+    margin-bottom: 0.75rem;
+}
+
+.sectionHeading p {
+    margin: 0;
+    color: var(--emf-section-subtitle);
+}
+
+.infoGrid,
+.linkGrid,
+.stepsGrid {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.infoGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.linkGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stepsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.infoCard,
+.linkCard,
+.stepCard,
+.ctaPanel {
+    border-radius: 1.5rem;
+    border: 1px solid var(--emf-border);
+    background: color-mix(in srgb, var(--emf-surface) 90%, transparent);
+    box-shadow: var(--emf-shadow-md);
+    backdrop-filter: blur(10px);
+}
+
+.infoCard,
+.stepCard {
+    padding: 1.5rem;
+}
+
+.infoCard p,
+.stepCard p,
+.linkCard p,
+.ctaPanel p {
+    margin: 0;
+    color: var(--emf-text-muted-strong);
+}
+
+.linkCard {
+    display: block;
+    padding: 1.5rem;
+    color: var(--emf-section-title);
+    text-decoration: none;
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.linkCard:hover {
+    color: var(--emf-section-title);
+    text-decoration: none;
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--ifm-color-primary) 35%, var(--emf-border));
+    background: color-mix(in srgb, var(--emf-surface-strong) 88%, transparent);
+}
+
+.linkCard h3 {
+    margin-bottom: 0.75rem;
+}
+
+.stepNumber {
+    display: inline-flex;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--ifm-color-primary);
+}
+
+.finalSection {
+    padding-top: 0;
+    padding-bottom: 5rem;
+}
+
+.ctaPanel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    color: var(--emf-section-title);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--emf-surface) 92%, transparent), color-mix(in srgb, var(--emf-surface-strong) 92%, transparent)),
+        radial-gradient(circle at right, color-mix(in srgb, var(--ifm-color-primary) 12%, transparent), transparent 32%);
+}
+
+.ctaPanel h2 {
+    margin-bottom: 0.75rem;
 }
 
 @media screen and (max-width: 996px) {
     .heroBanner {
-        padding: 2rem;
+        padding: 3rem 0;
+    }
+
+    .marketStatsGrid,
+    .infoGrid,
+    .linkGrid,
+    .stepsGrid,
+    .ctaPanel {
+        grid-template-columns: 1fr;
+    }
+
+    .ctaPanel {
+        display: grid;
+    }
+
+    .heroTitle {
+        font-size: clamp(2.5rem, 12vw, 4rem);
     }
 }
 
-.buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+@media screen and (max-width: 640px) {
+    .section {
+        padding: 3rem 0;
+    }
+
+    .heroActions,
+    .sectionActions {
+        flex-direction: column;
+    }
+
+    .heroActions :global(.button),
+    .sectionActions :global(.button) {
+        width: 100%;
+        justify-content: center;
+    }
 }

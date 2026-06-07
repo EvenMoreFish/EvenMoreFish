@@ -1,25 +1,127 @@
 .features {
   display: flex;
   align-items: center;
-  padding: 2rem 0;
+  padding: 1rem 0 4rem;
   width: 100%;
 }
 
-.featureSvg {
-  height: 150px;
-  width: 150px;
+.sectionHeading {
+  max-width: 44rem;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+  color: var(--emf-section-title);
 }
 
-/*
-.featureItem {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.sectionHeading h2 {
+  margin-bottom: 0.75rem;
+}
+
+.sectionHeading p {
+  margin: 0;
+  color: var(--emf-section-subtitle);
+}
+
+.primaryGrid,
+.secondaryGrid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.primaryGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 1.25rem;
+}
+
+.secondaryGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.primaryCard,
+.secondaryCard {
+  border: 1px solid var(--emf-border);
   border-radius: 1.5rem;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--emf-surface-strong) 96%, transparent) 0%,
+      color-mix(in srgb, var(--emf-surface) 92%, transparent) 100%
+    );
+  box-shadow: var(--emf-shadow-md);
+  color: var(--emf-section-title);
 }
 
-.homepageRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
+.primaryCard {
+  padding: 1.75rem;
 }
-*/
+
+.secondaryCard {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 1.25rem;
+}
+
+.primaryIcon,
+.secondaryIcon {
+  color: color-mix(in srgb, var(--emf-section-title) 88%, var(--ifm-color-primary) 12%);
+}
+
+.primaryIcon {
+  margin-bottom: 1.25rem;
+}
+
+.primarySvg {
+  width: 62px;
+  height: 62px;
+}
+
+.secondarySvg {
+  width: 32px;
+  height: 32px;
+}
+
+.primaryContent h3,
+.secondaryContent h3 {
+  margin-bottom: 0.75rem;
+}
+
+.primaryContent h3 {
+  font-size: 1.3rem;
+  line-height: 1.2;
+}
+
+.secondaryContent h3 {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.primaryContent p,
+.secondaryContent p {
+  margin: 0;
+  color: var(--emf-text-muted-strong);
+}
+
+.primaryContent p {
+  line-height: 1.7;
+}
+
+.secondaryContent p {
+  line-height: 1.6;
+}
+
+@media screen and (max-width: 996px) {
+  .primaryGrid,
+  .secondaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .primaryCard {
+    padding: 1.5rem;
+  }
+
+  .primarySvg {
+    width: 54px;
+    height: 54px;
+  }
+}
