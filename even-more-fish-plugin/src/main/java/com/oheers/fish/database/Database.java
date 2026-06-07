@@ -110,12 +110,13 @@ public class Database implements DatabaseAPI {
 
     private Jdbi createJdbi() {
         Jdbi database = Jdbi.create(connectionFactory::getConnection);
+        boolean normalizeLegacyText = supportsLegacyTimestampNormalization();
         database.installPlugin(new SqlObjectPlugin());
         database.registerRowMapper(UserReport.class, new UserReportMapper());
-        database.registerRowMapper(FishLog.class, new FishLogMapper());
-        database.registerRowMapper(FishStats.class, new FishStatsMapper());
-        database.registerRowMapper(UserFishStats.class, new UserFishStatsMapper());
-        database.registerRowMapper(CompetitionReport.class, new CompetitionReportMapper());
+        database.registerRowMapper(FishLog.class, new FishLogMapper(fishLogTable, normalizeLegacyText));
+        database.registerRowMapper(FishStats.class, new FishStatsMapper(fishTable, normalizeLegacyText));
+        database.registerRowMapper(UserFishStats.class, new UserFishStatsMapper(userFishStatsTable, normalizeLegacyText));
+        database.registerRowMapper(CompetitionReport.class, new CompetitionReportMapper(competitionsTable, normalizeLegacyText));
         return database;
     }
 
@@ -205,7 +206,7 @@ public class Database implements DatabaseAPI {
 
     @Override
     public FishLog getFishLog(int userId, String fishName, String fishRarity, LocalDateTime time) {
-        return withHandle(handle -> handle.createQuery("select user_id, fish_name, fish_rarity, fish_length, catch_time, competition_id from " + fishLogTable + " where user_id = :user_id and fish_name = :fish_name and fish_rarity = :fish_rarity and catch_time = :catch_time").bind("user_id", userId).bind("fish_name", fishName).bind("fish_rarity", fishRarity).bind("catch_time", time).mapTo(FishLog.class).findOne().orElse(null), null);
+        return withHandle(handle -> handle.createQuery("select id, user_id, fish_name, fish_rarity, fish_length, catch_time, competition_id from " + fishLogTable + " where user_id = :user_id and fish_name = :fish_name and fish_rarity = :fish_rarity and catch_time = :catch_time").bind("user_id", userId).bind("fish_name", fishName).bind("fish_rarity", fishRarity).bind("catch_time", time).mapTo(FishLog.class).findOne().orElse(null), null);
     }
 
     public void shutdown() {
@@ -241,13 +242,21 @@ public class Database implements DatabaseAPI {
         return withHandle(handle -> handle.createQuery("select user_id, fish_name, fish_rarity, first_catch_time, shortest_length, longest_length, quantity from " + userFishStatsTable + " where user_id = :user_id and fish_name = :fish_name and fish_rarity = :fish_rarity").bind("user_id", userId).bind("fish_name", fishName).bind("fish_rarity", fishRarity).mapTo(UserFishStats.class).findOne().orElse(null), null);
     }
 
+    public LoadResult<UserFishStats> loadUserFishStats(int userId, String fishName, String fishRarity) {
+        UserFishStats stats = withHandle(handle -> handle.createQuery("select user_id, fish_name, fish_rarity, first_catch_time, shortest_length, longest_length, quantity from " + userFishStatsTable + " where user_id = :user_id and fish_name = :fish_name and fish_rarity = :fish_rarity").bind("user_id", userId).bind("fish_name", fishName).bind("fish_rarity", fishRarity).mapTo(UserFishStats.class).findOne().orElse(null), null);
+        if (stats != null) {
+            return LoadResult.found(stats);
+        }
+        return didLastHandleFail() ? LoadResult.unreadable() : LoadResult.notFound();
+    }
+
     public void upsertUserFishStats(UserFishStats userFishStats) {
         useHandle(handle -> bindUserFishStatsUpdate(handle, userFishStatsUpsertSql(), userFishStats).execute());
     }
 
     @Override
     public Set<FishLog> getFishLogEntries(int userId, String fishName, String fishRarity) {
-        return withHandle(handle -> new LinkedHashSet<>(handle.createQuery("select user_id, fish_name, fish_rarity, fish_length, catch_time, competition_id from " + fishLogTable + " where user_id = :user_id and fish_name = :fish_name and fish_rarity = :fish_rarity").bind("user_id", userId).bind("fish_name", fishName).bind("fish_rarity", fishRarity).mapTo(FishLog.class).list()), Set.of());
+        return withHandle(handle -> new LinkedHashSet<>(handle.createQuery("select id, user_id, fish_name, fish_rarity, fish_length, catch_time, competition_id from " + fishLogTable + " where user_id = :user_id and fish_name = :fish_name and fish_rarity = :fish_rarity").bind("user_id", userId).bind("fish_name", fishName).bind("fish_rarity", fishRarity).mapTo(FishLog.class).list()), Set.of());
     }
 
     @Override
@@ -258,6 +267,14 @@ public class Database implements DatabaseAPI {
     @Override
     public FishStats getFishStats(String fishName, String fishRarity) {
         return withHandle(handle -> handle.createQuery("select fish_name, fish_rarity, first_catch_time, discoverer, shortest_length, shortest_fisher, largest_fish, largest_fisher, total_caught from " + fishTable + " where fish_name = :fish_name and fish_rarity = :fish_rarity").bind("fish_name", fishName).bind("fish_rarity", fishRarity).mapTo(FishStats.class).findOne().orElse(null), null);
+    }
+
+    public LoadResult<FishStats> loadFishStats(String fishName, String fishRarity) {
+        FishStats stats = withHandle(handle -> handle.createQuery("select fish_name, fish_rarity, first_catch_time, discoverer, shortest_length, shortest_fisher, largest_fish, largest_fisher, total_caught from " + fishTable + " where fish_name = :fish_name and fish_rarity = :fish_rarity").bind("fish_name", fishName).bind("fish_rarity", fishRarity).mapTo(FishStats.class).findOne().orElse(null), null);
+        if (stats != null) {
+            return LoadResult.found(stats);
+        }
+        return didLastHandleFail() ? LoadResult.unreadable() : LoadResult.notFound();
     }
 
     public void upsertFishStats(@NotNull FishStats fishStats) {
@@ -328,7 +345,7 @@ public class Database implements DatabaseAPI {
     }
 
     public CompetitionReport getCompetitionReport(int id) {
-        return withHandle(handle -> handle.createQuery("select competition_name, winner_fish, winner_uuid, winner_score, contestants, start_time, end_time from " + competitionsTable + " where id = :id").bind("id", id).mapTo(CompetitionReport.class).findOne().orElse(null), null);
+        return withHandle(handle -> handle.createQuery("select id, competition_name, winner_fish, winner_uuid, winner_score, contestants, start_time, end_time from " + competitionsTable + " where id = :id").bind("id", id).mapTo(CompetitionReport.class).findOne().orElse(null), null);
     }
 
     public void batchUpdateCompetitions(Collection<CompetitionReport> competitions) {
@@ -359,12 +376,14 @@ public class Database implements DatabaseAPI {
 
     private <T> T withHandle(HandleCallback<T> callback, T fallback) {
         try {
+            handleFailureState().set(false);
             if (jdbi == null) {
                 return fallback;
             }
             return jdbi.withHandle(callback::apply);
         } catch (Exception exception) {
-            EvenMoreFish.getInstance().getLogger().log(Level.SEVERE, "Query execution failed", exception);
+            handleFailureState().set(true);
+            logQueryFailure(exception);
             return fallback;
         }
     }
@@ -447,4 +466,84 @@ public class Database implements DatabaseAPI {
     private interface HandleConsumer {
         void accept(Handle handle) throws Exception;
     }
+
+    private void logQueryFailure(Exception exception) {
+        UnreadableTimestampException unreadableTimestampException = findCause(exception, UnreadableTimestampException.class);
+        if (unreadableTimestampException != null) {
+            EvenMoreFish.getInstance().getLogger().warning("Query execution failed: " + unreadableTimestampException.getMessage());
+            EvenMoreFish.getInstance().debug("Query execution failed due to unreadable timestamp.", exception);
+            return;
+        }
+
+        EvenMoreFish.getInstance().getLogger().log(Level.SEVERE, "Query execution failed", exception);
+    }
+
+    private <T extends Throwable> T findCause(Throwable throwable, Class<T> type) {
+        Throwable current = throwable;
+        while (current != null) {
+            if (type.isInstance(current)) {
+                return type.cast(current);
+            }
+            current = current.getCause();
+        }
+        return null;
+    }
+
+    private boolean supportsLegacyTimestampNormalization() {
+        String type = connectionFactory.getType();
+        return "SQLITE".equalsIgnoreCase(type) || "H2".equalsIgnoreCase(type);
+    }
+
+    private boolean didLastHandleFail() {
+        return Boolean.TRUE.equals(handleFailureState().get());
+    }
+
+    private ThreadLocal<Boolean> handleFailureState() {
+        if (lastHandleFailed == null) {
+            lastHandleFailed = ThreadLocal.withInitial(() -> false);
+        }
+        return lastHandleFailed;
+    }
+
+    public static final class LoadResult<T> {
+        private final T value;
+        private final State state;
+
+        private LoadResult(T value, State state) {
+            this.value = value;
+            this.state = state;
+        }
+
+        public static <T> LoadResult<T> found(T value) {
+            return new LoadResult<>(value, State.FOUND);
+        }
+
+        public static <T> LoadResult<T> notFound() {
+            return new LoadResult<>(null, State.NOT_FOUND);
+        }
+
+        public static <T> LoadResult<T> unreadable() {
+            return new LoadResult<>(null, State.UNREADABLE);
+        }
+
+        public T getValue() {
+            return value;
+        }
+
+        public boolean isFound() {
+            return state == State.FOUND;
+        }
+
+        public boolean isUnreadable() {
+            return state == State.UNREADABLE;
+        }
+
+        private enum State {
+            FOUND,
+            NOT_FOUND,
+            UNREADABLE
+        }
+    }
+
+    private ThreadLocal<Boolean> lastHandleFailed = ThreadLocal.withInitial(() -> false);
 }

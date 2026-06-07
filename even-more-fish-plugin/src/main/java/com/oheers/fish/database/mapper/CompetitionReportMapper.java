@@ -7,9 +7,8 @@ import org.jdbi.v3.core.statement.StatementContext;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 public class CompetitionReportMapper implements RowMapper<CompetitionReport> {
@@ -17,6 +16,13 @@ public class CompetitionReportMapper implements RowMapper<CompetitionReport> {
     private static final UUID NIL_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
     private static final Field WINNER_UUID_FIELD = getField("winnerUuid");
     private static final Field CONTESTANTS_FIELD = getField("contestants");
+    private final String tableName;
+    private final boolean normalizeLegacyText;
+
+    public CompetitionReportMapper(String tableName, boolean normalizeLegacyText) {
+        this.tableName = tableName;
+        this.normalizeLegacyText = normalizeLegacyText;
+    }
 
     @Override
     public CompetitionReport map(ResultSet rs, StatementContext ctx) throws SQLException {
@@ -32,8 +38,8 @@ public class CompetitionReportMapper implements RowMapper<CompetitionReport> {
                 noWinner ? NIL_UUID.toString() : winnerUuid.trim(),
                 rs.getFloat("winner_score"),
                 noContestants ? NIL_UUID.toString() : normalizeContestants(contestants),
-                getLocalDateTime(rs, "start_time"),
-                getLocalDateTime(rs, "end_time")
+                CompatibleLocalDateTimeReader.read(rs, tableName, "start_time", identityFor(rs), normalizeLegacyText),
+                CompatibleLocalDateTimeReader.read(rs, tableName, "end_time", identityFor(rs), normalizeLegacyText)
         );
 
         if (noWinner) {
@@ -73,8 +79,9 @@ public class CompetitionReportMapper implements RowMapper<CompetitionReport> {
         }
     }
 
-    private LocalDateTime getLocalDateTime(ResultSet rs, String column) throws SQLException {
-        Timestamp timestamp = rs.getTimestamp(column);
-        return timestamp == null ? null : timestamp.toLocalDateTime();
+    private LinkedHashMap<String, Object> identityFor(ResultSet rs) throws SQLException {
+        LinkedHashMap<String, Object> identity = new LinkedHashMap<>();
+        identity.put("id", rs.getInt("id"));
+        return identity;
     }
 }

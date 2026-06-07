@@ -81,11 +81,21 @@ public class EMFFishListener implements Listener {
     private void handleFishStats(final @NotNull Fish fish) {
         final DataManager<FishStats> fishStatsDataManager = EvenMoreFish.getInstance().getPluginDataManager().getFishStatsDataManager();
         final FishRarityKey fishRarityKey = FishRarityKey.of(fish);
-        final FishStats stats = fishStatsDataManager.getOrCreate(
-                fishRarityKey.toString(),
-                key -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getFishStats(fish.getName(),fish.getRarity().getId()),
-                () -> FishStats.empty(fish,LocalDateTime.now())
-        );
+        final String key = fishRarityKey.toString();
+        FishStats stats = fishStatsDataManager.peek(key);
+        if (stats == null) {
+            final var loadResult = EvenMoreFish.getInstance().getPluginDataManager().getDatabase().loadFishStats(fish.getName(), fish.getRarity().getId());
+            if (loadResult.isUnreadable()) {
+                EvenMoreFish.getInstance().getLogger().warning("Skipping fish stats update for " + key + " because the stored row could not be read.");
+                return;
+            }
+            if (loadResult.isFound()) {
+                stats = loadResult.getValue();
+                fishStatsDataManager.cacheLoadedValue(key, stats);
+            } else {
+                stats = FishStats.empty(fish, LocalDateTime.now());
+            }
+        }
 
         UUID fishermanUuid = fish.getFishermanUUID();
         float length = fish.getLength();
@@ -102,7 +112,7 @@ public class EMFFishListener implements Listener {
         }
 
         stats.incrementQuantity();
-        fishStatsDataManager.update(fishRarityKey.toString(), stats);
+        fishStatsDataManager.update(key, stats);
         EvenMoreFish.getInstance().debug("Fish Stats: %s".formatted( stats.toString()));
     }
 
@@ -116,11 +126,21 @@ public class EMFFishListener implements Listener {
 
     private void handleUserFishStats(final int userId, final @NotNull Fish fish) {
         final DataManager<UserFishStats> userFishStatsDataManager = EvenMoreFish.getInstance().getPluginDataManager().getUserFishStatsDataManager();
-        final UserFishStats stats = userFishStatsDataManager.getOrCreate(
-                UserFishRarityKey.of(userId,fish).toString(),
-                id -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getUserFishStats(userId, fish.getName(), fish.getRarity().getId()),
-                () -> new UserFishStats(userId, fish, LocalDateTime.now())
-        );
+        final String key = UserFishRarityKey.of(userId,fish).toString();
+        UserFishStats stats = userFishStatsDataManager.peek(key);
+        if (stats == null) {
+            final var loadResult = EvenMoreFish.getInstance().getPluginDataManager().getDatabase().loadUserFishStats(userId, fish.getName(), fish.getRarity().getId());
+            if (loadResult.isUnreadable()) {
+                EvenMoreFish.getInstance().getLogger().warning("Skipping user fish stats update for " + key + " because the stored row could not be read.");
+                return;
+            }
+            if (loadResult.isFound()) {
+                stats = loadResult.getValue();
+                userFishStatsDataManager.cacheLoadedValue(key, stats);
+            } else {
+                stats = new UserFishStats(userId, fish, LocalDateTime.now());
+            }
+        }
 
         if (stats.getLongestLength() < fish.getLength()) {
             stats.setLongestLength(fish.getLength());
@@ -131,7 +151,6 @@ public class EMFFishListener implements Listener {
         }
 
         stats.incrementQuantity();
-        final String key = UserFishRarityKey.of(userId,fish).toString();
         userFishStatsDataManager.update(key, stats);
     }
 }
