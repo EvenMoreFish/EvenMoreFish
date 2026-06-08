@@ -38,7 +38,7 @@ public class Checks {
      * @param player The player to check.
      * @param location The location of the hook.
      */
-    public static boolean isMcMMOOverfishing(@NotNull Player player, @NotNull Location location) {
+    public static boolean isMcMMOOverfishing(@NotNull Player player) {
         if (!EvenMoreFish.getInstance().getDependencyManager().isUsingMcMMO()) {
             return false;
         }
@@ -46,7 +46,7 @@ public class Checks {
             return false;
         }
         McMMOPlayer mmoPlayer = UserManager.getPlayer(player);
-        return mmoPlayer != null && mmoPlayer.getFishingManager().isExploitingFishing(location.toVector());
+        return mmoPlayer != null && mmoPlayer.getFishingManager().isExploitingFishing();
     }
 
 }
