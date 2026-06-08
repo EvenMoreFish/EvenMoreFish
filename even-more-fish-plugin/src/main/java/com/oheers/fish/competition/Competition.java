@@ -280,7 +280,7 @@ public class Competition {
 
     private static void checkHeldCompetition() {
         if (held.isEmpty()) {
-            System.out.println("No competitions were held.");
+            Logging.debug("No competitions have been held back.");
             return;
         }
         CompetitionFile file = held.removeFirst();
