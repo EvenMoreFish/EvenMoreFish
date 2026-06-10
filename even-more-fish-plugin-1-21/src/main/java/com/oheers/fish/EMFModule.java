@@ -9,6 +9,7 @@ import com.oheers.fish.items.ItemConfigResolver;
 import com.oheers.fish.items.configs.FireResistantItemConfig;
 import com.oheers.fish.items.configs.HideTooltipItemConfig;
 import com.oheers.fish.items.configs.ItemRarityItemConfig;
+import com.oheers.fish.items.configs.MaxStackSizeItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
@@ -37,6 +38,7 @@ public class EMFModule extends EvenMoreFish{
         inst.setFireResistantResolver(FireResistantItemConfig::new);
         inst.setHideTooltipResolver(HideTooltipItemConfig::new);
         inst.setItemRarityResolver(ItemRarityItemConfig::new);
+        inst.setMaxStackSizeResolver(MaxStackSizeItemConfig::new);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.oheers.fish.items.ItemConfigResolver;
 import com.oheers.fish.items.configs.FireResistantItemConfig;
 import com.oheers.fish.items.configs.HideTooltipItemConfig;
 import com.oheers.fish.items.configs.ItemRarityItemConfig;
+import com.oheers.fish.items.configs.MaxStackSizeItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
@@ -35,6 +36,7 @@ public class EMFModule extends EvenMoreFish {
         inst.setFireResistantResolver(FireResistantItemConfig::new);
         inst.setHideTooltipResolver(HideTooltipItemConfig::new);
         inst.setItemRarityResolver(ItemRarityItemConfig::new);
+        inst.setMaxStackSizeResolver(MaxStackSizeItemConfig::new);
     }
 
     @Override

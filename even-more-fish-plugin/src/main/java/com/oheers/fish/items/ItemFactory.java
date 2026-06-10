@@ -55,6 +55,7 @@ public class ItemFactory {
     private final ItemConfig<Boolean> hideTooltip;
     private final ItemConfig<String> itemRarity;
     private final ItemConfig<NamespacedKey> tooltipStyle;
+    private final ItemConfig<Integer> maxStackSize;
 
     private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation) {
         if (configLocation == null) {
@@ -84,6 +85,7 @@ public class ItemFactory {
         this.hideTooltip = resolver.getHideTooltip(this.configuration);
         this.itemRarity = resolver.getItemRarity(this.configuration);
         this.tooltipStyle = resolver.getTooltipStyle(this.configuration);
+        this.maxStackSize = resolver.getMaxStackSize(this.configuration);
 
         this.baseItem = getBaseItem();
     }
@@ -146,6 +148,7 @@ public class ItemFactory {
             hideTooltip.apply(item, player, replacements);
             itemRarity.apply(item, player, replacements);
             tooltipStyle.apply(item, player, replacements);
+            maxStackSize.apply(item, player, replacements);
 
             if (finalChanges != null) {
                 finalChanges.accept(item);
@@ -295,6 +298,10 @@ public class ItemFactory {
 
     public ItemConfig<NamespacedKey> getTooltipStyle() {
         return tooltipStyle;
+    }
+
+    public ItemConfig<Integer> getMaxStackSize() {
+        return maxStackSize;
     }
 
     // Base Item Methods //

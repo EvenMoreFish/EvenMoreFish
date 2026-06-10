@@ -47,6 +47,7 @@ public class ItemConfigResolver {
     private @NotNull Function<Section, ItemConfig<Boolean>> hideTooltipResolver = EmptyItemConfig::new;
     private @NotNull Function<Section, ItemConfig<String>> itemRarityResolver = EmptyItemConfig::new;
     private @NotNull Function<Section, ItemConfig<NamespacedKey>> tooltipStyleResolver = EmptyItemConfig::new;
+    private @NotNull Function<Section, ItemConfig<Integer>> maxStackSizeResolver = EmptyItemConfig::new;
 
     private ItemConfigResolver() {}
 
@@ -176,6 +177,14 @@ public class ItemConfigResolver {
 
     public void setTooltipStyleResolver(@NotNull Function<Section, ItemConfig<NamespacedKey>> tooltipStyleResolver) {
         this.tooltipStyleResolver = tooltipStyleResolver;
+    }
+
+    public @NotNull ItemConfig<Integer> getMaxStackSize(@NotNull Section section) {
+        return resolve(maxStackSizeResolver, section);
+    }
+
+    public void setMaxStackSizeResolver(@NotNull Function<Section, ItemConfig<Integer>> maxStackSizeResolver) {
+        this.maxStackSizeResolver = maxStackSizeResolver;
     }
 
 }
