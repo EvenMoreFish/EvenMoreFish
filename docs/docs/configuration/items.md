@@ -192,3 +192,14 @@ Example:
 item:
   tooltip-style: my:key
 ```
+
+### Max Stack Size
+On 1.21.1 and above, you can set a custom max stack size using the `max-stack-size` setting.
+
+This cannot be less than 1 or more than 99.
+
+Example:
+```yaml
+item:
+  max-stack-size: 99
+```
