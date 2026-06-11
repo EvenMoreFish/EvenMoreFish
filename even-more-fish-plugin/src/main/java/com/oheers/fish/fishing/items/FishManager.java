@@ -2,6 +2,7 @@ package com.oheers.fish.fishing.items;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.FishingType;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.requirement.RequirementContext;
@@ -205,26 +206,46 @@ public class FishManager extends AbstractFishManager<Rarity> {
                         boolean doRequirementChecks,
                         @Nullable Processor<?> processor,
                         @Nullable CustomRod customRod) {
+        return getFish(
+            rarity,
+            location,
+            player,
+            boostRate,
+            boostedFish,
+            doRequirementChecks,
+            FishingType.VANILLA,
+            processor,
+            customRod
+        );
+    }
+
+    public Fish getFish(Rarity rarity, Location location, Player player,
+                        double boostRate, List<Fish> boostedFish,
+                        boolean doRequirementChecks,
+                        @NotNull FishingType fishingType,
+                        @Nullable Processor<?> processor,
+                        @Nullable CustomRod customRod) {
         if (rarity == null || rarity.getOriginalFishList().isEmpty()) {
             rarity = getRandomWeightedRarity(player, 1,
-                    Collections.emptySet(),
-                    Set.copyOf(getItemMap().values()),
-                    customRod
+                Collections.emptySet(),
+                Set.copyOf(getItemMap().values()),
+                customRod
             );
             if (rarity == null) return null;
         }
 
         final RequirementContext context = new RequirementContext(
-                location != null ? location.getWorld() : null,
-                location,
-                player,
-                null,
-                null
+            location != null ? location.getWorld() : null,
+            location,
+            player,
+            null,
+            null,
+            fishingType
         );
 
         final List<Fish> available = rarity.getFishList().stream()
-                .filter(fish -> isFishAllowed(fish, boostRate, boostedFish, processor, customRod, context, doRequirementChecks))
-                .toList();
+            .filter(fish -> isFishAllowed(fish, boostRate, boostedFish, processor, customRod, context, doRequirementChecks))
+            .toList();
 
         if (available.isEmpty()) {
             logNoFishAvailable(rarity, location, customRod);
@@ -305,22 +326,23 @@ public class FishManager extends AbstractFishManager<Rarity> {
         if (fisher == null) return new ArrayList<>(totalRarities);
 
         RequirementContext context = new RequirementContext(
-                fisher.getWorld(),
-                fisher.getLocation(),
-                fisher,
-                null,
-                null
+            fisher.getWorld(),
+            fisher.getLocation(),
+            fisher,
+            null,
+            null,
+            null
         );
 
         String region = FishUtils.getRegionName(fisher.getLocation());
         return getItemMap().values().stream()
-                .filter(r -> !shouldSkipRarity(r, boostRate, boostedRarities, fisher))
-                .filter(r -> r.getRequirement().meetsRequirements(context))
-                .flatMap(r -> Collections.nCopies(
-                        (int)Math.max(1, MainConfig.getInstance().getRegionBoost(region, r.getId())),
-                        r
-                ).stream())
-                .toList();
+            .filter(r -> !shouldSkipRarity(r, boostRate, boostedRarities, fisher))
+            .filter(r -> r.getRequirement().meetsRequirements(context))
+            .flatMap(r -> Collections.nCopies(
+                (int) Math.max(1, MainConfig.getInstance().getRegionBoost(region, r.getId())),
+                r
+            ).stream())
+            .toList();
     }
 
     private boolean shouldSkipRarity(Rarity rarity, double boostRate,
@@ -354,6 +376,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
             location != null ? location.getWorld() : null,
             location,
             player,
+            null,
             null,
             null
         );

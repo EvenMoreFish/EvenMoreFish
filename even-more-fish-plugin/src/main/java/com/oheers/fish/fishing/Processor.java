@@ -4,6 +4,7 @@ import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.fishing.FishingType;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.competition.Competition;
@@ -35,6 +36,15 @@ public abstract class Processor<E extends Event> {
     // Used for formatting fish length.
     public static final DecimalFormat LENGTH_FORMAT = new DecimalFormat("#.0");
     private final Random random = new Random();
+    private final FishingType fishingType;
+
+    public Processor() {
+        this.fishingType = FishingType.VANILLA;
+    }
+
+    public Processor(@NotNull FishingType fishingType) {
+        this.fishingType = fishingType;
+    }
 
     protected abstract void process(@NotNull E event);
 
@@ -187,6 +197,7 @@ public abstract class Processor<E extends Event> {
             1,
             null,
             true,
+            this.fishingType,
             this,
             customRod
         );
