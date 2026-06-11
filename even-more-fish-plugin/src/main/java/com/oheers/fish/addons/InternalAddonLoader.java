@@ -1,7 +1,7 @@
 package com.oheers.fish.addons;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.addons.external.requirement.FishingTypeRequirement;
+import com.oheers.fish.addons.internal.requirement.FishingTypeRequirementType;
 import com.oheers.fish.addons.external.requirement.PermissionRequirementType;
 import com.oheers.fish.addons.external.reward.AuraSkillsXPRewardType;
 import com.oheers.fish.addons.external.reward.GPClaimBlocksRewardType;
@@ -107,6 +107,7 @@ public class InternalAddonLoader extends AddonLoader {
         new WeatherRequirementType().register();
         new WorldRequirementType().register();
         new RewardTypeRequirementType().register();
+        new FishingTypeRequirementType().register();
 
         // Load Group RequirementType
         Permission permission = EvenMoreFish.getInstance().getDependencyManager().getPermission();
@@ -116,10 +117,6 @@ public class InternalAddonLoader extends AddonLoader {
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderRequirementType().register();
-        }
-
-        if (Bukkit.getPluginManager().isPluginEnabled("DimensionFishing")) {
-            new FishingTypeRequirement().register();
         }
     }
 
