@@ -87,6 +87,8 @@ dependencies {
     compileOnly(libs.guava)
 
     compileOnlyApi(libs.boostedyaml)
+
+    compileOnly(libs.dimensionfishing)
 }
 
 
