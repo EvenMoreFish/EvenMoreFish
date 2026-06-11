@@ -3,6 +3,7 @@ package com.oheers.fish.commands.admin.subcommand;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.arguments.BaitArgument;
@@ -45,7 +46,15 @@ public class DebugSubcommand {
             target = BrigCommandUtils.requirePlayer(ctx);
         }
 
-        bait.createDebugMessages(target).forEach(sender::sendMessage);
+        RequirementContext context = new RequirementContext(
+            target.getWorld(),
+            target.getLocation(),
+            target,
+            null,
+            null,
+            null
+        );
+        bait.createDebugMessages(target, context).forEach(sender::sendMessage);
         return 1;
     }
 

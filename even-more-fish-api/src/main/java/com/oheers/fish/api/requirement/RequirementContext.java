@@ -34,6 +34,10 @@ public class RequirementContext {
         this.fishingType = fishingType == null ? FishingType.VANILLA : fishingType;
     }
 
+    public static @NotNull RequirementContext empty() {
+        return new RequirementContext(null, null, null, null, null, null);
+    }
+
     public @Nullable World getWorld() {
         return worldRef.get();
     }

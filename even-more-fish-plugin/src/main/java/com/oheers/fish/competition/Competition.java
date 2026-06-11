@@ -6,6 +6,7 @@ import com.oheers.fish.api.EMFCompetitionStartEvent;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.fishing.items.RarityKey;
+import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
@@ -704,8 +705,13 @@ public class Competition {
 
             if (rarity == null) {
                 rarity = FishManager.getInstance().getRandomWeightedRarity(
-                        null, 0, Collections.emptySet(),
-                        Set.copyOf(FishManager.getInstance().getRarityMap().values()), null
+                    null,
+                    0,
+                    Collections.emptySet(),
+                    Set.copyOf(FishManager.getInstance().getRarityMap().values()),
+                    null,
+                    // RequirementContext cannot be filled as we have nothing to base it on.
+                    RequirementContext.empty()
                 );
             }
 

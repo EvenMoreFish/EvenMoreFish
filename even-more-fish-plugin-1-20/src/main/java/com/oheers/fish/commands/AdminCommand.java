@@ -3,6 +3,7 @@ package com.oheers.fish.commands;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.utils.ManifestUtil;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitManager;
@@ -240,8 +241,16 @@ public class AdminCommand {
                             ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
                             return;
                         }
+                        RequirementContext context = new RequirementContext(
+                            target.getWorld(),
+                            target.getLocation(),
+                            target,
+                            null,
+                            null,
+                            null
+                        );
 
-                        bait.createDebugMessages(target).forEach(sender::sendMessage);
+                        bait.createDebugMessages(target, context).forEach(sender::sendMessage);
                     })
             );
     }
