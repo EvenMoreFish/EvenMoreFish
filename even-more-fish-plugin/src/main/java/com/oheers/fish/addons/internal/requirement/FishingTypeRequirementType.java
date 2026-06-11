@@ -26,12 +26,12 @@ public class FishingTypeRequirementType extends RequirementType {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "PERMISSION";
+        return "FISHING-TYPE";
     }
 
     @Override
     public @NotNull String getAuthor() {
-        return "Oheers";
+        return "FireML";
     }
 
     @Override
