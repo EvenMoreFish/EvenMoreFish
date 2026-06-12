@@ -2,6 +2,7 @@ package com.oheers.fish.fishing.items;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.FishingType;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.requirement.RequirementContext;
@@ -158,12 +159,13 @@ public class FishManager extends AbstractFishManager<Rarity> {
     public Rarity getRandomWeightedRarity(Player fisher, double boostRate,
                                           @NotNull Set<Rarity> boostedRarities,
                                           Set<Rarity> totalRarities,
-                                          @Nullable CustomRod customRod) {
+                                          @Nullable CustomRod customRod,
+                                          @NotNull RequirementContext requirementContext) {
         Rarity preDecided = getPreDecidedRarity(fisher);
         if (preDecided != null) return preDecided;
 
         List<Rarity> allowedRarities = filterByCustomRod(
-                getAllowedRarities(fisher, boostRate, boostedRarities, totalRarities),
+                getAllowedRarities(fisher, boostRate, boostedRarities, totalRarities, requirementContext),
                 customRod
         );
 
@@ -181,13 +183,14 @@ public class FishManager extends AbstractFishManager<Rarity> {
     public @Nullable Rarity getWeightedRarity(@Nullable Player fisher,
                                               @NotNull Set<Rarity> totalRarities,
                                               @NotNull ToDoubleFunction<Rarity> weightFunction,
-                                              @Nullable CustomRod customRod) {
+                                              @Nullable CustomRod customRod,
+                                              @NotNull RequirementContext requirementContext) {
         Rarity preDecided = getPreDecidedRarity(fisher);
         if (preDecided != null) {
             return preDecided;
         }
 
-        List<Rarity> allowedRarities = getAvailableRarities(fisher, totalRarities, customRod);
+        List<Rarity> allowedRarities = getAvailableRarities(fisher, totalRarities, customRod, requirementContext);
         if (allowedRarities.isEmpty()) {
             return null;
         }
@@ -204,27 +207,21 @@ public class FishManager extends AbstractFishManager<Rarity> {
                         double boostRate, List<Fish> boostedFish,
                         boolean doRequirementChecks,
                         @Nullable Processor<?> processor,
-                        @Nullable CustomRod customRod) {
+                        @Nullable CustomRod customRod,
+                        @NotNull RequirementContext context) {
         if (rarity == null || rarity.getOriginalFishList().isEmpty()) {
             rarity = getRandomWeightedRarity(player, 1,
-                    Collections.emptySet(),
-                    Set.copyOf(getItemMap().values()),
-                    customRod
+                Collections.emptySet(),
+                Set.copyOf(getItemMap().values()),
+                customRod,
+                context
             );
             if (rarity == null) return null;
         }
 
-        final RequirementContext context = new RequirementContext(
-                location != null ? location.getWorld() : null,
-                location,
-                player,
-                null,
-                null
-        );
-
         final List<Fish> available = rarity.getFishList().stream()
-                .filter(fish -> isFishAllowed(fish, boostRate, boostedFish, processor, customRod, context, doRequirementChecks))
-                .toList();
+            .filter(fish -> isFishAllowed(fish, boostRate, boostedFish, processor, customRod, context, doRequirementChecks))
+            .toList();
 
         if (available.isEmpty()) {
             logNoFishAvailable(rarity, location, customRod);
@@ -286,9 +283,10 @@ public class FishManager extends AbstractFishManager<Rarity> {
 
     public @NotNull List<Rarity> getAvailableRarities(@Nullable Player fisher,
                                                       @NotNull Set<Rarity> totalRarities,
-                                                      @Nullable CustomRod customRod) {
+                                                      @Nullable CustomRod customRod,
+                                                      @NotNull RequirementContext requirementContext) {
         return filterByCustomRod(
-            getAllowedRarities(fisher, 1.0D, Collections.emptySet(), totalRarities),
+            getAllowedRarities(fisher, 1.0D, Collections.emptySet(), totalRarities, requirementContext),
             customRod
         );
     }
@@ -301,26 +299,19 @@ public class FishManager extends AbstractFishManager<Rarity> {
 
     private List<Rarity> getAllowedRarities(Player fisher, double boostRate,
                                             Set<Rarity> boostedRarities,
-                                            Set<Rarity> totalRarities) {
+                                            Set<Rarity> totalRarities,
+                                            @NotNull RequirementContext requirementContext) {
         if (fisher == null) return new ArrayList<>(totalRarities);
-
-        RequirementContext context = new RequirementContext(
-                fisher.getWorld(),
-                fisher.getLocation(),
-                fisher,
-                null,
-                null
-        );
 
         String region = FishUtils.getRegionName(fisher.getLocation());
         return getItemMap().values().stream()
-                .filter(r -> !shouldSkipRarity(r, boostRate, boostedRarities, fisher))
-                .filter(r -> r.getRequirement().meetsRequirements(context))
-                .flatMap(r -> Collections.nCopies(
-                        (int)Math.max(1, MainConfig.getInstance().getRegionBoost(region, r.getId())),
-                        r
-                ).stream())
-                .toList();
+            .filter(r -> !shouldSkipRarity(r, boostRate, boostedRarities, fisher))
+            .filter(r -> r.getRequirement().meetsRequirements(requirementContext))
+            .flatMap(r -> Collections.nCopies(
+                (int) Math.max(1, MainConfig.getInstance().getRegionBoost(region, r.getId())),
+                r
+            ).stream())
+            .toList();
     }
 
     private boolean shouldSkipRarity(Rarity rarity, double boostRate,
@@ -354,6 +345,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
             location != null ? location.getWorld() : null,
             location,
             player,
+            null,
             null,
             null
         );

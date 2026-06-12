@@ -1,9 +1,12 @@
 package com.oheers.fish.api.requirement;
 
+import com.oheers.fish.api.fishing.FishingType;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Fish;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
@@ -15,18 +18,24 @@ public class RequirementContext {
     private Player player;
     private YamlDocument config;
     private String configPath;
+    private FishingType fishingType;
 
     /**
      * Provides data about the current server to the requirement checker, for example it passes through the current
      * tick time of the day so the in-game time limit can be compared, or the location the player is in so the world
      * can be checked or the regions or y-level can be checked.
      */
-    public RequirementContext(@Nullable World world, @Nullable Location location, @Nullable Player player, @Nullable YamlDocument config, @Nullable String configPath) {
+    public RequirementContext(@Nullable World world, @Nullable Location location, @Nullable Player player, @Nullable YamlDocument config, @Nullable String configPath, @Nullable FishingType fishingType) {
         this.worldRef = new WeakReference<>(world);
         this.location = location;
         this.player = player;
         this.config = config;
         this.configPath = configPath;
+        this.fishingType = fishingType == null ? FishingType.VANILLA : fishingType;
+    }
+
+    public static @NotNull RequirementContext empty() {
+        return new RequirementContext(null, null, null, null, null, null);
     }
 
     public @Nullable World getWorld() {
@@ -89,6 +98,14 @@ public class RequirementContext {
             return player.getLocation();
         }
         return null;
+    }
+
+    public @NotNull FishingType getFishingType() {
+        return this.fishingType;
+    }
+
+    public void setFishingType(@NotNull FishingType fishingType) {
+        this.fishingType = fishingType;
     }
 
 }

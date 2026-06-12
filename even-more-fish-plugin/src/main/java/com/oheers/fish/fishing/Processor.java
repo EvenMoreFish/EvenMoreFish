@@ -4,6 +4,8 @@ import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.fishing.FishingType;
+import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.competition.Competition;
@@ -35,6 +37,15 @@ public abstract class Processor<E extends Event> {
     // Used for formatting fish length.
     public static final DecimalFormat LENGTH_FORMAT = new DecimalFormat("#.0");
     private final Random random = new Random();
+    private final FishingType fishingType;
+
+    public Processor() {
+        this.fishingType = FishingType.VANILLA;
+    }
+
+    public Processor(@NotNull FishingType fishingType) {
+        this.fishingType = fishingType;
+    }
 
     protected abstract void process(@NotNull E event);
 
@@ -163,9 +174,18 @@ public abstract class Processor<E extends Event> {
      * @return A random fish.
      */
     private @Nullable Fish chooseFish(@NotNull Player player, @NotNull Location location, @Nullable BaitHandler bait, @Nullable CustomRod customRod) {
+        RequirementContext context = new RequirementContext(
+            player.getWorld(),
+            location,
+            player,
+            null,
+            null,
+            this.fishingType
+        );
+
         // Check if the bait exists and a custom rod does not. Custom rods are not compatible with baits.
         if (bait != null && customRod == null) {
-            return bait.chooseFish(player, location);
+            return bait.chooseFish(player, location, context);
         }
 
         Rarity rarity = FishManager.getInstance().getRandomWeightedRarity(
@@ -173,7 +193,8 @@ public abstract class Processor<E extends Event> {
             1,
             Set.of(),
             Set.copyOf(FishManager.getInstance().getRarityMap().values()),
-            customRod
+            customRod,
+            context
         );
         if (rarity == null) {
             Logging.error("Could not determine a fish rarity for " + player.getName());
@@ -188,7 +209,8 @@ public abstract class Processor<E extends Event> {
             null,
             true,
             this,
-            customRod
+            customRod,
+            context
         );
         if (fish == null) {
             EvenMoreFish.getInstance().getLogger().severe("Could not determine a fish for " + player.getName());

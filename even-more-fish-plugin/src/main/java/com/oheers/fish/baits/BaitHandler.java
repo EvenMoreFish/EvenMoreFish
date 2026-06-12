@@ -7,8 +7,10 @@ import com.oheers.fish.api.baits.IBait;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.economy.EconomyType;
+import com.oheers.fish.api.fishing.FishingType;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.registry.EMFRegistry;
+import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.baits.configs.BaitFileUpdates;
 import com.oheers.fish.baits.manager.BaitNBTManager;
@@ -324,7 +326,19 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      */
     @Override
     public @NotNull Fish chooseFish(@NotNull Player player, @NotNull Location location) {
-        Rarity selectedRarity = selectRarityWithModifiers(player);
+        RequirementContext context = new RequirementContext(
+            player.getWorld(),
+            player.getLocation(),
+            player,
+            null,
+            null,
+            FishingType.VANILLA
+        );
+        return chooseFish(player, location, context);
+    }
+
+    public @NotNull Fish chooseFish(@NotNull Player player, @NotNull Location location, @NotNull RequirementContext requirementContext) {
+        Rarity selectedRarity = selectRarityWithModifiers(player, requirementContext);
         Fish selectedFish = selectFishFromRarity(selectedRarity, player, location);
 
         processBaitUsage(player, selectedRarity, selectedFish);
@@ -340,12 +354,13 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return baitData.fishModifiers();
     }
 
-    private @Nullable Rarity selectRarityWithModifiers(@NotNull Player player) {
+    private @Nullable Rarity selectRarityWithModifiers(@NotNull Player player, @NotNull RequirementContext requirementContext) {
         return fishManager.getWeightedRarity(
             player,
             Set.copyOf(fishManager.getRarityMap().values()),
             this::getEffectiveRarityWeight,
-            null
+            null,
+            requirementContext
         );
     }
 
@@ -551,13 +566,13 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         logger.warning("Bait file '" + getFileName() + "' is using the pre-2.3.0 bait format. Please migrate it to 'rarity-modifiers' and/or 'fish-modifiers'.");
     }
 
-    public @NotNull List<Component> createDebugMessages(@NotNull Player player) {
-        return createDebugMessages(player, player.getLocation());
+    public @NotNull List<Component> createDebugMessages(@NotNull Player player, @NotNull RequirementContext requirementContext) {
+        return createDebugMessages(player, player.getLocation(), requirementContext);
     }
 
-    public @NotNull List<Component> createDebugMessages(@NotNull Player player, @NotNull Location location) {
+    public @NotNull List<Component> createDebugMessages(@NotNull Player player, @NotNull Location location, @NotNull RequirementContext requirementContext) {
         final List<Component> messages = new ArrayList<>();
-        final List<RarityChance> rarityChances = calculateRarityChances(player, location);
+        final List<RarityChance> rarityChances = calculateRarityChances(player, location, requirementContext);
 
         messages.add(Component.text("Bait debug for " + getId() + " at " + formatLocation(location) + " on " + player.getName()));
 
@@ -604,11 +619,12 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return messages;
     }
 
-    private @NotNull List<RarityChance> calculateRarityChances(@NotNull Player player, @NotNull Location location) {
+    private @NotNull List<RarityChance> calculateRarityChances(@NotNull Player player, @NotNull Location location, @NotNull RequirementContext requirementContext) {
         final List<Rarity> availableRarities = fishManager.getAvailableRarities(
             player,
             Set.copyOf(fishManager.getRarityMap().values()),
-            null
+            null,
+            requirementContext
         );
         if (availableRarities.isEmpty()) {
             return List.of();

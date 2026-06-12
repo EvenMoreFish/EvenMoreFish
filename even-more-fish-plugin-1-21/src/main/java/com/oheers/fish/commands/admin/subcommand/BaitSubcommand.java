@@ -82,16 +82,4 @@ public class BaitSubcommand {
         return 1;
     }
 
-    private int executeDebug(@NotNull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        CommandSender sender = ctx.getSource().getSender();
-        BaitHandler bait = ctx.getArgument("bait", BaitHandler.class);
-        Player target = BrigCommandUtils.getArgumentOrNull(ctx, "target", Player.class);
-        if (target == null) {
-            target = BrigCommandUtils.requirePlayer(ctx);
-        }
-
-        bait.createDebugMessages(target).forEach(sender::sendMessage);
-        return 1;
-    }
-
 }
