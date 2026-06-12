@@ -1,5 +1,5 @@
 ---
-title: Pinata Commands
+title: Piñata Commands
 sidebar_position: 1
 ---
 
