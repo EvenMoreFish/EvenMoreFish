@@ -791,9 +791,16 @@ public class Competition {
 
         competition.begin();
 
-        Section leaderboardSection = config.createSection("leaderboard");
+        Section leaderboardSection = config.getSection("leaderboard");
+        if (leaderboardSection == null) {
+            Logging.debug("Competition backup file had no leaderboard data.");
+            return;
+        }
         leaderboardSection.getRoutesAsStrings(false).forEach(key -> {
-            Section entrySection = leaderboardSection.createSection(key);
+            Section entrySection = leaderboardSection.getSection(key);
+            if (entrySection == null) {
+                return;
+            }
             UUID player;
             try {
                 player = UUID.fromString(key);
