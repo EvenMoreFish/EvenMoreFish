@@ -2,7 +2,7 @@ package com.oheers.fish.api.fishing;
 
 /**
  * The type of fishing the player is doing.
- * Only used if the DimensionFishing addon is installed.
+ * Used for our DimensionFishing addon, but can be used in other addons too.
  */
 public enum FishingType {
     VANILLA,

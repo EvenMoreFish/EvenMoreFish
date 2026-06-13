@@ -21,10 +21,6 @@ afterEvaluate {
         foliaSupported = true
 
         softDepend = listOf(
-            // Internal
-            "DimensionFishing",
-
-            // External
             "AuraSkills",
             "Denizen",
             "EcoItems",
