@@ -7,9 +7,8 @@ plugins {
 afterEvaluate {
     bukkit {
         name = "EvenMoreFish"
-        author = "Oheers"
-        // This is being used for developers instead of contributors
-        contributors = listOf(
+        authors = listOf(
+            "Oheers",
             "FireML",
             "sarhatabaot"
         )
