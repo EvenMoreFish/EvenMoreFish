@@ -798,7 +798,7 @@ public class Competition {
             try {
                 player = UUID.fromString(key);
             } catch (IllegalArgumentException exception) {
-                dataFile.delete();
+                Logging.warn("Competition backup file had invalid uuid: " + key);
                 return;
             }
             String fishStr = entrySection.getString("fish");
