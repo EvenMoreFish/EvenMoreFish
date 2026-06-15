@@ -1,6 +1,6 @@
 ---
 title: Hooking into EvenMoreFish
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 DimensionFishing hooks into EvenMoreFish by default. Installing both plugins alongside each other will work as intended.
