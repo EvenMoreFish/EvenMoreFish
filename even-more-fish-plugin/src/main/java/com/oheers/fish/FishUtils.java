@@ -623,33 +623,36 @@ public class FishUtils {
         }
     }
 
-    public static @Nullable Double fetchSize(@NotNull Section section, @NotNull String key, @Nullable OfflinePlayer player) {
-        Object value = section.get(key);
+    public static Double getDoubleOrNull(@Nullable Object value) {
+        if (value == null) {
+            return null;
+        }
         try {
             return Double.parseDouble(value.toString());
-        } catch (NullPointerException | NumberFormatException exception) {
-            if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                return null;
-            }
-            String parsed = PlaceholderAPI.setPlaceholders(player, value.toString());
-            try {
-                return Double.parseDouble(parsed);
-            } catch (NullPointerException | NumberFormatException exception) {
-                Logging.warn("Invalid size placeholder " + value + " in config " + section.getRouteAsString());
-                return null;
-            }
+        } catch (NumberFormatException exception) {
+            return null;
         }
-        if (section.isString(key) && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            String value = section.getString(key);
-            String parsed = PlaceholderAPI.setPlaceholders(player, value);
-            try {
-                return Double.parseDouble(parsed);
-            } catch (NullPointerException | NumberFormatException exception) {
-                Logging.warn("Invalid size placeholder " + value + " in config " + section.getRouteAsString());
-                return null;
-            }
+    }
+
+    public static @Nullable Double fetchSize(@NotNull Section section, @NotNull String key, @Nullable OfflinePlayer player) {
+        Object value = section.get(key);
+        if (value == null) {
+            return null;
         }
-        return section.getDouble(key, null);
+        Double parsed = getDoubleOrNull(value);
+        if (parsed != null) {
+            return parsed;
+        }
+        if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            return null;
+        }
+        String papi = PlaceholderAPI.setPlaceholders(player, value.toString());
+        Double papiParsed = getDoubleOrNull(papi);
+        if (papiParsed == null) {
+            Logging.warn("Invalid size placeholder " + value + " in config " + section.getRouteAsString());
+            return null;
+        }
+        return papiParsed;
     }
 
 }
