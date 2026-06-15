@@ -14,6 +14,10 @@ This is the permission the player needs to have to start this type of fishing. I
 ### Allowed Worlds
 This is a list of worlds this type of fishing is enabled in.
 
+If this is missing or empty, the plugin will default to the following:
+- Void is enabled in worlds with the THE_END environment.
+- Lava is enabled in worlds with the NETHER environment.
+
 ### Swallow Sound
 This sound is played when the player misses the fish and the hook is "swallowed" by the lava or void.
 
