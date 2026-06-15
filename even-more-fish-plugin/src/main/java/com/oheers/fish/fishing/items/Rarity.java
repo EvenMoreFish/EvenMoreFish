@@ -13,6 +13,7 @@ import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.utils.sort.Sortable;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -155,17 +156,31 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
 
     @Override
     public @NotNull Optional<Double> getSetSize() {
-        return getConfig().getOptionalDouble("size");
+        return getSetSize(null);
+    }
+
+    public @NotNull Optional<Double> getSetSize(@Nullable OfflinePlayer player) {
+        return Optional.ofNullable(FishUtils.fetchSize(getConfig(), "size", player));
     }
 
     @Override
     public double getMinSize() {
-        return getConfig().getDouble("size.minSize", 0D);
+        return getMinSize(null);
+    }
+
+    public double getMinSize(@Nullable OfflinePlayer player) {
+        Double minSize = FishUtils.fetchSize(getConfig(), "size.minSize", player);
+        return minSize == null ? 1D : minSize;
     }
 
     @Override
     public double getMaxSize() {
-        return getConfig().getDouble("size.maxSize", 10D);
+        return getMaxSize(null);
+    }
+
+    public double getMaxSize(@Nullable OfflinePlayer player) {
+        Double maxSize = FishUtils.fetchSize(getConfig(), "size.maxSize", player);
+        return maxSize == null ? 10D : maxSize;
     }
 
     // TODO this was set to always be false at some point, we need to re-add the removed code.

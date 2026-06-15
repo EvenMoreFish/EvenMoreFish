@@ -22,6 +22,8 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import de.tr7zw.changeme.nbtapi.NBT;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
@@ -619,6 +621,35 @@ public class FishUtils {
         } catch (ClassNotFoundException e) {
             return false;
         }
+    }
+
+    public static @Nullable Double fetchSize(@NotNull Section section, @NotNull String key, @Nullable OfflinePlayer player) {
+        Object value = section.get(key);
+        try {
+            return Double.parseDouble(value.toString());
+        } catch (NullPointerException | NumberFormatException exception) {
+            if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                return null;
+            }
+            String parsed = PlaceholderAPI.setPlaceholders(player, value.toString());
+            try {
+                return Double.parseDouble(parsed);
+            } catch (NullPointerException | NumberFormatException exception) {
+                Logging.warn("Invalid size placeholder " + value + " in config " + section.getRouteAsString());
+                return null;
+            }
+        }
+        if (section.isString(key) && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            String value = section.getString(key);
+            String parsed = PlaceholderAPI.setPlaceholders(player, value);
+            try {
+                return Double.parseDouble(parsed);
+            } catch (NullPointerException | NumberFormatException exception) {
+                Logging.warn("Invalid size placeholder " + value + " in config " + section.getRouteAsString());
+                return null;
+            }
+        }
+        return section.getDouble(key, null);
     }
 
 }

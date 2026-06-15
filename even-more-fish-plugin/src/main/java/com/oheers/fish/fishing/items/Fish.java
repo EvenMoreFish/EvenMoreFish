@@ -402,18 +402,20 @@ public class Fish implements IFish, Sortable {
 
     @Override
     public @NotNull Optional<Double> getSetSize() {
-        Double size = section.getDouble("size", null);
-        return size == null ? rarity.getSetSize() : Optional.of(size);
+        Double size = FishUtils.fetchSize(section, "size", fisherman);
+        return size == null ? rarity.getSetSize(fisherman) : Optional.of(size);
     }
 
     @Override
     public double getMinSize() {
-        return section.getDouble("size.minSize", rarity.getMinSize());
+        Double minSize = FishUtils.fetchSize(section, "size.minSize", fisherman);
+        return minSize == null ? rarity.getMinSize(fisherman) : minSize;
     }
 
     @Override
     public double getMaxSize() {
-        return section.getDouble("size.maxSize", rarity.getMaxSize());
+        Double maxSize = FishUtils.fetchSize(section, "size.maxSize", fisherman);
+        return maxSize == null ? rarity.getMaxSize(fisherman) : maxSize;
     }
 
     @Override
