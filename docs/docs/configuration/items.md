@@ -5,7 +5,7 @@ title: Item Configs
 ## Introduction
 EvenMoreFish has a variety of item configs that can be set and changed to customize how items behave. 
 
-This page will cover every item config available in EvenMoreFish (as of 2.1.5), and how to use them.
+This page will cover every item config available in EvenMoreFish (as of 2.3.6), and how to use them.
 
 ### Setting the base item
 To set the base item, you can use one of the following settings:
