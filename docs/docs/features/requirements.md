@@ -231,6 +231,31 @@ Atlantic Cod:
     - MONEY:5000
 ```
 
+### Fishing Type
+Checks the type of fishing being done. This requires the DimensionFishing plugin.
+
+Valid values are:
+- Vanilla
+- Lava
+- Void
+
+If not configured, the fish will be available to all three types.
+
+```yaml title="Fishing Type Example"
+Cod:
+  requirements:
+    fishing-type:
+      - Vanilla
+Emberfish:
+  requirements:
+    fishing-type:
+      - Lava
+Enderfish:
+  requirements:
+    fishing-type:
+      - Void
+```
+
 ### World
 And finally, this limits fish to certain worlds. By default there's only three worlds, `overworld`, `nether` and `end`, but with a plugin like [Multiverse-Core](https://modrinth.com/plugin/multiverse-core), you can create worlds to allow fish to only be caught in. There probably isn't much point allowing `nether` since water can't be placed there and lava can't be fished in though.
 
