@@ -636,7 +636,7 @@ public class FishUtils {
 
     public static @Nullable Double fetchSize(@NotNull Section section, @NotNull String key, @Nullable OfflinePlayer player) {
         Object value = section.get(key);
-        if (value == null) {
+        if (value == null || value instanceof Section) {
             return null;
         }
         Double parsed = getDoubleOrNull(value);
