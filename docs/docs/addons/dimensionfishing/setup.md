@@ -43,3 +43,6 @@ It is configured in a map format, so you can stack as many particles as you'd li
   - For Float, you provide a float value: `data: 1.0`.
   - For Integer, you provide an integer value: `data: 1`.
   - Unsupported types are: Vibration, Trail, Geyser, GeyserBase.
+
+If particles are set up incorrectly, you will be warned in console and they will no longer be shown.
+When a player runs the reload command, all particles are spawned at their current location to filter out broken ones.
