@@ -28,6 +28,7 @@ import com.oheers.fish.plugin.PluginDataManager;
 import com.oheers.fish.update.UpdateChecker;
 import de.themoep.inventorygui.InventoryGui;
 import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -88,7 +89,7 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
     @Override
     public void onLoad() {
-        if (!NBT.preloadApi()) {
+        if (false && !NBT.preloadApi()) {
             throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
         }
         instance = this;

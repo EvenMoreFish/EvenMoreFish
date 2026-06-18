@@ -10,14 +10,14 @@ plugins {
 group = "com.oheers.evenmorefish"
 version = properties["project-version"] as String
 
-extra["variant"] = "26.1"
+extra["variant"] = "26.2"
 
 dependencies {
     api(project(":even-more-fish-plugin"))
 
     compileOnly(libs.paper.api) {
         version {
-            strictly("26.1.1.build.+")
+            strictly("26.2.build.+")
         }
     }
 
@@ -39,7 +39,7 @@ dependencies {
 afterEvaluate {
     bukkit {
         main = "com.oheers.fish.EMFModule"
-        apiVersion = "26.1"
+        apiVersion = "26.2"
     }
 }
 
@@ -53,7 +53,7 @@ tasks {
     }
     // Quick manual testing, don't use this in ci/cd
     runServer {
-        minecraftVersion("26.2")
+        minecraftVersion("26.1.1")
         jvmArgs("-Dcom.mojang.eula.agree=true")
     }
 }
