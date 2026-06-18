@@ -2,6 +2,7 @@ package com.oheers.fish;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.commands.AdminCommand;
 import com.oheers.fish.commands.MainCommand;
 import com.oheers.fish.config.MainConfig;
@@ -16,6 +17,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public class EMFModule extends EvenMoreFish {
+
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        Logging.warn(
+            "After the release of Minecraft 26.3, " +
+            "EvenMoreFish will no longer support 1.20.x servers. " +
+            "We recommend you update to a newer version to keep up to date with bug fixes and new features."
+        );
+    }
+
     @Override
     public void loadCommands() {
         CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(this)
