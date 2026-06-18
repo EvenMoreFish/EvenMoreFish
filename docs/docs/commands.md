@@ -1,5 +1,5 @@
 ---
-title: Commands Reference
+title: Commands and Permissions Reference
 sidebar_position: 4
 ---
 
