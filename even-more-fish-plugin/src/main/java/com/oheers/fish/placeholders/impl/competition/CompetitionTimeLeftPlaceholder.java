@@ -20,11 +20,11 @@ public class CompetitionTimeLeftPlaceholder implements EMFPlaceholder {
     public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
         Competition competition = Competition.getCurrentlyActive();
         if (competition == null) {
-            return Competition.getNextCompetitionMessage().getLegacyMessage();
+            return Competition.getNextCompetitionMessage().getLegacyMessage(null);
         }
         EMFMessage message = ConfigMessage.PLACEHOLDER_TIME_REMAINING_ACTIVE.getMessage();
         message.setVariable("{time-left}", FishUtils.timeFormat(competition.getTimeLeft()));
-        return message.getLegacyMessage();
+        return message.getLegacyMessage(null);
     }
 
 }

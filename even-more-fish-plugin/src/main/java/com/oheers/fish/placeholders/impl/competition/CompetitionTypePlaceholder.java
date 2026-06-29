@@ -18,7 +18,7 @@ public class CompetitionTypePlaceholder implements EMFPlaceholder {
     public @NotNull String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
-            return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage();
+            return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage(null);
         }
         return activeComp.getCompetitionType().toString();
     }

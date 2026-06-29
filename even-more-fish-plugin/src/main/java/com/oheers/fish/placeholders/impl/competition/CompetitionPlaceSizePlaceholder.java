@@ -22,16 +22,16 @@ public class CompetitionPlaceSizePlaceholder implements EMFPlaceholder {
     public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
-            return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING_SIZE.getMessage().getLegacyMessage();
+            return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING_SIZE.getMessage().getLegacyMessage(null);
         }
 
         if (!activeComp.getCompetitionType().getStrategy().shouldUseFishLength()) {
-            return ConfigMessage.PLACEHOLDER_SIZE_DURING_MOST_FISH.getMessage().getLegacyMessage();
+            return ConfigMessage.PLACEHOLDER_SIZE_DURING_MOST_FISH.getMessage().getLegacyMessage(null);
         }
 
         CompetitionEntry entry = fetchEntry(activeComp, identifier, PREFIX_LENGTH);
         if (entry == null) {
-            return ConfigMessage.PLACEHOLDER_NO_SIZE_IN_PLACE.getMessage().getLegacyMessage();
+            return ConfigMessage.PLACEHOLDER_NO_SIZE_IN_PLACE.getMessage().getLegacyMessage(null);
         }
         return String.valueOf(FishUtils.roundDouble(entry.getValue(), 1));
     }

@@ -47,22 +47,14 @@ public abstract class EMFMessage {
 
     public abstract void setUnderlying(@NotNull ComponentMessage message);
 
+    public abstract ComponentMessage processPlaceholders(@Nullable OfflinePlayer player);
+
     public final void send(@NotNull Audience target) {
         if (getUnderlying().isEmpty()) {
             return;
         }
-
-        if (target instanceof Player player) {
-            OfflinePlayer relevant = relevantPlayer == null ? player : relevantPlayer;
-            getUnderlying().replace("{player}", relevant.getName())
-                .parsePlaceholderAPI(relevant)
-                .send(player);
-            return;
-        }
-        String name = FishUtils.getPlayerName(relevantPlayer);
-        getUnderlying().replace("{player}", name)
-            .parsePlaceholderAPI(relevantPlayer)
-            .send(target);
+        OfflinePlayer player = (target instanceof Player p) ? p : relevantPlayer;
+        processPlaceholders(player).send(target);
     }
 
     public final void send(@NotNull Collection<? extends Audience> targets) {
@@ -73,19 +65,9 @@ public abstract class EMFMessage {
         if (getUnderlying().isEmpty()) {
             return;
         }
-
-        if (target instanceof Player player) {
-            OfflinePlayer relevant = relevantPlayer == null ? player : relevantPlayer;
-            getUnderlying().messageType(MessageType.ACTION_BAR)
-                .replace("{player}", relevant.getName())
-                .parsePlaceholderAPI(relevant)
-                .send(player);
-            return;
-        }
-        String name = FishUtils.getPlayerName(relevantPlayer);
-        getUnderlying().messageType(MessageType.ACTION_BAR)
-            .replace("{player}", name)
-            .parsePlaceholderAPI(relevantPlayer)
+        OfflinePlayer player = (target instanceof Player p) ? p : relevantPlayer;
+        processPlaceholders(player)
+            .messageType(MessageType.ACTION_BAR)
             .send(target);
     }
 
@@ -105,13 +87,13 @@ public abstract class EMFMessage {
 
     public abstract @NotNull List<Component> getComponentListMessage(@Nullable OfflinePlayer player);
 
-    public abstract @NotNull String getLegacyMessage();
+    public abstract @NotNull String getLegacyMessage(@Nullable OfflinePlayer player);
 
-    public abstract @NotNull List<String> getLegacyListMessage();
+    public abstract @NotNull List<String> getLegacyListMessage(@Nullable OfflinePlayer player);
 
-    public abstract @NotNull String getPlainTextMessage();
+    public abstract @NotNull String getPlainTextMessage(@Nullable OfflinePlayer player);
 
-    public abstract @NotNull List<String> getPlainTextListMessage();
+    public abstract @NotNull List<String> getPlainTextListMessage(@Nullable OfflinePlayer player);
 
     public abstract void formatPlaceholderAPI();
 

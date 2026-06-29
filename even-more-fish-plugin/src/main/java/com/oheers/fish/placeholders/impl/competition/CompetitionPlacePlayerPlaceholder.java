@@ -22,11 +22,11 @@ public class CompetitionPlacePlayerPlaceholder implements EMFPlaceholder {
     public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
-            return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage();
+            return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage(null);
         }
         CompetitionEntry entry = fetchEntry(activeComp, identifier, PREFIX_LENGTH);
         if (entry == null) {
-            return ConfigMessage.PLACEHOLDER_NO_PLAYER_IN_PLACE.getMessage().getLegacyMessage();
+            return ConfigMessage.PLACEHOLDER_NO_PLAYER_IN_PLACE.getMessage().getLegacyMessage(null);
         }
         return FishUtils.getPlayerName(entry.getPlayer());
     }

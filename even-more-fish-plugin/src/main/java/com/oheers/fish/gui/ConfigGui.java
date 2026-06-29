@@ -91,7 +91,7 @@ public class ConfigGui {
         String[] layout = this.config.getStringList("layout").stream().limit(6).toArray(String[]::new);
         InventoryGui gui = new InventoryGui(
             EvenMoreFish.getInstance(),
-            title == null ? null : EMFSingleMessage.fromString(title).getLegacyMessage(),
+            title == null ? null : EMFSingleMessage.fromString(title).getLegacyMessage(player),
             layout
         );
         loadFiller(gui, this.config);

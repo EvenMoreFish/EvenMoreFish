@@ -1,5 +1,6 @@
 package com.oheers.fish.messages;
 
+import com.oheers.fish.FishUtils;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -45,6 +46,13 @@ public class EMFListMessage extends EMFMessage {
             // Should never happen.
             return;
         }
+    }
+
+    @Override
+    public ComponentListMessage processPlaceholders(@Nullable OfflinePlayer player) {
+        OfflinePlayer relevant = Optional.ofNullable(player).orElse(relevantPlayer);
+        String name = Optional.ofNullable(FishUtils.getPlayerName(relevant)).orElse("N/A");
+        return underlying.parsePlaceholderAPI(relevant).replace("{player}", name);
     }
 
     // Factory methods
@@ -99,30 +107,27 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public @NotNull List<Component> getComponentListMessage(@Nullable OfflinePlayer player) {
-        OfflinePlayer relevant = relevantPlayer == null ? player : relevantPlayer;
-        return underlying.parsePlaceholderAPI(relevant)
-            .replace("{player}", Optional.ofNullable(relevant).map(OfflinePlayer::getName).orElse("N/A"))
-            .get();
+        return processPlaceholders(player).get();
     }
 
     @Override
-    public @NotNull String getLegacyMessage() {
-        return String.join("\n", underlying.getAsLegacy());
+    public @NotNull String getLegacyMessage(@Nullable OfflinePlayer player) {
+        return String.join("\n", getLegacyListMessage(player));
     }
 
     @Override
-    public @NotNull List<String> getLegacyListMessage() {
-        return underlying.getAsLegacy();
+    public @NotNull List<String> getLegacyListMessage(@Nullable OfflinePlayer player) {
+        return processPlaceholders(player).getAsLegacy();
     }
 
     @Override
-    public @NotNull String getPlainTextMessage() {
-        return String.join("\n", underlying.getAsPlainText());
+    public @NotNull String getPlainTextMessage(@Nullable OfflinePlayer player) {
+        return String.join("\n", getPlainTextListMessage(player));
     }
 
     @Override
-    public @NotNull List<String> getPlainTextListMessage() {
-        return underlying.getAsPlainText();
+    public @NotNull List<String> getPlainTextListMessage(@Nullable OfflinePlayer player) {
+        return processPlaceholders(player).getAsPlainText();
     }
 
     @Override

@@ -21,8 +21,8 @@ public class CustomFishingStatusPlaceholder implements EMFPlaceholder {
             return null;
         }
         return EvenMoreFish.getInstance().getToggle().isCustomFishingDisabled(online)
-            ? ConfigMessage.CUSTOM_FISHING_DISABLED.getMessage().getLegacyMessage()
-            : ConfigMessage.CUSTOM_FISHING_ENABLED.getMessage().getLegacyMessage();
+            ? ConfigMessage.CUSTOM_FISHING_DISABLED.getMessage().getLegacyMessage(null)
+            : ConfigMessage.CUSTOM_FISHING_ENABLED.getMessage().getLegacyMessage(null);
     }
 
 }
