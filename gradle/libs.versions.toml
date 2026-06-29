@@ -4,10 +4,10 @@ worldedit = "7.3.0"
 redprotect = "7.7.3"
 flyway = "12.2.0"
 jdbi = "3.53.0"
-junit = "6.1.0"
+junit = "6.1.1"
 craftengine = "0.0.67.11"
 
-shadow = "9.4.2"
+shadow = "9.4.3"
 plugin-yml = "0.9.0"
 grgit = "5.3.3"
 jooq-plugin = "9.0"
@@ -108,7 +108,7 @@ flyway = ["flyway-core", "flyway-mysql"]
 connectors = ["connectors-mysql", "connectors-sqlite"]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "9.4.2" }
+shadow = { id = "com.gradleup.shadow", version = "9.4.3" }
 plugin-yml = { id = "de.eldoria.plugin-yml.bukkit", version.ref = "plugin-yml" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
 sonar = { id = "org.sonarqube", version.ref = "sonar" }
