@@ -19,8 +19,11 @@ import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.permissions.UserPerms;
 import com.oheers.fish.selling.SellHelper;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import org.bukkit.entity.Player;
+
+import java.util.Objects;
 
 import static com.oheers.fish.commands.MainCommandProvider.sendHelpMessage;
 
@@ -163,9 +166,19 @@ public class MainCommand {
         String name = MainConfig.getInstance().getSellAllSubCommandName();
         return new CommandAPICommand(name)
             .withPermission(UserPerms.SELL_ALL)
+            .withArguments(new EntitySelectorArgument.OnePlayer("target").setOptional(false))
             .executesPlayer(info -> {
                 Player player = info.sender();
                 if (CommandUtils.isEconomyEnabled(player)) {
+                    new SellHelper(player.getInventory(), player).sell();
+                }
+            })
+            .executes(info -> {
+                if (!info.sender().hasPermission(AdminPerms.ADMIN)) {
+                    return;
+                }
+                Player player = Objects.requireNonNull(info.args().getUnchecked("target"));
+                if (CommandUtils.isEconomyEnabled(info.sender())) {
                     new SellHelper(player.getInventory(), player).sell();
                 }
             });
