@@ -10,6 +10,7 @@ import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.MainCommandProvider;
 import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.subcommand.JournalSubcommand;
+import com.oheers.fish.commands.main.subcommand.SellAllSubcommand;
 import com.oheers.fish.commands.main.subcommand.ShopSubcommand;
 import com.oheers.fish.commands.main.subcommand.ToggleSubcommand;
 import com.oheers.fish.competition.Competition;
@@ -130,15 +131,7 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
 
     @Override
     public @NotNull ArgumentBuilder<CommandSourceStack, ?> sellAll() {
-        return Commands.literal(sellAllName())
-            .requires(stack -> stack.getSender().hasPermission(UserPerms.SELL_ALL))
-            .executes(ctx -> {
-                Player player = BrigCommandUtils.requirePlayer(ctx);
-                if (CommandUtils.isEconomyEnabled(player)) {
-                    new SellHelper(player.getInventory(), player).sell();
-                }
-                return 1;
-            });
+        return new SellAllSubcommand(sellAllName()).get();
     }
 
     @Override
