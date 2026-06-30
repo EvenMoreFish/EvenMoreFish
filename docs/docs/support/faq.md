@@ -56,6 +56,10 @@ See [Weights](/docs/features/weights)
 
 See https://evenmorefish.github.io/EvenMoreFish/docs/category/addons
 
+## How do I use ItemsAdder emojis for my rarities?
+
+You need to get the Unicode value of your emoji via /iaemoji, and paste it into your rarity as the display name.
+
 ## There is something missing in the documentation! Or there is a mistake!
 
-See [Contributing to the documentation](./contribute-docs.mdx)
+Open an issue on GitHub, or see [Contributing to the documentation](./contribute-docs.mdx)
