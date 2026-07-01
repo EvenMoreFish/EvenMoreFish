@@ -64,7 +64,6 @@ public class EMFVersionLoader {
         } else {
             throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
         }
-        ServerBuildInfo
     }
 
     private URLClassLoader getClassLoader(ClassLoader parent) {
