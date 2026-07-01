@@ -1,19 +1,19 @@
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+
 plugins {
     `java-library`
     `maven-publish`
     `jvm-test-suite`
-    //alias(libs.plugins.plugin.yml)
-    //alias(libs.plugins.shadow)
-    //alias(libs.plugins.grgit)
     alias(libs.plugins.sonar)
-    //id("org.evenmorefish.fish.shadow-conventions")
+    id("de.eldoria.plugin-yml.bukkit")
+    id("org.evenmorefish.fish.shadow-conventions")
     id("org.evenmorefish.fish.publishing-conventions")
 }
 
+extra["plugin"] = true
+
 group = "com.oheers.evenmorefish"
 version = properties["project-version"] as String
-
-extra["variant"] = "core"
 
 description = "A fishing extension bringing an exciting new experience to fishing."
 
@@ -27,7 +27,6 @@ java {
 
 dependencies {
     api(project(":even-more-fish-api"))
-
 
     compileOnly(libs.paper.api) {
         version {
@@ -86,7 +85,143 @@ dependencies {
     compileOnly(libs.annotations)
     compileOnly(libs.guava)
 
+    library(libs.bundles.flyway) {
+        exclude("org.xerial", "sqlite-jdbc")
+        exclude("com.mysql", "mysql-connector-j")
+    }
+    library(libs.friendlyid)
+    library(libs.maven.artifact)
+    library(libs.annotations)
+    library(libs.guava)
+
+    library(libs.boostedyaml)
     compileOnlyApi(libs.boostedyaml)
+
+    library(libs.bundles.connectors)
+
+    // TODO remove when 1.20 is dropped...
+    implementation(libs.commandsapi.bukkit)
+}
+
+bukkit {
+    name = "EvenMoreFish"
+    authors = listOf(
+        "Oheers",
+        "FireML",
+        "sarhatabaot"
+    )
+    main = "com.oheers.fish.EvenMoreFish"
+    version = project.version.toString()
+    description = "A fishing extension bringing an exciting new experience to fishing."
+    website = "https://github.com/EvenMoreFish/EvenMoreFish"
+    apiVersion = "1.20"
+    foliaSupported = true
+
+    softDepend = listOf(
+        "AuraSkills",
+        "Denizen",
+        "EcoItems",
+        "GriefPrevention",
+        "HeadDatabase",
+        "ItemsAdder",
+        "mcMMO",
+        "Nexo",
+        "Oraxen",
+        "PlayerPoints",
+        "PlaceholderAPI",
+        "RedProtect",
+        "Vault",
+        "WorldGuard",
+        // VanishChecker dependencies.
+        "Essentials",
+        "CMI",
+        "SayanVanish",
+        "AdvancedVanish"
+    )
+    loadBefore = listOf("AntiAC")
+
+    permissions {
+        register("emf.*") {
+            children = listOf(
+                "emf.admin",
+                "emf.user"
+            )
+        }
+
+        register("emf.admin") {
+            children = listOf(
+                "emf.admin.update.notify",
+                "emf.admin.migrate"
+            )
+        }
+
+        register("emf.admin.update.notify") {
+            description = "Allows users to be notified about updates."
+        }
+
+        register("emf.admin.migrate") {
+            description = "Allows users to use the migrate command."
+        }
+
+        register("emf.user") {
+            children = listOf(
+                "emf.toggle",
+                "emf.top",
+                "emf.shop",
+                "emf.use_rod",
+                "emf.sellall",
+                "emf.help",
+                "emf.next",
+                "emf.applybaits",
+                "emf.journal"
+            )
+        }
+
+        register("emf.applybaits") {
+            description = "Allows users to apply baits to rods."
+        }
+
+        register("emf.journal") {
+            description = "Allows access to the fish journal."
+        }
+
+        register("emf.sellall") {
+            description = "Allows users to use sellall."
+        }
+        register("emf.toggle") {
+            description = "Allows users to toggle emf."
+            children = listOf(
+                "emf.toggle.fishing",
+                "emf.toggle.bossbar",
+                "emf.toggle.catchmessage"
+            )
+        }
+        register("emf.toggle.fishing")
+        register("emf.toggle.bossbar")
+        register("emf.toggle.catchmessage")
+
+        register("emf.top") {
+            description = "Allows users to use /emf top."
+        }
+
+        register("emf.shop") {
+            description = "Allows users to use /emf shop."
+        }
+
+        register("emf.use_rod") {
+            description = "Allows users to use emf rods."
+        }
+
+        register("emf.next") {
+            description = "Allows users to see when the next competition will be."
+        }
+
+        register("emf.help") {
+            description = "Allows users to see the help messages."
+            default = BukkitPluginDescription.Permission.Default.TRUE
+        }
+
+    }
 }
 
 
@@ -115,10 +250,26 @@ val copyAddons by tasks.registering(Copy::class) {
     into(file("src/main/resources/addons"))
 }
 
+val copyVersions by tasks.registering(Copy::class) {
+    dependsOn(
+        ":versions:1-20:build",
+        ":versions:1-21:build",
+        ":versions:26-1:build",
+        ":versions:26-2:build"
+    )
+
+    from(project(":versions:1-20").layout.buildDirectory.dir("libs"))
+    from(project(":versions:1-21").layout.buildDirectory.dir("libs"))
+    from(project(":versions:26-1").layout.buildDirectory.dir("libs"))
+    from(project(":versions:26-2").layout.buildDirectory.dir("libs"))
+    into(file("src/main/resources/versions"))
+}
+
 
 tasks {
     processResources {
         dependsOn(copyAddons)
+        dependsOn(copyVersions)
     }
 
     clean {
@@ -128,6 +279,10 @@ tasks {
                 return@doFirst
 
             for (file in File(project.projectDir, "src/main/resources/addons").listFiles()!!) {
+                file.delete()
+            }
+
+            for (file in File(project.projectDir, "src/main/resources/versions").listFiles()!!) {
                 file.delete()
             }
         }

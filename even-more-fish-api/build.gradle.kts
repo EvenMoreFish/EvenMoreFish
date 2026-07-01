@@ -1,7 +1,5 @@
 plugins {
-    id("org.evenmorefish.fish.java-conventions")
     id("org.evenmorefish.fish.publishing-conventions")
-
     `java-library`
 }
 
