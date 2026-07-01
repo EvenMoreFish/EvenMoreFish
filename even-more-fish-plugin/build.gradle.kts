@@ -10,10 +10,11 @@ plugins {
     `jvm-test-suite`
     alias(libs.plugins.sonar)
     id("de.eldoria.plugin-yml.bukkit")
-    id("com.gradleup.shadow")
-    id("org.ajoberstar.grgit")
+    id("org.evenmorefish.fish.shadow-conventions")
     id("org.evenmorefish.fish.publishing-conventions")
 }
+
+extra["plugin"] = true
 
 group = "com.oheers.evenmorefish"
 version = properties["project-version"] as String
@@ -30,7 +31,6 @@ java {
 
 dependencies {
     api(project(":even-more-fish-api"))
-
 
     compileOnly(libs.paper.api) {
         version {
@@ -257,51 +257,13 @@ val copyVersions by tasks.registering(Copy::class) {
         ":versions:26-2:build"
     )
 
-    from(project(":versions:26-2").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-1").layout.buildDirectory.dir("libs"))
+    from(project(":versions:26-2").layout.buildDirectory.dir("libs"))
     into(file("src/main/resources/versions"))
 }
 
 
 tasks {
-    jar {
-        enabled = false
-    }
-    shadowJar {
-        val buildNumberOrDate = getBuildNumberOrDate()
-        val variant: String = project.findProperty("variant")?.toString() ?: "core"
-        manifest {
-            attributes["Specification-Title"] = "EvenMoreFish"
-            attributes["Specification-Version"] = project.version
-            attributes["Implementation-Title"] = grgit.branch.current().name
-            attributes["Implementation-Version"] = buildNumberOrDate
-            attributes["Database-Baseline-Version"] = "8.0"
-            attributes["Plugin-Variant"] = variant
-        }
-
-        minimize()
-
-        exclude("LICENSE")
-        exclude("META-INF/**")
-
-        if (buildNumberOrDate == "RELEASE") {
-            archiveFileName.set("EvenMoreFish-${project.version}.jar")
-        } else {
-            archiveFileName.set("EvenMoreFish-${project.version}-${buildNumberOrDate}.jar")
-        }
-
-        archiveClassifier.set("shadow")
-
-        relocate("de.tr7zw.changeme.nbtapi", "com.oheers.fish.utils.nbtapi")
-        relocate("org.bstats", "com.oheers.fish.libs.bstats")
-        relocate("com.github.Anon8281.universalScheduler", "com.oheers.fish.libs.universalScheduler")
-        relocate("de.themoep.inventorygui", "com.oheers.fish.libs.inventorygui")
-        relocate("uk.firedev.vanishchecker", "com.oheers.fish.libs.vanishchecker")
-        relocate("uk.firedev.messagelib", "com.oheers.fish.libs.messagelib")
-        relocate("org.jooq", "com.oheers.fish.libs.jooq")
-        relocate("com.zaxxer", "com.oheers.fish.libs.hikaricp")
-    }
-
     processResources {
         dependsOn(copyAddons)
         dependsOn(copyVersions)
@@ -370,23 +332,6 @@ publishing {
             from(components["java"])
         }
     }
-}
-
-private fun getBuildNumberOrDate(): String? {
-    val currentBranch = grgit.branch.current().name
-    if (currentBranch.equals("head", ignoreCase = true) || currentBranch.equals("master", ignoreCase = true)) {
-        val buildNumber: String? by project
-        if (buildNumber == null)
-            return "RELEASE"
-
-        return buildNumber
-    }
-
-    val time = DateTimeFormatter.ofPattern("yyyyMMdd-HHmm", Locale.ENGLISH)
-        .withZone(ZoneId.systemDefault())
-        .format(Instant.now())
-
-    return time
 }
 
 

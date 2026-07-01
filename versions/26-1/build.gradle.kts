@@ -1,5 +1,6 @@
 plugins {
     id("java-library")
+    id("org.evenmorefish.fish.shadow-conventions")
 }
 
 dependencies {
