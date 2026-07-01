@@ -1,5 +1,5 @@
 plugins {
-    id("org.evenmorefish.fish.java-conventions")
+    id("org.evenmorefish.fish.addon-conventions")
     id("com.oheers.evenmorefish.emf-addon")
 }
 
