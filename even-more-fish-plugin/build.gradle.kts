@@ -284,9 +284,9 @@ tasks {
         exclude("META-INF/**")
 
         if (buildNumberOrDate == "RELEASE") {
-            archiveFileName.set("even-more-fish-${project.version}.jar")
+            archiveFileName.set("EvenMoreFish-${project.version}.jar")
         } else {
-            archiveFileName.set("even-more-fish-${project.version}-${buildNumberOrDate}.jar")
+            archiveFileName.set("EvenMoreFish-${project.version}-${buildNumberOrDate}.jar")
         }
 
         archiveClassifier.set("shadow")
