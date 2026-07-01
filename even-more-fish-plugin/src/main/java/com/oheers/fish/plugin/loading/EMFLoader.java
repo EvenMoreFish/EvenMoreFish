@@ -48,7 +48,7 @@ public class EMFLoader {
      */
     private EMFVersionProvider fetchVersion() {
         try  {
-            Class<?> clazz = jar.loadClass("com.oheers.fish.EMFModule");
+            Class<?> clazz = jar.loadClass("com.oheers.fish.EMFVersion");
             return (EMFVersionProvider) clazz.getDeclaredConstructor(EMFPlugin.class).newInstance(plugin);
         } catch (Exception exception) {
             throw new RuntimeException("Failed to load EvenMoreFish", exception);

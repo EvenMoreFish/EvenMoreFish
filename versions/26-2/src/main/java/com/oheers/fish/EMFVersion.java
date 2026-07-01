@@ -24,9 +24,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class EMFModule extends EMFVersionProvider {
+public class EMFVersion extends EMFVersionProvider {
 
-    public EMFModule(@NotNull EMFPlugin plugin) {
+    public EMFVersion(@NotNull EMFPlugin plugin) {
         super(plugin);
     }
 
