@@ -11,10 +11,20 @@ import java.util.logging.Level;
 
 public abstract class EMFPlugin extends JavaPlugin {
 
-    protected EMFPlugin() {}
+    private static EMFPlugin instance;
+
+    protected EMFPlugin() {
+        if (instance != null) {
+            throw new UnsupportedOperationException("EMFPlugin has already been assigned!");
+        }
+        instance = this;
+    }
 
     public static @NotNull EMFPlugin getInstance() {
-        return JavaPlugin.getPlugin(EMFPlugin.class);
+        if (instance == null) {
+            throw new IllegalStateException("EMFPlugin not found. This should not happen!");
+        }
+        return instance;
     }
 
     public void debug(final String message) {

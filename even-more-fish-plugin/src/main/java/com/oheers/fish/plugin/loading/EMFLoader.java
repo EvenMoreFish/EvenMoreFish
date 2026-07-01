@@ -55,10 +55,8 @@ public class EMFLoader {
         }
     }
 
-    private URL getURL() {
+    private URL getURL(ClassLoader classLoader) {
         String minecraftVersion = Bukkit.getMinecraftVersion();
-        System.out.println(minecraftVersion);
-        ClassLoader classLoader = getClass().getClassLoader();
         if (minecraftVersion.startsWith("1.20")) {
             return classLoader.getResource("versions/1-20.jar");
         } else if (minecraftVersion.startsWith("1.21")) {
@@ -73,7 +71,7 @@ public class EMFLoader {
     }
 
     private URLClassLoader getClassLoader(ClassLoader parent) {
-        try (InputStream is = getURL().openStream()) {
+        try (InputStream is = getURL(parent).openStream()) {
             File file = new File(plugin.getDataFolder(), Bukkit.getMinecraftVersion() + ".jar");
             file.deleteOnExit();
             Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
