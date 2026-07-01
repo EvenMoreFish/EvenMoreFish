@@ -1,0 +1,59 @@
+---
+title: DimensionFishing API
+sidebar_position: 4
+description: Maven, Gradle
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## CodeMC
+
+The plugin's API is available via CodeMC's Maven Repository. To add it to your build tool, follow the examples below:
+
+<Tabs>
+<TabItem value="gradle" label="Gradle (Kotlin)">
+
+```kotlin title="build.gradle.kts"
+repositories {
+    maven("https://repo.codemc.io/repository/EvenMoreFish/")
+}
+
+// Note: The version shown here may not be the latest. Make sure to check the latest version before using!
+dependencies {
+    compileOnly("org.evenmorefish:DimensionFishing:1.0")
+}
+```
+
+</TabItem>
+<TabItem value="maven" label="Maven">
+
+```xml title="pom.xml"
+<repositories>
+    <repository>
+        <id>evenmorefish</id>
+        <url>https://repo.codemc.io/repository/EvenMoreFish</url>
+    </repository>
+</repositories>
+
+<!-- Note: The version shown here may not be the latest. Make sure to check the latest version before using! -->
+<dependencies>
+    <dependency>
+        <groupId>org.evenmorefish</groupId>
+        <artifactId>DimensionFishing</artifactId>
+        <version>1.0</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
+```
+
+</TabItem>
+</Tabs>
+
+## Events
+
+DimensionFishing provides two events:
+- LavaFishCaughtEvent
+- VoidFishCaughtEvent
+
+Both events provide the `FishHook`, `Player`, and `ArmorStand` the hook is attached to via the `TrackedHook` object. You can manually handle the rewards from there.
