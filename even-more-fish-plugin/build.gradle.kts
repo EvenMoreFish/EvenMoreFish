@@ -1,17 +1,22 @@
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+
 plugins {
     `java-library`
     `maven-publish`
     `jvm-test-suite`
     alias(libs.plugins.sonar)
-    id("org.evenmorefish.fish.shadow-conventions")
+    id("de.eldoria.plugin-yml.bukkit")
+    id("com.gradleup.shadow")
+    id("org.ajoberstar.grgit")
     id("org.evenmorefish.fish.publishing-conventions")
-    id("org.evenmorefish.fish.plugin-yml-conventions")
 }
 
 group = "com.oheers.evenmorefish"
 version = properties["project-version"] as String
-
-extra["variant"] = "core"
 
 description = "A fishing extension bringing an exciting new experience to fishing."
 
@@ -99,6 +104,127 @@ dependencies {
     library(libs.bundles.connectors)
 }
 
+bukkit {
+    name = "EvenMoreFish"
+    authors = listOf(
+        "Oheers",
+        "FireML",
+        "sarhatabaot"
+    )
+    main = "com.oheers.fish.EvenMoreFish"
+    version = project.version.toString()
+    description = "A fishing extension bringing an exciting new experience to fishing."
+    website = "https://github.com/EvenMoreFish/EvenMoreFish"
+    apiVersion = "1.20"
+    foliaSupported = true
+
+    softDepend = listOf(
+        "AuraSkills",
+        "Denizen",
+        "EcoItems",
+        "GriefPrevention",
+        "HeadDatabase",
+        "ItemsAdder",
+        "mcMMO",
+        "Nexo",
+        "Oraxen",
+        "PlayerPoints",
+        "PlaceholderAPI",
+        "RedProtect",
+        "Vault",
+        "WorldGuard",
+        // VanishChecker dependencies.
+        "Essentials",
+        "CMI",
+        "SayanVanish",
+        "AdvancedVanish"
+    )
+    loadBefore = listOf("AntiAC")
+
+    permissions {
+        register("emf.*") {
+            children = listOf(
+                "emf.admin",
+                "emf.user"
+            )
+        }
+
+        register("emf.admin") {
+            children = listOf(
+                "emf.admin.update.notify",
+                "emf.admin.migrate"
+            )
+        }
+
+        register("emf.admin.update.notify") {
+            description = "Allows users to be notified about updates."
+        }
+
+        register("emf.admin.migrate") {
+            description = "Allows users to use the migrate command."
+        }
+
+        register("emf.user") {
+            children = listOf(
+                "emf.toggle",
+                "emf.top",
+                "emf.shop",
+                "emf.use_rod",
+                "emf.sellall",
+                "emf.help",
+                "emf.next",
+                "emf.applybaits",
+                "emf.journal"
+            )
+        }
+
+        register("emf.applybaits") {
+            description = "Allows users to apply baits to rods."
+        }
+
+        register("emf.journal") {
+            description = "Allows access to the fish journal."
+        }
+
+        register("emf.sellall") {
+            description = "Allows users to use sellall."
+        }
+        register("emf.toggle") {
+            description = "Allows users to toggle emf."
+            children = listOf(
+                "emf.toggle.fishing",
+                "emf.toggle.bossbar",
+                "emf.toggle.catchmessage"
+            )
+        }
+        register("emf.toggle.fishing")
+        register("emf.toggle.bossbar")
+        register("emf.toggle.catchmessage")
+
+        register("emf.top") {
+            description = "Allows users to use /emf top."
+        }
+
+        register("emf.shop") {
+            description = "Allows users to use /emf shop."
+        }
+
+        register("emf.use_rod") {
+            description = "Allows users to use emf rods."
+        }
+
+        register("emf.next") {
+            description = "Allows users to see when the next competition will be."
+        }
+
+        register("emf.help") {
+            description = "Allows users to see the help messages."
+            default = BukkitPluginDescription.Permission.Default.TRUE
+        }
+
+    }
+}
+
 
 sonar {
     properties {
@@ -137,6 +263,44 @@ val copyVersions by tasks.registering(Copy::class) {
 
 
 tasks {
+    jar {
+        enabled = false
+    }
+    shadowJar {
+        val buildNumberOrDate = getBuildNumberOrDate()
+        val variant: String = project.findProperty("variant")?.toString() ?: "core"
+        manifest {
+            attributes["Specification-Title"] = "EvenMoreFish"
+            attributes["Specification-Version"] = project.version
+            attributes["Implementation-Title"] = grgit.branch.current().name
+            attributes["Implementation-Version"] = buildNumberOrDate
+            attributes["Database-Baseline-Version"] = "8.0"
+            attributes["Plugin-Variant"] = variant
+        }
+
+        minimize()
+
+        exclude("LICENSE")
+        exclude("META-INF/**")
+
+        if (buildNumberOrDate == "RELEASE") {
+            archiveFileName.set("even-more-fish-${project.version}.jar")
+        } else {
+            archiveFileName.set("even-more-fish-${project.version}-${buildNumberOrDate}.jar")
+        }
+
+        archiveClassifier.set("shadow")
+
+        relocate("de.tr7zw.changeme.nbtapi", "com.oheers.fish.utils.nbtapi")
+        relocate("org.bstats", "com.oheers.fish.libs.bstats")
+        relocate("com.github.Anon8281.universalScheduler", "com.oheers.fish.libs.universalScheduler")
+        relocate("de.themoep.inventorygui", "com.oheers.fish.libs.inventorygui")
+        relocate("uk.firedev.vanishchecker", "com.oheers.fish.libs.vanishchecker")
+        relocate("uk.firedev.messagelib", "com.oheers.fish.libs.messagelib")
+        relocate("org.jooq", "com.oheers.fish.libs.jooq")
+        relocate("com.zaxxer", "com.oheers.fish.libs.hikaricp")
+    }
+
     processResources {
         dependsOn(copyAddons)
         dependsOn(copyVersions)
@@ -205,6 +369,23 @@ publishing {
             from(components["java"])
         }
     }
+}
+
+private fun getBuildNumberOrDate(): String? {
+    val currentBranch = grgit.branch.current().name
+    if (currentBranch.equals("head", ignoreCase = true) || currentBranch.equals("master", ignoreCase = true)) {
+        val buildNumber: String? by project
+        if (buildNumber == null)
+            return "RELEASE"
+
+        return buildNumber
+    }
+
+    val time = DateTimeFormatter.ofPattern("yyyyMMdd-HHmm", Locale.ENGLISH)
+        .withZone(ZoneId.systemDefault())
+        .format(Instant.now())
+
+    return time
 }
 
 
