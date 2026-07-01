@@ -1,6 +1,5 @@
 package com.oheers.fish.plugin.loading;
 
-import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
@@ -11,21 +10,18 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 
 /**
  * Uses reflection and classloaders to load our version-dependent jar files.
  */
-public class EMFLoader {
+public class EMFVersionLoader {
 
     private final EMFPlugin plugin;
     private final URLClassLoader jar;
     private final EMFVersionProvider version;
 
-    public EMFLoader(@NotNull EMFPlugin plugin, @NotNull ClassLoader parent) {
+    public EMFVersionLoader(@NotNull EMFPlugin plugin, @NotNull ClassLoader parent) {
         this.plugin = plugin;
         this.jar = getClassLoader(parent);
         this.version = fetchVersion();
@@ -68,6 +64,7 @@ public class EMFLoader {
         } else {
             throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
         }
+        ServerBuildInfo
     }
 
     private URLClassLoader getClassLoader(ClassLoader parent) {

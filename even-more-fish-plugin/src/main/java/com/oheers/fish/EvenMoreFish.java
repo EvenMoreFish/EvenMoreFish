@@ -8,7 +8,7 @@ import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.events.EMFPluginReloadEvent;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.plugin.EMFPlugin;
-import com.oheers.fish.plugin.loading.EMFLoader;
+import com.oheers.fish.plugin.loading.EMFVersionLoader;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.baits.manager.BaitManager;
@@ -48,7 +48,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class EvenMoreFish extends EMFPlugin {
 
-    private final EMFLoader loader;
+    private final EMFVersionLoader loader;
     private final EMFVersionProvider versionProvider;
 
     private final Random random = ThreadLocalRandom.current();
@@ -87,7 +87,7 @@ public class EvenMoreFish extends EMFPlugin {
     }
 
     public EvenMoreFish() {
-        this.loader = new EMFLoader(this, getClassLoader());
+        this.loader = new EMFVersionLoader(this, getClassLoader());
         this.versionProvider = loader.getVersionProvider();
         this.toggle = new Toggle(this);
     }
