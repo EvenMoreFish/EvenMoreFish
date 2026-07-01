@@ -181,35 +181,5 @@ class DatabaseTest {
         }
     }
 
-    public static final class TestPlugin extends EvenMoreFish {
-        @Override
-        public void loadCommands() {
-        }
-
-        @Override
-        public void enableCommands() {
-        }
-
-        @Override
-        public void registerCommands() {
-        }
-
-        @Override
-        public void resendCommands() {
-        }
-
-        @Override
-        public void disableCommands() {
-        }
-
-        @Override
-        public @NonNull ItemStack getSkullFromUUID(@NonNull UUID uuid) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public @NonNull ItemStack getSkullFromBase64(@NonNull String base64) {
-            throw new UnsupportedOperationException();
-        }
-    }
+    public static final class TestPlugin extends EvenMoreFish {}
 }

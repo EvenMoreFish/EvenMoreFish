@@ -8,6 +8,8 @@ import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.events.EMFPluginReloadEvent;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.plugin.EMFPlugin;
+import com.oheers.fish.plugin.loading.EMFLoader;
+import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.competition.AutoRunner;
@@ -28,14 +30,11 @@ import com.oheers.fish.plugin.PluginDataManager;
 import com.oheers.fish.update.UpdateChecker;
 import de.themoep.inventorygui.InventoryGui;
 import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.vanishchecker.VanishChecker;
@@ -47,7 +46,11 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class EvenMoreFish extends EMFPlugin {
+public class EvenMoreFish extends EMFPlugin {
+
+    private final EMFLoader loader;
+    private final EMFVersionProvider versionProvider;
+
     private final Random random = ThreadLocalRandom.current();
     private final Toggle toggle;
 
@@ -84,6 +87,8 @@ public abstract class EvenMoreFish extends EMFPlugin {
     }
 
     public EvenMoreFish() {
+        this.loader = new EMFLoader(this, getClassLoader());
+        this.versionProvider = loader.getVersionProvider();
         this.toggle = new Toggle(this);
     }
 
@@ -93,23 +98,13 @@ public abstract class EvenMoreFish extends EMFPlugin {
             throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
         }
         instance = this;
-        loadCommands();
+        versionProvider.loadCommands();
+        versionProvider.load();
     }
-
-    /**
-     * Stuff to do onLoad() with commands
-     */
-    public abstract void loadCommands();
-
-    public abstract void enableCommands();
-
-    public abstract void registerCommands();
-
-    public abstract void resendCommands();
 
     @Override
     public void onEnable() {
-        enableCommands();
+        versionProvider.enableCommands();
 
         scheduler = UniversalScheduler.getScheduler(this);
 
@@ -157,7 +152,8 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
         autoRunner.start();
 
-        registerCommands();
+        versionProvider.registerCommands();
+        versionProvider.enable();
 
         // Attempt to resume a competition if the temporary file exists.
         Competition.resumeFromFile();
@@ -165,14 +161,13 @@ public abstract class EvenMoreFish extends EMFPlugin {
         getLogger().info(() -> "EvenMoreFish by Oheers : Enabled");
     }
 
-    public abstract void disableCommands();
-
     @Override
     public void onDisable() {
         // Do this first.
         autoRunner.stop();
 
-        disableCommands();
+        versionProvider.disableCommands();
+        versionProvider.disableCommands();
 
         terminateGuis();
         // Ends the current competition in case the plugin is being disabled when the server will continue running
@@ -191,6 +186,8 @@ public abstract class EvenMoreFish extends EMFPlugin {
         RodManager.getInstance().unload();
         BaitManager.getInstance().unload();
         FishManager.getInstance().unload();
+
+        loader.onDisable();
 
         getLogger().info(() -> "EvenMoreFish by Oheers : Disabled");
     }
@@ -234,7 +231,8 @@ public abstract class EvenMoreFish extends EMFPlugin {
             ConfigMessage.RELOAD_SUCCESS.getMessage().send(sender);
         }
 
-        resendCommands();
+        versionProvider.resendCommands();
+        versionProvider.reload();
 
         // This event is not cancellable.
         new EMFPluginReloadEvent().callEvent();
@@ -246,6 +244,10 @@ public abstract class EvenMoreFish extends EMFPlugin {
 
     public Toggle getToggle() {
         return toggle;
+    }
+
+    public EMFVersionProvider getVersionProvider() {
+        return this.versionProvider;
     }
 
     public boolean isRaritiesCompCheckExempt() {
@@ -302,14 +304,6 @@ public abstract class EvenMoreFish extends EMFPlugin {
     public MetricsManager getMetricsManager() {
         return metricsManager;
     }
-
-    // Can probably be moved somewhere else, but they're here for now.
-
-    @ApiStatus.Internal
-    public abstract @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid);
-
-    @ApiStatus.Internal
-    public abstract @NotNull ItemStack getSkullFromBase64(@NotNull String base64);
 
     @Override
     public @NotNull Component getRewardCatchupMessage() {

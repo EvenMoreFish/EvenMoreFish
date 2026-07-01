@@ -2,12 +2,10 @@ plugins {
     `java-library`
     `maven-publish`
     `jvm-test-suite`
-    //alias(libs.plugins.plugin.yml)
-    //alias(libs.plugins.shadow)
-    //alias(libs.plugins.grgit)
     alias(libs.plugins.sonar)
-    //id("org.evenmorefish.fish.shadow-conventions")
+    id("org.evenmorefish.fish.shadow-conventions")
     id("org.evenmorefish.fish.publishing-conventions")
+    id("org.evenmorefish.fish.plugin-yml-conventions")
 }
 
 group = "com.oheers.evenmorefish"
@@ -86,7 +84,19 @@ dependencies {
     compileOnly(libs.annotations)
     compileOnly(libs.guava)
 
+    library(libs.bundles.flyway) {
+        exclude("org.xerial", "sqlite-jdbc")
+        exclude("com.mysql", "mysql-connector-j")
+    }
+    library(libs.friendlyid)
+    library(libs.maven.artifact)
+    library(libs.annotations)
+    library(libs.guava)
+
+    library(libs.boostedyaml)
     compileOnlyApi(libs.boostedyaml)
+
+    library(libs.bundles.connectors)
 }
 
 
@@ -115,10 +125,21 @@ val copyAddons by tasks.registering(Copy::class) {
     into(file("src/main/resources/addons"))
 }
 
+val copyVersions by tasks.registering(Copy::class) {
+    dependsOn(
+        ":versions:26-2:build"
+    )
+
+    from(project(":versions:26-2").layout.buildDirectory.dir("libs"))
+
+    into(file("src/main/resources/versions"))
+}
+
 
 tasks {
     processResources {
         dependsOn(copyAddons)
+        dependsOn(copyVersions)
     }
 
     clean {
@@ -128,6 +149,10 @@ tasks {
                 return@doFirst
 
             for (file in File(project.projectDir, "src/main/resources/addons").listFiles()!!) {
+                file.delete()
+            }
+
+            for (file in File(project.projectDir, "src/main/resources/versions").listFiles()!!) {
                 file.delete()
             }
         }
