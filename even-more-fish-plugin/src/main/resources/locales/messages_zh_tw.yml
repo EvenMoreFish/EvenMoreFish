@@ -201,11 +201,17 @@ bait-cannot-afford: <white>You cannot afford to purchase that bait. You need {pr
 bait-not-for-sale: <white>That bait is not for sale.
 toggle:
   fishing:
+    no-permission: <white>You cannot toggle custom fish.
     off: <white>你將不再捕捉自訂魚類。
     on: <white>你現在可以捕捉自訂魚類。
   bossbar:
+    no-permission: <white>You cannot toggle competition bossbars.
     off: <white>你將不再看到比賽的 Boss 狀態條。
     on: <white>你現在可以看到比賽的 Boss 狀態條。
+  catch-message:
+    no-permission: <white>You cannot toggle catch messages.
+    off: <white>You will no longer see catch messages.
+    on: <white>You will now see catch messages.
 admin:
   # Opens an /emf shop for another player
   open-fish-shop: <green>為玩家{player}打開了釣魚商店.
@@ -284,4 +290,4 @@ bait:
   unused-slot: <gray>► ? <i>可用欄位
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 13
+version: 14

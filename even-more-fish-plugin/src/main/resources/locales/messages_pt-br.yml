@@ -201,11 +201,17 @@ bait-cannot-afford: <white>You cannot afford to purchase that bait. You need {pr
 bait-not-for-sale: <white>That bait is not for sale.
 toggle:
   fishing:
+    no-permission: <white>You cannot toggle custom fish.
     off: <white>You will no longer catch custom fish.
     on: <white>You will now catch custom fish.
   bossbar:
+    no-permission: <white>You cannot toggle competition bossbars.
     off: <white>You will no longer see competition bossbars.
     on: <white>You will now see competition bossbars.
+  catch-message:
+    no-permission: <white>You cannot toggle catch messages.
+    off: <white>You will no longer see catch messages.
+    on: <white>You will now see catch messages.
 admin:
   # Opens an /emf shop for another player
   open-fish-shop: <reset>Loja aberta para {player}.
@@ -284,4 +290,4 @@ bait:
   unused-slot: <gray>► ? <i>Available Slot
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 13
+version: 14
