@@ -57,15 +57,16 @@ public class EMFLoader {
 
     private URL getURL() {
         String minecraftVersion = Bukkit.getMinecraftVersion();
+        System.out.println(minecraftVersion);
         ClassLoader classLoader = getClass().getClassLoader();
         if (minecraftVersion.startsWith("1.20")) {
-            return classLoader.getResource("versions/1.20.jar");
+            return classLoader.getResource("versions/1-20.jar");
         } else if (minecraftVersion.startsWith("1.21")) {
-            return classLoader.getResource("versions/1.21.jar");
+            return classLoader.getResource("versions/1-21.jar");
         } else if (minecraftVersion.startsWith("26.1")) {
-            return classLoader.getResource("versions/26.1.jar");
+            return classLoader.getResource("versions/26-1.jar");
         } else if (minecraftVersion.startsWith("26.2")) {
-            return classLoader.getResource("versions/26.2.jar");
+            return classLoader.getResource("versions/26-2.jar");
         } else {
             throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
         }
