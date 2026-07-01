@@ -123,7 +123,7 @@ public abstract class Processor<E extends Event> {
 
         if (fish.getRarity().getBroadcastEnabled()) {
             new FishBroadcast(message, player, fish).broadcast();
-        } else {
+        } else if (!EvenMoreFish.getInstance().getToggle().isCatchMessageDisabled(player)) {
             message.send(player);
         }
     }

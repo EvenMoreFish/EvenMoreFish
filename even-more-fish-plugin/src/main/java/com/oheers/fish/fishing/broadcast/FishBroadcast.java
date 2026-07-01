@@ -1,5 +1,7 @@
 package com.oheers.fish.fishing.broadcast;
 
+import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.Toggle;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.fishing.items.Fish;
@@ -23,6 +25,8 @@ public record FishBroadcast(@NotNull EMFMessage message, @NotNull Player player,
         players = filterRarity(players);
         // Process competition settings.
         players = filterCompetition(players);
+        // Process message toggle.
+        players = filterToggled(players);
         players.forEach(message::send);
     }
 
@@ -36,6 +40,11 @@ public record FishBroadcast(@NotNull EMFMessage message, @NotNull Player player,
             players = players.filter(player -> isWithinRange(this.player, player, rangeSquared));
         }
         return players;
+    }
+
+    private Stream<? extends Player> filterToggled(@NotNull Stream<? extends Player> players) {
+        Toggle toggle = EvenMoreFish.getInstance().getToggle();
+        return players.filter(player -> !toggle.isCatchMessageDisabled(player));
     }
 
     private Stream<? extends Player> filterCompetition(@NotNull Stream<? extends Player> players) {

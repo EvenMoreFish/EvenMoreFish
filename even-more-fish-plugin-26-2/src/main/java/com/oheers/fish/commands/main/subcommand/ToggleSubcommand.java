@@ -9,7 +9,6 @@ import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("UnstableApiUsage")
 public class ToggleSubcommand {
 
     private final String name;
@@ -20,18 +19,20 @@ public class ToggleSubcommand {
 
     public ArgumentBuilder<CommandSourceStack, ?> get() {
         return Commands.literal(name)
-            .requires(stack -> stack.getSender().hasPermission(UserPerms.TOGGLE))
+            .requires(stack -> UserPerms.checkTogglePerms(stack.getSender()))
             .executes(ctx -> {
                 Player player = BrigCommandUtils.requirePlayer(ctx);
                 EvenMoreFish.getInstance().getToggle().performFishToggle(player);
                 return 1;
             })
             .then(fishing())
-            .then(bossbar());
+            .then(bossbar())
+            .then(catchMessage());
     }
 
     private ArgumentBuilder<CommandSourceStack, ?> fishing() {
         return Commands.literal("fishing")
+            .requires(stack -> stack.getSender().hasPermission(UserPerms.TOGGLE_FISHING))
             .executes(ctx -> {
                 Player player = BrigCommandUtils.requirePlayer(ctx);
                 EvenMoreFish.getInstance().getToggle().performFishToggle(player);
@@ -41,9 +42,20 @@ public class ToggleSubcommand {
 
     private ArgumentBuilder<CommandSourceStack, ?> bossbar() {
         return Commands.literal("bossbar")
+            .requires(stack -> stack.getSender().hasPermission(UserPerms.TOGGLE_BOSSBAR))
             .executes(ctx -> {
                 Player player = BrigCommandUtils.requirePlayer(ctx);
                 EvenMoreFish.getInstance().getToggle().performBossBarToggle(player);
+                return 1;
+            });
+    }
+
+    private ArgumentBuilder<CommandSourceStack, ?> catchMessage() {
+        return Commands.literal("catchMessage")
+            .requires(stack -> stack.getSender().hasPermission(UserPerms.TOGGLE_CATCH_MESSAGE))
+            .executes(ctx -> {
+                Player player = BrigCommandUtils.requirePlayer(ctx);
+                EvenMoreFish.getInstance().getToggle().performCatchMessageToggle(player);
                 return 1;
             });
     }

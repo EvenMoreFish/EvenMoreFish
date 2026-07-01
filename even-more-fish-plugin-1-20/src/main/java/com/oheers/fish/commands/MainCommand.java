@@ -2,6 +2,7 @@ package com.oheers.fish.commands;
 
 import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.Toggle;
 import com.oheers.fish.commands.arguments.ArgumentHelper;
 import com.oheers.fish.commands.arguments.RarityArgument;
 import com.oheers.fish.competition.Competition;
@@ -80,16 +81,15 @@ public class MainCommand {
     private CommandAPICommand getToggle() {
         String name = MainConfig.getInstance().getToggleSubCommandName();
         return new CommandAPICommand(name)
-            .withPermission(UserPerms.TOGGLE)
-            .withArguments(new MultiLiteralArgument("toggle", "fishing", "bossbar").setOptional(true))
+            .withRequirement(UserPerms::checkTogglePerms)
+            .withArguments(new MultiLiteralArgument("toggle", "fishing", "bossbar", "catchMessage").setOptional(true))
             .executesPlayer(info -> {
+                Toggle toggle = EvenMoreFish.getInstance().getToggle();
                 String toggleType = info.args().getUnchecked("toggle");
-                // Bossbar
-                if ("bossbar".equals(toggleType)) {
-                    EvenMoreFish.getInstance().getToggle().performBossBarToggle(info.sender());
-                // Unspecified, Invalid, or Fishing
-                } else {
-                    EvenMoreFish.getInstance().getToggle().performFishToggle(info.sender());
+                switch (toggleType) {
+                    case "bossbar" -> toggle.performBossBarToggle(info.sender());
+                    case "catchMessage" -> toggle.performCatchMessageToggle(info.sender());
+                    case null, default -> toggle.performFishToggle(info.sender());
                 }
             });
     }

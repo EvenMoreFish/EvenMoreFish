@@ -92,7 +92,15 @@ afterEvaluate {
             }
             register("emf.toggle") {
                 description = "Allows users to toggle emf."
+                children = listOf(
+                    "emf.toggle.fishing",
+                    "emf.toggle.bossbar",
+                    "emf.toggle.catchmessage"
+                )
             }
+            register("emf.toggle.fishing")
+            register("emf.toggle.bossbar")
+            register("emf.toggle.catchmessage")
 
             register("emf.top") {
                 description = "Allows users to use /emf top."

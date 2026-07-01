@@ -3,6 +3,8 @@ package com.oheers.fish.messages;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import net.kyori.adventure.audience.Audience;
+import org.jetbrains.annotations.NotNull;
 import uk.firedev.messagelib.message.ComponentListMessage;
 import uk.firedev.messagelib.message.ComponentMessage;
 import uk.firedev.messagelib.message.ComponentSingleMessage;
@@ -175,8 +177,13 @@ public enum ConfigMessage {
 
     TOGGLE_FISHING_ON(PrefixType.DEFAULT, "toggle.fishing.on"),
     TOGGLE_FISHING_OFF(PrefixType.DEFAULT, "toggle.fishing.off"),
+    TOGGLE_FISHING_NO_PERMISSION(PrefixType.ERROR, "toggle.fishing.no-permission"),
     TOGGLE_BOSSBAR_ON(PrefixType.DEFAULT, "toggle.bossbar.on"),
     TOGGLE_BOSSBAR_OFF(PrefixType.DEFAULT, "toggle.bossbar.off"),
+    TOGGLE_BOSSBAR_NO_PERMISSION(PrefixType.ERROR, "toggle.bossbar.no-permission"),
+    TOGGLE_CATCH_MESSAGE_ON(PrefixType.DEFAULT, "toggle.catch-message.on"),
+    TOGGLE_CATCH_MESSAGE_OFF(PrefixType.DEFAULT, "toggle.catch-message.off"),
+    TOGGLE_CATCH_MESSAGE_NO_PERMISSION(PrefixType.ERROR, "toggle.catch-message.no-permission"),
 
     WORTH_GUI_NAME(PrefixType.NONE, "worth-gui-name"),
     WORTH_GUI_CONFIRM_ALL_BUTTON_NAME(PrefixType.NONE, "confirm-sell-all-gui-name"),
@@ -238,6 +245,10 @@ public enum ConfigMessage {
             Logging.warn("Unknown message type for " + getId() + ". Returning an empty message.");
             return EMFSingleMessage.empty();
         }
+    }
+
+    public void send(@NotNull Audience target) {
+        getMessage().send(target);
     }
 
     private EMFMessage processList(ComponentListMessage list) {
