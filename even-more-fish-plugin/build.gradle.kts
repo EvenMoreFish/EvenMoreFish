@@ -1,8 +1,4 @@
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 plugins {
     `java-library`
@@ -102,6 +98,9 @@ dependencies {
     compileOnlyApi(libs.boostedyaml)
 
     library(libs.bundles.connectors)
+
+    // TODO remove when 1.20 is dropped...
+    implementation(libs.commandsapi.bukkit)
 }
 
 bukkit {
@@ -253,11 +252,13 @@ val copyAddons by tasks.registering(Copy::class) {
 
 val copyVersions by tasks.registering(Copy::class) {
     dependsOn(
+        ":versions:1-20:build",
         ":versions:1-21:build",
         ":versions:26-1:build",
         ":versions:26-2:build"
     )
 
+    from(project(":versions:1-20").layout.buildDirectory.dir("libs"))
     from(project(":versions:1-21").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-1").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-2").layout.buildDirectory.dir("libs"))

@@ -8,9 +8,11 @@ dependencies {
 
     compileOnly(libs.paper.api) {
         version {
-            strictly("26.2.build.+")
+            strictly("1.20.1-R0.1-SNAPSHOT")
         }
     }
+
+    compileOnly(libs.commandsapi.bukkit)
 }
 
 tasks.test {
@@ -19,7 +21,7 @@ tasks.test {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
+        languageVersion.set(JavaLanguageVersion.of(21))
         vendor.set(JvmVendorSpec.ADOPTIUM)
     }
 }

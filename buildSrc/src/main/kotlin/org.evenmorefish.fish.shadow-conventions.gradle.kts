@@ -22,7 +22,9 @@ afterEvaluate {
             attributes["Database-Baseline-Version"] = "8.0"
         }
 
-        minimize()
+        minimize {
+            exclude(dependency("dev.jorel:.*:.*"))
+        }
 
         exclude("LICENSE")
         exclude("META-INF/**")
@@ -45,6 +47,7 @@ afterEvaluate {
         relocate("uk.firedev.messagelib", "com.oheers.fish.libs.messagelib")
         relocate("org.jooq", "com.oheers.fish.libs.jooq")
         relocate("com.zaxxer", "com.oheers.fish.libs.hikaricp")
+        relocate("dev.jorel.commandapi", "com.oheers.fish.libs.commandapi")
     }
     tasks.named<Jar>("jar") {
         enabled = false

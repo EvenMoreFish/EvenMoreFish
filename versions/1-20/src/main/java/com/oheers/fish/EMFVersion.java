@@ -2,22 +2,17 @@ package com.oheers.fish;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
-import com.oheers.fish.commands.admin.AdminCommand;
-import com.oheers.fish.commands.main.MainCommand;
+import com.oheers.fish.commands.AdminCommand;
+import com.oheers.fish.commands.MainCommand;
 import com.oheers.fish.config.MainConfig;
-import com.oheers.fish.items.ItemConfigResolver;
-import com.oheers.fish.items.configs.FireResistantItemConfig;
-import com.oheers.fish.items.configs.HideTooltipItemConfig;
-import com.oheers.fish.items.configs.ItemRarityItemConfig;
-import com.oheers.fish.items.configs.MaxStackSizeItemConfig;
-import com.oheers.fish.items.configs.ModernGlowingItemConfig;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
@@ -32,34 +27,47 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     @Override
-    public void load() {
-        registerItemConfigs();
+    public void enable() {
+        Logging.warn(
+            "After the release of Minecraft 26.3, " +
+                "EvenMoreFish will no longer support 1.20.x servers. " +
+                "We recommend you update to a newer version to keep up to date with bug fixes and new features."
+        );
     }
 
-    private void registerItemConfigs() {
-        ItemConfigResolver inst = ItemConfigResolver.getInstance();
-        inst.setGlowingResolver(ModernGlowingItemConfig::new);
-        inst.setFireResistantResolver(FireResistantItemConfig::new);
-        inst.setHideTooltipResolver(HideTooltipItemConfig::new);
-        inst.setItemRarityResolver(ItemRarityItemConfig::new);
-        inst.setMaxStackSizeResolver(MaxStackSizeItemConfig::new);
-    }
-
-    @SuppressWarnings("UnstableApiUsage")
     @Override
     public void loadCommands() {
-        plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(event -> {
-            event.registrar().register(new MainCommand().get(), MainConfig.getInstance().getMainCommandAliases());
-            if (MainConfig.getInstance().isAdminShortcutCommandEnabled()) {
-                String shortcut = MainConfig.getInstance().getAdminShortcutCommandName();
-                event.registrar().register(new AdminCommand(shortcut).get());
-            }
-        }));
+        CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(plugin)
+            .shouldHookPaperReload(true)
+            .missingExecutorImplementationMessage("You are not able to use this command!");
+        CommandAPI.onLoad(config);
+    }
+
+    @Override
+    public void enableCommands() {
+        CommandAPI.onEnable();
+    }
+
+    @Override
+    public void registerCommands() {
+        new MainCommand().getCommand().register(plugin);
+
+        // Shortcut command for /emf admin
+        if (!MainConfig.getInstance().isAdminShortcutCommandEnabled()) {
+            return;
+        }
+        String adminShortcut = MainConfig.getInstance().getAdminShortcutCommandName();
+        new AdminCommand(adminShortcut).getCommand().register(plugin);
     }
 
     @Override
     public void resendCommands() {
-        Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
+        Bukkit.getOnlinePlayers().forEach(CommandAPI::updateRequirements);
+    }
+
+    @Override
+    public void disableCommands() {
+        CommandAPI.onDisable();
     }
 
     @Override
@@ -94,18 +102,9 @@ public class EMFVersion extends EMFVersionProvider {
     // Ignored Methods
 
     @Override
-    public void enable() {}
+    public void load() {}
 
     @Override
     public void reload() {}
-
-    @Override
-    public void enableCommands() {}
-
-    @Override
-    public void registerCommands() {}
-
-    @Override
-    public void disableCommands() {}
 
 }

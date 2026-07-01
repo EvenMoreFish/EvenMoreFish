@@ -13,13 +13,6 @@ dependencies {
     }
 }
 
-tasks {
-    jar {
-        archiveBaseName.set("26.1")
-        archiveVersion.set("")
-        archiveClassifier.set("")
-    }
-}
 tasks.test {
     useJUnitPlatform()
 }
