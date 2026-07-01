@@ -13,6 +13,7 @@ include(":addons:even-more-fish-addons-moderncmd")
 include(":addons:even-more-fish-addons-crafterfix")
 
 // Versions
+include(":versions:26-1")
 include(":versions:26-2")
 
 // Plugin Stuff

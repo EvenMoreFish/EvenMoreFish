@@ -7,14 +7,14 @@ dependencies {
 
     compileOnly(libs.paper.api) {
         version {
-            strictly("26.2.build.+")
+            strictly("26.1.1.build.+")
         }
     }
 }
 
 tasks {
     jar {
-        archiveBaseName.set("26.2")
+        archiveBaseName.set("26.1")
         archiveVersion.set("")
         archiveClassifier.set("")
     }
