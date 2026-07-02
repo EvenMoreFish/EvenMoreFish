@@ -13,30 +13,31 @@ plugins {
 afterEvaluate {
     tasks.named<ShadowJar>("shadowJar") {
         val buildNumberOrDate = getBuildNumberOrDate()
-        val variant: String = project.findProperty("variant")?.toString() ?: "core"
+
         manifest {
             attributes["Specification-Title"] = "EvenMoreFish"
             attributes["Specification-Version"] = project.version
             attributes["Implementation-Title"] = grgit.branch.current().name
             attributes["Implementation-Version"] = buildNumberOrDate
             attributes["Database-Baseline-Version"] = "8.0"
-            attributes["Plugin-Variant"] = variant
         }
 
-        minimize()
+        minimize {
+            exclude(dependency("dev.jorel:.*:.*"))
+        }
 
         exclude("LICENSE")
         exclude("META-INF/**")
 
-        if (variant == "core") {
-            archiveFileName.set("even-more-fish-plugin-${project.version}.jar")
-        } else if (buildNumberOrDate == "RELEASE") {
-            archiveFileName.set("even-more-fish-${project.version}-${variant}.jar")
-        } else {
-            archiveFileName.set("even-more-fish-${project.version}-${variant}-${buildNumberOrDate}.jar")
+        val plugin: Boolean = (project.findProperty("plugin")?.toString() ?: "false") == "true"
+        if (plugin) {
+            if (buildNumberOrDate == "RELEASE") {
+                archiveFileName.set("EvenMoreFish-${project.version}.jar")
+            } else {
+                archiveFileName.set("EvenMoreFish-${project.version}-${buildNumberOrDate}.jar")
+            }
         }
-
-        archiveClassifier.set("shadow")
+        archiveClassifier.set("")
 
         relocate("de.tr7zw.changeme.nbtapi", "com.oheers.fish.utils.nbtapi")
         relocate("org.bstats", "com.oheers.fish.libs.bstats")
@@ -46,6 +47,7 @@ afterEvaluate {
         relocate("uk.firedev.messagelib", "com.oheers.fish.libs.messagelib")
         relocate("org.jooq", "com.oheers.fish.libs.jooq")
         relocate("com.zaxxer", "com.oheers.fish.libs.hikaricp")
+        relocate("dev.jorel.commandapi", "com.oheers.fish.libs.commandapi")
     }
     tasks.named<Jar>("jar") {
         enabled = false

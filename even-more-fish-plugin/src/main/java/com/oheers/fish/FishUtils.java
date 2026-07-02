@@ -424,11 +424,11 @@ public class FishUtils {
     }
 
     public static @NotNull ItemStack getSkullFromBase64(@NotNull String base64) {
-        return EvenMoreFish.getInstance().getSkullFromBase64(base64);
+        return EvenMoreFish.getInstance().getVersionProvider().getSkullFromBase64(base64);
     }
 
     public static @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
-        return EvenMoreFish.getInstance().getSkullFromUUID(uuid);
+        return EvenMoreFish.getInstance().getVersionProvider().getSkullFromUUID(uuid);
     }
 
     public static @NotNull ItemStack getSkullFromUUIDString(@NotNull String uuidString) {

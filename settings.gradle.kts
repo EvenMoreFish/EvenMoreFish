@@ -9,13 +9,15 @@ pluginManagement {
 // Addons
 include(":addons:even-more-fish-addons-j21")
 include(":addons:even-more-fish-addons-itemmodel")
-include("addons:even-more-fish-addons-moderncmd")
+include(":addons:even-more-fish-addons-moderncmd")
+include(":addons:even-more-fish-addons-crafterfix")
+
+// Versions
+include(":versions:1-20")
+include(":versions:1-21")
+include(":versions:26-1")
+include(":versions:26-2")
 
 // Plugin Stuff
 include(":even-more-fish-api")
-include(":even-more-fish-plugin") //"core"
-include(":even-more-fish-plugin-1-20")
-include(":even-more-fish-plugin-1-21")
-include("even-more-fish-plugin-26-1")
-include("even-more-fish-plugin-26-2")
-include("addons:even-more-fish-addons-crafterfix")
+include(":even-more-fish-plugin")
