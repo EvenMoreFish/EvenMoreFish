@@ -23,6 +23,7 @@ package com.oheers.fish.api;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.plugin.Plugin;
+import org.codehaus.plexus.util.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,10 +37,12 @@ import java.net.URLClassLoader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +56,7 @@ import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FileUtil {
 
@@ -400,4 +404,21 @@ public class FileUtil {
                 false
         );
     }
+
+    /**
+     * Recursively deletes an entire directory.
+     * <p>
+     * Potentially dangerous depending on where it's used.
+     */
+    public static void deleteDirectory(@NotNull File directory) {
+        if (!directory.exists()) {
+            return;
+        }
+        try (Stream<Path> paths = Files.walk(directory.toPath())) {
+            paths.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        } catch (IOException exception) {
+            Logging.error("Failed to delete directory " + directory.getAbsolutePath(), exception);
+        }
+    }
+
 }

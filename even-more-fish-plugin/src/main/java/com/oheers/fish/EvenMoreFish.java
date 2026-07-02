@@ -187,6 +187,8 @@ public class EvenMoreFish extends EMFPlugin {
         BaitManager.getInstance().unload();
         FishManager.getInstance().unload();
 
+        this.integrationManager.unloadAddons();
+
         loader.onDisable();
 
         getLogger().info(() -> "EvenMoreFish by Oheers : Disabled");

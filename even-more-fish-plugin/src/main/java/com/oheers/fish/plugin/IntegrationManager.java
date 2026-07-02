@@ -23,15 +23,19 @@ public class IntegrationManager {
     }
 
     public void loadAddons() {
-        saveDefaultAddons();
-
         this.addonManager = new AddonManager(plugin);
+
+        saveDefaultAddons();
 
         // Load external addons
         this.addonManager.load();
 
         // Load internal addons
         new InternalAddonLoader(plugin).load();
+    }
+
+    public void unloadAddons() {
+        this.addonManager.unload();
     }
 
     private void saveDefaultAddons() {

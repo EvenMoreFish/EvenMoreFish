@@ -19,7 +19,9 @@ public class AddonManager {
         this.plugin = plugin;
         this.folder = new File(plugin.getDataFolder(), ADDON_FOLDER);
 
-        if (!this.folder.exists() && !this.folder.mkdirs()) {
+        // Clean up in case of a crash.
+        FileUtil.deleteDirectory(this.folder);
+        if (!this.folder.mkdirs()) {
             plugin.getLogger().warning("Could not create addons folder.");
         }
     }
@@ -29,6 +31,10 @@ public class AddonManager {
                 folder, ".jar", true, true);
 
         jarFiles.forEach(this::processJar);
+    }
+
+    public void unload() {
+        FileUtil.deleteDirectory(this.folder);
     }
 
     private void processJar(File jar) {
