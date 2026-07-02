@@ -12,6 +12,7 @@ import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
+import com.oheers.fish.config.serializer.SoundSerializer;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.model.CompetitionReport;
 import com.oheers.fish.database.model.user.UserReport;
@@ -72,7 +73,7 @@ public class Competition {
     private final List<Long> alertTimes;
     private final Map<Integer, List<Reward>> rewards;
     private int playersNeeded;
-    private Sound.Type startSound;
+    private Sound startSound;
     private CompetitionTimer timingSystem;
     private CompetitionBackupTimer backupSystem;
     private CompetitionFile competitionFile;
@@ -408,12 +409,7 @@ public class Competition {
         startMessage.broadcast();
 
         if (startSound != null) {
-            Sound sound = Sound.sound()
-                .type(startSound)
-                .volume(10f)
-                .pitch(1f)
-                .build();
-            Bukkit.getOnlinePlayers().forEach(player -> player.playSound(sound, net.kyori.adventure.sound.Sound.Emitter.self()));
+            Bukkit.getOnlinePlayers().forEach(player -> player.playSound(startSound, Sound.Emitter.self()));
         }
     }
 

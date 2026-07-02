@@ -5,6 +5,7 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.competition.CompetitionType;
+import com.oheers.fish.config.serializer.SoundSerializer;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -288,16 +289,16 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return The sound to play when this competition starts. Returns null if no sound should be played.
      */
-    public @Nullable Sound.Type getStartSound() {
+    public @Nullable Sound getStartSound() {
         String soundString = getConfig().getString("start-sound", "NONE");
         if (soundString.equalsIgnoreCase("NONE")) {
             return null;
         }
-        Sound.Type type = FishUtils.getSound(soundString);
-        if (type == null) {
+        Sound sound = SoundSerializer.deserialize(soundString, 10F, 1F);
+        if (sound == null) {
             EvenMoreFish.getInstance().getLogger().warning(soundString + " is not a valid sound. Defaulting to NONE.");
         }
-        return type;
+        return sound;
     }
 
     /**
