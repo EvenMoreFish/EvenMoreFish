@@ -98,7 +98,6 @@ public class EvenMoreFish extends EMFPlugin {
         this.toggle = new Toggle(this);
 
         if (MinecraftVersion.isAtLeastVersion(MinecraftVersion.MC1_21_R1)) {
-            Logging.info("Loading DimensionFishing.");
             this.dimensionFishing = new DimensionFishing(
                 this,
                 DimensionFishingConfig.getInstance()
