@@ -4,30 +4,23 @@ sidebar_position: 2
 ---
 
 ## Getting Started
-1. Use this template: [Addon Template](https://github.com/EvenMoreFish/AddonTemplate)
-
-For reference here is the implementation of the itemsadder addon:
+For reference here is the implementation of the ItemsAdder addon:
 
 ```java title="ItemsAdder Item Addon"
-package com.oheers.evenmorefish.addons;
-
+package org.evenmorefish.fish.addons.item;
 
 import com.oheers.fish.api.addons.ItemAddon;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import dev.lone.itemsadder.api.CustomStack;
 import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
-public class ItemsAdderItemAddon extends ItemAddon implements Listener {
-    private boolean itemsAdderLoaded = false;
+public class ItemsAdderItemAddon extends ItemAddon {
 
     @Override
-    public String getPrefix() {
+    public String getIdentifier() {
         return "itemsadder";
     }
 
@@ -42,25 +35,30 @@ public class ItemsAdderItemAddon extends ItemAddon implements Listener {
     }
 
     @Override
-    public ItemStack getItemStack(String id) {
-        if (!itemsAdderLoaded) {
-            return null;
-        }
+    public String getVersion() {
+        return "1.0.1";
+    }
 
+    @Override
+    public ItemStack getItemStack(@NotNull String id) {
         String[] splitMaterialValue = id.split(":");
-        if (splitMaterialValue.length != 2) {
-            getLogger().severe(() -> String.format("Incorrect format for ItemsAdderItemAddon, use %s:namespace:id. Got %s",getPrefix(), id));
+        if (!verifyItemsFormat(splitMaterialValue)) {
+            getLogger().severe(() -> String.format(
+                "Incorrect format for ItemsAdderItemAddon, use %s:namespace:id. Got %s",
+                getIdentifier(),
+                id)
+            );
             return null;
         }
 
         final String namespaceId = splitMaterialValue[0] + ":" + splitMaterialValue[1];
+
         final CustomStack customStack = CustomStack.getInstance(namespaceId);
         if (customStack == null) {
             getLogger().info(() -> String.format("Could not obtain itemsadder item %s", namespaceId));
             return null;
         }
         return CustomStack.getInstance(namespaceId).getItemStack();
-
     }
 
     @EventHandler
@@ -70,5 +68,11 @@ public class ItemsAdderItemAddon extends ItemAddon implements Listener {
 
         EMFPlugin.getInstance().reload(null);
     }
+    
+    public boolean verifyItemsFormat(final String[] splitMaterialValue) {
+        return splitMaterialValue.length == 2;
+    }
+
 }
+
 ```

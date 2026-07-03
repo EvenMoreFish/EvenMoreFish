@@ -3,7 +3,7 @@ title: Rarities
 ---
 
 ## The files
-As of EvenMoreFish 2.0, all rarity configs are located in `plugins/EvenMoreFish/rarities`.
+All rarity configs are located in `plugins/EvenMoreFish/rarities`.
 
 ## Creating Rarities
 To create a new rarity, you need to create a new yml file in the rarities folder.

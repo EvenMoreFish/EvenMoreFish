@@ -97,7 +97,7 @@ rewards:
 Note: You cannot spawn another Piñata as a reward, as the plugin will exclude the reward type from the list.
 
 ### Effects
-As of EMFPiñata 2.0.2, you can assign effects to Piñatas with the `effects` key. This uses the same format as EvenMoreFish.
+You can assign effects to Piñatas with the `effects` key. This uses the same format as EvenMoreFish.
 
 Example:
 ```yaml
@@ -107,7 +107,7 @@ effects:
 ```
 
 ### Equipment
-As of EMFPiñata 2.0.2, you can assign equipment to Piñatas with the `equipment` key. The items are configured identically to EvenMoreFish.
+You can assign equipment to Piñatas with the `equipment` key. The items are configured identically to EvenMoreFish.
 
 Example:
 ```yaml

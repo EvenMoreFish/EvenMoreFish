@@ -1,6 +1,5 @@
 package org.evenmorefish.fish.addons.item;
 
-
 import com.oheers.fish.api.addons.ItemAddon;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import dev.lone.itemsadder.api.CustomStack;

@@ -2,12 +2,12 @@
 title: Requirements
 ---
 ## How do requirements work?
-Requirements set a list of rules for a fish to appear and can be applied to any fish to limit fish to only appear when the rule(s) are met. If a fish has no requirements it will always be able to be caught (depending on the allowed-worlds/regions setting in config.yml) however if all fish have requirements and the user is in a situation where they meet none of the requirements for the rarity fish they've caught an error may be sent to console. When a user reels in their rod, the plugin chooses a rarity the player will receive, then it chooses a fish. It doesn't go back and re-roll the rarity if it can't find any fish to give the user, hence why there must be at least one fish in each rarity that a user will always meet requirements for. 
+Requirements set a list of rules for a fish to appear and can be applied to any fish to limit fish to only appear when the rule(s) are met.
 
-A few settings from pre-1.6 have been moved into requirements, so it's advised to check through this before upgrading.
+A fish with no requirements will be able to be caught. If a player fails the requirements for every fish, an error will be sent to console.
 
 ## Rarity requirements
-As of 1.6.10 it's possible to add in requirements to rarities. These are applied exactly the same as they are to fish and all requirements available to fish are available to rarities - if a user doesn't meet the criteria for a rarity they won't be able to catch any fish in that rarity at all.
+It is possible to add in requirements to rarities. These are applied exactly the same as they are to fish and all requirements available to fish are available to rarities - if a user doesn't meet the criteria for a rarity they won't be able to catch any fish in that rarity at all.
 
 An example of using requirements for a rarity:
 ```yaml
@@ -79,7 +79,7 @@ A config example of using the biome set requirement:
 ```
 
 ### In-game Time
-This restricts your users to only catching fish during certain times of in-game day, this time will be inputted based on the current in-game tick, which happens 20 times every second. For example, 15 seconds past midnight would be 20*15 and four minutes would be 4*60*20. Like minSize/maxSize, you need to specify a minTime & maxTime in the format of `min-max`.
+This restricts your users to only catching fish during certain times of in-game day, this time will be inputted based on the current in-game tick, which happens 20 times every second. For example, 15 seconds past midnight would be `20*15` and four minutes would be `4*60*20`. Like minSize/maxSize, you need to specify a minTime & maxTime in the format of `min-max`.
 
 A config example of using the ingame-time requirement:
 ```yaml title="In-game Time Example"
@@ -128,7 +128,7 @@ Atlantic Cod:
 ```
 
 ### Permission
-Like biome and world requirements, this has moved from its own config setting. If you still have the old `permission:` setting for your fish not in any requirements, this will need to be converted to this new format.
+This will fail if the player does not have the correct permission.
 
 A config example of using the permission requirement:
 ```yaml title="Permission Example"
@@ -149,7 +149,11 @@ Atlantic Cod:
 ```
 
 ### Weather
-This limits fish to only appear in certain weather. Initially when I started adding requirements I thought there was a lot more weather variation. There was not. As it turns out, your choice is limited to `CLEAR` or `DOWNFALL`. For non-English speakers I can imagine this quite easily getting lost in translation, so simply `CLEAR` is not raining/snowing, and `DOWNFALL` is raining/snowing (Minecraft sees rain and snow as the same thing)
+This limits fish to only appear in certain weather.
+
+Valid Options:
+- CLEAR
+- DOWNFALL
 
 A config example of using the weather requirement:
 ```yaml title="Weather Example"
@@ -257,7 +261,7 @@ Enderfish:
 ```
 
 ### World
-And finally, this limits fish to certain worlds. By default there's only three worlds, `overworld`, `nether` and `end`, but with a plugin like [Multiverse-Core](https://modrinth.com/plugin/multiverse-core), you can create worlds to allow fish to only be caught in. There probably isn't much point allowing `nether` since water can't be placed there and lava can't be fished in though.
+And finally, this limits fish to certain worlds. By default, there are only three worlds, `overworld`, `nether` and `end`, but with a plugin like [Multiverse-Core](https://modrinth.com/plugin/multiverse-core), you can create worlds to allow fish to only be caught in.
 
 A config example of using the world requirement:
 ```yaml title="World Example"

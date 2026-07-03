@@ -2,8 +2,8 @@
 title: Economy
 ---
 
-## How to use EMF's new economy system:
-As of EvenMoreFish 2.0, the plugin is capable of supporting multiple economies at the same time.
+## How to use EMF's economy system:
+EvenMoreFish is capable of supporting multiple economies at the same time.
 
 Below is the default config (found in config.yml) as of December 4th 2024:
 ```yaml

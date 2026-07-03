@@ -3,7 +3,7 @@ title: Baits
 ---
 
 ## The files
-As of EvenMoreFish 2.0, all bait configs are located in `plugins/EvenMoreFish/baits`.
+All bait configs are located in `plugins/EvenMoreFish/baits`.
 
 ![Epic Elixir](./assets/bait-epic-elixir-example.webp)
 
@@ -64,7 +64,7 @@ To disable a bait, you have two choices:
 Doing either of these will prevent the bait from being registered into the plugin.
 
 ## Purchasing Baits
-As of EvenMoreFish 2.1.6, you can set up baits to be purchased from the baits menu.
+Baits can be configured to be purchased from the baits menu.
 
 Doing this is very simple, you just add the following config options to your bait file:
 ```yaml

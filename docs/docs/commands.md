@@ -13,7 +13,7 @@ The main command (`/emf`) can have custom aliases configured in `MainConfig`.
 |-------------------|--------------------------------------|----------------------------------------|----------------------------------------|
 | `/emf`            | None                                 | None                                   | Shows help message (default)           |
 | `/emf next`       | None                                 | `emf.next`                             | Shows when the next competition starts |
-| `/emf toggle`     | `bossbar`, `fishing`, `catchMessage` | `emf.toggle`                           | Toggles fishing rewards on/off         |
+| `/emf toggle`     | `bossbar`, `fishing`, `catchMessage` | `emf.toggle`                           | Toggles various features for players   |
 | `/emf gui`        | None                                 | `emf.gui`                              | Opens the main menu GUI                |
 | `/emf help`       | None                                 | `emf.help`                             | Shows command help                     |
 | `/emf top`        | None                                 | `emf.top`                              | Shows competition leaderboard          |
@@ -35,7 +35,7 @@ The main command (`/emf`) can have custom aliases configured in `MainConfig`.
 | `/emf admin list requirementTypes`      | None                                | `emf.admin`                        | Lists requirement types                |
 | `/emf admin list rewardTypes`           | None                                | `emf.admin`                        | Lists reward types                     |
 | `/emf admin list itemAddons`            | None                                | `emf.admin`                        | Lists item addons                      |
-| `/emf admin nbt-rod`                    | `[target]`                          | `emf.admin`                        | Gives NBT fishing rod                  |
+| `/emf admin custom-rod`                 | `<rodId> [target]`                  | `emf.admin`                        | Gives a custom fishing rod             |
 | `/emf admin bait`                       | `<bait> [quantity] [target]`        | `emf.admin`                        | Gives bait to player                   |
 | `/emf admin bait debug`                 | `<bait>`                            | `emf.admin`                        | Shows resolved bait chances for you    |
 | `/emf admin bait debug`                 | `<bait> <target>`                   | `emf.admin`                        | Shows resolved bait chances for target |

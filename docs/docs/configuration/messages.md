@@ -2,16 +2,6 @@
 title: Messages
 ---
 
-## The file
-
-This is the file for modifying messages sent to the players from the plugin: if you're running the server locally or
-viewing the files on a panel through FTP/SFTP, you can use a text-editor such
-as [Notepad++](https://notepad-plus-plus.org/).
-
-## The Wiki
-
-***
-
 ## Tags
 
 It's possible to add "tags" to the messages, these cause the message to be formatted differently or to act differently.
@@ -32,7 +22,7 @@ help, you have to add one for each line of the list.
 
 ## Message Types
 
-As of 2.0.12, it is now possible to choose a message type.
+A message type can be specified to choose where the message is sent to. Only one type can be added per message.
 
 While a normal chat message can be configured like this:
 ```
