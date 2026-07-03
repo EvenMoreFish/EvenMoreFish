@@ -5,6 +5,10 @@ import com.oheers.fish.addons.InternalAddonLoader;
 import com.oheers.fish.api.FileUtil;
 import com.oheers.fish.api.addons.AddonManager;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.fishing.processors.LavaFishingProcessor;
+import org.bukkit.Bukkit;
+import org.evenmorefish.dimensionfishing.DimensionFishing;
+import org.evenmorefish.dimensionfishing.hooks.evenmorefish.VoidFishingProcessor;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,6 +40,12 @@ public class IntegrationManager {
 
     public void unloadAddons() {
         this.addonManager.unload();
+    }
+
+    public void setupDimensionFishing() {
+        Bukkit.getPluginManager().registerEvents(new LavaFishingProcessor(), plugin);
+        Bukkit.getPluginManager().registerEvents(new VoidFishingProcessor(), plugin);
+        DimensionFishing.getInstance().reload(null);
     }
 
     private void saveDefaultAddons() {

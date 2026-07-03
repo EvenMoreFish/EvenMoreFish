@@ -99,6 +99,8 @@ dependencies {
 
     library(libs.bundles.connectors)
 
+    implementation(libs.dimensionfishing)
+
     // TODO remove when 1.20 is dropped...
     implementation(libs.commandsapi.bukkit)
 }

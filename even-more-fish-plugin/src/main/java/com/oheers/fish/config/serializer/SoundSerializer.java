@@ -8,18 +8,18 @@ import org.jspecify.annotations.Nullable;
 
 public class SoundSerializer {
 
-    public static String serialize(Sound element) {
+    public static String serialize(@Nullable Sound element) {
         if (element == null) {
             return null;
         }
         return element.name().asString() + "," + element.volume() + "," + element.pitch();
     }
 
-    public static Sound deserialize(String element) {
+    public static Sound deserialize(@Nullable String element) {
         return deserialize(element, 1, 1);
     }
 
-    public static Sound deserialize(String element, float defaultVolume, float defaultPitch) {
+    public static Sound deserialize(@Nullable String element, float defaultVolume, float defaultPitch) {
         if (element == null) {
             return null;
         }

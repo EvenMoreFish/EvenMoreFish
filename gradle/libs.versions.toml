@@ -25,6 +25,9 @@ bstats = "org.bstats:bstats-bukkit:3.2.1"
 
 kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.0"
 
+# DimensionFishing
+dimensionfishing = "org.evenmorefish:DimensionFishing:1.0-SNAPSHOT"
+
 # World Management
 worldguard-core = { module = "com.sk89q.worldguard:worldguard-core", version.ref = "worldguard" }
 worldguard-bukkit = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
