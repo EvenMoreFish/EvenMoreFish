@@ -1,6 +1,7 @@
 package com.oheers.fish.plugin;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.config.DimensionFishingConfig;
 import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.config.GuiFillerConfig;
 import com.oheers.fish.config.MainConfig;
@@ -27,6 +28,10 @@ public class ConfigurationManager {
             new MessageConfig();
             new GuiConfig();
             new GuiFillerConfig();
+
+            if (EvenMoreFish.getInstance().getDimensionFishing() != null) {
+                DimensionFishingConfig.getInstance().reload();
+            }
 
             plugin.getLogger().info("Successfully loaded all configurations");
         } catch (Exception e) {

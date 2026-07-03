@@ -336,6 +336,10 @@ public class EvenMoreFish extends EMFPlugin {
         return metricsManager;
     }
 
+    public @Nullable DimensionFishing getDimensionFishing() {
+        return this.dimensionFishing;
+    }
+
     @Override
     public @NotNull Component getRewardCatchupMessage() {
         return ConfigMessage.REWARD_CATCHUP.getMessage().getComponentMessage();

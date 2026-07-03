@@ -23,7 +23,7 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
         return INSTANCE;
     }
 
-    protected void reload() {
+    public void reload() {
         YamlDocument config = MainConfig.getInstance().getConfig();
         this.lavaLureParticles = new ParticleFactory(config.getMapList("dimension-fishing.lava.lure-particles"));
         this.voidLureParticles = new ParticleFactory(config.getMapList("dimension-fishing.void.lure-particles"));
