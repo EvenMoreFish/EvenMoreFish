@@ -266,7 +266,7 @@ biome-sets:
     - WARM_OCEAN
 
 # Fishing in lava and void. (1.21+)
-# A full explanation of these configs can be found on the wiki: https://evenmorefish.github.io/EvenMoreFish/docs/addons/dimensionfishing/setup
+# A full explanation of these configs can be found on the wiki: https://evenmorefish.github.io/EvenMoreFish/docs/features/dimensionfishing/setup
 dimension-fishing:
   # Configuration for lava fishing.
   lava:
