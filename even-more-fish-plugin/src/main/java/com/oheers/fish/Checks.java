@@ -2,6 +2,7 @@ package com.oheers.fish;
 
 import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.gmail.nossr50.datatypes.player.McMMOPlayer;
+import com.gmail.nossr50.skills.fishing.FishingManager;
 import com.gmail.nossr50.util.player.UserManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.rods.CustomRod;
@@ -38,7 +39,7 @@ public class Checks {
      * @param player The player to check.
      * @param location The location of the hook.
      */
-    public static boolean isMcMMOOverfishing(@NotNull Player player) {
+    public static boolean isMcMMOOverfishing(@NotNull Player player, @NotNull Location hookLocation) {
         if (!EvenMoreFish.getInstance().getDependencyManager().isUsingMcMMO()) {
             return false;
         }
@@ -46,7 +47,16 @@ public class Checks {
             return false;
         }
         McMMOPlayer mmoPlayer = UserManager.getPlayer(player);
-        return mmoPlayer != null && mmoPlayer.getFishingManager().isExploitingFishing();
+        if (mmoPlayer == null) {
+            return false;
+        }
+        FishingManager manager = mmoPlayer.getFishingManager();
+        try {
+            return manager.isExploitingFishing();
+        // Fallback to the deprecated method if needed.
+        } catch (NoSuchMethodException exception) {
+            return manager.isExploitingFishing(hookLocation.toVector());
+        }
     }
 
 }

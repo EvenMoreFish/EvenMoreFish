@@ -63,7 +63,7 @@ public abstract class Processor<E extends Event> {
             return null;
         }
         // Check for mcMMO overfishing
-        if (Checks.isMcMMOOverfishing(player)) {
+        if (Checks.isMcMMOOverfishing(player, location)) {
             Logging.debug("McMMO Overfishing is active.");
             return null;
         }
