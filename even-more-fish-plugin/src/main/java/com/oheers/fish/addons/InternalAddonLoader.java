@@ -1,6 +1,7 @@
 package com.oheers.fish.addons;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.addons.internal.requirement.ActiveCompetitionRequirementType;
 import com.oheers.fish.addons.internal.requirement.FishingTypeRequirementType;
 import com.oheers.fish.addons.external.requirement.PermissionRequirementType;
 import com.oheers.fish.addons.external.reward.AuraSkillsXPRewardType;
@@ -108,6 +109,7 @@ public class InternalAddonLoader extends AddonLoader {
         new WorldRequirementType().register();
         new RewardTypeRequirementType().register();
         new FishingTypeRequirementType().register();
+        new ActiveCompetitionRequirementType().register();
 
         // Load Group RequirementType
         Permission permission = EvenMoreFish.getInstance().getDependencyManager().getPermission();

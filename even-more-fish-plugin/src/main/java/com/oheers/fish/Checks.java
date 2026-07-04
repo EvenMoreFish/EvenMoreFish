@@ -47,16 +47,8 @@ public class Checks {
             return false;
         }
         McMMOPlayer mmoPlayer = UserManager.getPlayer(player);
-        if (mmoPlayer == null) {
-            return false;
-        }
-        FishingManager manager = mmoPlayer.getFishingManager();
-        try {
-            return manager.isExploitingFishing();
-        // Fallback to the deprecated method if needed.
-        } catch (NoSuchMethodException exception) {
-            return manager.isExploitingFishing(hookLocation.toVector());
-        }
+        // The deprecated method has to be used here for older mcmmo versions.
+        return mmoPlayer != null && mmoPlayer.getFishingManager().isExploitingFishing(hookLocation.toVector());
     }
 
 }

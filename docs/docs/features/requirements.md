@@ -245,6 +245,7 @@ Valid values are:
 
 If not configured, the fish will be available to all three types.
 
+A config example of using the fishing type requirement:
 ```yaml title="Fishing Type Example"
 Cod:
   requirements:
@@ -258,6 +259,20 @@ Enderfish:
   requirements:
     fishing-type:
       - Void
+```
+
+### Active Competition
+Checks the id of the active competition.
+
+If a list is provided, this requirement will pass if any id in the list matches the active one.
+
+A config example of using the active competition requirement:
+```yaml title="World Example"
+Atlantic Cod:
+  requirements:
+    active-competition:
+      - mainCompetition
+      - testCompetition
 ```
 
 ### World
