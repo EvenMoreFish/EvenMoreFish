@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'docs/**'
-      - '.github/workflows/test-deploy.yml'
+      - '.github/workflows/test-docs.yml'
 
 jobs:
   test-build:
