@@ -8,7 +8,7 @@ Dimension Fishing is a fancy new feature which allows players to fish inside lav
 
 All configs are located under `dimension-fishing` inside config.yml.
 
-This page explains what each setting does.
+## Configuration
 
 ### Permission
 This is the permission the player needs to have to start this type of fishing.
@@ -50,3 +50,17 @@ It is configured in a map format, so you can stack as many particles as you'd li
 
 If particles are set up incorrectly, you will be warned in console, and they will no longer be shown.
 When a player runs the reload command, all particles are spawned at their current location to filter out broken ones.
+
+## Explanation
+
+### Lava Fishing
+Lava fishing is done by casting your fishing hook into lava.
+
+If you fail to catch a fish, the hook will burn in the lava and play a burning sound (configurable).
+
+### Void Fishing
+Void fishing is done by casting your fishing hook into the “void". 
+
+Despite the name, the void is not required. When the hook is cast, a random number between 4 and 6 is chosen. The hook is considered “void fishing” once it falls that many blocks below the player.
+
+If you fail to catch a fish, the hook will be teleported away (destroyed) and play a teleport sound (configurable).
