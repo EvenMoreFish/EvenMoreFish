@@ -3,11 +3,13 @@ package com.oheers.fish;
 import com.github.Anon8281.universalScheduler.UniversalScheduler;
 import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
 import com.oheers.fish.api.EMFAPI;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.baits.AbstractBaitManager;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.events.EMFPluginReloadEvent;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.plugin.EMFPlugin;
+import com.oheers.fish.config.DimensionFishingConfig;
 import com.oheers.fish.plugin.loading.EMFVersionLoader;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.api.registry.EMFRegistry;
@@ -30,11 +32,13 @@ import com.oheers.fish.plugin.PluginDataManager;
 import com.oheers.fish.update.UpdateChecker;
 import de.themoep.inventorygui.InventoryGui;
 import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.evenmorefish.dimensionfishing.DimensionFishing;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.vanishchecker.VanishChecker;
@@ -50,6 +54,8 @@ public class EvenMoreFish extends EMFPlugin {
 
     private final EMFVersionLoader loader;
     private final EMFVersionProvider versionProvider;
+
+    private final DimensionFishing dimensionFishing;
 
     private final Random random = ThreadLocalRandom.current();
     private final Toggle toggle;
@@ -90,6 +96,15 @@ public class EvenMoreFish extends EMFPlugin {
         this.loader = new EMFVersionLoader(this, getClassLoader());
         this.versionProvider = loader.getVersionProvider();
         this.toggle = new Toggle(this);
+
+        if (MinecraftVersion.isAtLeastVersion(MinecraftVersion.MC1_21_R1)) {
+            this.dimensionFishing = new DimensionFishing(
+                this,
+                DimensionFishingConfig.getInstance()
+            );
+        } else {
+            this.dimensionFishing = null;
+        }
     }
 
     @Override
@@ -100,6 +115,9 @@ public class EvenMoreFish extends EMFPlugin {
         instance = this;
         versionProvider.loadCommands();
         versionProvider.load();
+        if (dimensionFishing != null) {
+            dimensionFishing.load();
+        }
     }
 
     @Override
@@ -155,6 +173,11 @@ public class EvenMoreFish extends EMFPlugin {
         versionProvider.registerCommands();
         versionProvider.enable();
 
+        if (dimensionFishing != null) {
+            dimensionFishing.enable();
+            this.integrationManager.setupDimensionFishing();
+        }
+
         // Attempt to resume a competition if the temporary file exists.
         Competition.resumeFromFile();
 
@@ -166,7 +189,9 @@ public class EvenMoreFish extends EMFPlugin {
         // Do this first.
         autoRunner.stop();
 
-        versionProvider.disableCommands();
+        if (dimensionFishing != null) {
+            dimensionFishing.disable();
+        }
         versionProvider.disableCommands();
 
         terminateGuis();
@@ -235,6 +260,10 @@ public class EvenMoreFish extends EMFPlugin {
 
         versionProvider.resendCommands();
         versionProvider.reload();
+
+        if (dimensionFishing != null) {
+            dimensionFishing.reload(sender);
+        }
 
         // This event is not cancellable.
         new EMFPluginReloadEvent().callEvent();
@@ -305,6 +334,10 @@ public class EvenMoreFish extends EMFPlugin {
 
     public MetricsManager getMetricsManager() {
         return metricsManager;
+    }
+
+    public @Nullable DimensionFishing getDimensionFishing() {
+        return this.dimensionFishing;
     }
 
     @Override

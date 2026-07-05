@@ -1,4 +1,4 @@
-package com.oheers.fish.fishing;
+package com.oheers.fish.fishing.processors;
 
 import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
@@ -7,6 +7,7 @@ import com.oheers.fish.api.events.EMFFishCaughtEvent;
 import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.permissions.UserPerms;

@@ -4,12 +4,16 @@ sidebar_position: 1
 ---
 
 ## Introduction
-This page explains how to set up lava and void fishing.
+Dimension Fishing is a fancy new feature which allows players to fish inside lava or the end's void!
 
-While the main config file should be self-explanatory, this page explains things in more detail.
+All configs are located under `dimension-fishing` inside config.yml.
+
+This page explains what each setting does.
 
 ### Permission
-This is the permission the player needs to have to start this type of fishing. If the player does not have it, the hook will act like vanilla.
+This is the permission the player needs to have to start this type of fishing.
+
+If the player does not have it, the hook will act like vanilla.
 
 ### Allowed Worlds
 This is a list of worlds this type of fishing is enabled in.
@@ -21,12 +25,12 @@ If this is missing or empty, the plugin will default to the following:
 ### Swallow Sound
 This sound is played when the player misses the fish and the hook is "swallowed" by the lava or void.
 
-It is formatted the same as EvenMoreFish's Sound RewardType.
+It follows the same format as the [Sound RewardType](https://evenmorefish.github.io/EvenMoreFish/docs/configuration/reward-types).
 
 ### Bite Sound
 This sound is played when the fish bites the hook.
 
-It is formatted the same as EvenMoreFish's Sound RewardType.
+It follows the same format as the [Sound RewardType](https://evenmorefish.github.io/EvenMoreFish/docs/configuration/reward-types).
 
 ### Lure Particles
 These particles are shown when the fish is being lured towards the hook.
@@ -44,5 +48,5 @@ It is configured in a map format, so you can stack as many particles as you'd li
   - For Integer, you provide an integer value: `data: 1`.
   - Unsupported types are: Vibration, Trail, Geyser, GeyserBase.
 
-If particles are set up incorrectly, you will be warned in console and they will no longer be shown.
+If particles are set up incorrectly, you will be warned in console, and they will no longer be shown.
 When a player runs the reload command, all particles are spawned at their current location to filter out broken ones.

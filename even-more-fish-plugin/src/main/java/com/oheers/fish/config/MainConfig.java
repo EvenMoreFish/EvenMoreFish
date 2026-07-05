@@ -66,7 +66,7 @@ public class MainConfig extends ConfigBase {
     @Override
     public void reload() {
         super.reload();
-
+        DimensionFishingConfig.getInstance().reload();
         this.biomeSets = loadBiomeSets();
         this.regionBoosts = loadRegionBoosts();
     }
@@ -491,6 +491,5 @@ public class MainConfig extends ConfigBase {
     public boolean getBaitShowUnusedSlots() {
         return getConfig().getBoolean("bait.show-unused-slots", true);
     }
-
 
 }

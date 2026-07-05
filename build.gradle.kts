@@ -14,6 +14,7 @@ allprojects {
         maven("https://repo.auxilor.io/repository/maven-public/")
         maven("https://repo.rosewooddev.io/repository/public/")
         maven("https://repo.minebench.de/")
+        maven("https://repo.codemc.io/repository/EvenMoreFish/")
         maven("https://repo.codemc.io/repository/FireML/")
         maven("https://maven.citizensnpcs.co/repo")
         maven("https://nexus.phoenixdevt.fr/repository/maven-public/")

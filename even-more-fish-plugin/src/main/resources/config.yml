@@ -265,7 +265,32 @@ biome-sets:
     - OCEAN
     - WARM_OCEAN
 
+# Fishing in lava and void. (1.21+)
+# A full explanation of these configs can be found on the wiki: https://evenmorefish.github.io/EvenMoreFish/docs/features/dimensionfishing/setup
+dimension-fishing:
+  # Configuration for lava fishing.
+  lava:
+    enabled: false
+    permission: []
+    allowed-worlds: []
+    swallow-sound: BLOCK_LAVA_EXTINGUISH
+    bite-sound: ENTITY_FISHING_BOBBER_SPLASH,0.25,0.5
+    lure-particles:
+      - particle: LAVA
+        amount: 3
+  # Configuration for void fishing.
+  void:
+    enabled: false
+    allowed-worlds: [ ]
+    permission: []
+    swallow-sound: ENTITY_ENDERMAN_TELEPORT,0.25,0.1
+    bite-sound: ENTITY_FOX_BITE,0.25,0.1
+    lure-particles:
+      - particle: DUST
+        amount: 3
+        color: "#FF55FF"
+
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 8
+version: 9
 
