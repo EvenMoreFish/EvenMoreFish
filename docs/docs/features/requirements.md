@@ -236,7 +236,7 @@ Atlantic Cod:
 ```
 
 ### Fishing Type
-Checks the type of fishing being done. This requires the DimensionFishing plugin.
+Checks the type of fishing being done.
 
 Valid values are:
 - Vanilla

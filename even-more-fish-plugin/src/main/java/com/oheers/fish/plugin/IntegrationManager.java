@@ -6,9 +6,9 @@ import com.oheers.fish.api.FileUtil;
 import com.oheers.fish.api.addons.AddonManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.processors.LavaFishingProcessor;
+import com.oheers.fish.fishing.processors.VoidFishingProcessor;
 import org.bukkit.Bukkit;
 import org.evenmorefish.dimensionfishing.DimensionFishing;
-import org.evenmorefish.dimensionfishing.hooks.evenmorefish.VoidFishingProcessor;
 
 import java.io.IOException;
 import java.nio.file.Files;

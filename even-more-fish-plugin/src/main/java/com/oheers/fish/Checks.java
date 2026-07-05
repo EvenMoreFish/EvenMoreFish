@@ -48,6 +48,7 @@ public class Checks {
         }
         McMMOPlayer mmoPlayer = UserManager.getPlayer(player);
         // The deprecated method has to be used here for older mcmmo versions.
+        //noinspection removal
         return mmoPlayer != null && mmoPlayer.getFishingManager().isExploitingFishing(hookLocation.toVector());
     }
 
