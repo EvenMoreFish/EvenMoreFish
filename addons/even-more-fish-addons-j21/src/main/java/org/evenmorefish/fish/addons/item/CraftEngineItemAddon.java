@@ -1,12 +1,9 @@
 package org.evenmorefish.fish.addons.item;
 
 import com.oheers.fish.api.addons.ItemAddon;
-import net.momirealms.craftengine.bukkit.plugin.BukkitCraftEngine;
-import net.momirealms.craftengine.core.item.CustomItem;
-import net.momirealms.craftengine.core.util.Key;
+import net.momirealms.craftengine.bukkit.api.CraftEngineItems;
+import net.momirealms.craftengine.bukkit.item.BukkitItemDefinition;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Optional;
 
 public class CraftEngineItemAddon extends ItemAddon {
 
@@ -22,7 +19,7 @@ public class CraftEngineItemAddon extends ItemAddon {
 
     @Override
     public String getVersion() {
-        return "1.0.0";
+        return "2.0.0";
     }
 
     @Override
@@ -32,13 +29,13 @@ public class CraftEngineItemAddon extends ItemAddon {
 
     @Override
     public ItemStack getItemStack(String id) {
-        Optional<CustomItem<ItemStack>> optionalItem = BukkitCraftEngine.instance().itemManager().getCustomItem(Key.of(id));
-        if (optionalItem.isEmpty()) {
+        BukkitItemDefinition itemDef = CraftEngineItems.byId(id);
+        if (itemDef == null) {
             getLogger().warning(() -> "CraftEngine item with id %s doesn't exist.".formatted(id));
             return null;
         }
 
-        final ItemStack item = optionalItem.get().buildItemStack();
+        final ItemStack item = itemDef.buildBukkitItem();
 
         if (item == null) {
             getLogger().info(() -> String.format("Could not obtain CraftEngine item %s", id));
