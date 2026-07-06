@@ -3,7 +3,7 @@ worldguard = "7.0.9"
 worldedit = "7.3.0"
 redprotect = "7.7.3"
 flyway = "12.2.0"
-jdbi = "3.53.0"
+jdbi = "3.54.0"
 junit = "6.1.1"
 craftengine = "26.7"
 
@@ -20,7 +20,7 @@ strokk-commands = "1.5.0"
 # Paper & Core APIs
 paper-api = {module = "io.papermc.paper:paper-api", version = {strictly="[1.20,)"}}
 vault-api = "com.github.MilkBowl:VaultAPI:1.7.1"
-placeholder-api = "me.clip:placeholderapi:2.12.2"
+placeholder-api = "me.clip:placeholderapi:2.12.3"
 bstats = "org.bstats:bstats-bukkit:3.2.1"
 
 kotlin-gradle-plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.0"
@@ -49,7 +49,7 @@ headdatabase-api = "com.arcaniax:HeadDatabase-API:1.3.2"
 itemsadder-api = "com.github.LoneDev6:API-ItemsAdder:3.6.1"
 nbt-api = "de.tr7zw:item-nbt-api:2.15.7"
 oraxen = "io.th0rgal:oraxen:1.217.0"
-nexo = "com.nexomc:nexo:1.24.0"
+nexo = "com.nexomc:nexo:1.25.0"
 
 # Craft Engine
 craftengine-core = { module = "net.momirealms:craft-engine-core", version.ref = "craftengine" }
