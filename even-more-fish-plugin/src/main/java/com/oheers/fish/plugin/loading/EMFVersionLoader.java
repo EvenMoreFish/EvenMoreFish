@@ -68,6 +68,7 @@ public class EMFVersionLoader {
 
     private URLClassLoader getClassLoader(ClassLoader parent) {
         try (InputStream is = getURL(parent).openStream()) {
+            plugin.getDataFolder().mkdirs();
             File file = new File(plugin.getDataFolder(), Bukkit.getMinecraftVersion() + ".jar");
             file.deleteOnExit();
             Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
