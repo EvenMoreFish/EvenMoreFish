@@ -16,8 +16,7 @@ fishing:
   give-straight-to-inventory: false
 
   # Makes competitions resume after a server restart.
-  # This does not work if the server crashes.
-  # Experimental. May be changed or removed at any time.
+  # This does not work if the server crashes. See competition-backup to handle those.
   resume-competition-on-restart: false
 
   # Holds back any scheduled competitions if one is already active.
