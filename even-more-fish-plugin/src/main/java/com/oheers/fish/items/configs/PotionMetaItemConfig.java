@@ -2,6 +2,7 @@ package com.oheers.fish.items.configs;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +26,7 @@ public class PotionMetaItemConfig extends ItemConfig<PotionEffect> {
         if (potionSettings == null) {
             return null;
         }
-        return FishUtils.getPotionEffect(potionSettings);
+        return PotionEffectSerializer.get().deserialize(potionSettings);
     }
 
     @Override

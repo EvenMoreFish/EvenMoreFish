@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigUtils;
+import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
 import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.requirement.Requirement;
@@ -253,7 +254,7 @@ public class Fish implements IFish, Sortable {
             return;
         }
 
-        PotionEffect effect = FishUtils.getPotionEffect(effectConfig);
+        PotionEffect effect = PotionEffectSerializer.get().deserialize(effectConfig);
         if (effect == null) {
             Logging.warn(effectConfig + " is not a valid potion effect for fish: " + getName());
             return;

@@ -3,6 +3,8 @@ package com.oheers.fish;
 import br.net.fabiozumbi12.RedProtect.Bukkit.RedProtect;
 import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
+import com.oheers.fish.api.config.serializer.SoundSerializer;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.exceptions.InvalidFishException;
@@ -44,6 +46,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.Utils;
@@ -58,7 +61,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-
+@ApiStatus.Internal
 public class FishUtils {
 
     private static final DurationFormatter durationFormatter = new DurationFormatter(TimeUnit.SECONDS);
@@ -495,54 +498,6 @@ public class FishUtils {
         return colour.substring(0, openingTagEnd + 1) + "{name}";
     }
 
-    private static @Nullable PotionEffect getPotionEffect(@NotNull String effectString, @NotNull String separator) {
-
-        String[] split = effectString.split(separator);
-        if (split.length != 3) {
-            Logging.error("Invalid potion effect string: " + effectString);
-            Logging.error("The correct format is \"potion,amplifier,duration\".");
-            return null;
-        }
-        PotionEffectType type = PotionEffectType.getByName(split[0].toUpperCase());
-        if (type == null) {
-            Logging.error("Potion effect type " + split[0] + " is not valid.");
-            return null;
-        }
-        Integer amplifier = FishUtils.getInteger(split[1]);
-        if (amplifier == null || amplifier < 1) {
-            Logging.error("Potion effect amplifier " + split[1] + " is not valid.");
-            return null;
-        }
-        Integer duration = FishUtils.getInteger(split[2]);
-        if (duration == null || duration < 1) {
-            Logging.error("Potion effect duration " + split[2] + " is not valid.");
-            return null;
-        }
-        return new PotionEffect(
-            type,
-            duration * 20,
-            amplifier - 1,
-            false
-        );
-    }
-
-    /**
-     * Fetches a PotionEffect from a String.
-     * @param effectString The String to fetch the PotionEffect from.
-     * @return A PotionEffect built from the provided String, or null if invalid.
-     */
-    public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString) {
-        // Correct format using commas
-        if (effectString.contains(",")) {
-            return getPotionEffect(effectString, ",");
-        // Incorrect format that was shipped with default configs for a long time
-        } else if (effectString.contains(":")) {
-            return getPotionEffect(effectString, ":");
-        } else {
-            return null;
-        }
-    }
-
     public static @Nullable Enchantment getEnchantment(@NotNull String namespace) {
         return getFromBukkitRegistry(namespace, Registry.ENCHANTMENT);
     }
@@ -588,14 +543,6 @@ public class FishUtils {
         }
         try {
             return Enum.valueOf(enumClass, value.toUpperCase());
-        } catch (IllegalArgumentException exception) {
-            return null;
-        }
-    }
-
-    public static @Nullable Sound.Type getSound(@Nullable String name) {
-        try {
-            return org.bukkit.Sound.valueOf(name);
         } catch (IllegalArgumentException exception) {
             return null;
         }
@@ -653,6 +600,36 @@ public class FishUtils {
             return null;
         }
         return papiParsed;
+    }
+
+    // Deprecated. Keep until the API module can be considered stable.
+
+    /**
+     * @deprecated Use {@link PotionEffectSerializer#deserialize(String, String)} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString, @NotNull String separator) {
+        return PotionEffectSerializer.get().deserialize(effectString, separator);
+    }
+
+    /**
+     * @deprecated Use {@link PotionEffectSerializer#deserialize(String)} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString) {
+        return PotionEffectSerializer.get().deserialize(effectString);
+    }
+
+    /**
+     * @deprecated Use {@link SoundSerializer#deserialize(String)} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public static @Nullable Sound.Type getSound(@Nullable String name) {
+        try {
+            return org.bukkit.Sound.valueOf(name);
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
     }
 
 }

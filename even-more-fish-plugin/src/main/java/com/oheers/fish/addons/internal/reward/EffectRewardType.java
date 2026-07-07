@@ -2,6 +2,7 @@ package com.oheers.fish.addons.internal.reward;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
 import com.oheers.fish.api.reward.RewardType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ public class EffectRewardType extends RewardType {
 
     @Override
     public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location hookLocation) {
-        PotionEffect effect = FishUtils.getPotionEffect(value);
+        PotionEffect effect = PotionEffectSerializer.get().deserialize(value);
         if (effect == null) {
             EvenMoreFish.getInstance().getLogger().warning("Invalid effect specified for RewardType " + getIdentifier() + ": " + value);
             return;
