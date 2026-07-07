@@ -3,6 +3,7 @@ package com.oheers.fish;
 import br.net.fabiozumbi12.RedProtect.Bukkit.RedProtect;
 import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.config.serializer.BossBarOverlaySerializer;
 import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
 import com.oheers.fish.api.config.serializer.SoundSerializer;
 import com.oheers.fish.api.registry.EMFRegistry;
@@ -502,28 +503,6 @@ public class FishUtils {
         return getFromBukkitRegistry(namespace, Registry.ENCHANTMENT);
     }
 
-    public static BossBar.Overlay fetchBarStyle(@Nullable String styleStr) {
-        if (styleStr == null) {
-            return BossBar.Overlay.NOTCHED_10;
-        }
-        BossBar.Overlay modern = getEnumValue(BossBar.Overlay.class, styleStr);
-        if (modern != null) {
-            return modern;
-        }
-        // Manually convert legacy to modern to stay compatible with old configs.
-        BarStyle legacy = getEnumValue(BarStyle.class, styleStr);
-        if (legacy == null) {
-            return BossBar.Overlay.NOTCHED_10;
-        }
-        return switch (legacy) {
-            case SOLID -> BossBar.Overlay.PROGRESS;
-            case SEGMENTED_6 -> BossBar.Overlay.NOTCHED_6;
-            case SEGMENTED_10 -> BossBar.Overlay.NOTCHED_10;
-            case SEGMENTED_12 -> BossBar.Overlay.NOTCHED_12;
-            case SEGMENTED_20 -> BossBar.Overlay.NOTCHED_20;
-        };
-    }
-
     public static @NotNull <E extends Enum<E>> E getEnumValue(@NotNull Class<E> enumClass, @Nullable String value, @NotNull E def) {
         E enumValue = getEnumValue(enumClass, value);
         if (enumValue == null) {
@@ -630,6 +609,11 @@ public class FishUtils {
         } catch (IllegalArgumentException exception) {
             return null;
         }
+    }
+
+    @Deprecated(forRemoval = true)
+    public static BossBar.Overlay fetchBarStyle(@Nullable String styleStr) {
+        return BossBarOverlaySerializer.get().deserialize(styleStr);
     }
 
 }
