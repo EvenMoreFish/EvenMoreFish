@@ -1,25 +1,31 @@
-package com.oheers.fish.config.serializer;
+package com.oheers.fish.api.config.serializer;
 
 import com.oheers.fish.api.Logging;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.NamespacedKey;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class SoundSerializer {
+public class SoundSerializer implements EMFSerializer<Sound> {
 
-    public static String serialize(@Nullable Sound element) {
-        if (element == null) {
-            return null;
-        }
+    private static final SoundSerializer INSTANCE = new SoundSerializer();
+
+    private SoundSerializer() {}
+
+    public static @NotNull SoundSerializer get() {
+        return INSTANCE;
+    }
+
+    public @NotNull String serialize(@NotNull Sound element) {
         return element.name().asString() + "," + element.volume() + "," + element.pitch();
     }
 
-    public static Sound deserialize(@Nullable String element) {
+    public @Nullable Sound deserialize(@Nullable String element) {
         return deserialize(element, 1, 1);
     }
 
-    public static Sound deserialize(@Nullable String element, float defaultVolume, float defaultPitch) {
+    public @Nullable Sound deserialize(@Nullable String element, float defaultVolume, float defaultPitch) {
         if (element == null) {
             return null;
         }

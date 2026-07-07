@@ -5,7 +5,7 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.competition.CompetitionType;
-import com.oheers.fish.config.serializer.SoundSerializer;
+import com.oheers.fish.api.config.serializer.SoundSerializer;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -294,7 +294,7 @@ public class CompetitionFile extends ConfigBase {
         if (soundString.equalsIgnoreCase("NONE")) {
             return null;
         }
-        Sound sound = SoundSerializer.deserialize(soundString, 10F, 1F);
+        Sound sound = SoundSerializer.get().deserialize(soundString, 10F, 1F);
         if (sound == null) {
             EvenMoreFish.getInstance().getLogger().warning(soundString + " is not a valid sound. Defaulting to NONE.");
         }

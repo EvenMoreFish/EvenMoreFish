@@ -12,7 +12,6 @@ import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
-import com.oheers.fish.config.serializer.SoundSerializer;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.model.CompetitionReport;
 import com.oheers.fish.database.model.user.UserReport;

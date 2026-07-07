@@ -1,6 +1,6 @@
 package com.oheers.fish.config;
 
-import com.oheers.fish.config.serializer.SoundSerializer;
+import com.oheers.fish.api.config.serializer.SoundSerializer;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import net.kyori.adventure.sound.Sound;
 import org.evenmorefish.dimensionfishing.config.DimensionFishingConfigProvider;
@@ -52,7 +52,7 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     @Override
     public @NotNull Sound getLavaFishingSwallowSound() {
         String soundString = MainConfig.getInstance().getConfig().getString("dimension-fishing.lava.swallow-sound");
-        Sound sound = SoundSerializer.deserialize(soundString);
+        Sound sound = SoundSerializer.get().deserialize(soundString);
         if (sound != null) {
             return sound;
         }
@@ -62,7 +62,7 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     @Override
     public @NotNull Sound getVoidFishingSwallowSound() {
         String soundString = MainConfig.getInstance().getConfig().getString("dimension-fishing.void.swallow-sound");
-        Sound sound = SoundSerializer.deserialize(soundString);
+        Sound sound = SoundSerializer.get().deserialize(soundString);
         if (sound != null) {
             return sound;
         }
@@ -72,7 +72,7 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     @Override
     public @NotNull Sound getLavaFishingBiteSound() {
         String soundString = MainConfig.getInstance().getConfig().getString("dimension-fishing.lava.bite-sound");
-        Sound sound = SoundSerializer.deserialize(soundString);
+        Sound sound = SoundSerializer.get().deserialize(soundString);
         if (sound != null) {
             return sound;
         }
@@ -86,7 +86,7 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     @Override
     public @NotNull Sound getVoidFishingBiteSound() {
         String soundString = MainConfig.getInstance().getConfig().getString("dimension-fishing.void.bite-sound");
-        Sound sound = SoundSerializer.deserialize(soundString);
+        Sound sound = SoundSerializer.get().deserialize(soundString);
         if (sound != null) {
             return sound;
         }
