@@ -533,8 +533,8 @@ public class FishUtils {
     }
 
     public static @Nullable <E extends Enum<E>> E getEnumValue(@NotNull Class<E> enumClass, @Nullable String value) {
-        // Safety check - These classes are interfaces in newer Paper versions.
-        if (BAD_ENUMS.contains(enumClass)) {
+        // Safety check - Some classes are interfaces in newer Paper versions.
+        if (!enumClass.isEnum()) {
             throw new IllegalArgumentException(enumClass.getName() + " cannot be used in FishUtils#getEnumValue.");
         }
 
