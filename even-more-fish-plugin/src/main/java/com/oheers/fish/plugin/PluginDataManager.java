@@ -5,6 +5,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.Database;
 import com.oheers.fish.database.DatabaseUtil;
+import com.oheers.fish.database.data.DatabaseWriteQueue;
 import com.oheers.fish.database.data.FishLogKey;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.database.data.UserFishRarityKey;
@@ -31,6 +32,7 @@ public class PluginDataManager {
     private final EvenMoreFish plugin;
     private Database database;
     private UserManager userManager;
+    private DatabaseWriteQueue writeQueue;
 
     // Data Managers
     private DataManager<Collection<FishLog>> fishLogDataManager;
@@ -52,22 +54,23 @@ public class PluginDataManager {
         }
 
         this.database = new Database();
+        this.writeQueue = new DatabaseWriteQueue();
         initDataManagers();
     }
 
     public void initDataManagers() {
-        this.userManager = new UserManager(database);
-        this.fishLogDataManager = new DataManager<>(new FishLogSavingStrategy(), key -> {
+        this.userManager = new UserManager(database, writeQueue, null);
+        this.fishLogDataManager = new DataManager<>(new FishLogSavingStrategy(writeQueue), key -> {
             FishLogKey logKey = FishLogKey.from(key);
             return Collections.singleton(database.getFishLog(logKey.getUserId(), logKey.getFishName(), logKey.getFishRarity(), logKey.getDateTime()));
         });
-        this.fishStatsDataManager = new DataManager<>(new FishStatsSavingStrategy(), key -> {
+        this.fishStatsDataManager = new DataManager<>(new FishStatsSavingStrategy(writeQueue), key -> {
             final FishRarityKey fishRarityKey = FishRarityKey.from(key);
             return database.getFishStats(fishRarityKey.fishName(),fishRarityKey.fishRarity());
         });
 
         this.userFishStatsDataManager = new DataManager<UserFishStats>(
-            new UserFishStatsSavingStrategy(),
+            new UserFishStatsSavingStrategy(writeQueue),
             key -> {
                 final UserFishRarityKey userFishRarityKey = UserFishRarityKey.from(key);
                 return database.getUserFishStats(userFishRarityKey.userId(), userFishRarityKey.fishName(), userFishRarityKey.fishRarity());
@@ -76,9 +79,9 @@ public class PluginDataManager {
             TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
         );
 
-        this.userReportDataManager = new DataManager<>(new UserReportsSavingStrategy(), uuid -> database.getUserReport(UUID.fromString(uuid)));
+        this.userReportDataManager = new DataManager<>(new UserReportsSavingStrategy(writeQueue), uuid -> database.getUserReport(UUID.fromString(uuid)));
         this.competitionDataManager = new DataManager<CompetitionReport>(
-            new CompetitionSavingStrategy(),
+            new CompetitionSavingStrategy(writeQueue),
             key -> database.getCompetitionReport(Integer.parseInt(key)),
             Long.valueOf(MainConfig.getInstance().getCompetitionSaveInterval()),
             TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
@@ -91,11 +94,19 @@ public class PluginDataManager {
         }
 
         try {
-            // Flush all pending data
+            // Flush all pending data. The managers enqueue their remaining
+            // writes onto the write queue.
             userReportDataManager.shutdown();
             userFishStatsDataManager.shutdown();
             fishStatsDataManager.shutdown();
+            fishLogDataManager.shutdown();
             competitionDataManager.shutdown();
+
+            // Drain the write queue before closing the pool so no queued
+            // writes are lost. Blocking here (onDisable) is acceptable.
+            if (writeQueue != null) {
+                writeQueue.shutdown(60, TimeUnit.SECONDS);
+            }
 
             // Close database connection
             database.shutdown();
@@ -131,6 +142,13 @@ public class PluginDataManager {
 
     public Database getDatabase() {
         return database;
+    }
+
+    /**
+     * The single-threaded queue all database writes are dispatched to.
+     */
+    public DatabaseWriteQueue getWriteQueue() {
+        return writeQueue;
     }
 
 
