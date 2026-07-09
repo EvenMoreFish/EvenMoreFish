@@ -255,7 +255,13 @@ public abstract class EMFMessage {
         setLength(Processor.LENGTH_FORMAT.format(fish.getLength()));
         setRarity(fish.getRarity().getDisplayName());
 
-        Component display = fish.getDisplayName().getComponentMessage().hoverEvent(fish.give());
+        Component display = fish.getDisplayName().getComponentMessage();
+
+        ItemStack fishItem = fish.give();
+        if (!fishItem.isEmpty()) {
+            display = display.hoverEvent(fishItem);
+        }
+
         setFishCaught(display);
     }
 
