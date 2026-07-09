@@ -180,15 +180,19 @@ public class SellHelper {
 
         Database database = EvenMoreFish.getInstance().getPluginDataManager().getDatabase();
 
-        database.createTransaction(transactionId, userId, timestamp);
-        soldFish.forEach(fish -> database.createSale(
-            transactionId,
-            fish.getName(),
-            fish.getRarity(),
-            fish.getAmount(),
-            fish.getLength(),
-            fish.getTotalValue()
-        ));
+        // Insert the transaction and sale rows off the server thread; the
+        // queue keeps the transaction row ahead of its sale rows.
+        EvenMoreFish.getInstance().getPluginDataManager().getWriteQueue().execute(() -> {
+            database.createTransaction(transactionId, userId, timestamp);
+            soldFish.forEach(fish -> database.createSale(
+                transactionId,
+                fish.getName(),
+                fish.getRarity(),
+                fish.getAmount(),
+                fish.getLength(),
+                fish.getTotalValue()
+            ));
+        });
 
         final DataManager<UserReport> userReportDataManager = EvenMoreFish.getInstance().getPluginDataManager().getUserReportDataManager();
         final UserReport report = userReportDataManager.get(uuid.toString());
