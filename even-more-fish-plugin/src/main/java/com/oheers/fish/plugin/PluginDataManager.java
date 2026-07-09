@@ -24,7 +24,10 @@ import com.oheers.fish.database.model.user.UserReport;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -33,6 +36,12 @@ public class PluginDataManager {
     private Database database;
     private UserManager userManager;
     private DatabaseWriteQueue writeQueue;
+
+    // Users whose fish stats rows have been fully preloaded into the cache,
+    // so a cache miss on the server thread means "no row exists" and no
+    // blocking existence query is needed.
+    private final Set<Integer> preloadedUserFishStats = ConcurrentHashMap.newKeySet();
+    private volatile boolean fishStatsPreloaded;
 
     // Data Managers
     private DataManager<Collection<FishLog>> fishLogDataManager;
@@ -56,10 +65,11 @@ public class PluginDataManager {
         this.database = new Database();
         this.writeQueue = new DatabaseWriteQueue();
         initDataManagers();
+        writeQueue.execute(this::preloadFishStats);
     }
 
     public void initDataManagers() {
-        this.userManager = new UserManager(database, writeQueue, null);
+        this.userManager = new UserManager(database, writeQueue, this::preloadUserData);
         this.fishLogDataManager = new DataManager<>(new FishLogSavingStrategy(writeQueue), key -> {
             FishLogKey logKey = FishLogKey.from(key);
             return Collections.singleton(database.getFishLog(logKey.getUserId(), logKey.getFishName(), logKey.getFishRarity(), logKey.getDateTime()));
@@ -149,6 +159,61 @@ public class PluginDataManager {
      */
     public DatabaseWriteQueue getWriteQueue() {
         return writeQueue;
+    }
+
+    /**
+     * True once every row of the global fish stats table has been loaded
+     * into the cache, meaning a cache miss can be treated as "row does not
+     * exist" without a blocking query.
+     */
+    public boolean isFishStatsPreloaded() {
+        return fishStatsPreloaded;
+    }
+
+    /**
+     * True once all of the user's fish stats rows have been loaded into the
+     * cache, meaning a cache miss for that user can be treated as "row does
+     * not exist" without a blocking query.
+     */
+    public boolean isUserFishStatsPreloaded(int userId) {
+        return preloadedUserFishStats.contains(userId);
+    }
+
+    /**
+     * Runs on the write queue after the user's row is guaranteed to exist:
+     * warms the user report and user fish stats caches so the catch path on
+     * the server thread never needs a blocking load.
+     */
+    private void preloadUserData(UUID uuid, int userId) {
+        UserReport report = database.getUserReport(uuid);
+        if (report != null) {
+            userReportDataManager.cacheLoadedValue(uuid.toString(), report);
+        }
+
+        List<UserFishStats> statsRows = database.loadAllUserFishStats(userId);
+        if (statsRows != null) {
+            for (UserFishStats stats : statsRows) {
+                userFishStatsDataManager.cacheLoadedValue(
+                    UserFishRarityKey.of(userId, stats.getFishName(), stats.getFishRarity()).toString(),
+                    stats
+                );
+            }
+            preloadedUserFishStats.add(userId);
+        }
+    }
+
+    private void preloadFishStats() {
+        List<FishStats> rows = database.loadAllFishStats();
+        if (rows == null) {
+            plugin.getLogger().warning("Could not preload fish stats; falling back to on-demand loads.");
+            return;
+        }
+
+        for (FishStats stats : rows) {
+            fishStatsDataManager.cacheLoadedValue(FishRarityKey.of(stats.getFishName(), stats.getFishRarity()).toString(), stats);
+        }
+        fishStatsPreloaded = true;
+        plugin.getLogger().info("Preloaded %d fish stats entries.".formatted(rows.size()));
     }
 
 
