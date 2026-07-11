@@ -38,7 +38,7 @@ public class SkullSaver implements Listener {
         event.setCancelled(true);
         event.setDropItems(false);
 
-        Fish f = FishUtils.getFish(skullMeta, event.getPlayer());
+        IFish f = FishManager.getInstance().getFish(skullMeta, event.getPlayer());
         if (f == null) {
             // Uncancel the event so people can still pick up the heads.
             event.setCancelled(false);

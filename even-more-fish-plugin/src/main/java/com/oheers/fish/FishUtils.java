@@ -8,6 +8,7 @@ import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
 import com.oheers.fish.api.config.serializer.SoundSerializer;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.registry.EMFRegistry;
+import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.Fish;
@@ -212,20 +213,6 @@ public class FishUtils {
         // Remaining seconds to always show, e.g. "1 minutes and 0 seconds left" and "5 seconds left"
         returning += (timeLeft % 60);
         return returning;
-    }
-
-    /**
-     * Determines whether the bait has the emf nbt tag "bait:", this can be used to decide whether this is a bait that
-     * can be applied to a rod or not.
-     *
-     * @param item The item being considered.
-     * @return Whether this ItemStack is a bait.
-     */
-    public static boolean isBaitObject(@NotNull ItemStack item) {
-        if (!item.isEmpty()) {
-            return NbtUtils.hasKey(item, NbtKeys.EMF_BAIT);
-        }
-        return false;
     }
 
     /**
@@ -544,6 +531,14 @@ public class FishUtils {
     public static @Nullable Fish getFish(@Nullable Skull skull, @Nullable Player fisher) {
         IFish abstracted = FishManager.getInstance().getFish(skull, fisher);
         return (abstracted instanceof Fish fish) ? fish : null;
+    }
+
+    /**
+     * @deprecated Use {@link BaitManager#isBait(ItemStack)} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public static boolean isBaitObject(@NotNull ItemStack item) {
+        return BaitManager.getInstance().isBait(item);
     }
 
 }

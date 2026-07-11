@@ -1,6 +1,7 @@
 package com.oheers.fish.api;
 
-import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
@@ -33,7 +34,7 @@ public class EMFAPI {
      */
     @Deprecated(forRemoval = true)
     public boolean isBait(@NotNull ItemStack item) {
-        return FishUtils.isBaitObject(item);
+        return BaitManager.getInstance().isBait(item);
     }
 
     /**
@@ -41,7 +42,8 @@ public class EMFAPI {
      */
     @Deprecated(forRemoval = true)
     public @Nullable Fish getFish(ItemStack item) {
-        return FishUtils.getFish(item);
+        IFish abstracted = FishManager.getInstance().getFish(item);
+        return (abstracted instanceof Fish fish) ? fish : null;
     }
 
     /**
@@ -49,7 +51,8 @@ public class EMFAPI {
      */
     @Deprecated(forRemoval = true)
     public @Nullable Fish getFish(Skull skull, Player fisher) throws InvalidFishException {
-        return FishUtils.getFish(skull, fisher);
+        IFish abstracted = FishManager.getInstance().getFish(skull, fisher);
+        return (abstracted instanceof Fish fish) ? fish : null;
     }
 
     /**
