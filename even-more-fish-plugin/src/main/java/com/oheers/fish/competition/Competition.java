@@ -308,7 +308,11 @@ public class Competition {
     }
 
     private void processRewards() {
-        if (competitionType.getStrategy().isSingleReward() && singleWinner != null) {
+        if (competitionType.getStrategy().isSingleReward()) {
+            if (singleWinner == null) {
+                Logging.warn("Single-winner competition ended without a winner.");
+                return;
+            }
             singleReward(singleWinner);
         } else {
             handleRewards();
