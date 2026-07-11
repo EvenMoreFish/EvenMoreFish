@@ -68,29 +68,8 @@ public class FishUtils {
     private static final DurationFormatter durationFormatter = new DurationFormatter(TimeUnit.SECONDS);
     public static final UUID B64_SKULL_UUID = UUID.fromString("07cd5534-e542-4fbf-861c-67a144ecf776");
 
-    // Enums in 1.20.1 API that are not enums in modern versions.
-    // Used in getEnumValue and will throw if any of these match.
-    private static final List<Class<? extends Enum<?>>> BAD_ENUMS = List.of(
-        org.bukkit.Sound.class
-    );
-
     private FishUtils() {
         throw new UnsupportedOperationException();
-    }
-
-    // checks for the "emf-fish-name" nbt tag, to determine if this ItemStack is a fish or not.
-    public static boolean isFish(@Nullable ItemStack item) {
-        if (item == null || item.isEmpty()) {
-            return false;
-        }
-        return NbtUtils.hasKey(item, NbtKeys.EMF_FISH_NAME);
-    }
-
-    public static boolean isFish(@Nullable Skull skull) {
-        if (skull == null) {
-            return false;
-        }
-        return NbtUtils.hasKey(skull, NbtKeys.EMF_FISH_NAME);
     }
 
     public static @Nullable Fish getFish(@Nullable ItemStack item) {
@@ -614,6 +593,22 @@ public class FishUtils {
     @Deprecated(forRemoval = true)
     public static BossBar.Overlay fetchBarStyle(@Nullable String styleStr) {
         return BossBarOverlaySerializer.get().deserialize(styleStr);
+    }
+
+    /**
+     * @deprecated Use {@link FishManager#isFish(ItemStack)} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public static boolean isFish(@Nullable ItemStack item) {
+        return FishManager.getInstance().isFish(item);
+    }
+
+    /**
+     * @deprecated Use {@link FishManager#isFish(Skull)} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public static boolean isFish(@Nullable Skull skull) {
+        return FishManager.getInstance().isFish(skull);
     }
 
 }

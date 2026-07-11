@@ -14,6 +14,8 @@ import com.oheers.fish.fishing.items.config.FishConversions;
 import com.oheers.fish.fishing.items.config.RarityConversions;
 import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.utils.WeightedRandom;
+import com.oheers.fish.utils.nbt.NbtKeys;
+import com.oheers.fish.utils.nbt.NbtUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Skull;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -114,12 +116,18 @@ public class FishManager extends AbstractFishManager<Rarity> {
 
     @Override
     public boolean isFish(@Nullable ItemStack item) {
-        return FishUtils.isFish(item);
+        if (item == null || item.isEmpty()) {
+            return false;
+        }
+        return NbtUtils.hasKey(item, NbtKeys.EMF_FISH_NAME);
     }
 
     @Override
     public boolean isFish(@Nullable Skull skull) {
-        return FishUtils.isFish(skull);
+        if (skull == null) {
+            return false;
+        }
+        return NbtUtils.hasKey(skull, NbtKeys.EMF_FISH_NAME);
     }
 
     @Override
