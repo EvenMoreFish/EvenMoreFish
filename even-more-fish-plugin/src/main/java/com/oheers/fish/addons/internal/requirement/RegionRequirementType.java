@@ -1,5 +1,6 @@
 package com.oheers.fish.addons.internal.requirement;
 
+import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.requirement.RequirementContext;
@@ -18,7 +19,7 @@ public class RegionRequirementType extends RequirementType {
         if (location == null) {
             return false;
         }
-        return FishUtils.checkRegion(location, values);
+        return Checks.canUseRegion(location, values);
     }
 
     @Override

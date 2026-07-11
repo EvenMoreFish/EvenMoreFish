@@ -53,12 +53,12 @@ public abstract class Processor<E extends Event> {
 
     public @Nullable ItemStack getCaughtItem(@NotNull Player player, @NotNull Location location, @Nullable ItemStack fishingRod) {
         // Check if fishing is allowed in this world.
-        if (!FishUtils.checkWorld(location)) {
+        if (!Checks.canFishInWorld(location)) {
             Logging.debug("Fish cannot be caught in this world.");
             return null;
         }
         // Check if fishing is allowed in this WorldGuard or RedProtect region.
-        if (!FishUtils.checkRegion(location, MainConfig.getInstance().getAllowedRegions())) {
+        if (!Checks.canFishInRegion(location)) {
             Logging.debug("Fish cannot be caught in this region.");
             return null;
         }

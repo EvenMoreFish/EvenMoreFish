@@ -124,10 +124,6 @@ public class MainConfig extends ConfigBase {
         return getConfig().getBoolean("enabled", true);
     }
 
-    public boolean worldWhitelist() {
-        return !getConfig().getStringList("allowed-worlds").isEmpty();
-    }
-
     public List<String> getAllowedRegions() {
         return getConfig().getStringList("allowed-regions");
     }

@@ -10,23 +10,18 @@ import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.config.MainConfig;
-import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.DurationFormatter;
 import com.oheers.fish.utils.ItemUtils;
-import com.oheers.fish.utils.nbt.NbtKeys;
-import com.oheers.fish.utils.nbt.NbtUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
-import de.tr7zw.changeme.nbtapi.NBT;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.bossbar.BossBar;
@@ -40,7 +35,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Registry;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Skull;
-import org.bukkit.boss.BarStyle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -48,7 +42,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -107,41 +100,6 @@ public class FishUtils {
         giveItems(List.of(item), player);
     }
 
-    public static boolean checkRegion(@NotNull Location location, @NotNull List<String> whitelistedRegions) {
-        // If no whitelist is defined, allow all regions
-        if (whitelistedRegions.isEmpty()) {
-            return true;
-        }
-
-        // Check WorldGuard
-        if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
-            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-            RegionQuery query = container.createQuery();
-            ApplicableRegionSet regions = query.getApplicableRegions(BukkitAdapter.adapt(location));
-
-            for (ProtectedRegion region : regions) {
-                if (whitelistedRegions.contains(region.getId())) {
-                    return true; // Return true if a region matches the whitelist
-                }
-            }
-
-            return false; // No match found in WorldGuard regions
-        }
-
-        // Check RedProtect
-        if (Bukkit.getPluginManager().isPluginEnabled("RedProtect")) {
-            Region region = RedProtect.get().getAPI().getRegion(location);
-            if (region != null) {
-                return whitelistedRegions.contains(region.getName()); // Check if the region is whitelisted
-            }
-            return false; // No region found in RedProtect
-        }
-
-        // If no supported region plugins are found
-        EvenMoreFish.getInstance().getLogger().warning("Please install WorldGuard or RedProtect to use allowed-regions.");
-        return true; // Allow by default if no region plugin is present
-    }
-
 
     public static @Nullable String getRegionName(@NotNull Location location) {
         if (!MainConfig.getInstance().isRegionBoostsEnabled()) {
@@ -176,22 +134,6 @@ public class FishUtils {
         }
         
         return null;
-    }
-
-
-    public static boolean checkWorld(@NotNull Location l) {
-        // if the user has defined a world whitelist
-        if (!MainConfig.getInstance().worldWhitelist()) {
-            return true;
-        }
-
-        // Gets a list of user defined regions
-        List<String> whitelistedWorlds = MainConfig.getInstance().getAllowedWorlds();
-        if (l.getWorld() == null) {
-            return false;
-        }
-
-        return whitelistedWorlds.contains(l.getWorld().getName());
     }
 
     public static @NotNull EMFMessage timeFormat(long timeLeft) {
@@ -539,6 +481,22 @@ public class FishUtils {
     @Deprecated(forRemoval = true)
     public static boolean isBaitObject(@NotNull ItemStack item) {
         return BaitManager.getInstance().isBait(item);
+    }
+
+    /**
+     * @deprecated Use {@link Checks#canFishInWorld(Location)} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public static boolean checkWorld(@NotNull Location l) {
+        return Checks.canFishInWorld(l);
+    }
+
+    /**
+     * @deprecated Use {@link Checks#canUseRegion(Location, List)} instead.
+     */
+    @Deprecated(forRemoval = true)
+    public static boolean checkRegion(@NotNull Location location, @NotNull List<String> whitelistedRegions) {
+        return Checks.canUseRegion(location, whitelistedRegions);
     }
 
 }
