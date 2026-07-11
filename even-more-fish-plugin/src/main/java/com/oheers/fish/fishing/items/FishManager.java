@@ -2,6 +2,7 @@ package com.oheers.fish.fishing.items;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.fishing.FishingType;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.fishing.items.IFish;
@@ -16,7 +17,9 @@ import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.utils.WeightedRandom;
 import com.oheers.fish.utils.nbt.NbtKeys;
 import com.oheers.fish.utils.nbt.NbtUtils;
+import de.tr7zw.changeme.nbtapi.NBT;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Entity;
@@ -34,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.function.ToDoubleFunction;
 
 public class FishManager extends AbstractFishManager<Rarity> {
@@ -94,16 +98,82 @@ public class FishManager extends AbstractFishManager<Rarity> {
 
     @Override
     public @Nullable IFish getFish(@Nullable ItemStack item) {
-        return FishUtils.getFish(item);
+        if (item == null || item.isEmpty()) {
+            return null;
+        }
+        String nameString = NbtUtils.getString(item, NbtKeys.EMF_FISH_NAME);
+        String playerString = NbtUtils.getString(item, NbtKeys.EMF_FISH_PLAYER);
+        String rarityString = NbtUtils.getString(item, NbtKeys.EMF_FISH_RARITY);
+        Float lengthFloat = NbtUtils.getFloat(item, NbtKeys.EMF_FISH_LENGTH);
+        Integer randomIndex = NbtUtils.getInteger(item, NbtKeys.EMF_FISH_RANDOM_INDEX);
+
+        if (nameString == null || rarityString == null) {
+            return null;
+        }
+
+        Rarity rarity = FishManager.getInstance().getRarity(rarityString);
+        if (rarity == null) {
+            return null;
+        }
+
+        Fish fish = rarity.getFish(nameString);
+        if (fish == null) {
+            return null;
+        }
+        if (randomIndex != null) {
+            fish.getFactory().setRandomIndex(randomIndex);
+        }
+        fish.setLength(lengthFloat);
+        if (playerString != null) {
+            try {
+                fish.setFisherman(UUID.fromString(playerString));
+            } catch (IllegalArgumentException exception) {
+                fish.setFisherman((OfflinePlayer) null);
+            }
+        }
+        return fish;
     }
 
     @Override
     public @Nullable IFish getFish(@Nullable Skull skull, @Nullable Player fisher) {
-        try {
-            return FishUtils.getFish(skull, fisher);
-        } catch (InvalidFishException exception) {
+        if (skull == null) {
             return null;
         }
+        final String nameString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_NAME).toString()));
+        final String playerString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_PLAYER).toString()));
+        final String rarityString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RARITY).toString()));
+        final Float lengthFloat = NBT.getPersistentData(skull, nbt -> nbt.getFloat(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_LENGTH).toString()));
+        final Integer randomIndex = NBT.getPersistentData(skull, nbt -> nbt.getInteger(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RANDOM_INDEX).toString()));
+
+        if (nameString == null || rarityString == null) {
+            Logging.warn("NBT Error", new InvalidFishException("NBT Error"));
+            return null;
+        }
+
+        Rarity rarity = FishManager.getInstance().getRarity(rarityString);
+        if (rarity == null) {
+            return null;
+        }
+
+        Fish fish = rarity.getFish(nameString);
+        if (fish == null) {
+            return null;
+        }
+        fish.setLength(lengthFloat);
+        if (randomIndex != null) {
+            fish.getFactory().setRandomIndex(randomIndex);
+        }
+        if (playerString != null) {
+            try {
+                fish.setFisherman(UUID.fromString(playerString));
+            } catch (IllegalArgumentException exception) {
+                fish.setFisherman((OfflinePlayer) null);
+            }
+        } else if (fisher != null) {
+            fish.setFisherman(fisher);
+        }
+
+        return fish;
     }
 
     @Override

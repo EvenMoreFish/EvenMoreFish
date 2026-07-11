@@ -6,6 +6,7 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.serializer.BossBarOverlaySerializer;
 import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
 import com.oheers.fish.api.config.serializer.SoundSerializer;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.exceptions.InvalidFishException;
@@ -70,90 +71,6 @@ public class FishUtils {
 
     private FishUtils() {
         throw new UnsupportedOperationException();
-    }
-
-    public static @Nullable Fish getFish(@Nullable ItemStack item) {
-        if (item == null || item.isEmpty()) {
-            return null;
-        }
-        String nameString = NbtUtils.getString(item, NbtKeys.EMF_FISH_NAME);
-        String playerString = NbtUtils.getString(item, NbtKeys.EMF_FISH_PLAYER);
-        String rarityString = NbtUtils.getString(item, NbtKeys.EMF_FISH_RARITY);
-        Float lengthFloat = NbtUtils.getFloat(item, NbtKeys.EMF_FISH_LENGTH);
-        Integer randomIndex = NbtUtils.getInteger(item, NbtKeys.EMF_FISH_RANDOM_INDEX);
-
-        if (nameString == null || rarityString == null) {
-            return null;
-        }
-
-
-        // Get the rarity
-        Rarity rarity = FishManager.getInstance().getRarity(rarityString);
-
-        if (rarity == null) {
-            return null;
-        }
-
-        // setting the correct length so it's an exact replica.
-        Fish fish = rarity.getFish(nameString);
-        if (fish == null) {
-            return null;
-        }
-        if (randomIndex != null) {
-            fish.getFactory().setRandomIndex(randomIndex);
-        }
-        fish.setLength(lengthFloat);
-        if (playerString != null) {
-            try {
-                fish.setFisherman(UUID.fromString(playerString));
-            } catch (IllegalArgumentException exception) {
-                fish.setFisherman((OfflinePlayer) null);
-            }
-        }
-        return fish;
-    }
-
-    public static @Nullable Fish getFish(@Nullable Skull skull, @Nullable Player fisher) throws InvalidFishException {
-        if (skull == null) {
-            return null;
-        }
-        final String nameString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_NAME).toString()));
-        final String playerString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_PLAYER).toString()));
-        final String rarityString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RARITY).toString()));
-        final Float lengthFloat = NBT.getPersistentData(skull, nbt -> nbt.getFloat(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_LENGTH).toString()));
-        final Integer randomIndex = NBT.getPersistentData(skull, nbt -> nbt.getInteger(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RANDOM_INDEX).toString()));
-
-        if (nameString == null || rarityString == null) {
-            throw new InvalidFishException("NBT Error");
-        }
-
-        // Get the rarity
-        Rarity rarity = FishManager.getInstance().getRarity(rarityString);
-
-        if (rarity == null) {
-            return null;
-        }
-
-        // setting the correct length and randomIndex, so it's an exact replica.
-        Fish fish = rarity.getFish(nameString);
-        if (fish == null) {
-            return null;
-        }
-        fish.setLength(lengthFloat);
-        if (randomIndex != null) {
-            fish.getFactory().setRandomIndex(randomIndex);
-        }
-        if (playerString != null) {
-            try {
-                fish.setFisherman(UUID.fromString(playerString));
-            } catch (IllegalArgumentException exception) {
-                fish.setFisherman((OfflinePlayer) null);
-            }
-        } else if (fisher != null) {
-            fish.setFisherman(fisher);
-        }
-
-        return fish;
     }
 
     public static void giveItems(@NotNull List<@Nullable ItemStack> items, @NotNull Player player) {
@@ -609,6 +526,16 @@ public class FishUtils {
     @Deprecated(forRemoval = true)
     public static boolean isFish(@Nullable Skull skull) {
         return FishManager.getInstance().isFish(skull);
+    }
+
+    public static @Nullable Fish getFish(@Nullable ItemStack item) {
+        IFish abstracted = FishManager.getInstance().getFish(item);
+        return (abstracted instanceof Fish fish) ? fish : null;
+    }
+
+    public static @Nullable Fish getFish(@Nullable Skull skull, @Nullable Player fisher) {
+        IFish abstracted = FishManager.getInstance().getFish(skull, fisher);
+        return (abstracted instanceof Fish fish) ? fish : null;
     }
 
 }
