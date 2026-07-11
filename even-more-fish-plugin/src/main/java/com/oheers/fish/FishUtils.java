@@ -528,11 +528,19 @@ public class FishUtils {
         return FishManager.getInstance().isFish(skull);
     }
 
+    /**
+     * @deprecated Use {@link FishManager#getFish(ItemStack)} instead.
+     */
+    @Deprecated(forRemoval = true)
     public static @Nullable Fish getFish(@Nullable ItemStack item) {
         IFish abstracted = FishManager.getInstance().getFish(item);
         return (abstracted instanceof Fish fish) ? fish : null;
     }
 
+    /**
+     * @deprecated Use {@link FishManager#getFish(Skull, Player)} instead.
+     */
+    @Deprecated(forRemoval = true)
     public static @Nullable Fish getFish(@Nullable Skull skull, @Nullable Player fisher) {
         IFish abstracted = FishManager.getInstance().getFish(skull, fisher);
         return (abstracted instanceof Fish fish) ? fish : null;

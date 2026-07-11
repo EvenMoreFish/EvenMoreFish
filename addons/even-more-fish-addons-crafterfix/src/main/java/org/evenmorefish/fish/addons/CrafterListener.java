@@ -2,6 +2,7 @@ package org.evenmorefish.fish.addons;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.block.Crafter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +21,7 @@ public class CrafterListener implements Listener {
             if (craftItem == null) {
                 continue;
             }
-            if (FishUtils.isFish(craftItem) || FishUtils.isBaitObject(craftItem)) {
+            if (FishManager.getInstance().isFish(craftItem) || FishUtils.isBaitObject(craftItem)) {
                 event.setCancelled(true);
             }
         }

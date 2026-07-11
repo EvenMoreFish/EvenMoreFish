@@ -1,7 +1,9 @@
 package com.oheers.fish.events;
 
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -19,8 +21,12 @@ public class FishInteractEvent implements Listener {
             || !event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
             return;
         }
+        ItemStack item = event.getItem();
+        if (item == null) {
+            return;
+        }
         // Creates a replica of the fish we can use. If the item is null or isn't a fish, the null check will pass.
-        Fish fish = FishUtils.getFish(event.getItem());
+        IFish fish = FishManager.getInstance().getFish(item);
         if (fish == null) {
             return;
         }
@@ -28,8 +34,7 @@ public class FishInteractEvent implements Listener {
             // Cancel the interact event
             event.setCancelled(true);
             // Take one item from the player's event hand itemstack so we know that it's gone
-            ItemStack itemInHand = event.getItem();
-            event.getPlayer().getInventory().getItemInMainHand().setAmount(itemInHand.getAmount() - 1);
+            event.getPlayer().getInventory().getItemInMainHand().setAmount(item.getAmount() - 1);
             // Runs through each eat-event
             fish.getActionRewards().forEach(r -> r.rewardPlayer(event.getPlayer(), null));
         }

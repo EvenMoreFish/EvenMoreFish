@@ -1,7 +1,9 @@
 package com.oheers.fish;
 
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.selling.WorthNBT;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -24,43 +26,30 @@ public class SkullSaver implements Listener {
         if (event.isCancelled()) return;
         if (event.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
         Block block = event.getBlock();
-        
+
         if (!isHead(block)) return;
         if (block.getDrops().isEmpty()) return;
-        
+
         BlockState state = event.getBlock().getState();
         Skull skullMeta = (Skull) state;
-        if (!FishUtils.isFish(skullMeta)) return;
+        if (!FishManager.getInstance().isFish(skullMeta)) return;
 
         ItemStack stack = block.getDrops().iterator().next().clone();
         event.setCancelled(true);
         event.setDropItems(false);
-        
-        try {
-            Fish f = FishUtils.getFish(skullMeta, event.getPlayer());
-            if (f == null) {
-                // Uncancel the event so people can still pick up the heads.
-                event.setCancelled(false);
-                event.setDropItems(true);
-                return;
-            }
-            ItemStack fishItem = f.give();
-            stack.setItemMeta(fishItem.getItemMeta());
-            block.setType(Material.AIR);
-            block.getWorld().dropItemNaturally(block.getLocation(), stack);
-            block.getWorld().playSound(block.getLocation(), Sound.BLOCK_BONE_BLOCK_BREAK, 1, 1);
-        } catch (InvalidFishException exception) {
-            EvenMoreFish.getInstance().getLogger().severe(() -> String.format("Error fetching fish from config at location: " +
-                "x:%d y:%d z:%d world:%s",
-                block.getLocation().getBlockX(),
-                block.getLocation().getBlockY(),
-                block.getLocation().getBlockZ(),
-                block.getLocation().getBlock().getWorld().getName()
-                )
-            );
+
+        Fish f = FishUtils.getFish(skullMeta, event.getPlayer());
+        if (f == null) {
+            // Uncancel the event so people can still pick up the heads.
+            event.setCancelled(false);
+            event.setDropItems(true);
+            return;
         }
-        
-        
+        ItemStack fishItem = f.give();
+        stack.setItemMeta(fishItem.getItemMeta());
+        block.setType(Material.AIR);
+        block.getWorld().dropItemNaturally(block.getLocation(), stack);
+        block.getWorld().playSound(block.getLocation(), Sound.BLOCK_BONE_BLOCK_BREAK, 1, 1);
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -76,11 +65,11 @@ public class SkullSaver implements Listener {
             return;
         }
         
-        if (FishUtils.isFish(stack)) {
+        if (FishManager.getInstance().isFish(stack)) {
             
             if (block.getState() instanceof Skull sm) {
-                Fish fish = FishUtils.getFish(stack);
-                if (fish != null) {
+                IFish iFish = FishManager.getInstance().getFish(stack);
+                if (iFish instanceof Fish fish) {
                     WorthNBT.setNBT(sm, fish);
                     sm.update();
                 }

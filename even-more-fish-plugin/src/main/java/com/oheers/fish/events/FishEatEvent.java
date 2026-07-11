@@ -1,8 +1,11 @@
 package com.oheers.fish.events;
 
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class FishEatEvent {
 
@@ -15,10 +18,11 @@ public class FishEatEvent {
     }
 
     public boolean checkEatEvent(PlayerItemConsumeEvent event) {
+        ItemStack item = event.getItem();
         // Checks if the eaten item is a fish
-        if (FishUtils.isFish(event.getItem())) {
+        if (FishManager.getInstance().isFish(item)) {
             // Creates a replica of the fish we can use
-            Fish fish = FishUtils.getFish(event.getItem());
+            IFish fish = FishManager.getInstance().getFish(item);
             if (fish == null) {
                 return false;
             }

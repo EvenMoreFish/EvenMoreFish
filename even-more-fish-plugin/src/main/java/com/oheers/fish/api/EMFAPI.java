@@ -17,7 +17,7 @@ public class EMFAPI {
      */
     @Deprecated(forRemoval = true)
     public boolean isFish(@Nullable ItemStack item) {
-        return FishUtils.isFish(item);
+        return FishManager.getInstance().isFish(item);
     }
 
     /**
@@ -25,7 +25,7 @@ public class EMFAPI {
      */
     @Deprecated(forRemoval = true)
     public boolean isFish(@Nullable Skull skull) {
-        return FishUtils.isFish(skull);
+        return FishManager.getInstance().isFish(skull);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.oheers.fish.utils;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.events.FishEatEvent;
+import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,7 +26,7 @@ public class ItemProtectionListener implements Listener {
             if (craftItem == null) {
                 continue;
             }
-            if (FishUtils.isFish(craftItem) || FishUtils.isBaitObject(craftItem)) {
+            if (FishManager.getInstance().isFish(craftItem) || FishUtils.isBaitObject(craftItem)) {
                 event.setCancelled(true);
             }
         }
@@ -39,7 +40,7 @@ public class ItemProtectionListener implements Listener {
             return;
         }
         ItemStack item = event.getItem();
-        if (FishUtils.isFish(item) || FishUtils.isBaitObject(item)) {
+        if (FishManager.getInstance().isFish(item) || FishUtils.isBaitObject(item)) {
             event.setCancelled(true);
         }
     }
@@ -51,7 +52,7 @@ public class ItemProtectionListener implements Listener {
             return;
         }
         ItemStack item = event.getFuel();
-        if (FishUtils.isFish(item) || FishUtils.isBaitObject(item)) {
+        if (FishManager.getInstance().isFish(item) || FishUtils.isBaitObject(item)) {
             event.setCancelled(true);
         }
     }
@@ -63,7 +64,7 @@ public class ItemProtectionListener implements Listener {
             return;
         }
         ItemStack item = event.getSource();
-        if (FishUtils.isFish(item) || FishUtils.isBaitObject(item)) {
+        if (FishManager.getInstance().isFish(item) || FishUtils.isBaitObject(item)) {
             event.setCancelled(true);
         }
     }
@@ -79,7 +80,7 @@ public class ItemProtectionListener implements Listener {
         if (item.getType().equals(Material.PLAYER_HEAD)) {
             return;
         }
-        if (FishUtils.isFish(item) || FishUtils.isBaitObject(item)) {
+        if (FishManager.getInstance().isFish(item) || FishUtils.isBaitObject(item)) {
             event.setCancelled(true);
         }
     }
