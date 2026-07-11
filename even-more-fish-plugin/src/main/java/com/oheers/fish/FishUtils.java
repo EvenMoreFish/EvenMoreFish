@@ -411,7 +411,7 @@ public class FishUtils {
     /**
      * @deprecated Use {@link PotionEffectSerializer#deserialize(String, String)} instead.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString, @NotNull String separator) {
         return PotionEffectSerializer.get().deserialize(effectString, separator);
     }
@@ -419,7 +419,7 @@ public class FishUtils {
     /**
      * @deprecated Use {@link PotionEffectSerializer#deserialize(String)} instead.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString) {
         return PotionEffectSerializer.get().deserialize(effectString);
     }
@@ -427,7 +427,7 @@ public class FishUtils {
     /**
      * @deprecated Use {@link SoundSerializer#deserialize(String)} instead.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static @Nullable Sound.Type getSound(@Nullable String name) {
         try {
             return org.bukkit.Sound.valueOf(name);
@@ -436,7 +436,7 @@ public class FishUtils {
         }
     }
 
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static BossBar.Overlay fetchBarStyle(@Nullable String styleStr) {
         return BossBarOverlaySerializer.get().deserialize(styleStr);
     }
@@ -444,7 +444,7 @@ public class FishUtils {
     /**
      * @deprecated Use {@link FishManager#isFish(ItemStack)} instead.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static boolean isFish(@Nullable ItemStack item) {
         return FishManager.getInstance().isFish(item);
     }
@@ -452,7 +452,7 @@ public class FishUtils {
     /**
      * @deprecated Use {@link FishManager#isFish(Skull)} instead.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static boolean isFish(@Nullable Skull skull) {
         return FishManager.getInstance().isFish(skull);
     }
@@ -460,7 +460,7 @@ public class FishUtils {
     /**
      * @deprecated Use {@link FishManager#getFish(ItemStack)} instead.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static @Nullable Fish getFish(@Nullable ItemStack item) {
         IFish abstracted = FishManager.getInstance().getFish(item);
         return (abstracted instanceof Fish fish) ? fish : null;
@@ -469,7 +469,7 @@ public class FishUtils {
     /**
      * @deprecated Use {@link FishManager#getFish(Skull, Player)} instead.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static @Nullable Fish getFish(@Nullable Skull skull, @Nullable Player fisher) {
         IFish abstracted = FishManager.getInstance().getFish(skull, fisher);
         return (abstracted instanceof Fish fish) ? fish : null;
@@ -478,7 +478,7 @@ public class FishUtils {
     /**
      * @deprecated Use {@link BaitManager#isBait(ItemStack)} instead.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static boolean isBaitObject(@NotNull ItemStack item) {
         return BaitManager.getInstance().isBait(item);
     }
@@ -486,7 +486,7 @@ public class FishUtils {
     /**
      * @deprecated Use {@link Checks#canFishInWorld(Location)} instead.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static boolean checkWorld(@NotNull Location l) {
         return Checks.canFishInWorld(l);
     }
@@ -494,7 +494,7 @@ public class FishUtils {
     /**
      * @deprecated Use {@link Checks#canUseRegion(Location, List)} instead.
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public static boolean checkRegion(@NotNull Location location, @NotNull List<String> whitelistedRegions) {
         return Checks.canUseRegion(location, whitelistedRegions);
     }
