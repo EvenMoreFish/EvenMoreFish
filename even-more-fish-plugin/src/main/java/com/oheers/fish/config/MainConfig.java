@@ -504,7 +504,8 @@ public class MainConfig extends ConfigBase {
     }
 
     public int getAFKMaxFishCaught() {
-        return getConfig().getInt("exploits.afk-fishing.max-caught", 10);
+        // Internally add 1 because otherwise it'll stop on the number instead of after.
+        return getConfig().getInt("exploits.afk-fishing.max-caught", 10) + 1;
     }
 
     public int getAFKCheckRange() {
