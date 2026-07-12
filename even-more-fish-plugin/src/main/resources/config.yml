@@ -38,6 +38,17 @@ fishing:
   # Allows spawner fish to be ignored for hunting
   hunt-ignore-spawner-fish: true
 
+# Exploit Configs
+exploits:
+  # AFK Fishing - If mcMMO's Overfishing is enabled, this will have no functionality.
+  afk-fishing:
+    # Should AFK fishing be protected against? (Default: false)
+    enabled: false
+    # How many fish can be caught before needing to move the hook?
+    max-caught: 10
+    # How far should the player need to move their hook?
+    range: 3
+
 # Backs up active competitions to a file.
 # Useful for crashes and such.
 competition-backup:
@@ -291,5 +302,5 @@ dimension-fishing:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 9
+version: 10
 

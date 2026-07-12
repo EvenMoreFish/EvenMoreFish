@@ -8,13 +8,18 @@ import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.Processor;
+import com.oheers.fish.fishing.exploits.AFKFishingTracker;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
+import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.permissions.UserPerms;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -40,22 +45,22 @@ public class FishingProcessor extends Processor<PlayerFishEvent> implements List
         ItemStack rod = getRod(event);
 
         if (rod == null) {
-            plugin.debug("Fishing blocked: could not find rod.");
+            plugin.debug("Custom fishing blocked: could not find rod.");
             return;
         }
 
         if (!isCustomFishAllowed(event.getPlayer())) {
-            plugin.debug("Fishing blocked: custom fish not allowed for player %s.".formatted(event.getPlayer().getName()));
+            plugin.debug("Custom fishing blocked: custom fish not allowed for player %s.".formatted(event.getPlayer().getName()));
             return;
         }
 
         if (!Checks.canUseRod(rod)) {
-            plugin.debug("Fishing blocked: rod unusable (%s).".formatted(rod));
+            plugin.debug("Custom fishing blocked: rod unusable (%s).".formatted(rod));
             return;
         }
 
         if (MainConfig.getInstance().requireFishingPermission() && !event.getPlayer().hasPermission(UserPerms.USE_ROD)) {
-            plugin.debug("Fishing blocked: permission required and player lacks it.");
+            plugin.debug("Custom fishing blocked: permission required and player lacks it.");
             if (event.getState() == PlayerFishEvent.State.FISHING) {
                 //send msg only when throw the lure
                 ConfigMessage.NO_PERMISSION_FISHING.getMessage().send(event.getPlayer());
