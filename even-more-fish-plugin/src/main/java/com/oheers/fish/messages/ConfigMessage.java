@@ -205,7 +205,10 @@ public enum ConfigMessage {
     BAIT_BOOSTS_RARITY(PrefixType.NONE, "bait.boosts-rarity"),
     BAIT_BOOSTS_RARITIES(PrefixType.NONE, "bait.boosts-rarities"),
     BAIT_BOOSTS_FISH(PrefixType.NONE, "bait.boosts-fish"),
-    BAIT_UNUSED_SLOT(PrefixType.NONE, "bait.unused-slot");
+    BAIT_UNUSED_SLOT(PrefixType.NONE, "bait.unused-slot"),
+
+    EXPLOITS_AFK_FISHING_DETECTED(PrefixType.ERROR, "exploits.afk-fishing.detected"),
+    EXPLOITS_AFK_FISHING_BLOCKED(PrefixType.ERROR, "exploits.afk-fishing.blocked");
 
     private final String id;
     private final PrefixType prefixType;

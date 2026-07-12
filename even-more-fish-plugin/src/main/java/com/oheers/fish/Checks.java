@@ -5,7 +5,9 @@ import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.gmail.nossr50.datatypes.player.McMMOPlayer;
 import com.gmail.nossr50.util.player.UserManager;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.fishing.exploits.AFKFishingTracker;
 import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.fishing.rods.RodManager;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -20,6 +22,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +33,7 @@ import java.util.stream.Stream;
 /**
  * A utility class for common checks
  */
+@ApiStatus.Internal
 public class Checks {
 
     /**
@@ -104,6 +108,13 @@ public class Checks {
             Region region = RedProtect.get().getAPI().getRegion(location);
             return region != null && allowedRegions.contains(region.getName());
         }
+    }
+
+    public static boolean isAFKFishing(@NotNull Player player) {
+        if (!MainConfig.getInstance().isAFKProtectionEnabled()) {
+            return false;
+        }
+        return AFKFishingTracker.get(player.getUniqueId()).isAFKFishing();
     }
 
 }

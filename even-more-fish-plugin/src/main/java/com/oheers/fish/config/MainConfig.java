@@ -1,13 +1,16 @@
 package com.oheers.fish.config;
 
+import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.config.serializer.BossBarOverlaySerializer;
 import com.oheers.fish.api.economy.EconomyType;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import net.kyori.adventure.bossbar.BossBar;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -487,6 +490,26 @@ public class MainConfig extends ConfigBase {
 
     public boolean getBaitShowUnusedSlots() {
         return getConfig().getBoolean("bait.show-unused-slots", true);
+    }
+
+    // Exploit Configs
+
+    public boolean isAFKProtectionEnabled() {
+        boolean enabled = getConfig().getBoolean("exploits.afk-fishing.enabled", false);
+        if (enabled && Bukkit.getPluginManager().isPluginEnabled("mcMMO") && ExperienceConfig.getInstance().isFishingExploitingPrevented()) {
+            Logging.warn("mcMMO Overfishing is enabled. EMF's Anti-AFK features will not function.");
+            return false;
+        }
+        return enabled;
+    }
+
+    public int getAFKMaxFishCaught() {
+        // Internally add 1 because otherwise it'll stop on the number instead of after.
+        return getConfig().getInt("exploits.afk-fishing.max-caught", 10) + 1;
+    }
+
+    public int getAFKCheckRange() {
+        return getConfig().getInt("exploits.afk-fishing.range", 3);
     }
 
 }
