@@ -288,6 +288,12 @@ bait:
   boosts-fish: '► <white>물고기 {amount}개'
   # This is added to the lore in place of a bait if show-unused-slots is enabled in the general section.
   unused-slot: <gray>► ? <i>가능한 슬롯
+exploits:
+  afk-fishing:
+    # When AFK Fishing is detected. This is sent on the final fish before the limit.
+    detected: "<white>There are no more fish in this area. Try moving your hook at least {range} blocks away."
+    # When AFK Fishing is blocked.
+    blocked: "<white>There are no more fish in this area. Try moving your hook at least {range} blocks away."
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 14
+version: 15
