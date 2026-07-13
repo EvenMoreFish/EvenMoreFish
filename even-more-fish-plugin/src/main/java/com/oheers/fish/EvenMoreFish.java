@@ -371,7 +371,7 @@ public class EvenMoreFish extends EMFPlugin {
      */
     @Override
     public void logSoldFish(@NotNull SoldFish sold) {
-        if (!DatabaseUtil.isDatabaseOnline()) {
+        if (!DatabaseUtil.isDatabaseOnline() || sold.getPlayer() == null) {
             return;
         }
         final UUID uuid = sold.getPlayer().getUniqueId();
