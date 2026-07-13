@@ -4,6 +4,7 @@ import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.events.EMFFishPreSaleEvent;
 import com.oheers.fish.api.events.EMFFishSoldEvent;
 import com.oheers.fish.api.plugin.EMFPlugin;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -38,8 +39,14 @@ public class SellHelper {
         boolean soldAny = false;
         double totalValue = 0;
         int count = 0;
-        while (iterator.hasNext()) {
-            SoldFish sold = SoldFish.get(player, iterator.next());
+
+        int size = inventory.getSize();
+        for (int slot = 0; slot < size; slot++) {
+            ItemStack item = inventory.getItem(slot);
+            if (item == null || item.isEmpty()) {
+                continue;
+            }
+            SoldFish sold = SoldFish.get(player, item);
             if (sold == null) {
                 continue;
             }
@@ -53,7 +60,7 @@ public class SellHelper {
             sold.getFish().getSellRewards().forEach(reward -> reward.rewardPlayer(player, player.getLocation()));
             new EMFFishSoldEvent(player, sold).callEvent();
 
-            iterator.remove();
+            inventory.setItem(slot, null);
             soldAny = true;
             totalValue += sold.getFinalValue();
             count += sold.getQuantity();
