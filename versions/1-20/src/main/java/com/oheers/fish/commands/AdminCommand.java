@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.requirement.RequirementContext;
+import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.api.utils.ManifestUtil;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitManager;
@@ -46,6 +47,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.jar.Attributes;
 
 import static com.oheers.fish.commands.AdminCommandProvider.sendHelpMessage;
@@ -63,6 +65,7 @@ public class AdminCommand {
             })
             .withSubcommands(
                 getFish(),
+                getRandomFish(),
                 getList(),
                 getCompetition(),
                 getCustomRod(),
@@ -128,6 +131,77 @@ public class AdminCommand {
                 message.setVariable("{player}", CommandUtils.getPlayersVariable(targets));
 
                 message.setFishCaught(initialFish.getName());
+                message.send(sender);
+            });
+    }
+
+    private CommandAPICommand getRandomFish() {
+        return new CommandAPICommand("random-fish")
+            .withArguments(
+                RarityArgument.create(),
+                new IntegerArgument("amount", 1).setOptional(true),
+                new EntitySelectorArgument.OnePlayer("target").setOptional(true)
+            )
+            .executes((sender, arguments) -> {
+                final Rarity rarity = arguments.getUnchecked("rarity");
+                if (rarity == null) {
+                    return;
+                }
+
+                final int amount = (Integer) arguments.getOptional("amount").orElse(1);
+                Player target = arguments.getUnchecked("target");
+                if (target == null && sender instanceof Player player) {
+                    target = player;
+                }
+
+                if (target == null) {
+                    ConfigMessage.ADMIN_CANT_BE_CONSOLE.getMessage().send(sender);
+                    return;
+                }
+
+                RequirementContext context = new RequirementContext(
+                    target.getWorld(),
+                    target.getLocation(),
+                    target,
+                    null,
+                    null,
+                    null
+                );
+
+                Fish fish = FishManager.getInstance().getFish(
+                    rarity,
+                    target.getLocation(),
+                    target,
+                    1,
+                    null,
+                    true,
+                    null,
+                    null,
+                    context
+                );
+                if (fish == null) {
+                    EMFSingleMessage message = PrefixType.ADMIN.getPrefix();
+                    message.appendString("<white>Failed to select fish. See console for information.");
+                    message.send(sender);
+                    return;
+                }
+
+                fish.init();
+
+                for (Reward reward : fish.getCatchRewards()) {
+                    reward.rewardPlayer(target, target.getLocation());
+                }
+
+                fish.setFisherman(target);
+
+                final ItemStack fishItem = fish.give();
+                fishItem.setAmount(amount);
+
+                FishUtils.giveItem(fishItem, target);
+
+                EMFMessage message = ConfigMessage.ADMIN_GIVE_PLAYER_FISH.getMessage();
+                message.setPlayer(target);
+                message.setFishCaught(fish.getName());
                 message.send(sender);
             });
     }

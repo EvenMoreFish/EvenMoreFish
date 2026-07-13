@@ -36,6 +36,8 @@ public abstract class AdminCommandProvider<C, A> {
 
     protected abstract @NotNull A fish();
 
+    protected abstract @NotNull A randomFish();
+
     protected abstract @NotNull A list();
 
     protected abstract @NotNull A competition();
