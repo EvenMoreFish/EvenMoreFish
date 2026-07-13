@@ -5,7 +5,7 @@ import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.gui.ConfigGui;
-import com.oheers.fish.selling.SellHelper;
+import com.oheers.fish.api.economy.selling.SellHelper;
 import de.themoep.inventorygui.GuiStorageElement;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
@@ -28,10 +28,10 @@ public class SellGui extends ConfigGui {
 
         Economy economy = Economy.getInstance();
 
-        double shopSaleValue = SellHelper.calculateInventoryWorth(this.fishInventory);
+        double shopSaleValue = FishUtils.calculateInventoryWorth(this.fishInventory);
         addReplacement("{sell-price}", economy.getWorthFormat(shopSaleValue, true));
 
-        double playerSaleValue = SellHelper.calculateInventoryWorth(player.getInventory());
+        double playerSaleValue = FishUtils.calculateInventoryWorth(player.getInventory());
         addReplacement("{sell-all-price}", economy.getWorthFormat(playerSaleValue, true));
 
         setCloseAction(close -> {

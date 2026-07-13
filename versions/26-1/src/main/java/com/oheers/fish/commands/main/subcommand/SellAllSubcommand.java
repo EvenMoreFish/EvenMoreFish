@@ -6,7 +6,7 @@ import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.arguments.EMFPlayerArgument;
 import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.permissions.UserPerms;
-import com.oheers.fish.selling.SellHelper;
+import com.oheers.fish.api.economy.selling.SellHelper;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;

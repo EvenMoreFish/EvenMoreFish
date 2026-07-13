@@ -1,6 +1,8 @@
 package com.oheers.fish.gui;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.economy.selling.SellHelper;
 import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.DatabaseUtil;
@@ -10,7 +12,6 @@ import com.oheers.fish.gui.guis.MainMenuGui;
 import com.oheers.fish.gui.guis.SellGui;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.ConfigMessage;
-import com.oheers.fish.selling.SellHelper;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiPageElement;
 import de.themoep.inventorygui.InventoryGui;
@@ -144,7 +145,7 @@ public class GuiUtils {
                 new SellGui(player, SellGui.SellState.CONFIRM, sellGui.getFishInventory()).open();
                 return;
             }
-            SellHelper.sellInventoryGui(click.getGui(), click.getWhoClicked());
+            FishUtils.sellInventoryGui(click.getGui(), click.getWhoClicked());
             closeGui(click.getWhoClicked());
         });
         newActionMap.put("sell-inventory-confirm", (gui, click) -> {
@@ -159,7 +160,7 @@ public class GuiUtils {
             closeGui(click.getWhoClicked());
         });
         newActionMap.put("sell-shop-confirm", (gui, click) -> {
-            SellHelper.sellInventoryGui(click.getGui(), click.getWhoClicked());
+            FishUtils.sellInventoryGui(click.getGui(), click.getWhoClicked());
             if (gui != null) {
                 gui.doRescue();
             }
