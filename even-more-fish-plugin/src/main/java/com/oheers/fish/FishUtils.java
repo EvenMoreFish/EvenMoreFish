@@ -428,7 +428,7 @@ public class FishUtils {
             if (!(element instanceof GuiStorageElement storageElement)) {
                 return;
             }
-            new SellHelper(storageElement.getStorage(), player).sell();
+            SellHelper.get().sell(storageElement.getStorage(), player);
         });
     }
 

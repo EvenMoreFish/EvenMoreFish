@@ -136,7 +136,7 @@ public class GuiUtils {
                 new SellGui(player, SellGui.SellState.CONFIRM, sellGui.getFishInventory()).open();
                 return;
             }
-            new SellHelper(click.getWhoClicked().getInventory(), player).sell();
+            SellHelper.get().sell(click.getWhoClicked().getInventory(), player);
             closeGui(humanEntity);
         });
         newActionMap.put("sell-shop", (gui, click) -> {
@@ -153,7 +153,7 @@ public class GuiUtils {
             if (!(humanEntity instanceof Player player)) {
                 return;
             }
-            new SellHelper(click.getWhoClicked().getInventory(), player).sell();
+            SellHelper.get().sell(click.getWhoClicked().getInventory(), player);
             if (gui != null) {
                 gui.doRescue();
             }

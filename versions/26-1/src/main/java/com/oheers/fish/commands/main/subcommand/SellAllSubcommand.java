@@ -43,7 +43,7 @@ public class SellAllSubcommand {
 
     private void execute(@NotNull CommandSender sender, @NotNull Player target) {
         if (CommandUtils.isEconomyEnabled(sender)) {
-            new SellHelper(target.getInventory(), target).sell();
+            SellHelper.get().sell(target.getInventory(), target);
         }
     }
 

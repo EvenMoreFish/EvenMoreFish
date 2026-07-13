@@ -170,7 +170,7 @@ public class MainCommand {
             .executesPlayer(info -> {
                 Player player = info.sender();
                 if (CommandUtils.isEconomyEnabled(player)) {
-                    new SellHelper(player.getInventory(), player).sell();
+                    SellHelper.get().sell(player.getInventory(), player);
                 }
             })
             .executes(info -> {
@@ -179,7 +179,7 @@ public class MainCommand {
                 }
                 Player player = Objects.requireNonNull(info.args().getUnchecked("target"));
                 if (CommandUtils.isEconomyEnabled(info.sender())) {
-                    new SellHelper(player.getInventory(), player).sell();
+                    SellHelper.get().sell(player.getInventory(), player);
                 }
             });
     }

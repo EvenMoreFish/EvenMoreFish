@@ -2,7 +2,9 @@ package com.oheers.fish.selling;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @deprecated Use {@link com.oheers.fish.api.economy.selling.SellHelper} instead.
@@ -10,26 +12,29 @@ import org.jetbrains.annotations.NotNull;
 @Deprecated(forRemoval = true)
 public class SellHelper {
 
-    private final com.oheers.fish.api.economy.selling.SellHelper ref;
+    private final Player player;
+    private final Inventory inventory;
+    private final ItemStack[] array;
 
     public SellHelper(@NotNull Inventory inventory, @NotNull Player player) {
-        this.ref = new com.oheers.fish.api.economy.selling.SellHelper(inventory, player);
+        this.inventory = inventory;
+        this.player = player;
+        this.array = null;
     }
 
     public SellHelper(@NotNull Inventory inventory, @NotNull Player player, boolean removeFromInventory) {
         this(inventory, player);
     }
 
-    /* TODO revisit.
     public SellHelper(@Nullable ItemStack @NotNull[] itemStacks, @NotNull Player player, boolean removeStacks) {
-        this.ref = new com.oheers.fish.api.economy.selling.SellHelper(inventory, player);
+        this.inventory = null;
+        this.player = player;
+        this.array = itemStacks;
     }
-     */
 
-    /* TODO revisit.
    public SellHelper(@Nullable ItemStack @NotNull[] itemStacks, @NotNull Player player) {
        this(itemStacks, player, true);
-   */
+   }
 
    /**
     * @deprecated use {@link #sell()} instead
@@ -40,7 +45,13 @@ public class SellHelper {
     }
 
     public void sell() {
-        ref.sell();
+        if (inventory != null) {
+            com.oheers.fish.api.economy.selling.SellHelper.get().sell(inventory, player);
+        } else if (array != null) {
+            com.oheers.fish.api.economy.selling.SellHelper.get().sell(array, player);
+        } else {
+            throw new IllegalStateException("Deprecated SellHelper has nothing to sell.");
+        }
     }
 
 }
