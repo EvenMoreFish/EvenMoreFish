@@ -4,10 +4,10 @@ worldedit = "7.3.0"
 redprotect = "7.7.3"
 flyway = "12.2.0"
 jdbi = "3.54.0"
-junit = "6.1.1"
-craftengine = "26.7"
+junit = "6.1.2"
+craftengine = "26.7.3"
 
-shadow = "9.4.3"
+shadow = "9.5.1"
 plugin-yml = "0.9.0"
 grgit = "5.3.3"
 jooq-plugin = "9.0"
@@ -40,7 +40,7 @@ redprotect-spigot = { module = "br.net.fabiozumbi12.RedProtect:RedProtect-Spigot
 griefprevention = "com.github.TechFortress:GriefPrevention:16.18.4"
 
 # Skills & Economy
-mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.2.053"
+mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.3.000"
 aura-skills = "dev.aurelium:auraskills-api-bukkit:2.3.12"
 playerpoints = "org.black_ixx:playerpoints:3.3.5"
 
@@ -111,7 +111,7 @@ flyway = ["flyway-core", "flyway-mysql"]
 connectors = ["connectors-mysql", "connectors-sqlite"]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "9.4.3" }
+shadow = { id = "com.gradleup.shadow", version = "9.5.1" }
 plugin-yml = { id = "de.eldoria.plugin-yml.bukkit", version.ref = "plugin-yml" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
 sonar = { id = "org.sonarqube", version.ref = "sonar" }
