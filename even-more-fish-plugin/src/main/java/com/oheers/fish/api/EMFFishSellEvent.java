@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Called when EMF Fish are sold
+ * @deprecated Use {@link com.oheers.fish.api.events.EMFFishSoldEvent} instead.
  */
+@SuppressWarnings("removal")
+@Deprecated(forRemoval = true)
 public class EMFFishSellEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
@@ -24,8 +26,8 @@ public class EMFFishSellEvent extends Event implements Cancellable {
     private boolean cancel;
 
     @ApiStatus.Internal
-    public EMFFishSellEvent(@NotNull List<SoldFish> soldFish, @NotNull Player player, double worth, @NotNull LocalDateTime soldTime) {
-        this.soldFish = soldFish;
+    public EMFFishSellEvent(@NotNull SoldFish soldFish, @NotNull Player player, double worth, @NotNull LocalDateTime soldTime) {
+        this.soldFish = List.of(soldFish);
         this.player = player;
         this.worth = worth;
         this.soldTime = soldTime;

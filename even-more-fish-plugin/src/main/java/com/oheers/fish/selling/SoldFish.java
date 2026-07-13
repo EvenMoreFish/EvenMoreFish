@@ -1,23 +1,16 @@
 package com.oheers.fish.selling;
 
-import com.oheers.fish.FishUtils;
-import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-
+/**
+ * @deprecated Use {@link com.oheers.fish.api.economy.selling.SoldFish} instead.
+ */
+@Deprecated(forRemoval = true)
 public class SoldFish {
 
-    private final Fish fish;
-    private final String name;
-    private final String rarity;
-    private int amount;
-    
-    private double totalValue;
-    private final double length;
+    private final com.oheers.fish.api.economy.selling.SoldFish ref;
 
     /**
      * Create a SoldFish instance from an ItemStack
@@ -25,51 +18,49 @@ public class SoldFish {
      * @throws IllegalArgumentException if the ItemStack does not represent a valid fish
      */
     public SoldFish(@NotNull ItemStack item) throws IllegalArgumentException {
-        IFish iFish = FishManager.getInstance().getFish(item);
-        if ((!(iFish instanceof Fish f))) {
-            throw new IllegalArgumentException("Item is not a fish.");
+        com.oheers.fish.api.economy.selling.SoldFish ref = com.oheers.fish.api.economy.selling.SoldFish.get(null, item);
+        if (ref == null) {
+            throw new IllegalArgumentException("Item is not a sellable fish.");
         }
-        Optional<Double> worth = WorthNBT.getValue(f);
-        if (worth.isEmpty()) {
-            throw new IllegalArgumentException("Fish has no worth.");
-        }
-        this.fish = f;
-        this.name = f.getName();
-        this.rarity = f.getRarity().getId();
-        this.length = f.getLength();
-        this.amount = item.getAmount();
-        this.totalValue = worth.get() * this.amount;
+        this.ref = ref;
     }
-    
+
+    public SoldFish(@NotNull com.oheers.fish.api.economy.selling.SoldFish ref) {
+        this.ref = ref;
+    }
+
     public void setAmount(int amount) {
-        this.amount = amount;
+        ref.setQuantity(amount);
     }
     
     public void setTotalValue(double totalValue) {
-        this.totalValue = totalValue;
+        ref.setValue(totalValue);
     }
     
     public @NotNull String getName() {
-        return name;
+        return ref.getFish().getName();
     }
     
     public int getAmount() {
-        return amount;
+        return ref.getQuantity();
     }
     
     public double getTotalValue() {
-        return totalValue;
+        return ref.getFinalValue();
     }
     
     public @NotNull String getRarity() {
-        return rarity;
+        return ref.getFish().getRarity().getId();
     }
     
     public double getLength() {
-        return length;
+        return ref.getFish().getLength();
     }
 
     public @NotNull Fish getFish() {
+        if (!(ref.getFish() instanceof Fish fish)) {
+            throw new IllegalArgumentException("SoldFish is not an internal Fish object.");
+        }
         return fish;
     }
 

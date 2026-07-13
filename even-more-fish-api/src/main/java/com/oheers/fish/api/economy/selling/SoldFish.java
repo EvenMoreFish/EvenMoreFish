@@ -7,21 +7,27 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDateTime;
+
 public class SoldFish {
 
     private final @NotNull IFish fish;
-    private final @NotNull Player player;
-    private final @NotNull int quantity;
+    private final @Nullable Player player;
+    private final @NotNull LocalDateTime sellTime;
+
+    private int quantity;
     private double value;
 
-    private SoldFish(@NotNull IFish fish, @NotNull Player player, int quantity, double value) {
+    private SoldFish(@NotNull IFish fish, @Nullable Player player, int quantity, double value, @NotNull LocalDateTime sellTime) {
         this.fish = fish;
         this.player = player;
-        this.value = value * quantity;
+        this.sellTime = sellTime;
+
+        this.value = value;
         this.quantity = quantity;
     }
 
-    public static @Nullable SoldFish get(@NotNull Player player, @Nullable ItemStack item) {
+    public static @Nullable SoldFish get(@Nullable Player player, @Nullable ItemStack item) {
         if (item == null || item.isEmpty()) {
             return null;
         }
@@ -33,11 +39,11 @@ public class SoldFish {
         double setWorth = fish.getSetWorth();
         float length = fish.getLength();
         if (setWorth > 0) {
-            return new SoldFish(fish, player, amount, setWorth );
+            return new SoldFish(fish, player, amount, setWorth, LocalDateTime.now());
         } else if (length > 0.0D) {
             double multiplier = fish.getWorthMultiplier();
             double worth = multiplier <= 0.0D ? -1D : multiplier * length;
-            return new SoldFish(fish, player, amount, worth);
+            return new SoldFish(fish, player, amount, worth, LocalDateTime.now());
         } else {
             return null;
         }
@@ -53,7 +59,7 @@ public class SoldFish {
     /**
      * @return The player selling this fish.
      */
-    public @NotNull Player getPlayer() {
+    public @Nullable Player getPlayer() {
         return this.player;
     }
 
@@ -65,7 +71,22 @@ public class SoldFish {
     }
 
     /**
-     * @return The value of this fish.
+     * Sets the quantity of this fish.
+     * @param quantity The new quantity of the fish. This must be above 0.
+     */
+    public void setQuantity(int quantity) {
+        this.quantity = Math.min(1, quantity);
+    }
+
+    /**
+     * @return The value of this fish after applying quantity.
+     */
+    public double getFinalValue() {
+        return this.value * this.quantity;
+    }
+
+    /**
+     * @return The raw value of this fish.
      */
     public double getValue() {
         return this.value;
@@ -77,6 +98,13 @@ public class SoldFish {
      */
     public void setValue(double value) {
         this.value = value;
+    }
+
+    /**
+     * @return The time this fish was sold at.
+     */
+    public @NotNull LocalDateTime getSellTime() {
+        return this.sellTime;
     }
 
 }

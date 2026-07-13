@@ -28,7 +28,7 @@ public class SellHelper {
     }
 
     public void sell() {
-        if (!Economy.getInstance().isEnabled()) {
+        if (!economy.isEnabled()) {
             EMFPlugin.getInstance().sendMessage("ECONOMY_DISABLED", player);
             return;
         }
@@ -38,16 +38,15 @@ public class SellHelper {
         double totalValue = 0;
         int count = 0;
         while (iterator.hasNext()) {
-            ItemStack item = iterator.next();
-            SoldFish sold = SoldFish.get(player, item);
-            if (sold == null) {
+            SoldFish sold = handleItem(iterator.next());
+            if (sold == null || sold.getValue() < 0) {
                 continue;
             }
-            handleSale(sold);
-            iterator.remove();
+            sold.getFish().getSellRewards().forEach(reward -> reward.rewardPlayer(player, player.getLocation()));
 
+            iterator.remove();
             soldAny = true;
-            totalValue += sold.getValue();
+            totalValue += sold.getFinalValue();
             count += sold.getQuantity();
         }
 
@@ -57,7 +56,7 @@ public class SellHelper {
         }
 
         // Give money
-        Economy.getInstance().deposit(player, totalValue, true);
+        economy.deposit(player, totalValue, true);
 
         // Send Message
         EMFPlugin.getInstance().sendSoldMessage(totalValue, count, player);
@@ -66,12 +65,17 @@ public class SellHelper {
         player.playSound(this.player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.06f);
     }
 
-    private void handleSale(@NotNull SoldFish sold) {
+    private SoldFish handleItem(@NotNull ItemStack item) {
+        SoldFish sold = SoldFish.get(player, item);
+        if (sold == null) {
+            return null;
+        }
         new EMFFishSoldEvent(player, sold).callEvent(); // SoldFish can be edited during this event.
-
-        sold.getFish().getSellRewards().forEach(reward -> reward.rewardPlayer(player, player.getLocation()));
-
+        if (sold.getValue() < 0) {
+            return null;
+        }
         logSoldFish(sold);
+        return sold;
     }
 
     private void logSoldFish(@NotNull SoldFish soldFish) {

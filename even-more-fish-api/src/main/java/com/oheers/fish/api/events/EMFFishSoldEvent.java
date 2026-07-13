@@ -18,7 +18,7 @@ public class EMFFishSoldEvent extends PlayerEvent {
     private final SoldFish fish;
 
     @ApiStatus.Internal
-    public EMFFishSoldEvent(@NotNull Player player, @NotNull SoldFish fish) {
+    public EMFFishSoldEvent(@NotNull Player player, @NotNull SoldFish fish, double value) {
         super(player);
         this.fish = fish;
         this.player = player;
