@@ -17,6 +17,7 @@ import com.oheers.fish.database.Database;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.data.manager.DataManager;
 import com.oheers.fish.database.model.user.UserReport;
+import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.plugin.loading.EMFVersionLoader;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.api.registry.EMFRegistry;
@@ -402,14 +403,14 @@ public class EvenMoreFish extends EMFPlugin {
 
     /**
      * Temporary and for internal use only. Will be removed once API methods for messages are added.
-     *
-     * @param value
-     * @param count
-     * @param player
      */
     @Override
     public void sendSoldMessage(double value, int count, @NotNull Player player) {
-
+        EMFMessage message = ConfigMessage.FISH_SALE.getMessage();
+        message.setSellPrice(Economy.getInstance().getWorthFormat(value, true));
+        message.setAmount(count);
+        message.setPlayer(player);
+        message.send(player);
     }
 
 }
