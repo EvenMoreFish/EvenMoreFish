@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * @deprecated Use {@link com.oheers.fish.api.events.EMFFishSoldEvent} instead.
+ * @deprecated Use {@link com.oheers.fish.api.events.EMFFishPreSaleEvent} or {@link com.oheers.fish.api.events.EMFFishSoldEvent} instead.
  */
 @SuppressWarnings("removal")
 @Deprecated(forRemoval = true)

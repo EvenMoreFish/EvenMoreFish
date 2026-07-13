@@ -4,6 +4,7 @@ import com.oheers.fish.api.EMFFishEvent;
 import com.oheers.fish.api.EMFFishSellEvent;
 import com.oheers.fish.api.events.EMFFishCaughtEvent;
 import com.oheers.fish.api.events.EMFFishHuntEvent;
+import com.oheers.fish.api.events.EMFFishPreSaleEvent;
 import com.oheers.fish.api.events.EMFFishSoldEvent;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.selling.SoldFish;
@@ -42,7 +43,7 @@ public class DeprecatedEventListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onSoldEvent(EMFFishSoldEvent event) {
+    public void onSoldEvent(EMFFishPreSaleEvent event) {
         SoldFish deprecatedFish = new SoldFish(event.getSoldFish());
         EMFFishSellEvent deprecated = new EMFFishSellEvent(
             deprecatedFish,

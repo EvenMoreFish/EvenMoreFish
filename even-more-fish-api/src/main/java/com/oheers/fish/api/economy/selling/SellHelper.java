@@ -1,6 +1,7 @@
 package com.oheers.fish.api.economy.selling;
 
 import com.oheers.fish.api.economy.Economy;
+import com.oheers.fish.api.events.EMFFishPreSaleEvent;
 import com.oheers.fish.api.events.EMFFishSoldEvent;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.Sound;
@@ -38,11 +39,19 @@ public class SellHelper {
         double totalValue = 0;
         int count = 0;
         while (iterator.hasNext()) {
-            SoldFish sold = handleItem(iterator.next());
-            if (sold == null || sold.getValue() < 0) {
+            SoldFish sold = SoldFish.get(player, iterator.next());
+            if (sold == null) {
                 continue;
             }
+            // PreSaleEvent - Allows for modifying the sold fish and cancellation.
+            boolean cancelled = !new EMFFishPreSaleEvent(player, sold).callEvent();
+            if (cancelled || sold.getValue() < 0) {
+                continue;
+            }
+
+            logSoldFish(sold);
             sold.getFish().getSellRewards().forEach(reward -> reward.rewardPlayer(player, player.getLocation()));
+            new EMFFishSoldEvent(player, sold).callEvent();
 
             iterator.remove();
             soldAny = true;
@@ -63,19 +72,6 @@ public class SellHelper {
 
         // Play sound
         player.playSound(this.player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.06f);
-    }
-
-    private SoldFish handleItem(@NotNull ItemStack item) {
-        SoldFish sold = SoldFish.get(player, item);
-        if (sold == null) {
-            return null;
-        }
-        new EMFFishSoldEvent(player, sold).callEvent(); // SoldFish can be edited during this event.
-        if (sold.getValue() < 0) {
-            return null;
-        }
-        logSoldFish(sold);
-        return sold;
     }
 
     private void logSoldFish(@NotNull SoldFish soldFish) {
