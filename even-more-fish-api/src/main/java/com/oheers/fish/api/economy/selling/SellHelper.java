@@ -11,8 +11,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
-
 public class SellHelper {
 
     private final @NotNull Player player;
@@ -35,7 +33,6 @@ public class SellHelper {
             return;
         }
 
-        Iterator<ItemStack> iterator = inventory.iterator();
         boolean soldAny = false;
         double totalValue = 0;
         int count = 0;
