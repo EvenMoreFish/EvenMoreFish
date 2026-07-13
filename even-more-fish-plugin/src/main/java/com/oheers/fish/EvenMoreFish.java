@@ -1,15 +1,22 @@
 package com.oheers.fish;
 
+import com.devskiller.friendly_id.FriendlyId;
 import com.github.Anon8281.universalScheduler.UniversalScheduler;
 import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
 import com.oheers.fish.api.EMFAPI;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.baits.AbstractBaitManager;
 import com.oheers.fish.api.economy.Economy;
+import com.oheers.fish.api.economy.selling.SoldFish;
 import com.oheers.fish.api.events.EMFPluginReloadEvent;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.config.DimensionFishingConfig;
+import com.oheers.fish.database.Database;
+import com.oheers.fish.database.DatabaseUtil;
+import com.oheers.fish.database.data.manager.DataManager;
+import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.plugin.loading.EMFVersionLoader;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.api.registry.EMFRegistry;
@@ -43,8 +50,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.vanishchecker.VanishChecker;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -340,9 +350,66 @@ public class EvenMoreFish extends EMFPlugin {
         return this.dimensionFishing;
     }
 
+    // Things that don't belong here but have no place right now.
+
+    /**
+     * Temporary and for internal use only. Will be removed once API methods for messages are added.
+     */
     @Override
-    public @NotNull Component getRewardCatchupMessage() {
-        return ConfigMessage.REWARD_CATCHUP.getMessage().getComponentMessage();
+    public void sendMessage(@NotNull String id, @NotNull Player player) {
+        try {
+            ConfigMessage message = ConfigMessage.valueOf(id.toUpperCase(Locale.ROOT));
+            message.send(player);
+        } catch (IllegalArgumentException exception) {
+            Logging.warn("Invalid message id " + id, exception);
+        }
+    }
+
+    /**
+     * Temporary and for internal use only. Will be removed once a proper place is found for it.
+     */
+    @Override
+    public void logSoldFish(@NotNull SoldFish sold) {
+        if (!DatabaseUtil.isDatabaseOnline()) {
+            return;
+        }
+        final UUID uuid = sold.getPlayer().getUniqueId();
+
+        final int userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(uuid);
+        final String transactionId = FriendlyId.createFriendlyId();
+        final Timestamp timestamp = Timestamp.from(Instant.now());
+
+        Database database = EvenMoreFish.getInstance().getPluginDataManager().getDatabase();
+
+        database.createTransaction(transactionId, userId, timestamp);
+        IFish fish = sold.getFish();
+        database.createSale(
+            transactionId,
+            fish.getName(),
+            fish.getRarity().getId(),
+            sold.getQuantity(),
+            fish.getLength(),
+            sold.getValue()
+        );
+
+        final DataManager<UserReport> userReportDataManager = EvenMoreFish.getInstance().getPluginDataManager().getUserReportDataManager();
+        final UserReport report = userReportDataManager.get(uuid.toString());
+        report.incrementFishSold(sold.getQuantity());
+        report.incrementMoneyEarned(sold.getValue());
+
+        userReportDataManager.update(uuid.toString(), report);
+    }
+
+    /**
+     * Temporary and for internal use only. Will be removed once API methods for messages are added.
+     *
+     * @param value
+     * @param count
+     * @param player
+     */
+    @Override
+    public void sendSoldMessage(double value, int count, @NotNull Player player) {
+
     }
 
 }
