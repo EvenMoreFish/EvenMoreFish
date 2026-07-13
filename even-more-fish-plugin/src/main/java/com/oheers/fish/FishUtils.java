@@ -6,12 +6,16 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.serializer.BossBarOverlaySerializer;
 import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
 import com.oheers.fish.api.config.serializer.SoundSerializer;
+import com.oheers.fish.api.economy.Economy;
+import com.oheers.fish.api.economy.selling.SellHelper;
+import com.oheers.fish.api.economy.selling.SoldFish;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
+import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.DurationFormatter;
@@ -22,6 +26,8 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
+import de.themoep.inventorygui.GuiStorageElement;
+import de.themoep.inventorygui.InventoryGui;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.bossbar.BossBar;
@@ -36,6 +42,7 @@ import org.bukkit.Registry;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Skull;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -51,6 +58,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -404,6 +412,35 @@ public class FishUtils {
             return null;
         }
         return papiParsed;
+    }
+
+    public static void sellInventoryGui(@NotNull InventoryGui gui, @NotNull HumanEntity humanEntity) {
+        if (!(humanEntity instanceof Player player)) {
+            return;
+        }
+
+        if (!Economy.getInstance().isEnabled()) {
+            ConfigMessage.ECONOMY_DISABLED.getMessage().send(player);
+            return;
+        }
+
+        gui.getElements().forEach(element -> {
+            if (!(element instanceof GuiStorageElement storageElement)) {
+                return;
+            }
+            new SellHelper(storageElement.getStorage(), player).sell();
+        });
+    }
+
+    public static double calculateInventoryWorth(@NotNull Inventory inventory) {
+        double worth = 0;
+        for (ItemStack itemStack : inventory) {
+            SoldFish fish = SoldFish.get(null, itemStack);
+            if (fish != null) {
+                worth += fish.getFinalValue();
+            }
+        }
+        return worth;
     }
 
     // Deprecated. Keep until the API module can be considered stable.
