@@ -254,6 +254,16 @@ public class Database implements DatabaseAPI {
         useHandle(handle -> bindUserFishStatsUpdate(handle, userFishStatsUpsertSql(), userFishStats).execute());
     }
 
+    /**
+     * Loads every fish stats row belonging to a user in one query, for
+     * cache preloading on join.
+     *
+     * @return all rows for the user (possibly empty), or null if the query failed
+     */
+    public List<UserFishStats> loadAllUserFishStats(int userId) {
+        return withHandle(handle -> handle.createQuery("select user_id, fish_name, fish_rarity, first_catch_time, shortest_length, longest_length, quantity from " + userFishStatsTable + " where user_id = :user_id").bind("user_id", userId).mapTo(UserFishStats.class).list(), null);
+    }
+
     @Override
     public Set<FishLog> getFishLogEntries(int userId, String fishName, String fishRarity) {
         return withHandle(handle -> new LinkedHashSet<>(handle.createQuery("select id, user_id, fish_name, fish_rarity, fish_length, catch_time, competition_id from " + fishLogTable + " where user_id = :user_id and fish_name = :fish_name and fish_rarity = :fish_rarity").bind("user_id", userId).bind("fish_name", fishName).bind("fish_rarity", fishRarity).mapTo(FishLog.class).list()), Set.of());
@@ -279,6 +289,17 @@ public class Database implements DatabaseAPI {
 
     public void upsertFishStats(@NotNull FishStats fishStats) {
         useTransaction(handle -> bindFishStatsUpdate(handle, fishStats).execute());
+    }
+
+    /**
+     * Loads every global fish stats row in one query, for cache preloading
+     * at startup. The table holds one row per fish/rarity pair, so this is
+     * bounded by the configured fish count.
+     *
+     * @return all rows (possibly empty), or null if the query failed
+     */
+    public List<FishStats> loadAllFishStats() {
+        return withHandle(handle -> handle.createQuery("select fish_name, fish_rarity, first_catch_time, discoverer, shortest_length, shortest_fisher, largest_fish, largest_fisher, total_caught from " + fishTable).mapTo(FishStats.class).list(), null);
     }
 
     @Override

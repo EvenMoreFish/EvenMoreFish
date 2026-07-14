@@ -1,14 +1,20 @@
 package com.oheers.fish.config;
 
 import com.oheers.fish.api.config.serializer.SoundSerializer;
+import com.oheers.fish.api.requirement.Requirement;
+import com.oheers.fish.api.requirement.RequirementContext;
 import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.sound.Sound;
+import org.bukkit.entity.Player;
 import org.evenmorefish.dimensionfishing.config.DimensionFishingConfigProvider;
 import org.evenmorefish.dimensionfishing.util.ParticleFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class DimensionFishingConfig implements DimensionFishingConfigProvider {
 
@@ -99,12 +105,20 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
 
     @Override
     public @Nullable String getLavaFishingPermission() {
-        return MainConfig.getInstance().getConfig().getString("dimension-fishing.lava.permission", null);
+        String permission = MainConfig.getInstance().getConfig().getString("dimension-fishing.lava.permission", null);
+        if ("[]".equals(permission)) {
+            return null;
+        }
+        return permission;
     }
 
     @Override
     public @Nullable String getVoidFishingPermission() {
-        return MainConfig.getInstance().getConfig().getString("dimension-fishing.void.permission", null);
+        String permission = MainConfig.getInstance().getConfig().getString("dimension-fishing.void.permission", null);
+        if ("[]".equals(permission)) {
+            return null;
+        }
+        return permission;
     }
 
     @Override
@@ -115,6 +129,38 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     @Override
     public @NotNull ParticleFactory getVoidFishingLureParticles() {
         return this.voidLureParticles;
+    }
+
+    @Override
+    public @NotNull Predicate<Player> getLavaPredicate() {
+        Section section = MainConfig.getInstance().getConfig().getSection("dimension-fishing.lava.requirements");
+        return player -> {
+            RequirementContext context = new RequirementContext(
+                player.getWorld(),
+                player.getLocation(),
+                player,
+                null,
+                null,
+                null
+            );
+            return new Requirement(section).meetsRequirements(context);
+        };
+    }
+
+    @Override
+    public @NotNull Predicate<Player> getVoidPredicate() {
+        Section section = MainConfig.getInstance().getConfig().getSection("dimension-fishing.void.requirements");
+        return player -> {
+            RequirementContext context = new RequirementContext(
+                player.getWorld(),
+                player.getLocation(),
+                player,
+                null,
+                null,
+                null
+            );
+            return new Requirement(section).meetsRequirements(context);
+        };
     }
 
 }

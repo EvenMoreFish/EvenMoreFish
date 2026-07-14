@@ -97,7 +97,7 @@ public class FishJournalGui extends ConfigGui {
 
         boolean hideUndiscovered = section.getBoolean("hide-undiscovered-fish", true);
         // If undiscovered fish should be hidden
-        if (hideUndiscovered && !database.userHasFish(fish.getRarity().getId(), fish.getName(), userId)) {
+        if (hideUndiscovered && !userHasFish(database, fish)) {
             return ItemFactory.itemFactory(section, "undiscovered-fish").createItem(player.getUniqueId());
         }
 
@@ -125,9 +125,30 @@ public class FishJournalGui extends ConfigGui {
         return display;
     }
 
+    /**
+     * Answers "has this user caught this fish" from the preloaded cache when
+     * possible, so opening the journal does not run one blocking query per
+     * fish on the server thread.
+     */
+    private boolean userHasFish(@NotNull Database database, @NotNull Fish fish) {
+        final var dataManager = EvenMoreFish.getInstance().getPluginDataManager();
+        if (dataManager.isUserFishStatsPreloaded(userId)) {
+            return dataManager.getUserFishStatsDataManager().peek(UserFishRarityKey.of(userId, fish).toString()) != null;
+        }
+        return database.userHasFish(fish.getRarity().getId(), fish.getName(), userId);
+    }
+
     private @NotNull EMFListMessage prepareLore(@NotNull ItemFactory factory, @NotNull Fish fish) {
-        final UserFishStats userFishStats = EvenMoreFish.getInstance().getPluginDataManager().getUserFishStatsDataManager().get(UserFishRarityKey.of(userId, fish).toString());
-        final FishStats fishStats = EvenMoreFish.getInstance().getPluginDataManager().getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
+        final var dataManager = EvenMoreFish.getInstance().getPluginDataManager();
+        // When the caches were preloaded, a miss means "no row exists" and
+        // falling through to the blocking loader would query the database
+        // once per fish while the GUI builds on the server thread.
+        final UserFishStats userFishStats = dataManager.isUserFishStatsPreloaded(userId)
+            ? dataManager.getUserFishStatsDataManager().peek(UserFishRarityKey.of(userId, fish).toString())
+            : dataManager.getUserFishStatsDataManager().get(UserFishRarityKey.of(userId, fish).toString());
+        final FishStats fishStats = dataManager.isFishStatsPreloaded()
+            ? dataManager.getFishStatsDataManager().peek(FishRarityKey.of(fish).toString())
+            : dataManager.getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
 
         final String discoverDate = getValueOrDefault(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE), getUnknownMessage());
 

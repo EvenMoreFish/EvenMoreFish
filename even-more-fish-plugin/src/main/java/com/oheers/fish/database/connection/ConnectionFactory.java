@@ -60,7 +60,13 @@ public abstract class ConnectionFactory {
         configureDatabase(config, getDatabaseAddress(), getDatabasePort(), MainConfig.getInstance().getDatabase(), MainConfig.getInstance().getUsername(), MainConfig.getInstance().getPassword());
         config.setInitializationFailTimeout(-1);
         config.setValidationTimeout(5000);
-        config.addDataSourceProperty("validateBorrowedConnections", true);
+        // Cap how long a borrower can wait for a connection; the Hikari
+        // default of 30s can stall a caller for the full window when the
+        // database link degrades.
+        config.setConnectionTimeout(TimeUnit.SECONDS.toMillis(5));
+        // Ping idle connections so links over VPN/NAT stay warm instead of
+        // being silently dropped and failing at borrow time.
+        config.setKeepaliveTime(TimeUnit.MINUTES.toMillis(1));
         config.setLeakDetectionThreshold(30000);
 
 

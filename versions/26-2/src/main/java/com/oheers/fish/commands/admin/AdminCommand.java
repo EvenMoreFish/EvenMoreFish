@@ -18,6 +18,7 @@ import com.oheers.fish.commands.admin.subcommand.DatabaseSubcommand;
 import com.oheers.fish.commands.admin.subcommand.DebugSubcommand;
 import com.oheers.fish.commands.admin.subcommand.FishSubcommand;
 import com.oheers.fish.commands.admin.subcommand.ListSubcommand;
+import com.oheers.fish.commands.admin.subcommand.RandomFishSubcommand;
 import com.oheers.fish.database.Database;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.fishing.items.FishManager;
@@ -61,6 +62,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
             .requires(source -> source.getSender().hasPermission(AdminPerms.ADMIN))
             .then(database())
             .then(fish())
+            .then(randomFish())
             .then(list())
             .then(competition())
             .then(customRod())
@@ -82,6 +84,11 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     @Override
     protected @NonNull ArgumentBuilder<CommandSourceStack, ?> fish() {
         return new FishSubcommand("fish").get();
+    }
+
+    @Override
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> randomFish() {
+        return new RandomFishSubcommand("random-fish").get();
     }
 
     @Override

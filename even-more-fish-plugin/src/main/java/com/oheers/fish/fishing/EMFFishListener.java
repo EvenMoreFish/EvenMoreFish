@@ -84,16 +84,22 @@ public class EMFFishListener implements Listener {
         final String key = fishRarityKey.toString();
         FishStats stats = fishStatsDataManager.peek(key);
         if (stats == null) {
-            final var loadResult = EvenMoreFish.getInstance().getPluginDataManager().getDatabase().loadFishStats(fish.getName(), fish.getRarity().getId());
-            if (loadResult.isUnreadable()) {
-                EvenMoreFish.getInstance().getLogger().warning("Skipping fish stats update for " + key + " because the stored row could not be read.");
-                return;
-            }
-            if (loadResult.isFound()) {
-                stats = loadResult.getValue();
-                fishStatsDataManager.cacheLoadedValue(key, stats);
-            } else {
+            if (EvenMoreFish.getInstance().getPluginDataManager().isFishStatsPreloaded()) {
+                // Every stored row is already cached, so a miss means the
+                // fish has never been caught — no blocking lookup needed.
                 stats = FishStats.empty(fish, LocalDateTime.now());
+            } else {
+                final var loadResult = EvenMoreFish.getInstance().getPluginDataManager().getDatabase().loadFishStats(fish.getName(), fish.getRarity().getId());
+                if (loadResult.isUnreadable()) {
+                    EvenMoreFish.getInstance().getLogger().warning("Skipping fish stats update for " + key + " because the stored row could not be read.");
+                    return;
+                }
+                if (loadResult.isFound()) {
+                    stats = loadResult.getValue();
+                    fishStatsDataManager.cacheLoadedValue(key, stats);
+                } else {
+                    stats = FishStats.empty(fish, LocalDateTime.now());
+                }
             }
         }
 
@@ -129,16 +135,22 @@ public class EMFFishListener implements Listener {
         final String key = UserFishRarityKey.of(userId,fish).toString();
         UserFishStats stats = userFishStatsDataManager.peek(key);
         if (stats == null) {
-            final var loadResult = EvenMoreFish.getInstance().getPluginDataManager().getDatabase().loadUserFishStats(userId, fish.getName(), fish.getRarity().getId());
-            if (loadResult.isUnreadable()) {
-                EvenMoreFish.getInstance().getLogger().warning("Skipping user fish stats update for " + key + " because the stored row could not be read.");
-                return;
-            }
-            if (loadResult.isFound()) {
-                stats = loadResult.getValue();
-                userFishStatsDataManager.cacheLoadedValue(key, stats);
-            } else {
+            if (EvenMoreFish.getInstance().getPluginDataManager().isUserFishStatsPreloaded(userId)) {
+                // All of this user's rows are already cached, so a miss means
+                // a first catch of this fish — no blocking lookup needed.
                 stats = new UserFishStats(userId, fish, LocalDateTime.now());
+            } else {
+                final var loadResult = EvenMoreFish.getInstance().getPluginDataManager().getDatabase().loadUserFishStats(userId, fish.getName(), fish.getRarity().getId());
+                if (loadResult.isUnreadable()) {
+                    EvenMoreFish.getInstance().getLogger().warning("Skipping user fish stats update for " + key + " because the stored row could not be read.");
+                    return;
+                }
+                if (loadResult.isFound()) {
+                    stats = loadResult.getValue();
+                    userFishStatsDataManager.cacheLoadedValue(key, stats);
+                } else {
+                    stats = new UserFishStats(userId, fish, LocalDateTime.now());
+                }
             }
         }
 

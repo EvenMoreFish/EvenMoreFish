@@ -1,6 +1,7 @@
 package com.oheers.fish.api.registry;
 
 import com.oheers.fish.api.addons.ItemAddonRegistry;
+import com.oheers.fish.api.boost.RarityBoostRegistry;
 import com.oheers.fish.api.economy.EconomyTypeRegistry;
 import com.oheers.fish.api.requirement.RequirementTypeRegistry;
 import com.oheers.fish.api.reward.RewardTypeRegistry;
@@ -15,6 +16,7 @@ public interface EMFRegistry<T extends RegistryItem> {
     @NotNull RewardTypeRegistry REWARD_TYPE = RewardTypeRegistry.getInstance();
     @NotNull ItemAddonRegistry ITEM_ADDON = ItemAddonRegistry.getInstance();
     @NotNull EconomyTypeRegistry ECONOMY_TYPE = EconomyTypeRegistry.getInstance();
+    @NotNull RarityBoostRegistry RARITY_BOOST = RarityBoostRegistry.getInstance();
 
     boolean isEmpty();
 
