@@ -105,12 +105,20 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
 
     @Override
     public @Nullable String getLavaFishingPermission() {
-        return MainConfig.getInstance().getConfig().getString("dimension-fishing.lava.permission", null);
+        String permission = MainConfig.getInstance().getConfig().getString("dimension-fishing.lava.permission", null);
+        if ("[]".equals(permission)) {
+            return null;
+        }
+        return permission;
     }
 
     @Override
     public @Nullable String getVoidFishingPermission() {
-        return MainConfig.getInstance().getConfig().getString("dimension-fishing.void.permission", null);
+        String permission = MainConfig.getInstance().getConfig().getString("dimension-fishing.void.permission", null);
+        if ("[]".equals(permission)) {
+            return null;
+        }
+        return permission;
     }
 
     @Override

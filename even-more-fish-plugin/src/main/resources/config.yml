@@ -281,8 +281,8 @@ dimension-fishing:
   # Configuration for lava fishing.
   lava:
     enabled: false
-    permission: []
     allowed-worlds: []
+    permission: null
     requirements: []
     swallow-sound: BLOCK_LAVA_EXTINGUISH
     bite-sound: ENTITY_FISHING_BOBBER_SPLASH,0.25,0.5
@@ -293,7 +293,7 @@ dimension-fishing:
   void:
     enabled: false
     allowed-worlds: []
-    permission: []
+    permission: null
     requirements: []
     swallow-sound: ENTITY_ENDERMAN_TELEPORT,0.25,0.1
     bite-sound: ENTITY_FOX_BITE,0.25,0.1
