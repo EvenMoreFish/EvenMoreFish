@@ -7,6 +7,7 @@ jdbi = "3.54.0"
 junit = "6.1.2"
 craftengine = "26.7.3"
 
+paperweight = "2.0.0-beta.21"
 shadow = "9.5.1"
 plugin-yml = "0.9.0"
 grgit = "5.3.3"
@@ -101,6 +102,8 @@ commandsapi-bukkit = { module = "dev.jorel:commandapi-bukkit-shade", version = "
 
 plugin-yml = { module = "de.eldoria.plugin-yml.bukkit:de.eldoria.plugin-yml.bukkit.gradle.plugin", version.ref = "plugin-yml"}
 shadow =  {module = "com.gradleup.shadow:com.gradleup.shadow.gradle.plugin", version.ref = "shadow"}
+paperweight = {module = "io.papermc.paperweight.userdev:io.papermc.paperweight.userdev.gradle.plugin", version.ref = "paperweight"}
+
 grgit = { module = "org.ajoberstar.grgit:org.ajoberstar.grgit.gradle.plugin", version.ref = "grgit"}
 [bundles]
 worldguard = ["worldguard-core", "worldguard-bukkit"]
@@ -116,3 +119,4 @@ plugin-yml = { id = "de.eldoria.plugin-yml.bukkit", version.ref = "plugin-yml" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
 sonar = { id = "org.sonarqube", version.ref = "sonar" }
 run-paper = { id = "xyz.jpenilla.run-paper", version = "3.0.2"}
+paperweight = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight" }

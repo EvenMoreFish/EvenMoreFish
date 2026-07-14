@@ -7,6 +7,7 @@ import com.oheers.fish.api.boost.RarityBoostRegistry;
 import com.oheers.fish.api.fishing.FishingType;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
@@ -15,9 +16,9 @@ import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.config.FishConversions;
 import com.oheers.fish.fishing.items.config.RarityConversions;
 import com.oheers.fish.fishing.rods.CustomRod;
+import com.oheers.fish.items.nbt.NBTHolder;
 import com.oheers.fish.utils.WeightedRandom;
 import com.oheers.fish.utils.nbt.NbtKeys;
-import com.oheers.fish.utils.nbt.NbtUtils;
 import de.tr7zw.changeme.nbtapi.NBT;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -102,29 +103,27 @@ public class FishManager extends AbstractFishManager<Rarity> {
         if (item == null || item.isEmpty()) {
             return null;
         }
-        String nameString = NbtUtils.getString(item, NbtKeys.EMF_FISH_NAME);
-        String playerString = NbtUtils.getString(item, NbtKeys.EMF_FISH_PLAYER);
-        String rarityString = NbtUtils.getString(item, NbtKeys.EMF_FISH_RARITY);
-        Float lengthFloat = NbtUtils.getFloat(item, NbtKeys.EMF_FISH_LENGTH);
-        Integer randomIndex = NbtUtils.getInteger(item, NbtKeys.EMF_FISH_RANDOM_INDEX);
+        NBTHolder<ItemStack> holder = NBTHolder.itemStack(item);
+        String nameString = holder.getString(NbtKeys.EMF_FISH_NAME.get());
+        String playerString = holder.getString(NbtKeys.EMF_FISH_PLAYER.get());
+        String rarityString = holder.getString(NbtKeys.EMF_FISH_RARITY.get());
+        Float length = holder.getFloat(NbtKeys.EMF_FISH_LENGTH.get());
+        Integer randomIndex = holder.getInteger(NbtKeys.EMF_FISH_RANDOM_INDEX.get());
 
         if (nameString == null || rarityString == null) {
             return null;
         }
 
-        Rarity rarity = FishManager.getInstance().getRarity(rarityString);
-        if (rarity == null) {
+        RarityKey key = RarityKey.of(rarityString, nameString);
+        if (key == null) {
             return null;
         }
 
-        Fish fish = rarity.getFish(nameString);
-        if (fish == null) {
-            return null;
+        IFish fish = key.getFish();
+        if (randomIndex != null && fish instanceof Fish f) { // TODO Can remove that instanceof when ItemFactory is part of API.
+            f.getFactory().setRandomIndex(randomIndex);
         }
-        if (randomIndex != null) {
-            fish.getFactory().setRandomIndex(randomIndex);
-        }
-        fish.setLength(lengthFloat);
+        fish.setLength(length);
         if (playerString != null) {
             try {
                 fish.setFisherman(UUID.fromString(playerString));

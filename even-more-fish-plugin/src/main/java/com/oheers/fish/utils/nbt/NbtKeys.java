@@ -1,30 +1,36 @@
 package com.oheers.fish.utils.nbt;
 
+import com.oheers.fish.EvenMoreFish;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public class NbtKeys {
+public enum NbtKeys {
+    EMF_FISH_PLAYER("emf-fish-player"),
+    EMF_FISH_RARITY("emf-fish-rarity"),
+    EMF_FISH_LENGTH("emf-fish-length"),
+    EMF_FISH_NAME("emf-fish-name"),
+    EMF_FISH_RANDOM_INDEX("emf-fish-random-index"),
+    EMF_BAIT("emf-bait"),
+    EMF_APPLIED_BAIT("emf-applied-bait"),
+    EMF_BAIT_REFORMATTED("emf-bait-reformatted"),
+    EMF_ROD_NBT("emf-rod-nbt"),
+    EMF_ROD_ID("emf-rod-id");
 
-    private NbtKeys() {
-        throw new UnsupportedOperationException();
+    private final String value;
+
+    NbtKeys(@NotNull String value) {
+        this.value = value;
     }
 
-    public static final String EMF_COMPOUND = JavaPlugin.getProvidingPlugin(NbtUtils.class).getName().toLowerCase(Locale.ROOT);
-    public static final String EMF_FISH_PLAYER = "emf-fish-player";
-    public static final String EMF_FISH_RARITY = "emf-fish-rarity";
-    public static final String EMF_FISH_LENGTH = "emf-fish-length";
-    public static final String EMF_FISH_NAME = "emf-fish-name";
-    public static final String EMF_FISH_RANDOM_INDEX = "emf-fish-random-index";
-    public static final String EMF_BAIT = "emf-bait";
-    public static final String EMF_APPLIED_BAIT = "emf-applied-bait";
+    public @NotNull NamespacedKey get() {
+        return new NamespacedKey(EvenMoreFish.getInstance(), this.value);
+    }
 
-    // Used to identify whether a baited rod has been updated with the line identifier
-    public static final String EMF_BAIT_REFORMATTED = "emf-bait-reformatted";
-
-    public static final String EMF_ROD_NBT = "emf-rod-nbt";
-    public static final String EMF_ROD_ID = "emf-rod-id";
-
-    public static final String PUBLIC_BUKKIT_VALUES = "PublicBukkitValues";
+    public @NotNull NamespacedKey get(@NotNull String namespace) {
+        return new NamespacedKey(namespace, this.value);
+    }
 
 }

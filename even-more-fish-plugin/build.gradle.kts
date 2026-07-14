@@ -254,16 +254,16 @@ val copyAddons by tasks.registering(Copy::class) {
 
 val copyVersions by tasks.registering(Copy::class) {
     dependsOn(
-        ":versions:1-20:build",
-        ":versions:1-21:build",
-        ":versions:26-1:build",
-        ":versions:26-2:build"
+        //":versions:1-20:build",
+        //":versions:1-21:build",
+        ":versions:26-1:build"
+        //":versions:26-2:build"
     )
 
-    from(project(":versions:1-20").layout.buildDirectory.dir("libs"))
-    from(project(":versions:1-21").layout.buildDirectory.dir("libs"))
+    //from(project(":versions:1-20").layout.buildDirectory.dir("libs"))
+    //from(project(":versions:1-21").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-1").layout.buildDirectory.dir("libs"))
-    from(project(":versions:26-2").layout.buildDirectory.dir("libs"))
+    //from(project(":versions:26-2").layout.buildDirectory.dir("libs"))
     into(file("src/main/resources/versions"))
 }
 

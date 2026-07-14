@@ -2,6 +2,10 @@ package com.oheers.fish;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.oheers.fish.api.plugin.EMFPlugin;
+import com.oheers.fish.items.nbt.NBTHolder;
+import com.oheers.fish.nbt.NBTProviderImpl;
+import com.oheers.fish.nbt.holder.BlockStateNBTHolder;
+import com.oheers.fish.nbt.holder.ItemStackNBTHolder;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.MainCommand;
@@ -18,6 +22,7 @@ import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -106,5 +111,16 @@ public class EMFVersion extends EMFVersionProvider {
 
     @Override
     public void disableCommands() {}
+
+    @Override
+    public @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item) {
+        return new ItemStackNBTHolder(item);
+    }
+
+    @NotNull
+    @Override
+    public NBTHolder<BlockState> createBlockStateNbtHolder(@NotNull BlockState state) {
+        return new BlockStateNBTHolder(state);
+    }
 
 }

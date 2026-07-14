@@ -1,15 +1,14 @@
 package com.oheers.fish.baits.manager;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.baits.AbstractBaitManager;
 import com.oheers.fish.api.baits.IBait;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.configs.BaitConversions;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.items.FishManager;
+import com.oheers.fish.items.nbt.NBTHolder;
 import com.oheers.fish.utils.nbt.NbtKeys;
-import com.oheers.fish.utils.nbt.NbtUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
@@ -92,7 +91,7 @@ public class BaitManager extends AbstractBaitManager<BaitHandler> {
 
     @Override
     public boolean isBait(@Nullable ItemStack itemStack) {
-        return itemStack != null && !itemStack.isEmpty() && NbtUtils.hasKey(itemStack, NbtKeys.EMF_BAIT);
+        return itemStack != null && !itemStack.isEmpty() && NBTHolder.itemStack(item).hasKey(NbtKeys.EMF_BAIT.get());
     }
 
     @Override
