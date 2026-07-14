@@ -56,6 +56,12 @@ testing {
             dependencies {
                 implementation(libs.junit.jupiter.api)
                 runtimeOnly(libs.junit.jupiter.engine)
+                implementation(libs.mockito.core)
+                implementation(libs.paper.api) {
+                    version {
+                        strictly("1.20.1-R0.1-SNAPSHOT")
+                    }
+                }
             }
 
             targets {

@@ -3,6 +3,7 @@ package com.oheers.fish.fishing.items;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.boost.RarityBoostRegistry;
 import com.oheers.fish.api.fishing.FishingType;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.fishing.items.IFish;
@@ -254,7 +255,8 @@ public class FishManager extends AbstractFishManager<Rarity> {
             return null;
         }
 
-        Rarity selected = selectRandomRarity(allowedRarities, boostRate, boostedRarities);
+        Rarity selected = selectRandomRarity(allowedRarities, boostRate, boostedRarities,
+                fisher, requirementContext.getLocation());
         return selected != null && isRarityAllowedInCompetition(selected) ? selected : null;
     }
 
@@ -349,14 +351,28 @@ public class FishManager extends AbstractFishManager<Rarity> {
                 (EvenMoreFish.getInstance().isRaritiesCompCheckExempt() && rarity.hasCompExemptFish());
     }
 
-    private Rarity selectRandomRarity(List<Rarity> rarities, double boostRate, Set<Rarity> boosted) {
+    private Rarity selectRandomRarity(List<Rarity> rarities, double boostRate, Set<Rarity> boosted,
+                                      @Nullable Player fisher, @Nullable Location location) {
         return WeightedRandom.pick(
                 rarities,
-                Rarity::getWeight,
+                externallyBoostedWeight(fisher, location),
                 boostRate,
                 boosted,
                 EvenMoreFish.getInstance().getRandom()
         );
+    }
+
+    /**
+     * The rarity weight function with any externally registered {@link RarityBoostRegistry}
+     * boosts (e.g. area-of-effect fishing buffs from other plugins) multiplied in. Falls back
+     * to the plain configured weight when nothing is registered or no fisher/location is known.
+     */
+    private ToDoubleFunction<Rarity> externallyBoostedWeight(@Nullable Player fisher, @Nullable Location location) {
+        RarityBoostRegistry boosts = RarityBoostRegistry.getInstance();
+        if (fisher == null || location == null || boosts.isEmpty()) {
+            return Rarity::getWeight;
+        }
+        return rarity -> rarity.getWeight() * boosts.combinedMultiplier(fisher, location, rarity.getId());
     }
 
     public @NotNull List<Rarity> getAvailableRarities(@Nullable Player fisher,
