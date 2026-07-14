@@ -382,16 +382,20 @@ public class EvenMoreFish extends EMFPlugin {
 
         Database database = EvenMoreFish.getInstance().getPluginDataManager().getDatabase();
 
-        database.createTransaction(transactionId, userId, timestamp);
-        IFish fish = sold.getFish();
-        database.createSale(
-            transactionId,
-            fish.getName(),
-            fish.getRarity().getId(),
-            sold.getQuantity(),
-            fish.getLength(),
-            sold.getValue()
-        );
+        // Insert the transaction and sale rows off the server thread; the
+        // queue keeps the transaction row ahead of its sale rows.
+        EvenMoreFish.getInstance().getPluginDataManager().getWriteQueue().execute(() -> {
+            database.createTransaction(transactionId, userId, timestamp);
+            IFish fish = sold.getFish();
+            database.createSale(
+                transactionId,
+                fish.getName(),
+                fish.getRarity().getId(),
+                sold.getQuantity(),
+                fish.getLength(),
+                sold.getFinalValue()
+            );
+        });
 
         final DataManager<UserReport> userReportDataManager = EvenMoreFish.getInstance().getPluginDataManager().getUserReportDataManager();
         final UserReport report = userReportDataManager.get(uuid.toString());
