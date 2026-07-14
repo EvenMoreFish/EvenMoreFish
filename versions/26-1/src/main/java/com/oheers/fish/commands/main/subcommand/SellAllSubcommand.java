@@ -6,7 +6,7 @@ import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.arguments.EMFPlayerArgument;
 import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.permissions.UserPerms;
-import com.oheers.fish.selling.SellHelper;
+import com.oheers.fish.api.economy.selling.SellHelper;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
@@ -43,7 +43,7 @@ public class SellAllSubcommand {
 
     private void execute(@NotNull CommandSender sender, @NotNull Player target) {
         if (CommandUtils.isEconomyEnabled(sender)) {
-            new SellHelper(target.getInventory(), target).sell();
+            SellHelper.get().sell(target.getInventory(), target);
         }
     }
 

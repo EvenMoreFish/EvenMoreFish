@@ -21,7 +21,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.PrefixType;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.permissions.UserPerms;
-import com.oheers.fish.selling.SellHelper;
+import com.oheers.fish.api.economy.selling.SellHelper;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;

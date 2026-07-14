@@ -1,7 +1,9 @@
 package com.oheers.fish.api.plugin;
 
+import com.oheers.fish.api.economy.selling.SoldFish;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -72,10 +74,24 @@ public abstract class EMFPlugin extends JavaPlugin {
         }
     }
 
+    // Things that don't belong here but have no place right now.
+
     /**
      * Temporary and for internal use only. Will be removed once API methods for messages are added.
      */
     @ApiStatus.Internal
-    public abstract @NotNull Component getRewardCatchupMessage();
+    public abstract void sendMessage(@NotNull String id, @NotNull Player player);
+
+    /**
+     * Temporary and for internal use only. Will be removed once a proper place is found for it.
+     */
+    @ApiStatus.Internal
+    public abstract void logSoldFish(@NotNull SoldFish soldFish);
+
+    /**
+     * Temporary and for internal use only. Will be removed once API methods for messages are added.
+     */
+    @ApiStatus.Internal
+    public abstract void sendSoldMessage(double value, int count, @NotNull Player player);
 
 }

@@ -18,7 +18,7 @@ import com.oheers.fish.messages.PrefixType;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.permissions.UserPerms;
-import com.oheers.fish.selling.SellHelper;
+import com.oheers.fish.api.economy.selling.SellHelper;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -170,7 +170,7 @@ public class MainCommand {
             .executesPlayer(info -> {
                 Player player = info.sender();
                 if (CommandUtils.isEconomyEnabled(player)) {
-                    new SellHelper(player.getInventory(), player).sell();
+                    SellHelper.get().sell(player.getInventory(), player);
                 }
             })
             .executes(info -> {
@@ -179,7 +179,7 @@ public class MainCommand {
                 }
                 Player player = Objects.requireNonNull(info.args().getUnchecked("target"));
                 if (CommandUtils.isEconomyEnabled(info.sender())) {
-                    new SellHelper(player.getInventory(), player).sell();
+                    SellHelper.get().sell(player.getInventory(), player);
                 }
             });
     }
