@@ -77,9 +77,14 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
             return false;
         }
         scheduledDays.forEach((day, times) ->
-                times.forEach(time ->
-                        competitions.put(generateTimeCode(day, time), file)
-                )
+            times.forEach(time -> {
+                String[] split = time.split(":");
+                if (split.length != 2) {
+                    Logging.warn("Invalid TimeCode in " + file.getFileName() + ": " + time);
+                    return;
+                }
+                competitions.put(generateTimeCode(day, split[0], split[1]), file);
+            })
         );
         return true;
     }
