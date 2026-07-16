@@ -49,6 +49,9 @@ public class UpdateChecker {
             JSONObject latestVersion = (JSONObject) versions.getFirst();
             String version = latestVersion.get("version_number").toString();
             int mcVersionSeparatorIndex = version.lastIndexOf("-");
+            if (mcVersionSeparatorIndex == -1) {
+                return version;
+            }
             return version.substring(0, mcVersionSeparatorIndex);
         } catch (Exception e) {
             plugin.getLogger().warning("Update check failed: " + e.getMessage());
