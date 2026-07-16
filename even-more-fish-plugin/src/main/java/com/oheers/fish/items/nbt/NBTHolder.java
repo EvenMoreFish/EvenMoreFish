@@ -3,6 +3,7 @@ package com.oheers.fish.items.nbt;
 import com.oheers.fish.EvenMoreFish;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -14,13 +15,25 @@ public abstract class NBTHolder<T> {
     protected final T obj;
 
     protected boolean autoSave = true;
+    protected boolean pdcMode = false;
 
+    /**
+     * Returns an ItemStack NBTHolder.
+     * <p>
+     * This can be toggled to use PDC or a custom namespace.
+     */
     public static @NotNull NBTHolder<ItemStack> itemStack(@NotNull ItemStack item) {
+        // Refer to version provider as we use NMS for item data.
         return EvenMoreFish.getInstance().getVersionProvider().createItemStackNbtHolder(item);
     }
 
-    public static @NotNull NBTHolder<BlockState> blockState(@NotNull BlockState state) {
-        return EvenMoreFish.getInstance().getVersionProvider().createBlockStateNbtHolder(state);
+    /**
+     * Returns an ItemStack NBTHolder.
+     * <p>
+     * This will always use PDC.
+     */
+    public static @NotNull NBTHolder<Skull> skull(@NotNull Skull skull) {
+        return new SkullNBTHolder(skull);
     }
 
     public NBTHolder(@NotNull T obj) {
@@ -57,6 +70,13 @@ public abstract class NBTHolder<T> {
      */
     public void setAutoSave(boolean autoSave) {
         this.autoSave = autoSave;
+    }
+
+    /**
+     * Sets whether the PDC is used instead.
+     */
+    public void setPdcMode(boolean pdcMode) {
+        this.pdcMode = pdcMode;
     }
 
     public abstract void save();
