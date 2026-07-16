@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
-    private @Nullable CompoundTag data;
+    private final @NotNull CompoundTag data;
 
     public ItemStackNBTHolder(@NonNull ItemStack obj) {
         super(obj);
@@ -30,9 +30,6 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         CompoundTag data = getData(namespace);
-        if (data == null) {
-            return false;
-        }
         return data.contains(key);
     }
 
@@ -42,9 +39,6 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         CompoundTag data = getData(namespace);
-        if (data == null) {
-            return null;
-        }
         return data.getString(key).orElse(null);
     }
 
@@ -56,8 +50,10 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
         modifyData(data -> {
             String namespace = namespacedKey.getNamespace();
             String key = namespacedKey.getKey();
-            CompoundTag tag = data.getCompoundOrEmpty(namespace);
-
+            CompoundTag tag = data.getCompound(namespace).orElse(null);
+            if (tag == null) {
+                return;
+            }
             if (value == null) {
                 tag.remove(key);
             } else {
@@ -72,9 +68,6 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         CompoundTag data = getData(namespace);
-        if (data == null) {
-            return null;
-        }
         return data.getFloat(key).orElse(null);
     }
 
@@ -86,8 +79,10 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
         modifyData(data -> {
             String namespace = namespacedKey.getNamespace();
             String key = namespacedKey.getKey();
-            CompoundTag tag = data.getCompoundOrEmpty(namespace);
-
+            CompoundTag tag = data.getCompound(namespace).orElse(null);
+            if (tag == null) {
+                return;
+            }
             if (value == null) {
                 tag.remove(key);
             } else {
@@ -102,9 +97,6 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         CompoundTag data = getData(namespace);
-        if (data == null) {
-            return null;
-        }
         return data.getInt(key).orElse(null);
     }
 
@@ -116,8 +108,10 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
         modifyData(data -> {
             String namespace = namespacedKey.getNamespace();
             String key = namespacedKey.getKey();
-            CompoundTag tag = data.getCompoundOrEmpty(namespace);
-
+            CompoundTag tag = data.getCompound(namespace).orElse(null);
+            if (tag == null) {
+                return;
+            }
             if (value == null) {
                 tag.remove(key);
             } else {
@@ -128,16 +122,22 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     @Override
     public void save() {
-        if (this.data == null) {
-            return;
-        }
         ((CraftItemStack) obj).handle.set(DataComponents.CUSTOM_DATA, CustomData.of(this.data));
     }
 
-    private void modifyData(@NotNull Consumer<CompoundTag> consumer) {
-        if (this.data == null) {
-            return;
+    private @NotNull CompoundTag getData() {
+        // TODO test.
+        if (pdcMode) {
+            return this.data.getCompoundOrEmpty("PublicBukkitValues");
         }
+        return this.data;
+    }
+
+    private @NotNull CompoundTag getData(@NotNull String namespace) {
+        return getData().getCompoundOrEmpty(namespace);
+    }
+
+    private void modifyData(@NotNull Consumer<CompoundTag> consumer) {
         consumer.accept(this.data);
         if (autoSave) {
             save();

@@ -1,15 +1,10 @@
 package com.oheers.fish.selling;
 
 import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.items.nbt.NBTHolder;
 import com.oheers.fish.utils.nbt.NbtKeys;
-import com.oheers.fish.utils.nbt.NbtUtils;
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -22,64 +17,36 @@ public class WorthNBT {
     }
 
     public static void setNBT(@NotNull ItemStack fishItem, @NotNull Fish fish) {
-        if (NbtUtils.isInvalidItem(fishItem)) {
+        if (fishItem.isEmpty()) {
             return;
         }
-        NBT.modify(fishItem, nbt -> {
-            ReadWriteNBT emfCompound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
-
-            // Set Length
-            if (fish.getLength() > 0) {
-                emfCompound.setFloat(NbtKeys.EMF_FISH_LENGTH, fish.getLength());
-            }
-
-            // Set Fisherman
-            if (!fish.hasFishermanDisabled() && fish.getFishermanUUID() != null) {
-                emfCompound.setString(NbtKeys.EMF_FISH_PLAYER, fish.getFishermanUUID().toString());
-            }
-
-            // Set Fish Name
-            emfCompound.setString(NbtKeys.EMF_FISH_NAME, fish.getName());
-
-            // Set Rarity
-            emfCompound.setString(NbtKeys.EMF_FISH_RARITY, fish.getRarity().getId());
-
-            // Set Random Index
-            emfCompound.setInteger(NbtKeys.EMF_FISH_RANDOM_INDEX, fish.getFactory().getRandomIndex());
-        });
+        NBTHolder<ItemStack> holder = NBTHolder.itemStack(fishItem);
+        setNBT(holder, fish);
     }
 
     public static void setNBT(@NotNull Skull skull, @NotNull Fish fish) {
-        NamespacedKey lengthKey = NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_LENGTH);
-        NamespacedKey playerKey = NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_PLAYER);
-        NamespacedKey rarityKey = NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RARITY);
-        NamespacedKey fishNameKey = NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_NAME);
-        NamespacedKey randomIndexKey = NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RANDOM_INDEX);
+        NBTHolder<Skull> holder = NBTHolder.skull(skull);
+        setNBT(holder, fish);
+    }
 
-        PersistentDataContainer pdc = skull.getPersistentDataContainer();
+    public static void setNBT(@NotNull NBTHolder<?> holder, @NotNull Fish fish) {
+        holder.setAutoSave(false);
 
-        // Set Length
         float length = fish.getLength();
         if (length > 0) {
-            pdc.set(lengthKey, PersistentDataType.FLOAT, length);
+            holder.setFloat(NbtKeys.EMF_FISH_LENGTH.get(), length);
         }
 
-        // Set Fisherman
-        if (!fish.hasFishermanDisabled()) {
-            UUID fisherman = fish.getFishermanUUID();
-            if (fisherman != null) {
-                pdc.set(playerKey, PersistentDataType.STRING, fisherman.toString());
-            }
+        UUID fisherman = fish.getFishermanUUID();
+        if (!fish.hasFishermanDisabled() && fisherman != null) {
+            holder.setString(NbtKeys.EMF_FISH_PLAYER.get(), fisherman.toString());
         }
 
-        // Set Random Index
-        pdc.set(randomIndexKey, PersistentDataType.INTEGER, fish.getFactory().getRandomIndex());
+        holder.setString(NbtKeys.EMF_FISH_NAME.get(), fish.getName());
+        holder.setString(NbtKeys.EMF_FISH_RARITY.get(), fish.getRarity().getId());
+        holder.setInteger(NbtKeys.EMF_FISH_RANDOM_INDEX.get(), fish.getFactory().getRandomIndex());
 
-        // Set Rarity
-        pdc.set(rarityKey, PersistentDataType.STRING, fish.getRarity().getId());
-
-        // Set Fish Name
-        pdc.set(fishNameKey, PersistentDataType.STRING, fish.getName());
+        holder.save();
     }
 
     public static @NotNull Optional<Double> getValue(@NotNull Fish fish) {

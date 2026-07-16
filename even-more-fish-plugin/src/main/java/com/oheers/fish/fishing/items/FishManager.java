@@ -28,6 +28,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -139,29 +141,28 @@ public class FishManager extends AbstractFishManager<Rarity> {
         if (skull == null) {
             return null;
         }
-        final String nameString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_NAME).toString()));
-        final String playerString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_PLAYER).toString()));
-        final String rarityString = NBT.getPersistentData(skull, nbt -> nbt.getString(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RARITY).toString()));
-        final Float lengthFloat = NBT.getPersistentData(skull, nbt -> nbt.getFloat(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_LENGTH).toString()));
-        final Integer randomIndex = NBT.getPersistentData(skull, nbt -> nbt.getInteger(NbtUtils.getNamespacedKey(NbtKeys.EMF_FISH_RANDOM_INDEX).toString()));
+        PersistentDataContainer pdc = skull.getPersistentDataContainer();
+
+        final String nameString = pdc.get(NbtKeys.EMF_FISH_NAME.get(), PersistentDataType.STRING);
+        final String playerString = pdc.get(NbtKeys.EMF_FISH_PLAYER.get(), PersistentDataType.STRING);
+        final String rarityString = pdc.get(NbtKeys.EMF_FISH_RARITY.get(), PersistentDataType.STRING);
+        final Float lengthFloat = pdc.get(NbtKeys.EMF_FISH_LENGTH.get(), PersistentDataType.FLOAT);
+        final Integer randomIndex = pdc.get(NbtKeys.EMF_FISH_RANDOM_INDEX.get(), PersistentDataType.INTEGER);
 
         if (nameString == null || rarityString == null) {
             Logging.warn("NBT Error", new InvalidFishException("NBT Error"));
             return null;
         }
 
-        Rarity rarity = FishManager.getInstance().getRarity(rarityString);
-        if (rarity == null) {
+        RarityKey key = RarityKey.of(rarityString, nameString);
+        if (key == null) {
             return null;
         }
 
-        Fish fish = rarity.getFish(nameString);
-        if (fish == null) {
-            return null;
-        }
+        IFish fish = key.getFish();
         fish.setLength(lengthFloat);
-        if (randomIndex != null) {
-            fish.getFactory().setRandomIndex(randomIndex);
+        if (randomIndex != null && (fish instanceof Fish f)) { // TODO Can remove that instanceof when ItemFactory is part of API.
+            f.getFactory().setRandomIndex(randomIndex);
         }
         if (playerString != null) {
             try {
@@ -189,7 +190,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
         if (item == null || item.isEmpty()) {
             return false;
         }
-        return NbtUtils.hasKey(item, NbtKeys.EMF_FISH_NAME);
+        return NBTHolder.itemStack(item).hasKey(NbtKeys.EMF_FISH_NAME.get());
     }
 
     @Override
@@ -197,7 +198,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
         if (skull == null) {
             return false;
         }
-        return NbtUtils.hasKey(skull, NbtKeys.EMF_FISH_NAME);
+        return NBTHolder.blockState(skull).hasKey(NbtKeys.EMF_FISH_NAME.get());
     }
 
     @Override
