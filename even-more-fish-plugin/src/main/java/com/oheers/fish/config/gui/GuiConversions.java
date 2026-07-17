@@ -11,11 +11,14 @@ import com.oheers.fish.config.gui.impl.MainMenuGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuConfirmGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuNormalGuiConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import dev.dejvokep.boostedyaml.route.Route;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentMessage;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GuiConversions {
 
@@ -30,11 +33,11 @@ public class GuiConversions {
             guiDir.mkdirs();
         }
         ConfigBase config = new ConfigBase(guisFile, EvenMoreFish.getInstance(), false);
-        Section general = config.getConfig().getSection("general");
+        Map<String, Map<Route, Object>> mappedPageButtons = mapPageButtons(config.getConfig().getSection("general"));
         for (String key : config.getConfig().getRoutesAsStrings(false)) {
             Section section = config.getConfig().getSection(key);
             if (section != null) {
-                convertSectionToFile(section, general);
+                convertSectionToFile(section, mappedPageButtons);
             }
         }
         finalizeConversion(config);
@@ -58,7 +61,7 @@ public class GuiConversions {
         return new File(EvenMoreFish.getInstance().getDataFolder(), "gui");
     }
 
-    private void convertSectionToFile(@NotNull Section section, @Nullable Section general) {
+    private void convertSectionToFile(@NotNull Section section, @NotNull Map<String, Map<Route, Object>> mappedPageButtons) {
         String id = section.getNameAsString();
         if (id == null) {
             return;
@@ -77,16 +80,22 @@ public class GuiConversions {
             return;
         }
         // If paginated, add page buttons.
-        if (config.isPaginated() && general != null) {
-            addPageButtons(config.getConfig(), general);
+        if (config.isPaginated() && !mappedPageButtons.isEmpty()) {
+            System.out.println("Added mapped page buttons to " + config.getFile().getName());
+            mappedPageButtons.forEach((key, map) -> config.getConfig().createSection(key).setAll(map));
         }
         config.getConfig().setAll(section.getRouteMappedValues(true));
         config.save();
     }
 
-    private void addPageButtons(@NotNull Section config, @NotNull Section general) {
+    private Map<String, Map<Route, Object>> mapPageButtons(@Nullable Section general) {
+        if (general == null) {
+            return Map.of();
+        }
+        Map<String, Map<Route, Object>> mapped = new HashMap<>();
         for (String key : general.getRoutesAsStrings(false)) {
             Section section = general.getSection(key);
+            System.out.println(section.getRouteMappedValues(true));
             switch (key) {
                 case "first-page" -> section.set("character", "f");
                 case "previous-page" -> section.set("character", "p");
@@ -96,8 +105,10 @@ public class GuiConversions {
                     continue;
                 }
             }
-            config.set(key, section);
+            mapped.put(key, section.getRouteMappedValues(true));
+            System.out.println(mapped);
         }
+        return mapped;
     }
 
 }
