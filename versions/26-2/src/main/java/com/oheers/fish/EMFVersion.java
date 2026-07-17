@@ -2,6 +2,8 @@ package com.oheers.fish;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.oheers.fish.api.plugin.EMFPlugin;
+import com.oheers.fish.items.nbt.NBTHolder;
+import com.oheers.fish.nbt.ItemStackNBTHolder;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.MainCommand;
@@ -106,5 +108,10 @@ public class EMFVersion extends EMFVersionProvider {
 
     @Override
     public void disableCommands() {}
+
+    @Override
+    public @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item) {
+        return new ItemStackNBTHolder(item);
+    }
 
 }
