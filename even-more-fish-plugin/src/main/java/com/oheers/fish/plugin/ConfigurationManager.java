@@ -2,10 +2,19 @@ package com.oheers.fish.plugin;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.DimensionFishingConfig;
-import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.config.GuiFillerConfig;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
+import com.oheers.fish.config.gui.GuiConfig;
+import com.oheers.fish.config.gui.GuiConversions;
+import com.oheers.fish.config.gui.impl.ApplyBaitsMenuGuiConfig;
+import com.oheers.fish.config.gui.impl.BaitsMenuGuiConfig;
+import com.oheers.fish.config.gui.impl.JournalFishGuiConfig;
+import com.oheers.fish.config.gui.impl.JournalRaritiesGuiConfig;
+import com.oheers.fish.config.gui.impl.MainMenuGuiConfig;
+import com.oheers.fish.config.gui.impl.SellMenuConfirmGuiConfig;
+import com.oheers.fish.config.gui.impl.SellMenuNormalGuiConfig;
+import com.oheers.fish.gui.guis.MainMenuGui;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import uk.firedev.messagelib.MessageLibSettings;
@@ -20,14 +29,27 @@ public class ConfigurationManager {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void loadConfigurations() {
         try {
             prepareMessageLib();
 
             new MainConfig();
             new MessageConfig();
-            new GuiConfig();
             new GuiFillerConfig();
+
+            // GUIs. Fetching the instance will initialize the class.
+            ApplyBaitsMenuGuiConfig.getInstance();
+            BaitsMenuGuiConfig.getInstance();
+            JournalFishGuiConfig.getInstance();
+            JournalRaritiesGuiConfig.getInstance();
+            MainMenuGuiConfig.getInstance();
+            SellMenuConfirmGuiConfig.getInstance();
+            SellMenuNormalGuiConfig.getInstance();
+
+            // Split guis.yml into the above files.
+            System.out.println("Checking guis.yml");
+            new GuiConversions().performCheck();
 
             if (EvenMoreFish.getInstance().getDimensionFishing() != null) {
                 DimensionFishingConfig.getInstance().reload();
@@ -47,7 +69,15 @@ public class ConfigurationManager {
 
             MainConfig.getInstance().reload();
             MessageConfig.getInstance().reload();
-            GuiConfig.getInstance().reload();
+
+            ApplyBaitsMenuGuiConfig.getInstance().reload();
+            BaitsMenuGuiConfig.getInstance().reload();
+            JournalFishGuiConfig.getInstance().reload();
+            JournalRaritiesGuiConfig.getInstance().reload();
+            MainMenuGuiConfig.getInstance().reload();
+            SellMenuConfirmGuiConfig.getInstance().reload();
+            SellMenuNormalGuiConfig.getInstance().reload();
+
             GuiFillerConfig.getInstance().reload();
 
             plugin.getLogger().info("Successfully reloaded all configurations");

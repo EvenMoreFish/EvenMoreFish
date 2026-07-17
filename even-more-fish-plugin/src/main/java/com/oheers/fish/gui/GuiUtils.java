@@ -3,8 +3,9 @@ package com.oheers.fish.gui;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.economy.selling.SellHelper;
-import com.oheers.fish.config.GuiConfig;
+import com.oheers.fish.commands.MainCommandProvider;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.config.gui.GuiConfig;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.gui.guis.BaitsGui;
 import com.oheers.fish.gui.guis.FishJournalGui;
@@ -29,53 +30,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class GuiUtils {
-
-    public static GuiPageElement getFirstPageButton() {
-        YamlDocument config = GuiConfig.getInstance().getConfig();
-        return new GuiPageElement('f',
-            createItemStack(config.getSection("general.first-page")),
-            GuiPageElement.PageAction.FIRST
-        );
-    }
-
-    public static GuiPageElement getNextPageButton() {
-        YamlDocument config = GuiConfig.getInstance().getConfig();
-        return new GuiPageElement('n',
-            createItemStack(config.getSection("general.next-page")),
-            GuiPageElement.PageAction.NEXT
-        );
-    }
-
-    public static GuiPageElement getPreviousPageButton() {
-        YamlDocument config = GuiConfig.getInstance().getConfig();
-        return new GuiPageElement('p',
-            createItemStack(config.getSection("general.previous-page")),
-            GuiPageElement.PageAction.PREVIOUS
-        );
-    }
-
-    public static GuiPageElement getLastPageButton() {
-        YamlDocument config = GuiConfig.getInstance().getConfig();
-        return new GuiPageElement('l',
-            createItemStack(config.getSection("general.last-page")),
-            GuiPageElement.PageAction.LAST
-        );
-    }
-
-    public static ItemStack createItemStack(@Nullable Section section) {
-        if (section == null) {
-            ItemStack fallback = new ItemStack(Material.BARRIER);
-            fallback.editMeta(meta -> meta.displayName(Component.text("Invalid Item")));
-            return fallback;
-        }
-        // Fix for me messing up the item config layout - FireML
-        if (section.contains("displayname")) {
-            section.set("item.displayname", section.get("displayname"));
-            section.remove("displayname");
-        }
-        ItemFactory factory = ItemFactory.itemFactory(section);
-        return factory.createItem();
-    }
 
     public static Map<String, BiConsumer<ConfigGui, GuiElement.Click>> getActionMap() {
         Map<String, BiConsumer<ConfigGui, GuiElement.Click>> newActionMap = new HashMap<>();
@@ -117,15 +71,7 @@ public class GuiUtils {
         });
         newActionMap.put("show-command-help", (gui, click) -> {
             click.getWhoClicked().closeInventory();
-            if (click.getWhoClicked() instanceof Player player) {
-                //todo test
-                player.performCommand("%s %s".formatted(
-                                MainConfig.getInstance().getMainCommandName(),
-                                MainConfig.getInstance().getHelpSubCommandName()
-                ));
-            }
-
-            //MainCommand.HELP_MESSAGE.sendMessage(click.getWhoClicked());
+            MainCommandProvider.sendHelpMessage(click.getWhoClicked());
         });
         newActionMap.put("sell-inventory", (gui, click) -> {
             HumanEntity humanEntity = click.getWhoClicked();

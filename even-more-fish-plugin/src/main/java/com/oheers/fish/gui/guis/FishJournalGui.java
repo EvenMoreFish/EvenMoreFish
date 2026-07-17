@@ -3,7 +3,8 @@ package com.oheers.fish.gui.guis;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
-import com.oheers.fish.config.GuiConfig;
+import com.oheers.fish.config.gui.impl.JournalFishGuiConfig;
+import com.oheers.fish.config.gui.impl.JournalRaritiesGuiConfig;
 import com.oheers.fish.database.Database;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.database.data.UserFishRarityKey;
@@ -40,9 +41,9 @@ public class FishJournalGui extends ConfigGui {
 
     public FishJournalGui(@NotNull HumanEntity player, @Nullable Rarity rarity) {
         super(
-            GuiConfig.getInstance().getConfig().getSection(
-                rarity == null ? "journal-menu" : "journal-rarity"
-            ),
+            (rarity == null)
+                ? JournalRaritiesGuiConfig.getInstance()
+                : JournalFishGuiConfig.getInstance(),
             player
         );
 

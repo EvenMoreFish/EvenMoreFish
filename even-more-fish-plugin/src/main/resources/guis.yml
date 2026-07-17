@@ -17,38 +17,6 @@ button-example:
   click-commands: # Optional commands for the player to execute on either click.
     - emf help
 
-# These elements are available in every gui.
-# They will only show up when pages are needed.
-general:
-  # Character: f
-  first-page:
-    item:
-      material: arrow
-      displayname: <aqua>First Page
-      lore:
-        - <yellow>Go to the first page
-  # Character: p
-  previous-page:
-    item:
-      material: paper
-      displayname: <aqua>Previous Page
-      lore:
-        - <yellow>Go to the previous page
-  # Character: n
-  next-page:
-    item:
-      material: paper
-      displayname: <aqua>Next Page
-      lore:
-        - <yellow>Go to the next page
-  # Character: l
-  last-page:
-    item:
-      material: arrow
-      displayname: <aqua>Last Page
-      lore:
-        - <yellow>Go to the last page
-
 main-menu:
   title: <#006F86>EvenMoreFish - Main Menu
   layout:

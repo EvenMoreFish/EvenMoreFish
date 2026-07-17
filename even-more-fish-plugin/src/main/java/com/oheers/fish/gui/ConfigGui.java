@@ -112,13 +112,6 @@ public class ConfigGui {
     }
 
     private void loadItems(@NotNull InventoryGui gui, @NotNull Section config) {
-        // This needs to be done first so individual configs can override them
-        gui.addElements(
-            GuiUtils.getFirstPageButton(),
-            GuiUtils.getPreviousPageButton(),
-            GuiUtils.getNextPageButton(),
-            GuiUtils.getLastPageButton()
-        );
         config.getRoutesAsStrings(false).forEach(key -> {
             Section itemSection = config.getSection(key);
             if (itemSection == null || !itemSection.contains("item")) {

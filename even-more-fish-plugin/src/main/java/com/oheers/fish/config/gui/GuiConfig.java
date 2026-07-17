@@ -1,16 +1,21 @@
 package com.oheers.fish.config.gui;
 
+import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.messages.EMFSingleMessage;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public abstract class GuiConfig extends ConfigBase {
 
-    public GuiConfig(@NotNull String fileName, @NotNull String resourceName, @NotNull Plugin plugin, boolean configUpdater) {
-        super(fileName, resourceName, plugin, configUpdater);
+    public GuiConfig(@NotNull String name) {
+        super(
+            "gui/" + name,
+            "gui/" + name,
+            EvenMoreFish.getInstance(),
+            true
+        );
     }
 
     public @NotNull EMFSingleMessage getTitle() {
@@ -23,5 +28,7 @@ public abstract class GuiConfig extends ConfigBase {
             .limit(6)
             .toArray(String[]::new);
     }
+
+    public abstract boolean isPaginated();
 
 }
