@@ -120,9 +120,6 @@ public class EvenMoreFish extends EMFPlugin {
 
     @Override
     public void onLoad() {
-        if (false && !NBT.preloadApi()) {
-            throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
-        }
         instance = this;
         versionProvider.loadCommands();
         versionProvider.load();
