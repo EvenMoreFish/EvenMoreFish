@@ -1,0 +1,52 @@
+# Configuration for the Baits GUI, shown after clicking the baits button in /emf gui.
+
+title: <#006F86>EvenMoreFish - Baits
+layout:
+  - "  23232  "
+  - "23 4 4 32"
+  - "4 bbbbb 4"
+  - "23 4 4 32"
+  - "p 23x32 n"
+filler: black_stained_glass_pane
+# The character to use for the bait items.
+bait-character: b
+
+# How to sort the baits. Valid options are: alphabetical, index. (Default: alphabetical)
+sort-type: alphabetical
+
+# The lore to use when a bait can be purchased.
+# Supported variables: {quantity}, {price}, {bait}
+purchase-lore:
+  - Click to purchase {quantity}x {bait} for {price}
+
+exit:
+  item:
+    material: pufferfish
+    displayname: <red>Exit
+    lore:
+      - <yellow>Exit to the Menu
+  glowing: true
+  character: x
+  click-action: open-main-menu
+
+next-page:
+  item:
+    material: paper
+    displayname: <yellow>Next Page
+    lore:
+      - <yellow>Navigate to the next page
+  character: n
+  click-action: next-page
+
+previous-page:
+  item:
+    material: paper
+    displayname: <yellow>Previous Page
+    lore:
+      - <yellow>Navigate to the previous page
+  character: p
+  click-action: previous-page
+
+# ATTENTION ATTENTION ATTENTION
+# DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
+version: 1

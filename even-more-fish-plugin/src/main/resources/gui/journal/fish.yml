@@ -1,0 +1,76 @@
+# Configuration for the Journal GUI, shown after clicking the journal button in /emf gui, after selecting a rarity.
+
+title: <#006F86>EvenMoreFish - Fish Journal
+layout:
+  - "    a    "
+  - " fffffff "
+  - " fffffff "
+  - " fffffff "
+  - " fffffff "
+  - "p   x   n"
+filler: gray_stained_glass_pane
+# The character to use for fish items
+fish-character: f
+
+# How to sort the fish. Valid options are: alphabetical, weight, index. (Default: alphabetical)
+sort-type: alphabetical
+
+# Whether to show the undiscovered-fish config below when a fish has not been caught by the player.
+hide-undiscovered-fish: false
+
+# The message to display when a fish has no data.
+# This does not support formatting.
+unknown-message: "Unknown"
+
+# How undiscovered fish should look
+undiscovered-fish:
+  item:
+    material: iron_bars
+    displayname: <dark_gray>Undiscovered Fish
+  lore:
+    - ''
+    - <white>Catch this fish
+    - <white>to unlock it here.
+
+# How caught fish should look. Changing the material will not work, as it always uses the fish item as a base
+fish-item:
+  item:
+    displayname: <white>{fishname}
+    lore:
+      - ''
+      - '<white>Caught: {times-caught}x'
+      - '<white>Largest Size: {largest-size}cm'
+      - '<white>Smallest Size: {smallest-size}cm'
+      - '<white>Found: {discover-date}'
+      - ''
+      - '<white>Discovered by: {discoverer}'
+      - '<white>Server Largest: {server-largest}cm'
+      - '<white>Server Smallest: {server-smallest}cm'
+      - '<white>Server Caught: {server-caught}x'
+
+rarity-item:
+  item:
+    displayname: <white>{rarityname}
+
+info:
+  item:
+    material: book
+    displayname: <red>INFO
+    lore:
+      - <yellow>Here you can see all the fish you have caught.
+      - <yellow>From this rarity.
+  character: a
+
+exit:
+  item:
+    material: pufferfish
+    displayname: <red>Exit
+    lore:
+      - <yellow>Exit to the Menu
+  glowing: true
+  character: x
+  click-action: open-journal-menu
+
+# ATTENTION ATTENTION ATTENTION
+# DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
+version: 1
