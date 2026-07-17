@@ -1,17 +1,16 @@
 plugins {
     id("java-library")
     id("org.evenmorefish.fish.shadow-conventions")
+    alias(libs.plugins.paperweight)
 }
 
 dependencies {
     compileOnly(project(":even-more-fish-plugin"))
 
-    compileOnly(libs.paper.api) {
-        version {
-            strictly("1.21.1-R0.1-SNAPSHOT")
-        }
-    }
+    paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
+
+extra["fileName"] = "1.21.1-4"
 
 tasks.test {
     useJUnitPlatform()

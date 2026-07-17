@@ -12,6 +12,8 @@ import com.oheers.fish.items.configs.HideTooltipItemConfig;
 import com.oheers.fish.items.configs.ItemRarityItemConfig;
 import com.oheers.fish.items.configs.MaxStackSizeItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
+import com.oheers.fish.items.nbt.NBTHolder;
+import com.oheers.fish.nbt.ItemStackNBTHolder;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -107,5 +109,10 @@ public class EMFVersion extends EMFVersionProvider {
 
     @Override
     public void disableCommands() {}
+
+    @Override
+    public @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item) {
+        return new ItemStackNBTHolder(item);
+    }
 
 }
