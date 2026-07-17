@@ -13,6 +13,7 @@ dependencies {
     }
 
     compileOnly(libs.commandsapi.bukkit)
+    compileOnly(libs.nbt.api)
 }
 
 tasks.test {

@@ -8,6 +8,7 @@ import com.oheers.fish.commands.AdminCommand;
 import com.oheers.fish.commands.MainCommand;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.items.nbt.NBTHolder;
+import com.oheers.fish.nbt.ItemStackNBTHolder;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import dev.jorel.commandapi.CommandAPI;
@@ -73,7 +74,7 @@ public class EMFVersion extends EMFVersionProvider {
 
     @Override
     public @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item) {
-        return null;
+        return new ItemStackNBTHolder(item);
     }
 
     @Override
