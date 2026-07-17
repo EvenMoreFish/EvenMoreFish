@@ -89,7 +89,6 @@ public class Fish implements IFish, Sortable {
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             });
-            WorthNBT.setNBT(fish, this);
         });
         this.factory = factory;
 
@@ -154,10 +153,12 @@ public class Fish implements IFish, Sortable {
         // Build custom fish lore and include the configured lore.
         factory.getLore().setTransformer(this::buildFishLore);
         factory.getDisplayName().setDefault(getDisplayName().getUnderlying().getAsMiniMessage());
-        if (fisherman == null) {
-            return factory.createItem();
-        }
-        return factory.createItem(fisherman.getUniqueId());
+
+        ItemStack item = fisherman == null
+            ? factory.createItem()
+            : factory.createItem(fisherman.getUniqueId());
+        WorthNBT.setNBT(item, this);
+        return item;
     }
 
     private @Nullable OfflinePlayer getFishermanPlayer() {

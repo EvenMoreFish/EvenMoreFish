@@ -9,13 +9,14 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 @ApiStatus.Internal
 public abstract class NBTHolder<T> {
 
     protected final T obj;
 
     protected boolean autoSave = true;
-    protected boolean pdcMode = false;
 
     /**
      * Returns an ItemStack NBTHolder.
@@ -23,7 +24,15 @@ public abstract class NBTHolder<T> {
      * This can be toggled to use PDC or a custom namespace.
      */
     public static @NotNull NBTHolder<ItemStack> itemStack(@NotNull ItemStack item) {
-        // Refer to version provider as we use NMS for item data.
+        if (item.isEmpty()) {
+            throw new IllegalStateException("Cannot fetch NBTHolder for an empty item.");
+        }
+        NBTHolder<ItemStack> legacy = new LegacyItemStackNBTHolder(item);
+        // Legacy data is present.
+        if (legacy.hasNamespace("evenmorefish")) {
+            return legacy;
+        }
+        // Item is using modern NBT.
         return EvenMoreFish.getInstance().getVersionProvider().createItemStackNbtHolder(item);
     }
 
@@ -39,6 +48,8 @@ public abstract class NBTHolder<T> {
     public NBTHolder(@NotNull T obj) {
         this.obj = obj;
     }
+
+    public abstract boolean hasNamespace(@NotNull String namespace);
 
     public abstract boolean hasKey(@NotNull NamespacedKey namespacedKey);
 
@@ -63,22 +74,17 @@ public abstract class NBTHolder<T> {
      */
     public abstract void setInteger(@NotNull NamespacedKey namespacedKey, @Nullable Integer value);
 
+    public abstract @Nullable Boolean getBoolean(@NotNull NamespacedKey namespacedKey);
+
     /**
-     * Sets whether the object will be saved after each edit.
-     * <p>
-     * Set to false if doing bulk changes for better performance.
+     * Sets a Boolean in the specified NBT location. If null is passed, the key will be removed.
      */
+    public abstract void setBoolean(@NotNull NamespacedKey namespacedKey, @Nullable Boolean value);
+
+    public abstract void save();
+
     public void setAutoSave(boolean autoSave) {
         this.autoSave = autoSave;
     }
-
-    /**
-     * Sets whether the PDC is used instead.
-     */
-    public void setPdcMode(boolean pdcMode) {
-        this.pdcMode = pdcMode;
-    }
-
-    public abstract void save();
 
 }

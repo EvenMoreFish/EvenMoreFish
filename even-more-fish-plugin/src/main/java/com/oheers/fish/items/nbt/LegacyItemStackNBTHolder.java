@@ -1,20 +1,22 @@
 package com.oheers.fish.items.nbt;
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Skull;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
-import tools.jackson.databind.node.BooleanNode;
 
 import java.util.Locale;
 
-public class SkullNBTHolder extends NBTHolder<Skull> {
+public class LegacyItemStackNBTHolder extends NBTHolder<ItemStack> {
 
-    public SkullNBTHolder(@NonNull Skull obj) {
+    private final ItemMeta meta;
+
+    public LegacyItemStackNBTHolder(@NotNull ItemStack obj) {
         super(obj);
+        this.meta = obj.getItemMeta();
     }
 
     @Override
@@ -39,11 +41,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
      */
     @Override
     public void setString(@NotNull NamespacedKey namespacedKey, @Nullable String value) {
-        if (value == null) {
-            getData().remove(namespacedKey);
-            return;
-        }
-        getData().set(namespacedKey, PersistentDataType.STRING, value);
+        throw new UnsupportedOperationException("Cannot use set methods with legacy NBT.");
     }
 
     @Nullable
@@ -57,11 +55,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
      */
     @Override
     public void setFloat(@NotNull NamespacedKey namespacedKey, @Nullable Float value) {
-        if (value == null) {
-            getData().remove(namespacedKey);
-            return;
-        }
-        getData().set(namespacedKey, PersistentDataType.FLOAT, value);
+        throw new UnsupportedOperationException("Cannot use set methods with legacy NBT.");
     }
 
     @Nullable
@@ -75,11 +69,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
      */
     @Override
     public void setInteger(@NotNull NamespacedKey namespacedKey, @Nullable Integer value) {
-        if (value == null) {
-            getData().remove(namespacedKey);
-            return;
-        }
-        getData().set(namespacedKey, PersistentDataType.INTEGER, value);
+        throw new UnsupportedOperationException("Cannot use set methods with legacy NBT.");
     }
 
     @Override
@@ -92,18 +82,16 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
      */
     @Override
     public void setBoolean(@NotNull NamespacedKey namespacedKey, @Nullable Boolean value) {
-        if (value == null) {
-            getData().remove(namespacedKey);
-            return;
-        }
-        getData().set(namespacedKey, PersistentDataType.BOOLEAN, value);
+        throw new UnsupportedOperationException("Cannot use set methods with legacy NBT.");
     }
 
     @Override
-    public void save() { /* PDC saves after being edited, so this does nothing. */ }
+    public void save() {
+        obj.setItemMeta(this.meta);
+    }
 
     private @NotNull PersistentDataContainer getData() {
-        return obj.getPersistentDataContainer();
+        return this.meta.getPersistentDataContainer();
     }
 
 }

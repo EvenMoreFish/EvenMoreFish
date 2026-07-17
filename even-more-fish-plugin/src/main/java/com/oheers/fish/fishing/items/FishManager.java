@@ -4,7 +4,6 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.boost.RarityBoostRegistry;
-import com.oheers.fish.api.fishing.FishingType;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.RarityKey;
@@ -18,8 +17,7 @@ import com.oheers.fish.fishing.items.config.RarityConversions;
 import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.items.nbt.NBTHolder;
 import com.oheers.fish.utils.WeightedRandom;
-import com.oheers.fish.utils.nbt.NbtKeys;
-import de.tr7zw.changeme.nbtapi.NBT;
+import com.oheers.fish.items.nbt.NbtKeys;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
@@ -198,7 +196,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
         if (skull == null) {
             return false;
         }
-        return NBTHolder.blockState(skull).hasKey(NbtKeys.EMF_FISH_NAME.get());
+        return NBTHolder.skull(skull).hasKey(NbtKeys.EMF_FISH_NAME.get());
     }
 
     @Override

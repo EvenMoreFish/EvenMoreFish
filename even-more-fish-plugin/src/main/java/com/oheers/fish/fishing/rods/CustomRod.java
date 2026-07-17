@@ -8,11 +8,10 @@ import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.items.ItemFactory;
+import com.oheers.fish.items.nbt.NBTHolder;
 import com.oheers.fish.recipe.EMFRecipe;
 import com.oheers.fish.recipe.RecipeUtil;
-import com.oheers.fish.utils.nbt.NbtKeys;
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import com.oheers.fish.items.nbt.NbtKeys;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -39,12 +38,6 @@ public class CustomRod extends ConfigBase implements ICustomRod {
         this.allowedRarities = loadAllowedRarities();
         this.allowedFish = loadAllowedFish();
         this.factory = ItemFactory.itemFactory(getConfig());
-        this.factory.setFinalChanges(item ->
-            NBT.modify(item, nbt -> {
-                ReadWriteNBT emfCompound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
-                emfCompound.setString(NbtKeys.EMF_ROD_ID, getId());
-            })
-        );
         this.recipe = loadRecipe();
     }
 
@@ -141,10 +134,7 @@ public class CustomRod extends ConfigBase implements ICustomRod {
     @Override
     public @NotNull ItemStack create() {
         ItemStack item = factory.createItem();
-        NBT.modify(item, nbt -> {
-            ReadWriteNBT emfCompound = nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND);
-            emfCompound.setString(NbtKeys.EMF_ROD_ID, getId());
-        });
+        NBTHolder.itemStack(item).setString(NbtKeys.EMF_ROD_ID.get(), getId());
         return item;
     }
 

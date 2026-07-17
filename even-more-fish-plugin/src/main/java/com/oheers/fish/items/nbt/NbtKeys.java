@@ -1,11 +1,8 @@
-package com.oheers.fish.utils.nbt;
+package com.oheers.fish.items.nbt;
 
 import com.oheers.fish.EvenMoreFish;
 import org.bukkit.NamespacedKey;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Locale;
 
 public enum NbtKeys {
     EMF_FISH_PLAYER("emf-fish-player"),
