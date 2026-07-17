@@ -71,6 +71,39 @@ exit:
   character: x
   click-action: open-journal-menu
 
+# Page Buttons
+next-page:
+  item:
+    material: paper
+    displayname: <aqua>Next Page
+    lore:
+      - <yellow>Go to the next page
+  character: n
+
+last-page:
+  item:
+    material: arrow
+    displayname: <aqua>Last Page
+    lore:
+      - <yellow>Go to the last page
+  character: l
+
+previous-page:
+  item:
+    material: paper
+    displayname: <aqua>Previous Page
+    lore:
+      - <yellow>Go to the previous page
+  character: p
+
+first-page:
+  item:
+    material: arrow
+    displayname: <aqua>First Page
+    lore:
+      - <yellow>Go to the first page
+  character: f
+
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
 version: 1
