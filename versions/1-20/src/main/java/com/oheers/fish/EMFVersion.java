@@ -29,6 +29,13 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     @Override
+    public void load() {
+        if (!NBT.preloadApi()) {
+            throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
+        }
+    }
+
+    @Override
     public void enable() {
         Logging.warn(
             "After the release of Minecraft 26.3, " +
@@ -107,9 +114,6 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     // Ignored Methods
-
-    @Override
-    public void load() {}
 
     @Override
     public void reload() {}
