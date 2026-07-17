@@ -71,6 +71,8 @@ public class EvenMoreFish extends EMFPlugin {
     private final Random random = ThreadLocalRandom.current();
     private final Toggle toggle;
 
+    private final boolean isFolia = FishUtils.classExists("io.papermc.paper.threadedregions.RegionizedServer");
+
     // Do some fish in some rarities have the comp-check-exempt: true.
     private boolean raritiesCompCheckExempt = false;
     private CompetitionQueue competitionQueue;
@@ -108,7 +110,8 @@ public class EvenMoreFish extends EMFPlugin {
         this.versionProvider = loader.getVersionProvider();
         this.toggle = new Toggle(this);
 
-        if (MinecraftVersion.isAtLeastVersion(MinecraftVersion.MC1_21_R1)) {
+        // Dimension Fishing is disabled on Folia for now.
+        if (MinecraftVersion.isAtLeastVersion(MinecraftVersion.MC1_21_R1) && !isFolia) {
             this.dimensionFishing = new DimensionFishing(
                 this,
                 DimensionFishingConfig.getInstance()
