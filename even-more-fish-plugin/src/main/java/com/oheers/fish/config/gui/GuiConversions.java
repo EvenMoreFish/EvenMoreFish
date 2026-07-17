@@ -97,10 +97,22 @@ public class GuiConversions {
             Section section = general.getSection(key);
             System.out.println(section.getRouteMappedValues(true));
             switch (key) {
-                case "first-page" -> section.set("character", "f");
-                case "previous-page" -> section.set("character", "p");
-                case "next-page" -> section.set("character", "n");
-                case "last-page" -> section.set("character", "l");
+                case "first-page" -> {
+                    section.set("character", "f");
+                    section.set("page-action", "first");
+                }
+                case "previous-page" -> {
+                    section.set("character", "p");
+                    section.set("page-action", "previous");
+                }
+                case "next-page" -> {
+                    section.set("character", "n");
+                    section.set("page-action", "next");
+                }
+                case "last-page" -> {
+                    section.set("character", "l");
+                    section.set("page-action", "last");
+                }
                 default -> {
                     continue;
                 }

@@ -55,6 +55,7 @@ next-page:
     lore:
       - <yellow>Go to the next page
   character: n
+  page-action: next
 
 last-page:
   item:
@@ -63,6 +64,7 @@ last-page:
     lore:
       - <yellow>Go to the last page
   character: l
+  page-action: last
 
 previous-page:
   item:
@@ -71,6 +73,7 @@ previous-page:
     lore:
       - <yellow>Go to the previous page
   character: p
+  page-action: previous
 
 first-page:
   item:
@@ -79,6 +82,7 @@ first-page:
     lore:
       - <yellow>Go to the first page
   character: f
+  page-action: first
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!

@@ -9,7 +9,9 @@ import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.ItemUtils;
+import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElement;
+import de.themoep.inventorygui.GuiPageElement;
 import de.themoep.inventorygui.GuiStorageElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
@@ -21,6 +23,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -128,7 +131,15 @@ public class ConfigGui {
         }
         ItemFactory factory = ItemFactory.itemFactory(itemSection);
         ItemStack item = factory.createItem(this.player.getUniqueId(), this.replacements);
-        if (item.getType() == Material.AIR) {
+        if (item.isEmpty()) {
+            return;
+        }
+        GuiPageElement.PageAction pageAction = FishUtils.getEnumValue(
+            GuiPageElement.PageAction.class,
+            itemSection.getString("page-action")
+        );
+        if (pageAction != null) {
+            gui.addElement(fetchPageElement(character, item, pageAction));
             return;
         }
         StaticGuiElement actionElement = new StaticGuiElement(character, item, click -> {
@@ -137,6 +148,28 @@ public class ConfigGui {
             return true;
         });
         gui.addElement(actionElement);
+    }
+
+    private DynamicGuiElement fetchPageElement(char character, @NotNull ItemStack item, @NotNull GuiPageElement.PageAction action) {
+        // Process the page.
+        /* Currently not functional. This is preparation to fix another bug after this is done.
+        ItemStack finalItem = item;
+        int maxPages = gui.getPageAmount(player);
+        int currentPage = gui.getPageNumber(player);
+        switch (action) {
+            case LAST, NEXT -> {
+                if (currentPage == maxPages) {
+                    finalItem = null;
+                }
+            }
+            case FIRST, PREVIOUS -> {
+                if (currentPage == 0) {
+                    finalItem = null;
+                }
+            }
+        }
+         */
+        return new DynamicGuiElement(character, () -> new GuiPageElement(character, item, action));
     }
 
     private void executeClickAction(@NotNull Section section, @NotNull GuiElement.Click click) {
