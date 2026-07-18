@@ -75,7 +75,11 @@ public class EMFVersionLoader {
             return classLoader.getResource("versions/26-1.jar");
         // 1.21 has multiple version jars.
         } else if (minecraftVersion.startsWith("1.21")) {
-            List<String> oldVersions = List.of("1.21", "1.21.1", "1.21.3", "1.21.4");
+            // 1.21.0 is not supported.
+            if (minecraftVersion.equals("1.21")) {
+                throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
+            }
+            List<String> oldVersions = List.of("1.21.1", "1.21.3", "1.21.4");
             if (oldVersions.contains(minecraftVersion)) {
                 return classLoader.getResource("versions/1.21.1-4.jar");
             } else {

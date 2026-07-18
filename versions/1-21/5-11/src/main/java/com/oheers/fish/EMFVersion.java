@@ -18,6 +18,8 @@ import com.oheers.fish.items.configs.MaxStackSizeItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.nbt.ItemStackNBTHolder;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import it.unimi.dsi.fastutil.objects.ReferenceLinkedOpenHashSet;
 import net.minecraft.core.component.DataComponents;
@@ -25,7 +27,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.util.datafix.fixes.References;
-import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.item.component.TooltipDisplay;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -84,10 +85,15 @@ public class EMFVersion extends EMFVersionProvider {
     @Override
     public @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
         ItemStack skull = ItemStack.of(Material.PLAYER_HEAD);
+        // Uses Paper's DataComponent API as internals changed in 1.21.9.
+        //noinspection UnstableApiUsage
+        skull.setData(
+            DataComponentTypes.PROFILE,
+            ResolvableProfile.resolvableProfile().uuid(uuid).build()
+        );
 
         // Set our data using NMS
         net.minecraft.world.item.ItemStack handle = ((CraftItemStack) skull).handle;
-        handle.set(DataComponents.PROFILE, new ResolvableProfile(Optional.empty(), Optional.of(uuid), new PropertyMap()));
         TooltipDisplay display = handle.getOrDefault(
             DataComponents.TOOLTIP_DISPLAY,
             new TooltipDisplay(false, new ReferenceLinkedOpenHashSet<>()) // NMS seems to use this set, so we do the same.
