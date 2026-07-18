@@ -55,10 +55,9 @@ rarity-item:
 info:
   item:
     material: book
-    displayname: <red>INFO
+    displayname: <red>Information
     lore:
-      - <yellow>Here you can see all the fish you have caught.
-      - <yellow>From this rarity.
+      - <yellow>This page shows all the {rarity} fish you have caught.
   character: a
 
 exit:

@@ -48,6 +48,10 @@ public class FishJournalGui extends ConfigGui {
         );
 
         this.rarity = rarity;
+        if (rarity != null) {
+            addReplacement("{rarity}", rarity.getDisplayName());
+        }
+
         this.userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(player.getUniqueId());
         createGui();
 
@@ -179,7 +183,7 @@ public class FishJournalGui extends ConfigGui {
         } catch (Exception exception) {
             EvenMoreFish.getInstance().debug(
                 "An exception occurred while getting a value. Defaulting to " + def,
-                new RuntimeException()
+                exception
             );
             return def;
         }
