@@ -35,6 +35,17 @@ public abstract class NBTHolder<T> {
         return EvenMoreFish.getInstance().getVersionProvider().createItemStackNbtHolder(item);
     }
 
+    public static @Nullable NBTHolder<ItemStack> itemStack(@NotNull String rawNbt) {
+        if (rawNbt.isEmpty()) {
+            return null;
+        }
+        ItemStack item = EvenMoreFish.getInstance().getVersionProvider().deserializeItemStack(rawNbt);
+        if (item == null || item.isEmpty()) {
+            return null;
+        }
+        return itemStack(item);
+    }
+
     /**
      * Returns an ItemStack NBTHolder.
      * <p>
@@ -84,6 +95,10 @@ public abstract class NBTHolder<T> {
 
     public void setAutoSave(boolean autoSave) {
         this.autoSave = autoSave;
+    }
+
+    public @NotNull T getObject() {
+        return this.obj;
     }
 
 }

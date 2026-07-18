@@ -39,8 +39,7 @@ public class EMFVersion extends EMFVersionProvider {
 
     static {
         try {
-            //noinspection JavaReflectionMemberAccess
-            deserializeItem = CraftMagicNumbers.class.getMethod("deserializeItem", CompoundTag.class);
+            deserializeItem = CraftMagicNumbers.class.getDeclaredMethod("deserializeItem", CompoundTag.class);
             deserializeItem.setAccessible(true);
         } catch (NoSuchMethodException exception) {
             throw new IllegalStateException("Failed to load EvenMoreFish.", exception);

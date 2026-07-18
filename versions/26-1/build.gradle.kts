@@ -7,7 +7,7 @@ plugins {
 dependencies {
     compileOnly(project(":even-more-fish-plugin"))
 
-    paperweight.paperDevBundle("26.1.1.build.+")
+    paperweight.paperDevBundle("26.1.2.build.+")
 }
 
 tasks.test {

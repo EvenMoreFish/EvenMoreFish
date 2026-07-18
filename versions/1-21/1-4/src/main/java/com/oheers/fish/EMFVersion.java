@@ -1,5 +1,7 @@
 package com.oheers.fish;
 
+import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
+import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -18,8 +20,11 @@ import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.nbt.ItemStackNBTHolder;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.CraftRegistry;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,23 +33,9 @@ import org.jetbrains.annotations.NotNull;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 public class EMFVersion extends EMFVersionProvider {
-
-    private static final Method deserializeItem;
-
-    static {
-        try {
-            //noinspection JavaReflectionMemberAccess
-            deserializeItem = CraftMagicNumbers.class.getMethod("deserializeItem", CompoundTag.class);
-            deserializeItem.setAccessible(true);
-        } catch (NoSuchMethodException exception) {
-            throw new IllegalStateException("Failed to load EvenMoreFish.", exception);
-        }
-    }
 
     public EMFVersion(@NotNull EMFPlugin plugin) {
         super(plugin);
@@ -111,11 +102,19 @@ public class EMFVersion extends EMFVersionProvider {
     @Nullable
     @Override
     public ItemStack deserializeItemStack(@NotNull String raw) {
+        // Manually deserializes as the newer CraftMagicNumbers methods aren't on this version.
         try {
             CompoundTag tag = net.minecraft.nbt.TagParser.parseTag(raw);
-            return (ItemStack) deserializeItem.invoke(CraftMagicNumbers.INSTANCE, tag);
-        } catch (CommandSyntaxException | IllegalAccessException | InvocationTargetException exception) {
+            int dataVersion = tag.getInt("DataVersion");
+            tag = MCDataConverter.convertTag(MCTypeRegistry.ITEM_STACK, tag, dataVersion, CraftMagicNumbers.INSTANCE.getDataVersion());
+
+            String id = tag.contains("id") ? tag.getString("id") : "minecraft:air";
+            return id.equals("minecraft:air")
+                ? CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.EMPTY)
+                : CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.CODEC.parse(CraftRegistry.getMinecraftRegistry().createSerializationContext(NbtOps.INSTANCE), tag).getOrThrow());
+        } catch (CommandSyntaxException | IllegalStateException exception) {
             Logging.warn("Failed to parse an ItemStack from raw NBT: " + raw);
+            Logging.error(exception.getMessage(), exception);
             return null;
         }
     }
