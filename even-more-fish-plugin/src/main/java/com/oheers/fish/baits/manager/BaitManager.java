@@ -7,7 +7,7 @@ import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.configs.BaitConversions;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.items.nbt.NBTHolder;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.items.nbt.NbtKeys;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;

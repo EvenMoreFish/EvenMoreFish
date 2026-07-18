@@ -1,6 +1,6 @@
 package com.oheers.fish.nbt;
 
-import com.oheers.fish.items.nbt.NBTHolder;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.component.CustomData;
@@ -10,11 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
-
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 

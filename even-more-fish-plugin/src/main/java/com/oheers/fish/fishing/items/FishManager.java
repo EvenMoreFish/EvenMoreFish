@@ -15,7 +15,7 @@ import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.config.FishConversions;
 import com.oheers.fish.fishing.items.config.RarityConversions;
 import com.oheers.fish.fishing.rods.CustomRod;
-import com.oheers.fish.items.nbt.NBTHolder;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.utils.WeightedRandom;
 import com.oheers.fish.items.nbt.NbtKeys;
 import org.bukkit.Location;

@@ -1,15 +1,14 @@
-package com.oheers.fish.items.nbt;
+package com.oheers.fish.items.nbt.abstracted;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.items.nbt.LegacyItemStackNBTHolder;
+import com.oheers.fish.items.nbt.SkullNBTHolder;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 @ApiStatus.Internal
 public abstract class NBTHolder<T> {

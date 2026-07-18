@@ -62,7 +62,7 @@ dependencies {
     compileOnly(libs.headdatabase.api)
     compileOnly(libs.playerpoints)
 
-    api(libs.nbt.api)
+    //api(libs.nbt.api)
     api(libs.universalscheduler)
 
     implementation(libs.bstats)

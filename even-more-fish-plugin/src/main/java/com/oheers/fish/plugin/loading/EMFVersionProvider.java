@@ -1,12 +1,11 @@
 package com.oheers.fish.plugin.loading;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
-import com.oheers.fish.items.nbt.NBTHolder;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Skull;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -40,6 +39,10 @@ public abstract class EMFVersionProvider {
     // NBT Things
 
     public abstract @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item);
+
+    public abstract @Nullable ItemStack deserializeItemStack(@NotNull String raw);
+
+    public abstract @NotNull String serializeItemStack(@NotNull ItemStack item);
 
     @ApiStatus.Internal
     public abstract @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid);

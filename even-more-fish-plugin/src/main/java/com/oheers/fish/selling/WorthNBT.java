@@ -1,7 +1,7 @@
 package com.oheers.fish.selling;
 
 import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.items.nbt.NBTHolder;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.items.nbt.NbtKeys;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;

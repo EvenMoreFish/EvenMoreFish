@@ -1,5 +1,6 @@
 package com.oheers.fish.items.nbt;
 
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Skull;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -7,7 +8,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
-import tools.jackson.databind.node.BooleanNode;
 
 import java.util.Locale;
 

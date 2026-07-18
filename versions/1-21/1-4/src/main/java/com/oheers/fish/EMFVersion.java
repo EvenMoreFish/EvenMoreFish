@@ -2,6 +2,8 @@ package com.oheers.fish;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.MainCommand;
@@ -12,22 +14,37 @@ import com.oheers.fish.items.configs.HideTooltipItemConfig;
 import com.oheers.fish.items.configs.ItemRarityItemConfig;
 import com.oheers.fish.items.configs.MaxStackSizeItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
-import com.oheers.fish.items.nbt.NBTHolder;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.nbt.ItemStackNBTHolder;
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import net.minecraft.nbt.CompoundTag;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 public class EMFVersion extends EMFVersionProvider {
+
+    private static final Method deserializeItem;
+
+    static {
+        try {
+            //noinspection JavaReflectionMemberAccess
+            deserializeItem = CraftMagicNumbers.class.getMethod("deserializeItem", CompoundTag.class);
+            deserializeItem.setAccessible(true);
+        } catch (NoSuchMethodException exception) {
+            throw new IllegalStateException("Failed to load EvenMoreFish.", exception);
+        }
+    }
 
     public EMFVersion(@NotNull EMFPlugin plugin) {
         super(plugin);
@@ -66,18 +83,11 @@ public class EMFVersion extends EMFVersionProvider {
 
     @Override
     public @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        ItemStack skull = ItemStack.of(Material.PLAYER_HEAD);
         skull.editMeta(SkullMeta.class, meta -> {
-            PlayerProfile profile = Bukkit.createProfile(uuid, null);
+            PlayerProfile profile = Bukkit.createProfile(uuid);
             meta.setPlayerProfile(profile);
         });
-        if (MinecraftVersion.isAtLeastVersion(MinecraftVersion.MC1_21_R4)) {
-            NBT.modifyComponents(skull, nbt -> {
-                nbt.getOrCreateCompound("minecraft:tooltip_display")
-                    .getStringList("hidden_components")
-                    .add("minecraft:profile");
-            });
-        }
         return skull;
     }
 
@@ -91,6 +101,29 @@ public class EMFVersion extends EMFVersionProvider {
             meta.setPlayerProfile(profile);
         });
         return skull;
+    }
+
+    @Override
+    public @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item) {
+        return new ItemStackNBTHolder(item);
+    }
+
+    @Nullable
+    @Override
+    public ItemStack deserializeItemStack(@NotNull String raw) {
+        try {
+            CompoundTag tag = net.minecraft.nbt.TagParser.parseTag(raw);
+            return (ItemStack) deserializeItem.invoke(CraftMagicNumbers.INSTANCE, tag);
+        } catch (CommandSyntaxException | IllegalAccessException | InvocationTargetException exception) {
+            Logging.warn("Failed to parse an ItemStack from raw NBT: " + raw);
+            return null;
+        }
+    }
+
+    @NotNull
+    @Override
+    public String serializeItemStack(@NotNull ItemStack item) {
+        return CraftMagicNumbers.INSTANCE.serializeItemAsJson(item).getAsString();
     }
 
     // Ignored Methods
@@ -109,10 +142,5 @@ public class EMFVersion extends EMFVersionProvider {
 
     @Override
     public void disableCommands() {}
-
-    @Override
-    public @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item) {
-        return new ItemStackNBTHolder(item);
-    }
 
 }

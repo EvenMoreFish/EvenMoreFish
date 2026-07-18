@@ -2,7 +2,7 @@ package com.oheers.fish.fishing.rods;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.fishing.rods.AbstractRodManager;
-import com.oheers.fish.items.nbt.NBTHolder;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.items.nbt.NbtKeys;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

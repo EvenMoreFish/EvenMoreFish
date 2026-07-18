@@ -25,7 +25,6 @@ import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.PrefixType;
 import com.oheers.fish.permissions.AdminPerms;
-import de.tr7zw.changeme.nbtapi.NBT;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -149,7 +148,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
                     return 1;
                 }
 
-                String handItemNbt = NBT.itemStackToNBT(handItem).toString();
+                String handItemNbt = EvenMoreFish.getInstance().getVersionProvider().serializeItemStack(handItem);
 
                 // Ensure the handItemNbt is escaped for use in YAML
                 // This could be slightly inefficient, but it is the only way I can currently think of.

@@ -1,5 +1,6 @@
 package com.oheers.fish.items.nbt;
 
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

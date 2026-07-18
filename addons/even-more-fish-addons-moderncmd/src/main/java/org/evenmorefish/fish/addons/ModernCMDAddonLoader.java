@@ -6,7 +6,6 @@ import com.oheers.fish.api.utils.system.JavaSpecVersion;
 import com.oheers.fish.api.utils.system.SystemUtils;
 import com.oheers.fish.items.ItemConfigResolver;
 import com.oheers.fish.utils.MinecraftVersionHelper;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import org.evenmorefish.fish.addons.itemconfig.ModernCustomModelDataItemConfig;
 
 import java.io.File;
