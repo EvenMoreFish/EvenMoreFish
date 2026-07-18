@@ -3,6 +3,7 @@ package com.oheers.fish.competition;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.AbstractFileBasedManager;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.competition.configs.CompetitionConversions;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.fishing.rods.RodManager;
@@ -76,9 +77,14 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
             return false;
         }
         scheduledDays.forEach((day, times) ->
-                times.forEach(time ->
-                        competitions.put(generateTimeCode(day, time), file)
-                )
+            times.forEach(time -> {
+                String[] split = time.split(":");
+                if (split.length != 2) {
+                    Logging.warn("Invalid TimeCode in " + file.getFileName() + ": " + time);
+                    return;
+                }
+                competitions.put(generateTimeCode(day, split[0], split[1]), file);
+            })
         );
         return true;
     }
@@ -94,20 +100,21 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
         daysToUse.removeAll(file.getBlacklistedDays());
 
         for (String time : repeatedTimes) {
+            String[] split = time.split(":");
+            if (split.length != 2) {
+                Logging.warn("Invalid TimeCode in " + file.getFileName() + ": " + time);
+                continue;
+            }
             for (DayOfWeek day : daysToUse) {
-                competitions.put(generateTimeCode(day, time), file);
+                competitions.put(generateTimeCode(day, split[0], split[1]), file);
             }
         }
         return true;
     }
 
-    public @Nullable TimeCode generateTimeCode(@NotNull DayOfWeek day, @NotNull String hourMinute) {
-        String[] time = hourMinute.split(":");
-        if (time.length != 2) {
-            return null;
-        }
-        Integer hour = FishUtils.getInteger(time[0]);
-        Integer minute = FishUtils.getInteger(time[1]);
+    public @Nullable TimeCode generateTimeCode(@NotNull DayOfWeek day, @NotNull String hourStr, @NotNull String minuteStr) {
+        Integer hour = FishUtils.getInteger(hourStr);
+        Integer minute = FishUtils.getInteger(minuteStr);
         if (hour == null || minute == null) {
             return null;
         }
