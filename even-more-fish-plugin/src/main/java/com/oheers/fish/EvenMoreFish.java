@@ -374,34 +374,47 @@ public class EvenMoreFish extends EMFPlugin {
             return;
         }
         final UUID uuid = sold.getPlayer().getUniqueId();
-
-        final int userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(uuid);
         final String transactionId = FriendlyId.createFriendlyId();
         final Timestamp timestamp = Timestamp.from(Instant.now());
+        final IFish fish = sold.getFish();
+        final String fishName = fish.getName();
+        final String rarityId = fish.getRarity().getId();
+        final int quantity = sold.getQuantity();
+        final float length = fish.getLength();
+        final double finalValue = sold.getFinalValue();
+        final double rawValue = sold.getValue();
 
-        Database database = EvenMoreFish.getInstance().getPluginDataManager().getDatabase();
+        // Resolve the user row, insert sale data, and update cached report
+        // state on the single FIFO database worker.
+        pluginDataManager.getDatabaseWorker().execute(() -> {
+            final int userId = pluginDataManager.getUserManager().getUserId(uuid);
+            if (userId == 0) {
+                getLogger().warning("Skipping sold fish database update because user id could not be resolved for " + uuid);
+                return;
+            }
 
-        // Insert the transaction and sale rows off the server thread; the
-        // queue keeps the transaction row ahead of its sale rows.
-        EvenMoreFish.getInstance().getPluginDataManager().getWriteQueue().execute(() -> {
+            Database database = pluginDataManager.getDatabase();
             database.createTransaction(transactionId, userId, timestamp);
-            IFish fish = sold.getFish();
             database.createSale(
                 transactionId,
-                fish.getName(),
-                fish.getRarity().getId(),
-                sold.getQuantity(),
-                fish.getLength(),
-                sold.getFinalValue()
+                fishName,
+                rarityId,
+                quantity,
+                length,
+                finalValue
             );
+
+            final DataManager<UserReport> userReportDataManager = pluginDataManager.getUserReportDataManager();
+            final UserReport report = userReportDataManager.get(uuid.toString());
+            if (report == null) {
+                getLogger().warning("Skipping sold fish report update because user report could not be loaded for " + uuid);
+                return;
+            }
+            report.incrementFishSold(quantity);
+            report.incrementMoneyEarned(rawValue);
+
+            userReportDataManager.update(uuid.toString(), report);
         });
-
-        final DataManager<UserReport> userReportDataManager = EvenMoreFish.getInstance().getPluginDataManager().getUserReportDataManager();
-        final UserReport report = userReportDataManager.get(uuid.toString());
-        report.incrementFishSold(sold.getQuantity());
-        report.incrementMoneyEarned(sold.getValue());
-
-        userReportDataManager.update(uuid.toString(), report);
     }
 
     /**

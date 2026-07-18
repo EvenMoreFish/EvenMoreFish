@@ -172,7 +172,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
                     sender.sendPlainMessage("You cannot run migrations when the database is disabled. Please set database.enabled: true. And restart the server.");
                     return 1;
                 }
-                EvenMoreFish.getScheduler().runTaskAsynchronously(
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker().execute(
                     () -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().migrateLegacy(sender)
                 );
                 return 1;

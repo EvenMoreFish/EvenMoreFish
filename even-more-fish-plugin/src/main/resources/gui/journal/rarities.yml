@@ -1,0 +1,89 @@
+# Configuration for the Journal GUI, shown after clicking the journal button in /emf gui, before selecting a rarity.
+
+title: <#006F86>EvenMoreFish - Fish Journal
+layout:
+  - "232323232"
+  - "3rrrrrrr3"
+  - "2rrrrrrr2"
+  - "3rrrrrrr3"
+  - "2rrrrrrr2"
+  - "p323x323n"
+filler: gray_stained_glass_pane
+# The character to use for rarity items
+rarity-character: r
+
+# How to sort the rarities. Valid options are: alphabetical, weight, index. (Default: index)
+sort-type: index
+
+# Whether to show the undiscovered-rarity config below when a rarity has not been discovered by the player.
+hide-undiscovered-rarity: false
+
+# How undiscovered rarities should look
+undiscovered-rarity:
+  item:
+    material: iron_bars
+    displayname: <dark_gray>Undiscovered Rarity
+    lore:
+      - ''
+      - <white>Catch a fish from this
+      - <white>rarity to unlock it here.
+
+rarity-item:
+  item:
+    # This will be overwritten by the rarity's material.
+    material: cod
+    displayname: '{rarity}'
+    lore:
+      - ''
+      - <aqua>→ Click to view caught fish
+
+exit:
+  item:
+    material: pufferfish
+    displayname: <red>Exit
+    lore:
+      - <yellow>Exit to the Menu
+  glowing: true
+  character: x
+  click-action: full-exit
+
+# Page Buttons
+next-page:
+  item:
+    material: paper
+    displayname: <aqua>Next Page
+    lore:
+      - <yellow>Go to the next page
+  character: n
+  page-action: next
+
+last-page:
+  item:
+    material: arrow
+    displayname: <aqua>Last Page
+    lore:
+      - <yellow>Go to the last page
+  character: l
+  page-action: last
+
+previous-page:
+  item:
+    material: paper
+    displayname: <aqua>Previous Page
+    lore:
+      - <yellow>Go to the previous page
+  character: p
+  page-action: previous
+
+first-page:
+  item:
+    material: arrow
+    displayname: <aqua>First Page
+    lore:
+      - <yellow>Go to the first page
+  character: f
+  page-action: first
+
+# ATTENTION ATTENTION ATTENTION
+# DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
+version: 1

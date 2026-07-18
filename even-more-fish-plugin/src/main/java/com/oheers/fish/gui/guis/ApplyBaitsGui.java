@@ -7,7 +7,7 @@ import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.baits.model.ApplicationResult;
-import com.oheers.fish.config.GuiConfig;
+import com.oheers.fish.config.gui.impl.ApplyBaitsMenuGuiConfig;
 import com.oheers.fish.exceptions.MaxBaitReachedException;
 import com.oheers.fish.exceptions.MaxBaitsReachedException;
 import com.oheers.fish.gui.ConfigGui;
@@ -32,7 +32,7 @@ public class ApplyBaitsGui extends ConfigGui {
 
     public ApplyBaitsGui(@NotNull Player player, @Nullable Inventory baitInventory) {
         super(
-            GuiConfig.getInstance().getConfig().getSection("apply-baits-menu"),
+            ApplyBaitsMenuGuiConfig.getInstance(),
             player
         );
         this.baitInventory = Optional.ofNullable(baitInventory).orElse(Bukkit.createInventory(player, 54));

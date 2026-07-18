@@ -213,7 +213,7 @@ public class MainCommand {
                     return;
                 }
                 Rarity rarity = info.args().getUnchecked("rarity"); // This is allowed to be null.
-                new FishJournalGui(info.sender(), rarity).open();
+                FishJournalGui.openAsync(info.sender(), rarity);
             });
     }
 

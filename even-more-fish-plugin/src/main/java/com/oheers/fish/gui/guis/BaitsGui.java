@@ -4,7 +4,7 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitManager;
-import com.oheers.fish.config.GuiConfig;
+import com.oheers.fish.config.gui.impl.BaitsMenuGuiConfig;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.utils.CooldownHelper;
@@ -32,7 +32,7 @@ public class BaitsGui extends ConfigGui {
 
     public BaitsGui(@NotNull HumanEntity player) {
         super(
-            GuiConfig.getInstance().getConfig().getSection("baits-menu"),
+            BaitsMenuGuiConfig.getInstance(),
             player
         );
 
