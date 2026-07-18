@@ -49,7 +49,7 @@ public class JournalSubcommand {
             ConfigMessage.JOURNAL_DISABLED.getMessage().send(player);
             return;
         }
-        new FishJournalGui(player, rarity).open();
+        FishJournalGui.openAsync(player, rarity);
     }
 
 }

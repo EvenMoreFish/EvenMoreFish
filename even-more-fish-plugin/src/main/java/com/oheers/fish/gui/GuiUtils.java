@@ -127,7 +127,10 @@ public class GuiUtils {
             if (gui != null) {
                 gui.doRescue();
             }
-            new FishJournalGui(click.getWhoClicked(), null).open();
+            if (!(click.getWhoClicked() instanceof Player player)) {
+                return;
+            }
+            FishJournalGui.openAsync(player, null, click.getGui());
             clearHistory(click.getWhoClicked());
         });
         // Add page actions so third party plugins cannot register their own.
