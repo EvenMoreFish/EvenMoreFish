@@ -11,6 +11,7 @@ import com.oheers.fish.gui.guis.BaitsGui;
 import com.oheers.fish.gui.guis.FishJournalGui;
 import com.oheers.fish.gui.guis.MainMenuGui;
 import com.oheers.fish.gui.guis.SellGui;
+import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.ConfigMessage;
 import de.themoep.inventorygui.GuiElement;
@@ -23,6 +24,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -130,7 +132,7 @@ public class GuiUtils {
             if (!(click.getWhoClicked() instanceof Player player)) {
                 return;
             }
-            FishJournalGui.openAsync(player, null, click.getGui());
+            openJournalFromMainMenu(player, FishJournalGui::openAsync);
             clearHistory(click.getWhoClicked());
         });
         // Add page actions so third party plugins cannot register their own.
@@ -149,6 +151,15 @@ public class GuiUtils {
 
     private static void clearHistory(HumanEntity human) {
         InventoryGui.clearHistory(human);
+    }
+
+    static void openJournalFromMainMenu(@NotNull Player player, @NotNull JournalOpener opener) {
+        opener.open(player, null, null);
+    }
+
+    @FunctionalInterface
+    interface JournalOpener {
+        void open(@NotNull Player player, @Nullable Rarity rarity, @Nullable InventoryGui expectedOpenGui);
     }
 
 }

@@ -49,6 +49,7 @@ public class DatabaseWorker implements Executor, AutoCloseable {
             thread.setDaemon(true);
             return thread;
         });
+        debug("Database worker started with thread prefix '%s'.".formatted(threadNamePrefix));
     }
 
     @Override
@@ -171,5 +172,13 @@ public class DatabaseWorker implements Executor, AutoCloseable {
 
     private Logger fallbackLogger() {
         return Logger.getLogger("EvenMoreFish");
+    }
+
+    private void debug(@NotNull String message) {
+        try {
+            EvenMoreFish.getInstance().debug(message);
+        } catch (RuntimeException ignored) {
+            // Unit tests and early bootstrap paths may not have an initialized plugin singleton.
+        }
     }
 }

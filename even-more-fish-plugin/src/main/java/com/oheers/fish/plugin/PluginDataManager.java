@@ -184,11 +184,14 @@ public class PluginDataManager {
         if (databaseWorker == null) {
             return CompletableFuture.completedFuture(0);
         }
+        plugin.debug("Queueing user data preload for %s.".formatted(uuid));
         return databaseWorker.query(() -> {
+            plugin.debug("Preloading user data for %s.".formatted(uuid));
             int userId = userManager.getUserId(uuid);
             if (userId != 0 && !isUserFishStatsPreloaded(userId)) {
                 preloadUserData(uuid, userId);
             }
+            plugin.debug("Finished user data preload for %s with user id %d.".formatted(uuid, userId));
             return userId;
         });
     }
@@ -217,6 +220,7 @@ public class PluginDataManager {
     }
 
     private void preloadFishStats() {
+        plugin.debug("Preloading fish stats.");
         List<FishStats> rows = database.loadAllFishStats();
         if (rows == null) {
             plugin.getLogger().warning("Could not preload fish stats; falling back to on-demand loads.");

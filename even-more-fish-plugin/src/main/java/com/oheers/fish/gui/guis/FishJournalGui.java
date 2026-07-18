@@ -48,15 +48,27 @@ public class FishJournalGui extends ConfigGui {
 
     public static void openAsync(@NotNull Player player, @Nullable Rarity rarity, @Nullable InventoryGui expectedOpenGui) {
         EvenMoreFish plugin = EvenMoreFish.getInstance();
-        plugin.getPluginDataManager().preloadUserDataAsync(player.getUniqueId()).thenAccept(userId -> {
+        plugin.debug("Preparing fish journal for %s.".formatted(player.getName()));
+        plugin.getPluginDataManager().preloadUserDataAsync(player.getUniqueId()).whenComplete((userId, throwable) -> {
+            if (throwable != null) {
+                Logging.warn("Could not prepare fish journal for " + player.getName() + ".", throwable);
+                return;
+            }
+            plugin.debug("Fish journal data prepared for %s with user id %d.".formatted(player.getName(), userId));
             EvenMoreFish.getScheduler().runTask(player, () -> {
-                if (!player.isOnline()) {
-                    return;
+                try {
+                    if (!player.isOnline()) {
+                        plugin.debug("Skipping fish journal open for %s because the player is offline.".formatted(player.getName()));
+                        return;
+                    }
+                    if (expectedOpenGui != null && InventoryGui.getOpen(player) != expectedOpenGui) {
+                        plugin.debug("Skipping fish journal open for %s because the open GUI changed while data loaded.".formatted(player.getName()));
+                        return;
+                    }
+                    new FishJournalGui(player, rarity, userId, true).open();
+                } catch (Exception exception) {
+                    Logging.warn("Could not open fish journal for " + player.getName() + ".", exception);
                 }
-                if (expectedOpenGui != null && InventoryGui.getOpen(player) != expectedOpenGui) {
-                    return;
-                }
-                new FishJournalGui(player, rarity, userId, true).open();
             });
         });
     }
