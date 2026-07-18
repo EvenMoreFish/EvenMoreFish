@@ -187,10 +187,10 @@ public class FishJournalGui extends ConfigGui {
             ? dataManager.getFishStatsDataManager().peek(FishRarityKey.of(fish).toString())
             : dataManager.getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
 
-        final String discoverDate = getValueOrDefault(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE), getUnknownMessage());
+        final String discoverDate = getDiscoverDate(userFishStats, getUnknownMessage());
 
         @SuppressWarnings("Convert2MethodRef") // Suppressed as it introduces an unwanted Objects#requireNonNull when compiled.
-        final String discoverer = getValueOrDefault(() -> fishStats.getDiscovererName(), getUnknownMessage());
+        final String discoverer = getDiscoverer(fishStats, getUnknownMessage());
 
         EMFListMessage lore = EMFListMessage.ofList(
             Optional.ofNullable(factory.getLore().getConfiguredValue())
@@ -207,6 +207,14 @@ public class FishJournalGui extends ConfigGui {
         lore.setVariable("{server-caught}", getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getQuantity()), "0"));
 
         return lore;
+    }
+
+    static @NotNull String getDiscoverDate(@Nullable UserFishStats userFishStats, @NotNull String unknownMessage) {
+        return userFishStats == null ? unknownMessage : userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE);
+    }
+
+    static @NotNull String getDiscoverer(@Nullable FishStats fishStats, @NotNull String unknownMessage) {
+        return fishStats == null ? unknownMessage : Optional.ofNullable(fishStats.getDiscovererName()).orElse(unknownMessage);
     }
 
     private @NotNull String getValueOrDefault(@NotNull Supplier<String> supplier, @NotNull String def) {
