@@ -130,7 +130,7 @@ public class EMFVersion extends EMFVersionProvider {
     @NotNull
     @Override
     public String serializeItemStack(@NotNull ItemStack item) {
-        return CraftMagicNumbers.INSTANCE.serializeItemAsJson(item).getAsString();
+        return CraftMagicNumbers.INSTANCE.serializeItemAsJson(item).toString();
     }
 
     // Ignored Methods
