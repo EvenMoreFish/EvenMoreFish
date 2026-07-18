@@ -475,7 +475,9 @@ public class AdminCommand {
                         .send(info.sender());
                     return;
                 }
-                EvenMoreFish.getScheduler().runTaskAsynchronously(() -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().migrateLegacy(info.sender()));
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker().execute(
+                    () -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().migrateLegacy(info.sender())
+                );
             });
     }
 
