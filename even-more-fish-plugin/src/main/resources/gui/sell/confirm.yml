@@ -1,0 +1,50 @@
+# Configuration for the confirmation Sell GUI, shown when /emf shop is used, after clicking a sell button.
+
+title: <#006F86>EvenMoreFish - Sell Fish (Confirm)
+layout:
+  - "iiiiiiiii"
+  - "iiiiiiiii"
+  - "iiiiiiiii"
+  - "   s a   "
+filler: light_blue_stained_glass_pane
+# The character to use for the slots where players can place fish.
+deposit-character: i
+
+sell-item:
+  item:
+    material: GOLD_INGOT
+    displayname: <bold><gold>Confirm Sell
+    lore:
+      - <dark_gray>Fish Shop
+      - ''
+      - <gray>Sell your fish here to make
+      - <gray>some extra money.
+      - ''
+      - <yellow>» (Left-click) sell the fish.
+      - <gray>» (Right-click) cancel.
+  character: s
+  click-action:
+    left: sell-shop-confirm
+    right: full-exit
+
+sell-all-item:
+  item:
+    material: COD_BUCKET
+    displayname: <bold><gold>Confirm Sell All
+    lore:
+      - <dark_gray>Inventory
+      - ''
+      - <gray>Click this button to sell
+      - <gray>the fish in your inventory to
+      - <gray>make some extra money.
+      - ''
+      - <yellow>» (Left-click) sell the fish.
+      - <gray>» (Right-click) cancel.
+  character: a
+  click-action:
+    left: sell-inventory-confirm
+    right: full-exit
+
+# ATTENTION ATTENTION ATTENTION
+# DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
+version: 1

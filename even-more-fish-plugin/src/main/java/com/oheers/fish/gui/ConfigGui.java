@@ -2,12 +2,16 @@ package com.oheers.fish.gui;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.config.gui.GuiConfig;
 import com.oheers.fish.config.GuiFillerConfig;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.ItemUtils;
+import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElement;
+import de.themoep.inventorygui.GuiPageElement;
 import de.themoep.inventorygui.GuiStorageElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
@@ -19,8 +23,8 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,19 +32,22 @@ import java.util.function.BiConsumer;
 
 public class ConfigGui {
 
+    // TODO Bring the action map to this class when we switch to a different library
     protected final Map<String, BiConsumer<ConfigGui, GuiElement.Click>> actions = GuiUtils.getActionMap();
-    protected final Section config;
+    protected final GuiConfig config;
     protected final Player player;
     private final @NotNull Map<String, EMFMessage> replacements = new HashMap<>();
 
     private InventoryGui gui;
     private InventoryGui.CloseAction closeAction = null;
 
-    // TODO Bring the action map to this class when we switch to Triumph
-    public ConfigGui(@Nullable Section config, @NotNull HumanEntity player) {
+    public ConfigGui(@NotNull GuiConfig config, @NotNull HumanEntity human) {
         this.config = config;
+        if (!(human instanceof Player p)) {
+            throw new UnsupportedOperationException("Cannot open ConfigGui for a non-player.");
+        }
         // HumanEntity's only subclass is Player, so this is a safe cast
-        this.player = (Player) player;
+        this.player = p;
     }
 
     public void addReplacement(@NotNull String variable, @NotNull String replacement) {
@@ -71,7 +78,7 @@ public class ConfigGui {
     }
 
     public Section getGuiConfig() {
-        return config;
+        return config.getConfig();
     }
 
     public void open() {
@@ -79,23 +86,14 @@ public class ConfigGui {
     }
 
     public void createGui() {
-        if (this.config == null) {
-            this.gui = new InventoryGui(
-                EvenMoreFish.getInstance(),
-                "Empty Gui",
-                new String[0]
-            );
-            return;
-        }
-        String title = this.config.getString("title");
-        String[] layout = this.config.getStringList("layout").stream().limit(6).toArray(String[]::new);
         InventoryGui gui = new InventoryGui(
             EvenMoreFish.getInstance(),
-            title == null ? null : EMFSingleMessage.fromString(title).getLegacyMessage(player),
-            layout
+            config.getTitle().getLegacyMessage(player),
+            config.getLayout()
         );
-        loadFiller(gui, this.config);
-        loadItems(gui, this.config);
+
+        loadFiller(gui, config.getConfig());
+        loadItems(gui, config.getConfig());
         gui.setCloseAction(closeAction);
 
         this.gui = gui;
@@ -117,13 +115,6 @@ public class ConfigGui {
     }
 
     private void loadItems(@NotNull InventoryGui gui, @NotNull Section config) {
-        // This needs to be done first so individual configs can override them
-        gui.addElements(
-            GuiUtils.getFirstPageButton(),
-            GuiUtils.getPreviousPageButton(),
-            GuiUtils.getNextPageButton(),
-            GuiUtils.getLastPageButton()
-        );
         config.getRoutesAsStrings(false).forEach(key -> {
             Section itemSection = config.getSection(key);
             if (itemSection == null || !itemSection.contains("item")) {
@@ -140,40 +131,74 @@ public class ConfigGui {
         }
         ItemFactory factory = ItemFactory.itemFactory(itemSection);
         ItemStack item = factory.createItem(this.player.getUniqueId(), this.replacements);
-        if (item.getType() == Material.AIR) {
+        if (item.isEmpty()) {
             return;
         }
-        Section actionSection = itemSection.getSection("click-action");
-        if (actionSection != null) {
-            StaticGuiElement actionElement = new StaticGuiElement(character, item, click -> {
-                BiConsumer<ConfigGui, GuiElement.Click> action = switch (click.getType()) {
-                    case LEFT -> actions.get(actionSection.getString("left", ""));
-                    case RIGHT -> actions.get(actionSection.getString("right", ""));
-                    case MIDDLE -> actions.get(actionSection.getString("middle", ""));
-                    case DROP -> actions.get(actionSection.getString("drop", ""));
-                    default -> null;
-                };
-                if (action != null) {
-                    action.accept(this, click);
+        GuiPageElement.PageAction pageAction = FishUtils.getEnumValue(
+            GuiPageElement.PageAction.class,
+            itemSection.getString("page-action")
+        );
+        if (pageAction != null) {
+            gui.addElement(fetchPageElement(character, item, pageAction));
+            return;
+        }
+        StaticGuiElement actionElement = new StaticGuiElement(character, item, click -> {
+            executeClickAction(itemSection, click);
+            executeClickCommands(itemSection, click);
+            return true;
+        });
+        gui.addElement(actionElement);
+    }
+
+    private DynamicGuiElement fetchPageElement(char character, @NotNull ItemStack item, @NotNull GuiPageElement.PageAction action) {
+        // Process the page.
+        /* Currently not functional. This is preparation to fix another bug after this is done.
+        ItemStack finalItem = item;
+        int maxPages = gui.getPageAmount(player);
+        int currentPage = gui.getPageNumber(player);
+        switch (action) {
+            case LAST, NEXT -> {
+                if (currentPage == maxPages) {
+                    finalItem = null;
                 }
-                itemSection.getStringList("click-commands").forEach(command ->
-                    Bukkit.dispatchCommand(click.getWhoClicked(), command)
-                );
-                return true;
-            });
-            gui.addElement(actionElement);
-        } else {
-            StaticGuiElement element = new StaticGuiElement(character, item, click -> {
-                BiConsumer<ConfigGui, GuiElement.Click> action = actions.get(itemSection.getString("click-action", ""));
-                if (action != null) {
-                    action.accept(this, click);
+            }
+            case FIRST, PREVIOUS -> {
+                if (currentPage == 0) {
+                    finalItem = null;
                 }
-                itemSection.getStringList("click-commands").forEach(command ->
-                    Bukkit.dispatchCommand(click.getWhoClicked(), command)
-                );
-                return true;
-            });
-            gui.addElement(element);
+            }
+        }
+         */
+        return new DynamicGuiElement(character, () -> new GuiPageElement(character, item, action));
+    }
+
+    private void executeClickAction(@NotNull Section section, @NotNull GuiElement.Click click) {
+        Section actionSection = section.getSection("click-action");
+        // If not a section, fall back to a string.
+        if (actionSection == null) {
+            BiConsumer<ConfigGui, GuiElement.Click> action = actions.get(section.getString("click-action", ""));
+            if (action != null) {
+                action.accept(this, click);
+            }
+            return;
+        }
+        // If a section, filter for the specific click type.
+        BiConsumer<ConfigGui, GuiElement.Click> action = switch (click.getType()) {
+            case LEFT -> actions.get(actionSection.getString("left", ""));
+            case RIGHT -> actions.get(actionSection.getString("right", ""));
+            case MIDDLE -> actions.get(actionSection.getString("middle", ""));
+            case DROP -> actions.get(actionSection.getString("drop", ""));
+            default -> null;
+        };
+        if (action != null) {
+            action.accept(this, click);
+        }
+    }
+
+    private void executeClickCommands(@NotNull Section section, @NotNull GuiElement.Click click) {
+        HumanEntity player = click.getWhoClicked();
+        for (String command : section.getStringList("click-commands")) {
+            Bukkit.dispatchCommand(player, command);
         }
     }
 

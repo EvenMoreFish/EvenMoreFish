@@ -1,0 +1,85 @@
+# Configuration for the Main Menu GUI, shown when /emf gui is used.
+
+title: <#006F86>EvenMoreFish - Main Menu
+layout:
+  - "126515621"
+  - "23     32"
+  - "4 t s h 4"
+  - "4  j b  4"
+  - "23     32"
+  - "1265x5621"
+# This should be the most used filler item.
+filler: black_stained_glass_pane
+
+fish-toggle:
+  item:
+    material: tropical_fish
+    displayname: <gold>» Toggle Custom Fish
+    lore:
+      - ""
+      - <gray>Click this button to
+      - <gray>toggle custom fish.
+      - ""
+  character: t
+  click-action: fish-toggle
+
+open-shop:
+  item:
+    material: gold_ingot
+    displayname: <gold>» Open Fish Shop
+    lore:
+      - ""
+      - <gray>Sell the fish you catch to
+      - <gray>earn a bit of extra money.
+      - ""
+  character: s
+  click-action: open-shop
+
+help-button:
+  item:
+    material: COMPASS
+    displayname: <gold>» Command Help
+    lore:
+      - ""
+      - <gray>Shows a list of commands
+      - <gray>you can use for this plugin.
+      - ""
+  character: h
+  click-action: show-command-help
+
+open-baits:
+  item:
+    material: nautilus_shell
+    displayname: "<gold>» View Baits"
+    lore:
+      - ""
+      - <gray>Shows all loaded baits
+      - ""
+  character: b
+  click-action: open-baits-menu
+
+open-journal:
+  item:
+    material: writable_book
+    displayname: "<gold>» Fish Journal"
+    lore:
+      - ""
+      - <gray>Keep track of all the
+      - <gray>fish you have caught.
+      - ""
+  character: j
+  click-action: open-journal-menu
+
+exit:
+  item:
+    material: pufferfish
+    displayname: <red>Exit
+    lore:
+      - <yellow>Exit to the Menu
+  glowing: true
+  character: x
+  click-action: full-exit
+
+# ATTENTION ATTENTION ATTENTION
+# DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
+version: 1

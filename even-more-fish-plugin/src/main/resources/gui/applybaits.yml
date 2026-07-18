@@ -1,0 +1,25 @@
+# Configuration for the Main Menu GUI, shown when /emf applybaits is used.
+
+title: <#006F86>EvenMoreFish - Apply Baits
+layout:
+  - "bbbbbbbbb"
+  - "bbbbbbbbb"
+  - "bbbbbbbbb"
+  - "    x    "
+filler: light_blue_stained_glass_pane
+# The character to use for the bait slots.
+bait-character: b
+
+exit:
+  item:
+    material: pufferfish
+    displayname: <red>Exit
+    lore:
+      - <yellow>Exit to the Menu
+  glowing: true
+  character: x
+  click-action: full-exit
+
+# ATTENTION ATTENTION ATTENTION
+# DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
+version: 1

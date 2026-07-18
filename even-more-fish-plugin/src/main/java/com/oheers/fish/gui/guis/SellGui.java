@@ -2,8 +2,10 @@ package com.oheers.fish.gui.guis;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.economy.Economy;
-import com.oheers.fish.config.GuiConfig;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.config.gui.GuiConfig;
+import com.oheers.fish.config.gui.impl.SellMenuConfirmGuiConfig;
+import com.oheers.fish.config.gui.impl.SellMenuNormalGuiConfig;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.api.economy.selling.SellHelper;
 import de.themoep.inventorygui.GuiStorageElement;
@@ -15,8 +17,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
-// TODO look into dynamically updating the sell items when a fish is added/removed - AFTER we switch to TriumphGui
+// TODO look into dynamically updating the sell items when a fish is added/removed - AFTER we switch to another library
 public class SellGui extends ConfigGui {
 
     private final Inventory fishInventory;
@@ -55,17 +58,17 @@ public class SellGui extends ConfigGui {
     }
 
     public enum SellState {
-        NORMAL("sell-menu-normal"),
-        CONFIRM("sell-menu-confirm");
+        NORMAL(SellMenuNormalGuiConfig::getInstance),
+        CONFIRM(SellMenuConfirmGuiConfig::getInstance);
 
-        private final String configLocation;
+        private final Supplier<GuiConfig> configSupplier;
 
-        SellState(@NotNull String configLocation) {
-            this.configLocation = configLocation;
+        SellState(@NotNull Supplier<GuiConfig> configSupplier) {
+            this.configSupplier = configSupplier;
         }
 
-        public Section getGuiConfig() {
-            return GuiConfig.getInstance().getConfig().getSection(configLocation);
+        public GuiConfig getGuiConfig() {
+            return configSupplier.get();
         }
     }
 
