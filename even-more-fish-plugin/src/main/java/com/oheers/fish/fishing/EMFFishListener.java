@@ -45,12 +45,21 @@ public class EMFFishListener implements Listener {
             return;
         }
 
-        final int userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(player.getUniqueId());
+        final UUID uuid = player.getUniqueId();
+        final String competitionId = Competition.getCurrentlyActive() != null ? Competition.getCurrentlyActive().getCompetitionName() : null;
 
-        handleFishLog(userId, fish, catchTime);
-        handleUserFishStats(userId, fish);
-        handleFishStats(fish);
-        handleUserReport(player.getUniqueId(), fish);
+        EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker().execute(() -> {
+            final int userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(uuid);
+            if (userId == 0) {
+                EvenMoreFish.getInstance().getLogger().warning("Skipping fish database update because user id could not be resolved for " + uuid);
+                return;
+            }
+
+            handleFishLog(userId, fish, catchTime, competitionId);
+            handleUserFishStats(userId, fish);
+            handleFishStats(fish);
+            handleUserReport(uuid, fish);
+        });
     }
 
 
@@ -122,9 +131,8 @@ public class EMFFishListener implements Listener {
         EvenMoreFish.getInstance().debug("Fish Stats: %s".formatted( stats.toString()));
     }
 
-    private void handleFishLog(final int userId, final Fish fish, final LocalDateTime catchTime) {
+    private void handleFishLog(final int userId, final Fish fish, final LocalDateTime catchTime, final String competitionId) {
         final DataManager<Collection<FishLog>> fishLogDataManager = EvenMoreFish.getInstance().getPluginDataManager().getFishLogDataManager();
-        final String competitionId = Competition.getCurrentlyActive() != null ? Competition.getCurrentlyActive().getCompetitionName() : null;
         final FishLog log = new FishLog(userId, fish, catchTime, competitionId);
         final String key = UserFishRarityKey.of(userId,fish).toString();
         fishLogDataManager.update(key, Collections.singletonList(log));

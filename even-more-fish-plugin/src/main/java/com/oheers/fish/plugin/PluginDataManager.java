@@ -5,10 +5,10 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.Database;
 import com.oheers.fish.database.DatabaseUtil;
-import com.oheers.fish.database.data.DatabaseWriteQueue;
 import com.oheers.fish.database.data.FishLogKey;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.database.data.UserFishRarityKey;
+import com.oheers.fish.database.execute.DatabaseWorker;
 import com.oheers.fish.database.data.manager.DataManager;
 import com.oheers.fish.database.data.manager.UserManager;
 import com.oheers.fish.database.data.strategy.impl.CompetitionSavingStrategy;
@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -35,7 +36,7 @@ public class PluginDataManager {
     private final EvenMoreFish plugin;
     private Database database;
     private UserManager userManager;
-    private DatabaseWriteQueue writeQueue;
+    private DatabaseWorker databaseWorker;
 
     // Users whose fish stats rows have been fully preloaded into the cache,
     // so a cache miss on the server thread means "no row exists" and no
@@ -63,24 +64,24 @@ public class PluginDataManager {
         }
 
         this.database = new Database();
-        this.writeQueue = new DatabaseWriteQueue();
+        this.databaseWorker = new DatabaseWorker();
         initDataManagers();
-        writeQueue.execute(this::preloadFishStats);
+        databaseWorker.execute(this::preloadFishStats);
     }
 
     public void initDataManagers() {
-        this.userManager = new UserManager(database, writeQueue, this::preloadUserData);
-        this.fishLogDataManager = new DataManager<>(new FishLogSavingStrategy(writeQueue), key -> {
+        this.userManager = new UserManager(database, databaseWorker, this::preloadUserData);
+        this.fishLogDataManager = new DataManager<>(new FishLogSavingStrategy(databaseWorker), key -> {
             FishLogKey logKey = FishLogKey.from(key);
             return Collections.singleton(database.getFishLog(logKey.getUserId(), logKey.getFishName(), logKey.getFishRarity(), logKey.getDateTime()));
         });
-        this.fishStatsDataManager = new DataManager<>(new FishStatsSavingStrategy(writeQueue), key -> {
+        this.fishStatsDataManager = new DataManager<>(new FishStatsSavingStrategy(databaseWorker), key -> {
             final FishRarityKey fishRarityKey = FishRarityKey.from(key);
             return database.getFishStats(fishRarityKey.fishName(),fishRarityKey.fishRarity());
         });
 
         this.userFishStatsDataManager = new DataManager<UserFishStats>(
-            new UserFishStatsSavingStrategy(writeQueue),
+            new UserFishStatsSavingStrategy(databaseWorker),
             key -> {
                 final UserFishRarityKey userFishRarityKey = UserFishRarityKey.from(key);
                 return database.getUserFishStats(userFishRarityKey.userId(), userFishRarityKey.fishName(), userFishRarityKey.fishRarity());
@@ -89,9 +90,9 @@ public class PluginDataManager {
             TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
         );
 
-        this.userReportDataManager = new DataManager<>(new UserReportsSavingStrategy(writeQueue), uuid -> database.getUserReport(UUID.fromString(uuid)));
+        this.userReportDataManager = new DataManager<>(new UserReportsSavingStrategy(databaseWorker), uuid -> database.getUserReport(UUID.fromString(uuid)));
         this.competitionDataManager = new DataManager<CompetitionReport>(
-            new CompetitionSavingStrategy(writeQueue),
+            new CompetitionSavingStrategy(databaseWorker),
             key -> database.getCompetitionReport(Integer.parseInt(key)),
             Long.valueOf(MainConfig.getInstance().getCompetitionSaveInterval()),
             TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
@@ -105,17 +106,17 @@ public class PluginDataManager {
 
         try {
             // Flush all pending data. The managers enqueue their remaining
-            // writes onto the write queue.
+            // writes onto the database worker.
             userReportDataManager.shutdown();
             userFishStatsDataManager.shutdown();
             fishStatsDataManager.shutdown();
             fishLogDataManager.shutdown();
             competitionDataManager.shutdown();
 
-            // Drain the write queue before closing the pool so no queued
-            // writes are lost. Blocking here (onDisable) is acceptable.
-            if (writeQueue != null) {
-                writeQueue.shutdown(60, TimeUnit.SECONDS);
+            // Drain the database worker before closing the pool so no queued
+            // database tasks are lost. Blocking here (onDisable) is acceptable.
+            if (databaseWorker != null) {
+                databaseWorker.shutdown(60, TimeUnit.SECONDS);
             }
 
             // Close database connection
@@ -155,10 +156,10 @@ public class PluginDataManager {
     }
 
     /**
-     * The single-threaded queue all database writes are dispatched to.
+     * The worker all database I/O is dispatched to.
      */
-    public DatabaseWriteQueue getWriteQueue() {
-        return writeQueue;
+    public DatabaseWorker getDatabaseWorker() {
+        return databaseWorker;
     }
 
     /**
@@ -179,8 +180,21 @@ public class PluginDataManager {
         return preloadedUserFishStats.contains(userId);
     }
 
+    public CompletableFuture<Integer> preloadUserDataAsync(UUID uuid) {
+        if (databaseWorker == null) {
+            return CompletableFuture.completedFuture(0);
+        }
+        return databaseWorker.query(() -> {
+            int userId = userManager.getUserId(uuid);
+            if (userId != 0 && !isUserFishStatsPreloaded(userId)) {
+                preloadUserData(uuid, userId);
+            }
+            return userId;
+        });
+    }
+
     /**
-     * Runs on the write queue after the user's row is guaranteed to exist:
+     * Runs on the database worker after the user's row is guaranteed to exist:
      * warms the user report and user fish stats caches so the catch path on
      * the server thread never needs a blocking load.
      */

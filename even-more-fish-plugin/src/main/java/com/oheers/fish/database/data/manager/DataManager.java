@@ -2,12 +2,14 @@ package com.oheers.fish.database.data.manager;
 
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.database.execute.DatabaseWorker;
 import com.oheers.fish.database.data.strategy.DataSavingStrategy;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -53,6 +55,14 @@ public class DataManager<T> {
         return previousValue == null ? loadedValue : previousValue;
     }
 
+    public CompletableFuture<T> getAsync(String key, Function<String, T> loader, DatabaseWorker databaseWorker) {
+        T cachedValue = cache.get(key);
+        if (cachedValue != null) {
+            return CompletableFuture.completedFuture(cachedValue);
+        }
+        return databaseWorker.query(() -> get(key, loader));
+    }
+
     public T getOrCreate(String key, Function<String, T> loader, Supplier<T> fallbackValueSupplier) {
         T loadedValue = get(key, loader);
         if (loadedValue != null) {
@@ -79,11 +89,31 @@ public class DataManager<T> {
         return fallbackValue;
     }
 
+    public CompletableFuture<T> getOrCreateAsync(
+        String key,
+        Function<String, T> loader,
+        Supplier<T> fallbackValueSupplier,
+        DatabaseWorker databaseWorker
+    ) {
+        T cachedValue = cache.get(key);
+        if (cachedValue != null) {
+            return CompletableFuture.completedFuture(cachedValue);
+        }
+        return databaseWorker.query(() -> getOrCreate(key, loader, fallbackValueSupplier));
+    }
+
     public T get(String key) {
         if (defaultLoader == null) {
             throw new IllegalStateException("No default loader configured");
         }
         return get(key, defaultLoader);
+    }
+
+    public CompletableFuture<T> getAsync(String key, DatabaseWorker databaseWorker) {
+        if (defaultLoader == null) {
+            throw new IllegalStateException("No default loader configured");
+        }
+        return getAsync(key, defaultLoader, databaseWorker);
     }
 
     public T peek(String key) {
