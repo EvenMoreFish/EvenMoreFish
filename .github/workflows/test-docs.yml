@@ -3,7 +3,7 @@ name: Test Docusaurus Build
 on:
   pull_request:
     branches:
-      - main
+      - master
     paths:
       - 'docs/**'
       - '.github/workflows/test-docs.yml'
