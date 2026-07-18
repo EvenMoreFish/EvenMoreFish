@@ -35,8 +35,7 @@ public class DatabaseUtil {
             return true;
         }
 
-        boolean usingV2 = database.getMigrationManager().usingV2();
-        if (usingV2) {
+        if (database.isLegacyDatabase()) {
             plugin.debug("Database migration manager reports version 2.");
             return true;
         }

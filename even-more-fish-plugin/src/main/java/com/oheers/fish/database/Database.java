@@ -56,12 +56,14 @@ public class Database implements DatabaseAPI {
     private String transactionsTable;
     private String userSalesTable;
     private DatabaseSqlDialect sqlDialect;
+    private final boolean legacyDatabase;
 
     public Database() {
         this.connectionFactory = getConnectionFactory(MainConfig.getInstance().getDatabaseType().toLowerCase());
         this.connectionFactory.init();
         this.migrationManager = new MigrationManager(connectionFactory);
-        if (migrationManager.usingV2()) {
+        this.legacyDatabase = migrationManager.usingV2();
+        if (legacyDatabase) {
             this.version = "2";
             return;
         }
@@ -82,6 +84,10 @@ public class Database implements DatabaseAPI {
 
     public MigrationManager getMigrationManager() {
         return migrationManager;
+    }
+
+    public boolean isLegacyDatabase() {
+        return legacyDatabase;
     }
 
     private @NotNull ConnectionFactory getConnectionFactory(final @NotNull String type) {

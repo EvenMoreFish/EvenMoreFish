@@ -20,10 +20,12 @@ import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.utils.sort.SortType;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
+import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -38,8 +40,49 @@ public class FishJournalGui extends ConfigGui {
     private final int userId;
     private final Rarity rarity;
     private final SortType sortType;
+    private final boolean usePreloadedStatsOnly;
+
+    public static void openAsync(@NotNull Player player, @Nullable Rarity rarity) {
+        openAsync(player, rarity, null);
+    }
+
+    public static void openAsync(@NotNull Player player, @Nullable Rarity rarity, @Nullable InventoryGui expectedOpenGui) {
+        EvenMoreFish plugin = EvenMoreFish.getInstance();
+        plugin.debug("Preparing fish journal for %s.".formatted(player.getName()));
+        plugin.getPluginDataManager().preloadUserDataAsync(player.getUniqueId()).whenComplete((userId, throwable) -> {
+            if (throwable != null) {
+                Logging.warn("Could not prepare fish journal for " + player.getName() + ".", throwable);
+                return;
+            }
+            plugin.debug("Fish journal data prepared for %s with user id %d.".formatted(player.getName(), userId));
+            EvenMoreFish.getScheduler().runTask(player, () -> {
+                try {
+                    if (!player.isOnline()) {
+                        plugin.debug("Skipping fish journal open for %s because the player is offline.".formatted(player.getName()));
+                        return;
+                    }
+                    if (expectedOpenGui != null && InventoryGui.getOpen(player) != expectedOpenGui) {
+                        plugin.debug("Skipping fish journal open for %s because the open GUI changed while data loaded.".formatted(player.getName()));
+                        return;
+                    }
+                    new FishJournalGui(player, rarity, userId, true).open();
+                } catch (Exception exception) {
+                    Logging.warn("Could not open fish journal for " + player.getName() + ".", exception);
+                }
+            });
+        });
+    }
 
     public FishJournalGui(@NotNull HumanEntity player, @Nullable Rarity rarity) {
+        this(
+            player,
+            rarity,
+            EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(player.getUniqueId()),
+            false
+        );
+    }
+
+    private FishJournalGui(@NotNull HumanEntity player, @Nullable Rarity rarity, int userId, boolean usePreloadedStatsOnly) {
         super(
             (rarity == null)
                 ? JournalRaritiesGuiConfig.getInstance()
@@ -52,7 +95,8 @@ public class FishJournalGui extends ConfigGui {
             addReplacement("{rarity}", rarity.getDisplayName());
         }
 
-        this.userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(player.getUniqueId());
+        this.userId = userId;
+        this.usePreloadedStatsOnly = usePreloadedStatsOnly;
         createGui();
 
         Section config = getGuiConfig();
@@ -137,7 +181,7 @@ public class FishJournalGui extends ConfigGui {
      */
     private boolean userHasFish(@NotNull Database database, @NotNull Fish fish) {
         final var dataManager = EvenMoreFish.getInstance().getPluginDataManager();
-        if (dataManager.isUserFishStatsPreloaded(userId)) {
+        if (usePreloadedStatsOnly || dataManager.isUserFishStatsPreloaded(userId)) {
             return dataManager.getUserFishStatsDataManager().peek(UserFishRarityKey.of(userId, fish).toString()) != null;
         }
         return database.userHasFish(fish.getRarity().getId(), fish.getName(), userId);
@@ -148,17 +192,17 @@ public class FishJournalGui extends ConfigGui {
         // When the caches were preloaded, a miss means "no row exists" and
         // falling through to the blocking loader would query the database
         // once per fish while the GUI builds on the server thread.
-        final UserFishStats userFishStats = dataManager.isUserFishStatsPreloaded(userId)
+        final UserFishStats userFishStats = (usePreloadedStatsOnly || dataManager.isUserFishStatsPreloaded(userId))
             ? dataManager.getUserFishStatsDataManager().peek(UserFishRarityKey.of(userId, fish).toString())
             : dataManager.getUserFishStatsDataManager().get(UserFishRarityKey.of(userId, fish).toString());
         final FishStats fishStats = dataManager.isFishStatsPreloaded()
             ? dataManager.getFishStatsDataManager().peek(FishRarityKey.of(fish).toString())
             : dataManager.getFishStatsDataManager().get(FishRarityKey.of(fish).toString());
 
-        final String discoverDate = getValueOrDefault(() -> userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE), getUnknownMessage());
+        final String discoverDate = getDiscoverDate(userFishStats, getUnknownMessage());
 
         @SuppressWarnings("Convert2MethodRef") // Suppressed as it introduces an unwanted Objects#requireNonNull when compiled.
-        final String discoverer = getValueOrDefault(() -> fishStats.getDiscovererName(), getUnknownMessage());
+        final String discoverer = getDiscoverer(fishStats, getUnknownMessage());
 
         EMFListMessage lore = EMFListMessage.ofList(
             Optional.ofNullable(factory.getLore().getConfiguredValue())
@@ -175,6 +219,14 @@ public class FishJournalGui extends ConfigGui {
         lore.setVariable("{server-caught}", getValueOrDefault(() -> fishStats == null ? null : String.valueOf(fishStats.getQuantity()), "0"));
 
         return lore;
+    }
+
+    static @NotNull String getDiscoverDate(@Nullable UserFishStats userFishStats, @NotNull String unknownMessage) {
+        return userFishStats == null ? unknownMessage : userFishStats.getFirstCatchTime().format(DateTimeFormatter.ISO_DATE);
+    }
+
+    static @NotNull String getDiscoverer(@Nullable FishStats fishStats, @NotNull String unknownMessage) {
+        return fishStats == null ? unknownMessage : Optional.ofNullable(fishStats.getDiscovererName()).orElse(unknownMessage);
     }
 
     private @NotNull String getValueOrDefault(@NotNull Supplier<String> supplier, @NotNull String def) {
@@ -204,7 +256,7 @@ public class FishJournalGui extends ConfigGui {
             }
             group.addElement(
                 new StaticGuiElement(character, item, click -> {
-                    new FishJournalGui(player, rarity).open();
+                    FishJournalGui.openAsync(player, rarity, click.getGui());
                     return true;
                 })
             );
@@ -220,7 +272,7 @@ public class FishJournalGui extends ConfigGui {
         }
 
         boolean hideUndiscovered = section.getBoolean("hide-undiscovered-rarity", true);
-        if (hideUndiscovered && !database.userHasRarity(rarity.getId(), userId)) {
+        if (hideUndiscovered && !userHasRarity(database, rarity)) {
             return ItemFactory.itemFactory(section, "undiscovered-rarity").createItem(player.getUniqueId());
         }
 
@@ -245,6 +297,15 @@ public class FishJournalGui extends ConfigGui {
         }
 
         return rarityItem;
+    }
+
+    private boolean userHasRarity(@NotNull Database database, @NotNull Rarity rarity) {
+        final var dataManager = EvenMoreFish.getInstance().getPluginDataManager();
+        if (usePreloadedStatsOnly || dataManager.isUserFishStatsPreloaded(userId)) {
+            return rarity.getFishList().stream()
+                .anyMatch(fish -> dataManager.getUserFishStatsDataManager().peek(UserFishRarityKey.of(userId, fish).toString()) != null);
+        }
+        return database.userHasRarity(rarity.getId(), userId);
     }
 
     @Override
