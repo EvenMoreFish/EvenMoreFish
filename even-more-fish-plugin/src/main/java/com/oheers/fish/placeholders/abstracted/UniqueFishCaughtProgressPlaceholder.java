@@ -84,7 +84,7 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
 
         int total = 0;
         for (Fish fish : fishList) {
-            UserFishStats stats = userFishStatsDataManager.get(key(userId, fish));
+            UserFishStats stats = userFishStatsDataManager.peek(key(userId, fish));
             if (stats != null) {
                 total += stats.getQuantity();
             }
@@ -107,7 +107,7 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
             return 0;
         }
 
-        UserFishStats stats = userFishStatsDataManager.get(key(userId, fish));
+        UserFishStats stats = userFishStatsDataManager.peek(key(userId, fish));
         return stats == null ? 0 : stats.getQuantity();
     }
 
@@ -148,7 +148,7 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
 
         int caught = 0;
         for (Fish fish : fishList) {
-            UserFishStats stats = userFishStatsDataManager.get(UserFishRarityKey.of(userId, fish).toString());
+            UserFishStats stats = userFishStatsDataManager.peek(UserFishRarityKey.of(userId, fish).toString());
             if (stats != null && stats.getQuantity() > 0) {
                 caught++;
             }
@@ -223,7 +223,16 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
             return 0;
         }
 
-        return userManager.getUserId(uuid);
+        int userId = userManager.getCachedUserId(uuid);
+        if (userId == 0) {
+            plugin.getPluginDataManager().preloadUserDataAsync(uuid);
+            return 0;
+        }
+        if (!plugin.getPluginDataManager().isUserFishStatsPreloaded(userId)) {
+            plugin.getPluginDataManager().preloadUserDataAsync(uuid);
+            return 0;
+        }
+        return userId;
     }
 
     private @Nullable DataManager<UserFishStats> getUserFishStatsDataManager() {

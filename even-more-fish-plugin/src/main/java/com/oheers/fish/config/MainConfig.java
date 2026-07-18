@@ -89,7 +89,7 @@ public class MainConfig extends ConfigBase {
 
     @Deprecated
     public boolean isDatabaseOnline() {
-        if (!databaseEnabled() || EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().usingV2())
+        if (!databaseEnabled() || EvenMoreFish.getInstance().getPluginDataManager().getDatabase().isLegacyDatabase())
             return false;
 
         return EvenMoreFish.getInstance().getPluginDataManager().getDatabase() != null;

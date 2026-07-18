@@ -45,7 +45,12 @@ public interface EMFPlaceholder {
         if (DatabaseUtil.isDatabaseOffline()) {
             return null;
         }
-        return EvenMoreFish.getInstance().getPluginDataManager().getUserReportDataManager().get(uuid.toString());
+        final var dataManager = EvenMoreFish.getInstance().getPluginDataManager();
+        UserReport report = dataManager.getUserReportDataManager().peek(uuid.toString());
+        if (report == null) {
+            dataManager.preloadUserDataAsync(uuid);
+        }
+        return report;
     }
 
 }
