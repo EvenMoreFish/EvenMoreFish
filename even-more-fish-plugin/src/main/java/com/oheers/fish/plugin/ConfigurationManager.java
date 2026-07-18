@@ -48,7 +48,6 @@ public class ConfigurationManager {
             SellMenuNormalGuiConfig.getInstance();
 
             // Split guis.yml into the above files.
-            System.out.println("Checking guis.yml");
             new GuiConversions().performCheck();
 
             if (EvenMoreFish.getInstance().getDimensionFishing() != null) {

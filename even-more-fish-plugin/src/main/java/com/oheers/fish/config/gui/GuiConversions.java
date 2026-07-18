@@ -81,7 +81,6 @@ public class GuiConversions {
         }
         // If paginated, add page buttons.
         if (config.isPaginated() && !mappedPageButtons.isEmpty()) {
-            System.out.println("Added mapped page buttons to " + config.getFile().getName());
             mappedPageButtons.forEach((key, map) -> config.getConfig().createSection(key).setAll(map));
         }
         config.getConfig().setAll(section.getRouteMappedValues(true));
@@ -95,7 +94,6 @@ public class GuiConversions {
         Map<String, Map<Route, Object>> mapped = new HashMap<>();
         for (String key : general.getRoutesAsStrings(false)) {
             Section section = general.getSection(key);
-            System.out.println(section.getRouteMappedValues(true));
             switch (key) {
                 case "first-page" -> {
                     section.set("character", "f");
@@ -118,7 +116,6 @@ public class GuiConversions {
                 }
             }
             mapped.put(key, section.getRouteMappedValues(true));
-            System.out.println(mapped);
         }
         return mapped;
     }
