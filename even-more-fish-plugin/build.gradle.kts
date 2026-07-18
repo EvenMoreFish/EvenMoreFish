@@ -62,7 +62,6 @@ dependencies {
     compileOnly(libs.headdatabase.api)
     compileOnly(libs.playerpoints)
 
-    //api(libs.nbt.api)
     api(libs.universalscheduler)
 
     implementation(libs.bstats)
@@ -103,6 +102,7 @@ dependencies {
 
     // TODO remove when 1.20 is dropped...
     implementation(libs.commandsapi.bukkit)
+    implementation(libs.nbt.api)
 }
 
 bukkit {
