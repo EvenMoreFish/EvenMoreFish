@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -48,6 +50,43 @@ class DatabaseWorkerTest {
 
         assertEquals("loaded", result.get(5, TimeUnit.SECONDS));
         assertNotEquals(Thread.currentThread(), workerThread.get());
+        assertTrue(worker.shutdown(5, TimeUnit.SECONDS));
+    }
+
+    @Test
+    void writeResultPreservesSubmissionOrderWithWrites() throws Exception {
+        DatabaseWorker worker = new DatabaseWorker("emf-db-test", 1_000);
+        List<String> order = new CopyOnWriteArrayList<>();
+
+        CompletableFuture<Void> first = worker.write(() -> order.add("first"));
+        CompletableFuture<String> second = worker.writeResult(() -> {
+            order.add("second");
+            return "result";
+        });
+        CompletableFuture<Void> third = worker.write(() -> order.add("third"));
+
+        first.get(5, TimeUnit.SECONDS);
+        assertEquals("result", second.get(5, TimeUnit.SECONDS));
+        third.get(5, TimeUnit.SECONDS);
+
+        assertEquals(List.of("first", "second", "third"), order);
+        assertTrue(worker.shutdown(5, TimeUnit.SECONDS));
+    }
+
+    @Test
+    void queryCompletesFutureExceptionallyWhenWorkFails() throws Exception {
+        DatabaseWorker worker = new DatabaseWorker("emf-db-test", 1_000);
+
+        CompletableFuture<String> result = worker.query(() -> {
+            throw new IllegalStateException("boom");
+        });
+
+        ExecutionException exception = org.junit.jupiter.api.Assertions.assertThrows(
+            ExecutionException.class,
+            () -> result.get(5, TimeUnit.SECONDS)
+        );
+        assertInstanceOf(IllegalStateException.class, exception.getCause());
+        assertEquals("boom", exception.getCause().getMessage());
         assertTrue(worker.shutdown(5, TimeUnit.SECONDS));
     }
 

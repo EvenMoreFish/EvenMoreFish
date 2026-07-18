@@ -161,10 +161,15 @@ public class DatabaseWorker implements Executor, AutoCloseable {
 
     private Logger logger() {
         try {
-            return EvenMoreFish.getInstance().getLogger();
+            Logger pluginLogger = EvenMoreFish.getInstance().getLogger();
+            return pluginLogger == null ? fallbackLogger() : pluginLogger;
         } catch (RuntimeException ignored) {
             // Unit tests and early bootstrap paths may not have an initialized plugin singleton.
-            return Logger.getLogger("EvenMoreFish");
+            return fallbackLogger();
         }
+    }
+
+    private Logger fallbackLogger() {
+        return Logger.getLogger("EvenMoreFish");
     }
 }
