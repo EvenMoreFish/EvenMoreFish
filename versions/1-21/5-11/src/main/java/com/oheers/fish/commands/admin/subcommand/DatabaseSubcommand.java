@@ -38,8 +38,9 @@ public class DatabaseSubcommand {
                 if (CommandUtils.isLogDbError(sender)) {
                     return 1;
                 }
-                EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().dropFlywaySchemaHistory();
-                sender.sendMessage("Dropped flyway schema history.");
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker()
+                    .write(() -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().dropFlywaySchemaHistory())
+                    .thenRun(() -> EvenMoreFish.getScheduler().runTask(() -> sender.sendMessage("Dropped flyway schema history.")));
                 return 1;
             });
     }
@@ -53,7 +54,8 @@ public class DatabaseSubcommand {
                     return 1;
                 }
                 sender.sendMessage("Attempting to repair the migrations, check the logs.");
-                EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().repairFlyway();
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker()
+                    .write(() -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().repairFlyway());
                 return 1;
             });
     }
@@ -67,7 +69,8 @@ public class DatabaseSubcommand {
                     return 1;
                 }
                 sender.sendMessage("Attempting to clean flyway, check the logs.");
-                EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().cleanFlyway();
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker()
+                    .write(() -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().cleanFlyway());
                 return 1;
             });
     }
@@ -80,7 +83,8 @@ public class DatabaseSubcommand {
                 if (CommandUtils.isLogDbError(sender)) {
                     return 1;
                 }
-                EvenMoreFish.getInstance().getPluginDataManager().getDatabase().migrateFromDatabaseVersionToLatest();
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker()
+                    .write(() -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().migrateFromDatabaseVersionToLatest());
                 return 1;
             });
     }
