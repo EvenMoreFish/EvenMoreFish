@@ -7,13 +7,13 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
 public class SkullNBTHolder extends NBTHolder<Skull> {
 
-    public SkullNBTHolder(@NonNull Skull obj) {
+    public SkullNBTHolder(@NotNull Skull obj) {
         super(obj);
     }
 

@@ -9,14 +9,14 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("UnstableApiUsage")
 public class DatabaseSubcommand {
 
     private final String name;
 
-    public DatabaseSubcommand(@NonNull String name) {
+    public DatabaseSubcommand(@NotNull String name) {
         this.name = name;
     }
 

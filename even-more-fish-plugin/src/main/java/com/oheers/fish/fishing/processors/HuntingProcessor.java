@@ -16,7 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +24,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> implements Lis
 
     @Override
     @EventHandler(priority = EventPriority.HIGHEST)
-    protected void process(@NonNull EntityDeathEvent event) {
+    protected void process(@NotNull EntityDeathEvent event) {
         if (!(event.getEntity() instanceof org.bukkit.entity.Fish fishEntity)) {
             return;
         }

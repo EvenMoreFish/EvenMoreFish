@@ -9,7 +9,7 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -17,7 +17,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     private final @NotNull CompoundTag data;
 
-    public ItemStackNBTHolder(@NonNull ItemStack obj) {
+    public ItemStackNBTHolder(@NotNull ItemStack obj) {
         super(obj);
 
         net.minecraft.world.item.ItemStack handle = ((CraftItemStack) obj).handle;
