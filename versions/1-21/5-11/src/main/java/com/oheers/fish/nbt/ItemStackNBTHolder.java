@@ -141,7 +141,6 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
     @Override
     public void save() {
         ((CraftItemStack) obj).handle.set(DataComponents.CUSTOM_DATA, CustomData.of(this.data));
-        System.out.println("Saved NBT to ItemStack.");
     }
 
     private @NotNull CompoundTag getData() {

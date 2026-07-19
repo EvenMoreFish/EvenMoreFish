@@ -20,7 +20,6 @@ public class WorthNBT {
         if (fishItem.isEmpty()) {
             return;
         }
-        System.out.println("Setting NBT.");
         NBTHolder<ItemStack> holder = NBTHolder.itemStack(fishItem);
         setNBT(holder, fish);
     }
@@ -48,8 +47,6 @@ public class WorthNBT {
         holder.setInteger(NbtKeys.EMF_FISH_RANDOM_INDEX.get(), fish.getFactory().getRandomIndex());
 
         holder.save();
-
-        System.out.println("Set NBT and saved to item.");
     }
 
     public static @NotNull Optional<Double> getValue(@NotNull Fish fish) {
