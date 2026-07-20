@@ -1,16 +1,13 @@
 plugins {
     id("java-library")
     id("org.evenmorefish.fish.shadow-conventions")
+    alias(libs.plugins.paperweight)
 }
 
 dependencies {
     compileOnly(project(":even-more-fish-plugin"))
 
-    compileOnly(libs.paper.api) {
-        version {
-            strictly("26.2.build.+")
-        }
-    }
+    paperweight.paperDevBundle("26.2.build.+")
 }
 
 tasks.test {

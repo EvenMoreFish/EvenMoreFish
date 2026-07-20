@@ -25,7 +25,6 @@ import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.PrefixType;
 import com.oheers.fish.permissions.AdminPerms;
-import de.tr7zw.changeme.nbtapi.NBT;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -38,7 +37,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.jar.Attributes;
 
@@ -52,12 +51,12 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    public @NonNull LiteralCommandNode<CommandSourceStack> get() {
+    public @NotNull LiteralCommandNode<CommandSourceStack> get() {
         return getAsArgument().build();
     }
 
     @Override
-    public @NonNull LiteralArgumentBuilder<CommandSourceStack> getAsArgument() {
+    public @NotNull LiteralArgumentBuilder<CommandSourceStack> getAsArgument() {
         return Commands.literal(name)
             .requires(source -> source.getSender().hasPermission(AdminPerms.ADMIN))
             .then(database())
@@ -77,52 +76,52 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> database() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> database() {
         return new DatabaseSubcommand("database").get();
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> fish() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> fish() {
         return new FishSubcommand("fish").get();
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> randomFish() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> randomFish() {
         return new RandomFishSubcommand("random-fish").get();
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> list() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> list() {
         return new ListSubcommand("list").get();
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> competition() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> competition() {
         return new CompetitionSubcommand("competition").get();
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> customRod() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> customRod() {
         return new CustomRodSubcommand("custom-rod").get();
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> debug() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> debug() {
         return new DebugSubcommand("debug").get();
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> bait() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> bait() {
         return new BaitSubcommand("bait").get();
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> clearBaits() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> clearBaits() {
         return new ClearBaitsSubcommand("clearbaits").get();
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> reload() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> reload() {
         return Commands.literal("reload")
             .executes(ctx -> {
                 EvenMoreFish.getInstance().reload(ctx.getSource().getSender());
@@ -131,7 +130,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> version() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> version() {
         return Commands.literal("version")
             .executes(ctx -> {
                 getVersionMessage().send(ctx.getSource().getSender());
@@ -140,7 +139,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> rawItem() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> rawItem() {
         return Commands.literal("rawItem")
             .executes(ctx -> {
                 Player player = BrigCommandUtils.requirePlayer(ctx);
@@ -149,7 +148,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
                     return 1;
                 }
 
-                String handItemNbt = NBT.itemStackToNBT(handItem).toString();
+                String handItemNbt = EvenMoreFish.getInstance().getVersionProvider().serializeItemStack(handItem);
 
                 // Ensure the handItemNbt is escaped for use in YAML
                 // This could be slightly inefficient, but it is the only way I can currently think of.
@@ -166,7 +165,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> migrate() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> migrate() {
         return Commands.literal("migrate")
             .executes(ctx -> {
                 CommandSender sender = ctx.getSource().getSender();
@@ -182,7 +181,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> help() {
+    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> help() {
         return Commands.literal("help")
             .executes(ctx -> {
                 sendHelpMessage(ctx.getSource().getSender());

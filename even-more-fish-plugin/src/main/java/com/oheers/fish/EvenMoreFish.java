@@ -1,5 +1,6 @@
 package com.oheers.fish;
 
+import com.comphenix.protocol.utility.MinecraftVersion;
 import com.devskiller.friendly_id.FriendlyId;
 import com.github.Anon8281.universalScheduler.UniversalScheduler;
 import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
@@ -38,10 +39,8 @@ import com.oheers.fish.plugin.IntegrationManager;
 import com.oheers.fish.plugin.MetricsManager;
 import com.oheers.fish.plugin.PluginDataManager;
 import com.oheers.fish.update.UpdateChecker;
+import com.oheers.fish.utils.MinecraftVersionHelper;
 import de.themoep.inventorygui.InventoryGui;
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -111,7 +110,7 @@ public class EvenMoreFish extends EMFPlugin {
         this.toggle = new Toggle(this);
 
         // Dimension Fishing is disabled on Folia for now.
-        if (MinecraftVersion.isAtLeastVersion(MinecraftVersion.MC1_21_R1) && !isFolia) {
+        if (MinecraftVersionHelper.isAtLeastVersion("1.21.1") && !isFolia) {
             this.dimensionFishing = new DimensionFishing(
                 this,
                 DimensionFishingConfig.getInstance()
@@ -123,9 +122,6 @@ public class EvenMoreFish extends EMFPlugin {
 
     @Override
     public void onLoad() {
-        if (false && !NBT.preloadApi()) {
-            throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
-        }
         instance = this;
         versionProvider.loadCommands();
         versionProvider.load();

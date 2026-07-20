@@ -18,7 +18,7 @@ public class ModernCMDAddonLoader extends AddonLoader {
 
     @Override
     public boolean canLoad() {
-        return SystemUtils.isJavaVersionAtLeast(JavaSpecVersion.JAVA_21) && MinecraftVersionHelper.isAtLeastVersion("MC1_21_R3");
+        return SystemUtils.isJavaVersionAtLeast(JavaSpecVersion.JAVA_21) && MinecraftVersionHelper.isAtLeastVersion("1.21.4");
     }
 
     @Override

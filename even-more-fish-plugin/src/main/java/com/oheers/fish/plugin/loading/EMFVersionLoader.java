@@ -11,6 +11,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 /**
  * Uses reflection and classloaders to load our version-dependent jar files.
@@ -51,21 +52,6 @@ public class EMFVersionLoader {
         }
     }
 
-    private URL getURL(ClassLoader classLoader) {
-        String minecraftVersion = Bukkit.getMinecraftVersion();
-        if (minecraftVersion.startsWith("1.20")) {
-            return classLoader.getResource("versions/1-20.jar");
-        } else if (minecraftVersion.startsWith("1.21")) {
-            return classLoader.getResource("versions/1-21.jar");
-        } else if (minecraftVersion.startsWith("26.1")) {
-            return classLoader.getResource("versions/26-1.jar");
-        } else if (minecraftVersion.startsWith("26.2")) {
-            return classLoader.getResource("versions/26-2.jar");
-        } else {
-            throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
-        }
-    }
-
     private URLClassLoader getClassLoader(ClassLoader parent) {
         try (InputStream is = getURL(parent).openStream()) {
             plugin.getDataFolder().mkdirs();
@@ -78,6 +64,31 @@ public class EMFVersionLoader {
             );
         } catch (IOException exception) {
             throw new RuntimeException("Failed to load EvenMoreFish", exception);
+        }
+    }
+
+    private URL getURL(ClassLoader classLoader) {
+        String minecraftVersion = Bukkit.getMinecraftVersion();
+        if (minecraftVersion.startsWith("26.2")) {
+            return classLoader.getResource("versions/26-2.jar");
+        } else if (minecraftVersion.startsWith("26.1")) {
+            return classLoader.getResource("versions/26-1.jar");
+        // 1.21 has multiple version jars.
+        } else if (minecraftVersion.startsWith("1.21")) {
+            // 1.21.0 is not supported.
+            if (minecraftVersion.equals("1.21")) {
+                throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
+            }
+            List<String> oldVersions = List.of("1.21.1", "1.21.3", "1.21.4");
+            if (oldVersions.contains(minecraftVersion)) {
+                return classLoader.getResource("versions/1.21.1-4.jar");
+            } else {
+                return classLoader.getResource("versions/1.21.5-11.jar");
+            }
+        } else if (minecraftVersion.startsWith("1.20")) {
+            return classLoader.getResource("versions/1-20.jar");
+        } else {
+            throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
         }
     }
 

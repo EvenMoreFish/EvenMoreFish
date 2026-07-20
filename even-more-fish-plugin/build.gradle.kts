@@ -62,7 +62,6 @@ dependencies {
     compileOnly(libs.headdatabase.api)
     compileOnly(libs.playerpoints)
 
-    api(libs.nbt.api)
     api(libs.universalscheduler)
 
     implementation(libs.bstats)
@@ -103,6 +102,7 @@ dependencies {
 
     // TODO remove when 1.20 is dropped...
     implementation(libs.commandsapi.bukkit)
+    implementation(libs.nbt.api)
 }
 
 bukkit {
@@ -255,13 +255,15 @@ val copyAddons by tasks.registering(Copy::class) {
 val copyVersions by tasks.registering(Copy::class) {
     dependsOn(
         ":versions:1-20:build",
-        ":versions:1-21:build",
+        ":versions:1-21:1-4:build",
+        ":versions:1-21:5-11:build",
         ":versions:26-1:build",
         ":versions:26-2:build"
     )
 
     from(project(":versions:1-20").layout.buildDirectory.dir("libs"))
-    from(project(":versions:1-21").layout.buildDirectory.dir("libs"))
+    from(project(":versions:1-21:1-4").layout.buildDirectory.dir("libs"))
+    from(project(":versions:1-21:5-11").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-1").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-2").layout.buildDirectory.dir("libs"))
     into(file("src/main/resources/versions"))

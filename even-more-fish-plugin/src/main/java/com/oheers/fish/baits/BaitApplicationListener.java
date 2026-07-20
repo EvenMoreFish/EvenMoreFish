@@ -8,15 +8,13 @@ import com.oheers.fish.baits.model.ApplicationResult;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.exceptions.MaxBaitReachedException;
 import com.oheers.fish.exceptions.MaxBaitsReachedException;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
+import com.oheers.fish.items.nbt.NbtKeys;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import com.oheers.fish.utils.nbt.NbtKeys;
-import com.oheers.fish.utils.nbt.NbtUtils;
-import com.oheers.fish.utils.nbt.NbtVersion;
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +23,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 /**
  * Handles inventory interactions between fishing rods and bait items in the EvenMoreFish plugin.
@@ -73,10 +74,8 @@ public class BaitApplicationListener implements Listener {
             return;
         }
 
-        NbtVersion nbtVersion = NbtVersion.getVersion(potentialFishingRod);
-        if (nbtVersion != NbtVersion.COMPAT) {
-            convertToCompatNbtItem(nbtVersion, potentialFishingRod);
-        }
+        // Updates the rod's NBT if necessary.
+        updateNbt(potentialFishingRod);
 
         try {
             if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
@@ -115,43 +114,6 @@ public class BaitApplicationListener implements Listener {
         }
     }
 
-    private void convertToCompatNbtItem(final NbtVersion nbtVersion, final ItemStack fishingRod) {
-        final String appliedBaitString = NbtUtils.getString(fishingRod, NbtKeys.EMF_APPLIED_BAIT);
-
-        if (nbtVersion == NbtVersion.LEGACY) {
-            final String namespacedKey = NbtKeys.EMF_COMPOUND + ":" + NbtKeys.EMF_APPLIED_BAIT;
-            NBT.modify(fishingRod,nbt -> {
-                ReadWriteNBT compound = nbt.getCompound(NbtKeys.PUBLIC_BUKKIT_VALUES);
-                if (compound != null) {
-                    compound.removeKey(namespacedKey);
-                }
-            });
-
-            if (NBT.get(fishingRod, nbt -> {
-                return nbt.hasTag(namespacedKey);
-            })) {
-                NBT.modify(fishingRod, nbt -> {
-                    nbt.removeKey(namespacedKey);
-                    ReadWriteNBT compound = nbt.getCompound("display");
-                    if (compound != null) {
-                        compound.getStringList("Lore").clear();
-                    }
-                });
-            }
-        }
-
-        if (nbtVersion == NbtVersion.NBTAPI) {
-            NBT.modify(fishingRod, nbt -> {
-                nbt.removeKey(NbtKeys.EMF_COMPOUND + ":" + NbtKeys.EMF_APPLIED_BAIT);
-            });
-        }
-
-        NBT.modify(fishingRod, nbt -> {
-            nbt.getOrCreateCompound(NbtKeys.EMF_COMPOUND).setString(NbtKeys.EMF_APPLIED_BAIT, appliedBaitString);
-        });
-
-    }
-
     private boolean anvilCheck(InventoryClickEvent event) {
         if (!(event.getClickedInventory() instanceof AnvilInventory inv) || !(event.getWhoClicked() instanceof Player player)) {
             return false;
@@ -163,6 +125,31 @@ public class BaitApplicationListener implements Listener {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Updates the item's NBT to latest if needed.
+     */
+    private void updateNbt(final ItemStack fishingRod) {
+        if (fishingRod == null || fishingRod.isEmpty()) {
+            return;
+        }
+        ItemMeta meta = fishingRod.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        NamespacedKey key = NbtKeys.EMF_APPLIED_BAIT.get();
+
+        final String appliedBaitString = pdc.get(key, PersistentDataType.STRING);
+        // No applied bait in PDC, no upgrade required.
+        if (appliedBaitString == null) {
+            return;
+        }
+        // Remove the old data
+        pdc.remove(key);
+        fishingRod.setItemMeta(meta);
+
+        // Create a modern holder and set the new value.
+        NBTHolder<ItemStack> modernHolder = EvenMoreFish.getInstance().getVersionProvider().createItemStackNbtHolder(fishingRod);
+        modernHolder.setString(NbtKeys.EMF_APPLIED_BAIT.get(), appliedBaitString);
     }
 
 }

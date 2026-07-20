@@ -36,6 +36,11 @@ afterEvaluate {
             } else {
                 archiveFileName.set("EvenMoreFish-${project.version}-${buildNumberOrDate}.jar")
             }
+        } else {
+            val name: String? = (project.findProperty("fileName")?.toString())
+            if (name != null) {
+                archiveFileName.set("$name.jar")
+            }
         }
         archiveClassifier.set("")
 

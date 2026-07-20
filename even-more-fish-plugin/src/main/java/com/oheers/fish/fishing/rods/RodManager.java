@@ -2,8 +2,8 @@ package com.oheers.fish.fishing.rods;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.fishing.rods.AbstractRodManager;
-import com.oheers.fish.utils.nbt.NbtKeys;
-import com.oheers.fish.utils.nbt.NbtUtils;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
+import com.oheers.fish.items.nbt.NbtKeys;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,15 +63,17 @@ public class RodManager extends AbstractRodManager<CustomRod> {
 
     @Override
     public @Nullable CustomRod getRod(@Nullable ItemStack item) {
-        if (item == null) {
+        if (item == null || item.isEmpty()) {
             return null;
         }
-        String rodId = NbtUtils.getString(item, NbtKeys.EMF_ROD_ID);
+        NBTHolder<ItemStack> holder = NBTHolder.itemStack(item);
+
+        String rodId = holder.getString(NbtKeys.EMF_ROD_ID.get());
         if (rodId != null) {
             return getItem(rodId);
         }
         // For the old nbt-rod tags
-        if (NbtUtils.hasKey(item, NbtKeys.EMF_ROD_NBT)) {
+        if (holder.hasKey(NbtKeys.EMF_ROD_NBT.get())) {
             return getItem("default");
         }
         return null;

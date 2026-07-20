@@ -1,0 +1,104 @@
+package com.oheers.fish.items.nbt.abstracted;
+
+import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.items.nbt.LegacyItemStackNBTHolder;
+import com.oheers.fish.items.nbt.SkullNBTHolder;
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.Skull;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+@ApiStatus.Internal
+public abstract class NBTHolder<T> {
+
+    protected final T obj;
+
+    protected boolean autoSave = true;
+
+    /**
+     * Returns an ItemStack NBTHolder.
+     * <p>
+     * This can be toggled to use PDC or a custom namespace.
+     */
+    public static @NotNull NBTHolder<ItemStack> itemStack(@NotNull ItemStack item) {
+        if (item.isEmpty()) {
+            throw new IllegalStateException("Cannot fetch NBTHolder for an empty item.");
+        }
+        NBTHolder<ItemStack> legacy = new LegacyItemStackNBTHolder(item);
+        // Legacy data is present.
+        if (legacy.hasNamespace("evenmorefish")) {
+            return legacy;
+        }
+        // Item is using modern NBT.
+        return EvenMoreFish.getInstance().getVersionProvider().createItemStackNbtHolder(item);
+    }
+
+    public static @Nullable NBTHolder<ItemStack> itemStack(@NotNull String rawNbt) {
+        if (rawNbt.isEmpty()) {
+            return null;
+        }
+        ItemStack item = EvenMoreFish.getInstance().getVersionProvider().deserializeItemStack(rawNbt);
+        if (item == null || item.isEmpty()) {
+            return null;
+        }
+        return itemStack(item);
+    }
+
+    /**
+     * Returns an ItemStack NBTHolder.
+     * <p>
+     * This will always use PDC.
+     */
+    public static @NotNull NBTHolder<Skull> skull(@NotNull Skull skull) {
+        return new SkullNBTHolder(skull);
+    }
+
+    public NBTHolder(@NotNull T obj) {
+        this.obj = obj;
+    }
+
+    public abstract boolean hasNamespace(@NotNull String namespace);
+
+    public abstract boolean hasKey(@NotNull NamespacedKey namespacedKey);
+
+    public abstract @Nullable String getString(@NotNull NamespacedKey namespacedKey);
+
+    /**
+     * Sets a String in the specified NBT location. If null is passed, the key will be removed.
+     */
+    public abstract void setString(@NotNull NamespacedKey namespacedKey, @Nullable String value);
+
+    public abstract @Nullable Float getFloat(@NotNull NamespacedKey namespacedKey);
+
+    /**
+     * Sets a Float in the specified NBT location. If null is passed, the key will be removed.
+     */
+    public abstract void setFloat(@NotNull NamespacedKey namespacedKey, @Nullable Float value);
+
+    public abstract @Nullable Integer getInteger(@NotNull NamespacedKey namespacedKey);
+
+    /**
+     * Sets an Integer in the specified NBT location. If null is passed, the key will be removed.
+     */
+    public abstract void setInteger(@NotNull NamespacedKey namespacedKey, @Nullable Integer value);
+
+    public abstract @Nullable Boolean getBoolean(@NotNull NamespacedKey namespacedKey);
+
+    /**
+     * Sets a Boolean in the specified NBT location. If null is passed, the key will be removed.
+     */
+    public abstract void setBoolean(@NotNull NamespacedKey namespacedKey, @Nullable Boolean value);
+
+    public abstract void save();
+
+    public void setAutoSave(boolean autoSave) {
+        this.autoSave = autoSave;
+    }
+
+    public @NotNull T getObject() {
+        return this.obj;
+    }
+
+}

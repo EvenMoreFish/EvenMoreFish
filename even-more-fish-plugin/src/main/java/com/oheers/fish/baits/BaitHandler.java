@@ -43,7 +43,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -502,7 +502,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      * @return The displayname setting for the bait.
      */
     @Override
-    public @NonNull String getDisplayName() {
+    public @NotNull String getDisplayName() {
         return baitData.displayName();
     }
 

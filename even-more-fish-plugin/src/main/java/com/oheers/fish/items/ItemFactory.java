@@ -6,8 +6,6 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigUtils;
 import com.oheers.fish.items.configs.ItemConfig;
 import com.oheers.fish.utils.ItemUtils;
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.NbtApiException;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import net.kyori.adventure.text.Component;
@@ -312,13 +310,7 @@ public class ItemFactory {
         if (rawValue == null) {
             return null;
         }
-
-        try {
-            return NBT.itemStackFromNBT(NBT.parseNBT(rawValue));
-        } catch (NbtApiException exception) {
-            EvenMoreFish.getInstance().getLogger().severe(configuration.getRouteAsString() + " has invalid raw NBT: " + rawValue);
-            return null;
-        }
+        return EvenMoreFish.getInstance().getVersionProvider().deserializeItemStack(rawValue);
     }
 
 

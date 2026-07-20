@@ -11,7 +11,7 @@ import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.HandleConsumer;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Update;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
