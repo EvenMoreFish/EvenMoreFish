@@ -89,6 +89,10 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
         return getConfig().getDouble("weight");
     }
 
+    public int getCatchLimit() {
+        return getConfig().getInt("catch-limit", -1);
+    }
+
     @Override
     public boolean getBroadcastEnabled() {
         return getConfig().getBoolean("broadcast.enabled", true);
