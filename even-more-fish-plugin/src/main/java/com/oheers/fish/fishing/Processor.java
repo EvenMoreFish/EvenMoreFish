@@ -130,12 +130,22 @@ public abstract class Processor<E extends Event> {
 
     private @Nullable BaitHandler getBaitFromRod(@NotNull ItemStack rod, @Nullable CustomRod customRod) {
         if (customRod != null) {
+            Logging.debug("Bait ignored because custom rods are not compatible with baits.");
             return null;
         }
         if (MainConfig.getInstance().getBaitCompetitionDisable() && Competition.isActive()) {
+            Logging.debug("Bait ignored because bait usage is disabled during competitions.");
             return null;
         }
-        return BaitNBTManager.isBaitedRod(rod) ? BaitNBTManager.randomBaitApplication(rod) : null;
+        if (!BaitNBTManager.isBaitedRod(rod)) {
+            Logging.debug("Bait ignored because the fishing rod has no applied bait NBT.");
+            return null;
+        }
+        BaitHandler bait = BaitNBTManager.randomBaitApplication(rod);
+        if (bait == null) {
+            Logging.debug("Bait ignored because no valid applied bait could be resolved from the rod.");
+        }
+        return bait;
     }
 
     private @Nullable ItemStack getBaitItem(@NotNull Player player, @NotNull Location location) {
