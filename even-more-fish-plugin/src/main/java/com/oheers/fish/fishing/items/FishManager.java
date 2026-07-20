@@ -10,6 +10,9 @@ import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.database.DatabaseUtil;
+import com.oheers.fish.database.data.FishRarityKey;
+import com.oheers.fish.database.model.fish.FishStats;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.config.FishConversions;
@@ -446,6 +449,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
             .filter(fish -> isFishAllowedByCustomRod(fish, customRod))
             .filter(fish -> isFishAllowedByProcessor(fish, processor))
             .filter(fish -> meetsRequirements(fish, doRequirementChecks, context))
+            .filter(this::isFishWithinCatchLimit)
             .toList();
     }
 
@@ -459,7 +463,28 @@ public class FishManager extends AbstractFishManager<Rarity> {
         return isFishAllowedByCustomRod(fish, customRod) &&
                 isFishBoosted(fish, boostRate, boostedFish) &&
                 isFishAllowedByProcessor(fish, processor) &&
-                meetsRequirements(fish, doRequirements, context);
+                meetsRequirements(fish, doRequirements, context) &&
+                isFishWithinCatchLimit(fish);
+    }
+
+    private boolean isFishWithinCatchLimit(@NotNull Fish fish) {
+        int catchLimit = fish.getCatchLimit();
+        if (catchLimit <= 0 || !DatabaseUtil.isDatabaseOnline()) {
+            return true;
+        }
+
+        var dataManager = EvenMoreFish.getInstance().getPluginDataManager();
+        if (!dataManager.isFishStatsPreloaded()) {
+            return true;
+        }
+
+        FishStats stats = dataManager.getFishStatsDataManager().peek(FishRarityKey.of(fish).toString());
+        int caught = stats == null ? 0 : stats.getQuantity();
+        return hasRemainingCatches(catchLimit, caught);
+    }
+
+    static boolean hasRemainingCatches(int catchLimit, int caught) {
+        return catchLimit <= 0 || caught < catchLimit;
     }
 
     private boolean isFishAllowedByCustomRod(Fish fish, CustomRod rod) {

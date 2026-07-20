@@ -65,6 +65,7 @@ public class Fish implements IFish, Sortable {
     private final String displayName;
 
     private boolean showInJournal;
+    private final int catchLimit;
 
     private Fish(@NotNull Rarity rarity, @NotNull Section section) {
         this.section = section;
@@ -95,6 +96,7 @@ public class Fish implements IFish, Sortable {
         this.displayName = section.getString("displayname", factory.getDisplayName().getConfiguredValue());
 
         this.showInJournal = section.getBoolean("journal", true);
+        this.catchLimit = section.getInt("catch-limit", rarity.getCatchLimit());
 
         ItemConfig<List<Component>> lore = factory.getLore();
         if (lore.isEnabled()) {
@@ -497,6 +499,10 @@ public class Fish implements IFish, Sortable {
     @Override
     public double getWeight() {
         return weight;
+    }
+
+    public int getCatchLimit() {
+        return catchLimit;
     }
 
     @Override

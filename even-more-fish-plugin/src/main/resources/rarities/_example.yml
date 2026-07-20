@@ -19,6 +19,10 @@ item:
 # How likely is the rarity to be chosen? Having a greater weight means the rarity is more likely to be chosen (the total weights don't have to add to 100)
 weight: 5
 
+# Maximum number of times each fish in this rarity can be caught globally.
+# Set to -1 or 0 for unlimited catches. This can be overridden by each fish.
+catch-limit: -1
+
 # Optional: Used for sorting the fish journal if the sort type is index.
 sort-index: 0
 
@@ -150,6 +154,10 @@ fish:
 
     # How likely is this fish to be chosen? Having a greater weight means the rarity is more likely to be chosen (the total weights don't have to add to 100)
     weight: 10
+
+    # Maximum number of times this fish can be caught globally.
+    # Set to -1 or 0 for unlimited catches.
+    catch-limit: -1
 
     # You can set custom requirement for this fish to appear, all possible requirements are on the wiki: https://evenmorefish.github.io/EvenMoreFish/docs/features/requirements
     requirements:
