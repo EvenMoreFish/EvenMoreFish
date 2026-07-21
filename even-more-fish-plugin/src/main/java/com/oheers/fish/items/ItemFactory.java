@@ -38,6 +38,7 @@ public class ItemFactory {
     private Consumer<ItemStack> finalChanges = null;
     private @NotNull ItemStack baseItem;
     private boolean usingItemAddon = false;
+    private boolean usingFallbackBaseItem = false;
 
     private final ItemConfig<Number> customModelData;
     private final ItemConfig<Integer> itemDamage;
@@ -245,6 +246,7 @@ public class ItemFactory {
         // Default item if no checks pass
         // This should ALWAYS be last
         Logging.debug(configuration.getRouteAsString() + " has no valid item, returning default.");
+        this.usingFallbackBaseItem = true;
         return new ItemStack(Material.COD);
     }
 
@@ -534,6 +536,10 @@ public class ItemFactory {
 
     public void setFinalChanges(@Nullable Consumer<ItemStack> finalChanges) {
         this.finalChanges = finalChanges;
+    }
+
+    public boolean isUsingFallbackBaseItem() {
+        return this.usingFallbackBaseItem;
     }
 
 }

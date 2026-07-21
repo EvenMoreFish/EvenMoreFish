@@ -159,7 +159,7 @@ public class ConfigGui {
 
     private GuiPageElement fetchPageElement(char character, @NotNull ItemStack item, @NotNull Section section, @NotNull GuiPageElement.PageAction pageAction) {
         ItemFactory factory = ItemFactory.itemFactory(section, null, "fallback-item");
-        ItemStack fallbackItem = factory.createItem(this.player.getUniqueId(), this.replacements);
+        ItemStack fallbackItem = factory.isUsingFallbackBaseItem() ? null : factory.createItem(this.player.getUniqueId(), this.replacements);
         return new EMFGuiPageElement(character, item, fallbackItem, pageAction);
     }
 
