@@ -17,7 +17,7 @@ public class MaxStackSizeItemConfig extends ItemConfig<Integer> {
 
     @Override
     public @Nullable Integer getConfiguredValue() {
-        return section.getInt("item.max-stack-size", null);
+        return section.getInt("max-stack-size", null);
     }
 
     @Override

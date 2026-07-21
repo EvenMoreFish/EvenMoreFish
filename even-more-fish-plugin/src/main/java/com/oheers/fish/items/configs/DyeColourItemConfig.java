@@ -20,7 +20,7 @@ public class DyeColourItemConfig extends ItemConfig<Color> {
 
     @Override
     public Color getConfiguredValue() {
-        String colourString = section.getString("item.dye-colour");
+        String colourString = section.getString("dye-colour");
         if (colourString == null) {
             return null;
         }

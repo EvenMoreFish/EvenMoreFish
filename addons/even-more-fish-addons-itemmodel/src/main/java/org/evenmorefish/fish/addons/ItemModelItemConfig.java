@@ -19,7 +19,7 @@ public class ItemModelItemConfig extends ItemConfig<NamespacedKey> {
 
     @Override
     public NamespacedKey getConfiguredValue() {
-        String keyStr = section.getString("item.item-model");
+        String keyStr = section.getString("item-model");
         if (keyStr == null) {
             return null;
         }

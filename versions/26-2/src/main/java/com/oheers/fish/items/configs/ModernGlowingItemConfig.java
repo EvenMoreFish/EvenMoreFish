@@ -17,7 +17,7 @@ public class ModernGlowingItemConfig extends ItemConfig<Boolean> {
 
     @Override
     public Boolean getConfiguredValue() {
-        return section.getBoolean("item.glowing");
+        return section.getBoolean("glowing");
     }
 
     @Override

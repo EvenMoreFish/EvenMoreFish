@@ -17,7 +17,7 @@ public class FireResistantItemConfig extends ItemConfig<Boolean> {
 
     @Override
     public Boolean getConfiguredValue() {
-        return section.getBoolean("item.fire-resistant", false);
+        return section.getBoolean("fire-resistant", false);
     }
 
     @Override

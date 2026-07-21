@@ -22,7 +22,7 @@ public class PotionMetaItemConfig extends ItemConfig<PotionEffect> {
 
     @Override
     public PotionEffect getConfiguredValue() {
-        String potionSettings = section.getString("item.potion");
+        String potionSettings = section.getString("potion");
         if (potionSettings == null) {
             return null;
         }

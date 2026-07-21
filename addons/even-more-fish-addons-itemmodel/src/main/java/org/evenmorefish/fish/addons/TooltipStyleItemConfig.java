@@ -19,7 +19,7 @@ public class TooltipStyleItemConfig extends ItemConfig<NamespacedKey> {
 
     @Override
     public NamespacedKey getConfiguredValue() {
-        String keyStr = section.getString("item.tooltip-style");
+        String keyStr = section.getString("tooltip-style");
         if (keyStr == null) {
             return null;
         }

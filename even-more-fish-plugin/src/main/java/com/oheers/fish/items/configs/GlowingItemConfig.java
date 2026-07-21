@@ -19,7 +19,7 @@ public class GlowingItemConfig extends ItemConfig<Boolean> {
 
     @Override
     public @NotNull Boolean getConfiguredValue() {
-        return section.getBoolean("item.glowing", false);
+        return section.getBoolean("glowing", false);
     }
 
     @Override

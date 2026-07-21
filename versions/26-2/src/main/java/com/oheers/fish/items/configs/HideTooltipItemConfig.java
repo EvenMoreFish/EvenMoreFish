@@ -17,7 +17,7 @@ public class HideTooltipItemConfig extends ItemConfig<Boolean> {
 
     @Override
     public Boolean getConfiguredValue() {
-        return section.getBoolean("item.hide-tooltip", false);
+        return section.getBoolean("hide-tooltip", false);
     }
 
     @Override
