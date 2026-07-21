@@ -4,7 +4,7 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -17,7 +17,7 @@ public class MaxStackSizeItemConfig extends ItemConfig<Integer> {
 
     @Override
     public @Nullable Integer getConfiguredValue() {
-        return section.getInt("item.max-stack-size", null);
+        return section.getInt("max-stack-size", null);
     }
 
     @Override

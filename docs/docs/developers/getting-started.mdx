@@ -13,8 +13,6 @@ Currently, EMF has 2 main artifacts for use:
 - `even-more-fish-api`
 - `even-more-fish-plugin`
 
-In the future these will be further abstracted so you don't need to use the "core" artifact any longer.
-
 ## CodeMC
 
 The plugin is available via CodeMC's Maven Repository. To add it to your build tool, follow the examples below:
@@ -29,14 +27,13 @@ repositories {
 
 // Note: The version shown here may not be the latest. Make sure to check the latest version before using!
 dependencies {
-    // For the plugin artifact
-    // The exclusions are required as your build will fail without them.
-    compileOnly("com.oheers.evenmorefish:even-more-fish-plugin:2.1.6") {
+    // For the unstable plugin artifact. Things may change at any time.
+    compileOnly("com.oheers.evenmorefish:even-more-fish-plugin:2.4.3") {
         exclude("de.tr7zw", "item-nbt-api")
         exclude("com.github.Anon8281", "UniversalScheduler")
     }
-    // For the api artifact
-    compileOnly("com.oheers.evenmorefish:even-more-fish-api:2.1.6")
+    // For the api artifact.
+    compileOnly("com.oheers.evenmorefish:even-more-fish-api:2.4.3")
 }
 ```
 
@@ -53,12 +50,11 @@ dependencies {
 
     <!-- Note: The version shown here may not be the latest. Make sure to check the latest version before using! -->
     <dependencies>
-        <!-- For the plugin artifact -->
-        <!-- The exclusions are required as your build will fail without them. -->
+        <!-- For the unstable plugin artifact. Things may change at any time. -->
         <dependency>
             <groupId>com.oheers.evenmorefish</groupId>
             <artifactId>even-more-fish-plugin</artifactId>
-            <version>2.0.12</version>
+            <version>2.4.3</version>
             <scope>provided</scope>
             <classifier>shadow</classifier>
             <exclusions>
@@ -76,7 +72,7 @@ dependencies {
         <dependency>
             <groupId>com.oheers.evenmorefish</groupId>
             <artifactId>even-more-fish-api</artifactId>
-            <version>2.0.12</version>
+            <version>2.4.3</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

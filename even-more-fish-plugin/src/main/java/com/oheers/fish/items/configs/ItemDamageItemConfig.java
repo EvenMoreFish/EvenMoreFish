@@ -21,7 +21,7 @@ public class ItemDamageItemConfig extends ItemConfig<Integer> {
 
     @Override
     public @NotNull Integer getConfiguredValue() {
-        return section.getInt("item.durability");
+        return section.getInt("durability");
     }
 
     @Override

@@ -22,7 +22,7 @@ public class EnchantmentsItemConfig extends ItemConfig<Map<Enchantment, Integer>
 
     @Override
     public Map<Enchantment, Integer> getConfiguredValue() {
-        List<String> strings = section.getStringList("item.enchantments");
+        List<String> strings = section.getStringList("enchantments");
         if (strings.isEmpty()) {
             return null;
         }

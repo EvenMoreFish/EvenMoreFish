@@ -19,7 +19,7 @@ public class DisplayNameItemConfig extends ItemConfig<String> {
 
     @Override
     public String getConfiguredValue() {
-        return section.getString("item.displayname");
+        return section.getString("displayname");
     }
 
     @Override

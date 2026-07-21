@@ -3,11 +3,8 @@ package com.oheers.fish.items;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
-import com.oheers.fish.api.config.ConfigUtils;
 import com.oheers.fish.items.configs.ItemConfig;
 import com.oheers.fish.utils.ItemUtils;
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.NbtApiException;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import net.kyori.adventure.text.Component;
@@ -33,12 +30,15 @@ import java.util.function.Function;
 public class ItemFactory {
 
     private final @NotNull Section configuration;
+    private final @Nullable String itemPath;
+
     private boolean rawItem = false;
     private UUID relevantPlayer = null;
     private int randomIndex = -1;
     private Consumer<ItemStack> finalChanges = null;
     private @NotNull ItemStack baseItem;
     private boolean usingItemAddon = false;
+    private boolean usingFallbackBaseItem = false;
 
     private final ItemConfig<Number> customModelData;
     private final ItemConfig<Integer> itemDamage;
@@ -57,16 +57,17 @@ public class ItemFactory {
     private final ItemConfig<NamespacedKey> tooltipStyle;
     private final ItemConfig<Integer> maxStackSize;
 
-    private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation) {
-        if (configLocation == null) {
-            this.configuration = initialSection;
-        } else {
-            this.configuration = ConfigUtils.getOrCreateSection(initialSection, configLocation);
-        }
+    private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation, @Nullable String itemPath) {
+        Section section = configLocation == null ? initialSection : initialSection.createSection(configLocation);
 
         // Internally updates the configuration to put everything in the correct place.
         // As of 2.3.1, this no longer overwrites the file to avoid conflicting with fish display names.
-        new ItemFactoryConversion().performConversions(this.configuration);
+        if (itemPath != null) {
+            new ItemFactoryConversion().performConversions(section);
+        }
+
+        this.itemPath = itemPath;
+        this.configuration = itemPath == null ? section : section.createSection(itemPath);
 
         ItemConfigResolver resolver = ItemConfigResolver.getInstance();
 
@@ -91,7 +92,7 @@ public class ItemFactory {
     }
 
     public ItemFactory createCopy() {
-        ItemFactory newFactory = new ItemFactory(this.configuration, null);
+        ItemFactory newFactory = new ItemFactory(this.configuration, null, null);
         newFactory.relevantPlayer = this.relevantPlayer;
         newFactory.randomIndex = this.randomIndex;
         newFactory.finalChanges = this.finalChanges;
@@ -104,7 +105,7 @@ public class ItemFactory {
      * @return A new ItemFactory instance.
      */
     public static ItemFactory itemFactory(@NotNull Section configuration) {
-        return new ItemFactory(configuration, null);
+        return itemFactory(configuration, null);
     }
 
     /**
@@ -113,8 +114,18 @@ public class ItemFactory {
      * @param configLocation The config location to use.
      * @return A new ItemFactory instance.
      */
-    public static ItemFactory itemFactory(@NotNull Section configuration, @NotNull String configLocation) {
-        return new ItemFactory(configuration, configLocation);
+    public static ItemFactory itemFactory(@NotNull Section configuration, @Nullable String configLocation) {
+        return itemFactory(configuration, configLocation, "item");
+    }
+
+    /**
+     * Creates a new ItemFactory instance with the given configuration and config location.
+     * @param configuration The configuration to use.
+     * @param configLocation The config location to use.
+     * @return A new ItemFactory instance.
+     */
+    public static ItemFactory itemFactory(@NotNull Section configuration, @Nullable String configLocation, @NotNull String itemPath) {
+        return new ItemFactory(configuration, configLocation, itemPath);
     }
 
     public @NotNull ItemStack createItem() {
@@ -235,6 +246,7 @@ public class ItemFactory {
         // Default item if no checks pass
         // This should ALWAYS be last
         Logging.debug(configuration.getRouteAsString() + " has no valid item, returning default.");
+        this.usingFallbackBaseItem = true;
         return new ItemStack(Material.COD);
     }
 
@@ -308,17 +320,11 @@ public class ItemFactory {
 
     // Raw NBT
     private @Nullable ItemStack checkRawNbt() {
-        String rawValue = configuration.getString("item.raw-nbt");
+        String rawValue = configuration.getString("raw-nbt");
         if (rawValue == null) {
             return null;
         }
-
-        try {
-            return NBT.itemStackFromNBT(NBT.parseNBT(rawValue));
-        } catch (NbtApiException exception) {
-            EvenMoreFish.getInstance().getLogger().severe(configuration.getRouteAsString() + " has invalid raw NBT: " + rawValue);
-            return null;
-        }
+        return EvenMoreFish.getInstance().getVersionProvider().deserializeItemStack(rawValue);
     }
 
 
@@ -342,7 +348,7 @@ public class ItemFactory {
     }
 
     private @Nullable ItemStack checkMaterial() {
-        String materialStr = configuration.getString("item.material");
+        String materialStr = configuration.getString("material");
         if (materialStr == null) {
             return null;
         }
@@ -350,7 +356,7 @@ public class ItemFactory {
     }
 
     private @Nullable ItemStack checkRandomMaterial() {
-        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("item.materials"));
+        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("materials"));
         if (materialStrs.isEmpty()) {
             return null;
         }
@@ -362,7 +368,7 @@ public class ItemFactory {
     }
 
     private @Nullable ItemStack checkRawMaterial() {
-        String materialStr = configuration.getString("item.raw-material");
+        String materialStr = configuration.getString("raw-material");
         if (materialStr == null) {
             return null;
         }
@@ -370,7 +376,7 @@ public class ItemFactory {
     }
 
     private @Nullable ItemStack checkRandomRawMaterial() {
-        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("item.raw-materials"));
+        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("raw-materials"));
         if (materialStrs.isEmpty()) {
             return null;
         }
@@ -387,7 +393,7 @@ public class ItemFactory {
         if (!EvenMoreFish.getInstance().getDependencyManager().isUsingHeadsDB()) {
             return null;
         }
-        String materialStr = configuration.getString("item.headdb");
+        String materialStr = configuration.getString("headdb");
         if (materialStr == null) {
             return null;
         }
@@ -407,7 +413,7 @@ public class ItemFactory {
         if (!EvenMoreFish.getInstance().getDependencyManager().isUsingHeadsDB()) {
             return null;
         }
-        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("item.multiple-headdb"));
+        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("multiple-headdb"));
         if (materialStrs.isEmpty()) {
             return null;
         }
@@ -424,7 +430,7 @@ public class ItemFactory {
     // Head 64
 
     private @Nullable ItemStack checkHead64() {
-        String materialStr = configuration.getString("item.head-64");
+        String materialStr = configuration.getString("head-64");
         if (materialStr == null) {
             return null;
         }
@@ -432,7 +438,7 @@ public class ItemFactory {
     }
 
     private @Nullable ItemStack checkRandomHead64() {
-        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("item.multiple-head-64"));
+        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("multiple-head-64"));
         if (materialStrs.isEmpty()) {
             return null;
         }
@@ -445,7 +451,7 @@ public class ItemFactory {
     // Head UUID
 
     private @Nullable ItemStack checkHeadUUID() {
-        String materialStr = configuration.getString("item.head-uuid");
+        String materialStr = configuration.getString("head-uuid");
         if (materialStr == null) {
             return null;
         }
@@ -453,7 +459,7 @@ public class ItemFactory {
     }
 
     private @Nullable ItemStack checkRandomHeadUUID() {
-        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("item.multiple-head-uuid"));
+        ArrayList<String> materialStrs = new ArrayList<>(configuration.getStringList("multiple-head-uuid"));
         if (materialStrs.isEmpty()) {
             return null;
         }
@@ -469,7 +475,7 @@ public class ItemFactory {
         if (relevantPlayer == null) {
             return null;
         }
-        String materialStr = configuration.getString("item.own-head");
+        String materialStr = configuration.getString("own-head");
         if (materialStr == null) {
             return null;
         }
@@ -530,6 +536,10 @@ public class ItemFactory {
 
     public void setFinalChanges(@Nullable Consumer<ItemStack> finalChanges) {
         this.finalChanges = finalChanges;
+    }
+
+    public boolean isUsingFallbackBaseItem() {
+        return this.usingFallbackBaseItem;
     }
 
 }

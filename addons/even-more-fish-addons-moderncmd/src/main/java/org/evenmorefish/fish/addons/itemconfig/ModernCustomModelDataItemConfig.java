@@ -21,7 +21,7 @@ public class ModernCustomModelDataItemConfig extends ItemConfig<Number> {
     @Override
     @NotNull
     public Float getConfiguredValue() {
-        return section.getFloat("item.custom-model-data", null);
+        return section.getFloat("custom-model-data", null);
     }
 
     @SuppressWarnings("UnstableApiUsage")

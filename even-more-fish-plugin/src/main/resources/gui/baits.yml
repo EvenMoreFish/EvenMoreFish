@@ -29,31 +29,32 @@ exit:
   character: x
   click-action: open-main-menu
 
+# Page Buttons
 next-page:
   item:
     material: paper
-    displayname: <yellow>Next Page
+    displayname: <aqua>Next Page
     lore:
-      - <yellow>Navigate to the next page
+      - <yellow>Go to the next page
+  fallback-item:
+    material: barrier
+    displayname: <aqua>Next Page
+    lore:
+      - <yellow>You are on the last page
   character: n
-  click-action: next-page
+  page-action: next
 
-previous-page:
-  item:
-    material: paper
-    displayname: <yellow>Previous Page
-    lore:
-      - <yellow>Navigate to the previous page
-  character: p
-  click-action: previous-page
-
-# Page Buttons
 last-page:
   item:
     material: arrow
     displayname: <aqua>Last Page
     lore:
       - <yellow>Go to the last page
+  fallback-item:
+    material: barrier
+    displayname: <aqua>Last Page
+    lore:
+      - <yellow>You are on the last page
   character: l
   page-action: last
 
@@ -63,6 +64,11 @@ previous-page:
     displayname: <aqua>Previous Page
     lore:
       - <yellow>Go to the previous page
+  fallback-item:
+    material: barrier
+    displayname: <aqua>Previous Page
+    lore:
+      - <yellow>You are on the first page
   character: p
   page-action: previous
 
@@ -72,6 +78,11 @@ first-page:
     displayname: <aqua>First Page
     lore:
       - <yellow>Go to the first page
+  fallback-item:
+    material: barrier
+    displayname: <aqua>First Page
+    lore:
+      - <yellow>You are on the first page
   character: f
   page-action: first
 

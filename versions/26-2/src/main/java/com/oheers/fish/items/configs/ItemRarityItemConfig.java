@@ -19,7 +19,7 @@ public class ItemRarityItemConfig extends ItemConfig<String> {
 
     @Override
     public String getConfiguredValue() {
-        return section.getString("item.item-rarity");
+        return section.getString("item-rarity");
     }
 
     @Override

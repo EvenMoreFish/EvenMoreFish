@@ -65,6 +65,7 @@ public class Fish implements IFish, Sortable {
     private final String displayName;
 
     private boolean showInJournal;
+    private final int catchLimit;
 
     private Fish(@NotNull Rarity rarity, @NotNull Section section) {
         this.section = section;
@@ -89,13 +90,13 @@ public class Fish implements IFish, Sortable {
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             });
-            WorthNBT.setNBT(fish, this);
         });
         this.factory = factory;
 
         this.displayName = section.getString("displayname", factory.getDisplayName().getConfiguredValue());
 
         this.showInJournal = section.getBoolean("journal", true);
+        this.catchLimit = section.getInt("catch-limit", rarity.getCatchLimit());
 
         ItemConfig<List<Component>> lore = factory.getLore();
         if (lore.isEnabled()) {
@@ -154,10 +155,14 @@ public class Fish implements IFish, Sortable {
         // Build custom fish lore and include the configured lore.
         factory.getLore().setTransformer(this::buildFishLore);
         factory.getDisplayName().setDefault(getDisplayName().getUnderlying().getAsMiniMessage());
-        if (fisherman == null) {
-            return factory.createItem();
+
+        ItemStack item = fisherman == null
+            ? factory.createItem()
+            : factory.createItem(fisherman.getUniqueId());
+        if (!factory.isRawItem()) {
+            WorthNBT.setNBT(item, this);
         }
-        return factory.createItem(fisherman.getUniqueId());
+        return item;
     }
 
     private @Nullable OfflinePlayer getFishermanPlayer() {
@@ -496,6 +501,10 @@ public class Fish implements IFish, Sortable {
     @Override
     public double getWeight() {
         return weight;
+    }
+
+    public int getCatchLimit() {
+        return catchLimit;
     }
 
     @Override

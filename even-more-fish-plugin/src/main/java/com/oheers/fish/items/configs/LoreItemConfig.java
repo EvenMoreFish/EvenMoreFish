@@ -20,7 +20,7 @@ public class LoreItemConfig extends ItemConfig<List<Component>> {
 
     @Override
     public List<Component> getConfiguredValue() {
-        List<String> lore = section.getStringList("item.lore");
+        List<String> lore = section.getStringList("lore");
         return lore.isEmpty() ? null : EMFListMessage.fromStringList(lore).getComponentListMessage();
     }
 

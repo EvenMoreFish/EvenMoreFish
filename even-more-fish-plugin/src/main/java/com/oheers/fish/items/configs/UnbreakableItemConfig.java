@@ -17,7 +17,7 @@ public class UnbreakableItemConfig extends ItemConfig<Boolean> {
 
     @Override
     public @NotNull Boolean getConfiguredValue() {
-        return section.getBoolean("item.unbreakable", false);
+        return section.getBoolean("unbreakable", false);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class CustomModelDataItemConfig extends ItemConfig<Number> {
     @Override
     @NotNull
     public Integer getConfiguredValue() {
-        return section.getInt("item.custom-model-data", null);
+        return section.getInt("custom-model-data", null);
     }
 
     @Override

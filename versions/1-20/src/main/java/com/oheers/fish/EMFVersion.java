@@ -7,6 +7,8 @@ import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.commands.AdminCommand;
 import com.oheers.fish.commands.MainCommand;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
+import com.oheers.fish.nbt.ItemStackNBTHolder;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import dev.jorel.commandapi.CommandAPI;
@@ -17,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -24,6 +27,13 @@ public class EMFVersion extends EMFVersionProvider {
 
     public EMFVersion(@NotNull EMFPlugin plugin) {
         super(plugin);
+    }
+
+    @Override
+    public void load() {
+        if (!NBT.preloadApi()) {
+            throw new RuntimeException("NBT-API wasn't initialized properly, disabling the plugin");
+        }
     }
 
     @Override
@@ -71,6 +81,28 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     @Override
+    public @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item) {
+        return new ItemStackNBTHolder(item);
+    }
+
+    @Nullable
+    @Override
+    public ItemStack deserializeItemStack(@NotNull String raw) {
+        ItemStack item = NBT.itemStackFromNBT(NBT.parseNBT(raw));
+        if (item == null) {
+            Logging.warn("Failed to parse an ItemStack from raw NBT: " + raw);
+            return null;
+        }
+        return item;
+    }
+
+    @NotNull
+    @Override
+    public String serializeItemStack(@NotNull ItemStack item) {
+        return NBT.itemStackToNBT(item).toString();
+    }
+
+    @Override
     public @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         skull.editMeta(SkullMeta.class, meta -> {
@@ -100,9 +132,6 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     // Ignored Methods
-
-    @Override
-    public void load() {}
 
     @Override
     public void reload() {}
