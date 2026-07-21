@@ -15,7 +15,7 @@ public record BaitData(
         Map<Fish, WeightModifier> fishModifiers,
         boolean disabled,
         boolean infinite,
-        int maxApplications,
+        int maxBaits,
         int dropQuantity,
         double applicationWeight,
         double catchWeight,

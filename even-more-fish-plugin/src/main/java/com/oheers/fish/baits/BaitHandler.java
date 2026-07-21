@@ -180,7 +180,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
                 fishModifiers,
                 getConfig().getBoolean("disabled", false),
                 getConfig().getBoolean("infinite", false),
-                getConfig().getInt("max-applications", -1),
+                resolveMaxBaits(getConfig()),
                 getConfig().getInt("drop-quantity", 1),
                 getConfig().getDouble("application-weight", 100.0),
                 getConfig().getDouble("catch-weight", 100.0),
@@ -420,7 +420,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
 
         // Only consume bait if this bait actually affected the catch
         if (!shouldConsumeBait(fish)) {
-            Logging.debug("Fish does not affect bait");
+            Logging.debug("Bait %s did not modify caught fish %s; leaving bait unchanged.".formatted(getId(), FishRarityKey.of(fish)));
             return;
         }
 
@@ -438,7 +438,15 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     }
 
     private boolean shouldConsumeBait(@NotNull Fish fish) {
-        return hasRarityModifier(fish.getRarity()) || hasFishModifier(fish);
+        return shouldConsumeBait(getRarityModifiers(), getFishModifiers(), fish);
+    }
+
+    static boolean shouldConsumeBait(
+        @NotNull Map<Rarity, WeightModifier> rarityModifiers,
+        @NotNull Map<Fish, WeightModifier> fishModifiers,
+        @NotNull Fish fish
+    ) {
+        return rarityModifiers.containsKey(fish.getRarity()) || fishModifiers.containsKey(fish);
     }
 
     private boolean hasRarityModifier(@NotNull Rarity rarity) {
@@ -772,6 +780,10 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
 
     private @NotNull NamespacedKey getRecipeKey() {
         return new NamespacedKey(EvenMoreFish.getInstance(), "bait-" + getId());
+    }
+
+    static int resolveMaxBaits(@NotNull Section config) {
+        return config.getInt("max-baits", -1);
     }
 
     private EMFRecipe<?> loadRecipe() {

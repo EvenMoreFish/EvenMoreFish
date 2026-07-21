@@ -154,10 +154,10 @@ public class BaitNBTManager {
             throw new MaxBaitsReachedException("Max baits reached.", new ApplicationResult(item, cursorModifier.get()));
         }
 
-        int maxApplications = bait.getBaitData().maxApplications();
-        if (quantity > maxApplications && maxApplications != UNLIMITED_BAIT) {
-            cursorModifier.set(-maxApplications);
-            combined.append(bait.getId()).append(BAIT_SEPARATOR).append(maxApplications);
+        int maxBaits = bait.getBaitData().maxBaits();
+        if (quantity > maxBaits && maxBaits != UNLIMITED_BAIT) {
+            cursorModifier.set(-maxBaits);
+            combined.append(bait.getId()).append(BAIT_SEPARATOR).append(maxBaits);
             maxBait.set(true);
         } else {
             combined.append(bait.getId()).append(BAIT_SEPARATOR).append(quantity);
@@ -192,11 +192,11 @@ public class BaitNBTManager {
                     combined.append(baitId).append(":∞,");
                 } else {
                     int newQuantity = baitQuantity + quantity;
-                    int maxApplications = bait.getBaitData().maxApplications();
+                    int maxBaits = bait.getBaitData().maxBaits();
 
-                    if (newQuantity > maxApplications && maxApplications != UNLIMITED_BAIT) {
-                        combined.append(baitId).append(BAIT_SEPARATOR).append(maxApplications).append(BAIT_ENTRY_DELIMITER);
-                        cursorModifier.set(-maxApplications + (newQuantity - quantity));
+                    if (newQuantity > maxBaits && maxBaits != UNLIMITED_BAIT) {
+                        combined.append(baitId).append(BAIT_SEPARATOR).append(maxBaits).append(BAIT_ENTRY_DELIMITER);
+                        cursorModifier.set(-maxBaits + (newQuantity - quantity));
                         maxBait.set(true);
                     } else if (newQuantity != 0) {
                         combined.append(baitId).append(BAIT_SEPARATOR).append(newQuantity).append(BAIT_ENTRY_DELIMITER);
@@ -228,16 +228,17 @@ public class BaitNBTManager {
         if (item == null || item.isEmpty()) {
             return;
         }
+      
         NBTHolder<ItemStack> holder = NBTHolder.itemStack(item);
-        int maxApplications = bait.getBaitData().maxApplications();
+        int maxBaits = bait.getBaitData().maxBaits();
 
-        if (quantity > maxApplications && maxApplications != UNLIMITED_BAIT) {
-            combined.append(bait.getId()).append(BAIT_SEPARATOR).append(maxApplications);
-            cursorModifier.set(-maxApplications);
-            maxBait.set(true);
+        if (quantity > maxBaits && maxBaits != UNLIMITED_BAIT) {
+             combined.append(bait.getId()).append(BAIT_SEPARATOR).append(maxBaits);
+             cursorModifier.set(-maxBaits);
+             maxBait.set(true);
         } else {
-            combined.append(bait.getId()).append(BAIT_SEPARATOR).append(quantity);
-            cursorModifier.set(-quantity);
+             combined.append(bait.getId()).append(BAIT_SEPARATOR).append(quantity);
+             cursorModifier.set(-quantity);
         }
 
         holder.setString(NbtKeys.EMF_APPLIED_BAIT.get(), combined.toString());
