@@ -159,7 +159,9 @@ public class Fish implements IFish, Sortable {
         ItemStack item = fisherman == null
             ? factory.createItem()
             : factory.createItem(fisherman.getUniqueId());
-        WorthNBT.setNBT(item, this);
+        if (!factory.isRawItem()) {
+            WorthNBT.setNBT(item, this);
+        }
         return item;
     }
 
