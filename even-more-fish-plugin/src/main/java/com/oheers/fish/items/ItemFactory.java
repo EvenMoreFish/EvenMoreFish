@@ -30,6 +30,8 @@ import java.util.function.Function;
 public class ItemFactory {
 
     private final @NotNull Section configuration;
+    private final @Nullable String itemPath;
+
     private boolean rawItem = false;
     private UUID relevantPlayer = null;
     private int randomIndex = -1;
@@ -54,14 +56,17 @@ public class ItemFactory {
     private final ItemConfig<NamespacedKey> tooltipStyle;
     private final ItemConfig<Integer> maxStackSize;
 
-    private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation, @NotNull String itemPath) {
+    private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation, @Nullable String itemPath) {
         Section section = configLocation == null ? initialSection : initialSection.createSection(configLocation);
 
         // Internally updates the configuration to put everything in the correct place.
         // As of 2.3.1, this no longer overwrites the file to avoid conflicting with fish display names.
-        new ItemFactoryConversion().performConversions(section);
+        if (itemPath != null) {
+            new ItemFactoryConversion().performConversions(section);
+        }
 
-        this.configuration = section.createSection(itemPath);
+        this.itemPath = itemPath;
+        this.configuration = itemPath == null ? section : section.createSection(itemPath);
 
         ItemConfigResolver resolver = ItemConfigResolver.getInstance();
 
@@ -85,12 +90,8 @@ public class ItemFactory {
         this.baseItem = getBaseItem();
     }
 
-    private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation) {
-        this(initialSection, configLocation, "item");
-    }
-
     public ItemFactory createCopy() {
-        ItemFactory newFactory = new ItemFactory(this.configuration, null);
+        ItemFactory newFactory = new ItemFactory(this.configuration, null, null);
         newFactory.relevantPlayer = this.relevantPlayer;
         newFactory.randomIndex = this.randomIndex;
         newFactory.finalChanges = this.finalChanges;
@@ -103,7 +104,7 @@ public class ItemFactory {
      * @return A new ItemFactory instance.
      */
     public static ItemFactory itemFactory(@NotNull Section configuration) {
-        return new ItemFactory(configuration, null);
+        return itemFactory(configuration, null);
     }
 
     /**
@@ -112,8 +113,18 @@ public class ItemFactory {
      * @param configLocation The config location to use.
      * @return A new ItemFactory instance.
      */
-    public static ItemFactory itemFactory(@NotNull Section configuration, @NotNull String configLocation) {
-        return new ItemFactory(configuration, configLocation);
+    public static ItemFactory itemFactory(@NotNull Section configuration, @Nullable String configLocation) {
+        return itemFactory(configuration, configLocation, "item");
+    }
+
+    /**
+     * Creates a new ItemFactory instance with the given configuration and config location.
+     * @param configuration The configuration to use.
+     * @param configLocation The config location to use.
+     * @return A new ItemFactory instance.
+     */
+    public static ItemFactory itemFactory(@NotNull Section configuration, @Nullable String configLocation, @NotNull String itemPath) {
+        return new ItemFactory(configuration, configLocation, itemPath);
     }
 
     public @NotNull ItemStack createItem() {

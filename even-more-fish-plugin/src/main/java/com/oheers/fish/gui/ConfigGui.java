@@ -2,6 +2,7 @@ package com.oheers.fish.gui;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.config.gui.GuiConfig;
 import com.oheers.fish.config.GuiFillerConfig;
@@ -26,6 +27,8 @@ import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -129,19 +132,23 @@ public class ConfigGui {
         if (character == '#') {
             return;
         }
+
         ItemFactory factory = ItemFactory.itemFactory(itemSection);
         ItemStack item = factory.createItem(this.player.getUniqueId(), this.replacements);
         if (item.isEmpty()) {
             return;
         }
+        // Check if this is a page button.
         GuiPageElement.PageAction pageAction = FishUtils.getEnumValue(
             GuiPageElement.PageAction.class,
             itemSection.getString("page-action")
         );
         if (pageAction != null) {
-            gui.addElement(fetchPageElement(character, item, pageAction));
+            gui.addElement(fetchPageElement(character, item, itemSection, pageAction));
             return;
         }
+
+        // This is a regular button/item.
         StaticGuiElement actionElement = new StaticGuiElement(character, item, click -> {
             executeClickAction(itemSection, click);
             executeClickCommands(itemSection, click);
@@ -150,26 +157,10 @@ public class ConfigGui {
         gui.addElement(actionElement);
     }
 
-    private DynamicGuiElement fetchPageElement(char character, @NotNull ItemStack item, @NotNull GuiPageElement.PageAction action) {
-        // Process the page.
-        /* Currently not functional. This is preparation to fix another bug after this is done.
-        ItemStack finalItem = item;
-        int maxPages = gui.getPageAmount(player);
-        int currentPage = gui.getPageNumber(player);
-        switch (action) {
-            case LAST, NEXT -> {
-                if (currentPage == maxPages) {
-                    finalItem = null;
-                }
-            }
-            case FIRST, PREVIOUS -> {
-                if (currentPage == 0) {
-                    finalItem = null;
-                }
-            }
-        }
-         */
-        return new DynamicGuiElement(character, () -> new GuiPageElement(character, item, action));
+    private GuiPageElement fetchPageElement(char character, @NotNull ItemStack item, @NotNull Section section, @NotNull GuiPageElement.PageAction pageAction) {
+        ItemFactory factory = ItemFactory.itemFactory(section, null, "fallback-item");
+        ItemStack fallbackItem = factory.createItem(this.player.getUniqueId(), this.replacements);
+        return new EMFGuiPageElement(character, item, fallbackItem, pageAction);
     }
 
     private void executeClickAction(@NotNull Section section, @NotNull GuiElement.Click click) {
