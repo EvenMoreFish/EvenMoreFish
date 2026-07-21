@@ -50,11 +50,13 @@ public class ItemFactoryConfig {
         public void applyLore(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements, @NotNull ItemConfig<List<Component>> lore) {
             Logging.debug("AddonBehavior for the Lore is set to: " + this);
             switch (this) {
-                case REPLACE -> lore.apply(item, player, replacements);
+                case REPLACE -> {
+                    lore.apply(item, player, replacements, true);
+                }
                 case NOTHING -> {}
                 case APPEND -> {
                     List<Component> before = fetchLoreOrEmpty(item);
-                    lore.apply(item, player, replacements);
+                    lore.apply(item, player, replacements, true);
                     List<Component> after = item.lore();
                     if (after != null) {
                         before.addAll(after);
@@ -63,7 +65,7 @@ public class ItemFactoryConfig {
                 }
                 case PREPEND -> {
                     List<Component> before = item.lore();
-                    lore.apply(item, player, replacements);
+                    lore.apply(item, player, replacements, true);
                     List<Component> after = fetchLoreOrEmpty(item);
                     if (before != null) {
                         after.addAll(before);

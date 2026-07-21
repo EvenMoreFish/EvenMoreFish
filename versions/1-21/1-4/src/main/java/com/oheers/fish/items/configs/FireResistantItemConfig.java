@@ -22,8 +22,7 @@ public class FireResistantItemConfig extends ItemConfig<Boolean> {
 
     @Override
     protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
-        return (item, value) ->
-            item.editMeta(meta -> meta.setFireResistant(value));
+        return (item, value) -> item.editMeta(meta -> meta.setFireResistant(value));
     }
 
 }

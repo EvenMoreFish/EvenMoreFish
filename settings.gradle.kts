@@ -12,8 +12,6 @@ include(":even-more-fish-plugin")
 
 // Addons
 include(":addons:even-more-fish-addons-j21")
-include(":addons:even-more-fish-addons-itemmodel")
-include(":addons:even-more-fish-addons-moderncmd")
 include(":addons:even-more-fish-addons-crafterfix")
 
 // Versions

@@ -93,12 +93,12 @@ public class Fish implements IFish, Sortable {
         });
         this.factory = factory;
 
-        this.displayName = section.getString("displayname", factory.getDisplayName().getConfiguredValue());
+        this.displayName = section.getString("displayname", factory.getConfigProvider().displayName().getConfiguredValue());
 
         this.showInJournal = section.getBoolean("journal", true);
         this.catchLimit = section.getInt("catch-limit", rarity.getCatchLimit());
 
-        ItemConfig<List<Component>> lore = factory.getLore();
+        ItemConfig<List<Component>> lore = factory.getConfigProvider().lore();
         if (lore.isEnabled()) {
             lore.setEnabled(!section.getBoolean("disable-lore", false));
         }
@@ -153,8 +153,8 @@ public class Fish implements IFish, Sortable {
     public @NotNull ItemStack give() {
         ItemFactory factory = this.factory.createCopy();
         // Build custom fish lore and include the configured lore.
-        factory.getLore().setTransformer(this::buildFishLore);
-        factory.getDisplayName().setDefault(getDisplayName().getUnderlying().getAsMiniMessage());
+        factory.getConfigProvider().lore().setTransformer(this::buildFishLore);
+        factory.getConfigProvider().displayName().setDefault(getDisplayName().getUnderlying().getAsMiniMessage());
 
         ItemStack item = fisherman == null
             ? factory.createItem()

@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.items.configs.ItemConfig;
+import com.oheers.fish.items.configs.ItemConfigProvider;
 import com.oheers.fish.utils.ItemUtils;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
@@ -30,7 +31,6 @@ import java.util.function.Function;
 public class ItemFactory {
 
     private final @NotNull Section configuration;
-    private final @Nullable String itemPath;
 
     private boolean rawItem = false;
     private UUID relevantPlayer = null;
@@ -40,22 +40,7 @@ public class ItemFactory {
     private boolean usingItemAddon = false;
     private boolean usingFallbackBaseItem = false;
 
-    private final ItemConfig<Number> customModelData;
-    private final ItemConfig<Integer> itemDamage;
-    private final ItemConfig<String> displayName;
-    private final ItemConfig<Color> dyeColour;
-    private final ItemConfig<Boolean> glowing;
-    private final ItemConfig<List<Component>> lore;
-    private final ItemConfig<PotionEffect> potionMeta;
-    private final ItemConfig<Map<Enchantment, Integer>> enchantments;
-    private final ItemConfig<Boolean> unbreakable;
-    private final ItemConfig<Integer> quantity;
-    private final ItemConfig<NamespacedKey> itemModel;
-    private final ItemConfig<Boolean> fireResistant;
-    private final ItemConfig<Boolean> hideTooltip;
-    private final ItemConfig<String> itemRarity;
-    private final ItemConfig<NamespacedKey> tooltipStyle;
-    private final ItemConfig<Integer> maxStackSize;
+    private final ItemConfigProvider configProvider;
 
     private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation, @Nullable String itemPath) {
         Section section = configLocation == null ? initialSection : initialSection.createSection(configLocation);
@@ -66,27 +51,9 @@ public class ItemFactory {
             new ItemFactoryConversion().performConversions(section);
         }
 
-        this.itemPath = itemPath;
         this.configuration = itemPath == null ? section : section.createSection(itemPath);
 
-        ItemConfigResolver resolver = ItemConfigResolver.getInstance();
-
-        this.customModelData = resolver.getCustomModelData(this.configuration);
-        this.itemDamage = resolver.getDamage(this.configuration);
-        this.displayName = resolver.getDisplayName(this.configuration);
-        this.dyeColour = resolver.getDyeColour(this.configuration);
-        this.glowing = resolver.getGlowing(this.configuration);
-        this.lore = resolver.getLore(this.configuration);
-        this.potionMeta = resolver.getPotionMeta(this.configuration);
-        this.enchantments = resolver.getEnchantments(this.configuration);
-        this.unbreakable = resolver.getUnbreakable(this.configuration);
-        this.quantity = resolver.getQuantity(this.configuration);
-        this.itemModel = resolver.getItemModel(this.configuration);
-        this.fireResistant = resolver.getFireResistant(this.configuration);
-        this.hideTooltip = resolver.getHideTooltip(this.configuration);
-        this.itemRarity = resolver.getItemRarity(this.configuration);
-        this.tooltipStyle = resolver.getTooltipStyle(this.configuration);
-        this.maxStackSize = resolver.getMaxStackSize(this.configuration);
+        this.configProvider = ItemConfigProvider.create(this.configuration);
 
         this.baseItem = getBaseItem();
     }
@@ -138,28 +105,12 @@ public class ItemFactory {
         if (!rawItem) {
             OfflinePlayer player = relevantPlayer == null ? null : Bukkit.getOfflinePlayer(relevantPlayer);
 
-            if (this.usingItemAddon) {
-                ItemFactoryConfig.getAddonDisplayBehavior().applyDisplay(item, player, replacements, displayName);
-                ItemFactoryConfig.getAddonLoreBehavior().applyLore(item, player, replacements, lore);
-            } else {
-                displayName.apply(item, player, replacements);
-                lore.apply(item, player, replacements);
-            }
+            configProvider.apply(item, player, replacements);
 
-            customModelData.apply(item, player, replacements);
-            itemDamage.apply(item, player, replacements);
-            dyeColour.apply(item, player, replacements);
-            glowing.apply(item, player, replacements);
-            potionMeta.apply(item, player, replacements);
-            enchantments.apply(item, player, replacements);
-            unbreakable.apply(item, player, replacements);
-            quantity.apply(item, player, replacements);
-            itemModel.apply(item, player, replacements);
-            fireResistant.apply(item, player, replacements);
-            hideTooltip.apply(item, player, replacements);
-            itemRarity.apply(item, player, replacements);
-            tooltipStyle.apply(item, player, replacements);
-            maxStackSize.apply(item, player, replacements);
+            if (this.usingItemAddon) {
+                ItemFactoryConfig.getAddonDisplayBehavior().applyDisplay(item, player, replacements, configProvider.displayName());
+                ItemFactoryConfig.getAddonLoreBehavior().applyLore(item, player, replacements, configProvider.lore());
+            }
 
             if (finalChanges != null) {
                 finalChanges.accept(item);
@@ -252,68 +203,8 @@ public class ItemFactory {
 
     // Customization Methods //
 
-    public ItemConfig<Number> getCustomModelData() {
-        return customModelData;
-    }
-
-    public ItemConfig<Integer> getItemDamage() {
-        return itemDamage;
-    }
-
-    public ItemConfig<String> getDisplayName() {
-        return displayName;
-    }
-
-    public ItemConfig<Color> getDyeColour() {
-        return dyeColour;
-    }
-
-    public ItemConfig<Boolean> getGlowing() {
-        return glowing;
-    }
-
-    public ItemConfig<List<Component>> getLore() {
-        return lore;
-    }
-
-    public ItemConfig<PotionEffect> getPotionMeta() {
-        return potionMeta;
-    }
-
-    public ItemConfig<Map<Enchantment, Integer>> getEnchantments() {
-        return enchantments;
-    }
-
-    public ItemConfig<Boolean> getUnbreakable() {
-        return unbreakable;
-    }
-
-    public ItemConfig<Integer> getQuantity() {
-        return quantity;
-    }
-
-    public ItemConfig<NamespacedKey> getItemModel() {
-        return itemModel;
-    }
-
-    public ItemConfig<Boolean> getFireResistant() {
-        return fireResistant;
-    }
-
-    public ItemConfig<Boolean> getHideTooltip() {
-        return hideTooltip;
-    }
-
-    public ItemConfig<String> getItemRarity() {
-        return itemRarity;
-    }
-
-    public ItemConfig<NamespacedKey> getTooltipStyle() {
-        return tooltipStyle;
-    }
-
-    public ItemConfig<Integer> getMaxStackSize() {
-        return maxStackSize;
+    public ItemConfigProvider getConfigProvider() {
+        return this.configProvider;
     }
 
     // Base Item Methods //
@@ -340,6 +231,11 @@ public class ItemFactory {
         if (customItem != null) {
             Logging.debug(materialString + " was a valid ItemAddon.");
             this.usingItemAddon = true;
+
+            // Disable lore and displayname configs as these have different behavior with item addons.
+            configProvider.displayName().setEnabled(false);
+            configProvider.lore().setEnabled(false);
+
             return customItem;
         }
 

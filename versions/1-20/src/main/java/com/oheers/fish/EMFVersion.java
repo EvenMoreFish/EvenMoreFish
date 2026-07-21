@@ -7,10 +7,13 @@ import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.commands.AdminCommand;
 import com.oheers.fish.commands.MainCommand;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.items.ItemConfigProviderImpl;
+import com.oheers.fish.items.configs.ItemConfigProvider;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.nbt.ItemStackNBTHolder;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import org.bukkit.Bukkit;
@@ -78,6 +81,11 @@ public class EMFVersion extends EMFVersionProvider {
     @Override
     public void disableCommands() {
         CommandAPI.onDisable();
+    }
+
+    @Override
+    public @NotNull ItemConfigProvider createItemConfigProvider(@NotNull Section section) {
+        return new ItemConfigProviderImpl(section);
     }
 
     @Override

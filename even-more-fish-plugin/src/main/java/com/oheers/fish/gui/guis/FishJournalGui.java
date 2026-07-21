@@ -165,7 +165,7 @@ public class FishJournalGui extends ConfigGui {
     }
 
     private @Nullable EMFSingleMessage prepareDisplay(@NotNull ItemFactory factory, @NotNull Fish fish) {
-        final String displayStr = factory.getDisplayName().getConfiguredValue();
+        final String displayStr = factory.getConfigProvider().displayName().getConfiguredValue();
         if (displayStr == null) {
             return null;
         }
@@ -205,7 +205,7 @@ public class FishJournalGui extends ConfigGui {
         final String discoverer = getDiscoverer(fishStats, getUnknownMessage());
 
         EMFListMessage lore = EMFListMessage.ofList(
-            Optional.ofNullable(factory.getLore().getConfiguredValue())
+            Optional.ofNullable(factory.getConfigProvider().lore().getConfiguredValue())
                 .orElse(Collections.emptyList())
         );
 

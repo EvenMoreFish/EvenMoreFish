@@ -34,7 +34,11 @@ public abstract class ItemConfig<T> {
      * @param item The item to apply the config to.
      */
     public void apply(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
-        if (!enabled) {
+        apply(item, player, replacements, false);
+    }
+
+    public void apply(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements, boolean force) {
+        if (!force && !enabled) {
             return;
         }
         T value = transformer == null ? getActualValue() : transformer.apply(getActualValue());

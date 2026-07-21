@@ -32,10 +32,7 @@ public class BaitItemFactory {
 
     public ItemFactory createFactory() {
         ItemFactory factory = ItemFactory.itemFactory(config);
-
-        ItemConfig<String> displayNameConfig = factory.getDisplayName();
-        displayNameConfig.setEnabled(true);
-        displayNameConfig.setDefault("<yellow>" + baitId);
+        factory.getConfigProvider().displayName().setDefault("<yellow>" + baitId);
 
         factory.setFinalChanges(item -> {
             item.setAmount(config.getInt("drop-quantity", 1));
@@ -95,14 +92,12 @@ public class BaitItemFactory {
     @Contract(pure = true)
     private @NotNull Supplier<EMFListMessage> createItemLoreVariable(ItemFactory factory) {
         return () -> {
-            List<Component> configured = factory.getLore().getConfiguredValue();
+            List<Component> configured = factory.getConfigProvider().lore().getConfiguredValue();
             if (configured == null) {
                 return EMFListMessage.empty();
             }
             return EMFListMessage.ofList(configured);
         };
     }
-
-
 
 }

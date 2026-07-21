@@ -10,14 +10,11 @@ import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.MainCommand;
 import com.oheers.fish.config.MainConfig;
-import com.oheers.fish.items.ItemConfigResolver;
-import com.oheers.fish.items.configs.FireResistantItemConfig;
-import com.oheers.fish.items.configs.HideTooltipItemConfig;
-import com.oheers.fish.items.configs.ItemRarityItemConfig;
-import com.oheers.fish.items.configs.MaxStackSizeItemConfig;
-import com.oheers.fish.items.configs.ModernGlowingItemConfig;
+import com.oheers.fish.items.ItemConfigProviderImpl;
+import com.oheers.fish.items.configs.ItemConfigProvider;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.nbt.ItemStackNBTHolder;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -39,20 +36,6 @@ public class EMFVersion extends EMFVersionProvider {
 
     public EMFVersion(@NotNull EMFPlugin plugin) {
         super(plugin);
-    }
-
-    @Override
-    public void load() {
-        registerItemConfigs();
-    }
-
-    private void registerItemConfigs() {
-        ItemConfigResolver inst = ItemConfigResolver.getInstance();
-        inst.setGlowingResolver(ModernGlowingItemConfig::new);
-        inst.setFireResistantResolver(FireResistantItemConfig::new);
-        inst.setHideTooltipResolver(HideTooltipItemConfig::new);
-        inst.setItemRarityResolver(ItemRarityItemConfig::new);
-        inst.setMaxStackSizeResolver(MaxStackSizeItemConfig::new);
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -125,7 +108,15 @@ public class EMFVersion extends EMFVersionProvider {
         return CraftMagicNumbers.INSTANCE.serializeItemAsJson(item).toString();
     }
 
+    @Override
+    public @NotNull ItemConfigProvider createItemConfigProvider(@NotNull Section section) {
+        return new ItemConfigProviderImpl(section);
+    }
+
     // Ignored Methods
+
+    @Override
+    public void load() {}
 
     @Override
     public void enable() {}

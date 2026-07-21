@@ -54,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.Utils;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
@@ -441,6 +442,14 @@ public class FishUtils {
             }
         }
         return worth;
+    }
+
+    public static @Nullable Method fetchMethod(@NotNull Class<?> clazz, @NotNull String name, @NotNull Class<?> @NotNull ... parameterTypes) {
+        try {
+            return clazz.getDeclaredMethod(name, parameterTypes);
+        } catch (NoSuchMethodException exception) {
+            return null;
+        }
     }
 
     // Deprecated. Keep until the API module can be considered stable.
