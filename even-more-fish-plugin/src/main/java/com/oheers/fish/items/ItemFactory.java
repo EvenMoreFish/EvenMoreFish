@@ -54,14 +54,14 @@ public class ItemFactory {
     private final ItemConfig<NamespacedKey> tooltipStyle;
     private final ItemConfig<Integer> maxStackSize;
 
-    private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation) {
+    private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation, @NotNull String itemPath) {
         Section section = configLocation == null ? initialSection : initialSection.createSection(configLocation);
 
         // Internally updates the configuration to put everything in the correct place.
         // As of 2.3.1, this no longer overwrites the file to avoid conflicting with fish display names.
         new ItemFactoryConversion().performConversions(section);
 
-        this.configuration = section.createSection("item");
+        this.configuration = section.createSection(itemPath);
 
         ItemConfigResolver resolver = ItemConfigResolver.getInstance();
 
@@ -83,6 +83,10 @@ public class ItemFactory {
         this.maxStackSize = resolver.getMaxStackSize(this.configuration);
 
         this.baseItem = getBaseItem();
+    }
+
+    private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation) {
+        this(initialSection, configLocation, "item");
     }
 
     public ItemFactory createCopy() {
