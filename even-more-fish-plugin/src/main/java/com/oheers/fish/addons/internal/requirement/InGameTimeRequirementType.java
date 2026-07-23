@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-// TODO auto-update configs to reflect the new format required for this
 public class InGameTimeRequirementType extends RequirementType {
 
     @Override
@@ -37,9 +36,11 @@ public class InGameTimeRequirementType extends RequirementType {
                 maxTime = 24000;
             }
             if (world.getTime() <= maxTime && world.getTime() >= minTime) {
+                debugLogStatus(true, String.valueOf(world.getTime()));
                 return true;
             }
         }
+        debugLogStatus(false, String.valueOf(world.getTime()));
         return false;
     }
 

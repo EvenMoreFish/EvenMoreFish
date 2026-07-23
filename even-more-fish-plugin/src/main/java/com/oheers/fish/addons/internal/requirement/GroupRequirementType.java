@@ -26,9 +26,11 @@ public class GroupRequirementType extends RequirementType {
         }
         for (String value : values) {
             if (permission.playerInGroup(player, value)) {
+                debugLogStatus(true, value);
                 return true;
             }
         }
+        debugLogStatus(false, null);
         return false;
     }
 

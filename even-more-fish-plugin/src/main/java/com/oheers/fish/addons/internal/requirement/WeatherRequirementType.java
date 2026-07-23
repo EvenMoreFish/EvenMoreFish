@@ -31,9 +31,11 @@ public class WeatherRequirementType extends RequirementType {
                 return false;
             }
             if (isClear ? weatherType.equals(WeatherType.CLEAR) : weatherType.equals(WeatherType.DOWNFALL)) {
+                debugLogStatus(true, weatherType.toString());
                 return true;
             }
         }
+        debugLogStatus(false, null);
         return false;
     }
 

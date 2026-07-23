@@ -1,6 +1,7 @@
 package com.oheers.fish.addons.internal.requirement;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.requirement.RequirementType;
 import com.oheers.fish.competition.Competition;
@@ -21,10 +22,13 @@ public class ActiveCompetitionRequirementType extends RequirementType {
     public boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values) {
         Competition active = Competition.getCurrentlyActive();
         if (active == null) {
+            Logging.debug("There is no active competition. Failing active-competition requirement.");
             return false;
         }
         String id = active.getCompetitionFile().getId();
-        return values.stream().anyMatch(id::equalsIgnoreCase);
+        boolean match = values.stream().anyMatch(id::equalsIgnoreCase);
+        debugLogStatus(match, id);
+        return match;
     }
 
     /**

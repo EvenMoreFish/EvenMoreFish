@@ -34,15 +34,17 @@ public class BiomeSetRequirementType extends RequirementType {
         }
         Biome hookBiome = location.getBlock().getBiome();
         for (String value : values) {
-            @NotNull List<Biome> checkBiomes = MainConfig.getInstance().getBiomeSets().get(value);
+            List<Biome> checkBiomes = MainConfig.getInstance().getBiomeSets().get(value);
             if (checkBiomes == null) {
                 EvenMoreFish.getInstance().getLogger().severe(value + " is not a valid biome set.");
                 continue;
             }
             if (checkBiomes.contains(hookBiome)) {
+                debugLogStatus(true, hookBiome.key().asString());
                 return true;
             }
         }
+        debugLogStatus(false, hookBiome.key().asString());
         return false;
     }
 

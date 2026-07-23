@@ -1,5 +1,6 @@
 package com.oheers.fish.api.requirement;
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.api.registry.RegistryItem;
 import org.bukkit.plugin.Plugin;
@@ -44,6 +45,16 @@ public abstract class RequirementType implements RegistryItem {
 
     public boolean unregister() {
         return EMFRegistry.REQUIREMENT_TYPE.unregister(this);
+    }
+
+    protected void debugLogStatus(boolean passed, @Nullable String checked) {
+        String status = passed ? "passed" : "failed";
+
+        StringBuilder log = new StringBuilder(getIdentifier() + " Requirement " + status + ".");
+        if (checked != null) {
+            log.append(" Checked: ").append(checked);
+        }
+        Logging.debug(log.toString());
     }
 
     @Override

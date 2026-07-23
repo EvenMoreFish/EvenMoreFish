@@ -17,6 +17,7 @@ public class RegionRequirementType extends RequirementType {
     public boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values) {
         Location location = context.getHookOrPlayerLocation();
         if (location == null) {
+            EvenMoreFish.getInstance().getLogger().severe("There is no valid location. Failing region Requirement.");
             return false;
         }
         return Checks.canUseRegion(location, values);

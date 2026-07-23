@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Instant;
 import java.util.List;
 
-// TODO same as InGameTimeRequirementType
 public class IRLTimeRequirementType extends RequirementType {
 
     @Override
@@ -28,9 +27,11 @@ public class IRLTimeRequirementType extends RequirementType {
                 maxTime = 1440;
             }
             if (currentTime >= minTime && currentTime < maxTime) {
+                debugLogStatus(true, String.valueOf(currentTime));
                 return true;
             }
         }
+        debugLogStatus(false, String.valueOf(currentTime));
         return false;
     }
 

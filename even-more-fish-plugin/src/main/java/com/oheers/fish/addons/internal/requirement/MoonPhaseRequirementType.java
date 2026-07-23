@@ -26,9 +26,11 @@ public class MoonPhaseRequirementType extends RequirementType {
                 return false;
             }
             if (phase.getPhaseID() == phaseId) {
+                debugLogStatus(true, phase.toString());
                 return true;
             }
         }
+        debugLogStatus(false, String.valueOf(phaseId));
         return false;
     }
 
@@ -45,6 +47,29 @@ public class MoonPhaseRequirementType extends RequirementType {
     @Override
     public @NotNull Plugin getPlugin() {
         return EvenMoreFish.getInstance();
+    }
+
+    enum MoonPhase {
+
+        FULL_MOON(0),
+        WANING_GIBBOUS(1),
+        LAST_QUARTER(2),
+        WANING_CRESCENT(3),
+        NEW_MOON(4),
+        WAXING_CRESCENT(5),
+        FIRST_QUARTER(6),
+        WAXING_GIBBOUS(7);
+
+        final int phaseID;
+
+        MoonPhase(int phaseID) {
+            this.phaseID = phaseID;
+        }
+
+        public int getPhaseID() {
+            return phaseID;
+        }
+
     }
 
 }

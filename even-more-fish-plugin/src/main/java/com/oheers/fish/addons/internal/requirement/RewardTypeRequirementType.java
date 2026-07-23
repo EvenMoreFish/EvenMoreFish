@@ -23,9 +23,11 @@ public class RewardTypeRequirementType extends RequirementType {
      */
     @Override
     public boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values) {
-        return values.stream()
+        boolean pass = values.stream()
             .filter(Objects::nonNull)
             .allMatch(value -> EMFRegistry.REWARD_TYPE.get(value) != null);
+        debugLogStatus(pass, null);
+        return pass;
     }
 
     /**

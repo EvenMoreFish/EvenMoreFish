@@ -39,9 +39,11 @@ public class BiomeRequirementType extends RequirementType {
                 continue;
             }
             if (hookBiome.equals(biome)) {
+                debugLogStatus(true, hookBiome.key().asString());
                 return true;
             }
         }
+        debugLogStatus(false, hookBiome.key().asString());
         return false;
     }
 

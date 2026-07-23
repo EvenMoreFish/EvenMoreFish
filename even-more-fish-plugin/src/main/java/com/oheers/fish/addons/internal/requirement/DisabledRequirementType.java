@@ -1,6 +1,7 @@
 package com.oheers.fish.addons.internal.requirement;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.requirement.RequirementType;
 import org.bukkit.plugin.Plugin;
@@ -14,9 +15,11 @@ public class DisabledRequirementType extends RequirementType {
     public boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values) {
         for (String value : values) {
             if (!Boolean.parseBoolean(value)) {
+                debugLogStatus(true, null);
                 return true;
             }
         }
+        debugLogStatus(false, null);
         return false;
     }
 

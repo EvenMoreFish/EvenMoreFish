@@ -23,11 +23,14 @@ public class WorldRequirementType extends RequirementType {
                     "default. The player may not have been given a fish if you see this message multiple times.");
             return false;
         }
+        String worldName = world.getName();
         for (String value : values) {
-            if (world.getName().equalsIgnoreCase(value)) {
+            if (worldName.equalsIgnoreCase(value)) {
+                debugLogStatus(true, worldName);
                 return true;
             }
         }
+        debugLogStatus(false, worldName);
         return false;
     }
 

@@ -35,9 +35,11 @@ public class NearbyPlayersRequirementType extends RequirementType {
                 return false;
             }
             if (nearbyPlayers >= nearbyRequirement) {
+                debugLogStatus(true, String.valueOf(nearbyPlayers));
                 return true;
             }
         }
+        debugLogStatus(false, String.valueOf(nearbyPlayers));
         return false;
     }
 

@@ -26,8 +26,12 @@ public class PlaceholderRequirementType extends RequirementType {
             String operator = matcher.group(2);
             String requiredValue = matcher.group(3).trim();
             boolean pass = evaluate(placeholder, operator, requiredValue);
-            if (!pass) return false;
+            if (!pass) {
+                debugLogStatus(false, placeholder);
+                return false;
+            }
         }
+        debugLogStatus(true, null);
         return true;
     }
 
