@@ -183,7 +183,7 @@ Atlantic Cod:
 ```
 
 ### Nearby Players
-This limits the fish to only be caught when the provided amount of players is nearby.
+This limits the fish to only be caught when the provided amount of players is nearby. This does not count the player itself.
 
 The distance this will check is configured in the config.yml file. Higher values may cause lag.
 
