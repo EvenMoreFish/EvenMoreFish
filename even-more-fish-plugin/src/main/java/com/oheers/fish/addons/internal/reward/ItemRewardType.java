@@ -2,6 +2,7 @@ package com.oheers.fish.addons.internal.reward;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.config.serializer.ItemSerializer;
 import com.oheers.fish.api.reward.RewardType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,7 +15,7 @@ public class ItemRewardType extends RewardType {
     @Override
     public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location hookLocation) {
         String[] parsedItem = value.split(",");
-        ItemStack item = FishUtils.getItem(parsedItem[0]);
+        ItemStack item = ItemSerializer.get().deserialize(parsedItem[0], true);
         if (item == null) {
             EvenMoreFish.getInstance().getLogger().warning("Invalid item specified for RewardType " + getIdentifier() + ": " + parsedItem[0]);
             return;

@@ -4,6 +4,7 @@ import br.net.fabiozumbi12.RedProtect.Bukkit.RedProtect;
 import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.serializer.BossBarOverlaySerializer;
+import com.oheers.fish.api.config.serializer.ItemSerializer;
 import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
 import com.oheers.fish.api.config.serializer.SoundSerializer;
 import com.oheers.fish.api.economy.Economy;
@@ -107,7 +108,6 @@ public class FishUtils {
     public static void giveItem(@NotNull ItemStack item, @NotNull Player player) {
         giveItems(List.of(item), player);
     }
-
 
     public static @Nullable String getRegionName(@NotNull Location location) {
         if (!MainConfig.getInstance().isRegionBoostsEnabled()) {
@@ -221,43 +221,6 @@ public class FishUtils {
         } catch (IllegalArgumentException exception) {
             return null;
         }
-    }
-
-    public static @Nullable ItemStack getCustomItem(@NotNull String materialString) {
-        if (!materialString.contains(":")) {
-            return null;
-        }
-        try {
-            final String[] split = materialString.split(":", 2);
-            final String prefix = split[0];
-            final String id = split[1];
-            EvenMoreFish.getInstance().debug("GET ITEM for Addon(%s) Id(%s)".formatted(prefix, id));
-            return EMFRegistry.ITEM_ADDON.getItem(prefix, id);
-        } catch (ArrayIndexOutOfBoundsException exception) {
-            return null;
-        }
-    }
-
-    /**
-     * Gets an ItemStack from a string. If the string contains a colon, it is assumed to be an addon string.
-     * @param materialString The string to parse.
-     * @return The ItemStack, or null if the material is invalid.
-     */
-    public static @Nullable ItemStack getItem(@Nullable final String materialString) {
-        if (materialString == null) {
-            return null;
-        }
-        // Colon assumes an addon item
-        if (materialString.contains(":")) {
-            return getCustomItem(materialString);
-        }
-
-        Material material = ItemUtils.getMaterial(materialString);
-        if (material == null) {
-            return null;
-        }
-
-        return new ItemStack(material);
     }
 
     public static @NotNull ItemStack getSkullFromBase64(@NotNull String base64) {
@@ -534,6 +497,22 @@ public class FishUtils {
     @Deprecated
     public static boolean checkRegion(@NotNull Location location, @NotNull List<String> whitelistedRegions) {
         return Checks.canUseRegion(location, whitelistedRegions);
+    }
+
+    /**
+     * @deprecated Use {@link ItemSerializer#deserialize(String)} instead.
+     */
+    @Deprecated
+    public static @Nullable ItemStack getItem(@Nullable final String materialString) {
+        return ItemSerializer.get().deserialize(materialString, true);
+    }
+
+    /**
+     * @deprecated Use {@link ItemSerializer#deserializeItemAddon(String)} instead.
+     */
+    @Deprecated
+    public static @Nullable ItemStack getCustomItem(@NotNull String materialString) {
+        return ItemSerializer.get().deserializeItemAddon(materialString);
     }
 
 }

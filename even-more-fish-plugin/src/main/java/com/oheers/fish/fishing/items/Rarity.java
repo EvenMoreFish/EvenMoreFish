@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.config.ConfigUtils;
+import com.oheers.fish.api.config.serializer.ItemSerializer;
 import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.Requirement;
@@ -235,7 +236,7 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     @Override
     public @NotNull ItemStack getJournalItem() {
         // Old format for compatibility
-        ItemStack oldItem = FishUtils.getItem(getConfig().getString("material"));
+        ItemStack oldItem = ItemSerializer.get().deserialize(getConfig().getString("material"), true);
         if (oldItem != null) {
             return oldItem;
         }

@@ -3,6 +3,7 @@ package com.oheers.fish.items;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.config.serializer.ItemSerializer;
 import com.oheers.fish.items.configs.ItemConfig;
 import com.oheers.fish.utils.ItemUtils;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -330,13 +331,13 @@ public class ItemFactory {
 
     // Material
     private @Nullable ItemStack getItemFromMaterialString(@NotNull String materialString) {
-        Material material = ItemUtils.getMaterial(materialString);
+        ItemStack material = ItemSerializer.get().deserializeMaterial(materialString);
         if (material != null) {
             return new ItemStack(material);
         }
         Logging.debug(materialString + " is not a valid material, checking for custom item.");
 
-        ItemStack customItem = FishUtils.getCustomItem(materialString);
+        ItemStack customItem = ItemSerializer.get().deserializeItemAddon(materialString);
         if (customItem != null) {
             Logging.debug(materialString + " was a valid ItemAddon.");
             this.usingItemAddon = true;

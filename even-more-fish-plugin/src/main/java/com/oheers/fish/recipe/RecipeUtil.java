@@ -1,6 +1,6 @@
 package com.oheers.fish.recipe;
 
-import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.config.serializer.ItemSerializer;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +13,7 @@ import java.util.List;
 public class RecipeUtil {
 
     public static @Nullable RecipeChoice getRecipeChoice(String materialStr) {
-        ItemStack customItem = FishUtils.getItem(materialStr);
+        ItemStack customItem = ItemSerializer.get().deserialize(materialStr, true);
         if (customItem == null || customItem.isEmpty()) {
             return null;
         }
