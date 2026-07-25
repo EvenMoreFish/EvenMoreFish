@@ -6,6 +6,7 @@ import com.oheers.fish.competition.Competition;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import com.oheers.fish.api.utils.Scheduling;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,11 +38,11 @@ public class JoinChecker implements Listener {
             activeComp, ConfigMessage.COMPETITION_JOIN
         );
 
-        EvenMoreFish.getScheduler().runTaskLater(() -> message.send(player), 60L);
+        Scheduling.getInstance().runTaskLater(() -> message.send(player), 60L);
     }
 
     public void checkRewardsJoin(@NonNull Player player) {
-        EvenMoreFish.getScheduler().runTaskLater(() -> Reward.checkCache(player.getUniqueId()), 60L);
+        Scheduling.getInstance().runTaskLater(() -> Reward.checkCache(player.getUniqueId()), 60L);
     }
 
     // Removes the player from the bar list if they leave the server

@@ -1,9 +1,6 @@
 package com.oheers.fish;
 
-import com.comphenix.protocol.utility.MinecraftVersion;
 import com.devskiller.friendly_id.FriendlyId;
-import com.github.Anon8281.universalScheduler.UniversalScheduler;
-import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
 import com.oheers.fish.api.EMFAPI;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.baits.AbstractBaitManager;
@@ -90,7 +87,6 @@ public class EvenMoreFish extends EMFPlugin {
     private MetricsManager metricsManager;
 
     private static EvenMoreFish instance;
-    private static TaskScheduler scheduler;
     private EMFAPI api;
 
     public static @NonNull EvenMoreFish getInstance() {
@@ -98,10 +94,6 @@ public class EvenMoreFish extends EMFPlugin {
             throw new IllegalStateException("Plugin not initialized yet!");
         }
         return instance;
-    }
-
-    public static TaskScheduler getScheduler() {
-        return scheduler;
     }
 
     public EvenMoreFish() {
@@ -133,8 +125,6 @@ public class EvenMoreFish extends EMFPlugin {
     @Override
     public void onEnable() {
         versionProvider.enableCommands();
-
-        scheduler = UniversalScheduler.getScheduler(this);
 
         this.api = new EMFAPI();
 
@@ -348,6 +338,11 @@ public class EvenMoreFish extends EMFPlugin {
 
     public @Nullable DimensionFishing getDimensionFishing() {
         return this.dimensionFishing;
+    }
+
+    @Override
+    public boolean isRunningOnFolia() {
+        return this.isFolia;
     }
 
     // Things that don't belong here but have no place right now.

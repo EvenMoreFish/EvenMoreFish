@@ -53,6 +53,7 @@ public abstract class EMFPlugin extends JavaPlugin {
 
     public abstract void reload(@Nullable CommandSender sender);
 
+    public abstract boolean isRunningOnFolia();
 
     private static void log(final Level level, String message) {
         log(level, message, null);

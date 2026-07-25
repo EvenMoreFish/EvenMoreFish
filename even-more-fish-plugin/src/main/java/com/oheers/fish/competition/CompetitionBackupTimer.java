@@ -1,6 +1,5 @@
 package com.oheers.fish.competition;
 
-import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.EMFTimer;
 import com.oheers.fish.config.MainConfig;
 import org.jspecify.annotations.NonNull;
@@ -22,7 +21,7 @@ public class CompetitionBackupTimer extends EMFTimer {
 
     @Override
     public void run() {
-        EvenMoreFish.getScheduler().runTask(competition::saveToFile);
+        competition.saveToFile();
     }
 
 }

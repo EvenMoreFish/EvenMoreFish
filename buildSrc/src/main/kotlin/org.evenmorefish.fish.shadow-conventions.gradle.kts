@@ -46,7 +46,6 @@ afterEvaluate {
 
         relocate("de.tr7zw.changeme.nbtapi", "com.oheers.fish.utils.nbtapi")
         relocate("org.bstats", "com.oheers.fish.libs.bstats")
-        relocate("com.github.Anon8281.universalScheduler", "com.oheers.fish.libs.universalScheduler")
         relocate("de.themoep.inventorygui", "com.oheers.fish.libs.inventorygui")
         relocate("uk.firedev.vanishchecker", "com.oheers.fish.libs.vanishchecker")
         relocate("uk.firedev.messagelib", "com.oheers.fish.libs.messagelib")

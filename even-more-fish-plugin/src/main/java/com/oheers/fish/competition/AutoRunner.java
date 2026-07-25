@@ -23,29 +23,25 @@ public class AutoRunner extends EMFTimer {
      */
     @Override
     public void run() {
-        EvenMoreFish.getScheduler().runTask(
-            () -> {
-                if (hasMinuteBeenChecked()) {
-                    return;
-                }
-                TimeCode now = TimeCode.now();
-                Logging.debug("AutoRunner checking TimeCode: " + now.code());
+        if (hasMinuteBeenChecked()) {
+            return;
+        }
+        TimeCode now = TimeCode.now();
+        Logging.debug("AutoRunner checking TimeCode: " + now.code());
 
-                // Beginning the competition set for schedule
-                Map<TimeCode, CompetitionFile> competitions = EvenMoreFish.getInstance().getCompetitionQueue().getCompetitions();
-                CompetitionFile file = competitions.get(now);
-                if (file == null) {
-                    return;
-                }
-                Logging.debug("AutoRunner found a competition with this TimeCode. Attempting to start.");
-                if (Competition.isActive()) {
-                    Logging.debug("AutoRunner cannot start a competition as one is active. Attempting to hold until active is finished.");
-                    Competition.holdCompetition(file);
-                } else {
-                    new Competition(file).begin();
-                }
-            }
-        );
+        // Beginning the competition set for schedule
+        Map<TimeCode, CompetitionFile> competitions = EvenMoreFish.getInstance().getCompetitionQueue().getCompetitions();
+        CompetitionFile file = competitions.get(now);
+        if (file == null) {
+            return;
+        }
+        Logging.debug("AutoRunner found a competition with this TimeCode. Attempting to start.");
+        if (Competition.isActive()) {
+            Logging.debug("AutoRunner cannot start a competition as one is active. Attempting to hold until active is finished.");
+            Competition.holdCompetition(file);
+        } else {
+            new Competition(file).begin();
+        }
     }
 
     private boolean hasMinuteBeenChecked() {

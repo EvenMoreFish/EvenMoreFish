@@ -12,7 +12,6 @@ dependencies {
             strictly("1.20.1-R0.1-SNAPSHOT")
         }
     }
-    compileOnly(libs.universalscheduler)
     compileOnlyApi(libs.boostedyaml)
 
     compileOnly(libs.jspecify)
