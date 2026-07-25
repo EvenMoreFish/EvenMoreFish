@@ -30,7 +30,6 @@ dependencies {
     // For the unstable plugin artifact. Things may change at any time.
     compileOnly("com.oheers.evenmorefish:even-more-fish-plugin:2.4.3") {
         exclude("de.tr7zw", "item-nbt-api")
-        exclude("com.github.Anon8281", "UniversalScheduler")
     }
     // For the api artifact.
     compileOnly("com.oheers.evenmorefish:even-more-fish-api:2.4.3")
@@ -61,10 +60,6 @@ dependencies {
                 <exclusion>
                     <groupId>de.tr7zw</groupId>
                     <artifactId>item-nbt-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.github.Anon8281</groupId>
-                    <artifactId>UniversalScheduler</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
