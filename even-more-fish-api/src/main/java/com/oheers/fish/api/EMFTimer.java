@@ -1,16 +1,20 @@
 package com.oheers.fish.api;
 
+import com.oheers.fish.api.plugin.EMFPlugin;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-public abstract class EMFTimer extends TimerTask {
+@ApiStatus.Internal
+public abstract class EMFTimer {
 
-    private final Timer timer = new Timer();
     private final TimeUnit unit;
     private final long interval;
+
+    private ScheduledTask task;
 
     public EMFTimer(@NonNull TimeUnit unit, long interval) {
         this.unit = unit;
@@ -18,16 +22,28 @@ public abstract class EMFTimer extends TimerTask {
     }
 
     public void start() {
-        timer.scheduleAtFixedRate(
-            this,
-            0,
-            unit.toMillis(interval)
+        if (task != null && !task.isCancelled()) {
+            return;
+        }
+        // Use global region scheduler as this is a "main thread" job.
+        task = Bukkit.getGlobalRegionScheduler().runAtFixedRate(
+            EMFPlugin.getInstance(),
+            task -> run(),
+            1,
+            unit.toSeconds(interval) * 20
         );
     }
 
     public void stop() {
-        cancel();
-        timer.cancel();
+        if (task == null) {
+            return;
+        }
+        if (!task.isCancelled()) {
+            task.cancel();
+        }
+        task = null;
     }
+
+    public abstract void run();
 
 }
