@@ -5,10 +5,12 @@ import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 /**
  * Internal scheduling utility class.
@@ -28,6 +30,9 @@ public class Scheduling {
         return INSTANCE;
     }
 
+    /**
+     * @see io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler#run(Plugin, Consumer)
+     */
     public @NonNull ScheduledTask runTask(@NonNull Runnable runnable) {
         return Bukkit.getGlobalRegionScheduler().run(
             PLUGIN,
@@ -35,6 +40,9 @@ public class Scheduling {
         );
     }
 
+    /**
+     * @see io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler#runDelayed(Plugin, Consumer, long)
+     */
     public @NonNull ScheduledTask runTaskLater(@NonNull Runnable runnable, long delayTicks) {
         return Bukkit.getGlobalRegionScheduler().runDelayed(
             PLUGIN,
@@ -43,6 +51,9 @@ public class Scheduling {
         );
     }
 
+    /**
+     * @see io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler#runAtFixedRate(Plugin, Consumer, long, long) 
+     */
     public @NonNull ScheduledTask runTaskTimer(@NonNull Runnable runnable, long delayTicks, long periodTicks) {
         return Bukkit.getGlobalRegionScheduler().runAtFixedRate(
             PLUGIN,
@@ -52,6 +63,9 @@ public class Scheduling {
         );
     }
 
+    /**
+     * @see io.papermc.paper.threadedregions.scheduler.RegionScheduler#run(Plugin, Location, Consumer)
+     */
     public @NonNull ScheduledTask runTask(@NonNull Location location, @NonNull Runnable runnable) {
         return Bukkit.getRegionScheduler().run(
             PLUGIN,
@@ -60,6 +74,9 @@ public class Scheduling {
         );
     }
 
+    /**
+     * @see io.papermc.paper.threadedregions.scheduler.RegionScheduler#runDelayed(Plugin, Location, Consumer, long) 
+     */
     public @NonNull ScheduledTask runTaskLater(@NonNull Location location, @NonNull Runnable runnable, long delayTicks) {
         return Bukkit.getRegionScheduler().runDelayed(
             PLUGIN,
@@ -69,6 +86,9 @@ public class Scheduling {
         );
     }
 
+    /**
+     * @see io.papermc.paper.threadedregions.scheduler.RegionScheduler#runAtFixedRate(Plugin, Location, Consumer, long, long) 
+     */
     public @NonNull ScheduledTask runTaskTimer(@NonNull Location location, @NonNull Runnable runnable, long delayTicks, long periodTicks) {
         return Bukkit.getRegionScheduler().runAtFixedRate(
             PLUGIN,
@@ -79,6 +99,9 @@ public class Scheduling {
         );
     }
 
+    /**
+     * @see io.papermc.paper.threadedregions.scheduler.EntityScheduler#run(Plugin, Consumer, Runnable)
+     */
     public @Nullable ScheduledTask runTask(@NonNull Entity entity, @NonNull Runnable runnable) {
         return entity.getScheduler().run(
             PLUGIN,
@@ -87,6 +110,9 @@ public class Scheduling {
         );
     }
 
+    /**
+     * @see io.papermc.paper.threadedregions.scheduler.EntityScheduler#runDelayed(Plugin, Consumer, Runnable, long) 
+     */
     public @Nullable ScheduledTask runTaskLater(@NonNull Entity entity, @NonNull Runnable runnable, long delayTicks) {
         return entity.getScheduler().runDelayed(
             PLUGIN,
@@ -96,6 +122,9 @@ public class Scheduling {
         );
     }
 
+    /**
+     * @see io.papermc.paper.threadedregions.scheduler.EntityScheduler#runAtFixedRate(Plugin, Consumer, Runnable, long, long) 
+     */
     public @Nullable ScheduledTask runTaskTimer(@NonNull Entity entity, @NonNull Runnable runnable, long delayTicks, long periodTicks) {
         return entity.getScheduler().runAtFixedRate(
             PLUGIN,
