@@ -62,8 +62,6 @@ dependencies {
     compileOnly(libs.headdatabase.api)
     compileOnly(libs.playerpoints)
 
-    api(libs.universalscheduler)
-
     implementation(libs.bstats)
     implementation(libs.inventorygui)
     implementation(libs.vanishchecker)
