@@ -24,7 +24,7 @@ public class Scheduling {
 
     private Scheduling() {}
 
-    public static @NotNull Scheduling getInstance() {
+    public static @NonNull Scheduling getInstance() {
         return INSTANCE;
     }
 
