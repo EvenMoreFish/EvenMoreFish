@@ -3,7 +3,7 @@ package com.oheers.fish.competition;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.EMFTimer;
 import com.oheers.fish.config.MainConfig;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,7 +15,7 @@ public class CompetitionBackupTimer extends EMFTimer {
 
     private final Competition competition;
 
-    public CompetitionBackupTimer(@NotNull Competition competition) {
+    public CompetitionBackupTimer(@NonNull Competition competition) {
         super(TimeUnit.SECONDS, MainConfig.getInstance().getCompetitionBackupInterval());
         this.competition = competition;
     }

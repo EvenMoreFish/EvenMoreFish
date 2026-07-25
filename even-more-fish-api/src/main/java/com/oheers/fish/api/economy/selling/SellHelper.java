@@ -9,14 +9,15 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class SellHelper {
 
     private static final SellHelper GLOBAL = new SellHelper();
 
-    private final @NotNull Economy economy;
+    private final @NonNull Economy economy;
 
     public SellHelper() {
         this(Economy.getInstance());
@@ -25,15 +26,15 @@ public class SellHelper {
     /**
      * Returns a global instance of SellHelper using the global economy instance.
      */
-    public static @NotNull SellHelper get() {
+    public static @NonNull SellHelper get() {
         return GLOBAL;
     }
 
-    public SellHelper(@NotNull Economy economy) {
+    public SellHelper(@NonNull Economy economy) {
         this.economy = economy;
     }
 
-    public void sell(@NotNull Inventory inventory, @NotNull Player player) {
+    public void sell(@NonNull Inventory inventory, @NonNull Player player) {
         if (!economy.isEnabled()) {
             EMFPlugin.getInstance().sendMessage("ECONOMY_DISABLED", player);
             return;
@@ -84,7 +85,7 @@ public class SellHelper {
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.06f);
     }
 
-    public void sell(@Nullable ItemStack @NotNull[] itemStacks, @NotNull Player player) {
+    public void sell(@Nullable ItemStack @NonNull[] itemStacks, @NonNull Player player) {
         if (!economy.isEnabled()) {
             EMFPlugin.getInstance().sendMessage("ECONOMY_DISABLED", player);
             return;
@@ -133,7 +134,7 @@ public class SellHelper {
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.06f);
     }
 
-    private void logSoldFish(@NotNull SoldFish soldFish) {
+    private void logSoldFish(@NonNull SoldFish soldFish) {
         EMFPlugin.getInstance().logSoldFish(soldFish);
     }
 

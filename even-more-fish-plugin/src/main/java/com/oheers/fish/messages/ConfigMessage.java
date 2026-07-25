@@ -4,7 +4,7 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import net.kyori.adventure.audience.Audience;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import uk.firedev.messagelib.message.ComponentListMessage;
 import uk.firedev.messagelib.message.ComponentMessage;
 import uk.firedev.messagelib.message.ComponentSingleMessage;
@@ -250,7 +250,7 @@ public enum ConfigMessage {
         }
     }
 
-    public void send(@NotNull Audience target) {
+    public void send(@NonNull Audience target) {
         getMessage().send(target);
     }
 

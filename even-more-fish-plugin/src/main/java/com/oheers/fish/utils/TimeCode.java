@@ -1,7 +1,7 @@
 package com.oheers.fish.utils;
 
 import com.oheers.fish.FishUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.jetbrains.annotations.Range;
 
 import java.time.DayOfWeek;
@@ -15,7 +15,7 @@ import java.util.Comparator;
 /**
  * A time code representing an exact minute of a day.
  */
-public record TimeCode(@NotNull String code) {
+public record TimeCode(@NonNull String code) {
 
     public static TimeCode now() {
         return fromDateTime(LocalDateTime.now());
@@ -25,12 +25,12 @@ public record TimeCode(@NotNull String code) {
         return exact(time.getDayOfWeek(), time.getHour(), time.getMinute());
     }
 
-    public static TimeCode exact(@NotNull DayOfWeek day, @Range(from = 0, to = 23) int hour, @Range(from = 0, to = 59) int minute) {
+    public static TimeCode exact(@NonNull DayOfWeek day, @Range(from = 0, to = 23) int hour, @Range(from = 0, to = 59) int minute) {
         return new TimeCode(day + "-" + hour + "-" + minute);
     }
 
     @Override
-    public @NotNull String code() {
+    public @NonNull String code() {
         return this.code;
     }
 
@@ -77,7 +77,7 @@ public record TimeCode(@NotNull String code) {
     }
 
     @Override
-    public @NotNull String toString() {
+    public @NonNull String toString() {
         return code;
     }
 

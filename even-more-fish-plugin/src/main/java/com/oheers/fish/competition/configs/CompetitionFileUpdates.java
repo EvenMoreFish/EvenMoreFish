@@ -2,13 +2,13 @@ package com.oheers.fish.competition.configs;
 
 import com.oheers.fish.FishUtils;
 import dev.dejvokep.boostedyaml.YamlDocument;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
 public class CompetitionFileUpdates {
 
-    public static void update(@NotNull CompetitionFile competitionFile) {
+    public static void update(@NonNull CompetitionFile competitionFile) {
         YamlDocument config = competitionFile.getConfig();
 
         // leaderboard.position-colours -> leaderboard

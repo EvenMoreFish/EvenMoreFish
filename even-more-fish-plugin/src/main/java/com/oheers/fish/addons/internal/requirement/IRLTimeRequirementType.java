@@ -4,7 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.requirement.RequirementType;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.time.Instant;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 public class IRLTimeRequirementType extends RequirementType {
 
     @Override
-    public boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values) {
+    public boolean checkRequirement(@NonNull RequirementContext context, @NonNull List<String> values) {
         long currentTime = (Instant.now().getEpochSecond() / 60) % 1440 + 60;
         for (String value : values) {
             String[] split = value.split("-");
@@ -36,17 +36,17 @@ public class IRLTimeRequirementType extends RequirementType {
     }
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "IRL-TIME";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "Oheers";
     }
 
     @Override
-    public @NotNull Plugin getPlugin() {
+    public @NonNull Plugin getPlugin() {
         return EvenMoreFish.getInstance();
     }
 
@@ -59,7 +59,7 @@ public class IRLTimeRequirementType extends RequirementType {
      * @return The number of minutes that will have passed in the day by the time the clock ticks round to match the HHMM
      * format. If the HHMM format is incorrect however, the fallback will be returned.
      */
-    private int getDayMinute(@NotNull final String HHMMFormat, final int fallback) {
+    private int getDayMinute(@NonNull final String HHMMFormat, final int fallback) {
         String[] time = HHMMFormat.split(":");
         try {
             return (Integer.parseInt(time[0]) * 60) + Integer.parseInt(time[1]);

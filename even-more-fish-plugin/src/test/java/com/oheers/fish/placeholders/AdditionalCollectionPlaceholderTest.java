@@ -15,8 +15,8 @@ import com.oheers.fish.placeholders.impl.database.player.TimesCaughtFishPlacehol
 import com.oheers.fish.placeholders.impl.database.player.TotalFishCaughtInRarityPlaceholder;
 import org.bukkit.OfflinePlayer;
 import org.junit.jupiter.api.Test;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -153,12 +153,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @Nullable Rarity resolveRarity(@NotNull String rarityId) {
+        protected @Nullable Rarity resolveRarity(@NonNull String rarityId) {
             return support.rarities.get(rarityId);
         }
 
         @Override
-        protected int countCaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
             return support.distinct(fishList);
         }
     }
@@ -172,12 +172,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @Nullable Rarity resolveRarity(@NotNull String rarityId) {
+        protected @Nullable Rarity resolveRarity(@NonNull String rarityId) {
             return support.rarities.get(rarityId);
         }
 
         @Override
-        protected int totalCaughtQuantity(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+        protected int totalCaughtQuantity(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
             return support.raw(fishList);
         }
     }
@@ -191,12 +191,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @Nullable Rarity resolveRarity(@NotNull String rarityId) {
+        protected @Nullable Rarity resolveRarity(@NonNull String rarityId) {
             return support.rarities.get(rarityId);
         }
 
         @Override
-        protected int countCaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
             return support.distinct(fishList);
         }
     }
@@ -210,12 +210,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @Nullable Rarity resolveRarity(@NotNull String rarityId) {
+        protected @Nullable Rarity resolveRarity(@NonNull String rarityId) {
             return support.rarities.get(rarityId);
         }
 
         @Override
-        protected int countCaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
             return support.distinct(fishList);
         }
     }
@@ -230,12 +230,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @NotNull List<Fish> getAllFish() {
+        protected @NonNull List<Fish> getAllFish() {
             return allFish;
         }
 
         @Override
-        protected int countCaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
             return (int) fishList.stream().filter(fish -> catches.getOrDefault(key(fish), 0) > 0).count();
         }
     }
@@ -250,12 +250,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @NotNull List<Fish> getAllFish() {
+        protected @NonNull List<Fish> getAllFish() {
             return allFish;
         }
 
         @Override
-        protected int countCaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
             return (int) fishList.stream().filter(fish -> catches.getOrDefault(key(fish), 0) > 0).count();
         }
     }
@@ -270,12 +270,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @NotNull List<Fish> getAllFish() {
+        protected @NonNull List<Fish> getAllFish() {
             return allFish;
         }
 
         @Override
-        protected int countCaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
             return (int) fishList.stream().filter(fish -> catches.getOrDefault(key(fish), 0) > 0).count();
         }
     }
@@ -289,12 +289,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @Nullable Rarity resolveRarity(@NotNull String rarityId) {
+        protected @Nullable Rarity resolveRarity(@NonNull String rarityId) {
             return support.rarities.get(rarityId);
         }
 
         @Override
-        protected int countCaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
             return support.distinct(fishList);
         }
     }
@@ -308,12 +308,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @Nullable Rarity resolveRarity(@NotNull String rarityId) {
+        protected @Nullable Rarity resolveRarity(@NonNull String rarityId) {
             return support.rarities.get(rarityId);
         }
 
         @Override
-        protected boolean hasCaughtFish(@NotNull UUID uuid, @NotNull Fish fish) {
+        protected boolean hasCaughtFish(@NonNull UUID uuid, @NonNull Fish fish) {
             return support.catches.getOrDefault(key(fish), 0) > 0;
         }
     }
@@ -328,12 +328,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @Nullable Fish resolveFish(@NotNull String rarityId, @NotNull String fishName) {
+        protected @Nullable Fish resolveFish(@NonNull String rarityId, @NonNull String fishName) {
             return fishMap.get(rarityId + ":" + fishName);
         }
 
         @Override
-        protected boolean hasCaughtFish(@NotNull UUID uuid, @NotNull Fish fish) {
+        protected boolean hasCaughtFish(@NonNull UUID uuid, @NonNull Fish fish) {
             return catches.getOrDefault(key(fish), 0) > 0;
         }
     }
@@ -348,12 +348,12 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected @Nullable Fish resolveFish(@NotNull String rarityId, @NotNull String fishName) {
+        protected @Nullable Fish resolveFish(@NonNull String rarityId, @NonNull String fishName) {
             return fishMap.get(rarityId + ":" + fishName);
         }
 
         @Override
-        protected int timesCaught(@NotNull UUID uuid, @NotNull Fish fish) {
+        protected int timesCaught(@NonNull UUID uuid, @NonNull Fish fish) {
             return catches.getOrDefault(key(fish), 0);
         }
     }

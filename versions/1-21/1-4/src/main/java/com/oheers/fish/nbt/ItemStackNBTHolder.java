@@ -7,15 +7,15 @@ import net.minecraft.world.item.component.CustomData;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
-    private final @NotNull CompoundTag data;
+    private final @NonNull CompoundTag data;
 
-    public ItemStackNBTHolder(@NotNull ItemStack obj) {
+    public ItemStackNBTHolder(@NonNull ItemStack obj) {
         super(obj);
 
         net.minecraft.world.item.ItemStack handle = ((CraftItemStack) obj).handle;
@@ -24,12 +24,12 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
     }
 
     @Override
-    public boolean hasNamespace(@NotNull String namespace) {
+    public boolean hasNamespace(@NonNull String namespace) {
         return getData(namespace, false) != null;
     }
 
     @Override
-    public boolean hasKey(@NotNull NamespacedKey namespacedKey) {
+    public boolean hasKey(@NonNull NamespacedKey namespacedKey) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         CompoundTag data = getData(namespace);
@@ -38,7 +38,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     @Nullable
     @Override
-    public String getString(@NotNull NamespacedKey namespacedKey) {
+    public String getString(@NonNull NamespacedKey namespacedKey) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         CompoundTag data = getData(namespace);
@@ -52,7 +52,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets a String in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setString(@NotNull NamespacedKey namespacedKey, @Nullable String value) {
+    public void setString(@NonNull NamespacedKey namespacedKey, @Nullable String value) {
         CompoundTag tag = getData(namespacedKey.getNamespace());
         if (value == null) {
             tag.remove(namespacedKey.getKey());
@@ -66,7 +66,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     @Nullable
     @Override
-    public Float getFloat(@NotNull NamespacedKey namespacedKey) {
+    public Float getFloat(@NonNull NamespacedKey namespacedKey) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         CompoundTag data = getData(namespace);
@@ -80,7 +80,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets a Float in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setFloat(@NotNull NamespacedKey namespacedKey, @Nullable Float value) {
+    public void setFloat(@NonNull NamespacedKey namespacedKey, @Nullable Float value) {
         CompoundTag tag = getData(namespacedKey.getNamespace());
         if (value == null) {
             tag.remove(namespacedKey.getKey());
@@ -94,7 +94,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     @Nullable
     @Override
-    public Integer getInteger(@NotNull NamespacedKey namespacedKey) {
+    public Integer getInteger(@NonNull NamespacedKey namespacedKey) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         CompoundTag data = getData(namespace);
@@ -108,7 +108,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets an Integer in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setInteger(@NotNull NamespacedKey namespacedKey, @Nullable Integer value) {
+    public void setInteger(@NonNull NamespacedKey namespacedKey, @Nullable Integer value) {
         CompoundTag tag = getData(namespacedKey.getNamespace());
         if (value == null) {
             tag.remove(namespacedKey.getKey());
@@ -122,7 +122,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     @Nullable
     @Override
-    public Boolean getBoolean(@NotNull NamespacedKey namespacedKey) {
+    public Boolean getBoolean(@NonNull NamespacedKey namespacedKey) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         CompoundTag data = getData(namespace);
@@ -136,7 +136,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets a Boolean in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setBoolean(@NotNull NamespacedKey namespacedKey, @Nullable Boolean value) {
+    public void setBoolean(@NonNull NamespacedKey namespacedKey, @Nullable Boolean value) {
         CompoundTag tag = getData(namespacedKey.getNamespace());
         if (value == null) {
             tag.remove(namespacedKey.getKey());
@@ -153,11 +153,11 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
         ((CraftItemStack) obj).handle.set(DataComponents.CUSTOM_DATA, CustomData.of(this.data));
     }
 
-    private @NotNull CompoundTag getData() {
+    private @NonNull CompoundTag getData() {
         return this.data;
     }
 
-    private @NotNull CompoundTag getData(@NotNull String namespace) {
+    private @NonNull CompoundTag getData(@NonNull String namespace) {
         CompoundTag tag = getData(namespace, true);
         if (tag == null) {
             throw new IllegalStateException("Null tag was incorrectly returned.");
@@ -165,7 +165,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
         return tag;
     }
 
-    private @Nullable CompoundTag getData(@NotNull String namespace, boolean create) {
+    private @Nullable CompoundTag getData(@NonNull String namespace, boolean create) {
         if (this.data.contains(namespace)) {
             return this.data.getCompound(namespace);
         }

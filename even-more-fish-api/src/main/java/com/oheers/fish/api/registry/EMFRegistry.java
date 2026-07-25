@@ -5,18 +5,18 @@ import com.oheers.fish.api.boost.RarityBoostRegistry;
 import com.oheers.fish.api.economy.EconomyTypeRegistry;
 import com.oheers.fish.api.requirement.RequirementTypeRegistry;
 import com.oheers.fish.api.reward.RewardTypeRegistry;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
 public interface EMFRegistry<T extends RegistryItem> {
 
-    @NotNull RequirementTypeRegistry REQUIREMENT_TYPE = RequirementTypeRegistry.getInstance();
-    @NotNull RewardTypeRegistry REWARD_TYPE = RewardTypeRegistry.getInstance();
-    @NotNull ItemAddonRegistry ITEM_ADDON = ItemAddonRegistry.getInstance();
-    @NotNull EconomyTypeRegistry ECONOMY_TYPE = EconomyTypeRegistry.getInstance();
-    @NotNull RarityBoostRegistry RARITY_BOOST = RarityBoostRegistry.getInstance();
+    @NonNull RequirementTypeRegistry REQUIREMENT_TYPE = RequirementTypeRegistry.getInstance();
+    @NonNull RewardTypeRegistry REWARD_TYPE = RewardTypeRegistry.getInstance();
+    @NonNull ItemAddonRegistry ITEM_ADDON = ItemAddonRegistry.getInstance();
+    @NonNull EconomyTypeRegistry ECONOMY_TYPE = EconomyTypeRegistry.getInstance();
+    @NonNull RarityBoostRegistry RARITY_BOOST = RarityBoostRegistry.getInstance();
 
     boolean isEmpty();
 
@@ -25,14 +25,14 @@ public interface EMFRegistry<T extends RegistryItem> {
     /**
      * @return An immutable copy of the current registry.
      */
-    @NotNull Map<String, T> getRegistry();
+    @NonNull Map<String, T> getRegistry();
 
     /**
      * Get a value from the registry.
      * @param key The key to look for.
      * @return The value, or null if not found.
      */
-    @Nullable T get(@NotNull String key);
+    @Nullable T get(@NonNull String key);
 
     /**
      * Get a value from the registry, or a default value if not found.
@@ -40,21 +40,21 @@ public interface EMFRegistry<T extends RegistryItem> {
      * @param defaultValue The default value to return if not found.
      * @return The value, or the default value if not found.
      */
-    @NotNull T getOrDefault(@NotNull String key, @NotNull T defaultValue);
+    @NonNull T getOrDefault(@NonNull String key, @NonNull T defaultValue);
 
     /**
      * Unregister a key from the registry.
      * @param key The key to unregister.
      * @return True if the key was unregistered, false if not found.
      */
-    boolean unregister(@NotNull String key);
+    boolean unregister(@NonNull String key);
 
     /**
      * Unregister a value from the registry.
      * @param value The value to unregister.
      * @return True if the value was unregistered, false if not found.
      */
-    default boolean unregister(@NotNull T value) {
+    default boolean unregister(@NonNull T value) {
         return unregister(value.getKey());
     }
 
@@ -64,14 +64,14 @@ public interface EMFRegistry<T extends RegistryItem> {
      * @param force Whether to force the registration, overwriting any existing value.
      * @return True if the value was registered, false if a value with the same key already exists and force is false.
      */
-    boolean register(@NotNull T value, boolean force);
+    boolean register(@NonNull T value, boolean force);
 
     /**
      * Register a value in the registry.
      * @param value The value to register.
      * @return True if the value was registered, false if a value with the same key already exists.
      */
-    default boolean register(@NotNull T value) {
+    default boolean register(@NonNull T value) {
         return register(value, false);
     }
 

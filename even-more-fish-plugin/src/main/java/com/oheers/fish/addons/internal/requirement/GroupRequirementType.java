@@ -6,20 +6,20 @@ import com.oheers.fish.api.requirement.RequirementType;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
 public class GroupRequirementType extends RequirementType {
 
-    private final @NotNull Permission permission;
+    private final @NonNull Permission permission;
 
-    public GroupRequirementType(@NotNull Permission permission) {
+    public GroupRequirementType(@NonNull Permission permission) {
         this.permission = permission;
     }
 
     @Override
-    public boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values) {
+    public boolean checkRequirement(@NonNull RequirementContext context, @NonNull List<String> values) {
         Player player = context.getPlayer();
         if (player == null) {
             return false;
@@ -35,17 +35,17 @@ public class GroupRequirementType extends RequirementType {
     }
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "GROUP";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "FireML";
     }
 
     @Override
-    public @NotNull Plugin getPlugin() {
+    public @NonNull Plugin getPlugin() {
         return EvenMoreFish.getInstance();
     }
 

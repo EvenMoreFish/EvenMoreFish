@@ -11,15 +11,15 @@ import com.oheers.fish.permissions.UserPerms;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
 public class JournalSubcommand {
 
     private final String name;
 
-    public JournalSubcommand(@NotNull String name) {
+    public JournalSubcommand(@NonNull String name) {
         this.name = name;
     }
 
@@ -44,7 +44,7 @@ public class JournalSubcommand {
             });
     }
 
-    private void execute(@NotNull Player player, @Nullable Rarity rarity) {
+    private void execute(@NonNull Player player, @Nullable Rarity rarity) {
         if (!DatabaseUtil.isDatabaseOnline()) {
             ConfigMessage.JOURNAL_DISABLED.getMessage().send(player);
             return;

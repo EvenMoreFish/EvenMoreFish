@@ -3,8 +3,8 @@ package com.oheers.fish.api.config.serializer;
 import com.oheers.fish.api.Logging;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class PotionEffectSerializer implements EMFSerializer<PotionEffect> {
 
@@ -12,11 +12,11 @@ public class PotionEffectSerializer implements EMFSerializer<PotionEffect> {
 
     private PotionEffectSerializer() {}
 
-    public static @NotNull PotionEffectSerializer get() {
+    public static @NonNull PotionEffectSerializer get() {
         return INSTANCE;
     }
 
-    public @NotNull String serialize(@NotNull PotionEffect element) {
+    public @NonNull String serialize(@NonNull PotionEffect element) {
         return element.getType().toString().toLowerCase() + "," + element.getAmplifier() + "," + element.getDuration();
     }
 
@@ -35,7 +35,7 @@ public class PotionEffectSerializer implements EMFSerializer<PotionEffect> {
         }
     }
 
-    public @Nullable PotionEffect deserialize(@Nullable String element, @NotNull String separator) {
+    public @Nullable PotionEffect deserialize(@Nullable String element, @NonNull String separator) {
         if (element == null) {
             return null;
         }

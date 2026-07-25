@@ -10,11 +10,11 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.stream.Stream;
 
-public record FishBroadcast(@NotNull EMFMessage message, @NotNull Player player, @NotNull Fish fish) {
+public record FishBroadcast(@NonNull EMFMessage message, @NonNull Player player, @NonNull Fish fish) {
 
     public void broadcast() {
         if (message.isEmpty()) {
@@ -30,7 +30,7 @@ public record FishBroadcast(@NotNull EMFMessage message, @NotNull Player player,
         players.forEach(message::send);
     }
 
-    private Stream<? extends Player> filterRarity(@NotNull Stream<? extends Player> players) {
+    private Stream<? extends Player> filterRarity(@NonNull Stream<? extends Player> players) {
         Rarity rarity = fish.getRarity();
         if (rarity.getBroadcastOnlyRods()) {
             players = players.filter(this::isHoldingRod);
@@ -42,12 +42,12 @@ public record FishBroadcast(@NotNull EMFMessage message, @NotNull Player player,
         return players;
     }
 
-    private Stream<? extends Player> filterToggled(@NotNull Stream<? extends Player> players) {
+    private Stream<? extends Player> filterToggled(@NonNull Stream<? extends Player> players) {
         Toggle toggle = EvenMoreFish.getInstance().getToggle();
         return players.filter(player -> !toggle.isCatchMessageDisabled(player));
     }
 
-    private Stream<? extends Player> filterCompetition(@NotNull Stream<? extends Player> players) {
+    private Stream<? extends Player> filterCompetition(@NonNull Stream<? extends Player> players) {
         Competition active = Competition.getCurrentlyActive();
         if (active == null) {
             return players;
@@ -64,13 +64,13 @@ public record FishBroadcast(@NotNull EMFMessage message, @NotNull Player player,
         return players;
     }
 
-    private boolean isHoldingRod(@NotNull Player player) {
+    private boolean isHoldingRod(@NonNull Player player) {
         Material rodMaterial = Material.FISHING_ROD;
         return player.getInventory().getItemInMainHand().getType().equals(rodMaterial)
             || player.getInventory().getItemInOffHand().getType().equals(rodMaterial);
     }
 
-    private boolean isWithinRange(@NotNull Player sourcePlayer, @NotNull Player targetPlayer, int rangeSquared) {
+    private boolean isWithinRange(@NonNull Player sourcePlayer, @NonNull Player targetPlayer, int rangeSquared) {
         return sourcePlayer.getWorld().equals(targetPlayer.getWorld())
             && sourcePlayer.getLocation().distanceSquared(targetPlayer.getLocation()) <= rangeSquared;
     }

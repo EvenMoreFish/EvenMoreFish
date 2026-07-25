@@ -6,8 +6,8 @@ import com.oheers.fish.placeholders.impl.database.player.FishCaughtOutOfRarityPl
 import com.oheers.fish.placeholders.impl.database.player.FishCaughtOutOfTotalPlaceholder;
 import org.bukkit.OfflinePlayer;
 import org.junit.jupiter.api.Test;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -124,12 +124,12 @@ class UniqueFishCaughtProgressPlaceholderTest {
         }
 
         @Override
-        protected @NotNull List<Fish> getAllFish() {
+        protected @NonNull List<Fish> getAllFish() {
             return allFish;
         }
 
         @Override
-        protected int countCaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
             return (int) fishList.stream()
                 .filter(fish -> caughtFish.getOrDefault(key(fish), 0) > 0)
                 .count();
@@ -146,12 +146,12 @@ class UniqueFishCaughtProgressPlaceholderTest {
         }
 
         @Override
-        protected @Nullable Rarity resolveRarity(@NotNull String rarityId) {
+        protected @Nullable Rarity resolveRarity(@NonNull String rarityId) {
             return rarities.get(rarityId);
         }
 
         @Override
-        protected int countCaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
             return (int) fishList.stream()
                 .filter(fish -> caughtFish.getOrDefault(key(fish), 0) > 0)
                 .count();

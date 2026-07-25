@@ -2,8 +2,8 @@ package com.oheers.fish.api.requirement;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +16,7 @@ public class RequirementTypeRegistry implements EMFRegistry<RequirementType> {
 
     private RequirementTypeRegistry() {}
 
-    public static @NotNull RequirementTypeRegistry getInstance() {
+    public static @NonNull RequirementTypeRegistry getInstance() {
         return instance;
     }
 
@@ -34,7 +34,7 @@ public class RequirementTypeRegistry implements EMFRegistry<RequirementType> {
      * @return An immutable copy of the current registry.
      */
     @Override
-    public @NotNull Map<String, RequirementType> getRegistry() {
+    public @NonNull Map<String, RequirementType> getRegistry() {
         return Map.copyOf(registry);
     }
 
@@ -45,7 +45,7 @@ public class RequirementTypeRegistry implements EMFRegistry<RequirementType> {
      * @return The value, or null if not found.
      */
     @Override
-    public @Nullable RequirementType get(@NotNull String key) {
+    public @Nullable RequirementType get(@NonNull String key) {
         return registry.get(key);
     }
 
@@ -57,7 +57,7 @@ public class RequirementTypeRegistry implements EMFRegistry<RequirementType> {
      * @return The value, or the default value if not found.
      */
     @Override
-    public @NotNull RequirementType getOrDefault(@NotNull String key, @NotNull RequirementType defaultValue) {
+    public @NonNull RequirementType getOrDefault(@NonNull String key, @NonNull RequirementType defaultValue) {
         return registry.getOrDefault(key, defaultValue);
     }
 
@@ -68,7 +68,7 @@ public class RequirementTypeRegistry implements EMFRegistry<RequirementType> {
      * @return True if the key was unregistered, false if not found.
      */
     @Override
-    public boolean unregister(@NotNull String key) {
+    public boolean unregister(@NonNull String key) {
         return registry.remove(key) != null;
     }
 
@@ -80,7 +80,7 @@ public class RequirementTypeRegistry implements EMFRegistry<RequirementType> {
      * @return True if the value was registered, false if a value with the same key already exists and force is false.
      */
     @Override
-    public boolean register(@NotNull RequirementType value, boolean force) {
+    public boolean register(@NonNull RequirementType value, boolean force) {
         if (!force && registry.containsKey(value.getKey())) {
             return false;
         }

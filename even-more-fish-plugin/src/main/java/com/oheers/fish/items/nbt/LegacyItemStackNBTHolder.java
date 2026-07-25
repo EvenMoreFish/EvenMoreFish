@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -15,25 +15,25 @@ public class LegacyItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     private final ItemMeta meta;
 
-    public LegacyItemStackNBTHolder(@NotNull ItemStack obj) {
+    public LegacyItemStackNBTHolder(@NonNull ItemStack obj) {
         super(obj);
         this.meta = obj.getItemMeta();
     }
 
     @Override
-    public boolean hasNamespace(@NotNull String namespace) {
+    public boolean hasNamespace(@NonNull String namespace) {
         return getData().getKeys().stream()
             .anyMatch(key -> key.getNamespace().equals(namespace.toLowerCase(Locale.ROOT)));
     }
 
     @Override
-    public boolean hasKey(@NotNull NamespacedKey namespacedKey) {
+    public boolean hasKey(@NonNull NamespacedKey namespacedKey) {
         return getData().has(namespacedKey);
     }
 
     @Nullable
     @Override
-    public String getString(@NotNull NamespacedKey namespacedKey) {
+    public String getString(@NonNull NamespacedKey namespacedKey) {
         return getData().get(namespacedKey, PersistentDataType.STRING);
     }
 
@@ -41,13 +41,13 @@ public class LegacyItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets a String in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setString(@NotNull NamespacedKey namespacedKey, @Nullable String value) {
+    public void setString(@NonNull NamespacedKey namespacedKey, @Nullable String value) {
         throw new UnsupportedOperationException("Cannot use set methods with legacy NBT.");
     }
 
     @Nullable
     @Override
-    public Float getFloat(@NotNull NamespacedKey namespacedKey) {
+    public Float getFloat(@NonNull NamespacedKey namespacedKey) {
         return getData().get(namespacedKey, PersistentDataType.FLOAT);
     }
 
@@ -55,13 +55,13 @@ public class LegacyItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets a Float in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setFloat(@NotNull NamespacedKey namespacedKey, @Nullable Float value) {
+    public void setFloat(@NonNull NamespacedKey namespacedKey, @Nullable Float value) {
         throw new UnsupportedOperationException("Cannot use set methods with legacy NBT.");
     }
 
     @Nullable
     @Override
-    public Integer getInteger(@NotNull NamespacedKey namespacedKey) {
+    public Integer getInteger(@NonNull NamespacedKey namespacedKey) {
         return getData().get(namespacedKey, PersistentDataType.INTEGER);
     }
 
@@ -69,12 +69,12 @@ public class LegacyItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets an Integer in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setInteger(@NotNull NamespacedKey namespacedKey, @Nullable Integer value) {
+    public void setInteger(@NonNull NamespacedKey namespacedKey, @Nullable Integer value) {
         throw new UnsupportedOperationException("Cannot use set methods with legacy NBT.");
     }
 
     @Override
-    public @Nullable Boolean getBoolean(@NotNull NamespacedKey namespacedKey) {
+    public @Nullable Boolean getBoolean(@NonNull NamespacedKey namespacedKey) {
         return getData().get(namespacedKey, PersistentDataType.BOOLEAN);
     }
 
@@ -82,7 +82,7 @@ public class LegacyItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets a Boolean in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setBoolean(@NotNull NamespacedKey namespacedKey, @Nullable Boolean value) {
+    public void setBoolean(@NonNull NamespacedKey namespacedKey, @Nullable Boolean value) {
         throw new UnsupportedOperationException("Cannot use set methods with legacy NBT.");
     }
 
@@ -91,7 +91,7 @@ public class LegacyItemStackNBTHolder extends NBTHolder<ItemStack> {
         obj.setItemMeta(this.meta);
     }
 
-    private @NotNull PersistentDataContainer getData() {
+    private @NonNull PersistentDataContainer getData() {
         return this.meta.getPersistentDataContainer();
     }
 

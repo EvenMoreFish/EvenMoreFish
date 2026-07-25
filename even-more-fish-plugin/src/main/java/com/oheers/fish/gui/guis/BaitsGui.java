@@ -16,7 +16,7 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import uk.firedev.messagelib.message.ComponentListMessage;
 import uk.firedev.messagelib.message.ComponentMessage;
 
@@ -30,7 +30,7 @@ public class BaitsGui extends ConfigGui {
     private final CooldownHelper cooldown = CooldownHelper.create();
     private final SortType sortType;
 
-    public BaitsGui(@NotNull HumanEntity player) {
+    public BaitsGui(@NonNull HumanEntity player) {
         super(
             BaitsMenuGuiConfig.getInstance(),
             player
@@ -62,7 +62,7 @@ public class BaitsGui extends ConfigGui {
         });
     }
 
-    private StaticGuiElement createBaitElement(char character, @NotNull BaitHandler bait) {
+    private StaticGuiElement createBaitElement(char character, @NonNull BaitHandler bait) {
         return new StaticGuiElement(
             character,
             createBaitItem(bait),
@@ -87,13 +87,13 @@ public class BaitsGui extends ConfigGui {
         return getGuiConfig().getStringList("purchase-lore");
     }
 
-    private ItemStack createBaitItem(@NotNull BaitHandler bait) {
+    private ItemStack createBaitItem(@NonNull BaitHandler bait) {
         ItemStack item = bait.create(player);
         item.editMeta(meta -> applyLore(meta, bait));
         return item;
     }
 
-    private void applyLore(@NotNull ItemMeta meta, @NotNull BaitHandler bait) {
+    private void applyLore(@NonNull ItemMeta meta, @NonNull BaitHandler bait) {
         Economy economy = bait.getEconomy();
         if (economy == null || economy.isEmpty()) {
             return;
@@ -109,7 +109,7 @@ public class BaitsGui extends ConfigGui {
         meta.lore(purchaseLore.get());
     }
 
-    private boolean requireConfirmation(@NotNull UUID uuid) {
+    private boolean requireConfirmation(@NonNull UUID uuid) {
         if (!confirmation.hasCooldown(uuid)) {
             confirmation.applyCooldown(uuid, Duration.ofSeconds(5));
             return true;

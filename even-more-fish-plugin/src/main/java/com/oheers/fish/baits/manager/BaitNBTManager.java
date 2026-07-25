@@ -17,8 +17,8 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +60,7 @@ public class BaitNBTManager {
      * @param itemStack The item stack that is a bait.
      * @return The name of the bait.
      */
-    public static @Nullable String getBaitName(@NotNull ItemStack itemStack) {
+    public static @Nullable String getBaitName(@NonNull ItemStack itemStack) {
         if (itemStack.isEmpty()) {
             return null;
         }
@@ -166,7 +166,7 @@ public class BaitNBTManager {
     }
 
 
-    private static void removeOldLoreIfNecessary(@NotNull ItemStack item, BaitHandler bait) {
+    private static void removeOldLoreIfNecessary(@NonNull ItemStack item, BaitHandler bait) {
         try {
             item.editMeta(meta -> meta.lore(deleteOldLore(item)));
         } catch (IndexOutOfBoundsException ex) {
@@ -487,7 +487,7 @@ public class BaitNBTManager {
     /**
      * Removes all lore from the fishing rod
      */
-    private static boolean removeOldLoreFormat(@NotNull ItemStack item) {
+    private static boolean removeOldLoreFormat(@NonNull ItemStack item) {
         if (item.isEmpty()) {
             return false;
         }

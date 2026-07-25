@@ -7,7 +7,7 @@ import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,13 +31,13 @@ public class Leaderboard implements LeaderboardHandler {
     }
 
     @Override
-    public void addEntry(@NotNull UUID player, @NotNull Fish fish) {
+    public void addEntry(@NonNull UUID player, @NonNull Fish fish) {
         CompetitionEntry entry = new CompetitionEntry(player, fish, type);
         addEntry(entry);
     }
 
     @Override
-    public void addEntry(@NotNull CompetitionEntry entry) {
+    public void addEntry(@NonNull CompetitionEntry entry) {
         CompetitionEntry initialTopEntry = getTopEntry();
 
         entries.add(entry);
@@ -131,7 +131,7 @@ public class Leaderboard implements LeaderboardHandler {
      * @return The new competition entry with the updated values.
      */
     @Override
-    public CompetitionEntry trackFish(@NotNull CompetitionEntry entry, @NotNull Fish fish) {
+    public CompetitionEntry trackFish(@NonNull CompetitionEntry entry, @NonNull Fish fish) {
         CompetitionEntry newEntry = new CompetitionEntry(entry.getPlayer(), fish, type);
         float value = entry.getValue();
         if (type.getStrategy().shouldUseFishLength()) {

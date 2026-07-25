@@ -1,22 +1,22 @@
 package com.oheers.fish.addons.internal.reward.message;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import uk.firedev.messagelib.message.MessageType;
 
 public class ActionBarRewardType extends MessageRewardBase {
 
     @Override
-    public @NotNull MessageType getMessageType() {
+    public @NonNull MessageType getMessageType() {
         return MessageType.ACTION_BAR;
     }
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "ACTIONBAR";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "FireML";
     }
 

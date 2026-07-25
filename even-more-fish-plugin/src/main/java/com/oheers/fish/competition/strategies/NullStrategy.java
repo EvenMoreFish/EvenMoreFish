@@ -8,13 +8,13 @@ import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 
 public class NullStrategy implements CompetitionStrategy {
 
     @Override
-    public boolean randomInit(@NotNull Competition competition) {
+    public boolean randomInit(@NonNull Competition competition) {
         return true;
     }
 
@@ -30,7 +30,7 @@ public class NullStrategy implements CompetitionStrategy {
      * @return The single console leaderboard message.
      */
     @Override
-    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry) {
+    public EMFMessage getSingleConsoleLeaderboardMessage(@NonNull CompetitionEntry entry) {
         return EMFSingleMessage.empty();
     }
 
@@ -41,7 +41,7 @@ public class NullStrategy implements CompetitionStrategy {
      * @return The single player leaderboard message.
      */
     @Override
-    public EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry) {
+    public EMFMessage getSinglePlayerLeaderboard(@NonNull CompetitionEntry entry) {
         return EMFSingleMessage.empty();
     }
 

@@ -81,7 +81,6 @@ dependencies {
     }
     compileOnly(libs.friendlyid)
     compileOnly(libs.maven.artifact)
-    compileOnly(libs.annotations)
     compileOnly(libs.guava)
 
     library(libs.bundles.flyway) {
@@ -90,7 +89,6 @@ dependencies {
     }
     library(libs.friendlyid)
     library(libs.maven.artifact)
-    library(libs.annotations)
     library(libs.guava)
 
     library(libs.boostedyaml)
@@ -99,6 +97,8 @@ dependencies {
     library(libs.bundles.connectors)
 
     implementation(libs.dimensionfishing)
+
+    compileOnly(libs.jspecify)
 
     // TODO remove when 1.20 is dropped...
     implementation(libs.commandsapi.bukkit)

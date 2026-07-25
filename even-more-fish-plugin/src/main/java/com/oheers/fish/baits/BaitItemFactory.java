@@ -12,7 +12,7 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -52,7 +52,7 @@ public class BaitItemFactory {
      *
      * @return A list of formatted Adventure components for the bait's lore
      */
-    private @NotNull List<Component> createBoostLore(ItemFactory factory) {
+    private @NonNull List<Component> createBoostLore(ItemFactory factory) {
         final EMFListMessage lore = getBaseLoreTemplate();
         lore.setVariableWithListInsertion("{boosts}", createBoostsVariable());
         lore.setVariableWithListInsertion("{lore}", createItemLoreVariable(factory).get());
@@ -65,7 +65,7 @@ public class BaitItemFactory {
         return ConfigMessage.BAIT_BAIT_LORE.getMessage().toListMessage();
     }
 
-    private @NotNull EMFMessage createBoostsVariable() {
+    private @NonNull EMFMessage createBoostsVariable() {
         Component boostsMessage = Component.empty();
         boostsMessage = appendRarityBoosts(boostsMessage);
         boostsMessage = appendFishBoosts(boostsMessage);
@@ -93,7 +93,7 @@ public class BaitItemFactory {
 
 
     @Contract(pure = true)
-    private @NotNull Supplier<EMFListMessage> createItemLoreVariable(ItemFactory factory) {
+    private @NonNull Supplier<EMFListMessage> createItemLoreVariable(ItemFactory factory) {
         return () -> {
             List<Component> configured = factory.getLore().getConfiguredValue();
             if (configured == null) {

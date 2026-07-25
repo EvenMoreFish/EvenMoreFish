@@ -6,8 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Fish;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 
@@ -34,7 +34,7 @@ public class RequirementContext {
         this.fishingType = fishingType == null ? FishingType.VANILLA : fishingType;
     }
 
-    public static @NotNull RequirementContext empty() {
+    public static @NonNull RequirementContext empty() {
         return new RequirementContext(null, null, null, null, null, null);
     }
 
@@ -100,11 +100,11 @@ public class RequirementContext {
         return null;
     }
 
-    public @NotNull FishingType getFishingType() {
+    public @NonNull FishingType getFishingType() {
         return this.fishingType;
     }
 
-    public void setFishingType(@NotNull FishingType fishingType) {
+    public void setFishingType(@NonNull FishingType fishingType) {
         this.fishingType = fishingType;
     }
 

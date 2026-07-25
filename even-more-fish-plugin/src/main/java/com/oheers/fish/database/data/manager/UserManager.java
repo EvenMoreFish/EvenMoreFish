@@ -9,8 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
@@ -32,7 +32,7 @@ public class UserManager implements Listener {
     }
 
     @EventHandler
-    public void onJoin(final @NotNull PlayerJoinEvent event) {
+    public void onJoin(final @NonNull PlayerJoinEvent event) {
         final UUID uuid = event.getPlayer().getUniqueId();
         // Resolve (creating if missing) the user row off the server thread.
         // The database worker is single-threaded and FIFO, so the row is
@@ -47,7 +47,7 @@ public class UserManager implements Listener {
     }
 
     @EventHandler
-    public void onLeave(final @NotNull PlayerQuitEvent event) {
+    public void onLeave(final @NonNull PlayerQuitEvent event) {
         userCache.remove(event.getPlayer().getUniqueId());
     }
 

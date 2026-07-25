@@ -12,7 +12,7 @@ import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -31,15 +31,15 @@ public class RarityArgument implements CustomArgumentType.Converted<Rarity, Stri
         return rarity;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public ArgumentType<String> getNativeType() {
         return StringArgumentType.string();
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, @NotNull SuggestionsBuilder builder) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(@NonNull CommandContext<S> context, @NonNull SuggestionsBuilder builder) {
         FishManager.getInstance().getRarityMap().keySet().stream()
                 .filter(name -> name.toLowerCase().startsWith(builder.getRemainingLowerCase()))
                 .forEach(builder::suggest);

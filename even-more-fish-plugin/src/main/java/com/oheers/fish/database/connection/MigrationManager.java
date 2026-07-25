@@ -14,7 +14,7 @@ import org.flywaydb.core.api.MigrationInfoService;
 import org.flywaydb.core.api.MigrationVersion;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +83,7 @@ public class MigrationManager {
         }
     }
 
-    private boolean tableExists(@NotNull Connection connection, @NotNull String tableName) throws SQLException {
+    private boolean tableExists(@NonNull Connection connection, @NonNull String tableName) throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
         String[] tableTypes = {"TABLE"};
         for (String candidate : new String[]{tableName, tableName.toLowerCase(), tableName.toUpperCase()}) {
@@ -101,7 +101,7 @@ public class MigrationManager {
         return false;
     }
 
-    private @NotNull String resolveLegacyTableName(@NotNull String tableName) {
+    private @NonNull String resolveLegacyTableName(@NonNull String tableName) {
         if (tableName.contains("${table.prefix}")) {
             return tableName.replace("${table.prefix}", MainConfig.getInstance().getPrefix());
         }
@@ -191,7 +191,7 @@ public class MigrationManager {
     }
 
     @Contract(pure = true)
-    private @NotNull String getMigrationLocation(final String dialect) {
+    private @NonNull String getMigrationLocation(final String dialect) {
         return "db/migrations/" + dialect;
     }
 
@@ -207,7 +207,7 @@ public class MigrationManager {
         legacy.migrate(initiator);
     }
 
-    private FluentConfiguration getBaseFlywayConfiguration(@NotNull ConnectionFactory connectionFactory) {
+    private FluentConfiguration getBaseFlywayConfiguration(@NonNull ConnectionFactory connectionFactory) {
         final FluentConfiguration baseConfig = Flyway.configure(getClass().getClassLoader())
                 .dataSource(connectionFactory.dataSource)
                 .placeholders(Map.of(

@@ -2,7 +2,7 @@ package com.oheers.fish.plugin.loading;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,13 +22,13 @@ public class EMFVersionLoader {
     private final URLClassLoader jar;
     private final EMFVersionProvider version;
 
-    public EMFVersionLoader(@NotNull EMFPlugin plugin, @NotNull ClassLoader parent) {
+    public EMFVersionLoader(@NonNull EMFPlugin plugin, @NonNull ClassLoader parent) {
         this.plugin = plugin;
         this.jar = getClassLoader(parent);
         this.version = fetchVersion();
     }
 
-    public @NotNull EMFVersionProvider getVersionProvider() {
+    public @NonNull EMFVersionProvider getVersionProvider() {
         return this.version;
     }
 

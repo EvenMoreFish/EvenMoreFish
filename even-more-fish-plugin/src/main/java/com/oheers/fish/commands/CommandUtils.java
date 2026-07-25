@@ -16,7 +16,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,7 +60,7 @@ public class CommandUtils {
         }
     }
 
-    public static void listRewardTypes(@NotNull Audience audience) {
+    public static void listRewardTypes(@NonNull Audience audience) {
         TextComponent.Builder builder = Component.text();
 
         EMFMessage listMessage = ConfigMessage.ADMIN_LIST_ADDONS.getMessage();
@@ -80,7 +80,7 @@ public class CommandUtils {
         audience.sendMessage(builder.build());
     }
 
-    public static void listRequirementTypes(@NotNull Audience audience) {
+    public static void listRequirementTypes(@NonNull Audience audience) {
         TextComponent.Builder builder = Component.text();
 
         EMFMessage listMessage = ConfigMessage.ADMIN_LIST_ADDONS.getMessage();
@@ -100,7 +100,7 @@ public class CommandUtils {
         audience.sendMessage(builder.build());
     }
 
-    public static void listItemAddons(@NotNull Audience audience) {
+    public static void listItemAddons(@NonNull Audience audience) {
         TextComponent.Builder builder = Component.text();
 
         EMFMessage listMessage = ConfigMessage.ADMIN_LIST_ADDONS.getMessage();

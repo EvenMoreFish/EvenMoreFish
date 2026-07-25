@@ -28,7 +28,7 @@ public class LuckyHourBoost implements RarityWeightBoost {
      * A unique key for this boost, conventionally your plugin's name.
      */
     @Override
-    public @NotNull String getKey() {
+    public @NonNull String getKey() {
         return "MyPlugin";
     }
 
@@ -37,7 +37,7 @@ public class LuckyHourBoost implements RarityWeightBoost {
      * so keep this fast and never touch blocking IO.
      */
     @Override
-    public double weightMultiplier(@NotNull Player fisher, @NotNull Location location, @NotNull String rarityId) {
+    public double weightMultiplier(@NonNull Player fisher, @NonNull Location location, @NonNull String rarityId) {
         // Double the legendary chance while the lucky hour is active.
         if (isLuckyHour() && rarityId.equals("legendary")) {
             return 2.0;

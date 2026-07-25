@@ -8,8 +8,8 @@ import com.oheers.fish.competition.configs.CompetitionConversions;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.utils.TimeCode;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.time.DayOfWeek;
@@ -71,7 +71,7 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
         return competitions;
     }
 
-    private boolean loadSpecificDayTimes(@NotNull CompetitionFile file) {
+    private boolean loadSpecificDayTimes(@NonNull CompetitionFile file) {
         Map<DayOfWeek, List<String>> scheduledDays = file.getScheduledDays();
         if (scheduledDays.isEmpty()) {
             return false;
@@ -89,7 +89,7 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
         return true;
     }
 
-    private boolean loadRepeatedTiming(@NotNull CompetitionFile file) {
+    private boolean loadRepeatedTiming(@NonNull CompetitionFile file) {
         List<String> repeatedTimes = file.getTimes();
 
         if (repeatedTimes.isEmpty()) {
@@ -112,7 +112,7 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
         return true;
     }
 
-    public @Nullable TimeCode generateTimeCode(@NotNull DayOfWeek day, @NotNull String hourStr, @NotNull String minuteStr) {
+    public @Nullable TimeCode generateTimeCode(@NonNull DayOfWeek day, @NonNull String hourStr, @NonNull String minuteStr) {
         Integer hour = FishUtils.getInteger(hourStr);
         Integer minute = FishUtils.getInteger(minuteStr);
         if (hour == null || minute == null) {

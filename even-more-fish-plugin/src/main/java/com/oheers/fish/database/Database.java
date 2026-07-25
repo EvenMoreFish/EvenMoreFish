@@ -29,7 +29,7 @@ import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.PreparedBatch;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.sql.Timestamp;
 import java.sql.Types;
@@ -90,7 +90,7 @@ public class Database implements DatabaseAPI {
         return legacyDatabase;
     }
 
-    private @NotNull ConnectionFactory getConnectionFactory(final @NotNull String type) {
+    private @NonNull ConnectionFactory getConnectionFactory(final @NonNull String type) {
         return switch (type) {
             case "mysql" -> new MySqlConnectionFactory();
             case "sqlite" -> new SqliteConnectionFactory();
@@ -127,7 +127,7 @@ public class Database implements DatabaseAPI {
     }
 
     @Override
-    public boolean hasUser(@NotNull UUID uuid) {
+    public boolean hasUser(@NonNull UUID uuid) {
         return withHandle(handle -> handle.createQuery("select 1 from " + usersTable + " where uuid = :uuid limit 1").bind("uuid", uuid.toString()).mapTo(Integer.class).findOne().isPresent(), false);
     }
 
@@ -139,12 +139,12 @@ public class Database implements DatabaseAPI {
     }
 
     @Override
-    public int getUserId(@NotNull UUID uuid) {
+    public int getUserId(@NonNull UUID uuid) {
         return withHandle(handle -> handle.createQuery("select id from " + usersTable + " where uuid = :uuid order by id asc limit 1").bind("uuid", uuid.toString()).mapTo(Integer.class).findOne().orElse(0), 0);
     }
 
     @Override
-    public UserReport getUserReport(@NotNull UUID uuid) {
+    public UserReport getUserReport(@NonNull UUID uuid) {
         UserReport report = withHandle(handle -> handle.createQuery("select id, uuid, first_fish, last_fish, largest_fish, shortest_fish, largest_length, shortest_length, num_fish_caught, total_fish_length, competitions_won, competitions_joined, fish_sold, money_earned from " + usersTable + " where uuid = :uuid order by id asc limit 1").bind("uuid", uuid.toString()).mapTo(UserReport.class).findOne().orElse(null), null);
         if (report == null) {
             DatabaseUtil.writeDbVerbose("User report for (%s) does not exist in the database.".formatted(uuid));
@@ -155,17 +155,17 @@ public class Database implements DatabaseAPI {
     }
 
     @Override
-    public boolean hasFishStats(@NotNull Fish fish) {
+    public boolean hasFishStats(@NonNull Fish fish) {
         return withHandle(handle -> handle.createQuery("select 1 from " + fishTable + " where fish_name = :fish_name and fish_rarity = :fish_rarity limit 1").bind("fish_name", fish.getName()).bind("fish_rarity", fish.getRarity().getId()).mapTo(Integer.class).findOne().isPresent(), false);
     }
 
     @Override
-    public void incrementFish(@NotNull Fish fish) {
+    public void incrementFish(@NonNull Fish fish) {
         useHandle(handle -> handle.createUpdate("update " + fishTable + " set total_caught = total_caught + 1 where fish_rarity = :fish_rarity and fish_name = :fish_name").bind("fish_rarity", fish.getRarity().getId()).bind("fish_name", fish.getName()).execute());
     }
 
     @Override
-    public void createCompetitionReport(@NotNull Competition competition) {
+    public void createCompetitionReport(@NonNull Competition competition) {
         Leaderboard leaderboard = competition.getLeaderboard();
         String winnerUuid;
         String winnerFish;
@@ -189,24 +189,24 @@ public class Database implements DatabaseAPI {
         useHandle(handle -> handle.createUpdate("insert into " + competitionsTable + " (competition_name, winner_uuid, winner_fish, winner_score, contestants, start_time, end_time) values (:competition_name, :winner_uuid, :winner_fish, :winner_score, :contestants, :start_time, :end_time)").bind("competition_name", competition.getCompetitionName()).bind("winner_uuid", winnerUuid).bind("winner_fish", winnerFish).bind("winner_score", winnerScore).bind("contestants", contestants).bind("start_time", startTime == null ? endTime : startTime).bind("end_time", endTime).execute());
     }
 
-    private String prepareContestantsString(@NotNull List<CompetitionEntry> entries) {
+    private String prepareContestantsString(@NonNull List<CompetitionEntry> entries) {
         if (entries.isEmpty()) {
             return "None";
         }
         return entries.stream().map(CompetitionEntry::getPlayer).map(UUID::toString).collect(Collectors.joining(","));
     }
 
-    private @NotNull String prepareRarityFishString(final @NotNull Fish fish) {
+    private @NonNull String prepareRarityFishString(final @NonNull Fish fish) {
         return fish.getRarity().getId() + ":" + fish.getName();
     }
 
     @Override
-    public void createSale(@NotNull String transactionId, @NotNull String fishName, @NotNull String fishRarity, int fishAmount, double fishLength, double priceSold) {
+    public void createSale(@NonNull String transactionId, @NonNull String fishName, @NonNull String fishRarity, int fishAmount, double fishLength, double priceSold) {
         useHandle(handle -> handle.createUpdate("insert into " + userSalesTable + " (transaction_id, fish_name, fish_rarity, fish_amount, fish_length, price_sold) values (:transaction_id, :fish_name, :fish_rarity, :fish_amount, :fish_length, :price_sold)").bind("transaction_id", transactionId).bind("fish_name", fishName).bind("fish_rarity", fishRarity).bind("fish_amount", fishAmount).bind("fish_length", fishLength).bind("price_sold", priceSold).execute());
     }
 
     @Override
-    public void createTransaction(@NotNull String transactionId, int userId, @NotNull Timestamp timestamp) {
+    public void createTransaction(@NonNull String transactionId, int userId, @NonNull Timestamp timestamp) {
         useHandle(handle -> handle.createUpdate("insert into " + transactionsTable + " (id, user_id, timestamp) values (:id, :user_id, :timestamp)").bind("id", transactionId).bind("user_id", userId).bind("timestamp", timestamp.toLocalDateTime()).execute());
     }
 
@@ -293,7 +293,7 @@ public class Database implements DatabaseAPI {
         return didLastHandleFail() ? LoadResult.unreadable() : LoadResult.notFound();
     }
 
-    public void upsertFishStats(@NotNull FishStats fishStats) {
+    public void upsertFishStats(@NonNull FishStats fishStats) {
         useTransaction(handle -> bindFishStatsUpdate(handle, fishStats).execute());
     }
 
@@ -309,12 +309,12 @@ public class Database implements DatabaseAPI {
     }
 
     @Override
-    public boolean userHasFish(@NotNull String rarity, @NotNull String fish, int id) {
+    public boolean userHasFish(@NonNull String rarity, @NonNull String fish, int id) {
         return withHandle(handle -> handle.createQuery("select 1 from " + userFishStatsTable + " where user_id = :user_id and fish_rarity = :fish_rarity and fish_name = :fish_name limit 1").bind("user_id", id).bind("fish_rarity", rarity).bind("fish_name", fish).mapTo(Integer.class).findOne().isPresent(), false);
     }
 
     @Override
-    public boolean userHasRarity(@NotNull String rarity, int id) {
+    public boolean userHasRarity(@NonNull String rarity, int id) {
         return withHandle(handle -> handle.createQuery("select 1 from " + userFishStatsTable + " where user_id = :user_id and fish_rarity = :fish_rarity limit 1").bind("user_id", id).bind("fish_rarity", rarity).mapTo(Integer.class).findOne().isPresent(), false);
     }
 

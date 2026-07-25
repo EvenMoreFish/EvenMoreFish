@@ -2,7 +2,7 @@ package com.oheers.fish.items.nbt;
 
 import com.oheers.fish.EvenMoreFish;
 import org.bukkit.NamespacedKey;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public enum NbtKeys {
     EMF_FISH_PLAYER("emf-fish-player"),
@@ -18,15 +18,15 @@ public enum NbtKeys {
 
     private final String value;
 
-    NbtKeys(@NotNull String value) {
+    NbtKeys(@NonNull String value) {
         this.value = value;
     }
 
-    public @NotNull NamespacedKey get() {
+    public @NonNull NamespacedKey get() {
         return new NamespacedKey(EvenMoreFish.getInstance(), this.value);
     }
 
-    public @NotNull NamespacedKey get(@NotNull String namespace) {
+    public @NonNull NamespacedKey get(@NonNull String namespace) {
         return new NamespacedKey(namespace, this.value);
     }
 

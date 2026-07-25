@@ -20,7 +20,7 @@ public class EXPRewardType extends RewardType {
      * @param hookLocation The location of the player's fishing hook.
      */
     @Override
-    public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location hookLocation) {
+    public void doReward(@NonNull Player player, @NonNull String key, @NonNull String value, Location hookLocation) {
         int experience;
         try {
             experience = Integer.parseInt(value);
@@ -36,7 +36,7 @@ public class EXPRewardType extends RewardType {
      * If a RewardType already exists with this identifier, this type will not be registered.
      */
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "EXP";
     }
 
@@ -45,7 +45,7 @@ public class EXPRewardType extends RewardType {
      * This is shown in the admin command, and is intended to credit the author.
      */
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "FireML";
     }
 
@@ -54,7 +54,7 @@ public class EXPRewardType extends RewardType {
      * This is also shown in the admin command.
      */
     @Override
-    public @NotNull Plugin getPlugin() {
+    public @NonNull Plugin getPlugin() {
         return EvenMoreFish.getInstance();
     }
 

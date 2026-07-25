@@ -8,7 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class Toggle {
 
@@ -17,7 +17,7 @@ public class Toggle {
     private final NamespacedKey bossBarToggleKey;
     private final NamespacedKey catchMessageToggleKey;
 
-    public Toggle(@NotNull EvenMoreFish plugin) {
+    public Toggle(@NonNull EvenMoreFish plugin) {
         this.plugin = plugin;
         this.fishToggleKey = new NamespacedKey(plugin, "fish-disabled");
         this.bossBarToggleKey = new NamespacedKey(plugin, "bossbar-disabled");
@@ -26,7 +26,7 @@ public class Toggle {
 
     // Fish Toggle
 
-    public void performFishToggle(@NotNull Player player) {
+    public void performFishToggle(@NonNull Player player) {
         if (!player.hasPermission(UserPerms.TOGGLE_FISHING)) {
             ConfigMessage.TOGGLE_FISHING_NO_PERMISSION.send(player);
             return;
@@ -45,14 +45,14 @@ public class Toggle {
     }
 
 
-    public boolean isCustomFishingDisabled(@NotNull Player player) {
+    public boolean isCustomFishingDisabled(@NonNull Player player) {
         PersistentDataContainer pdc = player.getPersistentDataContainer();
         return pdc.getOrDefault(fishToggleKey, PersistentDataType.BOOLEAN, false);
     }
 
     // Bossbar Toggle
 
-    public void performBossBarToggle(@NotNull Player player) {
+    public void performBossBarToggle(@NonNull Player player) {
         if (!player.hasPermission(UserPerms.TOGGLE_BOSSBAR)) {
             ConfigMessage.TOGGLE_BOSSBAR_NO_PERMISSION.send(player);
             return;
@@ -81,14 +81,14 @@ public class Toggle {
     }
 
 
-    public boolean isBossBarDisabled(@NotNull Player player) {
+    public boolean isBossBarDisabled(@NonNull Player player) {
         PersistentDataContainer pdc = player.getPersistentDataContainer();
         return pdc.getOrDefault(bossBarToggleKey, PersistentDataType.BOOLEAN, false);
     }
 
     // Catch Message Toggle
 
-    public void performCatchMessageToggle(@NotNull Player player) {
+    public void performCatchMessageToggle(@NonNull Player player) {
         if (!player.hasPermission(UserPerms.TOGGLE_CATCH_MESSAGE)) {
             ConfigMessage.TOGGLE_CATCH_MESSAGE_NO_PERMISSION.send(player);
             return;
@@ -107,7 +107,7 @@ public class Toggle {
     }
 
 
-    public boolean isCatchMessageDisabled(@NotNull Player player) {
+    public boolean isCatchMessageDisabled(@NonNull Player player) {
         PersistentDataContainer pdc = player.getPersistentDataContainer();
         return pdc.getOrDefault(catchMessageToggleKey, PersistentDataType.BOOLEAN, false);
     }

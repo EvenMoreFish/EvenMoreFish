@@ -26,8 +26,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
@@ -36,7 +36,7 @@ public class FishingProcessor extends Processor<PlayerFishEvent> implements List
 
     @Override
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void process(@NotNull PlayerFishEvent event) {
+    public void process(@NonNull PlayerFishEvent event) {
         if (event.isCancelled()) {
             plugin.debug("Fishing event was cancelled. Skipping handling.");
             return;
@@ -122,7 +122,7 @@ public class FishingProcessor extends Processor<PlayerFishEvent> implements List
 
 
     @Override
-    protected boolean fireEvent(@NotNull Fish fish, @NotNull Player player) {
+    protected boolean fireEvent(@NonNull Fish fish, @NonNull Player player) {
         return new EMFFishCaughtEvent(fish, player, LocalDateTime.now()).callEvent();
     }
 
@@ -142,12 +142,12 @@ public class FishingProcessor extends Processor<PlayerFishEvent> implements List
     }
 
     @Override
-    public boolean canUseFish(@NotNull Fish fish) {
+    public boolean canUseFish(@NonNull Fish fish) {
         return fish.getCatchType().equals(CatchType.CATCH)
                 || fish.getCatchType().equals(CatchType.BOTH);
     }
 
-    private @Nullable ItemStack getRod(@NotNull PlayerFishEvent event) {
+    private @Nullable ItemStack getRod(@NonNull PlayerFishEvent event) {
         Player player = event.getPlayer();
 
         // Use getHand() only if the state is FISHING

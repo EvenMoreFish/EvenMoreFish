@@ -4,21 +4,21 @@ import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.fishing.items.IFish;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
 public class SoldFish {
 
-    private final @NotNull IFish fish;
+    private final @NonNull IFish fish;
     private final @Nullable Player player;
-    private final @NotNull LocalDateTime sellTime;
+    private final @NonNull LocalDateTime sellTime;
 
     private int quantity;
     private double value;
 
-    private SoldFish(@NotNull IFish fish, @Nullable Player player, int quantity, double value, @NotNull LocalDateTime sellTime) {
+    private SoldFish(@NonNull IFish fish, @Nullable Player player, int quantity, double value, @NonNull LocalDateTime sellTime) {
         this.fish = fish;
         this.player = player;
         this.sellTime = sellTime;
@@ -52,7 +52,7 @@ public class SoldFish {
     /**
      * @return The fish that the player is selling.
      */
-    public @NotNull IFish getFish() {
+    public @NonNull IFish getFish() {
         return this.fish.createCopy();
     }
 
@@ -103,7 +103,7 @@ public class SoldFish {
     /**
      * @return The time this fish was sold at.
      */
-    public @NotNull LocalDateTime getSellTime() {
+    public @NonNull LocalDateTime getSellTime() {
         return this.sellTime;
     }
 

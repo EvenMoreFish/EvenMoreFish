@@ -19,8 +19,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.logging.Level;
 
@@ -164,7 +164,7 @@ public class DependencyManager implements Listener {
         }
     }
 
-    private void loadEconomyType(@NotNull EconomyType type, @NotNull String name) {
+    private void loadEconomyType(@NonNull EconomyType type, @NonNull String name) {
         type.load();
         if (type.register()) {
             EvenMoreFish.getInstance().getLogger().info("EvenMoreFish has successfully hooked into " + name + ".");

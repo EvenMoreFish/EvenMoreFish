@@ -5,7 +5,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.MainConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,12 +81,12 @@ public abstract class ConnectionFactory {
     }
 
     //LP
-    protected void overrideProperties(@NotNull Map<String, String> properties) {
+    protected void overrideProperties(@NonNull Map<String, String> properties) {
         properties.putIfAbsent("socketTimeout", String.valueOf(TimeUnit.SECONDS.toMillis(30)));
     }
 
     //LP
-    protected void setProperties(HikariConfig config, @NotNull Map<String, String> properties) {
+    protected void setProperties(HikariConfig config, @NonNull Map<String, String> properties) {
         for (Map.Entry<String, String> property : properties.entrySet()) {
             config.addDataSourceProperty(property.getKey(), property.getValue());
         }

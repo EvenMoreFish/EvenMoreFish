@@ -24,8 +24,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -153,13 +153,13 @@ public class GuiUtils {
         InventoryGui.clearHistory(human);
     }
 
-    static void openJournalFromMainMenu(@NotNull Player player, @NotNull JournalOpener opener) {
+    static void openJournalFromMainMenu(@NonNull Player player, @NonNull JournalOpener opener) {
         opener.open(player, null, null);
     }
 
     @FunctionalInterface
     interface JournalOpener {
-        void open(@NotNull Player player, @Nullable Rarity rarity, @Nullable InventoryGui expectedOpenGui);
+        void open(@NonNull Player player, @Nullable Rarity rarity, @Nullable InventoryGui expectedOpenGui);
     }
 
 }

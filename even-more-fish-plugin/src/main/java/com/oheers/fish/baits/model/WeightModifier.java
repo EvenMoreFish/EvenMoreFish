@@ -1,14 +1,14 @@
 package com.oheers.fish.baits.model;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Locale;
 
-public record WeightModifier(@NotNull Operation operation, double value, @NotNull String expression) {
+public record WeightModifier(@NonNull Operation operation, double value, @NonNull String expression) {
 
     public static final WeightModifier IDENTITY = new WeightModifier(Operation.ADD, 0.0D, "+0");
 
-    public static @NotNull WeightModifier parse(Object rawValue) {
+    public static @NonNull WeightModifier parse(Object rawValue) {
         if (rawValue == null) {
             return IDENTITY;
         }
@@ -37,11 +37,11 @@ public record WeightModifier(@NotNull Operation operation, double value, @NotNul
         return add(parseDouble(input, input));
     }
 
-    public static @NotNull WeightModifier add(double value) {
+    public static @NonNull WeightModifier add(double value) {
         return new WeightModifier(Operation.ADD, value, formatExpression('+', value));
     }
 
-    public static @NotNull WeightModifier multiply(double value) {
+    public static @NonNull WeightModifier multiply(double value) {
         return new WeightModifier(Operation.MULTIPLY, value, formatExpression('*', value));
     }
 
@@ -59,11 +59,11 @@ public record WeightModifier(@NotNull Operation operation, double value, @NotNul
         return operation == Operation.ADD && value == 0.0D;
     }
 
-    public @NotNull String describe() {
+    public @NonNull String describe() {
         return expression;
     }
 
-    private static double parseDouble(@NotNull String value, @NotNull String originalInput) {
+    private static double parseDouble(@NonNull String value, @NonNull String originalInput) {
         try {
             return Double.parseDouble(value);
         } catch (NumberFormatException exception) {
@@ -71,11 +71,11 @@ public record WeightModifier(@NotNull Operation operation, double value, @NotNul
         }
     }
 
-    private static @NotNull String formatExpression(char operator, double value) {
+    private static @NonNull String formatExpression(char operator, double value) {
         return ("%c%s").formatted(operator, formatNumber(value));
     }
 
-    private static @NotNull String formatNumber(double value) {
+    private static @NonNull String formatNumber(double value) {
         if (value == Math.rint(value)) {
             return Long.toString(Math.round(value));
         }

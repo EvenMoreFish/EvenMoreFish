@@ -8,12 +8,12 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class EffectRewardType extends RewardType {
 
     @Override
-    public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location hookLocation) {
+    public void doReward(@NonNull Player player, @NonNull String key, @NonNull String value, Location hookLocation) {
         PotionEffect effect = PotionEffectSerializer.get().deserialize(value);
         if (effect == null) {
             EvenMoreFish.getInstance().getLogger().warning("Invalid effect specified for RewardType " + getIdentifier() + ": " + value);
@@ -24,17 +24,17 @@ public class EffectRewardType extends RewardType {
     }
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "EFFECT";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "Oheers";
     }
 
     @Override
-    public @NotNull JavaPlugin getPlugin() {
+    public @NonNull JavaPlugin getPlugin() {
         return EvenMoreFish.getInstance();
     }
 

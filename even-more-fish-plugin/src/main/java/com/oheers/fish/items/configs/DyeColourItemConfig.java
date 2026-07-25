@@ -6,15 +6,15 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class DyeColourItemConfig extends ItemConfig<Color> {
 
-    public DyeColourItemConfig(@NotNull Section section) {
+    public DyeColourItemConfig(@NonNull Section section) {
         super(section);
     }
 

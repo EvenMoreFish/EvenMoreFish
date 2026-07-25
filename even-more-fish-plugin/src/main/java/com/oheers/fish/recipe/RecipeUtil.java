@@ -5,8 +5,8 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class RecipeUtil {
         return new RecipeChoice.ExactChoice(customItem);
     }
 
-    public static @Nullable EMFRecipe<?> getRecipe(@NotNull Section section, @NotNull NamespacedKey key, @NotNull ItemStack result) {
+    public static @Nullable EMFRecipe<?> getRecipe(@NonNull Section section, @NonNull NamespacedKey key, @NonNull ItemStack result) {
         String type = section.getString("type");
         if (type == null) {
             return null;

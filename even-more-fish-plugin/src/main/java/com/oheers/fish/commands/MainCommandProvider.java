@@ -5,7 +5,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.permissions.UserPerms;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @param <C> The command class.
@@ -25,69 +25,69 @@ public abstract class MainCommandProvider<C, A> {
         .addEntry(MainConfig.getInstance().getToggleSubCommandName(), ConfigMessage.HELP_GENERAL_TOGGLE::getMessage, UserPerms.TOGGLE)
         .addEntry(MainConfig.getInstance().getShopSubCommandName(), ConfigMessage.HELP_GENERAL_SHOP::getMessage, UserPerms.SHOP);
 
-    public abstract @NotNull C get();
+    public abstract @NonNull C get();
 
-    protected @NotNull String commandName() {
+    protected @NonNull String commandName() {
         return MainConfig.getInstance().getMainCommandName();
     }
 
-    protected abstract @NotNull A admin();
+    protected abstract @NonNull A admin();
 
-    protected @NotNull String adminName() {
+    protected @NonNull String adminName() {
         return MainConfig.getInstance().getAdminSubCommandName();
     }
 
-    protected abstract @NotNull A shop();
+    protected abstract @NonNull A shop();
 
-    protected @NotNull String shopName() {
+    protected @NonNull String shopName() {
         return MainConfig.getInstance().getShopSubCommandName();
     }
 
-    protected abstract @NotNull A journal();
+    protected abstract @NonNull A journal();
 
-    protected @NotNull String journalName() {
+    protected @NonNull String journalName() {
         return MainConfig.getInstance().getJournalSubCommandName();
     }
 
-    protected abstract @NotNull A toggle();
+    protected abstract @NonNull A toggle();
 
-    protected @NotNull String toggleName() {
+    protected @NonNull String toggleName() {
         return MainConfig.getInstance().getToggleSubCommandName();
     }
 
-    protected abstract @NotNull A next();
+    protected abstract @NonNull A next();
 
-    protected @NotNull String nextName() {
+    protected @NonNull String nextName() {
         return MainConfig.getInstance().getNextSubCommandName();
     }
 
-    protected abstract @NotNull A help();
+    protected abstract @NonNull A help();
 
-    protected @NotNull String helpName() {
+    protected @NonNull String helpName() {
         return MainConfig.getInstance().getHelpSubCommandName();
     }
 
-    protected abstract @NotNull A gui();
+    protected abstract @NonNull A gui();
 
-    protected @NotNull String guiName() {
+    protected @NonNull String guiName() {
         return MainConfig.getInstance().getGuiSubCommandName();
     }
 
-    protected abstract @NotNull A top();
+    protected abstract @NonNull A top();
 
-    protected @NotNull String topName() {
+    protected @NonNull String topName() {
         return MainConfig.getInstance().getTopSubCommandName();
     }
 
-    protected abstract @NotNull A sellAll();
+    protected abstract @NonNull A sellAll();
 
-    protected @NotNull String sellAllName() {
+    protected @NonNull String sellAllName() {
         return MainConfig.getInstance().getSellAllSubCommandName();
     }
 
-    protected abstract @NotNull A applyBaits();
+    protected abstract @NonNull A applyBaits();
 
-    protected @NotNull String applyBaitsName() {
+    protected @NonNull String applyBaitsName() {
         return MainConfig.getInstance().getApplyBaitsSubCommandName();
     }
 

@@ -2,7 +2,7 @@ package com.oheers.fish.database.data;
 
 
 import com.oheers.fish.fishing.items.Fish;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
 
@@ -26,16 +26,16 @@ public class FishLogKey {
         this.dateTime = dateTime;
     }
 
-    public static @NotNull FishLogKey of(int userId, final String fishName, final String fishRarity, LocalDateTime dateTime) {
+    public static @NonNull FishLogKey of(int userId, final String fishName, final String fishRarity, LocalDateTime dateTime) {
         return new FishLogKey(userId, fishName, fishRarity, dateTime);
     }
 
-    public static @NotNull FishLogKey from(final String pattern) {
+    public static @NonNull FishLogKey from(final String pattern) {
         String[] split = pattern.split("\\.");
         return new FishLogKey(Integer.parseInt(split[0]), split[1], split[2], LocalDateTime.parse(split[3]));
     }
 
-    public static @NotNull FishLogKey of(int userId, final @NotNull Fish fish, LocalDateTime dateTime) {
+    public static @NonNull FishLogKey of(int userId, final @NonNull Fish fish, LocalDateTime dateTime) {
         return new FishLogKey(userId, fish, dateTime);
     }
 

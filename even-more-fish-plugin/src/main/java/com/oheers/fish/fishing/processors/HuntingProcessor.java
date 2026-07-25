@@ -15,8 +15,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +24,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> implements Lis
 
     @Override
     @EventHandler(priority = EventPriority.HIGHEST)
-    protected void process(@NotNull EntityDeathEvent event) {
+    protected void process(@NonNull EntityDeathEvent event) {
         if (!(event.getEntity() instanceof org.bukkit.entity.Fish fishEntity)) {
             return;
         }
@@ -81,7 +81,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> implements Lis
     }
 
     @Override
-    protected boolean fireEvent(@NotNull Fish fish, @NotNull Player player) {
+    protected boolean fireEvent(@NonNull Fish fish, @NonNull Player player) {
         return new EMFFishHuntEvent(fish, player, LocalDateTime.now()).callEvent();
     }
 
@@ -101,7 +101,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> implements Lis
     }
 
     @Override
-    public boolean canUseFish(@NotNull Fish fish) {
+    public boolean canUseFish(@NonNull Fish fish) {
         return fish.getCatchType() == CatchType.HUNT || fish.getCatchType() == CatchType.BOTH;
     }
 

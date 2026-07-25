@@ -8,15 +8,15 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class PotionMetaItemConfig extends ItemConfig<PotionEffect> {
 
-    public PotionMetaItemConfig(@NotNull Section section) {
+    public PotionMetaItemConfig(@NonNull Section section) {
         super(section);
     }
 

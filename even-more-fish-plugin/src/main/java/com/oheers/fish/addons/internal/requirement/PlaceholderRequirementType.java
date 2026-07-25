@@ -6,7 +6,7 @@ import com.oheers.fish.api.requirement.RequirementType;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,7 +17,7 @@ public class PlaceholderRequirementType extends RequirementType {
     private final Pattern pattern = Pattern.compile("^(.+?)(>=|<=|==|=|!=|<|>)(.+)$");
 
     @Override
-    public boolean checkRequirement(@NotNull RequirementContext requirementContext, @NotNull List<String> values) {
+    public boolean checkRequirement(@NonNull RequirementContext requirementContext, @NonNull List<String> values) {
         Player player = requirementContext.getPlayer();
         for (String value : values) {
             Matcher matcher = this.pattern.matcher(value);
@@ -35,20 +35,20 @@ public class PlaceholderRequirementType extends RequirementType {
         return true;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String getIdentifier() {
         return "PLACEHOLDER";
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String getAuthor() {
         return "KitterKatter";
     }
 
     @Override
-    public @NotNull Plugin getPlugin() {
+    public @NonNull Plugin getPlugin() {
         return EvenMoreFish.getInstance();
     }
 

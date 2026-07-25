@@ -6,7 +6,7 @@ import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.requirement.RequirementType;
 import com.oheers.fish.competition.Competition;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class ActiveCompetitionRequirementType extends RequirementType {
      * @param values  The values to check this context against
      */
     @Override
-    public boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values) {
+    public boolean checkRequirement(@NonNull RequirementContext context, @NonNull List<String> values) {
         Competition active = Competition.getCurrentlyActive();
         if (active == null) {
             Logging.debug("There is no active competition. Failing active-competition requirement.");
@@ -37,17 +37,17 @@ public class ActiveCompetitionRequirementType extends RequirementType {
      * @return The identifier for this Requirement
      */
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "ACTIVE-COMPETITION";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "FireML";
     }
 
     @Override
-    public @NotNull Plugin getPlugin() {
+    public @NonNull Plugin getPlugin() {
         return EvenMoreFish.getInstance();
     }
 

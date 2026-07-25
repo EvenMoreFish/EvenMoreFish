@@ -4,8 +4,8 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.registry.EMFRegistry;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -20,7 +20,7 @@ public class ItemSerializer implements EMFSerializer<ItemStack> {
 
     private ItemSerializer() {}
 
-    public static @NotNull ItemSerializer get() {
+    public static @NonNull ItemSerializer get() {
         return INSTANCE;
     }
 
@@ -29,7 +29,7 @@ public class ItemSerializer implements EMFSerializer<ItemStack> {
      */
     @Deprecated
     @Override
-    public @NotNull String serialize(@NotNull ItemStack element) {
+    public @NonNull String serialize(@NonNull ItemStack element) {
         throw new UnsupportedOperationException("ItemSerializer#serialize is unsupported.");
     }
 

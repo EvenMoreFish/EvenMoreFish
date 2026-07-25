@@ -6,7 +6,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +26,7 @@ public class EMFFishSellEvent extends Event implements Cancellable {
     private boolean cancel;
 
     @ApiStatus.Internal
-    public EMFFishSellEvent(@NotNull SoldFish soldFish, @NotNull Player player, double worth, @NotNull LocalDateTime soldTime) {
+    public EMFFishSellEvent(@NonNull SoldFish soldFish, @NonNull Player player, double worth, @NonNull LocalDateTime soldTime) {
         this.soldFish = List.of(soldFish);
         this.player = player;
         this.worth = worth;
@@ -38,21 +38,21 @@ public class EMFFishSellEvent extends Event implements Cancellable {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 
     /**
      * @return The fish that the player is selling
      */
-    public @NotNull List<SoldFish> getSoldFish() {
+    public @NonNull List<SoldFish> getSoldFish() {
         return soldFish;
     }
 
     /**
      * @return The player that sold the fish
      */
-    public @NotNull Player getPlayer() {
+    public @NonNull Player getPlayer() {
         return player;
     }
 

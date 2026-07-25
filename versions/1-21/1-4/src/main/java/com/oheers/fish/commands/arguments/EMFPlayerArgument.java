@@ -12,7 +12,7 @@ import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -31,15 +31,15 @@ public class EMFPlayerArgument implements CustomArgumentType.Converted<Player, S
         return player;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public ArgumentType<String> getNativeType() {
         return StringArgumentType.string();
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, @NotNull SuggestionsBuilder builder) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(@NonNull CommandContext<S> context, @NonNull SuggestionsBuilder builder) {
         Bukkit.getOnlinePlayers().stream()
             .map(Player::getName)
             .filter(name -> name.toLowerCase().startsWith(builder.getRemainingLowerCase()))

@@ -8,6 +8,8 @@ dependencies {
     compileOnly(project(":even-more-fish-plugin"))
 
     paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT")
+
+    compileOnly(libs.jspecify)
 }
 
 extra["fileName"] = "1.21.5-11"

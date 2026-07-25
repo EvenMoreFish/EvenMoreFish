@@ -7,8 +7,8 @@ import com.oheers.fish.items.configs.ItemConfig;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class ItemFactoryConfig {
         PREPEND,
         REPLACE;
 
-        public void applyDisplay(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements, @NotNull ItemConfig<String> display) {
+        public void applyDisplay(@NonNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements, @NonNull ItemConfig<String> display) {
             Logging.debug("AddonBehavior for the Display Name is set to: " + this);
             if (this.equals(REPLACE)) {
                 display.apply(item, player, replacements);
@@ -47,7 +47,7 @@ public class ItemFactoryConfig {
         }
 
         // Could be slightly confusing. May need to be rewritten.
-        public void applyLore(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements, @NotNull ItemConfig<List<Component>> lore) {
+        public void applyLore(@NonNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements, @NonNull ItemConfig<List<Component>> lore) {
             Logging.debug("AddonBehavior for the Lore is set to: " + this);
             switch (this) {
                 case REPLACE -> lore.apply(item, player, replacements);
@@ -73,7 +73,7 @@ public class ItemFactoryConfig {
             }
         }
 
-        private List<Component> fetchLoreOrEmpty(@NotNull ItemStack item) {
+        private List<Component> fetchLoreOrEmpty(@NonNull ItemStack item) {
             return Optional.ofNullable(item.lore())
                 .map(ArrayList::new)
                 .orElseGet(ArrayList::new);

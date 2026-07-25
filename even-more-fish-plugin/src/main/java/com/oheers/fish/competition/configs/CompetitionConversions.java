@@ -5,8 +5,8 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigBase;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentMessage;
 
 import java.io.File;
@@ -45,7 +45,7 @@ public class CompetitionConversions {
         finalizeConversion(config);
     }
 
-    private void finalizeConversion(@NotNull ConfigBase competitionsConfig) {
+    private void finalizeConversion(@NonNull ConfigBase competitionsConfig) {
         // Rename the file to competitions.yml.old
         File file = competitionsConfig.getFile();
         file.renameTo(new File(EvenMoreFish.getInstance().getDataFolder(), "competitions.yml.old"));
@@ -63,7 +63,7 @@ public class CompetitionConversions {
         return new File(EvenMoreFish.getInstance().getDataFolder(), "competitions");
     }
 
-    private void convertSectionToFile(@NotNull Section section, @Nullable Section general, @NotNull List<String> leaderboard, @Nullable Section rewards) {
+    private void convertSectionToFile(@NonNull Section section, @Nullable Section general, @NonNull List<String> leaderboard, @Nullable Section rewards) {
         String id = section.getNameAsString();
         if (id == null) {
             return;
@@ -80,7 +80,7 @@ public class CompetitionConversions {
         configBase.save();
     }
 
-    private void applyGeneralSection(@NotNull YamlDocument config, @Nullable Section general, @NotNull List<String> leaderboard, @Nullable Section rewards) {
+    private void applyGeneralSection(@NonNull YamlDocument config, @Nullable Section general, @NonNull List<String> leaderboard, @Nullable Section rewards) {
         // Account for the "general" section.
         if (general != null) {
             for (String key : general.getRoutesAsStrings(true)) {

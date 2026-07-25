@@ -5,8 +5,8 @@ import com.oheers.fish.api.registry.EMFRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,7 +19,7 @@ public class ItemAddonRegistry implements EMFRegistry<ItemAddon> {
 
     private ItemAddonRegistry() {}
 
-    public static @NotNull ItemAddonRegistry getInstance() {
+    public static @NonNull ItemAddonRegistry getInstance() {
         return instance;
     }
 
@@ -37,7 +37,7 @@ public class ItemAddonRegistry implements EMFRegistry<ItemAddon> {
      * @return An immutable copy of the current registry.
      */
     @Override
-    public @NotNull Map<String, ItemAddon> getRegistry() {
+    public @NonNull Map<String, ItemAddon> getRegistry() {
         return Map.copyOf(registry);
     }
 
@@ -48,11 +48,11 @@ public class ItemAddonRegistry implements EMFRegistry<ItemAddon> {
      * @return The value, or null if not found.
      */
     @Override
-    public @Nullable ItemAddon get(@NotNull String key) {
+    public @Nullable ItemAddon get(@NonNull String key) {
         return registry.get(key);
     }
 
-    public @Nullable ItemStack getItem(final @NotNull String prefix, final @NotNull String id) {
+    public @Nullable ItemStack getItem(final @NonNull String prefix, final @NonNull String id) {
         ItemAddon addon = registry.get(prefix);
         if (addon == null) {
             return null;
@@ -68,7 +68,7 @@ public class ItemAddonRegistry implements EMFRegistry<ItemAddon> {
      * @return The value, or the default value if not found.
      */
     @Override
-    public @NotNull ItemAddon getOrDefault(@NotNull String key, @NotNull ItemAddon defaultValue) {
+    public @NonNull ItemAddon getOrDefault(@NonNull String key, @NonNull ItemAddon defaultValue) {
         return registry.getOrDefault(key, defaultValue);
     }
 
@@ -79,7 +79,7 @@ public class ItemAddonRegistry implements EMFRegistry<ItemAddon> {
      * @return True if the key was unregistered, false if not found.
      */
     @Override
-    public boolean unregister(@NotNull String key) {
+    public boolean unregister(@NonNull String key) {
         ItemAddon value = registry.remove(key);
         if (value == null) {
             return false;
@@ -96,7 +96,7 @@ public class ItemAddonRegistry implements EMFRegistry<ItemAddon> {
      * @return True if the value was registered, false if a value with the same key already exists and force is false.
      */
     @Override
-    public boolean register(@NotNull ItemAddon value, boolean force) {
+    public boolean register(@NonNull ItemAddon value, boolean force) {
         if (!value.canLoad()) {
             return false;
         }

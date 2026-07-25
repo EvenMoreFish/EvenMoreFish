@@ -14,6 +14,8 @@ dependencies {
 
     compileOnly(libs.commandsapi.bukkit)
     compileOnly(libs.nbt.api)
+
+    compileOnly(libs.jspecify)
 }
 
 tasks.test {

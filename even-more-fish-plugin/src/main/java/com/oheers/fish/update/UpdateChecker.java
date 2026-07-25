@@ -3,7 +3,7 @@ package com.oheers.fish.update;
 import com.oheers.fish.EvenMoreFish;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -63,7 +63,7 @@ public class UpdateChecker {
     // Checks for updates, surprisingly
     @Contract(" -> new")
     @SuppressWarnings("UnstableApiUsage")
-    public @NotNull CompletableFuture<Boolean> checkUpdate() {
+    public @NonNull CompletableFuture<Boolean> checkUpdate() {
         return CompletableFuture.supplyAsync(() -> {
             ComparableVersion modrinthVersion = new ComparableVersion(new UpdateChecker(plugin).getVersion());
             ComparableVersion serverVersion = new ComparableVersion(plugin.getPluginMeta().getVersion());

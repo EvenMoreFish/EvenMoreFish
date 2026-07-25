@@ -1,19 +1,19 @@
 package com.oheers.fish.database.data;
 
 import com.oheers.fish.fishing.items.Fish;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
-public record UserFishRarityKey(int userId, @NotNull String fishName, @NotNull String fishRarity) {
+public record UserFishRarityKey(int userId, @NonNull String fishName, @NonNull String fishRarity) {
 
-    public static @NotNull UserFishRarityKey of(final int userId, final String fishName, final String fishRarity) {
+    public static @NonNull UserFishRarityKey of(final int userId, final String fishName, final String fishRarity) {
         return new UserFishRarityKey(userId, fishName, fishRarity);
     }
 
-    public static @NotNull UserFishRarityKey of(final int userId, final @NotNull Fish fish) {
+    public static @NonNull UserFishRarityKey of(final int userId, final @NonNull Fish fish) {
         return new UserFishRarityKey(userId, fish.getName(), fish.getRarity().getId());
     }
 
-    public static @NotNull UserFishRarityKey from(final @NotNull String pattern) {
+    public static @NonNull UserFishRarityKey from(final @NonNull String pattern) {
         int firstSeparator = pattern.indexOf('.');
         int lastSeparator = pattern.lastIndexOf('.');
         if (firstSeparator <= 0 || lastSeparator <= firstSeparator || lastSeparator == pattern.length() - 1) {
@@ -30,12 +30,12 @@ public record UserFishRarityKey(int userId, @NotNull String fishName, @NotNull S
         }
     }
 
-    public static @NotNull UserFishRarityKey empty() {
+    public static @NonNull UserFishRarityKey empty() {
         return new UserFishRarityKey(-1, "", "");
     }
 
     @Override
-    public @NotNull String toString() {
+    public @NonNull String toString() {
         return userId + "." + fishName + "." + fishRarity;
     }
 

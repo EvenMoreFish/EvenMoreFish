@@ -4,7 +4,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class EMFShapelessRecipe extends EMFRecipe<ShapelessRecipe> {
     private final NamespacedKey key;
     private final ItemStack result;
 
-    public EMFShapelessRecipe(@NotNull NamespacedKey key, @NotNull ItemStack result, @NotNull List<String> ingredients) {
+    public EMFShapelessRecipe(@NonNull NamespacedKey key, @NonNull ItemStack result, @NonNull List<String> ingredients) {
         if (ingredients.isEmpty()) {
             throw new RuntimeException("Shapeless recipe is missing ingredients.");
         }
@@ -24,7 +24,7 @@ public class EMFShapelessRecipe extends EMFRecipe<ShapelessRecipe> {
     }
 
     @Override
-    protected @NotNull ShapelessRecipe prepareRecipe() {
+    protected @NonNull ShapelessRecipe prepareRecipe() {
         ShapelessRecipe recipe = new ShapelessRecipe(key, result);
         this.ingredients.forEach(ingredient -> {
             RecipeChoice choice = RecipeUtil.getRecipeChoice(ingredient);

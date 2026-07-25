@@ -10,7 +10,7 @@ import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ public class RandomStrategy implements CompetitionStrategy {
     private CompetitionType randomType;
 
     @Override
-    public boolean randomInit(@NotNull Competition competition) {
+    public boolean randomInit(@NonNull Competition competition) {
         // This has to return false
         return false;
     }
@@ -48,7 +48,7 @@ public class RandomStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry) {
+    public EMFMessage getSingleConsoleLeaderboardMessage(@NonNull CompetitionEntry entry) {
         return randomType.getStrategy().getSingleConsoleLeaderboardMessage(entry);
     }
 
@@ -59,16 +59,16 @@ public class RandomStrategy implements CompetitionStrategy {
      * @return The single player leaderboard message.
      */
     @Override
-    public EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry) {
+    public EMFMessage getSinglePlayerLeaderboard(@NonNull CompetitionEntry entry) {
         return randomType.getStrategy().getSinglePlayerLeaderboard(entry);
     }
 
     @Override
-    public @NotNull EMFMessage getTypeFormat(@NotNull Competition competition, ConfigMessage configMessage) {
+    public @NonNull EMFMessage getTypeFormat(@NonNull Competition competition, ConfigMessage configMessage) {
         return randomType.getStrategy().getTypeFormat(competition, configMessage);
     }
 
-    public CompetitionType getRandomType(@NotNull Competition competition) {
+    public CompetitionType getRandomType(@NonNull Competition competition) {
         List<CompetitionType> types = getValidTypes(competition)
             .filter(type -> {
                 try {
@@ -89,7 +89,7 @@ public class RandomStrategy implements CompetitionStrategy {
         return types.get(type);
     }
 
-    private Stream<CompetitionType> getValidTypes(@NotNull Competition competition) {
+    private Stream<CompetitionType> getValidTypes(@NonNull Competition competition) {
         List<String> types = competition.getCompetitionFile().getConfig().getStringList("random-selection");
         if (types == null || types.isEmpty()) {
             return Arrays.stream(CompetitionType.values());

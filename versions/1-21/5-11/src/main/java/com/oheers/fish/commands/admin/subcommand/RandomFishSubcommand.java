@@ -26,7 +26,7 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSele
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class RandomFishSubcommand {
 
     private final String name;
 
-    public RandomFishSubcommand(@NotNull String name) {
+    public RandomFishSubcommand(@NonNull String name) {
         this.name = name;
     }
 
@@ -62,7 +62,7 @@ public class RandomFishSubcommand {
             );
     }
 
-    private int execute(@NotNull CommandContext<CommandSourceStack> ctx, boolean allowConsole) throws CommandSyntaxException {
+    private int execute(@NonNull CommandContext<CommandSourceStack> ctx, boolean allowConsole) throws CommandSyntaxException {
         CommandSender sender = allowConsole ? ctx.getSource().getSender() : BrigCommandUtils.requirePlayer(ctx);
         Rarity rarity = ctx.getArgument("rarity", Rarity.class);
         int amount = BrigCommandUtils.getArgumentOrDefault(ctx, "amount", int.class, 1);

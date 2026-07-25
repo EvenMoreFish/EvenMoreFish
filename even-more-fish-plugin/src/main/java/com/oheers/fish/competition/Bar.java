@@ -10,7 +10,7 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import static net.kyori.adventure.bossbar.BossBar.bossBar;
 
@@ -95,14 +95,14 @@ public class Bar {
         Bukkit.getOnlinePlayers().forEach(bar::addViewer);
     }
 
-    public void addPlayer(@NotNull Player player) {
+    public void addPlayer(@NonNull Player player) {
         if (!shouldShow || EvenMoreFish.getInstance().getToggle().isBossBarDisabled(player)) {
             return;
         }
         bar.addViewer(player);
     }
 
-    public void removePlayer(@NotNull Player player) {
+    public void removePlayer(@NonNull Player player) {
         bar.removeViewer(player);
     }
 

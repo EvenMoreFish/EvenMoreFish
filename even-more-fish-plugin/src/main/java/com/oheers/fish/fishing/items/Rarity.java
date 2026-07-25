@@ -17,8 +17,8 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.logging.Level;
 
 public class Rarity extends ConfigBase implements IRarity, Sortable {
 
-    private final @NotNull String id;
+    private final @NonNull String id;
 
     private boolean fishWeighted;
     private boolean showInJournal = true;
@@ -40,7 +40,7 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
      * Constructs a Rarity from its config file.
      * @param file The file for this rarity.
      */
-    public Rarity(@NotNull File file) throws InvalidConfigurationException {
+    public Rarity(@NonNull File file) throws InvalidConfigurationException {
         super(file, EvenMoreFish.getInstance(), false);
         new RarityFileUpdates(this).update();
         this.id = validateId();
@@ -60,7 +60,7 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     // Config getters
 
     @Override
-    public @NotNull String getId() {
+    public @NonNull String getId() {
         return this.id;
     }
 
@@ -69,12 +69,12 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
         return getConfig().getBoolean("disabled");
     }
 
-    public @NotNull EMFSingleMessage getFormat() {
+    public @NonNull EMFSingleMessage getFormat() {
         String format = getConfig().getString("format", "<white>{name}");
         return EMFSingleMessage.fromString(format);
     }
 
-    public @NotNull EMFSingleMessage format(@NotNull String name) {
+    public @NonNull EMFSingleMessage format(@NonNull String name) {
         EMFSingleMessage message = getFormat();
         message.setVariable("{name}", name);
         return message;
@@ -114,12 +114,12 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
         return getConfig().getBoolean("use-this-casing");
     }
 
-    public @NotNull EMFSingleMessage getDisplayName() {
+    public @NonNull EMFSingleMessage getDisplayName() {
         String displayName = getConfig().getString("displayname", this.id);
         return format(displayName);
     }
 
-    public @NotNull EMFSingleMessage getLorePrep() {
+    public @NonNull EMFSingleMessage getLorePrep() {
         String loreOverride = getConfig().getString("override-lore");
         if (loreOverride != null) {
             return EMFSingleMessage.fromString(loreOverride);
@@ -145,7 +145,7 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     }
 
     @Override
-    public @NotNull Requirement getRequirement() {
+    public @NonNull Requirement getRequirement() {
         return requirement;
     }
 
@@ -160,11 +160,11 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     }
 
     @Override
-    public @NotNull Optional<Double> getSetSize() {
+    public @NonNull Optional<Double> getSetSize() {
         return getSetSize(null);
     }
 
-    public @NotNull Optional<Double> getSetSize(@Nullable OfflinePlayer player) {
+    public @NonNull Optional<Double> getSetSize(@Nullable OfflinePlayer player) {
         return Optional.ofNullable(FishUtils.fetchSize(getConfig(), "size", player));
     }
 
@@ -197,7 +197,7 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
      * @return This rarity's original list of loaded fish
      */
     @Override
-    public @NotNull List<Fish> getOriginalFishList() {
+    public @NonNull List<Fish> getOriginalFishList() {
         return fishList;
     }
 
@@ -205,12 +205,12 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
      * @return This rarity's list of loaded fish, but each fish is a clone of the original
      */
     @Override
-    public @NotNull List<Fish> getFishList() {
+    public @NonNull List<Fish> getFishList() {
         return fishList.stream().map(Fish::createCopy).toList();
     }
 
     @Override
-    public @Nullable Fish getEditableFish(@NotNull String name) {
+    public @Nullable Fish getEditableFish(@NonNull String name) {
         for (Fish fish : fishList) {
             if (fish.getName().equalsIgnoreCase(name)) {
                 return fish;
@@ -220,7 +220,7 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     }
 
     @Override
-    public @Nullable Fish getFish(@NotNull String name) {
+    public @Nullable Fish getFish(@NonNull String name) {
         Fish fish = getEditableFish(name);
         if (fish == null) {
             return null;
@@ -234,7 +234,7 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     }
 
     @Override
-    public @NotNull ItemStack getJournalItem() {
+    public @NonNull ItemStack getJournalItem() {
         // Old format for compatibility
         ItemStack oldItem = ItemSerializer.get().deserialize(getConfig().getString("material"), true);
         if (oldItem != null) {
@@ -295,7 +295,7 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
         return new Requirement(requirementSection);
     }
 
-    protected @NotNull CatchType getCatchType() {
+    protected @NonNull CatchType getCatchType() {
         String typeStr = getConfig().getString("catch-type");
         CatchType type = FishUtils.getEnumValue(CatchType.class, typeStr);
         if (type == null) {

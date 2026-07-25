@@ -7,8 +7,8 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.placeholders.abstracted.EMFPlaceholder;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -25,12 +25,12 @@ public class CompetitionTypeFormatPlaceholder implements EMFPlaceholder {
     );
 
     @Override
-    public boolean shouldProcess(@NotNull String identifier) {
+    public boolean shouldProcess(@NonNull String identifier) {
         return identifier.equalsIgnoreCase("competition_type_format");
     }
 
     @Override
-    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage(null);

@@ -1,7 +1,7 @@
 package com.oheers.fish.config.gui.impl;
 
 import com.oheers.fish.config.gui.GuiConfig;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class ApplyBaitsMenuGuiConfig extends GuiConfig {
 
@@ -11,7 +11,7 @@ public class ApplyBaitsMenuGuiConfig extends GuiConfig {
         super("applybaits.yml");
     }
 
-    public static @NotNull ApplyBaitsMenuGuiConfig getInstance() {
+    public static @NonNull ApplyBaitsMenuGuiConfig getInstance() {
         return INSTANCE;
     }
 

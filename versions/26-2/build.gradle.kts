@@ -8,6 +8,8 @@ dependencies {
     compileOnly(project(":even-more-fish-plugin"))
 
     paperweight.paperDevBundle("26.2.build.+")
+
+    compileOnly(libs.jspecify)
 }
 
 tasks.test {

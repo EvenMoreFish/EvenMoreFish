@@ -42,7 +42,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +55,7 @@ public class AdminCommand {
 
     private final CommandAPICommand command;
 
-    public AdminCommand(@NotNull String name) {
+    public AdminCommand(@NonNull String name) {
         this.command = new CommandAPICommand(name)
             .withPermission(AdminPerms.ADMIN)
             .executes(info -> {

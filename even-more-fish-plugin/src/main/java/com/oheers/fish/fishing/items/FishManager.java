@@ -31,8 +31,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
         super();
     }
 
-    public static @NotNull FishManager getInstance() {
+    public static @NonNull FishManager getInstance() {
         if (instance == null) {
             instance = new FishManager();
         }
@@ -91,12 +91,12 @@ public class FishManager extends AbstractFishManager<Rarity> {
     /* Original Fish Manager Functionality Below */
 
     @Override
-    public @Nullable Rarity getRarity(@NotNull String rarityName) {
+    public @Nullable Rarity getRarity(@NonNull String rarityName) {
         return getItem(rarityName);
     }
 
     @Override
-    public @Nullable Fish getFish(@NotNull String rarityName, @NotNull String fishName) {
+    public @Nullable Fish getFish(@NonNull String rarityName, @NonNull String fishName) {
         final Rarity rarity = getRarity(rarityName);
         return rarity != null ? rarity.getFish(fishName) : null;
     }
@@ -230,17 +230,17 @@ public class FishManager extends AbstractFishManager<Rarity> {
     }
 
     @Override
-    public @NotNull TreeMap<String, Rarity> getRarityMap() {
+    public @NonNull TreeMap<String, Rarity> getRarityMap() {
         return getItemMap();
     }
 
     /* Fishing Logic Methods */
 
     public Rarity getRandomWeightedRarity(Player fisher, double boostRate,
-                                          @NotNull Set<Rarity> boostedRarities,
+                                          @NonNull Set<Rarity> boostedRarities,
                                           Set<Rarity> totalRarities,
                                           @Nullable CustomRod customRod,
-                                          @NotNull RequirementContext requirementContext) {
+                                          @NonNull RequirementContext requirementContext) {
         Rarity preDecided = getPreDecidedRarity(fisher);
         if (preDecided != null) return preDecided;
 
@@ -262,10 +262,10 @@ public class FishManager extends AbstractFishManager<Rarity> {
     }
 
     public @Nullable Rarity getWeightedRarity(@Nullable Player fisher,
-                                              @NotNull Set<Rarity> totalRarities,
-                                              @NotNull ToDoubleFunction<Rarity> weightFunction,
+                                              @NonNull Set<Rarity> totalRarities,
+                                              @NonNull ToDoubleFunction<Rarity> weightFunction,
                                               @Nullable CustomRod customRod,
-                                              @NotNull RequirementContext requirementContext) {
+                                              @NonNull RequirementContext requirementContext) {
         Rarity preDecided = getPreDecidedRarity(fisher);
         if (preDecided != null) {
             return preDecided;
@@ -289,7 +289,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
                         boolean doRequirementChecks,
                         @Nullable Processor<?> processor,
                         @Nullable CustomRod customRod,
-                        @NotNull RequirementContext context) {
+                        @NonNull RequirementContext context) {
         if (rarity == null || rarity.getOriginalFishList().isEmpty()) {
             rarity = getRandomWeightedRarity(player, 1,
                 Collections.emptySet(),
@@ -316,7 +316,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
     public @Nullable Fish getWeightedFish(@Nullable Rarity rarity,
                                           @Nullable Location location,
                                           @Nullable Player player,
-                                          @NotNull ToDoubleFunction<Fish> weightFunction,
+                                          @NonNull ToDoubleFunction<Fish> weightFunction,
                                           boolean doRequirementChecks,
                                           @Nullable Processor<?> processor,
                                           @Nullable CustomRod customRod) {
@@ -376,10 +376,10 @@ public class FishManager extends AbstractFishManager<Rarity> {
         return rarity -> rarity.getWeight() * boosts.combinedMultiplier(fisher, location, rarity.getId());
     }
 
-    public @NotNull List<Rarity> getAvailableRarities(@Nullable Player fisher,
-                                                      @NotNull Set<Rarity> totalRarities,
+    public @NonNull List<Rarity> getAvailableRarities(@Nullable Player fisher,
+                                                      @NonNull Set<Rarity> totalRarities,
                                                       @Nullable CustomRod customRod,
-                                                      @NotNull RequirementContext requirementContext) {
+                                                      @NonNull RequirementContext requirementContext) {
         return filterByCustomRod(
             getAllowedRarities(fisher, 1.0D, Collections.emptySet(), totalRarities, requirementContext),
             customRod
@@ -395,7 +395,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
     private List<Rarity> getAllowedRarities(Player fisher, double boostRate,
                                             Set<Rarity> boostedRarities,
                                             Set<Rarity> totalRarities,
-                                            @NotNull RequirementContext requirementContext) {
+                                            @NonNull RequirementContext requirementContext) {
         if (fisher == null) return new ArrayList<>(totalRarities);
 
         String region = FishUtils.getRegionName(fisher.getLocation());
@@ -415,7 +415,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
                 (rarity.getPermission() != null && !fisher.hasPermission(rarity.getPermission()));
     }
 
-    public @Nullable Fish getRandomWeightedFish(@NotNull List<Fish> fishList, double boostRate, @Nullable List<Fish> boostedFish) {
+    public @Nullable Fish getRandomWeightedFish(@NonNull List<Fish> fishList, double boostRate, @Nullable List<Fish> boostedFish) {
         if (fishList.isEmpty()) return null;
 
         ToDoubleFunction<Fish> weightFunction = FishManager::getBaseFishWeight;
@@ -430,7 +430,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
         );
     }
 
-    public @NotNull List<Fish> getAvailableFish(@NotNull Rarity rarity,
+    public @NonNull List<Fish> getAvailableFish(@NonNull Rarity rarity,
                                                 @Nullable Location location,
                                                 @Nullable Player player,
                                                 boolean doRequirementChecks,
@@ -453,7 +453,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
             .toList();
     }
 
-    public static double getBaseFishWeight(@NotNull Fish fish) {
+    public static double getBaseFishWeight(@NonNull Fish fish) {
         return fish.getWeight() == 0 ? 1.0D : fish.getWeight();
     }
 
@@ -467,7 +467,7 @@ public class FishManager extends AbstractFishManager<Rarity> {
                 isFishWithinCatchLimit(fish);
     }
 
-    private boolean isFishWithinCatchLimit(@NotNull Fish fish) {
+    private boolean isFishWithinCatchLimit(@NonNull Fish fish) {
         int catchLimit = fish.getCatchLimit();
         if (catchLimit <= 0 || !DatabaseUtil.isDatabaseOnline()) {
             return true;

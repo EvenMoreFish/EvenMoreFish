@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.units.qual.N;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -39,12 +39,12 @@ public class ConfigGui {
     protected final Map<String, BiConsumer<ConfigGui, GuiElement.Click>> actions = GuiUtils.getActionMap();
     protected final GuiConfig config;
     protected final Player player;
-    private final @NotNull Map<String, EMFMessage> replacements = new HashMap<>();
+    private final @NonNull Map<String, EMFMessage> replacements = new HashMap<>();
 
     private InventoryGui gui;
     private InventoryGui.CloseAction closeAction = null;
 
-    public ConfigGui(@NotNull GuiConfig config, @NotNull HumanEntity human) {
+    public ConfigGui(@NonNull GuiConfig config, @NonNull HumanEntity human) {
         this.config = config;
         if (!(human instanceof Player p)) {
             throw new UnsupportedOperationException("Cannot open ConfigGui for a non-player.");
@@ -53,27 +53,27 @@ public class ConfigGui {
         this.player = p;
     }
 
-    public void addReplacement(@NotNull String variable, @NotNull String replacement) {
+    public void addReplacement(@NonNull String variable, @NonNull String replacement) {
         this.replacements.put(variable, EMFSingleMessage.fromString(replacement));
     }
 
-    public void addReplacement(@NotNull String variable, @NotNull Component replacement) {
+    public void addReplacement(@NonNull String variable, @NonNull Component replacement) {
         this.replacements.put(variable, EMFSingleMessage.of(replacement));
     }
 
-    public void addReplacement(@NotNull String variable, @NotNull EMFSingleMessage replacement) {
+    public void addReplacement(@NonNull String variable, @NonNull EMFSingleMessage replacement) {
         this.replacements.put(variable, replacement);
     }
 
-    public void addReplacements(@NotNull Map<String, EMFSingleMessage> replacements) {
+    public void addReplacements(@NonNull Map<String, EMFSingleMessage> replacements) {
         this.replacements.putAll(replacements);
     }
 
-    public void setCloseAction(@NotNull InventoryGui.CloseAction closeAction) {
+    public void setCloseAction(InventoryGui.@NonNull CloseAction closeAction) {
         this.closeAction = closeAction;
     }
 
-    public @NotNull InventoryGui getGui() {
+    public @NonNull InventoryGui getGui() {
         if (this.gui == null) {
             throw new IllegalStateException("ConfigGui#createGui has not been called!");
         }
@@ -102,7 +102,7 @@ public class ConfigGui {
         this.gui = gui;
     }
 
-    private void loadFiller(@NotNull InventoryGui gui, @NotNull Section config) {
+    private void loadFiller(@NonNull InventoryGui gui, @NonNull Section config) {
         String fillerStr = config.getString("filler");
         if (fillerStr == null) {
             return;
@@ -117,7 +117,7 @@ public class ConfigGui {
         gui.addElements(GuiFillerConfig.getInstance().getDefaultFillerItems(this));
     }
 
-    private void loadItems(@NotNull InventoryGui gui, @NotNull Section config) {
+    private void loadItems(@NonNull InventoryGui gui, @NonNull Section config) {
         config.getRoutesAsStrings(false).forEach(key -> {
             Section itemSection = config.getSection(key);
             if (itemSection == null || !itemSection.contains("item")) {
@@ -127,7 +127,7 @@ public class ConfigGui {
         });
     }
 
-    protected void addGuiItem(@NotNull InventoryGui gui, @NotNull Section itemSection) {
+    protected void addGuiItem(@NonNull InventoryGui gui, @NonNull Section itemSection) {
         char character = FishUtils.getCharFromString(itemSection.getString("character", "#"), '#');
         if (character == '#') {
             return;
@@ -157,13 +157,13 @@ public class ConfigGui {
         gui.addElement(actionElement);
     }
 
-    private GuiPageElement fetchPageElement(char character, @NotNull ItemStack item, @NotNull Section section, @NotNull GuiPageElement.PageAction pageAction) {
+    private GuiPageElement fetchPageElement(char character, @NonNull ItemStack item, @NonNull Section section, GuiPageElement.@NonNull PageAction pageAction) {
         ItemFactory factory = ItemFactory.itemFactory(section, null, "fallback-item");
         ItemStack fallbackItem = factory.isUsingFallbackBaseItem() ? null : factory.createItem(this.player.getUniqueId(), this.replacements);
         return new EMFGuiPageElement(character, item, fallbackItem, pageAction);
     }
 
-    private void executeClickAction(@NotNull Section section, @NotNull GuiElement.Click click) {
+    private void executeClickAction(@NonNull Section section, GuiElement.@NonNull Click click) {
         Section actionSection = section.getSection("click-action");
         // If not a section, fall back to a string.
         if (actionSection == null) {
@@ -186,7 +186,7 @@ public class ConfigGui {
         }
     }
 
-    private void executeClickCommands(@NotNull Section section, @NotNull GuiElement.Click click) {
+    private void executeClickCommands(@NonNull Section section, GuiElement.@NonNull Click click) {
         HumanEntity player = click.getWhoClicked();
         for (String command : section.getStringList("click-commands")) {
             Bukkit.dispatchCommand(player, command);

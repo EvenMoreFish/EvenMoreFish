@@ -15,14 +15,14 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ListSubcommand {
 
     private final String name;
 
-    public ListSubcommand(@NotNull String name) {
+    public ListSubcommand(@NonNull String name) {
         this.name = name;
     }
 
@@ -79,7 +79,7 @@ public class ListSubcommand {
             });
     }
 
-    private void showRarities(@NotNull CommandSender sender) {
+    private void showRarities(@NonNull CommandSender sender) {
         TextComponent.Builder builder = Component.text();
         for (Rarity rarity : FishManager.getInstance().getRarityMap().values()) {
             TextComponent.Builder rarityBuilder = Component.text();
@@ -96,7 +96,7 @@ public class ListSubcommand {
         sender.sendMessage(builder.build());
     }
 
-    private void showFish(@NotNull CommandSender sender, @NotNull Rarity rarity) {
+    private void showFish(@NonNull CommandSender sender, @NonNull Rarity rarity) {
         TextComponent.Builder builder = Component.text();
         builder.append(rarity.getDisplayName().getComponentMessage());
         builder.append(Component.space());

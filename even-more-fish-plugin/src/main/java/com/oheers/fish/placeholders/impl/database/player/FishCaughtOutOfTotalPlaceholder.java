@@ -4,8 +4,8 @@ import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.placeholders.abstracted.UniqueFishCaughtProgressPlaceholder;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +17,7 @@ public class FishCaughtOutOfTotalPlaceholder extends UniqueFishCaughtProgressPla
     }
 
     @Override
-    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
         String target = identifier.substring(getPrefixLength());
         UUID uuid = resolveTarget(player, target, identifier);
         if (uuid == null) {

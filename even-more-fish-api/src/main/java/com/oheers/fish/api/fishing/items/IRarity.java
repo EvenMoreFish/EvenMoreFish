@@ -2,8 +2,8 @@ package com.oheers.fish.api.fishing.items;
 
 import com.oheers.fish.api.requirement.Requirement;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 public interface IRarity {
 
-    @NotNull String getId();
+    @NonNull String getId();
 
     boolean isDisabled();
 
@@ -37,25 +37,25 @@ public interface IRarity {
 
     @Nullable String getPermission();
 
-    @NotNull Requirement getRequirement();
+    @NonNull Requirement getRequirement();
 
     boolean isShouldDisableFisherman();
 
     double getSetWorth();
 
-    @NotNull Optional<Double> getSetSize();
+    @NonNull Optional<Double> getSetSize();
 
     double getMinSize();
 
     double getMaxSize();
 
-    @NotNull List<? extends IFish> getOriginalFishList();
+    @NonNull List<? extends IFish> getOriginalFishList();
 
-    @NotNull List<? extends IFish> getFishList();
+    @NonNull List<? extends IFish> getFishList();
 
-    @Nullable IFish getEditableFish(@NotNull String name);
+    @Nullable IFish getEditableFish(@NonNull String name);
 
-    @Nullable IFish getFish(@NotNull String name);
+    @Nullable IFish getFish(@NonNull String name);
 
     double getWorthMultiplier();
 
@@ -70,7 +70,7 @@ public interface IRarity {
     /**
      * @return The item to use in the journal menu, before display and lore is changed.
      */
-    @NotNull ItemStack getJournalItem();
+    @NonNull ItemStack getJournalItem();
 
     boolean getShowInJournal();
 

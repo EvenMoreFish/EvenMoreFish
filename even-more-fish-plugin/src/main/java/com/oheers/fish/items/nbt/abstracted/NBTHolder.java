@@ -7,8 +7,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 @ApiStatus.Internal
 public abstract class NBTHolder<T> {
@@ -22,7 +22,7 @@ public abstract class NBTHolder<T> {
      * <p>
      * This can be toggled to use PDC or a custom namespace.
      */
-    public static @NotNull NBTHolder<ItemStack> itemStack(@NotNull ItemStack item) {
+    public static @NonNull NBTHolder<ItemStack> itemStack(@NonNull ItemStack item) {
         if (item.isEmpty()) {
             throw new IllegalStateException("Cannot fetch NBTHolder for an empty item.");
         }
@@ -35,7 +35,7 @@ public abstract class NBTHolder<T> {
         return EvenMoreFish.getInstance().getVersionProvider().createItemStackNbtHolder(item);
     }
 
-    public static @Nullable NBTHolder<ItemStack> itemStack(@NotNull String rawNbt) {
+    public static @Nullable NBTHolder<ItemStack> itemStack(@NonNull String rawNbt) {
         if (rawNbt.isEmpty()) {
             return null;
         }
@@ -51,45 +51,45 @@ public abstract class NBTHolder<T> {
      * <p>
      * This will always use PDC.
      */
-    public static @NotNull NBTHolder<Skull> skull(@NotNull Skull skull) {
+    public static @NonNull NBTHolder<Skull> skull(@NonNull Skull skull) {
         return new SkullNBTHolder(skull);
     }
 
-    public NBTHolder(@NotNull T obj) {
+    public NBTHolder(@NonNull T obj) {
         this.obj = obj;
     }
 
-    public abstract boolean hasNamespace(@NotNull String namespace);
+    public abstract boolean hasNamespace(@NonNull String namespace);
 
-    public abstract boolean hasKey(@NotNull NamespacedKey namespacedKey);
+    public abstract boolean hasKey(@NonNull NamespacedKey namespacedKey);
 
-    public abstract @Nullable String getString(@NotNull NamespacedKey namespacedKey);
+    public abstract @Nullable String getString(@NonNull NamespacedKey namespacedKey);
 
     /**
      * Sets a String in the specified NBT location. If null is passed, the key will be removed.
      */
-    public abstract void setString(@NotNull NamespacedKey namespacedKey, @Nullable String value);
+    public abstract void setString(@NonNull NamespacedKey namespacedKey, @Nullable String value);
 
-    public abstract @Nullable Float getFloat(@NotNull NamespacedKey namespacedKey);
+    public abstract @Nullable Float getFloat(@NonNull NamespacedKey namespacedKey);
 
     /**
      * Sets a Float in the specified NBT location. If null is passed, the key will be removed.
      */
-    public abstract void setFloat(@NotNull NamespacedKey namespacedKey, @Nullable Float value);
+    public abstract void setFloat(@NonNull NamespacedKey namespacedKey, @Nullable Float value);
 
-    public abstract @Nullable Integer getInteger(@NotNull NamespacedKey namespacedKey);
+    public abstract @Nullable Integer getInteger(@NonNull NamespacedKey namespacedKey);
 
     /**
      * Sets an Integer in the specified NBT location. If null is passed, the key will be removed.
      */
-    public abstract void setInteger(@NotNull NamespacedKey namespacedKey, @Nullable Integer value);
+    public abstract void setInteger(@NonNull NamespacedKey namespacedKey, @Nullable Integer value);
 
-    public abstract @Nullable Boolean getBoolean(@NotNull NamespacedKey namespacedKey);
+    public abstract @Nullable Boolean getBoolean(@NonNull NamespacedKey namespacedKey);
 
     /**
      * Sets a Boolean in the specified NBT location. If null is passed, the key will be removed.
      */
-    public abstract void setBoolean(@NotNull NamespacedKey namespacedKey, @Nullable Boolean value);
+    public abstract void setBoolean(@NonNull NamespacedKey namespacedKey, @Nullable Boolean value);
 
     public abstract void save();
 
@@ -97,7 +97,7 @@ public abstract class NBTHolder<T> {
         this.autoSave = autoSave;
     }
 
-    public @NotNull T getObject() {
+    public @NonNull T getObject() {
         return this.obj;
     }
 

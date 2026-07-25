@@ -12,8 +12,8 @@ import com.oheers.fish.config.gui.impl.SellMenuConfirmGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuNormalGuiConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.boostedyaml.route.Route;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentMessage;
 
 import java.io.File;
@@ -43,7 +43,7 @@ public class GuiConversions {
         finalizeConversion(config);
     }
 
-    private void finalizeConversion(@NotNull ConfigBase config) {
+    private void finalizeConversion(@NonNull ConfigBase config) {
         // Rename the file to rarities.yml.old
         File file = config.getFile();
         file.renameTo(new File(EvenMoreFish.getInstance().getDataFolder(), "guis.yml.old"));
@@ -61,7 +61,7 @@ public class GuiConversions {
         return new File(EvenMoreFish.getInstance().getDataFolder(), "gui");
     }
 
-    private void convertSectionToFile(@NotNull Section section, @NotNull Map<String, Map<Route, Object>> mappedPageButtons) {
+    private void convertSectionToFile(@NonNull Section section, @NonNull Map<String, Map<Route, Object>> mappedPageButtons) {
         String id = section.getNameAsString();
         if (id == null) {
             return;

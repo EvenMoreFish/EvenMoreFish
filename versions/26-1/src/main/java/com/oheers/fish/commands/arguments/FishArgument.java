@@ -11,8 +11,8 @@ import com.oheers.fish.fishing.items.Rarity;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,15 +23,15 @@ public class FishArgument implements CustomArgumentType.Converted<String, String
         obj -> MessageComponentSerializer.message().serialize(Component.text("Invalid Fish: " + obj))
     );
 
-    @NotNull
+    @NonNull
     @Override
     public ArgumentType<String> getNativeType() {
         return StringArgumentType.string();
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, @NotNull SuggestionsBuilder builder) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(@NonNull CommandContext<S> context, @NonNull SuggestionsBuilder builder) {
         Rarity rarity;
         try {
             rarity = context.getLastChild().getArgument("rarity", Rarity.class);
@@ -50,7 +50,7 @@ public class FishArgument implements CustomArgumentType.Converted<String, String
         return nativeType;
     }
 
-    public static @Nullable Fish resolveFish(@NotNull Rarity rarity, @NotNull String fishStr) {
+    public static @Nullable Fish resolveFish(@NonNull Rarity rarity, @NonNull String fishStr) {
         Fish fish = rarity.getFish(fishStr);
         if (fish == null) {
             fish = rarity.getFish(fishStr.replace("_", " "));

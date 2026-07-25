@@ -7,13 +7,13 @@ import com.oheers.fish.permissions.UserPerms;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class ToggleSubcommand {
 
     private final String name;
 
-    public ToggleSubcommand(@NotNull String name) {
+    public ToggleSubcommand(@NonNull String name) {
         this.name = name;
     }
 

@@ -36,9 +36,9 @@ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -47,7 +47,7 @@ import java.util.UUID;
 
 public class EMFVersion extends EMFVersionProvider {
 
-    public EMFVersion(@NotNull EMFPlugin plugin) {
+    public EMFVersion(@NonNull EMFPlugin plugin) {
         super(plugin);
     }
 
@@ -83,7 +83,7 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     @Override
-    public @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
+    public @NonNull ItemStack getSkullFromUUID(@NonNull UUID uuid) {
         ItemStack skull = ItemStack.of(Material.PLAYER_HEAD);
         // Uses Paper's DataComponent API as internals changed in 1.21.9.
         //noinspection UnstableApiUsage
@@ -105,9 +105,9 @@ public class EMFVersion extends EMFVersionProvider {
         return skull;
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public ItemStack getSkullFromBase64(@NotNull String base64) {
+    public ItemStack getSkullFromBase64(@NonNull String base64) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         skull.editMeta(SkullMeta.class, meta -> {
             PlayerProfile profile = Bukkit.createProfile(FishUtils.B64_SKULL_UUID, null);
@@ -118,13 +118,13 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     @Override
-    public @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item) {
+    public @NonNull NBTHolder<ItemStack> createItemStackNbtHolder(@NonNull ItemStack item) {
         return new ItemStackNBTHolder(item);
     }
 
     @Nullable
     @Override
-    public ItemStack deserializeItemStack(@NotNull String raw) {
+    public ItemStack deserializeItemStack(@NonNull String raw) {
         // Manually deserializes as the newer CraftMagicNumbers methods aren't on this version.
         try {
             CompoundTag tag = net.minecraft.nbt.TagParser.parseCompoundFully(raw);
@@ -146,9 +146,9 @@ public class EMFVersion extends EMFVersionProvider {
         }
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public String serializeItemStack(@NotNull ItemStack item) {
+    public String serializeItemStack(@NonNull ItemStack item) {
         return CraftMagicNumbers.INSTANCE.serializeItemAsJson(item).toString();
     }
 

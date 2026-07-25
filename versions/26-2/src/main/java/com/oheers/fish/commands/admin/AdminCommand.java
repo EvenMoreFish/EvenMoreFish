@@ -36,8 +36,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.jar.Attributes;
 
@@ -45,17 +45,17 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
 
     private final String name;
 
-    public AdminCommand(@NotNull String name) {
+    public AdminCommand(@NonNull String name) {
         this.name = name;
     }
 
     @Override
-    public @NotNull LiteralCommandNode<CommandSourceStack> get() {
+    public @NonNull LiteralCommandNode<CommandSourceStack> get() {
         return getAsArgument().build();
     }
 
     @Override
-    public @NotNull LiteralArgumentBuilder<CommandSourceStack> getAsArgument() {
+    public @NonNull LiteralArgumentBuilder<CommandSourceStack> getAsArgument() {
         return Commands.literal(name)
             .requires(source -> source.getSender().hasPermission(AdminPerms.ADMIN))
             .then(database())
@@ -75,52 +75,52 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> database() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> database() {
         return new DatabaseSubcommand("database").get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> fish() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> fish() {
         return new FishSubcommand("fish").get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> randomFish() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> randomFish() {
         return new RandomFishSubcommand("random-fish").get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> list() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> list() {
         return new ListSubcommand("list").get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> competition() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> competition() {
         return new CompetitionSubcommand("competition").get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> customRod() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> customRod() {
         return new CustomRodSubcommand("custom-rod").get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> debug() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> debug() {
         return new DebugSubcommand("debug").get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> bait() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> bait() {
         return new BaitSubcommand("bait").get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> clearBaits() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> clearBaits() {
         return new ClearBaitsSubcommand("clearbaits").get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> reload() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> reload() {
         return Commands.literal("reload")
             .executes(ctx -> {
                 EvenMoreFish.getInstance().reload(ctx.getSource().getSender());
@@ -129,7 +129,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> version() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> version() {
         return Commands.literal("version")
             .executes(ctx -> {
                 getVersionMessage().send(ctx.getSource().getSender());
@@ -138,7 +138,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> rawItem() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> rawItem() {
         return Commands.literal("rawItem")
             .executes(ctx -> {
                 Player player = BrigCommandUtils.requirePlayer(ctx);
@@ -164,7 +164,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> migrate() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> migrate() {
         return Commands.literal("migrate")
             .executes(ctx -> {
                 CommandSender sender = ctx.getSource().getSender();
@@ -180,7 +180,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> help() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> help() {
         return Commands.literal("help")
             .executes(ctx -> {
                 sendHelpMessage(ctx.getSource().getSender());

@@ -4,8 +4,8 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.api.registry.RegistryItem;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -22,22 +22,22 @@ public abstract class RequirementType implements RegistryItem {
      * @param context The context to check
      * @param values The values to check this context against
      */
-    public abstract boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values);
+    public abstract boolean checkRequirement(@NonNull RequirementContext context, @NonNull List<String> values);
 
     /**
      * The identifier for this Requirement
      * @return The identifier for this Requirement
      */
-    public abstract @NotNull String getIdentifier();
+    public abstract @NonNull String getIdentifier();
 
     @Override
-    public @NotNull String getKey() {
+    public @NonNull String getKey() {
         return getIdentifier();
     }
 
-    public abstract @NotNull String getAuthor();
+    public abstract @NonNull String getAuthor();
 
-    public abstract @NotNull Plugin getPlugin();
+    public abstract @NonNull Plugin getPlugin();
 
     public boolean register() {
         return EMFRegistry.REQUIREMENT_TYPE.register(this);
@@ -93,7 +93,7 @@ public abstract class RequirementType implements RegistryItem {
      * @deprecated Use {@link RequirementTypeRegistry#get(String)} instead.
      */
     @Deprecated(forRemoval = true, since = "2.1.0")
-    public static @Nullable RequirementType get(@NotNull String identifier) {
+    public static @Nullable RequirementType get(@NonNull String identifier) {
         return EMFRegistry.REQUIREMENT_TYPE.get(identifier);
     }
 
@@ -101,7 +101,7 @@ public abstract class RequirementType implements RegistryItem {
      * @deprecated Use {@link RequirementTypeRegistry#unregister(String)} instead.
      */
     @Deprecated(forRemoval = true, since = "2.1.0")
-    public static boolean unregister(@NotNull String identifier) {
+    public static boolean unregister(@NonNull String identifier) {
         return EMFRegistry.REQUIREMENT_TYPE.unregister(identifier);
     }
 

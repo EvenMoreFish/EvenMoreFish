@@ -4,8 +4,8 @@ import com.oheers.fish.api.Logging;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.NamespacedKey;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class SoundSerializer implements EMFSerializer<Sound> {
 
@@ -13,11 +13,11 @@ public class SoundSerializer implements EMFSerializer<Sound> {
 
     private SoundSerializer() {}
 
-    public static @NotNull SoundSerializer get() {
+    public static @NonNull SoundSerializer get() {
         return INSTANCE;
     }
 
-    public @NotNull String serialize(@NotNull Sound element) {
+    public @NonNull String serialize(@NonNull Sound element) {
         return element.name().asString() + "," + element.volume() + "," + element.pitch();
     }
 

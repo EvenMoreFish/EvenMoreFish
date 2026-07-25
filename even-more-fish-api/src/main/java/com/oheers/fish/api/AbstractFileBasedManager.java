@@ -2,8 +2,8 @@ package com.oheers.fish.api;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -74,7 +74,7 @@ public abstract class AbstractFileBasedManager<T> {
     }
 
     // Getters
-    public @NotNull TreeMap<String, T> getItemMap() {
+    public @NonNull TreeMap<String, T> getItemMap() {
         return itemMap;
     }
 

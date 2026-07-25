@@ -17,8 +17,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +30,14 @@ import java.util.function.Function;
 
 public class ItemFactory {
 
-    private final @NotNull Section configuration;
+    private final @NonNull Section configuration;
     private final @Nullable String itemPath;
 
     private boolean rawItem = false;
     private UUID relevantPlayer = null;
     private int randomIndex = -1;
     private Consumer<ItemStack> finalChanges = null;
-    private @NotNull ItemStack baseItem;
+    private @NonNull ItemStack baseItem;
     private boolean usingItemAddon = false;
     private boolean usingFallbackBaseItem = false;
 
@@ -58,7 +58,7 @@ public class ItemFactory {
     private final ItemConfig<NamespacedKey> tooltipStyle;
     private final ItemConfig<Integer> maxStackSize;
 
-    private ItemFactory(@NotNull Section initialSection, @Nullable String configLocation, @Nullable String itemPath) {
+    private ItemFactory(@NonNull Section initialSection, @Nullable String configLocation, @Nullable String itemPath) {
         Section section = configLocation == null ? initialSection : initialSection.createSection(configLocation);
 
         // Internally updates the configuration to put everything in the correct place.
@@ -105,7 +105,7 @@ public class ItemFactory {
      * @param configuration The configuration to use.
      * @return A new ItemFactory instance.
      */
-    public static ItemFactory itemFactory(@NotNull Section configuration) {
+    public static ItemFactory itemFactory(@NonNull Section configuration) {
         return itemFactory(configuration, null);
     }
 
@@ -115,7 +115,7 @@ public class ItemFactory {
      * @param configLocation The config location to use.
      * @return A new ItemFactory instance.
      */
-    public static ItemFactory itemFactory(@NotNull Section configuration, @Nullable String configLocation) {
+    public static ItemFactory itemFactory(@NonNull Section configuration, @Nullable String configLocation) {
         return itemFactory(configuration, configLocation, "item");
     }
 
@@ -125,15 +125,15 @@ public class ItemFactory {
      * @param configLocation The config location to use.
      * @return A new ItemFactory instance.
      */
-    public static ItemFactory itemFactory(@NotNull Section configuration, @Nullable String configLocation, @NotNull String itemPath) {
+    public static ItemFactory itemFactory(@NonNull Section configuration, @Nullable String configLocation, @NonNull String itemPath) {
         return new ItemFactory(configuration, configLocation, itemPath);
     }
 
-    public @NotNull ItemStack createItem() {
+    public @NonNull ItemStack createItem() {
         return createItem((Map<String, ?>) null);
     }
 
-    public @NotNull ItemStack createItem(@Nullable Map<String, ?> replacements) {
+    public @NonNull ItemStack createItem(@Nullable Map<String, ?> replacements) {
         ItemStack item = baseItem.clone();
 
         if (!rawItem) {
@@ -170,17 +170,17 @@ public class ItemFactory {
         return item;
     }
 
-    public @NotNull ItemStack createItem(@NotNull UUID relevantPlayer) {
+    public @NonNull ItemStack createItem(@NonNull UUID relevantPlayer) {
         this.relevantPlayer = relevantPlayer;
         return createItem();
     }
 
-    public @NotNull ItemStack createItem(@NotNull UUID relevantPlayer, @Nullable Map<String, ?> replacements) {
+    public @NonNull ItemStack createItem(@NonNull UUID relevantPlayer, @Nullable Map<String, ?> replacements) {
         this.relevantPlayer = relevantPlayer;
         return createItem(replacements);
     }
 
-    public @NotNull ItemStack getBaseItem() {
+    public @NonNull ItemStack getBaseItem() {
         // item.raw-nbt
         ItemStack rawNbt = checkRawNbt();
         if (rawNbt != null) {
@@ -330,7 +330,7 @@ public class ItemFactory {
 
 
     // Material
-    private @Nullable ItemStack getItemFromMaterialString(@NotNull String materialString) {
+    private @Nullable ItemStack getItemFromMaterialString(@NonNull String materialString) {
         ItemStack material = ItemSerializer.get().deserializeMaterial(materialString);
         if (material != null) {
             return new ItemStack(material);
@@ -483,7 +483,7 @@ public class ItemFactory {
         return FishUtils.getSkullFromUUID(relevantPlayer);
     }
 
-    private @Nullable ItemStack getRandomItem(@NotNull List<String> strings, @NotNull Function<String, ItemStack> function) {
+    private @Nullable ItemStack getRandomItem(@NonNull List<String> strings, @NonNull Function<String, ItemStack> function) {
         if (randomIndex != -1) {
             Logging.debug("Random index is set to " + randomIndex + ", trying to use it.");
             try {

@@ -1,7 +1,7 @@
 package com.oheers.fish.baits.model;
 
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This is returned when a bait has been applied to a fishing rod, the remaining cursor items is how many of the bait
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @param cursorItemModifier How many baits should remain on the cursor after the application.
  * @param fishingRod         The fishing rod with the updated baits.
  */
-public record ApplicationResult(@NotNull ItemStack fishingRod, int cursorItemModifier) {
+public record ApplicationResult(@NonNull ItemStack fishingRod, int cursorItemModifier) {
 
     /**
      * @return How many baits should remain on the cursor after the application.

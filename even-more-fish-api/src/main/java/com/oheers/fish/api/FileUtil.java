@@ -24,8 +24,8 @@ package com.oheers.fish.api;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.plugin.Plugin;
 import org.codehaus.plexus.util.FileUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -66,7 +66,7 @@ public class FileUtil {
 
     private static final Map<File, URLClassLoader> fileClassLoaders = new HashMap<>();
 
-    public static <T> @NotNull List<Class<? extends T>> findClasses(@NotNull final File file, @NotNull final Class<T> clazz) {
+    public static <T> @NonNull List<Class<? extends T>> findClasses(@NonNull final File file, @NonNull final Class<T> clazz) {
         if (!file.exists()) {
             return Collections.emptyList();
         }
@@ -100,7 +100,7 @@ public class FileUtil {
         return classes;
     }
 
-    private static @NotNull List<String> matchingNames(final File file) {
+    private static @NonNull List<String> matchingNames(final File file) {
         final List<String> matches = new ArrayList<>();
         try {
             final URL jar = file.toURI().toURL();
@@ -121,7 +121,7 @@ public class FileUtil {
         return matches;
     }
 
-    private static <T> @Nullable Class<? extends T> loadClass(final @NotNull URLClassLoader loader, final String match, @NotNull final Class<T> clazz) throws ClassNotFoundException {
+    private static <T> @Nullable Class<? extends T> loadClass(final @NonNull URLClassLoader loader, final String match, @NonNull final Class<T> clazz) throws ClassNotFoundException {
         try {
             final Class<?> loaded = loader.loadClass(match);
             if (clazz.isAssignableFrom(loaded)) {
@@ -154,7 +154,7 @@ public class FileUtil {
      *           If file creation or resource copying fails, error messages will be logged
      *           through the plugin's logger.
      */
-    public static Optional<File> loadFileOrResource(@NotNull File directory, @NotNull String fileName, @NotNull String resourceName, @NotNull Plugin plugin, boolean overwrite) {
+    public static Optional<File> loadFileOrResource(@NonNull File directory, @NonNull String fileName, @NonNull String resourceName, @NonNull Plugin plugin, boolean overwrite) {
         Objects.requireNonNull(directory, "directory cannot be null");
         Objects.requireNonNull(fileName, "fileName cannot be null");
         Objects.requireNonNull(resourceName, "resourceName cannot be null");
@@ -197,11 +197,11 @@ public class FileUtil {
         }
     }
 
-    public static Optional<File> loadFileOrResource(@NotNull File directory, @NotNull String fileName, @NotNull String resourceName, @NotNull Plugin plugin) {
+    public static Optional<File> loadFileOrResource(@NonNull File directory, @NonNull String fileName, @NonNull String resourceName, @NonNull Plugin plugin) {
         return loadFileOrResource(directory, fileName, resourceName, plugin, false);
     }
 
-    public static List<File> getFilesInDirectoryWithExtension(@NotNull File directory, @Nullable String extension, boolean ignoreUnderscoreFiles, boolean recursive) {
+    public static List<File> getFilesInDirectoryWithExtension(@NonNull File directory, @Nullable String extension, boolean ignoreUnderscoreFiles, boolean recursive) {
         List<File> finalList = new ArrayList<>();
         if (!directory.exists() || !directory.isDirectory()) {
             return finalList;
@@ -236,11 +236,11 @@ public class FileUtil {
      * @param recursive Should this also search subdirectories?
      * @return A list of files in the directory. Returns an empty list if none.
      */
-    public static List<File> getFilesInDirectory(@NotNull File directory, boolean ignoreUnderscoreFiles, boolean recursive) {
+    public static List<File> getFilesInDirectory(@NonNull File directory, boolean ignoreUnderscoreFiles, boolean recursive) {
         return getFilesInDirectoryWithExtension(directory, null, ignoreUnderscoreFiles, recursive);
     }
 
-    public static boolean doesDirectoryContainFile(@NotNull File directory, @NotNull String fileName, boolean recursive) {
+    public static boolean doesDirectoryContainFile(@NonNull File directory, @NonNull String fileName, boolean recursive) {
         for (File file : getFilesInDirectory(directory, false, recursive)) {
             if (file.getName().equals(fileName)) {
                 return true;
@@ -257,7 +257,7 @@ public class FileUtil {
      * @return Set of .addon filenames (just names, not full paths)
      * @throws IOException If there's an error reading the JAR
      */
-    public static Set<String> getAddonFilenames(@NotNull Class<?> clazz, String jarPath) throws IOException {
+    public static Set<String> getAddonFilenames(@NonNull Class<?> clazz, String jarPath) throws IOException {
         URL jarLocation = clazz.getProtectionDomain().getCodeSource().getLocation();
         Optional<File> jarFile = fromURL(jarLocation);
         if (jarFile.isEmpty()) {
@@ -278,7 +278,7 @@ public class FileUtil {
         }
     }
 
-    private static Optional<File> fromURL(@NotNull URL jarLocation) {
+    private static Optional<File> fromURL(@NonNull URL jarLocation) {
         try {
             return Optional.of(new File(jarLocation.toURI()));
         } catch (URISyntaxException e) {
@@ -295,9 +295,9 @@ public class FileUtil {
      * @param filter Predicate to determine which files to include
      */
     public static void loadFilesFromJarDirectory(
-            @NotNull String jarDirectory,
-            @NotNull File targetDirectory,
-            @NotNull Predicate<String> filter,
+            @NonNull String jarDirectory,
+            @NonNull File targetDirectory,
+            @NonNull Predicate<String> filter,
             boolean overwrite
     ) {
         final List<String> fileList = getFilesFromJarDirectory(jarDirectory);
@@ -326,7 +326,7 @@ public class FileUtil {
      * @param jarDirectory The directory to scan (e.g., "rarities")
      * @return List of file paths in format "directory/file.ext"
      */
-    public static List<String> getFilesFromJarDirectory(@NotNull String jarDirectory) {
+    public static List<String> getFilesFromJarDirectory(@NonNull String jarDirectory) {
         try {
             // Remove trailing slash if present
             String dirPath = jarDirectory.endsWith("/")
@@ -410,7 +410,7 @@ public class FileUtil {
      * <p>
      * Potentially dangerous depending on where it's used.
      */
-    public static void deleteDirectory(@NotNull File directory) {
+    public static void deleteDirectory(@NonNull File directory) {
         if (!directory.exists()) {
             return;
         }

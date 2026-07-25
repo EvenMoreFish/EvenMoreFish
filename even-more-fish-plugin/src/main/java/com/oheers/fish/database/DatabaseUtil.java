@@ -4,7 +4,7 @@ package com.oheers.fish.database;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.connection.ConnectionFactory;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -48,7 +48,7 @@ public class DatabaseUtil {
         return !isDatabaseOffline();
     }
 
-    public static void debugDatabaseTypeVersion(@NotNull ConnectionFactory connectionFactory)  {
+    public static void debugDatabaseTypeVersion(@NonNull ConnectionFactory connectionFactory)  {
         try (Connection connection = connectionFactory.getConnection()) {
             final String version = connection.getMetaData().getDatabaseProductVersion();
             final String type = connection.getMetaData().getDatabaseProductName();

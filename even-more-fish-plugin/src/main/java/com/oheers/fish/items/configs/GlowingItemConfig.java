@@ -5,20 +5,20 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class GlowingItemConfig extends ItemConfig<Boolean> {
 
-    public GlowingItemConfig(@NotNull Section section) {
+    public GlowingItemConfig(@NonNull Section section) {
         super(section);
     }
 
     @Override
-    public @NotNull Boolean getConfiguredValue() {
+    public @NonNull Boolean getConfiguredValue() {
         return section.getBoolean("glowing", false);
     }
 

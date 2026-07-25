@@ -9,12 +9,12 @@ import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class ShortestTotalStrategy implements CompetitionStrategy {
 
     @Override
-    public boolean randomInit(@NotNull Competition competition) {
+    public boolean randomInit(@NonNull Competition competition) {
         return true;
     }
 
@@ -30,14 +30,14 @@ public class ShortestTotalStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry) {
+    public EMFMessage getSingleConsoleLeaderboardMessage(@NonNull CompetitionEntry entry) {
         EMFMessage message = ConfigMessage.LEADERBOARD_SHORTEST_TOTAL.getMessage();
         message.setAmount(getDecimalFormat().format(entry.getValue()));
         return message;
     }
 
     @Override
-    public EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry) {
+    public EMFMessage getSinglePlayerLeaderboard(@NonNull CompetitionEntry entry) {
         EMFMessage message = ConfigMessage.LEADERBOARD_SHORTEST_TOTAL.getMessage();
         message.setAmount(getDecimalFormat().format(entry.getValue()));
         return message;

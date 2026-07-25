@@ -7,7 +7,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.mockito.Mockito;
 
 import java.lang.reflect.Field;
@@ -80,12 +80,12 @@ class RarityBoostRegistryTest {
     void combinedMultiplierPassesTheRarityId() {
         registry.register(new RarityWeightBoost() {
             @Override
-            public @NotNull String getKey() {
+            public @NonNull String getKey() {
                 return "LegendaryOnly";
             }
 
             @Override
-            public double weightMultiplier(@NotNull Player fisher, @NotNull Location location, @NotNull String rarityId) {
+            public double weightMultiplier(@NonNull Player fisher, @NonNull Location location, @NonNull String rarityId) {
                 return rarityId.equals("legendary") ? 4.0 : 1.0;
             }
         });
@@ -104,12 +104,12 @@ class RarityBoostRegistryTest {
     private static RarityWeightBoost fixedBoost(String key, double multiplier) {
         return new RarityWeightBoost() {
             @Override
-            public @NotNull String getKey() {
+            public @NonNull String getKey() {
                 return key;
             }
 
             @Override
-            public double weightMultiplier(@NotNull Player fisher, @NotNull Location location, @NotNull String rarityId) {
+            public double weightMultiplier(@NonNull Player fisher, @NonNull Location location, @NonNull String rarityId) {
                 return multiplier;
             }
         };

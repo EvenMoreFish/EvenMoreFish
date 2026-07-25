@@ -11,7 +11,7 @@ import com.oheers.fish.competition.CompetitionType;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
@@ -31,15 +31,15 @@ public class CompetitionTypeArgument implements CustomArgumentType.Converted<Com
         return type;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public ArgumentType<String> getNativeType() {
         return StringArgumentType.string();
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, @NotNull SuggestionsBuilder builder) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(@NonNull CommandContext<S> context, @NonNull SuggestionsBuilder builder) {
         Arrays.stream(CompetitionType.values())
                 .map(CompetitionType::toString)
                 .filter(name -> name.toLowerCase().startsWith(builder.getRemainingLowerCase()))

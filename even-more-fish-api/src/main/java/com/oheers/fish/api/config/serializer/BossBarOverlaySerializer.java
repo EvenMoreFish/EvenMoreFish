@@ -3,8 +3,8 @@ package com.oheers.fish.api.config.serializer;
 import com.oheers.fish.api.Logging;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.boss.BarStyle;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -16,17 +16,17 @@ public class BossBarOverlaySerializer implements EMFSerializer<BossBar.Overlay> 
 
     private BossBarOverlaySerializer() {}
 
-    public static @NotNull BossBarOverlaySerializer get() {
+    public static @NonNull BossBarOverlaySerializer get() {
         return INSTANCE;
     }
 
     @Override
-    public @NotNull String serialize(@NotNull BossBar.Overlay element) {
+    public @NonNull String serialize(BossBar.@NonNull Overlay element) {
         return element.name();
     }
 
     @Override
-    public @NotNull BossBar.Overlay deserialize(@Nullable String element) {
+    public BossBar.@NonNull Overlay deserialize(@Nullable String element) {
         if (element == null) {
             return DEFAULT;
         }

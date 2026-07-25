@@ -6,7 +6,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class EMFShapedRecipe extends EMFRecipe<ShapedRecipe> {
     private final NamespacedKey key;
     private final ItemStack result;
 
-    public EMFShapedRecipe(@NotNull NamespacedKey key, @NotNull ItemStack result, @NotNull Section section) {
+    public EMFShapedRecipe(@NonNull NamespacedKey key, @NonNull ItemStack result, @NonNull Section section) {
         this.rawShape = section.getStringList("shape");
         this.ingredientsSection = section.getSection("ingredients");
         if (this.rawShape.isEmpty() || this.ingredientsSection == null) {
@@ -28,7 +28,7 @@ public class EMFShapedRecipe extends EMFRecipe<ShapedRecipe> {
     }
 
     @Override
-    protected @NotNull ShapedRecipe prepareRecipe() {
+    protected @NonNull ShapedRecipe prepareRecipe() {
         ShapedRecipe recipe = new ShapedRecipe(key, result);
 
         String[] shape = rawShape.stream().limit(3).toArray(String[]::new);

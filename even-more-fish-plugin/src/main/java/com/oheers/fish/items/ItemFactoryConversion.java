@@ -1,11 +1,11 @@
 package com.oheers.fish.items;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class ItemFactoryConversion {
 
-    public void performConversions(@NotNull Section section) {
+    public void performConversions(@NonNull Section section) {
         copyIfPresent(section, "glowing", "item.glowing");
         copyIfPresent(section, "dye-colour", "item.dye-colour");
         copyIfPresent(section, "durability", "item.durability");
@@ -13,7 +13,7 @@ public class ItemFactoryConversion {
         copyIfPresent(section, "displayname", "item.displayname");
     }
 
-    private void copyIfPresent(@NotNull Section section, @NotNull String from, @NotNull String to) {
+    private void copyIfPresent(@NonNull Section section, @NonNull String from, @NonNull String to) {
         if (section.contains(from) && !section.contains(to)) {
             section.set(to, section.get(from));
         }

@@ -1,7 +1,7 @@
 package com.oheers.fish.database.execute;
 
 import com.oheers.fish.EvenMoreFish;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +38,7 @@ public class DatabaseWorker implements Executor, AutoCloseable {
         this("emf-db-worker", DEFAULT_BACKLOG_WARNING_THRESHOLD);
     }
 
-    public DatabaseWorker(@NotNull String threadNamePrefix, int backlogWarningThreshold) {
+    public DatabaseWorker(@NonNull String threadNamePrefix, int backlogWarningThreshold) {
         if (backlogWarningThreshold <= 0) {
             throw new IllegalArgumentException("backlogWarningThreshold must be > 0");
         }
@@ -53,12 +53,12 @@ public class DatabaseWorker implements Executor, AutoCloseable {
     }
 
     @Override
-    public void execute(@NotNull Runnable task) {
+    public void execute(@NonNull Runnable task) {
         Objects.requireNonNull(task, "task");
         submit(() -> runLogged(task));
     }
 
-    public @NotNull CompletableFuture<Void> write(@NotNull Runnable work) {
+    public @NonNull CompletableFuture<Void> write(@NonNull Runnable work) {
         Objects.requireNonNull(work, "work");
         CompletableFuture<Void> future = new CompletableFuture<>();
         submit(() -> {
@@ -73,11 +73,11 @@ public class DatabaseWorker implements Executor, AutoCloseable {
         return future;
     }
 
-    public <T> @NotNull CompletableFuture<T> writeResult(@NotNull Supplier<T> work) {
+    public <T> @NonNull CompletableFuture<T> writeResult(@NonNull Supplier<T> work) {
         return submitFuture(work, "Async database write failed.");
     }
 
-    public <T> @NotNull CompletableFuture<T> query(@NotNull Supplier<T> work) {
+    public <T> @NonNull CompletableFuture<T> query(@NonNull Supplier<T> work) {
         return submitFuture(work, "Async database query failed.");
     }
 
@@ -91,7 +91,7 @@ public class DatabaseWorker implements Executor, AutoCloseable {
      *
      * @return true if the queue drained fully, false if tasks were dropped
      */
-    public boolean shutdown(long timeout, @NotNull TimeUnit unit) {
+    public boolean shutdown(long timeout, @NonNull TimeUnit unit) {
         executor.shutdown();
         try {
             if (executor.awaitTermination(timeout, unit)) {
@@ -174,7 +174,7 @@ public class DatabaseWorker implements Executor, AutoCloseable {
         return Logger.getLogger("EvenMoreFish");
     }
 
-    private void debug(@NotNull String message) {
+    private void debug(@NonNull String message) {
         try {
             EvenMoreFish.getInstance().debug(message);
         } catch (RuntimeException ignored) {

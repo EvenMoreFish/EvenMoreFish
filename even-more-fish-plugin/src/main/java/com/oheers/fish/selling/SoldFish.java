@@ -2,7 +2,7 @@ package com.oheers.fish.selling;
 
 import com.oheers.fish.fishing.items.Fish;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @deprecated Use {@link com.oheers.fish.api.economy.selling.SoldFish} instead.
@@ -17,7 +17,7 @@ public class SoldFish {
      * @param item The ItemStack representing the fish being sold
      * @throws IllegalArgumentException if the ItemStack does not represent a valid fish
      */
-    public SoldFish(@NotNull ItemStack item) throws IllegalArgumentException {
+    public SoldFish(@NonNull ItemStack item) throws IllegalArgumentException {
         com.oheers.fish.api.economy.selling.SoldFish ref = com.oheers.fish.api.economy.selling.SoldFish.get(null, item);
         if (ref == null) {
             throw new IllegalArgumentException("Item is not a sellable fish.");
@@ -25,7 +25,7 @@ public class SoldFish {
         this.ref = ref;
     }
 
-    public SoldFish(@NotNull com.oheers.fish.api.economy.selling.SoldFish ref) {
+    public SoldFish(com.oheers.fish.api.economy.selling.@NonNull SoldFish ref) {
         this.ref = ref;
     }
 
@@ -37,7 +37,7 @@ public class SoldFish {
         ref.setValue(totalValue);
     }
     
-    public @NotNull String getName() {
+    public @NonNull String getName() {
         return ref.getFish().getName();
     }
     
@@ -49,7 +49,7 @@ public class SoldFish {
         return ref.getFinalValue();
     }
     
-    public @NotNull String getRarity() {
+    public @NonNull String getRarity() {
         return ref.getFish().getRarity().getId();
     }
     
@@ -57,7 +57,7 @@ public class SoldFish {
         return ref.getFish().getLength();
     }
 
-    public @NotNull Fish getFish() {
+    public @NonNull Fish getFish() {
         if (!(ref.getFish() instanceof Fish fish)) {
             throw new IllegalArgumentException("SoldFish is not an internal Fish object.");
         }

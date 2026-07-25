@@ -2,12 +2,12 @@ package com.oheers.fish.utils;
 
 import com.oheers.fish.FishUtils;
 import org.bukkit.Material;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class ItemUtils {
 
-    public static @NotNull Material getMaterial(@Nullable String materialName, @NotNull Material defaultMaterial) {
+    public static @NonNull Material getMaterial(@Nullable String materialName, @NonNull Material defaultMaterial) {
         Material material = getMaterial(materialName);
         if (material == null) {
             return defaultMaterial;

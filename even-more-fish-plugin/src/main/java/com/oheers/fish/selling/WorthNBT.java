@@ -5,7 +5,7 @@ import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.items.nbt.NbtKeys;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -16,7 +16,7 @@ public class WorthNBT {
         throw new UnsupportedOperationException();
     }
 
-    public static void setNBT(@NotNull ItemStack fishItem, @NotNull Fish fish) {
+    public static void setNBT(@NonNull ItemStack fishItem, @NonNull Fish fish) {
         if (fishItem.isEmpty()) {
             return;
         }
@@ -24,12 +24,12 @@ public class WorthNBT {
         setNBT(holder, fish);
     }
 
-    public static void setNBT(@NotNull Skull skull, @NotNull Fish fish) {
+    public static void setNBT(@NonNull Skull skull, @NonNull Fish fish) {
         NBTHolder<Skull> holder = NBTHolder.skull(skull);
         setNBT(holder, fish);
     }
 
-    public static void setNBT(@NotNull NBTHolder<?> holder, @NotNull Fish fish) {
+    public static void setNBT(@NonNull NBTHolder<?> holder, @NonNull Fish fish) {
         holder.setAutoSave(false);
 
         float length = fish.getLength();
@@ -49,7 +49,7 @@ public class WorthNBT {
         holder.save();
     }
 
-    public static @NotNull Optional<Double> getValue(@NotNull Fish fish) {
+    public static @NonNull Optional<Double> getValue(@NonNull Fish fish) {
         double setWorth = fish.getSetWorth();
         float length = fish.getLength();
         if (setWorth > 0) {
@@ -61,7 +61,7 @@ public class WorthNBT {
         }
     }
 
-    private static Optional<Double> getMultipliedValue(float length, @NotNull Fish fish) {
+    private static Optional<Double> getMultipliedValue(float length, @NonNull Fish fish) {
         double multiplier = fish.getWorthMultiplier();
         if (multiplier <= 0.0D) {
             return Optional.empty();

@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
 
@@ -17,13 +17,13 @@ public class EMFFishSoldEvent extends PlayerEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private final @NotNull IFish fish;
+    private final @NonNull IFish fish;
     private final double value;
     private final int quantity;
-    private final @NotNull LocalDateTime sellTime;
+    private final @NonNull LocalDateTime sellTime;
 
     @ApiStatus.Internal
-    public EMFFishSoldEvent(@NotNull Player player, @NotNull SoldFish fish) {
+    public EMFFishSoldEvent(@NonNull Player player, @NonNull SoldFish fish) {
         super(player);
         this.value = fish.getFinalValue();
         this.fish = fish.getFish();
@@ -36,11 +36,11 @@ public class EMFFishSoldEvent extends PlayerEvent {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 
-    public @NotNull IFish getFish() {
+    public @NonNull IFish getFish() {
         return fish;
     }
 
@@ -52,7 +52,7 @@ public class EMFFishSoldEvent extends PlayerEvent {
         return quantity;
     }
 
-    public @NotNull LocalDateTime getSellTime() {
+    public @NonNull LocalDateTime getSellTime() {
         return sellTime;
     }
 

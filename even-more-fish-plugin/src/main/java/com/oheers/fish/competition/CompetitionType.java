@@ -9,7 +9,7 @@ import com.oheers.fish.competition.strategies.ShortestTotalStrategy;
 import com.oheers.fish.competition.strategies.SpecificFishStrategy;
 import com.oheers.fish.competition.strategies.SpecificRarityStrategy;
 import com.oheers.fish.messages.ConfigMessage;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 
 public enum CompetitionType {

@@ -11,7 +11,7 @@ import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.PrefixType;
 import org.bukkit.command.CommandSender;
 import org.jdbi.v3.core.Jdbi;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,7 +46,7 @@ public class LegacyToV3DatabaseMigration {
         migrationManager.legacyInitVersion();
     }
 
-    private void translateFishReportsV2(final UUID uuid, final @NotNull List<LegacyFishReport> reports) {
+    private void translateFishReportsV2(final UUID uuid, final @NonNull List<LegacyFishReport> reports) {
         String firstFishID = "";
         long epochFirst = Long.MAX_VALUE;
         String largestFishID = "";
@@ -173,7 +173,7 @@ public class LegacyToV3DatabaseMigration {
         migrationManager.migrateFromV5ToLatest();
     }
 
-    public void createEmptyUserReport(@NotNull UUID uuid) {
+    public void createEmptyUserReport(@NonNull UUID uuid) {
         jdbi.useHandle(handle -> {
             var update = handle.createUpdate(
                     "insert into " + prefixed("users") +
@@ -193,11 +193,11 @@ public class LegacyToV3DatabaseMigration {
         });
     }
 
-    private void execute(@NotNull String sql) {
+    private void execute(@NonNull String sql) {
         jdbi.useHandle(handle -> handle.execute(sql));
     }
 
-    private @NotNull String prefixed(@NotNull String tableName) {
+    private @NonNull String prefixed(@NonNull String tableName) {
         return MainConfig.getInstance().getPrefix() + tableName;
     }
 }

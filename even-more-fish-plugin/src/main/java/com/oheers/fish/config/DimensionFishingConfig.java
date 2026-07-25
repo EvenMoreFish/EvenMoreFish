@@ -9,9 +9,9 @@ import net.kyori.adventure.sound.Sound;
 import org.bukkit.entity.Player;
 import org.evenmorefish.dimensionfishing.config.DimensionFishingConfigProvider;
 import org.evenmorefish.dimensionfishing.util.ParticleFactory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -46,17 +46,17 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     }
 
     @Override
-    public @NotNull List<String> getLavaAllowedWorlds() {
+    public @NonNull List<String> getLavaAllowedWorlds() {
         return MainConfig.getInstance().getConfig().getStringList("dimension-fishing.lava.allowed-worlds");
     }
 
     @Override
-    public @NotNull List<String> getVoidAllowedWorlds() {
+    public @NonNull List<String> getVoidAllowedWorlds() {
         return MainConfig.getInstance().getConfig().getStringList("dimension-fishing.void.allowed-worlds");
     }
 
     @Override
-    public @NotNull Sound getLavaFishingSwallowSound() {
+    public @NonNull Sound getLavaFishingSwallowSound() {
         String soundString = MainConfig.getInstance().getConfig().getString("dimension-fishing.lava.swallow-sound");
         Sound sound = SoundSerializer.get().deserialize(soundString);
         if (sound != null) {
@@ -66,7 +66,7 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     }
 
     @Override
-    public @NotNull Sound getVoidFishingSwallowSound() {
+    public @NonNull Sound getVoidFishingSwallowSound() {
         String soundString = MainConfig.getInstance().getConfig().getString("dimension-fishing.void.swallow-sound");
         Sound sound = SoundSerializer.get().deserialize(soundString);
         if (sound != null) {
@@ -76,7 +76,7 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     }
 
     @Override
-    public @NotNull Sound getLavaFishingBiteSound() {
+    public @NonNull Sound getLavaFishingBiteSound() {
         String soundString = MainConfig.getInstance().getConfig().getString("dimension-fishing.lava.bite-sound");
         Sound sound = SoundSerializer.get().deserialize(soundString);
         if (sound != null) {
@@ -90,7 +90,7 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     }
 
     @Override
-    public @NotNull Sound getVoidFishingBiteSound() {
+    public @NonNull Sound getVoidFishingBiteSound() {
         String soundString = MainConfig.getInstance().getConfig().getString("dimension-fishing.void.bite-sound");
         Sound sound = SoundSerializer.get().deserialize(soundString);
         if (sound != null) {
@@ -122,17 +122,17 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     }
 
     @Override
-    public @NotNull ParticleFactory getLavaFishingLureParticles() {
+    public @NonNull ParticleFactory getLavaFishingLureParticles() {
         return this.lavaLureParticles;
     }
 
     @Override
-    public @NotNull ParticleFactory getVoidFishingLureParticles() {
+    public @NonNull ParticleFactory getVoidFishingLureParticles() {
         return this.voidLureParticles;
     }
 
     @Override
-    public @NotNull Predicate<Player> getLavaPredicate() {
+    public @NonNull Predicate<Player> getLavaPredicate() {
         Section section = MainConfig.getInstance().getConfig().getSection("dimension-fishing.lava.requirements");
         return player -> {
             RequirementContext context = new RequirementContext(
@@ -148,7 +148,7 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     }
 
     @Override
-    public @NotNull Predicate<Player> getVoidPredicate() {
+    public @NonNull Predicate<Player> getVoidPredicate() {
         Section section = MainConfig.getInstance().getConfig().getSection("dimension-fishing.void.requirements");
         return player -> {
             RequirementContext context = new RequirementContext(

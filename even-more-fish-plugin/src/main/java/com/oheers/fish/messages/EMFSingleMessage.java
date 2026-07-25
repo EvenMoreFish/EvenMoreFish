@@ -5,8 +5,8 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentListMessage;
 import uk.firedev.messagelib.message.ComponentMessage;
 import uk.firedev.messagelib.message.ComponentSingleMessage;
@@ -18,7 +18,7 @@ public class EMFSingleMessage extends EMFMessage {
 
     private ComponentSingleMessage underlying;
 
-    protected EMFSingleMessage(@NotNull ComponentSingleMessage message) {
+    protected EMFSingleMessage(@NonNull ComponentSingleMessage message) {
         super();
         this.underlying = message;
     }
@@ -31,12 +31,12 @@ public class EMFSingleMessage extends EMFMessage {
     }
 
     @Override
-    public @NotNull ComponentSingleMessage getUnderlying() {
+    public @NonNull ComponentSingleMessage getUnderlying() {
         return underlying;
     }
 
     @Override
-    public void setUnderlying(@NotNull ComponentMessage message) {
+    public void setUnderlying(@NonNull ComponentMessage message) {
         if (message instanceof ComponentListMessage listMessage) {
             this.underlying = listMessage.toSingleMessage();
         } else if (message instanceof ComponentSingleMessage singleMessage) {
@@ -62,29 +62,29 @@ public class EMFSingleMessage extends EMFMessage {
         );
     }
 
-    public static EMFSingleMessage ofUnderlying(@NotNull ComponentSingleMessage underlying) {
+    public static EMFSingleMessage ofUnderlying(@NonNull ComponentSingleMessage underlying) {
         return new EMFSingleMessage(underlying);
     }
 
-    public static EMFSingleMessage of(@NotNull Component component) {
+    public static EMFSingleMessage of(@NonNull Component component) {
         return new EMFSingleMessage(
             ComponentMessage.componentMessage(component)
         );
     }
 
-    public static EMFSingleMessage ofList(@NotNull List<Component> components) {
+    public static EMFSingleMessage ofList(@NonNull List<Component> components) {
         return new EMFSingleMessage(
             ComponentMessage.componentMessage(components).toSingleMessage()
         );
     }
 
-    public static EMFSingleMessage fromString(@NotNull String string) {
+    public static EMFSingleMessage fromString(@NonNull String string) {
         return new EMFSingleMessage(
             ComponentMessage.componentMessage(string)
         );
     }
 
-    public static EMFSingleMessage fromStringList(@NotNull List<String> strings) {
+    public static EMFSingleMessage fromStringList(@NonNull List<String> strings) {
         return new EMFSingleMessage(
             ComponentMessage.componentMessage(strings).toSingleMessage()
         );
@@ -95,37 +95,37 @@ public class EMFSingleMessage extends EMFMessage {
     /**
      * @return The stored component.
      */
-    public @NotNull Component getRawMessage() {
+    public @NonNull Component getRawMessage() {
         return underlying.get();
     }
 
     @Override
-    public @NotNull Component getComponentMessage(@Nullable OfflinePlayer player) {
+    public @NonNull Component getComponentMessage(@Nullable OfflinePlayer player) {
         return processPlaceholders(player).get();
     }
 
     @Override
-    public @NotNull List<Component> getComponentListMessage(@Nullable OfflinePlayer player) {
+    public @NonNull List<Component> getComponentListMessage(@Nullable OfflinePlayer player) {
         return List.of(getComponentMessage(player));
     }
 
     @Override
-    public @NotNull String getLegacyMessage(@Nullable OfflinePlayer player) {
+    public @NonNull String getLegacyMessage(@Nullable OfflinePlayer player) {
         return processPlaceholders(player).getAsLegacy();
     }
 
     @Override
-    public @NotNull List<String> getLegacyListMessage(@Nullable OfflinePlayer player) {
+    public @NonNull List<String> getLegacyListMessage(@Nullable OfflinePlayer player) {
         return List.of(getLegacyMessage(player));
     }
 
     @Override
-    public @NotNull String getPlainTextMessage(@Nullable OfflinePlayer player) {
+    public @NonNull String getPlainTextMessage(@Nullable OfflinePlayer player) {
         return processPlaceholders(player).getAsPlainText();
     }
 
     @Override
-    public @NotNull List<String> getPlainTextListMessage(@Nullable OfflinePlayer player) {
+    public @NonNull List<String> getPlainTextListMessage(@Nullable OfflinePlayer player) {
         return List.of(getPlainTextMessage(player));
     }
 
@@ -134,15 +134,15 @@ public class EMFSingleMessage extends EMFMessage {
         this.underlying = this.underlying.parsePlaceholderAPI(relevantPlayer);
     }
 
-    public void setMessage(@NotNull String message) {
+    public void setMessage(@NonNull String message) {
         this.underlying = ComponentMessage.componentMessage(message).messageType(underlying.messageType());
     }
 
-    public void setMessage(@NotNull Component message) {
+    public void setMessage(@NonNull Component message) {
         this.underlying = ComponentMessage.componentMessage(message).messageType(underlying.messageType());
     }
 
-    public void setMessage(@NotNull EMFSingleMessage message) {
+    public void setMessage(@NonNull EMFSingleMessage message) {
         this.underlying = message.underlying;
     }
 
@@ -154,7 +154,7 @@ public class EMFSingleMessage extends EMFMessage {
     }
 
     @Override
-    public boolean containsString(@NotNull String string) {
+    public boolean containsString(@NonNull String string) {
         return underlying.contains(string);
     }
 

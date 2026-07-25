@@ -6,8 +6,8 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
 
 public class EnchantmentsItemConfig extends ItemConfig<Map<Enchantment, Integer>> {
 
-    public EnchantmentsItemConfig(@NotNull Section section) {
+    public EnchantmentsItemConfig(@NonNull Section section) {
         super(section);
     }
 
@@ -34,7 +34,7 @@ public class EnchantmentsItemConfig extends ItemConfig<Map<Enchantment, Integer>
         return enchantments;
     }
 
-    private Pair<Enchantment, Integer> parseEnchantment(@NotNull String string) {
+    private Pair<Enchantment, Integer> parseEnchantment(@NonNull String string) {
         String[] split = string.split(",");
         String name = split[0];
         Enchantment enchantment = FishUtils.getEnchantment(name);

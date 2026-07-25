@@ -1,22 +1,22 @@
 package com.oheers.fish.addons.internal.reward.message;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import uk.firedev.messagelib.message.MessageType;
 
 public class TitleRewardType extends MessageRewardBase {
 
     @Override
-    public @NotNull MessageType getMessageType() {
+    public @NonNull MessageType getMessageType() {
         return MessageType.TITLE;
     }
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "TITLE";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "FireML";
     }
 

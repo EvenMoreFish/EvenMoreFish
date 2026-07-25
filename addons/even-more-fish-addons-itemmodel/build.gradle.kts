@@ -18,6 +18,7 @@ dependencies {
             strictly("1.21.3-R0.1-SNAPSHOT")
         }
     }
+    compileOnly(libs.jspecify)
     compileOnly(project(":even-more-fish-plugin"))
 }
 

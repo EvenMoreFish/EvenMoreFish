@@ -34,6 +34,7 @@ dependencies {
     compileOnly(libs.headdatabase.api)
     compileOnly(libs.mmoitems.api)
     compileOnly(libs.mythic.lib)
+    compileOnly(libs.jspecify)
     compileOnly(project(":even-more-fish-api"))
 }
 

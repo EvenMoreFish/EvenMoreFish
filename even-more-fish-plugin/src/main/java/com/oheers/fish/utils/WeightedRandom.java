@@ -1,7 +1,7 @@
 package com.oheers.fish.utils;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +56,7 @@ public final class WeightedRandom {
      */
 
     public static <T> @Nullable T pick(
-            @NotNull List<T> elements,
+            @NonNull List<T> elements,
             ToDoubleFunction<T> weightFunction,
             double boostRate,
             Set<T> boosted,
@@ -98,7 +98,7 @@ public final class WeightedRandom {
      * @return the sum of effective weights of all elements
      */
     private static <T> double calcTotalWeight(
-            @NotNull List<T> elements,
+            @NonNull List<T> elements,
             ToDoubleFunction<T> weightFunction,
             double boostRate,
             Set<T> boosted
@@ -127,7 +127,7 @@ public final class WeightedRandom {
      */
     private static <T> double getEffectiveWeight(
             T element,
-            @NotNull ToDoubleFunction<T> weightFunction,
+            @NonNull ToDoubleFunction<T> weightFunction,
             double boostRate,
             Set<T> boosted
     ) {

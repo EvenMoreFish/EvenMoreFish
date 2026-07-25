@@ -1,6 +1,6 @@
 package com.oheers.fish.utils.sort;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -20,7 +20,7 @@ public enum SortType {
         this.comparator = comparator;
     }
 
-    public <T extends Sortable> TreeSet<T> sort(@NotNull Collection<T> collection) {
+    public <T extends Sortable> TreeSet<T> sort(@NonNull Collection<T> collection) {
         TreeSet<T> set = new TreeSet<>(comparator);
         set.addAll(collection);
         return set;

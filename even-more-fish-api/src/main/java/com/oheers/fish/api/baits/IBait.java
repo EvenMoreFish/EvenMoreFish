@@ -8,8 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -18,29 +18,29 @@ import java.util.List;
  */
 public interface IBait {
 
-    @NotNull ItemStack create(@NotNull OfflinePlayer player);
+    @NonNull ItemStack create(@NonNull OfflinePlayer player);
 
-    @NotNull ItemStack create();
+    @NonNull ItemStack create();
 
-    @NotNull List<? extends IRarity> getRarities();
+    @NonNull List<? extends IRarity> getRarities();
 
-    @NotNull IFish chooseFish(@NotNull Player player, @NotNull Location location);
+    @NonNull IFish chooseFish(@NonNull Player player, @NonNull Location location);
 
-    void handleFish(@NotNull Player player, @NotNull IFish fish, @NotNull ItemStack fishingRod);
+    void handleFish(@NonNull Player player, @NonNull IFish fish, @NonNull ItemStack fishingRod);
 
-    @NotNull String getId();
+    @NonNull String getId();
 
     // TODO Add format methods after EMFMessage is moved to API module.
-    // @NotNull EMFSingleMessage getFormat();
-    //@NotNull EMFSingleMessage format(@NotNull String name);
+    // @NonNull EMFSingleMessage getFormat();
+    //@NonNull EMFSingleMessage format(@NonNull String name);
 
-    @NotNull String getDisplayName();
+    @NonNull String getDisplayName();
 
     boolean isSilent();
 
     boolean hasCatchRewards();
 
-    @NotNull List<Reward> getCatchRewards();
+    @NonNull List<Reward> getCatchRewards();
 
     double getPurchasePrice();
 
@@ -48,6 +48,6 @@ public interface IBait {
 
     @Nullable Economy getEconomy();
 
-    boolean attemptPurchase(@NotNull Player player);
+    boolean attemptPurchase(@NonNull Player player);
 
 }

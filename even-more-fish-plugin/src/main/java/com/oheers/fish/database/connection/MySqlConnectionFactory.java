@@ -1,20 +1,20 @@
 package com.oheers.fish.database.connection;
 
 import com.zaxxer.hikari.HikariConfig;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
 
 public class MySqlConnectionFactory extends ConnectionFactory {
     @Override
-    protected void configureDatabase(@NotNull HikariConfig config, String address, int port, String databaseName, String username, String password) {
+    protected void configureDatabase(@NonNull HikariConfig config, String address, int port, String databaseName, String username, String password) {
         config.setJdbcUrl("jdbc:mysql://" + address + ":" + port + "/" + databaseName);
         config.setUsername(username);
         config.setPassword(password);
     }
 
     @Override
-    protected void overrideProperties(@NotNull Map<String, String> properties) {
+    protected void overrideProperties(@NonNull Map<String, String> properties) {
         properties.putIfAbsent("cachePrepStmts", "true");
         properties.putIfAbsent("prepStmtCacheSize", "250");
         properties.putIfAbsent("prepStmtCacheSqlLimit", "2048");

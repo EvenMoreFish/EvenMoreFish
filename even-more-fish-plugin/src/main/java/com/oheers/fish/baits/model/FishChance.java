@@ -1,13 +1,13 @@
 package com.oheers.fish.baits.model;
 
 import com.oheers.fish.fishing.items.Fish;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public record FishChance(
-    @NotNull Fish fish,
+    @NonNull Fish fish,
     double baseWeight,
     double effectiveWeight,
     double conditionalChance,
     double overallChance,
-    @NotNull WeightModifier modifier
+    @NonNull WeightModifier modifier
 ) {}

@@ -1,7 +1,7 @@
 package com.oheers.fish.permissions;
 
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class UserPerms {
 
@@ -24,7 +24,7 @@ public class UserPerms {
     public static final String TOGGLE_BOSSBAR = "emf.toggle.bossbar";
     public static final String TOGGLE_CATCH_MESSAGE = "emf.toggle.catchmessage";
 
-    public static boolean checkTogglePerms(@NotNull CommandSender sender) {
+    public static boolean checkTogglePerms(@NonNull CommandSender sender) {
         return sender.hasPermission(TOGGLE_FISHING)
             || sender.hasPermission(TOGGLE_BOSSBAR)
             || sender.hasPermission(TOGGLE_CATCH_MESSAGE);

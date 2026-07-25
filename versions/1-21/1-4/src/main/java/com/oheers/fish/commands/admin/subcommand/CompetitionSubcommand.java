@@ -14,15 +14,15 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
 public class CompetitionSubcommand {
 
     private final String name;
 
-    public CompetitionSubcommand(@NotNull String name) {
+    public CompetitionSubcommand(@NonNull String name) {
         this.name = name;
     }
 
@@ -57,7 +57,7 @@ public class CompetitionSubcommand {
             );
     }
 
-    private void start(@NotNull CommandSender sender, @NotNull CompetitionFile file, @Nullable Integer duration) {
+    private void start(@NonNull CommandSender sender, @NonNull CompetitionFile file, @Nullable Integer duration) {
         if (Competition.isActive()) {
             ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
             return;

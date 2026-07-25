@@ -7,12 +7,12 @@ import com.oheers.fish.api.reward.RewardType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class McMMOXPRewardType extends RewardType {
 
     @Override
-    public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location hookLocation) {
+    public void doReward(@NonNull Player player, @NonNull String key, @NonNull String value, Location hookLocation) {
         // Pre-checks
         String[] split = value.split(",");
         if (split.length < 2) {
@@ -39,17 +39,17 @@ public class McMMOXPRewardType extends RewardType {
     }
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "MCMMO_XP";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "FireML";
     }
 
     @Override
-    public @NotNull JavaPlugin getPlugin() {
+    public @NonNull JavaPlugin getPlugin() {
         return EvenMoreFish.getInstance();
     }
 

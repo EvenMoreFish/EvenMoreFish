@@ -3,13 +3,13 @@ package com.oheers.fish.api.fishing.rods;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
 public interface ICustomRod {
 
-    @NotNull String getId();
+    @NonNull String getId();
 
     boolean isDisabled();
 
@@ -18,16 +18,16 @@ public interface ICustomRod {
      * NOTE: Creating an ItemStack from this factory will not add the necessary NBT to identify the rod. Use {@link #create()} instead.
      */
     // TODO add ItemFactory after moved to API module.
-    //@NotNull ItemFactory getFactory();
+    //@NonNull ItemFactory getFactory();
     //}
 
     /**
      * Creates an ItemStack of this rod, with the necessary NBT to identify it.
      */
-    @NotNull ItemStack create();
+    @NonNull ItemStack create();
 
-    @NotNull List<? extends IRarity> getAllowedRarities();
+    @NonNull List<? extends IRarity> getAllowedRarities();
 
-    @NotNull List<? extends IFish> getAllowedFish();
+    @NonNull List<? extends IFish> getAllowedFish();
 
 }

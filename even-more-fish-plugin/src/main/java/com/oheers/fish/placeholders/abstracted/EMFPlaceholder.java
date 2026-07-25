@@ -8,19 +8,19 @@ import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.model.user.UserReport;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
 @ApiStatus.Internal
 public interface EMFPlaceholder {
 
-    boolean shouldProcess(@NotNull String identifier);
+    boolean shouldProcess(@NonNull String identifier);
 
-    @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier);
+    @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier);
 
-    default @Nullable CompetitionEntry fetchEntry(@NotNull Competition active, @NotNull String identifier, int prefixLength) {
+    default @Nullable CompetitionEntry fetchEntry(@NonNull Competition active, @NonNull String identifier, int prefixLength) {
         Integer place = FishUtils.getInteger(identifier.substring(prefixLength));
         if (place == null || place <= 0) {
             return null;
@@ -28,7 +28,7 @@ public interface EMFPlaceholder {
         return active.getLeaderboard().getEntry(place);
     }
 
-    default @Nullable UUID fetchPlayerOrUUIDString(@Nullable OfflinePlayer player, @NotNull String substring) {
+    default @Nullable UUID fetchPlayerOrUUIDString(@Nullable OfflinePlayer player, @NonNull String substring) {
         if (substring.equalsIgnoreCase("player")) {
             return player == null ? null : player.getUniqueId();
         }
@@ -39,7 +39,7 @@ public interface EMFPlaceholder {
         }
     }
 
-    default @Nullable UserReport fetchUserReport(@NotNull UUID uuid) {
+    default @Nullable UserReport fetchUserReport(@NonNull UUID uuid) {
         // Should remove all NPEs if the database is offline.
         // Any NPEs that show up will be bugs.
         if (DatabaseUtil.isDatabaseOffline()) {

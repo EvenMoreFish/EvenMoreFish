@@ -3,8 +3,8 @@ package com.oheers.fish.api.economy;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,7 +17,7 @@ public class EconomyTypeRegistry implements EMFRegistry<EconomyType> {
 
     private EconomyTypeRegistry() {}
 
-    public static @NotNull EconomyTypeRegistry getInstance() {
+    public static @NonNull EconomyTypeRegistry getInstance() {
         return instance;
     }
 
@@ -35,7 +35,7 @@ public class EconomyTypeRegistry implements EMFRegistry<EconomyType> {
      * @return An immutable copy of the current registry.
      */
     @Override
-    public @NotNull Map<String, EconomyType> getRegistry() {
+    public @NonNull Map<String, EconomyType> getRegistry() {
         return Map.copyOf(registry);
     }
 
@@ -46,7 +46,7 @@ public class EconomyTypeRegistry implements EMFRegistry<EconomyType> {
      * @return The value, or null if not found.
      */
     @Override
-    public @Nullable EconomyType get(@NotNull String key) {
+    public @Nullable EconomyType get(@NonNull String key) {
         return registry.get(key);
     }
 
@@ -58,7 +58,7 @@ public class EconomyTypeRegistry implements EMFRegistry<EconomyType> {
      * @return The value, or the default value if not found.
      */
     @Override
-    public @NotNull EconomyType getOrDefault(@NotNull String key, @NotNull EconomyType defaultValue) {
+    public @NonNull EconomyType getOrDefault(@NonNull String key, @NonNull EconomyType defaultValue) {
         return registry.getOrDefault(key, defaultValue);
     }
 
@@ -69,7 +69,7 @@ public class EconomyTypeRegistry implements EMFRegistry<EconomyType> {
      * @return True if the key was unregistered, false if not found.
      */
     @Override
-    public boolean unregister(@NotNull String key) {
+    public boolean unregister(@NonNull String key) {
         return registry.remove(key) != null;
     }
 
@@ -81,7 +81,7 @@ public class EconomyTypeRegistry implements EMFRegistry<EconomyType> {
      * @return True if the value was registered, false if a value with the same key already exists and force is false.
      */
     @Override
-    public boolean register(@NotNull EconomyType value, boolean force) {
+    public boolean register(@NonNull EconomyType value, boolean force) {
         if (!force && registry.containsKey(value.getKey())) {
             return false;
         }

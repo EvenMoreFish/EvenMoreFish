@@ -19,7 +19,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Map;
@@ -30,160 +30,160 @@ public class ItemConfigResolver {
 
     private static final ItemConfigResolver instance = new ItemConfigResolver();
 
-    private @NotNull Function<Section, ItemConfig<Number>> customModelDataResolver = CustomModelDataItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<String>> displayNameResolver = DisplayNameItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<Color>> dyeColourResolver = DyeColourItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<Map<Enchantment, Integer>>> enchantmentsResolver = EnchantmentsItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<Boolean>> glowingResolver = GlowingItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<Integer>> damageResolver = ItemDamageItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<List<Component>>> loreResolver = LoreItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<PotionEffect>> potionMetaResolver = PotionMetaItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<Integer>> quantityResolver = QuantityItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<Boolean>> unbreakableResolver = UnbreakableItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<Number>> customModelDataResolver = CustomModelDataItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<String>> displayNameResolver = DisplayNameItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<Color>> dyeColourResolver = DyeColourItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<Map<Enchantment, Integer>>> enchantmentsResolver = EnchantmentsItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<Boolean>> glowingResolver = GlowingItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<Integer>> damageResolver = ItemDamageItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<List<Component>>> loreResolver = LoreItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<PotionEffect>> potionMetaResolver = PotionMetaItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<Integer>> quantityResolver = QuantityItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<Boolean>> unbreakableResolver = UnbreakableItemConfig::new;
 
     // These are set elsewhere as they have no functionality in 1.20.1.
-    private @NotNull Function<Section, ItemConfig<NamespacedKey>> itemModelResolver = EmptyItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<Boolean>> fireResistantResolver = EmptyItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<Boolean>> hideTooltipResolver = EmptyItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<String>> itemRarityResolver = EmptyItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<NamespacedKey>> tooltipStyleResolver = EmptyItemConfig::new;
-    private @NotNull Function<Section, ItemConfig<Integer>> maxStackSizeResolver = EmptyItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<NamespacedKey>> itemModelResolver = EmptyItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<Boolean>> fireResistantResolver = EmptyItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<Boolean>> hideTooltipResolver = EmptyItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<String>> itemRarityResolver = EmptyItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<NamespacedKey>> tooltipStyleResolver = EmptyItemConfig::new;
+    private @NonNull Function<Section, ItemConfig<Integer>> maxStackSizeResolver = EmptyItemConfig::new;
 
     private ItemConfigResolver() {}
 
-    public static @NotNull ItemConfigResolver getInstance() {
+    public static @NonNull ItemConfigResolver getInstance() {
         return instance;
     }
 
-    private <T> ItemConfig<T> resolve(Function<Section, ItemConfig<T>> resolver, @NotNull Section section) {
+    private <T> ItemConfig<T> resolve(Function<Section, ItemConfig<T>> resolver, @NonNull Section section) {
         return resolver == null ? null : resolver.apply(section);
     }
 
-    public ItemConfig<Number> getCustomModelData(@NotNull Section section) {
+    public ItemConfig<Number> getCustomModelData(@NonNull Section section) {
         return resolve(customModelDataResolver, section);
     }
 
-    public void setCustomModelDataResolver(@NotNull Function<Section, ItemConfig<Number>> customModelDataResolver) {
+    public void setCustomModelDataResolver(@NonNull Function<Section, ItemConfig<Number>> customModelDataResolver) {
         this.customModelDataResolver = customModelDataResolver;
     }
 
-    public @NotNull ItemConfig<String> getDisplayName(@NotNull Section section) {
+    public @NonNull ItemConfig<String> getDisplayName(@NonNull Section section) {
         return resolve(displayNameResolver, section);
     }
 
-    public void setDisplayNameResolver(@NotNull Function<Section, ItemConfig<String>> displayNameResolver) {
+    public void setDisplayNameResolver(@NonNull Function<Section, ItemConfig<String>> displayNameResolver) {
         this.displayNameResolver = displayNameResolver;
     }
 
-    public @NotNull ItemConfig<Color> getDyeColour(@NotNull Section section) {
+    public @NonNull ItemConfig<Color> getDyeColour(@NonNull Section section) {
         return resolve(dyeColourResolver, section);
     }
 
-    public void setDyeColourResolver(@NotNull Function<Section, ItemConfig<Color>> dyeColourResolver) {
+    public void setDyeColourResolver(@NonNull Function<Section, ItemConfig<Color>> dyeColourResolver) {
         this.dyeColourResolver = dyeColourResolver;
     }
 
-    public @NotNull ItemConfig<Map<Enchantment, Integer>> getEnchantments(@NotNull Section section) {
+    public @NonNull ItemConfig<Map<Enchantment, Integer>> getEnchantments(@NonNull Section section) {
         return resolve(enchantmentsResolver, section);
     }
 
-    public void setEnchantmentsResolver(@NotNull Function<Section, ItemConfig<Map<Enchantment, Integer>>> enchantmentsResolver) {
+    public void setEnchantmentsResolver(@NonNull Function<Section, ItemConfig<Map<Enchantment, Integer>>> enchantmentsResolver) {
         this.enchantmentsResolver = enchantmentsResolver;
     }
 
-    public @NotNull ItemConfig<Boolean> getGlowing(@NotNull Section section) {
+    public @NonNull ItemConfig<Boolean> getGlowing(@NonNull Section section) {
         return resolve(glowingResolver, section);
     }
 
-    public void setGlowingResolver(@NotNull Function<Section, ItemConfig<Boolean>> glowingResolver) {
+    public void setGlowingResolver(@NonNull Function<Section, ItemConfig<Boolean>> glowingResolver) {
         this.glowingResolver = glowingResolver;
     }
 
-    public @NotNull ItemConfig<Integer> getDamage(@NotNull Section section) {
+    public @NonNull ItemConfig<Integer> getDamage(@NonNull Section section) {
         return resolve(damageResolver, section);
     }
 
-    public void setDamageResolver(@NotNull Function<Section, ItemConfig<Integer>> damageResolver) {
+    public void setDamageResolver(@NonNull Function<Section, ItemConfig<Integer>> damageResolver) {
         this.damageResolver = damageResolver;
     }
 
-    public @NotNull ItemConfig<List<Component>> getLore(@NotNull Section section) {
+    public @NonNull ItemConfig<List<Component>> getLore(@NonNull Section section) {
         return resolve(loreResolver, section);
     }
 
-    public void setLoreResolver(@NotNull Function<Section, ItemConfig<List<Component>>> loreResolver) {
+    public void setLoreResolver(@NonNull Function<Section, ItemConfig<List<Component>>> loreResolver) {
         this.loreResolver = loreResolver;
     }
 
-    public @NotNull ItemConfig<PotionEffect> getPotionMeta(@NotNull Section section) {
+    public @NonNull ItemConfig<PotionEffect> getPotionMeta(@NonNull Section section) {
         return resolve(potionMetaResolver, section);
     }
 
-    public void setPotionMetaResolver(@NotNull Function<Section, ItemConfig<PotionEffect>> potionMetaResolver) {
+    public void setPotionMetaResolver(@NonNull Function<Section, ItemConfig<PotionEffect>> potionMetaResolver) {
         this.potionMetaResolver = potionMetaResolver;
     }
 
-    public @NotNull ItemConfig<Integer> getQuantity(@NotNull Section section) {
+    public @NonNull ItemConfig<Integer> getQuantity(@NonNull Section section) {
         return resolve(quantityResolver, section);
     }
 
-    public void setQuantityResolver(@NotNull Function<Section, ItemConfig<Integer>> quantityResolver) {
+    public void setQuantityResolver(@NonNull Function<Section, ItemConfig<Integer>> quantityResolver) {
         this.quantityResolver = quantityResolver;
     }
 
-    public @NotNull ItemConfig<Boolean> getUnbreakable(@NotNull Section section) {
+    public @NonNull ItemConfig<Boolean> getUnbreakable(@NonNull Section section) {
         return resolve(unbreakableResolver, section);
     }
 
-    public void setUnbreakableResolver(@NotNull Function<Section, ItemConfig<Boolean>> unbreakableResolver) {
+    public void setUnbreakableResolver(@NonNull Function<Section, ItemConfig<Boolean>> unbreakableResolver) {
         this.unbreakableResolver = unbreakableResolver;
     }
 
-    public @NotNull ItemConfig<NamespacedKey> getItemModel(@NotNull Section section) {
+    public @NonNull ItemConfig<NamespacedKey> getItemModel(@NonNull Section section) {
         return resolve(itemModelResolver, section);
     }
 
-    public void setItemModelResolver(@NotNull Function<Section, ItemConfig<NamespacedKey>> itemModelResolver) {
+    public void setItemModelResolver(@NonNull Function<Section, ItemConfig<NamespacedKey>> itemModelResolver) {
         this.itemModelResolver = itemModelResolver;
     }
 
-    public @NotNull ItemConfig<Boolean> getFireResistant(@NotNull Section section) {
+    public @NonNull ItemConfig<Boolean> getFireResistant(@NonNull Section section) {
         return resolve(fireResistantResolver, section);
     }
 
-    public void setFireResistantResolver(@NotNull Function<Section, ItemConfig<Boolean>> fireResistantResolver) {
+    public void setFireResistantResolver(@NonNull Function<Section, ItemConfig<Boolean>> fireResistantResolver) {
         this.fireResistantResolver = fireResistantResolver;
     }
 
-    public @NotNull ItemConfig<Boolean> getHideTooltip(@NotNull Section section) {
+    public @NonNull ItemConfig<Boolean> getHideTooltip(@NonNull Section section) {
         return resolve(hideTooltipResolver, section);
     }
 
-    public void setHideTooltipResolver(@NotNull Function<Section, ItemConfig<Boolean>> hideTooltipResolver) {
+    public void setHideTooltipResolver(@NonNull Function<Section, ItemConfig<Boolean>> hideTooltipResolver) {
         this.hideTooltipResolver = hideTooltipResolver;
     }
 
-    public @NotNull ItemConfig<String> getItemRarity(@NotNull Section section) {
+    public @NonNull ItemConfig<String> getItemRarity(@NonNull Section section) {
         return resolve(itemRarityResolver, section);
     }
 
-    public void setItemRarityResolver(@NotNull Function<Section, ItemConfig<String>> itemRarityResolver) {
+    public void setItemRarityResolver(@NonNull Function<Section, ItemConfig<String>> itemRarityResolver) {
         this.itemRarityResolver = itemRarityResolver;
     }
 
-    public @NotNull ItemConfig<NamespacedKey> getTooltipStyle(@NotNull Section section) {
+    public @NonNull ItemConfig<NamespacedKey> getTooltipStyle(@NonNull Section section) {
         return resolve(tooltipStyleResolver, section);
     }
 
-    public void setTooltipStyleResolver(@NotNull Function<Section, ItemConfig<NamespacedKey>> tooltipStyleResolver) {
+    public void setTooltipStyleResolver(@NonNull Function<Section, ItemConfig<NamespacedKey>> tooltipStyleResolver) {
         this.tooltipStyleResolver = tooltipStyleResolver;
     }
 
-    public @NotNull ItemConfig<Integer> getMaxStackSize(@NotNull Section section) {
+    public @NonNull ItemConfig<Integer> getMaxStackSize(@NonNull Section section) {
         return resolve(maxStackSizeResolver, section);
     }
 
-    public void setMaxStackSizeResolver(@NotNull Function<Section, ItemConfig<Integer>> maxStackSizeResolver) {
+    public void setMaxStackSizeResolver(@NonNull Function<Section, ItemConfig<Integer>> maxStackSizeResolver) {
         this.maxStackSizeResolver = maxStackSizeResolver;
     }
 

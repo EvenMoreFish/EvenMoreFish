@@ -6,7 +6,7 @@ import com.oheers.fish.api.registry.RegistryItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,14 +20,14 @@ public class Economy {
 
     private final List<EconomyType> relevantTypes;
 
-    private Economy(@NotNull Collection<EconomyType> types) {
+    private Economy(@NonNull Collection<EconomyType> types) {
         this.relevantTypes = new ArrayList<>(types);
     }
 
     /**
      * Creates a new Economy instance with all registered EconomyTypes.
      */
-    public static @NotNull Economy economy() {
+    public static @NonNull Economy economy() {
         return new Economy(EMFRegistry.ECONOMY_TYPE.getRegistry().values());
     }
 
@@ -35,11 +35,11 @@ public class Economy {
      * Creates a new Economy instance with a list of EconomyTypes.
      * @param types List of EconomyType to register.
      */
-    public static @NotNull Economy economy(@NotNull Collection<EconomyType> types) {
+    public static @NonNull Economy economy(@NonNull Collection<EconomyType> types) {
         return new Economy(types);
     }
 
-    public static @NotNull Economy getInstance() {
+    public static @NonNull Economy getInstance() {
         if (instance == null) {
             instance = economy();
         }
@@ -62,7 +62,7 @@ public class Economy {
         return List.copyOf(relevantTypes);
     }
 
-    public void setEconomyTypes(@NotNull Collection<EconomyType> types) {
+    public void setEconomyTypes(@NonNull Collection<EconomyType> types) {
         relevantTypes.clear();
         relevantTypes.addAll(types);
     }
@@ -78,15 +78,15 @@ public class Economy {
         return relevantTypes.stream().anyMatch(EconomyType::isAvailable);
     }
 
-    public void deposit(@NotNull OfflinePlayer player, double amount, boolean applyMultiplier) {
+    public void deposit(@NonNull OfflinePlayer player, double amount, boolean applyMultiplier) {
         relevantTypes.forEach(type -> type.deposit(player, amount, applyMultiplier));
     }
 
-    public void withdraw(@NotNull OfflinePlayer player, double amount, boolean applyMultiplier) {
+    public void withdraw(@NonNull OfflinePlayer player, double amount, boolean applyMultiplier) {
         relevantTypes.forEach(type -> type.withdraw(player, amount, applyMultiplier));
     }
 
-    public boolean has(@NotNull OfflinePlayer player, double amount) {
+    public boolean has(@NonNull OfflinePlayer player, double amount) {
         return relevantTypes.stream()
             .filter(EconomyType::isAvailable)
             .allMatch(type -> type.has(player, amount));
@@ -95,7 +95,7 @@ public class Economy {
     /**
      * Gets the economy type registered to this instance with the given identifier.
      */
-    public @NotNull Optional<EconomyType> getEconomyType(@NotNull String identifier) {
+    public @NonNull Optional<EconomyType> getEconomyType(@NonNull String identifier) {
         for (EconomyType type : relevantTypes) {
             if (type.getIdentifier().equalsIgnoreCase(identifier)) {
                 return Optional.of(type);
@@ -104,7 +104,7 @@ public class Economy {
         return Optional.empty();
     }
 
-    public @NotNull Component getWorthFormat(double value, boolean applyMultiplier) {
+    public @NonNull Component getWorthFormat(double value, boolean applyMultiplier) {
         List<Component> components = getEconomyTypes().stream()
             .map(type -> type.formatWorth(value, applyMultiplier))
             .filter(Objects::nonNull)
@@ -116,7 +116,7 @@ public class Economy {
      * @deprecated Use {@link EconomyTypeRegistry#register(RegistryItem)} instead.
      */
     @Deprecated(forRemoval = true)
-    public boolean registerEconomyType(@NotNull EconomyType economyType) {
+    public boolean registerEconomyType(@NonNull EconomyType economyType) {
         boolean registered = EMFRegistry.ECONOMY_TYPE.register(economyType);
         if (registered) {
             relevantTypes.add(economyType);

@@ -12,7 +12,7 @@ import com.oheers.fish.baits.manager.BaitManager;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -33,15 +33,15 @@ public class BaitArgument implements CustomArgumentType.Converted<BaitHandler, S
         return bait;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public ArgumentType<String> getNativeType() {
         return StringArgumentType.string();
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, @NotNull SuggestionsBuilder builder) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(@NonNull CommandContext<S> context, @NonNull SuggestionsBuilder builder) {
         BaitManager.getInstance().getItemMap().keySet().stream()
                 .map(s -> s.replace(" ", "_"))
                 .filter(name -> name.toLowerCase().startsWith(builder.getRemainingLowerCase()))

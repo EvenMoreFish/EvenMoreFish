@@ -26,8 +26,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class Fish implements IFish, Sortable {
 
     private static final Random random = new Random();
 
-    private final @NotNull Section section;
+    private final @NonNull Section section;
     private final String name;
     private final Rarity rarity;
     private final ItemFactory factory;
@@ -52,7 +52,7 @@ public class Fish implements IFish, Sortable {
     private @Nullable List<Reward> sellRewards = null;
     private String eventType;
 
-    private @NotNull Requirement requirement;
+    private @NonNull Requirement requirement;
 
     private boolean wasBaited;
     private boolean silent;
@@ -67,7 +67,7 @@ public class Fish implements IFish, Sortable {
     private boolean showInJournal;
     private final int catchLimit;
 
-    private Fish(@NotNull Rarity rarity, @NotNull Section section) {
+    private Fish(@NonNull Rarity rarity, @NonNull Section section) {
         this.section = section;
         this.rarity = rarity;
         // This should never be null, but we have this check just to be safe.
@@ -112,7 +112,7 @@ public class Fish implements IFish, Sortable {
      * Creates a Fish from its config section.
      * @param section The section for this fish.
      */
-    public static Fish create(@NotNull Rarity rarity, @NotNull Section section) {
+    public static Fish create(@NonNull Rarity rarity, @NonNull Section section) {
         return new Fish(rarity, section);
     }
 
@@ -121,7 +121,7 @@ public class Fish implements IFish, Sortable {
      * @param section The section for this fish.
      * @throws InvalidFishException When section is null.
      */
-    public static Fish createOrThrow(@NotNull Rarity rarity, @Nullable Section section) throws InvalidFishException {
+    public static Fish createOrThrow(@NonNull Rarity rarity, @Nullable Section section) throws InvalidFishException {
         if (section == null) {
             throw new InvalidFishException("Fish could not be fetched from the config.");
         }
@@ -134,7 +134,7 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public @NotNull ItemStack give(int randomIndex) {
+    public @NonNull ItemStack give(int randomIndex) {
         int initialIndex = factory.getRandomIndex();
 
         factory.setRandomIndex(randomIndex);
@@ -150,7 +150,7 @@ public class Fish implements IFish, Sortable {
      * @return An ItemStack version of the fish.
      */
     @Override
-    public @NotNull ItemStack give() {
+    public @NonNull ItemStack give() {
         ItemFactory factory = this.factory.createCopy();
         // Build custom fish lore and include the configured lore.
         factory.getLore().setTransformer(this::buildFishLore);
@@ -397,7 +397,7 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public @NotNull Fish createCopy() {
+    public @NonNull Fish createCopy() {
         return create(rarity, section);
     }
 
@@ -407,7 +407,7 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public @NotNull Optional<Double> getSetSize() {
+    public @NonNull Optional<Double> getSetSize() {
         Double size = FishUtils.fetchSize(section, "size", fisherman);
         return size == null ? rarity.getSetSize(fisherman) : Optional.of(size);
     }
@@ -455,12 +455,12 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public @NotNull String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
     @Override
-    public @NotNull Rarity getRarity() {
+    public @NonNull Rarity getRarity() {
         return rarity;
     }
 
@@ -475,20 +475,20 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public @NotNull List<Reward> getActionRewards() {
+    public @NonNull List<Reward> getActionRewards() {
         checkIntEvent();
         checkEatEvent();
         return actionRewards == null ? new ArrayList<>() : actionRewards;
     }
 
     @Override
-    public @NotNull List<Reward> getCatchRewards() {
+    public @NonNull List<Reward> getCatchRewards() {
         checkCatchEvent();
         return catchRewards == null ? new ArrayList<>() : catchRewards;
     }
 
     @Override
-    public @NotNull List<Reward> getSellRewards() {
+    public @NonNull List<Reward> getSellRewards() {
         checkSellEvent();
         return sellRewards == null ? new ArrayList<>() : sellRewards;
     }
@@ -508,7 +508,7 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public @NotNull String getId() {
+    public @NonNull String getId() {
         return this.name;
     }
 
@@ -517,7 +517,7 @@ public class Fish implements IFish, Sortable {
         this.weight = weight;
     }
 
-    @NotNull
+    @NonNull
     public EMFSingleMessage getDisplayName() {
         if (displayName == null) {
             return rarity.format(name);
@@ -530,12 +530,12 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public @NotNull Requirement getRequirement() {
+    public @NonNull Requirement getRequirement() {
         return this.requirement;
     }
 
     @Override
-    public void setRequirement(@NotNull Requirement requirement) {
+    public void setRequirement(@NonNull Requirement requirement) {
         this.requirement = requirement;
     }
 
@@ -589,7 +589,7 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public @NotNull CatchType getCatchType() {
+    public @NonNull CatchType getCatchType() {
         String typeStr = section.getString("catch-type");
         if (typeStr == null) {
             return rarity.getCatchType();

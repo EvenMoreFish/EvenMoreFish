@@ -32,8 +32,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.time.Duration;
@@ -79,7 +79,7 @@ public class Competition {
     private int numberNeeded = 0;
     private Player singleWinner = null;
 
-    public Competition(final @NotNull CompetitionFile competitionFile) {
+    public Competition(final @NonNull CompetitionFile competitionFile) {
         this.competitionFile = competitionFile;
         this.competitionName = competitionFile.getId();
         this.playersNeeded = competitionFile.getPlayersNeeded();
@@ -95,7 +95,7 @@ public class Competition {
     /**
      * @return A valid bossbar for this competition. Null if it should not be shown.
      */
-    private @NotNull Bar createBossbar() {
+    private @NonNull Bar createBossbar() {
         Bar bar = new Bar();
         bar.setShouldShow(competitionFile.shouldShowBossbar());
         bar.setColour(competitionFile.getBossbarColour());
@@ -164,7 +164,7 @@ public class Competition {
         return active;
     }
 
-    public static void holdCompetition(@NotNull CompetitionFile file) {
+    public static void holdCompetition(@NonNull CompetitionFile file) {
         if (!MainConfig.getInstance().shouldCompetitionHold()) {
             Logging.debug("Could not hold a competition as the feature is disabled.");
             return;
@@ -377,7 +377,7 @@ public class Competition {
      * @param configMessage The configmessage to use. Must have the {type} variable in it.
      * @return A message object that's pre-set to be compatible for the time remaining.
      */
-    private @NotNull EMFMessage getTypeFormat(ConfigMessage configMessage) {
+    private @NonNull EMFMessage getTypeFormat(ConfigMessage configMessage) {
         return competitionType.getStrategy().getTypeFormat(this, configMessage);
     }
 
@@ -416,7 +416,7 @@ public class Competition {
         }
     }
 
-    public void sendLeaderboard(@NotNull CommandSender sender) {
+    public void sendLeaderboard(@NonNull CommandSender sender) {
         if (!isActive()) {
             ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(sender);
             return;
@@ -438,7 +438,7 @@ public class Competition {
         message.send(sender);
     }
 
-    private @NotNull EMFListMessage buildLeaderboardMessage(List<CompetitionEntry> entries, List<String> competitionColours, boolean isConsole) {
+    private @NonNull EMFListMessage buildLeaderboardMessage(List<CompetitionEntry> entries, List<String> competitionColours, boolean isConsole) {
         if (entries == null) {
             entries = List.of();
         }
@@ -571,11 +571,11 @@ public class Competition {
         });
     }
 
-    public @NotNull Bar getStatusBar() {
+    public @NonNull Bar getStatusBar() {
         return this.statusBar;
     }
 
-    public @NotNull CompetitionType getCompetitionType() {
+    public @NonNull CompetitionType getCompetitionType() {
         return competitionType;
     }
 
@@ -587,7 +587,7 @@ public class Competition {
         return leaderboard.getSize();
     }
 
-    public @NotNull Leaderboard getLeaderboard() {
+    public @NonNull Leaderboard getLeaderboard() {
         return leaderboard;
     }
 
@@ -595,7 +595,7 @@ public class Competition {
         return startMessage;
     }
 
-    public @NotNull String getCompetitionName() {
+    public @NonNull String getCompetitionName() {
         return competitionName;
     }
 
@@ -603,11 +603,11 @@ public class Competition {
         return startTime;
     }
 
-    public @NotNull CompetitionFile getCompetitionFile() {
+    public @NonNull CompetitionFile getCompetitionFile() {
         return this.competitionFile;
     }
 
-    public static @NotNull EMFMessage getNextCompetitionMessage() {
+    public static @NonNull EMFMessage getNextCompetitionMessage() {
         if (Competition.isActive()) {
             return EMFSingleMessage.empty();
         }

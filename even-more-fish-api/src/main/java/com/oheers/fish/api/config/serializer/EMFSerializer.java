@@ -1,11 +1,11 @@
 package com.oheers.fish.api.config.serializer;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public interface EMFSerializer<T> {
 
-    @NotNull String serialize(@NotNull T element);
+    @NonNull String serialize(@NonNull T element);
 
     @Nullable T deserialize(@Nullable String element);
 

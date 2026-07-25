@@ -8,20 +8,20 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.placeholders.abstracted.EMFPlaceholder;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class CompetitionPlaceFishPlaceholder implements EMFPlaceholder {
 
     private static final int PREFIX_LENGTH = "competition_place_fish_".length();
 
     @Override
-    public boolean shouldProcess(@NotNull String identifier) {
+    public boolean shouldProcess(@NonNull String identifier) {
         return identifier.startsWith("competition_place_fish_");
     }
 
     @Override
-    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING_FISH.getMessage().getLegacyMessage(null);
@@ -57,7 +57,7 @@ public class CompetitionPlaceFishPlaceholder implements EMFPlaceholder {
         return message.getLegacyMessage(null);
     }
 
-    private @NotNull String formatMostFishMessage(int amount) {
+    private @NonNull String formatMostFishMessage(int amount) {
         EMFMessage message = ConfigMessage.PLACEHOLDER_FISH_MOST_FORMAT.getMessage();
         message.setAmount(amount);
         return message.getLegacyMessage(null);

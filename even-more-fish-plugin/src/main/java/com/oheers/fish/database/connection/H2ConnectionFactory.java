@@ -1,20 +1,20 @@
 package com.oheers.fish.database.connection;
 
 import com.zaxxer.hikari.HikariConfig;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
 
 public class H2ConnectionFactory extends ConnectionFactory {
     @Override
-    protected void configureDatabase(@NotNull HikariConfig config, String address, int port, String databaseName, String username, String password) {
+    protected void configureDatabase(@NonNull HikariConfig config, String address, int port, String databaseName, String username, String password) {
         config.setJdbcUrl("jdbc:h2:file:./plugins/EvenMoreFish/" + databaseName);
         config.setUsername(username);
         config.setPassword(password);
     }
 
     @Override
-    protected void overrideProperties(@NotNull Map<String, String> properties) {
+    protected void overrideProperties(@NonNull Map<String, String> properties) {
         properties.putIfAbsent("MODE", "MySQL"); // Sets compatibility mode to MySQL
         properties.putIfAbsent("DATABASE_TO_UPPER", "false"); // Keeps table names case-sensitive
         properties.putIfAbsent("MV_STORE", "true");

@@ -8,8 +8,8 @@ import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class EMFAPI {
 
@@ -33,7 +33,7 @@ public class EMFAPI {
      * @deprecated Use {@link com.oheers.fish.api.baits.AbstractBaitManager#isBait(ItemStack)} instead.
      */
     @Deprecated(forRemoval = true)
-    public boolean isBait(@NotNull ItemStack item) {
+    public boolean isBait(@NonNull ItemStack item) {
         return BaitManager.getInstance().isBait(item);
     }
 

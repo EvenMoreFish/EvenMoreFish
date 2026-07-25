@@ -6,7 +6,7 @@ import com.oheers.fish.baits.model.WeightModifier;
 import com.oheers.fish.config.MainConfig;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class BaitFileUpdates {
 
-    public static void update(@NotNull BaitHandler bait) {
+    public static void update(@NonNull BaitHandler bait) {
         YamlDocument config = bait.getConfig();
         boolean changed = false;
 
@@ -36,7 +36,7 @@ public class BaitFileUpdates {
         }
     }
 
-    static boolean migrateLegacyBaitModifiers(@NotNull YamlDocument config, double baitBoostRate) {
+    static boolean migrateLegacyBaitModifiers(@NonNull YamlDocument config, double baitBoostRate) {
         boolean changed = false;
         String legacyModifier = WeightModifier.multiply(baitBoostRate).describe();
 
@@ -46,7 +46,7 @@ public class BaitFileUpdates {
         return changed;
     }
 
-    private static boolean migrateLegacyRarityModifiers(@NotNull YamlDocument config, @NotNull String legacyModifier) {
+    private static boolean migrateLegacyRarityModifiers(@NonNull YamlDocument config, @NonNull String legacyModifier) {
         List<String> legacyRarities = config.getStringList("rarities");
         if (legacyRarities.isEmpty()) {
             return false;
@@ -64,7 +64,7 @@ public class BaitFileUpdates {
         return true;
     }
 
-    private static boolean migrateLegacyFishModifiers(@NotNull YamlDocument config, @NotNull String legacyModifier) {
+    private static boolean migrateLegacyFishModifiers(@NonNull YamlDocument config, @NonNull String legacyModifier) {
         Section legacyFish = config.getSection("fish");
         if (legacyFish == null) {
             return false;

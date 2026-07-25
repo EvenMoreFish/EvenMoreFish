@@ -4,8 +4,8 @@ import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -13,7 +13,7 @@ public abstract class EMFVersionProvider {
 
     protected final EMFPlugin plugin;
 
-    public EMFVersionProvider(@NotNull EMFPlugin plugin) {
+    public EMFVersionProvider(@NonNull EMFPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -38,16 +38,16 @@ public abstract class EMFVersionProvider {
 
     // NBT Things
 
-    public abstract @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item);
+    public abstract @NonNull NBTHolder<ItemStack> createItemStackNbtHolder(@NonNull ItemStack item);
 
-    public abstract @Nullable ItemStack deserializeItemStack(@NotNull String raw);
+    public abstract @Nullable ItemStack deserializeItemStack(@NonNull String raw);
 
-    public abstract @NotNull String serializeItemStack(@NotNull ItemStack item);
-
-    @ApiStatus.Internal
-    public abstract @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid);
+    public abstract @NonNull String serializeItemStack(@NonNull ItemStack item);
 
     @ApiStatus.Internal
-    public abstract @NotNull ItemStack getSkullFromBase64(@NotNull String base64);
+    public abstract @NonNull ItemStack getSkullFromUUID(@NonNull UUID uuid);
+
+    @ApiStatus.Internal
+    public abstract @NonNull ItemStack getSkullFromBase64(@NonNull String base64);
 
 }

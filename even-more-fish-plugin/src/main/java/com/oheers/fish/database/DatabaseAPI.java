@@ -7,7 +7,7 @@ import com.oheers.fish.database.model.fish.FishStats;
 import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.fishing.items.Fish;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -27,7 +27,7 @@ public interface DatabaseAPI {
      * @param uuid The UUID of the player to check
      * @return true if the user exists, false otherwise
      */
-    boolean hasUser(@NotNull UUID uuid);
+    boolean hasUser(@NonNull UUID uuid);
 
 
     /**
@@ -36,7 +36,7 @@ public interface DatabaseAPI {
      * @param uuid The UUID of the player
      * @return The database ID of the player, or 0 if not found
      */
-    int getUserId(@NotNull UUID uuid);
+    int getUserId(@NonNull UUID uuid);
 
 
     /**
@@ -45,7 +45,7 @@ public interface DatabaseAPI {
      * @param uuid The UUID of the player
      * @return The UserReport containing all fishing statistics, or null if not found
      */
-    UserReport getUserReport(@NotNull UUID uuid);
+    UserReport getUserReport(@NonNull UUID uuid);
 
     /**
      * Checks if fish statistics exist in the database for a specific fish.
@@ -53,7 +53,7 @@ public interface DatabaseAPI {
      * @param fish The fish to check
      * @return true if statistics exist, false otherwise
      */
-    boolean hasFishStats(@NotNull Fish fish);
+    boolean hasFishStats(@NonNull Fish fish);
 
 
     /**
@@ -61,7 +61,7 @@ public interface DatabaseAPI {
      *
      * @param fish The fish to update
      */
-    void incrementFish(@NotNull Fish fish);
+    void incrementFish(@NonNull Fish fish);
 
 
     /**
@@ -72,7 +72,7 @@ public interface DatabaseAPI {
      * @param id The database ID of the player
      * @return true if the player has caught the fish, false otherwise
      */
-    boolean userHasFish(@NotNull String rarity, @NotNull String fish, int id);
+    boolean userHasFish(@NonNull String rarity, @NonNull String fish, int id);
 
     /**
      * Checks if a player has caught a specific rarity by its name.
@@ -81,14 +81,14 @@ public interface DatabaseAPI {
      * @param id The database ID of the player
      * @return true if the player has caught the rarity, false otherwise
      */
-    boolean userHasRarity(@NotNull String rarity, int id);
+    boolean userHasRarity(@NonNull String rarity, int id);
 
     /**
      * Creates a competition report in the database.
      *
      * @param competition The competition to record
      */
-    void createCompetitionReport(@NotNull Competition competition);
+    void createCompetitionReport(@NonNull Competition competition);
 
     /**
      * Records a fish sale transaction in the database.
@@ -101,9 +101,9 @@ public interface DatabaseAPI {
      * @param priceSold Price the fish was sold for
      */
     void createSale(
-            @NotNull String transactionId,
-            @NotNull String fishName,
-            @NotNull String fishRarity,
+            @NonNull String transactionId,
+            @NonNull String fishName,
+            @NonNull String fishRarity,
             int fishAmount,
             double fishLength,
             double priceSold
@@ -117,9 +117,9 @@ public interface DatabaseAPI {
      * @param timestamp When the transaction occurred
      */
     void createTransaction(
-            @NotNull String transactionId,
+            @NonNull String transactionId,
             int userId,
-            @NotNull Timestamp timestamp
+            @NonNull Timestamp timestamp
     );
 
     /**

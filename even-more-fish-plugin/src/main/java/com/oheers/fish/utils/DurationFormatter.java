@@ -4,7 +4,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-public record DurationFormatter(@NotNull TimeUnit timeUnit) {
+public record DurationFormatter(@NonNull TimeUnit timeUnit) {
 
     public Component format(long value) {
         long seconds = timeUnit.toSeconds(value);
@@ -37,7 +37,7 @@ public record DurationFormatter(@NotNull TimeUnit timeUnit) {
         return Component.join(JoinConfiguration.separator(Component.space()), list);
     }
 
-    private static void appendUnit(@NotNull List<Component> list, long value, @NotNull DurationFormatter.Unit timeUnit) {
+    private static void appendUnit(@NonNull List<Component> list, long value, DurationFormatter.@NonNull Unit timeUnit) {
         if (value <= 0) {
             return;
         }
@@ -65,7 +65,7 @@ public record DurationFormatter(@NotNull TimeUnit timeUnit) {
         private final Supplier<EMFMessage> formatSupplier;
         private final String variable;
 
-        Unit(@NotNull Supplier<EMFMessage> formatSupplier, @NotNull String variable) {
+        Unit(@NonNull Supplier<EMFMessage> formatSupplier, @NonNull String variable) {
             this.formatSupplier = formatSupplier;
             this.variable = variable;
         }

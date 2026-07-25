@@ -13,7 +13,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 // Required branches:
 // /emf shop - Opens the shop for the sender
@@ -23,7 +23,7 @@ public class ShopSubcommand {
 
     private final String name;
 
-    public ShopSubcommand(@NotNull String name) {
+    public ShopSubcommand(@NonNull String name) {
         this.name = name;
     }
 
@@ -46,7 +46,7 @@ public class ShopSubcommand {
             );
     }
 
-    private void execute(@NotNull CommandSender sender, @NotNull Player target) {
+    private void execute(@NonNull CommandSender sender, @NonNull Player target) {
         if (!Economy.getInstance().isEnabled()) {
             ConfigMessage.ECONOMY_DISABLED.getMessage().send(sender);
             return;

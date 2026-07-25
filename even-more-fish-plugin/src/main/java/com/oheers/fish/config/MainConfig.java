@@ -12,8 +12,8 @@ import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -267,7 +267,7 @@ public class MainConfig extends ConfigBase {
         return adminShortcutEnabled;
     }
 
-    public @NotNull String getAdminShortcutCommandName() {
+    public @NonNull String getAdminShortcutCommandName() {
         return adminShortcutName;
     }
 
@@ -393,15 +393,15 @@ public class MainConfig extends ConfigBase {
         return regionBoosts != null && !regionBoosts.isEmpty();
     }
 
-    public boolean isEconomyEnabled(@NotNull EconomyType type) {
+    public boolean isEconomyEnabled(@NonNull EconomyType type) {
         return getConfig().getBoolean("economy." + type.getIdentifier().toLowerCase() + ".enabled");
     }
 
-    public double getEconomyMultiplier(@NotNull EconomyType type) {
+    public double getEconomyMultiplier(@NonNull EconomyType type) {
         return getConfig().getDouble("economy." + type.getIdentifier().toLowerCase() + ".multiplier");
     }
 
-    public @Nullable String getEconomyDisplay(@NotNull EconomyType type) {
+    public @Nullable String getEconomyDisplay(@NonNull EconomyType type) {
         return getConfig().getString("economy." + type.getIdentifier().toLowerCase() + ".display");
     }
 

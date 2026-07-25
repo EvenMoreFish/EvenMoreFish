@@ -15,7 +15,7 @@ import dev.lone.itemsadder.api.CustomStack;
 import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class ItemsAdderItemAddon extends ItemAddon {
 
@@ -40,7 +40,7 @@ public class ItemsAdderItemAddon extends ItemAddon {
     }
 
     @Override
-    public ItemStack getItemStack(@NotNull String id) {
+    public ItemStack getItemStack(@NonNull String id) {
         String[] splitMaterialValue = id.split(":");
         if (!verifyItemsFormat(splitMaterialValue)) {
             getLogger().severe(() -> String.format(

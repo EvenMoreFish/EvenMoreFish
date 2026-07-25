@@ -6,8 +6,8 @@ import com.oheers.fish.api.registry.RegistryItem;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -30,7 +30,7 @@ public abstract class ItemAddon implements Listener, RegistryItem {
     public abstract String getIdentifier();
 
     @Override
-    public @NotNull String getKey() {
+    public @NonNull String getKey() {
         return getIdentifier();
     }
 
@@ -69,12 +69,12 @@ public abstract class ItemAddon implements Listener, RegistryItem {
     public static void unregisterAll() {}
 
     @Deprecated(forRemoval = true, since = "2.1.0")
-    public static @Nullable ItemAddon get(final @NotNull String prefix) {
+    public static @Nullable ItemAddon get(final @NonNull String prefix) {
         return EMFRegistry.ITEM_ADDON.get(prefix);
     }
 
     @Deprecated(forRemoval = true, since = "2.1.0")
-    public static @Nullable ItemStack getItem(final @NotNull String prefix, final @NotNull String id) {
+    public static @Nullable ItemStack getItem(final @NonNull String prefix, final @NonNull String id) {
         return EMFRegistry.ITEM_ADDON.getItem(prefix, id);
     }
 

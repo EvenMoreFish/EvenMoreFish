@@ -5,8 +5,8 @@ import com.oheers.fish.api.registry.RegistryItem;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -17,18 +17,18 @@ public abstract class RewardType implements RegistryItem {
 
     public RewardType() {}
 
-    public abstract void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location hookLocation);
+    public abstract void doReward(@NonNull Player player, @NonNull String key, @NonNull String value, Location hookLocation);
 
-    public abstract @NotNull String getIdentifier();
+    public abstract @NonNull String getIdentifier();
 
     @Override
-    public @NotNull String getKey() {
+    public @NonNull String getKey() {
         return getIdentifier();
     }
 
-    public abstract @NotNull String getAuthor();
+    public abstract @NonNull String getAuthor();
 
-    public abstract @NotNull Plugin getPlugin();
+    public abstract @NonNull Plugin getPlugin();
 
     public boolean register() {
         return EMFRegistry.REWARD_TYPE.register(this);
@@ -74,7 +74,7 @@ public abstract class RewardType implements RegistryItem {
      * @deprecated Use {@link RewardTypeRegistry#get(String)} instead.
      */
     @Deprecated(forRemoval = true, since = "2.1.0")
-    public static @Nullable RewardType get(@NotNull String identifier) {
+    public static @Nullable RewardType get(@NonNull String identifier) {
         return EMFRegistry.REWARD_TYPE.get(identifier);
     }
 
@@ -82,7 +82,7 @@ public abstract class RewardType implements RegistryItem {
      * @deprecated Use {@link RewardTypeRegistry#unregister(String)} instead.
      */
     @Deprecated(forRemoval = true, since = "2.1.0")
-    public static boolean unregister(@NotNull String identifier) {
+    public static boolean unregister(@NonNull String identifier) {
         return EMFRegistry.REWARD_TYPE.unregister(identifier);
     }
 

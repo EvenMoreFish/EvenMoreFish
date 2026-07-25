@@ -26,13 +26,13 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 // Safe to suppress - Newer API versions are identical and stable.
 @SuppressWarnings("UnstableApiUsage")
 public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceStack>, ArgumentBuilder<CommandSourceStack, ?>> {
 
-    public @NotNull LiteralCommandNode<CommandSourceStack> get() {
+    public @NonNull LiteralCommandNode<CommandSourceStack> get() {
         return Commands.literal(commandName())
             .executes(ctx -> {
                 CommandSender sender = ctx.getSource().getSender();
@@ -61,27 +61,27 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> admin() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> admin() {
         return new AdminCommand(adminName()).getAsArgument();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> shop() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> shop() {
         return new ShopSubcommand(shopName()).get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> journal() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> journal() {
         return new JournalSubcommand(journalName()).get();
     }
 
     @Override
-    protected @NotNull ArgumentBuilder<CommandSourceStack, ?> toggle() {
+    protected @NonNull ArgumentBuilder<CommandSourceStack, ?> toggle() {
         return new ToggleSubcommand(toggleName()).get();
     }
 
     @Override
-    public @NotNull ArgumentBuilder<CommandSourceStack, ?> next() {
+    public @NonNull ArgumentBuilder<CommandSourceStack, ?> next() {
         return Commands.literal(nextName())
             .requires(stack -> stack.getSender().hasPermission(UserPerms.NEXT) && EvenMoreFish.getInstance().getCompetitionQueue().hasTimings())
             .executes(ctx -> {
@@ -93,7 +93,7 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
     }
 
     @Override
-    public @NotNull ArgumentBuilder<CommandSourceStack, ?> help() {
+    public @NonNull ArgumentBuilder<CommandSourceStack, ?> help() {
         return Commands.literal(helpName())
             .requires(stack -> stack.getSender().hasPermission(UserPerms.HELP))
             .executes(ctx -> {
@@ -103,7 +103,7 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
     }
 
     @Override
-    public @NotNull ArgumentBuilder<CommandSourceStack, ?> gui() {
+    public @NonNull ArgumentBuilder<CommandSourceStack, ?> gui() {
         return Commands.literal(guiName())
             .requires(stack -> stack.getSender().hasPermission(UserPerms.GUI))
             .executes(ctx -> {
@@ -114,7 +114,7 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
     }
 
     @Override
-    public @NotNull ArgumentBuilder<CommandSourceStack, ?> top() {
+    public @NonNull ArgumentBuilder<CommandSourceStack, ?> top() {
         return Commands.literal(topName())
             .requires(stack -> stack.getSender().hasPermission(UserPerms.TOP))
             .executes(ctx -> {
@@ -130,12 +130,12 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
     }
 
     @Override
-    public @NotNull ArgumentBuilder<CommandSourceStack, ?> sellAll() {
+    public @NonNull ArgumentBuilder<CommandSourceStack, ?> sellAll() {
         return new SellAllSubcommand(sellAllName()).get();
     }
 
     @Override
-    public @NotNull ArgumentBuilder<CommandSourceStack, ?> applyBaits() {
+    public @NonNull ArgumentBuilder<CommandSourceStack, ?> applyBaits() {
         return Commands.literal(applyBaitsName())
             .requires(stack -> stack.getSender().hasPermission(UserPerms.APPLYBAITS))
             .executes(ctx -> {

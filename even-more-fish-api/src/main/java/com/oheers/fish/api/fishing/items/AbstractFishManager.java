@@ -5,8 +5,8 @@ import org.bukkit.block.Skull;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.TreeMap;
 
@@ -21,16 +21,16 @@ public abstract class AbstractFishManager<T extends IRarity> extends AbstractFil
         instance = this;
     }
 
-    public static @NotNull AbstractFishManager<? extends IRarity> getInstance() {
+    public static @NonNull AbstractFishManager<? extends IRarity> getInstance() {
         if (instance == null) {
             throw new IllegalStateException("FishManager has not been initialized yet!");
         }
         return instance;
     }
 
-    public abstract @Nullable IRarity getRarity(@NotNull String rarityName);
+    public abstract @Nullable IRarity getRarity(@NonNull String rarityName);
 
-    public abstract @Nullable IFish getFish(@NotNull String rarityName, @NotNull String fishName);
+    public abstract @Nullable IFish getFish(@NonNull String rarityName, @NonNull String fishName);
 
     public abstract @Nullable IFish getFish(@Nullable ItemStack item);
 
@@ -44,6 +44,6 @@ public abstract class AbstractFishManager<T extends IRarity> extends AbstractFil
 
     public abstract boolean isFish(@Nullable Entity itemEntity);
 
-    public abstract @NotNull TreeMap<String, ? extends IRarity> getRarityMap();
+    public abstract @NonNull TreeMap<String, ? extends IRarity> getRarityMap();
 
 }

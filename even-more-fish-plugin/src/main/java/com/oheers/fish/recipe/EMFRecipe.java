@@ -2,7 +2,7 @@ package com.oheers.fish.recipe;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.CraftingRecipe;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class EMFRecipe<R extends CraftingRecipe> {
 
@@ -34,6 +34,6 @@ public abstract class EMFRecipe<R extends CraftingRecipe> {
         this.registered = false;
     }
 
-    protected abstract @NotNull R prepareRecipe();
+    protected abstract @NonNull R prepareRecipe();
 
 }

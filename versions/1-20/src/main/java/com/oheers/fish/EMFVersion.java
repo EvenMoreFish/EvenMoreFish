@@ -17,15 +17,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
 public class EMFVersion extends EMFVersionProvider {
 
-    public EMFVersion(@NotNull EMFPlugin plugin) {
+    public EMFVersion(@NonNull EMFPlugin plugin) {
         super(plugin);
     }
 
@@ -81,13 +81,13 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     @Override
-    public @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item) {
+    public @NonNull NBTHolder<ItemStack> createItemStackNbtHolder(@NonNull ItemStack item) {
         return new ItemStackNBTHolder(item);
     }
 
     @Nullable
     @Override
-    public ItemStack deserializeItemStack(@NotNull String raw) {
+    public ItemStack deserializeItemStack(@NonNull String raw) {
         ItemStack item = NBT.itemStackFromNBT(NBT.parseNBT(raw));
         if (item == null) {
             Logging.warn("Failed to parse an ItemStack from raw NBT: " + raw);
@@ -96,14 +96,14 @@ public class EMFVersion extends EMFVersionProvider {
         return item;
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public String serializeItemStack(@NotNull ItemStack item) {
+    public String serializeItemStack(@NonNull ItemStack item) {
         return NBT.itemStackToNBT(item).toString();
     }
 
     @Override
-    public @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
+    public @NonNull ItemStack getSkullFromUUID(@NonNull UUID uuid) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         skull.editMeta(SkullMeta.class, meta -> {
             PlayerProfile profile = Bukkit.createProfile(uuid, null);
@@ -119,9 +119,9 @@ public class EMFVersion extends EMFVersionProvider {
         return skull;
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public ItemStack getSkullFromBase64(@NotNull String base64) {
+    public ItemStack getSkullFromBase64(@NonNull String base64) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         skull.editMeta(SkullMeta.class, meta -> {
             PlayerProfile profile = Bukkit.createProfile(FishUtils.B64_SKULL_UUID, null);

@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -87,7 +87,7 @@ public class EMFFishListener implements Listener {
         EvenMoreFish.getInstance().debug("Saving user report %s".formatted(userReport.toString()));
     }
 
-    private void handleFishStats(final @NotNull Fish fish) {
+    private void handleFishStats(final @NonNull Fish fish) {
         final DataManager<FishStats> fishStatsDataManager = EvenMoreFish.getInstance().getPluginDataManager().getFishStatsDataManager();
         final FishRarityKey fishRarityKey = FishRarityKey.of(fish);
         final String key = fishRarityKey.toString();
@@ -138,7 +138,7 @@ public class EMFFishListener implements Listener {
         fishLogDataManager.update(key, Collections.singletonList(log));
     }
 
-    private void handleUserFishStats(final int userId, final @NotNull Fish fish) {
+    private void handleUserFishStats(final int userId, final @NonNull Fish fish) {
         final DataManager<UserFishStats> userFishStatsDataManager = EvenMoreFish.getInstance().getPluginDataManager().getUserFishStatsDataManager();
         final String key = UserFishRarityKey.of(userId,fish).toString();
         UserFishStats stats = userFishStatsDataManager.peek(key);

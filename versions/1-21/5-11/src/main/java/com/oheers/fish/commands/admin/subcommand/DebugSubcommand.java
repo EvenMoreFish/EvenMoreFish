@@ -12,14 +12,14 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 @SuppressWarnings("UnstableApiUsage")
 public class DebugSubcommand {
 
     private final String name;
 
-    public DebugSubcommand(@NotNull String name) {
+    public DebugSubcommand(@NonNull String name) {
         this.name = name;
     }
 
@@ -38,7 +38,7 @@ public class DebugSubcommand {
             );
     }
 
-    private int execute(@NotNull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    private int execute(@NonNull CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         CommandSender sender = ctx.getSource().getSender();
         BaitHandler bait = ctx.getArgument("bait", BaitHandler.class);
         Player target = BrigCommandUtils.getArgumentOrNull(ctx, "target", Player.class);

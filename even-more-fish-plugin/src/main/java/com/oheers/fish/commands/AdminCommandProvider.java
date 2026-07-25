@@ -5,7 +5,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.permissions.AdminPerms;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @param <C> The command class.
@@ -28,37 +28,37 @@ public abstract class AdminCommandProvider<C, A> {
         .addEntry("competition", ConfigMessage.HELP_ADMIN_COMPETITION::getMessage)
         .addEntry("database", ConfigMessage.HELP_ADMIN_DATABASE::getMessage, AdminPerms.DATABASE);
 
-    public abstract @NotNull C get();
+    public abstract @NonNull C get();
 
-    public abstract @NotNull A getAsArgument();
+    public abstract @NonNull A getAsArgument();
 
-    protected abstract @NotNull A database();
+    protected abstract @NonNull A database();
 
-    protected abstract @NotNull A fish();
+    protected abstract @NonNull A fish();
 
-    protected abstract @NotNull A randomFish();
+    protected abstract @NonNull A randomFish();
 
-    protected abstract @NotNull A list();
+    protected abstract @NonNull A list();
 
-    protected abstract @NotNull A competition();
+    protected abstract @NonNull A competition();
 
-    protected abstract @NotNull A customRod();
+    protected abstract @NonNull A customRod();
 
-    protected abstract @NotNull A debug();
+    protected abstract @NonNull A debug();
 
-    protected abstract @NotNull A bait();
+    protected abstract @NonNull A bait();
 
-    protected abstract @NotNull A clearBaits();
+    protected abstract @NonNull A clearBaits();
 
-    protected abstract @NotNull A reload();
+    protected abstract @NonNull A reload();
 
-    protected abstract @NotNull A version();
+    protected abstract @NonNull A version();
 
-    protected abstract @NotNull A rawItem();
+    protected abstract @NonNull A rawItem();
 
-    protected abstract @NotNull A migrate();
+    protected abstract @NonNull A migrate();
 
-    protected abstract @NotNull A help();
+    protected abstract @NonNull A help();
 
     public static void sendHelpMessage(CommandSender sender) {
         HELP_MESSAGE.send(sender);

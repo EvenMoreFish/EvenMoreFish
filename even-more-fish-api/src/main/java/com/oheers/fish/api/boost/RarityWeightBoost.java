@@ -3,7 +3,7 @@ package com.oheers.fish.api.boost;
 import com.oheers.fish.api.registry.RegistryItem;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An external modifier consulted every time EvenMoreFish rolls a rarity for a catch.
@@ -28,6 +28,6 @@ public interface RarityWeightBoost extends RegistryItem {
      *         {@code 1.0} make it more likely, values between {@code 0.0} and {@code 1.0}
      *         make it less likely. Must not be negative.
      */
-    double weightMultiplier(@NotNull Player fisher, @NotNull Location location, @NotNull String rarityId);
+    double weightMultiplier(@NonNull Player fisher, @NonNull Location location, @NonNull String rarityId);
 
 }

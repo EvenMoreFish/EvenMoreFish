@@ -1,6 +1,6 @@
 package com.oheers.fish.database.sql;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Locale;
 
@@ -9,7 +9,7 @@ public final class DatabaseSqlDialectFactory {
     private DatabaseSqlDialectFactory() {
     }
 
-    public static @NotNull DatabaseSqlDialect create(@NotNull String databaseType) {
+    public static @NonNull DatabaseSqlDialect create(@NonNull String databaseType) {
         return switch (databaseType.toUpperCase(Locale.ROOT)) {
             case "SQLITE" -> new SqliteDatabaseSqlDialect();
             case "POSTGRESQL", "POSTGRES" -> new PostgresDatabaseSqlDialect();

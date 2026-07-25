@@ -5,7 +5,7 @@ import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.requirement.RequirementType;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +22,7 @@ public class RewardTypeRequirementType extends RequirementType {
      * @param values  The values to check this context against
      */
     @Override
-    public boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values) {
+    public boolean checkRequirement(@NonNull RequirementContext context, @NonNull List<String> values) {
         boolean pass = values.stream()
             .filter(Objects::nonNull)
             .allMatch(value -> EMFRegistry.REWARD_TYPE.get(value) != null);
@@ -36,17 +36,17 @@ public class RewardTypeRequirementType extends RequirementType {
      * @return The identifier for this Requirement
      */
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "REWARD-TYPE";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "FireML";
     }
 
     @Override
-    public @NotNull Plugin getPlugin() {
+    public @NonNull Plugin getPlugin() {
         return EvenMoreFish.getInstance();
     }
 

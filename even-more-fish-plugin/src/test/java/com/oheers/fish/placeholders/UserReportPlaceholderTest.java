@@ -10,8 +10,8 @@ import com.oheers.fish.placeholders.impl.database.player.TotalFishSoldPlaceholde
 import com.oheers.fish.placeholders.impl.database.player.TotalMoneyEarnedPlaceholder;
 import org.bukkit.OfflinePlayer;
 import org.junit.jupiter.api.Test;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -126,7 +126,7 @@ class UserReportPlaceholderTest {
         }
 
         @Override
-        public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+        public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
             UUID uuid = fetchPlayerOrUUIDString(player, identifier.substring("total_competitions_joined_".length()));
             if (uuid == null) {
                 return null;
@@ -149,7 +149,7 @@ class UserReportPlaceholderTest {
         }
 
         @Override
-        public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+        public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
             UUID uuid = fetchPlayerOrUUIDString(player, identifier.substring("total_competitions_won_".length()));
             if (uuid == null) {
                 return null;
@@ -172,7 +172,7 @@ class UserReportPlaceholderTest {
         }
 
         @Override
-        public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+        public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
             UUID uuid = fetchPlayerOrUUIDString(player, identifier.substring("total_fish_caught_".length()));
             if (uuid == null) {
                 return null;
@@ -195,7 +195,7 @@ class UserReportPlaceholderTest {
         }
 
         @Override
-        public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+        public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
             UUID uuid = fetchPlayerOrUUIDString(player, identifier.substring("total_fish_sold_".length()));
             if (uuid == null) {
                 return null;
@@ -218,7 +218,7 @@ class UserReportPlaceholderTest {
         }
 
         @Override
-        public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+        public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
             UUID uuid = fetchPlayerOrUUIDString(player, identifier.substring("total_money_earned_".length()));
             if (uuid == null) {
                 return null;

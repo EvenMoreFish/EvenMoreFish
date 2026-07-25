@@ -6,7 +6,7 @@ import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.text.DecimalFormat;
 
@@ -18,7 +18,7 @@ public interface CompetitionStrategy {
     /**
      * Initializes the competition strategy for the random type.
      */
-    boolean randomInit(@NotNull Competition competition);
+    boolean randomInit(@NonNull Competition competition);
 
     /**
      * Begins the competition.
@@ -59,7 +59,7 @@ public interface CompetitionStrategy {
      * @param entry   The competition entry to get the leaderboard information from.
      * @return The single console leaderboard message.
      */
-    EMFMessage getSingleConsoleLeaderboardMessage(@NotNull CompetitionEntry entry);
+    EMFMessage getSingleConsoleLeaderboardMessage(@NonNull CompetitionEntry entry);
 
     /**
      * Gets the single player leaderboard message.
@@ -67,7 +67,7 @@ public interface CompetitionStrategy {
      * @param entry   The competition entry to get the leaderboard information from.
      * @return The single player leaderboard message.
      */
-    EMFMessage getSinglePlayerLeaderboard(@NotNull CompetitionEntry entry);
+    EMFMessage getSinglePlayerLeaderboard(@NonNull CompetitionEntry entry);
 
     /**
      * This creates a message object and applies all the settings to it to make it able to use the {type} variable. It
@@ -77,7 +77,7 @@ public interface CompetitionStrategy {
      * @param configMessage The configmessage to use. Must have the {type} variable in it.
      * @return A message object that's pre-set to be compatible for the time remaining.
      */
-    default @NotNull EMFMessage getTypeFormat(@NotNull Competition competition, ConfigMessage configMessage) {
+    default @NonNull EMFMessage getTypeFormat(@NonNull Competition competition, ConfigMessage configMessage) {
         EMFMessage message = configMessage.getMessage();
         message.setTimeFormatted(FishUtils.timeFormat(competition.getTimeLeft()));
         message.setTimeRaw(FishUtils.timeRaw(competition.getTimeLeft()));

@@ -3,8 +3,8 @@ package com.oheers.fish.selling;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @deprecated Use {@link com.oheers.fish.api.economy.selling.SellHelper} instead.
@@ -16,23 +16,23 @@ public class SellHelper {
     private final Inventory inventory;
     private final ItemStack[] array;
 
-    public SellHelper(@NotNull Inventory inventory, @NotNull Player player) {
+    public SellHelper(@NonNull Inventory inventory, @NonNull Player player) {
         this.inventory = inventory;
         this.player = player;
         this.array = null;
     }
 
-    public SellHelper(@NotNull Inventory inventory, @NotNull Player player, boolean removeFromInventory) {
+    public SellHelper(@NonNull Inventory inventory, @NonNull Player player, boolean removeFromInventory) {
         this(inventory, player);
     }
 
-    public SellHelper(@Nullable ItemStack @NotNull[] itemStacks, @NotNull Player player, boolean removeStacks) {
+    public SellHelper(@Nullable ItemStack @NonNull[] itemStacks, @NonNull Player player, boolean removeStacks) {
         this.inventory = null;
         this.player = player;
         this.array = itemStacks;
     }
 
-   public SellHelper(@Nullable ItemStack @NotNull[] itemStacks, @NotNull Player player) {
+   public SellHelper(@Nullable ItemStack @NonNull[] itemStacks, @NonNull Player player) {
        this(itemStacks, player, true);
    }
 

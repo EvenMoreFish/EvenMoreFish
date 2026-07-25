@@ -5,8 +5,8 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentListMessage;
 import uk.firedev.messagelib.message.ComponentMessage;
 import uk.firedev.messagelib.message.ComponentSingleMessage;
@@ -19,7 +19,7 @@ public class EMFListMessage extends EMFMessage {
 
     private ComponentListMessage underlying;
 
-    private EMFListMessage(@NotNull ComponentListMessage message) {
+    private EMFListMessage(@NonNull ComponentListMessage message) {
         super();
         this.underlying = message;
     }
@@ -32,12 +32,12 @@ public class EMFListMessage extends EMFMessage {
     }
 
     @Override
-    public @NotNull ComponentListMessage getUnderlying() {
+    public @NonNull ComponentListMessage getUnderlying() {
         return underlying;
     }
 
     @Override
-    public void setUnderlying(@NotNull ComponentMessage message) {
+    public void setUnderlying(@NonNull ComponentMessage message) {
         if (message instanceof ComponentSingleMessage singleMessage) {
             this.underlying = singleMessage.toListMessage();
         } else if (message instanceof ComponentListMessage listMessage) {
@@ -63,29 +63,29 @@ public class EMFListMessage extends EMFMessage {
         );
     }
 
-    public static EMFListMessage ofUnderlying(@NotNull ComponentListMessage underlying) {
+    public static EMFListMessage ofUnderlying(@NonNull ComponentListMessage underlying) {
         return new EMFListMessage(underlying);
     }
 
-    public static EMFListMessage of(@NotNull Component component) {
+    public static EMFListMessage of(@NonNull Component component) {
         return new EMFListMessage(
             ComponentMessage.componentMessage(List.of(component))
         );
     }
 
-    public static EMFListMessage ofList(@NotNull List<Component> components) {
+    public static EMFListMessage ofList(@NonNull List<Component> components) {
         return new EMFListMessage(
             ComponentMessage.componentMessage(components)
         );
     }
 
-    public static EMFListMessage fromString(@NotNull String string) {
+    public static EMFListMessage fromString(@NonNull String string) {
         return new EMFListMessage(
             ComponentMessage.componentMessage(List.of(string))
         );
     }
 
-    public static EMFListMessage fromStringList(@NotNull List<String> strings) {
+    public static EMFListMessage fromStringList(@NonNull List<String> strings) {
         return new EMFListMessage(
             ComponentMessage.componentMessage(strings)
         );
@@ -96,37 +96,37 @@ public class EMFListMessage extends EMFMessage {
     /**
      * @return The stored components in their original form, with no variables applied.
      */
-    public @NotNull List<Component> getRawMessage() {
+    public @NonNull List<Component> getRawMessage() {
         return this.underlying.get();
     }
 
     @Override
-    public @NotNull Component getComponentMessage(@Nullable OfflinePlayer player) {
+    public @NonNull Component getComponentMessage(@Nullable OfflinePlayer player) {
         return Component.join(JoinConfiguration.newlines(), getComponentListMessage(player));
     }
 
     @Override
-    public @NotNull List<Component> getComponentListMessage(@Nullable OfflinePlayer player) {
+    public @NonNull List<Component> getComponentListMessage(@Nullable OfflinePlayer player) {
         return processPlaceholders(player).get();
     }
 
     @Override
-    public @NotNull String getLegacyMessage(@Nullable OfflinePlayer player) {
+    public @NonNull String getLegacyMessage(@Nullable OfflinePlayer player) {
         return String.join("\n", getLegacyListMessage(player));
     }
 
     @Override
-    public @NotNull List<String> getLegacyListMessage(@Nullable OfflinePlayer player) {
+    public @NonNull List<String> getLegacyListMessage(@Nullable OfflinePlayer player) {
         return processPlaceholders(player).getAsLegacy();
     }
 
     @Override
-    public @NotNull String getPlainTextMessage(@Nullable OfflinePlayer player) {
+    public @NonNull String getPlainTextMessage(@Nullable OfflinePlayer player) {
         return String.join("\n", getPlainTextListMessage(player));
     }
 
     @Override
-    public @NotNull List<String> getPlainTextListMessage(@Nullable OfflinePlayer player) {
+    public @NonNull List<String> getPlainTextListMessage(@Nullable OfflinePlayer player) {
         return processPlaceholders(player).getAsPlainText();
     }
 
@@ -136,11 +136,11 @@ public class EMFListMessage extends EMFMessage {
     }
 
     @Override
-    public boolean containsString(@NotNull String string) {
+    public boolean containsString(@NonNull String string) {
         return underlying.getAsPlainText().stream().anyMatch(line -> line.contains(string));
     }
 
-    public void setVariableWithListInsertion(@NotNull String variable, @NotNull Object replacement) {
+    public void setVariableWithListInsertion(@NonNull String variable, @NonNull Object replacement) {
         this.underlying = this.underlying.replaceWithListInsertion(variable, replacement);
     }
 
@@ -151,13 +151,13 @@ public class EMFListMessage extends EMFMessage {
         this.underlying = this.underlying.replaceWithListInsertion(variableMap);
     }
 
-    public void appendEachLine(@NotNull Object object) {
+    public void appendEachLine(@NonNull Object object) {
         setUnderlying(
             getUnderlying().appendEachLine(object)
         );
     }
 
-    public void prependEachLine(@NotNull Object object) {
+    public void prependEachLine(@NonNull Object object) {
         setUnderlying(
             getUnderlying().prependEachLine(object)
         );

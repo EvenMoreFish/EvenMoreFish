@@ -12,7 +12,7 @@ import com.oheers.fish.fishing.rods.RodManager;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -31,15 +31,15 @@ public class CustomRodArgument implements CustomArgumentType.Converted<CustomRod
         return rod;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public ArgumentType<String> getNativeType() {
         return StringArgumentType.string();
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, @NotNull SuggestionsBuilder builder) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(@NonNull CommandContext<S> context, @NonNull SuggestionsBuilder builder) {
         RodManager.getInstance().getItemMap().keySet().stream()
                 .filter(name -> name.toLowerCase().startsWith(builder.getRemainingLowerCase()))
                 .forEach(builder::suggest);

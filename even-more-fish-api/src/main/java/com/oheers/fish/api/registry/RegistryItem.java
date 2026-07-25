@@ -1,9 +1,9 @@
 package com.oheers.fish.api.registry;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public interface RegistryItem {
 
-    @NotNull String getKey();
+    @NonNull String getKey();
 
 }

@@ -4,8 +4,8 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.database.model.user.UserReport;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.function.Function;
@@ -18,7 +18,7 @@ public abstract class UserReportPlaceholder implements EMFPlaceholder {
     private final Function<UserReport, String> func;
     private final String def;
 
-    public UserReportPlaceholder(@NotNull String prefix, @NotNull Function<@NotNull UserReport, @NotNull String> func, @NotNull String def) {
+    public UserReportPlaceholder(@NonNull String prefix, @NonNull Function<@NonNull UserReport, @NonNull String> func, @NonNull String def) {
         this.prefix = prefix;
         this.prefixLength = prefix.length();
         this.func = func;
@@ -26,12 +26,12 @@ public abstract class UserReportPlaceholder implements EMFPlaceholder {
     }
 
     @Override
-    public boolean shouldProcess(@NotNull String identifier) {
+    public boolean shouldProcess(@NonNull String identifier) {
         return identifier.startsWith(prefix);
     }
 
     @Override
-    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
         String target = identifier.substring(prefixLength);
         UUID uuid = fetchPlayerOrUUIDString(player, target);
         if (uuid == null) {

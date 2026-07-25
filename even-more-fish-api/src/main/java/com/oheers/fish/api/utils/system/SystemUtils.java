@@ -1,6 +1,6 @@
 package com.oheers.fish.api.utils.system;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class SystemUtils {
     public static final String JAVA_VERSION = System.getProperty("java.specification.version");
@@ -9,16 +9,16 @@ public class SystemUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static boolean isJavaVersionAtLeast(@NotNull JavaSpecVersion required) {
+    public static boolean isJavaVersionAtLeast(@NonNull JavaSpecVersion required) {
         return isJavaVersionAtLeast(JAVA_VERSION, required);
     }
 
-    static boolean isJavaVersionAtLeast(@NotNull String currentVersion, @NotNull JavaSpecVersion required) {
+    static boolean isJavaVersionAtLeast(@NonNull String currentVersion, @NonNull JavaSpecVersion required) {
         float current = parseJavaVersion(currentVersion);
         return current >= required.getValue();
     }
 
-    static float parseJavaVersion(@NotNull String version) {
+    static float parseJavaVersion(@NonNull String version) {
         String[] parts = version.split("\\.");
 
         try {

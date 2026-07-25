@@ -12,8 +12,8 @@ import com.oheers.fish.items.nbt.NbtKeys;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class BaitManager extends AbstractBaitManager<BaitHandler> {
 
@@ -23,7 +23,7 @@ public class BaitManager extends AbstractBaitManager<BaitHandler> {
         super();
     }
 
-    public static @NotNull BaitManager getInstance() {
+    public static @NonNull BaitManager getInstance() {
         if (instance == null) {
             instance = new BaitManager();
         }

@@ -3,15 +3,15 @@ package com.oheers.fish.items.configs;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class MaxStackSizeItemConfig extends ItemConfig<Integer> {
 
-    public MaxStackSizeItemConfig(@NotNull Section section) {
+    public MaxStackSizeItemConfig(@NonNull Section section) {
         super(section);
     }
 
@@ -21,7 +21,7 @@ public class MaxStackSizeItemConfig extends ItemConfig<Integer> {
     }
 
     @Override
-    protected BiConsumer<ItemStack, Integer> applyToItem(@org.jetbrains.annotations.Nullable OfflinePlayer player, @org.jetbrains.annotations.Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, Integer> applyToItem(@org.jspecify.annotations.Nullable OfflinePlayer player, @org.jspecify.annotations.Nullable Map<String, ?> replacements) {
         return (item, value) -> {
             if (value == null) {
                 return;

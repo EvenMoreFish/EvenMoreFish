@@ -23,7 +23,7 @@ package com.oheers.fish.api.addons;
 import com.github.Anon8281.universalScheduler.UniversalRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -39,9 +39,9 @@ public final class Futures {
     private Futures() {}
 
 
-    public static <T> void onMainThread(@NotNull final Plugin plugin,
-                                        @NotNull final CompletableFuture<T> future,
-                                        @NotNull final BiConsumer<T, Throwable> consumer) {
+    public static <T> void onMainThread(@NonNull final Plugin plugin,
+                                        @NonNull final CompletableFuture<T> future,
+                                        @NonNull final BiConsumer<T, Throwable> consumer) {
         future.whenComplete((value, exception) -> {
             if (Bukkit.isPrimaryThread()) {
                 consumer.accept(value, exception);
@@ -57,27 +57,27 @@ public final class Futures {
     }
 
 
-    @NotNull
+    @NonNull
     public static <T> Collector<CompletableFuture<T>, ?, CompletableFuture<List<T>>> collector() {
         return Collectors.collectingAndThen(Collectors.toList(), Futures::of);
     }
 
 
-    @NotNull
+    @NonNull
     public static <T> CompletableFuture<List<T>> of(
-            @NotNull final Stream<CompletableFuture<T>> futures) {
+            @NonNull final Stream<CompletableFuture<T>> futures) {
         return of(futures.collect(Collectors.toList()));
     }
 
-    @NotNull
-    public static <T> CompletableFuture<List<T>> of(@NotNull final Collection<CompletableFuture<T>> futures) {
+    @NonNull
+    public static <T> CompletableFuture<List<T>> of(@NonNull final Collection<CompletableFuture<T>> futures) {
         return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
                 .thenApplyAsync($ -> awaitCompletion(futures));
     }
 
-    @NotNull
+    @NonNull
     private static <T> List<T> awaitCompletion(
-            @NotNull final Collection<CompletableFuture<T>> futures) {
+            @NonNull final Collection<CompletableFuture<T>> futures) {
         return futures.stream().map(CompletableFuture::join).collect(Collectors.toList());
     }
 

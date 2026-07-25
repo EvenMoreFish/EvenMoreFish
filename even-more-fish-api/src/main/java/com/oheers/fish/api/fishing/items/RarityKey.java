@@ -1,8 +1,8 @@
 package com.oheers.fish.api.fishing.items;
 
 import com.oheers.fish.api.Logging;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An immutable key that uniquely identifies a fish by its rarity and name.
@@ -22,7 +22,7 @@ public final class RarityKey {
      *
      * @param fish The fish this key belongs to.
      */
-    public static @NotNull RarityKey of(@NotNull IFish fish) {
+    public static @NonNull RarityKey of(@NonNull IFish fish) {
         return new RarityKey(fish.getRarity(), fish);
     }
 
@@ -33,7 +33,7 @@ public final class RarityKey {
      * @param fishStr   The name of the fish.
      * @return A valid RarityKey, or null if the rarity or fish do not exist.
      */
-    public static @Nullable RarityKey of(@NotNull String rarityStr, @NotNull String fishStr) {
+    public static @Nullable RarityKey of(@NonNull String rarityStr, @NonNull String fishStr) {
         IRarity rarity = AbstractFishManager.getInstance().getRarity(rarityStr);
         if (rarity == null) {
             Logging.warn("There is no rarity named " + rarityStr, new IllegalArgumentException());
@@ -55,7 +55,7 @@ public final class RarityKey {
      *
      * @param keyString The key string to use.
      */
-    public static @Nullable RarityKey of(@NotNull String keyString) {
+    public static @Nullable RarityKey of(@NonNull String keyString) {
         String[] split = keyString.split(":");
         if (split.length < 2) {
             return null;
@@ -68,14 +68,14 @@ public final class RarityKey {
     /**
      * @return A copy of the fish this key belongs to.
      */
-    public @NotNull IFish getFish() {
+    public @NonNull IFish getFish() {
         return this.fish.createCopy();
     }
 
     /**
      * @return The rarity this key belongs to.
      */
-    public @NotNull IRarity getRarity() {
+    public @NonNull IRarity getRarity() {
         return this.rarity;
     }
 

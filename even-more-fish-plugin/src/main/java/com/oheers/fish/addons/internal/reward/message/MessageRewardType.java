@@ -1,22 +1,22 @@
 package com.oheers.fish.addons.internal.reward.message;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import uk.firedev.messagelib.message.MessageType;
 
 public class MessageRewardType extends MessageRewardBase {
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "MESSAGE";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "Oheers";
     }
 
     @Override
-    public @NotNull MessageType getMessageType() {
+    public @NonNull MessageType getMessageType() {
         return MessageType.CHAT;
     }
 

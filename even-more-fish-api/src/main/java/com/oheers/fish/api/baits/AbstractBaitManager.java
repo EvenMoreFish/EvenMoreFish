@@ -4,8 +4,8 @@ import com.oheers.fish.api.AbstractFileBasedManager;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public abstract class AbstractBaitManager<T extends IBait> extends AbstractFileBasedManager<T> {
 
@@ -19,7 +19,7 @@ public abstract class AbstractBaitManager<T extends IBait> extends AbstractFileB
         instance = this;
     }
 
-    public static @NotNull AbstractBaitManager<? extends IBait> getInstance() {
+    public static @NonNull AbstractBaitManager<? extends IBait> getInstance() {
         if (instance == null) {
             throw new IllegalStateException("BaitManager has not been initialized yet!");
         }

@@ -31,8 +31,8 @@ import com.oheers.fish.placeholders.impl.player.CustomFishingBooleanPlaceholder;
 import com.oheers.fish.placeholders.impl.player.CustomFishingStatusPlaceholder;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -45,7 +45,7 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
     private final EvenMoreFish plugin;
     private final List<EMFPlaceholder> handlers;
 
-    public PlaceholderReceiver(@NotNull EvenMoreFish plugin) {
+    public PlaceholderReceiver(@NonNull EvenMoreFish plugin) {
         this.plugin = plugin;
         this.handlers = createHandlers();
     }
@@ -62,18 +62,18 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
 
     @SuppressWarnings("UnstableApiUsage")
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return plugin.getPluginMeta().getAuthors().toString();
     }
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "emf";
     }
 
     @SuppressWarnings("UnstableApiUsage")
     @Override
-    public @NotNull String getVersion() {
+    public @NonNull String getVersion() {
         return plugin.getPluginMeta().getVersion();
     }
 
@@ -115,7 +115,7 @@ public class PlaceholderReceiver extends PlaceholderExpansion {
     }
 
     @Override
-    public @Nullable String onRequest(@Nullable OfflinePlayer player, @NotNull final String identifier) {
+    public @Nullable String onRequest(@Nullable OfflinePlayer player, @NonNull final String identifier) {
         for (EMFPlaceholder handler : handlers) {
             if (handler.shouldProcess(identifier)) {
                 return handler.parsePAPI(player, identifier);

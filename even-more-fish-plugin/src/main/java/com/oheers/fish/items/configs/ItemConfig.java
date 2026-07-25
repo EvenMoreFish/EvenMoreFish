@@ -3,8 +3,8 @@ package com.oheers.fish.items.configs;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -17,7 +17,7 @@ public abstract class ItemConfig<T> {
     protected final Section section;
     protected boolean enabled = true;
 
-    public ItemConfig(@NotNull Section section) {
+    public ItemConfig(@NonNull Section section) {
         this.section = section;
     }
 
@@ -33,7 +33,7 @@ public abstract class ItemConfig<T> {
      * Applies the actual value to the item if this config is enabled.
      * @param item The item to apply the config to.
      */
-    public void apply(@NotNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
+    public void apply(@NonNull ItemStack item, @Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         if (!enabled) {
             return;
         }

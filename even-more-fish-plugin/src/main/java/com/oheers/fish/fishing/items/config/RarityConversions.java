@@ -5,7 +5,7 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigBase;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import uk.firedev.messagelib.message.ComponentMessage;
 
 import java.io.File;
@@ -37,7 +37,7 @@ public class RarityConversions {
         finalizeConversion(config);
     }
 
-    private void finalizeConversion(@NotNull ConfigBase raritiesConfig) {
+    private void finalizeConversion(@NonNull ConfigBase raritiesConfig) {
         // Rename the file to rarities.yml.old
         File file = raritiesConfig.getFile();
         file.renameTo(new File(EvenMoreFish.getInstance().getDataFolder(), "rarities.yml.old"));
@@ -55,7 +55,7 @@ public class RarityConversions {
         return new File(EvenMoreFish.getInstance().getDataFolder(), "rarities");
     }
 
-    private void convertSectionToFile(@NotNull Section section) {
+    private void convertSectionToFile(@NonNull Section section) {
         String id = section.getNameAsString();
         if (id == null) {
             return;

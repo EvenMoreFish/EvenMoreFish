@@ -4,14 +4,14 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.fishing.items.Rarity;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class RarityFileUpdates {
 
     private final Rarity rarity;
     private boolean updated = false;
 
-    public RarityFileUpdates(@NotNull Rarity rarity) {
+    public RarityFileUpdates(@NonNull Rarity rarity) {
         this.rarity = rarity;
     }
 
@@ -63,7 +63,7 @@ public class RarityFileUpdates {
         }
     }
 
-    private void updateRequirementFormats(@NotNull Section section) {
+    private void updateRequirementFormats(@NonNull Section section) {
         Section ingameSection = section.getSection("requirement.ingame-time");
         if (ingameSection != null) {
             int min = ingameSection.getInt("minTime");

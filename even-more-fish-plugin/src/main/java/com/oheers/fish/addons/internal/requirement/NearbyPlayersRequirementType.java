@@ -6,14 +6,14 @@ import com.oheers.fish.api.requirement.RequirementType;
 import com.oheers.fish.config.MainConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
 public class NearbyPlayersRequirementType extends RequirementType {
 
     @Override
-    public boolean checkRequirement(@NotNull RequirementContext context, @NotNull List<String> values) {
+    public boolean checkRequirement(@NonNull RequirementContext context, @NonNull List<String> values) {
         Player player = context.getPlayer();
         if (player == null) {
             String configLocation = context.getConfigPath();
@@ -44,17 +44,17 @@ public class NearbyPlayersRequirementType extends RequirementType {
     }
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "NEARBY-PLAYERS";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "FireML";
     }
 
     @Override
-    public @NotNull Plugin getPlugin() {
+    public @NonNull Plugin getPlugin() {
         return EvenMoreFish.getInstance();
     }
 

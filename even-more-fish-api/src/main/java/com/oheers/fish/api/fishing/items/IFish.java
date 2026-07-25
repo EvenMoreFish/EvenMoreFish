@@ -5,8 +5,8 @@ import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +17,9 @@ import java.util.UUID;
  */
 public interface IFish {
 
-    @NotNull ItemStack give(int randomIndex);
+    @NonNull ItemStack give(int randomIndex);
 
-    @NotNull ItemStack give();
+    @NonNull ItemStack give();
 
     double getWorthMultiplier();
 
@@ -40,11 +40,11 @@ public interface IFish {
 
     void checkSilent();
 
-    @NotNull IFish createCopy();
+    @NonNull IFish createCopy();
 
     boolean hasFishermanDisabled();
 
-    @NotNull Optional<Double> getSetSize();
+    @NonNull Optional<Double> getSetSize();
 
     double getMinSize();
 
@@ -70,32 +70,32 @@ public interface IFish {
 
     double getSetWorth();
 
-    @NotNull String getName();
+    @NonNull String getName();
 
-    @NotNull IRarity getRarity();
+    @NonNull IRarity getRarity();
 
     float getLength();
 
     void setLength(@Nullable Float length);
 
-    @NotNull List<Reward> getActionRewards();
+    @NonNull List<Reward> getActionRewards();
 
     @Deprecated(forRemoval = true, since = "2.3.5")
-    default @NotNull List<Reward> getFishRewards() {
+    default @NonNull List<Reward> getFishRewards() {
         return getCatchRewards();
     }
 
-    @NotNull List<Reward> getCatchRewards();
+    @NonNull List<Reward> getCatchRewards();
 
-    @NotNull List<Reward> getSellRewards();
+    @NonNull List<Reward> getSellRewards();
 
     double getWeight();
 
     void setWeight(double weight);
 
-    @NotNull Requirement getRequirement();
+    @NonNull Requirement getRequirement();
 
-    void setRequirement(@NotNull Requirement requirement);
+    void setRequirement(@NonNull Requirement requirement);
 
     boolean isWasBaited();
 
@@ -105,7 +105,7 @@ public interface IFish {
 
     void setSilent(boolean silent);
 
-    @NotNull CatchType getCatchType();
+    @NonNull CatchType getCatchType();
 
     boolean getShowInJournal();
 

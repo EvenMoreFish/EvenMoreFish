@@ -6,22 +6,22 @@ import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadableNBT;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
-    public ItemStackNBTHolder(@NotNull ItemStack obj) {
+    public ItemStackNBTHolder(@NonNull ItemStack obj) {
         super(obj);
     }
 
     @Override
-    public boolean hasNamespace(@NotNull String namespace) {
+    public boolean hasNamespace(@NonNull String namespace) {
         return NBT.get(this.obj, nbt -> nbt.getCompound(namespace) != null);
     }
 
     @Override
-    public boolean hasKey(@NotNull NamespacedKey namespacedKey) {
+    public boolean hasKey(@NonNull NamespacedKey namespacedKey) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         return NBT.get(this.obj, nbt -> {
@@ -32,7 +32,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     @Nullable
     @Override
-    public String getString(@NotNull NamespacedKey namespacedKey) {
+    public String getString(@NonNull NamespacedKey namespacedKey) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         return NBT.get(this.obj, nbt -> {
@@ -48,7 +48,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets a String in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setString(@NotNull NamespacedKey namespacedKey, @Nullable String value) {
+    public void setString(@NonNull NamespacedKey namespacedKey, @Nullable String value) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         NBT.modify(this.obj, nbt -> {
@@ -63,7 +63,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     @Nullable
     @Override
-    public Float getFloat(@NotNull NamespacedKey namespacedKey) {
+    public Float getFloat(@NonNull NamespacedKey namespacedKey) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         return NBT.get(this.obj, nbt -> {
@@ -79,7 +79,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets a Float in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setFloat(@NotNull NamespacedKey namespacedKey, @Nullable Float value) {
+    public void setFloat(@NonNull NamespacedKey namespacedKey, @Nullable Float value) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         NBT.modify(this.obj, nbt -> {
@@ -94,7 +94,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     @Nullable
     @Override
-    public Integer getInteger(@NotNull NamespacedKey namespacedKey) {
+    public Integer getInteger(@NonNull NamespacedKey namespacedKey) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         return NBT.get(this.obj, nbt -> {
@@ -110,7 +110,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets an Integer in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setInteger(@NotNull NamespacedKey namespacedKey, @Nullable Integer value) {
+    public void setInteger(@NonNull NamespacedKey namespacedKey, @Nullable Integer value) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         NBT.modify(this.obj, nbt -> {
@@ -125,7 +125,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
 
     @Nullable
     @Override
-    public Boolean getBoolean(@NotNull NamespacedKey namespacedKey) {
+    public Boolean getBoolean(@NonNull NamespacedKey namespacedKey) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         return NBT.get(this.obj, nbt -> {
@@ -141,7 +141,7 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
      * Sets a Boolean in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setBoolean(@NotNull NamespacedKey namespacedKey, @Nullable Boolean value) {
+    public void setBoolean(@NonNull NamespacedKey namespacedKey, @Nullable Boolean value) {
         String namespace = namespacedKey.getNamespace();
         String key = namespacedKey.getKey();
         NBT.modify(this.obj, nbt -> {

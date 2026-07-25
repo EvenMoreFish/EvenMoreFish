@@ -13,8 +13,8 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -24,7 +24,7 @@ public class SellGui extends ConfigGui {
 
     private final Inventory fishInventory;
 
-    public SellGui(@NotNull Player player, @NotNull SellState sellState, @Nullable Inventory fishInventory) {
+    public SellGui(@NonNull Player player, @NonNull SellState sellState, @Nullable Inventory fishInventory) {
         super(sellState.getGuiConfig(), player);
 
         this.fishInventory = Optional.ofNullable(fishInventory).orElse(Bukkit.createInventory(player, 54));
@@ -63,7 +63,7 @@ public class SellGui extends ConfigGui {
 
         private final Supplier<GuiConfig> configSupplier;
 
-        SellState(@NotNull Supplier<GuiConfig> configSupplier) {
+        SellState(@NonNull Supplier<GuiConfig> configSupplier) {
             this.configSupplier = configSupplier;
         }
 

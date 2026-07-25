@@ -9,8 +9,8 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.logging.Level;
 
@@ -42,7 +42,7 @@ public class PlayerPointsEconomyType implements EconomyType {
     }
 
     @Override
-    public boolean deposit(@NotNull OfflinePlayer player, double amount, boolean allowMultiplier) {
+    public boolean deposit(@NonNull OfflinePlayer player, double amount, boolean allowMultiplier) {
         if (!isAvailable()) {
             return false;
         }
@@ -50,7 +50,7 @@ public class PlayerPointsEconomyType implements EconomyType {
     }
 
     @Override
-    public boolean withdraw(@NotNull OfflinePlayer player, double amount, boolean allowMultiplier) {
+    public boolean withdraw(@NonNull OfflinePlayer player, double amount, boolean allowMultiplier) {
         if (!isAvailable()) {
             return false;
         }
@@ -58,7 +58,7 @@ public class PlayerPointsEconomyType implements EconomyType {
     }
 
     @Override
-    public boolean has(@NotNull OfflinePlayer player, double amount) {
+    public boolean has(@NonNull OfflinePlayer player, double amount) {
         if (!isAvailable()) {
             return false;
         }
@@ -66,7 +66,7 @@ public class PlayerPointsEconomyType implements EconomyType {
     }
 
     @Override
-    public double get(@NotNull OfflinePlayer player) {
+    public double get(@NonNull OfflinePlayer player) {
         if (!isAvailable()) {
             return 0;
         }

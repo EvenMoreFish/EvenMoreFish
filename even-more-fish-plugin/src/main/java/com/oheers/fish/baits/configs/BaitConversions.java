@@ -7,7 +7,7 @@ import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import uk.firedev.messagelib.message.ComponentMessage;
 
 import java.io.File;
@@ -43,7 +43,7 @@ public class BaitConversions {
         finalizeConversion(config);
     }
 
-    private void finalizeConversion(@NotNull ConfigBase baitConfig) {
+    private void finalizeConversion(@NonNull ConfigBase baitConfig) {
         // Rename the file to baits.yml.old
         File file = baitConfig.getFile();
         file.renameTo(new File(EvenMoreFish.getInstance().getDataFolder(), "baits.yml.old"));
@@ -61,7 +61,7 @@ public class BaitConversions {
         return new File(EvenMoreFish.getInstance().getDataFolder(), "baits");
     }
 
-    private void convertSectionToFile(@NotNull Section section) {
+    private void convertSectionToFile(@NonNull Section section) {
         String id = section.getNameAsString();
         if (id == null) {
             return;
@@ -75,7 +75,7 @@ public class BaitConversions {
         configBase.save();
     }
 
-    private void handleMessagesYml(@NotNull ConfigBase config) {
+    private void handleMessagesYml(@NonNull ConfigBase config) {
         YamlDocument messages = MessageConfig.getInstance().getConfig();
         YamlDocument baitConfig = config.getConfig();
         Section baitSection = baitConfig.getSection("format");
@@ -90,7 +90,7 @@ public class BaitConversions {
         MessageConfig.getInstance().save();
     }
 
-    private void handleConfigYml(@NotNull ConfigBase config) {
+    private void handleConfigYml(@NonNull ConfigBase config) {
         YamlDocument mainConfig = MainConfig.getInstance().getConfig();
         YamlDocument baitConfig = config.getConfig();
         Section baitSection = baitConfig.getSection("general");

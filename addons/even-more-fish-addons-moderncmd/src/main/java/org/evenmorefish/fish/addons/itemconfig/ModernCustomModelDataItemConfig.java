@@ -5,8 +5,8 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -14,12 +14,12 @@ import java.util.function.BiConsumer;
 
 public class ModernCustomModelDataItemConfig extends ItemConfig<Number> {
 
-    public ModernCustomModelDataItemConfig(@NotNull Section section) {
+    public ModernCustomModelDataItemConfig(@NonNull Section section) {
         super(section);
     }
 
     @Override
-    @NotNull
+    @NonNull
     public Float getConfiguredValue() {
         return section.getFloat("custom-model-data", null);
     }

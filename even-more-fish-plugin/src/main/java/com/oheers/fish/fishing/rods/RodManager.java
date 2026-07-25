@@ -5,8 +5,8 @@ import com.oheers.fish.api.fishing.rods.AbstractRodManager;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.items.nbt.NbtKeys;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class RodManager extends AbstractRodManager<CustomRod> {
 
@@ -16,7 +16,7 @@ public class RodManager extends AbstractRodManager<CustomRod> {
         super();
     }
 
-    public static @NotNull RodManager getInstance() {
+    public static @NonNull RodManager getInstance() {
         return instance;
     }
 
@@ -80,7 +80,7 @@ public class RodManager extends AbstractRodManager<CustomRod> {
     }
 
     @Override
-    public @Nullable CustomRod getRod(@NotNull String rodId) {
+    public @Nullable CustomRod getRod(@NonNull String rodId) {
         return getItem(rodId);
     }
 

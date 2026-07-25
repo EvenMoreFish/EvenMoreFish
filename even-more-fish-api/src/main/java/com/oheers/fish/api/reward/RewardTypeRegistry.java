@@ -2,8 +2,8 @@ package com.oheers.fish.api.reward;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +16,7 @@ public class RewardTypeRegistry implements EMFRegistry<RewardType> {
 
     private RewardTypeRegistry() {}
 
-    public static @NotNull RewardTypeRegistry getInstance() {
+    public static @NonNull RewardTypeRegistry getInstance() {
         return instance;
     }
 
@@ -34,7 +34,7 @@ public class RewardTypeRegistry implements EMFRegistry<RewardType> {
      * @return An immutable copy of the current registry.
      */
     @Override
-    public @NotNull Map<String, RewardType> getRegistry() {
+    public @NonNull Map<String, RewardType> getRegistry() {
         return Map.copyOf(registry);
     }
 
@@ -45,7 +45,7 @@ public class RewardTypeRegistry implements EMFRegistry<RewardType> {
      * @return The value, or null if not found.
      */
     @Override
-    public @Nullable RewardType get(@NotNull String key) {
+    public @Nullable RewardType get(@NonNull String key) {
         return registry.get(key);
     }
 
@@ -57,7 +57,7 @@ public class RewardTypeRegistry implements EMFRegistry<RewardType> {
      * @return The value, or the default value if not found.
      */
     @Override
-    public @NotNull RewardType getOrDefault(@NotNull String key, @NotNull RewardType defaultValue) {
+    public @NonNull RewardType getOrDefault(@NonNull String key, @NonNull RewardType defaultValue) {
         return registry.getOrDefault(key, defaultValue);
     }
 
@@ -68,7 +68,7 @@ public class RewardTypeRegistry implements EMFRegistry<RewardType> {
      * @return True if the key was unregistered, false if not found.
      */
     @Override
-    public boolean unregister(@NotNull String key) {
+    public boolean unregister(@NonNull String key) {
         return registry.remove(key) != null;
     }
 
@@ -80,7 +80,7 @@ public class RewardTypeRegistry implements EMFRegistry<RewardType> {
      * @return True if the value was registered, false if a value with the same key already exists and force is false.
      */
     @Override
-    public boolean register(@NotNull RewardType value, boolean force) {
+    public boolean register(@NonNull RewardType value, boolean force) {
         if (!force && registry.containsKey(value.getKey())) {
             return false;
         }

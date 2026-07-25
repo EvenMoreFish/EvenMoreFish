@@ -13,7 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class ClearBaitsSubcommand {
 
     private final String name;
 
-    public ClearBaitsSubcommand(@NotNull String name) {
+    public ClearBaitsSubcommand(@NonNull String name) {
         this.name = name;
     }
 
@@ -50,7 +50,7 @@ public class ClearBaitsSubcommand {
             );
     }
 
-    private void clear(@NotNull CommandSender sender, @NotNull Player target) {
+    private void clear(@NonNull CommandSender sender, @NonNull Player target) {
         if (target.getInventory().getItemInMainHand().getType() != Material.FISHING_ROD) {
             ConfigMessage.ADMIN_NOT_HOLDING_ROD.getMessage().send(sender);
             return;

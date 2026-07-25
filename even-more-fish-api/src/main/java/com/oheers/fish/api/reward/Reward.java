@@ -8,8 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,12 +23,12 @@ public class Reward {
     // A cache for rewards that could not be given because a player was offline.
     private static final Map<UUID, List<RewardData>> rewardCache = new HashMap<>();
 
-    private final @NotNull String key;
-    private final @NotNull String value;
+    private final @NonNull String key;
+    private final @NonNull String value;
     private RewardType rewardType = null;
     private Vector fishVelocity;
 
-    public Reward(@NotNull String identifier) {
+    public Reward(@NonNull String identifier) {
         String[] split = identifier.split(":");
         if (split.length < 2) {
             EMFPlugin.getInstance().getLogger().warning(identifier + " is not formatted correctly. It won't be given as a reward");
@@ -48,15 +48,15 @@ public class Reward {
         return this.rewardType;
     }
 
-    public @NotNull String getKey() { return this.key; }
+    public @NonNull String getKey() { return this.key; }
 
-    public @NotNull String getValue() { return this.value; }
+    public @NonNull String getValue() { return this.value; }
 
-    public void rewardPlayer(@NotNull Player player, Location hookLocation) {
+    public void rewardPlayer(@NonNull Player player, Location hookLocation) {
         getRewardType().doReward(player, getKey(), getValue(), hookLocation);
     }
 
-    public void rewardPlayer(@NotNull OfflinePlayer player, @Nullable Location hookLocation) {
+    public void rewardPlayer(@NonNull OfflinePlayer player, @Nullable Location hookLocation) {
         if (getRewardType() == null) {
             EMFPlugin.getInstance().getLogger().warning("No reward type found for key: " + getKey());
             return;
@@ -64,7 +64,7 @@ public class Reward {
         rewardPlayer(player, hookLocation, true);
     }
 
-    public void rewardPlayer(@NotNull OfflinePlayer player, @Nullable Location hookLocation, boolean shouldAddToCache) {
+    public void rewardPlayer(@NonNull OfflinePlayer player, @Nullable Location hookLocation, boolean shouldAddToCache) {
         if (getRewardType() == null) {
             EMFPlugin.getInstance().getLogger().warning("No reward type found for key: " + getKey());
             return;
@@ -80,12 +80,12 @@ public class Reward {
         }
     }
 
-    private void addToCache(@NotNull UUID uuid, @Nullable Location hookLocation) {
+    private void addToCache(@NonNull UUID uuid, @Nullable Location hookLocation) {
         List<RewardData> cached = rewardCache.computeIfAbsent(uuid, u -> new ArrayList<>());
         cached.add(new RewardData(this, hookLocation));
     }
 
-    public static void checkCache(@NotNull UUID uuid) {
+    public static void checkCache(@NonNull UUID uuid) {
         if (!rewardCache.containsKey(uuid)) {
             Logging.debug("Player has no cached rewards.");
             return;
@@ -109,6 +109,6 @@ public class Reward {
         return this.fishVelocity;
     }
 
-    record RewardData(@NotNull Reward reward, @Nullable Location hookLocation) {}
+    record RewardData(@NonNull Reward reward, @Nullable Location hookLocation) {}
 
 }

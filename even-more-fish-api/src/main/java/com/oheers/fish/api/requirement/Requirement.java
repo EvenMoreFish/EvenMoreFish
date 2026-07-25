@@ -3,8 +3,8 @@ package com.oheers.fish.api.requirement;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +16,11 @@ public class Requirement {
 
     public Requirement() {}
 
-    public Requirement(@NotNull String identifier, @NotNull List<String> values) {
+    public Requirement(@NonNull String identifier, @NonNull List<String> values) {
         add(identifier, values);
     }
 
-    public Requirement(@NotNull Map<String, List<String>> requirements) {
+    public Requirement(@NonNull Map<String, List<String>> requirements) {
         add(requirements);
     }
 
@@ -28,12 +28,12 @@ public class Requirement {
         add(section);
     }
 
-    public Requirement add(@NotNull String identifier, @NotNull List<String> values) {
+    public Requirement add(@NonNull String identifier, @NonNull List<String> values) {
         processRequirement(identifier, values);
         return this;
     }
 
-    public Requirement add(@NotNull Map<String, List<String>> requirements) {
+    public Requirement add(@NonNull Map<String, List<String>> requirements) {
         requirements.forEach(this::processRequirement);
         return this;
     }
@@ -56,11 +56,11 @@ public class Requirement {
         return this;
     }
 
-    private void processRequirement(@NotNull String identifier, @NotNull List<String> values) {
+    private void processRequirement(@NonNull String identifier, @NonNull List<String> values) {
         this.checkMap.put(identifier, values);
     }
 
-    public boolean meetsRequirements(@NotNull RequirementContext context) {
+    public boolean meetsRequirements(@NonNull RequirementContext context) {
         for (Map.Entry<String, List<String>> entry : checkMap.entrySet()) {
             String key = entry.getKey().toUpperCase();
             List<String> value = entry.getValue();

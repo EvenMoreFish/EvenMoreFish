@@ -3,8 +3,8 @@ package com.oheers.fish.placeholders.impl.database.player;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.placeholders.abstracted.UniqueFishCaughtProgressPlaceholder;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class FirstUncaughtFishPlaceholder extends UniqueFishCaughtProgressPlaceholder {
 
@@ -13,7 +13,7 @@ public class FirstUncaughtFishPlaceholder extends UniqueFishCaughtProgressPlaceh
     }
 
     @Override
-    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NotNull String identifier) {
+    public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
         ParsedRarityTarget target = parseRarityTarget(player, identifier);
         if (target == null) {
             return null;

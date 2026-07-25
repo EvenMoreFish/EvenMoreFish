@@ -6,8 +6,8 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Random;
@@ -15,12 +15,12 @@ import java.util.function.BiConsumer;
 
 public class ItemDamageItemConfig extends ItemConfig<Integer> {
 
-    public ItemDamageItemConfig(@NotNull Section section) {
+    public ItemDamageItemConfig(@NonNull Section section) {
         super(section);
     }
 
     @Override
-    public @NotNull Integer getConfiguredValue() {
+    public @NonNull Integer getConfiguredValue() {
         return section.getInt("durability");
     }
 

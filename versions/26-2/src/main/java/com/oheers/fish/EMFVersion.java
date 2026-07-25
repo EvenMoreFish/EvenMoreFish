@@ -27,8 +27,8 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,7 +36,7 @@ import java.util.UUID;
 
 public class EMFVersion extends EMFVersionProvider {
 
-    public EMFVersion(@NotNull EMFPlugin plugin) {
+    public EMFVersion(@NonNull EMFPlugin plugin) {
         super(plugin);
     }
 
@@ -72,7 +72,7 @@ public class EMFVersion extends EMFVersionProvider {
 
     @SuppressWarnings("UnstableApiUsage")
     @Override
-    public @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
+    public @NonNull ItemStack getSkullFromUUID(@NonNull UUID uuid) {
         ResolvableProfile profile = ResolvableProfile.resolvableProfile()
             .uuid(uuid)
             .build();
@@ -87,9 +87,9 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    @NotNull
+    @NonNull
     @Override
-    public ItemStack getSkullFromBase64(@NotNull String base64) {
+    public ItemStack getSkullFromBase64(@NonNull String base64) {
         ResolvableProfile profile = ResolvableProfile.resolvableProfile()
             .uuid(FishUtils.B64_SKULL_UUID)
             .addProperty(new ProfileProperty("textures", base64))
@@ -101,13 +101,13 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     @Override
-    public @NotNull NBTHolder<ItemStack> createItemStackNbtHolder(@NotNull ItemStack item) {
+    public @NonNull NBTHolder<ItemStack> createItemStackNbtHolder(@NonNull ItemStack item) {
         return new ItemStackNBTHolder(item);
     }
 
     @Nullable
     @Override
-    public ItemStack deserializeItemStack(@NotNull String raw) {
+    public ItemStack deserializeItemStack(@NonNull String raw) {
         try {
             CompoundTag tag = net.minecraft.nbt.TagParser.parseCompoundFully(raw);
             return MCUtil.deserializeItem(tag);
@@ -117,9 +117,9 @@ public class EMFVersion extends EMFVersionProvider {
         }
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public String serializeItemStack(@NotNull ItemStack item) {
+    public String serializeItemStack(@NonNull ItemStack item) {
         return CraftMagicNumbers.INSTANCE.serializeItemAsJson(item).toString();
     }
 

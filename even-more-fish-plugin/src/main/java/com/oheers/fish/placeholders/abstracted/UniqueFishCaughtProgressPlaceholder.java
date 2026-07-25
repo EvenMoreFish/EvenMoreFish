@@ -12,8 +12,8 @@ import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
@@ -25,13 +25,13 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
     private final String prefix;
     private final int prefixLength;
 
-    protected UniqueFishCaughtProgressPlaceholder(@NotNull String prefix) {
+    protected UniqueFishCaughtProgressPlaceholder(@NonNull String prefix) {
         this.prefix = prefix;
         this.prefixLength = prefix.length();
     }
 
     @Override
-    public boolean shouldProcess(@NotNull String identifier) {
+    public boolean shouldProcess(@NonNull String identifier) {
         return identifier.startsWith(prefix);
     }
 
@@ -39,7 +39,7 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         return prefixLength;
     }
 
-    protected @Nullable UUID resolveTarget(@Nullable OfflinePlayer player, @NotNull String target, @NotNull String identifier) {
+    protected @Nullable UUID resolveTarget(@Nullable OfflinePlayer player, @NonNull String target, @NonNull String identifier) {
         UUID uuid = fetchPlayerOrUUIDString(player, target);
         if (uuid == null) {
             if (target.equalsIgnoreCase("player")) {
@@ -51,11 +51,11 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         return uuid;
     }
 
-    protected @NotNull String formatProgress(int caught, int total) {
+    protected @NonNull String formatProgress(int caught, int total) {
         return caught + "/" + total;
     }
 
-    protected @NotNull String formatPercent(int caught, int total) {
+    protected @NonNull String formatPercent(int caught, int total) {
         if (total <= 0) {
             return "0%";
         }
@@ -67,11 +67,11 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         return String.format(Locale.ROOT, "%.1f%%", percent);
     }
 
-    protected int remainingFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+    protected int remainingFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
         return Math.max(0, fishList.size() - countCaughtFish(uuid, fishList));
     }
 
-    protected int totalCaughtQuantity(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+    protected int totalCaughtQuantity(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
         int userId = resolveUserId(uuid);
         if (userId == 0) {
             return 0;
@@ -92,11 +92,11 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         return total;
     }
 
-    protected boolean hasCaughtFish(@NotNull UUID uuid, @NotNull Fish fish) {
+    protected boolean hasCaughtFish(@NonNull UUID uuid, @NonNull Fish fish) {
         return timesCaught(uuid, fish) > 0;
     }
 
-    protected int timesCaught(@NotNull UUID uuid, @NotNull Fish fish) {
+    protected int timesCaught(@NonNull UUID uuid, @NonNull Fish fish) {
         int userId = resolveUserId(uuid);
         if (userId == 0) {
             return 0;
@@ -111,7 +111,7 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         return stats == null ? 0 : stats.getQuantity();
     }
 
-    protected @Nullable Fish firstUncaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+    protected @Nullable Fish firstUncaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
         for (Fish fish : fishList) {
             if (!hasCaughtFish(uuid, fish)) {
                 return fish;
@@ -120,22 +120,22 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         return null;
     }
 
-    protected @NotNull List<Fish> getAllFish() {
+    protected @NonNull List<Fish> getAllFish() {
         return FishManager.getInstance().getRarityMap().values().stream()
             .map(Rarity::getOriginalFishList)
             .flatMap(List::stream)
             .toList();
     }
 
-    protected @Nullable Rarity resolveRarity(@NotNull String rarityId) {
+    protected @Nullable Rarity resolveRarity(@NonNull String rarityId) {
         return FishManager.getInstance().getRarity(rarityId);
     }
 
-    protected @Nullable Fish resolveFish(@NotNull String rarityId, @NotNull String fishName) {
+    protected @Nullable Fish resolveFish(@NonNull String rarityId, @NonNull String fishName) {
         return FishManager.getInstance().getFish(rarityId, fishName);
     }
 
-    protected int countCaughtFish(@NotNull UUID uuid, @NotNull List<Fish> fishList) {
+    protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
         int userId = resolveUserId(uuid);
         if (userId == 0) {
             return 0;
@@ -156,7 +156,7 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         return caught;
     }
 
-    protected @Nullable ParsedRarityTarget parseRarityTarget(@Nullable OfflinePlayer player, @NotNull String identifier) {
+    protected @Nullable ParsedRarityTarget parseRarityTarget(@Nullable OfflinePlayer player, @NonNull String identifier) {
         String payload = identifier.substring(getPrefixLength());
         int splitIndex = payload.lastIndexOf('_');
         if (splitIndex <= 0 || splitIndex == payload.length() - 1) {
@@ -180,7 +180,7 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         return new ParsedRarityTarget(uuid, rarityId, rarity, rarity.getOriginalFishList());
     }
 
-    protected @Nullable ParsedFishTarget parseFishTarget(@Nullable OfflinePlayer player, @NotNull String identifier) {
+    protected @Nullable ParsedFishTarget parseFishTarget(@Nullable OfflinePlayer player, @NonNull String identifier) {
         String payload = identifier.substring(getPrefixLength());
         int targetSplitIndex = payload.lastIndexOf('_');
         if (targetSplitIndex <= 0 || targetSplitIndex == payload.length() - 1) {
@@ -212,7 +212,7 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         return new ParsedFishTarget(uuid, rarityId, fishName, fish);
     }
 
-    private int resolveUserId(@NotNull UUID uuid) {
+    private int resolveUserId(@NonNull UUID uuid) {
         if (DatabaseUtil.isDatabaseOffline()) {
             return 0;
         }
@@ -242,11 +242,11 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         return EvenMoreFish.getInstance().getPluginDataManager().getUserFishStatsDataManager();
     }
 
-    private @NotNull String key(int userId, @NotNull Fish fish) {
+    private @NonNull String key(int userId, @NonNull Fish fish) {
         return UserFishRarityKey.of(userId, fish).toString();
     }
 
-    protected void debug(@NotNull String message) {
+    protected void debug(@NonNull String message) {
         try {
             Logging.debug(message);
         } catch (RuntimeException ignored) {
@@ -254,9 +254,9 @@ public abstract class UniqueFishCaughtProgressPlaceholder implements EMFPlacehol
         }
     }
 
-    protected record ParsedRarityTarget(@NotNull UUID uuid, @NotNull String rarityId, @NotNull Rarity rarity, @NotNull List<Fish> fishList) {
+    protected record ParsedRarityTarget(@NonNull UUID uuid, @NonNull String rarityId, @NonNull Rarity rarity, @NonNull List<Fish> fishList) {
     }
 
-    protected record ParsedFishTarget(@NotNull UUID uuid, @NotNull String rarityId, @NotNull String fishName, @NotNull Fish fish) {
+    protected record ParsedFishTarget(@NonNull UUID uuid, @NonNull String rarityId, @NonNull String fishName, @NonNull Fish fish) {
     }
 }

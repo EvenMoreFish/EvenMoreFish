@@ -23,8 +23,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -56,7 +56,7 @@ public class Checks {
      * @param player The player to check.
      * @param location The location of the hook.
      */
-    public static boolean isMcMMOOverfishing(@NotNull Player player, @NotNull Location hookLocation) {
+    public static boolean isMcMMOOverfishing(@NonNull Player player, @NonNull Location hookLocation) {
         if (!EvenMoreFish.getInstance().getDependencyManager().isUsingMcMMO()) {
             return false;
         }
@@ -69,7 +69,7 @@ public class Checks {
         return mmoPlayer != null && mmoPlayer.getFishingManager().isExploitingFishing(hookLocation.toVector());
     }
 
-    public static boolean canFishInWorld(@NotNull Location location) {
+    public static boolean canFishInWorld(@NonNull Location location) {
         World world = location.getWorld();
         if (world == null) {
             return false;
@@ -78,11 +78,11 @@ public class Checks {
         return whitelistedWorlds.isEmpty() || whitelistedWorlds.contains(world.getName()) || whitelistedWorlds.contains(world.getKey().asString());
     }
 
-    public static boolean canFishInRegion(@NotNull Location location) {
+    public static boolean canFishInRegion(@NonNull Location location) {
         return canUseRegion(location, MainConfig.getInstance().getAllowedRegions());
     }
 
-    public static boolean canUseRegion(@NotNull Location location, @NotNull List<String> allowedRegions) {
+    public static boolean canUseRegion(@NonNull Location location, @NonNull List<String> allowedRegions) {
         // If no whitelist is defined, allow all regions
         if (allowedRegions.isEmpty()) {
             return true;
@@ -110,7 +110,7 @@ public class Checks {
         }
     }
 
-    public static boolean isAFKFishing(@NotNull Player player) {
+    public static boolean isAFKFishing(@NonNull Player player) {
         if (!MainConfig.getInstance().isAFKProtectionEnabled()) {
             return false;
         }

@@ -2,7 +2,7 @@ package com.oheers.fish.database.model.user;
 
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.fishing.items.Fish;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
@@ -198,12 +198,12 @@ public class UserReport {
         this.shortestLength = shortestLength;
     }
 
-    public void setShortestLengthAndFish(@NotNull Fish fish) {
+    public void setShortestLengthAndFish(@NonNull Fish fish) {
         this.shortestLength = fish.getLength();
         this.shortestFish = FishRarityKey.of(fish);
     }
 
-    public void setLongestLengthAndFish(@NotNull Fish fish) {
+    public void setLongestLengthAndFish(@NonNull Fish fish) {
         this.largestLength = fish.getLength();
         this.largestFish = FishRarityKey.of(fish);
     }

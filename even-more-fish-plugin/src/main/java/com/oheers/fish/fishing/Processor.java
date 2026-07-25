@@ -23,8 +23,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -43,15 +43,15 @@ public abstract class Processor<E extends Event> {
         this.fishingType = FishingType.VANILLA;
     }
 
-    public Processor(@NotNull FishingType fishingType) {
+    public Processor(@NonNull FishingType fishingType) {
         this.fishingType = fishingType;
     }
 
-    protected abstract void process(@NotNull E event);
+    protected abstract void process(@NonNull E event);
 
     protected abstract boolean isEnabled();
 
-    public @Nullable ItemStack getCaughtItem(@NotNull Player player, @NotNull Location location, @Nullable ItemStack fishingRod) {
+    public @Nullable ItemStack getCaughtItem(@NonNull Player player, @NonNull Location location, @Nullable ItemStack fishingRod) {
         // Check if fishing is allowed in this world.
         if (!Checks.canFishInWorld(location)) {
             Logging.debug("Fish cannot be caught in this world.");
@@ -102,7 +102,7 @@ public abstract class Processor<E extends Event> {
         return fish.give();
     }
 
-    private void handleCaughtFish(@NotNull Player player, @NotNull Location location, @NotNull Fish fish) {
+    private void handleCaughtFish(@NonNull Player player, @NonNull Location location, @NonNull Fish fish) {
         if (fish.hasCatchRewards()) {
             fish.getCatchRewards().forEach(fishReward -> fishReward.rewardPlayer(player, location));
         }
@@ -128,7 +128,7 @@ public abstract class Processor<E extends Event> {
         }
     }
 
-    private @Nullable BaitHandler getBaitFromRod(@NotNull ItemStack rod, @Nullable CustomRod customRod) {
+    private @Nullable BaitHandler getBaitFromRod(@NonNull ItemStack rod, @Nullable CustomRod customRod) {
         if (customRod != null) {
             Logging.debug("Bait ignored because custom rods are not compatible with baits.");
             return null;
@@ -148,7 +148,7 @@ public abstract class Processor<E extends Event> {
         return bait;
     }
 
-    private @Nullable ItemStack getBaitItem(@NotNull Player player, @NotNull Location location) {
+    private @Nullable ItemStack getBaitItem(@NonNull Player player, @NonNull Location location) {
         Optional<BaitHandler> caughtBait = BaitNBTManager.randomBaitCatch();
         if (caughtBait.isEmpty()) {
             Logging.debug("Could not determine bait for player " + player.getName() + ". This is usually a bug.");
@@ -183,7 +183,7 @@ public abstract class Processor<E extends Event> {
      * @param customRod The custom rod being used, null if no custom rod.
      * @return A random fish.
      */
-    private @Nullable Fish chooseFish(@NotNull Player player, @NotNull Location location, @Nullable BaitHandler bait, @Nullable CustomRod customRod) {
+    private @Nullable Fish chooseFish(@NonNull Player player, @NonNull Location location, @Nullable BaitHandler bait, @Nullable CustomRod customRod) {
         RequirementContext context = new RequirementContext(
             player.getWorld(),
             location,
@@ -230,7 +230,7 @@ public abstract class Processor<E extends Event> {
         return fish;
     }
 
-    protected abstract boolean fireEvent(@NotNull Fish fish, @NotNull Player player);
+    protected abstract boolean fireEvent(@NonNull Fish fish, @NonNull Player player);
 
     protected abstract ConfigMessage getCaughtMessage();
 
@@ -250,12 +250,12 @@ public abstract class Processor<E extends Event> {
 
     protected abstract boolean shouldCatchBait();
 
-    public abstract boolean canUseFish(@NotNull Fish fish);
+    public abstract boolean canUseFish(@NonNull Fish fish);
 
     /**
      * Checks if we need to update the competition leaderboard.
      */
-    protected void leaderboardCheck(@NotNull Fish fish, @NotNull Player fisherman, @NotNull Location location) {
+    protected void leaderboardCheck(@NonNull Fish fish, @NonNull Player fisherman, @NonNull Location location) {
         final Competition active = Competition.getCurrentlyActive();
         if (active == null) {
             return;

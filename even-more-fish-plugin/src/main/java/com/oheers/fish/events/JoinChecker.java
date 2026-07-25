@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class JoinChecker implements Listener {
 
@@ -22,7 +22,7 @@ public class JoinChecker implements Listener {
         checkRewardsJoin(event.getPlayer());
     }
 
-    private void checkCompetitionJoin(@NotNull Player player) {
+    private void checkCompetitionJoin(@NonNull Player player) {
         Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp == null) {
             return;
@@ -40,7 +40,7 @@ public class JoinChecker implements Listener {
         EvenMoreFish.getScheduler().runTaskLater(() -> message.send(player), 60L);
     }
 
-    public void checkRewardsJoin(@NotNull Player player) {
+    public void checkRewardsJoin(@NonNull Player player) {
         EvenMoreFish.getScheduler().runTaskLater(() -> Reward.checkCache(player.getUniqueId()), 60L);
     }
 
@@ -50,7 +50,7 @@ public class JoinChecker implements Listener {
         checkCompetitionLeave(event.getPlayer());
     }
 
-    private void checkCompetitionLeave(@NotNull Player player) {
+    private void checkCompetitionLeave(@NonNull Player player) {
         final Competition activeComp = Competition.getCurrentlyActive();
         if (activeComp != null) {
             activeComp.getStatusBar().removePlayer(player);

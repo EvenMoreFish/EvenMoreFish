@@ -51,8 +51,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import uk.firedev.messagelib.Utils;
 
 import java.math.BigDecimal;
@@ -76,7 +76,7 @@ public class FishUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static void giveItems(@NotNull List<@Nullable ItemStack> items, @NotNull Player player) {
+    public static void giveItems(@NonNull List<@Nullable ItemStack> items, @NonNull Player player) {
         if (items.isEmpty()) {
             return; // Early return if the list is null or empty
         }
@@ -101,15 +101,15 @@ public class FishUtils {
     }
 
 
-    public static void giveItems(@Nullable ItemStack @NotNull [] items, @NotNull Player player) {
+    public static void giveItems(@Nullable ItemStack @NonNull [] items, @NonNull Player player) {
         giveItems(Arrays.asList(items), player);
     }
 
-    public static void giveItem(@NotNull ItemStack item, @NotNull Player player) {
+    public static void giveItem(@NonNull ItemStack item, @NonNull Player player) {
         giveItems(List.of(item), player);
     }
 
-    public static @Nullable String getRegionName(@NotNull Location location) {
+    public static @Nullable String getRegionName(@NonNull Location location) {
         if (!MainConfig.getInstance().isRegionBoostsEnabled()) {
             EvenMoreFish.getInstance().debug("Region boosts are disabled.");
             return null;
@@ -144,11 +144,11 @@ public class FishUtils {
         return null;
     }
 
-    public static @NotNull EMFMessage timeFormat(long timeLeft) {
+    public static @NonNull EMFMessage timeFormat(long timeLeft) {
         return EMFSingleMessage.of(durationFormatter.format(timeLeft));
     }
 
-    public static @NotNull String timeRaw(long timeLeft) {
+    public static @NonNull String timeRaw(long timeLeft) {
         String returning = "";
         long hours = timeLeft / 3600;
 
@@ -172,7 +172,7 @@ public class FishUtils {
      * @param defaultChar The default character to use if an exception is thrown.
      * @return The first Character from the String
      */
-    public static char getCharFromString(@NotNull String string, char defaultChar) {
+    public static char getCharFromString(@NonNull String string, char defaultChar) {
         try {
             return string.toCharArray()[0];
         } catch (ArrayIndexOutOfBoundsException ex) {
@@ -180,7 +180,7 @@ public class FishUtils {
         }
     }
 
-    public static @Nullable Biome getBiome(@NotNull String keyString) {
+    public static @Nullable Biome getBiome(@NonNull String keyString) {
         Biome biome = getFromBukkitRegistry(keyString, Registry.BIOME);
         if (biome == null) {
             EvenMoreFish.getInstance().getLogger().severe(keyString + " is not a valid biome.");
@@ -188,11 +188,11 @@ public class FishUtils {
         return biome;
     }
 
-    public static @Nullable DayOfWeek getDay(@NotNull String day) {
+    public static @Nullable DayOfWeek getDay(@NonNull String day) {
         return getEnumValue(DayOfWeek.class, day);
     }
 
-    public static @Nullable Integer getInteger(@NotNull String intString) {
+    public static @Nullable Integer getInteger(@NonNull String intString) {
         try {
             return Integer.parseInt(intString);
         } catch (NumberFormatException exception) {
@@ -223,15 +223,15 @@ public class FishUtils {
         }
     }
 
-    public static @NotNull ItemStack getSkullFromBase64(@NotNull String base64) {
+    public static @NonNull ItemStack getSkullFromBase64(@NonNull String base64) {
         return EvenMoreFish.getInstance().getVersionProvider().getSkullFromBase64(base64);
     }
 
-    public static @NotNull ItemStack getSkullFromUUID(@NotNull UUID uuid) {
+    public static @NonNull ItemStack getSkullFromUUID(@NonNull UUID uuid) {
         return EvenMoreFish.getInstance().getVersionProvider().getSkullFromUUID(uuid);
     }
 
-    public static @NotNull ItemStack getSkullFromUUIDString(@NotNull String uuidString) {
+    public static @NonNull ItemStack getSkullFromUUIDString(@NonNull String uuidString) {
         try {
             return getSkullFromUUID(UUID.fromString(uuidString));
         } catch (IllegalArgumentException exception) {
@@ -269,7 +269,7 @@ public class FishUtils {
      * @param colour The original colour
      * @return A string turned into a format key for use in configs.
      */
-    public static @NotNull String getFormat(@NotNull String colour) {
+    public static @NonNull String getFormat(@NonNull String colour) {
         if (Utils.isLegacy(colour)) {
             // Legacy's formatting makes this insanely simple
             return colour + "{name}";
@@ -278,7 +278,7 @@ public class FishUtils {
         }
     }
 
-    private static @NotNull String getMiniMessageFormat(@NotNull String colour) {
+    private static @NonNull String getMiniMessageFormat(@NonNull String colour) {
         int openingTagEnd = colour.indexOf(">");
 
         if (openingTagEnd == -1) {
@@ -295,11 +295,11 @@ public class FishUtils {
         return colour.substring(0, openingTagEnd + 1) + "{name}";
     }
 
-    public static @Nullable Enchantment getEnchantment(@NotNull String namespace) {
+    public static @Nullable Enchantment getEnchantment(@NonNull String namespace) {
         return getFromBukkitRegistry(namespace, Registry.ENCHANTMENT);
     }
 
-    public static @NotNull <E extends Enum<E>> E getEnumValue(@NotNull Class<E> enumClass, @Nullable String value, @NotNull E def) {
+    public static @NonNull <E extends Enum<E>> E getEnumValue(@NonNull Class<E> enumClass, @Nullable String value, @NonNull E def) {
         E enumValue = getEnumValue(enumClass, value);
         if (enumValue == null) {
             return def;
@@ -307,7 +307,7 @@ public class FishUtils {
         return enumValue;
     }
 
-    public static @Nullable <E extends Enum<E>> E getEnumValue(@NotNull Class<E> enumClass, @Nullable String value) {
+    public static @Nullable <E extends Enum<E>> E getEnumValue(@NonNull Class<E> enumClass, @Nullable String value) {
         // Safety check - Some classes are interfaces in newer Paper versions.
         if (!enumClass.isEnum()) {
             throw new IllegalArgumentException(enumClass.getName() + " cannot be used in FishUtils#getEnumValue.");
@@ -323,7 +323,7 @@ public class FishUtils {
         }
     }
 
-    private static <T extends Keyed> @Nullable T getFromBukkitRegistry(@NotNull String namespace, @NotNull Registry<T> registry) {
+    private static <T extends Keyed> @Nullable T getFromBukkitRegistry(@NonNull String namespace, @NonNull Registry<T> registry) {
         namespace = namespace.toLowerCase();
         NamespacedKey key = NamespacedKey.fromString(namespace);
         if (key == null) {
@@ -336,7 +336,7 @@ public class FishUtils {
         return inventory != null && inventory.firstEmpty() != -1;
     }
 
-    public static boolean classExists(@NotNull String className) {
+    public static boolean classExists(@NonNull String className) {
         try {
             Class.forName(className);
             return true;
@@ -356,7 +356,7 @@ public class FishUtils {
         }
     }
 
-    public static @Nullable Double fetchSize(@NotNull Section section, @NotNull String key, @Nullable OfflinePlayer player) {
+    public static @Nullable Double fetchSize(@NonNull Section section, @NonNull String key, @Nullable OfflinePlayer player) {
         Object value = section.get(key);
         if (value == null || value instanceof Section) {
             return null;
@@ -377,7 +377,7 @@ public class FishUtils {
         return papiParsed;
     }
 
-    public static void sellInventoryGui(@NotNull InventoryGui gui, @NotNull HumanEntity humanEntity) {
+    public static void sellInventoryGui(@NonNull InventoryGui gui, @NonNull HumanEntity humanEntity) {
         if (!(humanEntity instanceof Player player)) {
             return;
         }
@@ -395,7 +395,7 @@ public class FishUtils {
         });
     }
 
-    public static double calculateInventoryWorth(@NotNull Inventory inventory) {
+    public static double calculateInventoryWorth(@NonNull Inventory inventory) {
         double worth = 0;
         for (ItemStack itemStack : inventory) {
             SoldFish fish = SoldFish.get(null, itemStack);
@@ -412,7 +412,7 @@ public class FishUtils {
      * @deprecated Use {@link PotionEffectSerializer#deserialize(String, String)} instead.
      */
     @Deprecated
-    public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString, @NotNull String separator) {
+    public static @Nullable PotionEffect getPotionEffect(@NonNull String effectString, @NonNull String separator) {
         return PotionEffectSerializer.get().deserialize(effectString, separator);
     }
 
@@ -420,7 +420,7 @@ public class FishUtils {
      * @deprecated Use {@link PotionEffectSerializer#deserialize(String)} instead.
      */
     @Deprecated
-    public static @Nullable PotionEffect getPotionEffect(@NotNull String effectString) {
+    public static @Nullable PotionEffect getPotionEffect(@NonNull String effectString) {
         return PotionEffectSerializer.get().deserialize(effectString);
     }
 
@@ -428,7 +428,7 @@ public class FishUtils {
      * @deprecated Use {@link SoundSerializer#deserialize(String)} instead.
      */
     @Deprecated
-    public static @Nullable Sound.Type getSound(@Nullable String name) {
+    public static Sound.@Nullable Type getSound(@Nullable String name) {
         try {
             return org.bukkit.Sound.valueOf(name);
         } catch (IllegalArgumentException exception) {
@@ -479,7 +479,7 @@ public class FishUtils {
      * @deprecated Use {@link BaitManager#isBait(ItemStack)} instead.
      */
     @Deprecated
-    public static boolean isBaitObject(@NotNull ItemStack item) {
+    public static boolean isBaitObject(@NonNull ItemStack item) {
         return BaitManager.getInstance().isBait(item);
     }
 
@@ -487,7 +487,7 @@ public class FishUtils {
      * @deprecated Use {@link Checks#canFishInWorld(Location)} instead.
      */
     @Deprecated
-    public static boolean checkWorld(@NotNull Location l) {
+    public static boolean checkWorld(@NonNull Location l) {
         return Checks.canFishInWorld(l);
     }
 
@@ -495,7 +495,7 @@ public class FishUtils {
      * @deprecated Use {@link Checks#canUseRegion(Location, List)} instead.
      */
     @Deprecated
-    public static boolean checkRegion(@NotNull Location location, @NotNull List<String> whitelistedRegions) {
+    public static boolean checkRegion(@NonNull Location location, @NonNull List<String> whitelistedRegions) {
         return Checks.canUseRegion(location, whitelistedRegions);
     }
 
@@ -511,7 +511,7 @@ public class FishUtils {
      * @deprecated Use {@link ItemSerializer#deserializeItemAddon(String)} instead.
      */
     @Deprecated
-    public static @Nullable ItemStack getCustomItem(@NotNull String materialString) {
+    public static @Nullable ItemStack getCustomItem(@NonNull String materialString) {
         return ItemSerializer.get().deserializeItemAddon(materialString);
     }
 

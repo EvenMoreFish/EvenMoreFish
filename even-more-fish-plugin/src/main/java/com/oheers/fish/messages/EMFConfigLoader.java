@@ -1,8 +1,8 @@
 package com.oheers.fish.messages;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import uk.firedev.messagelib.config.ConfigLoader;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public class EMFConfigLoader implements ConfigLoader<Section> {
 
     private final Section config;
 
-    public EMFConfigLoader(@NotNull Section section) {
+    public EMFConfigLoader(@NonNull Section section) {
         this.config = section;
     }
     
@@ -26,17 +26,17 @@ public class EMFConfigLoader implements ConfigLoader<Section> {
     }
 
     @Override
-    public @NotNull List<String> getStringList(String path) {
+    public @NonNull List<String> getStringList(String path) {
         return config.getStringList(path);
     }
 
     @Override
-    public @NotNull Section getConfig() {
+    public @NonNull Section getConfig() {
         return config;
     }
 
     @Override
-    public @Nullable ConfigLoader<Section> getSection(@NotNull String path) {
+    public @Nullable ConfigLoader<Section> getSection(@NonNull String path) {
         Section section = config.getSection(path);
         return section == null ? null : new EMFConfigLoader(section);
     }

@@ -6,7 +6,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +19,7 @@ public class EMFFishCaughtEvent extends Event implements Cancellable {
     private boolean cancel;
 
     @ApiStatus.Internal
-    public EMFFishCaughtEvent(@NotNull IFish fish, @NotNull Player player, final LocalDateTime catchTime) {
+    public EMFFishCaughtEvent(@NonNull IFish fish, @NonNull Player player, final LocalDateTime catchTime) {
         this.fish = fish;
         this.player = player;
         this.catchTime = catchTime;
@@ -30,21 +30,21 @@ public class EMFFishCaughtEvent extends Event implements Cancellable {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 
     /**
      * @return The fish that the player is receiving
      */
-    public @NotNull IFish getFish() {
+    public @NonNull IFish getFish() {
         return fish;
     }
 
     /**
      * @return The player that has fished the fish
      */
-    public @NotNull Player getPlayer() {
+    public @NonNull Player getPlayer() {
         return player;
     }
 

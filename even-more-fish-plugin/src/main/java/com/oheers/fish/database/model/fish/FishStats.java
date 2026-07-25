@@ -3,35 +3,35 @@ package com.oheers.fish.database.model.fish;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.fishing.items.Fish;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class FishStats {
-    @NotNull
+    @NonNull
     private final String fishName;
-    @NotNull
+    @NonNull
     private final String fishRarity;
 
-    @NotNull
+    @NonNull
     private final LocalDateTime firstCatchTime;
-    @NotNull
+    @NonNull
     private final UUID discoverer;
     private String discovererName;
     private float shortestLength;
-    @NotNull
+    @NonNull
     private UUID shortestFisher;
     private String shortestFisherName;
     private float longestLength;
-    @NotNull
+    @NonNull
     private UUID longestFisher;
     private String longestFisherName;
     private int quantity;
 
-    public FishStats(@NotNull String fishName, @NotNull String fishRarity, @NotNull LocalDateTime firstCatchTime, @NotNull UUID discoverer, float shortestLength, @NotNull UUID shortestFisher, float longestLength, @NotNull UUID longestFisher, int quantity) {
+    public FishStats(@NonNull String fishName, @NonNull String fishRarity, @NonNull LocalDateTime firstCatchTime, @NonNull UUID discoverer, float shortestLength, @NonNull UUID shortestFisher, float longestLength, @NonNull UUID longestFisher, int quantity) {
         this.fishName = fishName;
         this.fishRarity = fishRarity;
         this.firstCatchTime = firstCatchTime;
@@ -46,7 +46,7 @@ public class FishStats {
         this.quantity = quantity;
     }
 
-    public FishStats(Fish fish, @NotNull LocalDateTime firstCatchTime, @NotNull UUID discoverer, float shortestLength, @NotNull UUID shortestFisher, float longestLength, @NotNull UUID longestFisher, int quantity) {
+    public FishStats(Fish fish, @NonNull LocalDateTime firstCatchTime, @NonNull UUID discoverer, float shortestLength, @NonNull UUID shortestFisher, float longestLength, @NonNull UUID longestFisher, int quantity) {
         this(
             fish.getName(),
             fish.getRarity().getId(),
@@ -64,19 +64,19 @@ public class FishStats {
         return new FishStats(fish,firstCatchTime,fish.getFishermanUUID(), fish.getLength(),fish.getFishermanUUID(),fish.getLength(), fish.getFishermanUUID(), 0);
     }
 
-    public @NotNull String getFishName() {
+    public @NonNull String getFishName() {
         return fishName;
     }
 
-    public @NotNull String getFishRarity() {
+    public @NonNull String getFishRarity() {
         return fishRarity;
     }
 
-    public @NotNull LocalDateTime getFirstCatchTime() {
+    public @NonNull LocalDateTime getFirstCatchTime() {
         return firstCatchTime;
     }
 
-    public @NotNull Timestamp getFirstCatchTimestamp() {
+    public @NonNull Timestamp getFirstCatchTimestamp() {
         return Timestamp.valueOf(firstCatchTime);
     }
 
@@ -84,7 +84,7 @@ public class FishStats {
         return shortestLength;
     }
 
-    public @NotNull UUID getShortestFisher() {
+    public @NonNull UUID getShortestFisher() {
         return shortestFisher;
     }
 
@@ -96,7 +96,7 @@ public class FishStats {
         return longestLength;
     }
 
-    public @NotNull UUID getLongestFisher() {
+    public @NonNull UUID getLongestFisher() {
         return longestFisher;
     }
 
@@ -108,7 +108,7 @@ public class FishStats {
         return quantity;
     }
 
-    public @NotNull UUID getDiscoverer() {
+    public @NonNull UUID getDiscoverer() {
         return discoverer;
     }
 
@@ -120,7 +120,7 @@ public class FishStats {
         this.shortestLength = shortestLength;
     }
 
-    public void setShortestFisher(@NotNull UUID shortestFisher) {
+    public void setShortestFisher(@NonNull UUID shortestFisher) {
         this.shortestFisher = shortestFisher;
         this.shortestFisherName = FishUtils.getPlayerName(shortestFisher);
     }
@@ -129,7 +129,7 @@ public class FishStats {
         this.longestLength = longestLength;
     }
 
-    public void setLongestFisher(@NotNull UUID longestFisher) {
+    public void setLongestFisher(@NonNull UUID longestFisher) {
         this.longestFisher = longestFisher;
         this.longestFisherName = FishUtils.getPlayerName(longestFisher);
     }

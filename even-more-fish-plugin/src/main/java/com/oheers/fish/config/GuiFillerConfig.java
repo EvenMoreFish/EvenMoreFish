@@ -11,7 +11,7 @@ import de.themoep.inventorygui.StaticGuiElement;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class GuiFillerConfig extends ConfigBase {
 
     // TODO these were copied from ConfigGui and won't be needed after the switch to Triumph
 
-    public List<GuiElement> getDefaultFillerItems(@NotNull ConfigGui gui) {
+    public List<GuiElement> getDefaultFillerItems(@NonNull ConfigGui gui) {
         List<GuiElement> elements = new ArrayList<>();
         getConfig().getRoutesAsStrings(false).forEach(key -> {
             Section itemSection = getConfig().getSection(key);
@@ -45,7 +45,7 @@ public class GuiFillerConfig extends ConfigBase {
         return elements;
     }
 
-    private StaticGuiElement getGuiItem(@NotNull ConfigGui gui, @NotNull Section itemSection) {
+    private StaticGuiElement getGuiItem(@NonNull ConfigGui gui, @NonNull Section itemSection) {
         char character = FishUtils.getCharFromString(itemSection.getString("character", "#"), '#');
         if (character == '#') {
             return null;

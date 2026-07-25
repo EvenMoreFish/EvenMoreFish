@@ -5,32 +5,32 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Skull;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Locale;
 
 public class SkullNBTHolder extends NBTHolder<Skull> {
 
-    public SkullNBTHolder(@NotNull Skull obj) {
+    public SkullNBTHolder(@NonNull Skull obj) {
         super(obj);
     }
 
     @Override
-    public boolean hasNamespace(@NotNull String namespace) {
+    public boolean hasNamespace(@NonNull String namespace) {
         return getData().getKeys().stream()
             .anyMatch(key -> key.getNamespace().equals(namespace.toLowerCase(Locale.ROOT)));
     }
 
     @Override
-    public boolean hasKey(@NotNull NamespacedKey namespacedKey) {
+    public boolean hasKey(@NonNull NamespacedKey namespacedKey) {
         return getData().has(namespacedKey);
     }
 
     @Nullable
     @Override
-    public String getString(@NotNull NamespacedKey namespacedKey) {
+    public String getString(@NonNull NamespacedKey namespacedKey) {
         return getData().get(namespacedKey, PersistentDataType.STRING);
     }
 
@@ -38,7 +38,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
      * Sets a String in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setString(@NotNull NamespacedKey namespacedKey, @Nullable String value) {
+    public void setString(@NonNull NamespacedKey namespacedKey, @Nullable String value) {
         if (value == null) {
             getData().remove(namespacedKey);
             return;
@@ -48,7 +48,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
 
     @Nullable
     @Override
-    public Float getFloat(@NotNull NamespacedKey namespacedKey) {
+    public Float getFloat(@NonNull NamespacedKey namespacedKey) {
         return getData().get(namespacedKey, PersistentDataType.FLOAT);
     }
 
@@ -56,7 +56,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
      * Sets a Float in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setFloat(@NotNull NamespacedKey namespacedKey, @Nullable Float value) {
+    public void setFloat(@NonNull NamespacedKey namespacedKey, @Nullable Float value) {
         if (value == null) {
             getData().remove(namespacedKey);
             return;
@@ -66,7 +66,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
 
     @Nullable
     @Override
-    public Integer getInteger(@NotNull NamespacedKey namespacedKey) {
+    public Integer getInteger(@NonNull NamespacedKey namespacedKey) {
         return getData().get(namespacedKey, PersistentDataType.INTEGER);
     }
 
@@ -74,7 +74,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
      * Sets an Integer in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setInteger(@NotNull NamespacedKey namespacedKey, @Nullable Integer value) {
+    public void setInteger(@NonNull NamespacedKey namespacedKey, @Nullable Integer value) {
         if (value == null) {
             getData().remove(namespacedKey);
             return;
@@ -83,7 +83,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
     }
 
     @Override
-    public @Nullable Boolean getBoolean(@NotNull NamespacedKey namespacedKey) {
+    public @Nullable Boolean getBoolean(@NonNull NamespacedKey namespacedKey) {
         return getData().get(namespacedKey, PersistentDataType.BOOLEAN);
     }
 
@@ -91,7 +91,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
      * Sets a Boolean in the specified NBT location. If null is passed, the key will be removed.
      */
     @Override
-    public void setBoolean(@NotNull NamespacedKey namespacedKey, @Nullable Boolean value) {
+    public void setBoolean(@NonNull NamespacedKey namespacedKey, @Nullable Boolean value) {
         if (value == null) {
             getData().remove(namespacedKey);
             return;
@@ -102,7 +102,7 @@ public class SkullNBTHolder extends NBTHolder<Skull> {
     @Override
     public void save() { /* PDC saves after being edited, so this does nothing. */ }
 
-    private @NotNull PersistentDataContainer getData() {
+    private @NonNull PersistentDataContainer getData() {
         return obj.getPersistentDataContainer();
     }
 

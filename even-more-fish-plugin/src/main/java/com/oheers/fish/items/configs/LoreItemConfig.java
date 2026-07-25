@@ -5,8 +5,8 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.function.BiConsumer;
 
 public class LoreItemConfig extends ItemConfig<List<Component>> {
 
-    public LoreItemConfig(@NotNull Section section) {
+    public LoreItemConfig(@NonNull Section section) {
         super(section);
     }
 

@@ -3,13 +3,13 @@ package com.oheers.fish.config.gui;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.messages.EMFSingleMessage;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
 public abstract class GuiConfig extends ConfigBase {
 
-    public GuiConfig(@NotNull String name) {
+    public GuiConfig(@NonNull String name) {
         super(
             "gui/" + name,
             "gui/" + name,
@@ -18,11 +18,11 @@ public abstract class GuiConfig extends ConfigBase {
         );
     }
 
-    public @NotNull EMFSingleMessage getTitle() {
+    public @NonNull EMFSingleMessage getTitle() {
         return EMFSingleMessage.fromString(getConfig().getString("title", "EvenMoreFish GUI"));
     }
 
-    public @NotNull String @NotNull [] getLayout() {
+    public @NonNull String @NonNull [] getLayout() {
         return getConfig().getStringList("layout").stream()
             .filter(Objects::nonNull)
             .limit(6)

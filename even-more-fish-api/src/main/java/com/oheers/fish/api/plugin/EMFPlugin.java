@@ -6,8 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.logging.Level;
 
@@ -22,7 +22,7 @@ public abstract class EMFPlugin extends JavaPlugin {
         instance = this;
     }
 
-    public static @NotNull EMFPlugin getInstance() {
+    public static @NonNull EMFPlugin getInstance() {
         if (instance == null) {
             throw new IllegalStateException("EMFPlugin not found. This should not happen!");
         }
@@ -80,18 +80,18 @@ public abstract class EMFPlugin extends JavaPlugin {
      * Temporary and for internal use only. Will be removed once API methods for messages are added.
      */
     @ApiStatus.Internal
-    public abstract void sendMessage(@NotNull String id, @NotNull Player player);
+    public abstract void sendMessage(@NonNull String id, @NonNull Player player);
 
     /**
      * Temporary and for internal use only. Will be removed once a proper place is found for it.
      */
     @ApiStatus.Internal
-    public abstract void logSoldFish(@NotNull SoldFish soldFish);
+    public abstract void logSoldFish(@NonNull SoldFish soldFish);
 
     /**
      * Temporary and for internal use only. Will be removed once API methods for messages are added.
      */
     @ApiStatus.Internal
-    public abstract void sendSoldMessage(double value, int count, @NotNull Player player);
+    public abstract void sendSoldMessage(double value, int count, @NonNull Player player);
 
 }

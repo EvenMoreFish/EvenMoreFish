@@ -3,15 +3,15 @@ package com.oheers.fish.items.configs;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class ModernGlowingItemConfig extends ItemConfig<Boolean> {
 
-    public ModernGlowingItemConfig(@NotNull Section section) {
+    public ModernGlowingItemConfig(@NonNull Section section) {
         super(section);
     }
 

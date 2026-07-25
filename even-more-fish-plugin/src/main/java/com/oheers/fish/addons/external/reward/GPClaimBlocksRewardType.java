@@ -7,12 +7,12 @@ import me.ryanhamshire.GriefPrevention.PlayerData;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class GPClaimBlocksRewardType extends RewardType {
 
     @Override
-    public void doReward(@NotNull Player player, @NotNull String key, @NotNull String value, Location hookLocation) {
+    public void doReward(@NonNull Player player, @NonNull String key, @NonNull String value, Location hookLocation) {
         int rewardBlocks;
         try {
             rewardBlocks = Integer.parseInt(value);
@@ -26,17 +26,17 @@ public class GPClaimBlocksRewardType extends RewardType {
     }
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "GP_CLAIM_BLOCKS";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return "FireML";
     }
 
     @Override
-    public @NotNull JavaPlugin getPlugin() {
+    public @NonNull JavaPlugin getPlugin() {
         return EvenMoreFish.getInstance();
     }
 

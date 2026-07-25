@@ -6,7 +6,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Fired when an EMF Fish is sold in the shop.
@@ -19,7 +19,7 @@ public class EMFFishPreSaleEvent extends PlayerEvent implements Cancellable {
     private boolean cancel = false;
 
     @ApiStatus.Internal
-    public EMFFishPreSaleEvent(@NotNull Player player, @NotNull SoldFish fish) {
+    public EMFFishPreSaleEvent(@NonNull Player player, @NonNull SoldFish fish) {
         super(player);
         this.fish = fish;
         this.player = player;
@@ -30,14 +30,14 @@ public class EMFFishPreSaleEvent extends PlayerEvent implements Cancellable {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 
     /**
      * @return The fish that the player is selling.
      */
-    public @NotNull SoldFish getSoldFish() {
+    public @NonNull SoldFish getSoldFish() {
         return this.fish;
     }
 

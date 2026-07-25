@@ -15,8 +15,8 @@ import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.time.DayOfWeek;
@@ -29,13 +29,13 @@ import java.util.logging.Logger;
 
 public class CompetitionFile extends ConfigBase {
 
-    private final @NotNull Logger logger = getPlugin().getLogger();
-    private final @NotNull String id;
-    private final @NotNull CompetitionType type;
+    private final @NonNull Logger logger = getPlugin().getLogger();
+    private final @NonNull String id;
+    private final @NonNull CompetitionType type;
     private final int duration;
 
     // We should never use the configUpdater for this.
-    public CompetitionFile(@NotNull File file) throws InvalidConfigurationException {
+    public CompetitionFile(@NonNull File file) throws InvalidConfigurationException {
         super(file, EvenMoreFish.getInstance(), false);
         CompetitionFileUpdates.update(this);
         this.id = validateId();
@@ -47,7 +47,7 @@ public class CompetitionFile extends ConfigBase {
      * Creates a new CompetitionFile with the provided values.
      * Used for the '/emf admin competition test' command.
      */
-    public CompetitionFile(@NotNull String id, @NotNull CompetitionType type, int duration) {
+    public CompetitionFile(@NonNull String id, @NonNull CompetitionType type, int duration) {
         super();
         this.id = id;
         this.type = type;
@@ -87,7 +87,7 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return The ID for this competition.
      */
-    public @NotNull String getId() {
+    public @NonNull String getId() {
         return this.id;
     }
 
@@ -101,21 +101,21 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return This competition's type.
      */
-    public @NotNull CompetitionType getType() {
+    public @NonNull CompetitionType getType() {
         return this.type;
     }
 
     /**
      * @return A list of times this competition should run at.
      */
-    public @NotNull List<String> getTimes() {
+    public @NonNull List<String> getTimes() {
         return getConfig().getStringList("times");
     }
 
     /**
      * @return A map of days and times to run this competition on.
      */
-    public @NotNull Map<DayOfWeek, List<String>> getScheduledDays() {
+    public @NonNull Map<DayOfWeek, List<String>> getScheduledDays() {
         Section section = getConfig().getSection("days");
         Map<DayOfWeek, List<String>> dayMap = new HashMap<>();
         if (section == null) {
@@ -141,7 +141,7 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return The commands to execute when this competition starts.
      */
-    public @NotNull List<String> getStartCommands() {
+    public @NonNull List<String> getStartCommands() {
         String route = "start-commands";
         if (!getConfig().contains(route)) {
             return List.of();
@@ -155,7 +155,7 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return A list of days this competition should not run on.
      */
-    public @NotNull List<DayOfWeek> getBlacklistedDays() {
+    public @NonNull List<DayOfWeek> getBlacklistedDays() {
         return getConfig().getStringList("blacklisted-days").stream()
                 .map(FishUtils::getDay)
                 .filter(Objects::nonNull)
@@ -165,7 +165,7 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return A list of rarities that can be caught in this competition.
      */
-    public @NotNull List<Rarity> getAllowedRarities() {
+    public @NonNull List<Rarity> getAllowedRarities() {
         return getConfig().getStringList("allowed-rarities").stream()
                 .map(FishManager.getInstance()::getRarity)
                 .filter(Objects::nonNull)
@@ -193,11 +193,11 @@ public class CompetitionFile extends ConfigBase {
         return getConfig().getInt("broadcast-range", -1);
     }
 
-    public @NotNull List<String> getLeaderboardColours() {
+    public @NonNull List<String> getLeaderboardColours() {
         return getConfig().getStringList("leaderboard", List.of("<gold>{name}</gold>", "<yellow>{name}</yellow>", "<gray>{name}</gray>", "<gray>{name}</gray>", "<#888888>{name}</#888888>"));
     }
 
-    public @NotNull List<Long> getAlertTimes() {
+    public @NonNull List<Long> getAlertTimes() {
         List<String> times = getAlertTimesAsStrings();
         List<Long> finalTimes = new ArrayList<>();
         for (String time : times) {
@@ -220,14 +220,14 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return The times to broadcast the "time remaining" message, represented as Strings.
      */
-    public @NotNull List<String> getAlertTimesAsStrings() {
+    public @NonNull List<String> getAlertTimesAsStrings() {
         return getConfig().getStringList("alerts");
     }
 
     /**
      * @return The reward to be given for winners of this competition.
      */
-    public @NotNull Map<Integer, List<Reward>> getRewards() {
+    public @NonNull Map<Integer, List<Reward>> getRewards() {
         Section section = getConfig().getSection("rewards");
         if (section == null) {
             return Map.of();
@@ -254,7 +254,7 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return The colour of this competition's bossbar.
      */
-    public @NotNull BossBar.Color getBossbarColour() {
+    public BossBar.@NonNull Color getBossbarColour() {
         String colour = getConfig().getString("bossbar-colour", "GREEN");
         BossBar.Color color = FishUtils.getEnumValue(BossBar.Color.class, colour);
         if (color == null) {

@@ -46,8 +46,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.evenmorefish.dimensionfishing.DimensionFishing;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import uk.firedev.vanishchecker.VanishChecker;
 
 import java.sql.Timestamp;
@@ -93,7 +93,7 @@ public class EvenMoreFish extends EMFPlugin {
     private static TaskScheduler scheduler;
     private EMFAPI api;
 
-    public static @NotNull EvenMoreFish getInstance() {
+    public static @NonNull EvenMoreFish getInstance() {
         if (instance == null) {
             throw new IllegalStateException("Plugin not initialized yet!");
         }
@@ -356,7 +356,7 @@ public class EvenMoreFish extends EMFPlugin {
      * Temporary and for internal use only. Will be removed once API methods for messages are added.
      */
     @Override
-    public void sendMessage(@NotNull String id, @NotNull Player player) {
+    public void sendMessage(@NonNull String id, @NonNull Player player) {
         try {
             ConfigMessage message = ConfigMessage.valueOf(id.toUpperCase(Locale.ROOT));
             message.send(player);
@@ -369,7 +369,7 @@ public class EvenMoreFish extends EMFPlugin {
      * Temporary and for internal use only. Will be removed once a proper place is found for it.
      */
     @Override
-    public void logSoldFish(@NotNull SoldFish sold) {
+    public void logSoldFish(@NonNull SoldFish sold) {
         if (!DatabaseUtil.isDatabaseOnline() || sold.getPlayer() == null) {
             return;
         }
@@ -421,7 +421,7 @@ public class EvenMoreFish extends EMFPlugin {
      * Temporary and for internal use only. Will be removed once API methods for messages are added.
      */
     @Override
-    public void sendSoldMessage(double value, int count, @NotNull Player player) {
+    public void sendSoldMessage(double value, int count, @NonNull Player player) {
         EMFMessage message = ConfigMessage.FISH_SALE.getMessage();
         message.setSellPrice(Economy.getInstance().getWorthFormat(value, true));
         message.setAmount(count);

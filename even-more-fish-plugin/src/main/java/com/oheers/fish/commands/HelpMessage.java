@@ -5,7 +5,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class HelpMessage {
 
     private Predicate<CommandSender> defaultRequirement = sender -> true;
 
-    private HelpMessage(@NotNull String subcommand) {
+    private HelpMessage(@NonNull String subcommand) {
         this.subcommand = subcommand;
     }
 
@@ -30,14 +30,14 @@ public class HelpMessage {
         return new HelpMessage("");
     }
 
-    public static HelpMessage helpMessage(@NotNull String subcommand) {
+    public static HelpMessage helpMessage(@NonNull String subcommand) {
         return new HelpMessage(subcommand);
     }
 
     /**
      * Adds a usage to this builder
      */
-    public HelpMessage addEntry(@NotNull String name, @NotNull Supplier<EMFMessage> description, @NotNull Predicate<CommandSender> requirement) {
+    public HelpMessage addEntry(@NonNull String name, @NonNull Supplier<EMFMessage> description, @NonNull Predicate<CommandSender> requirement) {
         this.entries.add(new HelpMessageEntry(name, description, requirement));
         return this;
     }
@@ -45,7 +45,7 @@ public class HelpMessage {
     /**
      * Adds a usage to this builder
      */
-    public HelpMessage addEntry(@NotNull String name, @NotNull Supplier<EMFMessage> description, @NotNull String permissionRequirement) {
+    public HelpMessage addEntry(@NonNull String name, @NonNull Supplier<EMFMessage> description, @NonNull String permissionRequirement) {
         Predicate<CommandSender> requirement = sender -> sender.hasPermission(permissionRequirement);
         this.entries.add(new HelpMessageEntry(name, description, requirement));
         return this;
@@ -54,17 +54,17 @@ public class HelpMessage {
     /**
      * Adds a usage to this builder
      */
-    public HelpMessage addEntry(@NotNull String name, @NotNull Supplier<EMFMessage> description) {
+    public HelpMessage addEntry(@NonNull String name, @NonNull Supplier<EMFMessage> description) {
         this.entries.add(new HelpMessageEntry(name, description, defaultRequirement));
         return this;
     }
 
-    public HelpMessage setDefaultRequirement(@NotNull Predicate<CommandSender> requirement) {
+    public HelpMessage setDefaultRequirement(@NonNull Predicate<CommandSender> requirement) {
         this.defaultRequirement = requirement;
         return this;
     }
 
-    public HelpMessage setDefaultRequirement(@NotNull String permissionRequirement) {
+    public HelpMessage setDefaultRequirement(@NonNull String permissionRequirement) {
         this.defaultRequirement = sender -> sender.hasPermission(permissionRequirement);
         return this;
     }
@@ -72,7 +72,7 @@ public class HelpMessage {
     /**
      * Adds "/[commandname] " and the relevant subcommand name to the start of the provided entry.
      */
-    private String correctCommand(@NotNull String name) {
+    private String correctCommand(@NonNull String name) {
         StringBuilder builder = new StringBuilder("/");
         builder.append(MainConfig.getInstance().getMainCommandName()).append(" ");
         if (!subcommand.isEmpty()) {
@@ -82,7 +82,7 @@ public class HelpMessage {
         return builder.toString();
     }
 
-    public void send(@NotNull CommandSender sender) {
+    public void send(@NonNull CommandSender sender) {
         final EMFListMessage message = ConfigMessage.HELP_GENERAL_TITLE.getMessage().toListMessage();
         entries.forEach(entry -> {
             if (!entry.requirement().test(sender)) {
@@ -101,9 +101,9 @@ public class HelpMessage {
     }
 
     record HelpMessageEntry(
-        @NotNull String name,
-        @NotNull Supplier<EMFMessage> description,
-        @NotNull Predicate<CommandSender> requirement
+        @NonNull String name,
+        @NonNull Supplier<EMFMessage> description,
+        @NonNull Predicate<CommandSender> requirement
     ) {}
 
 }

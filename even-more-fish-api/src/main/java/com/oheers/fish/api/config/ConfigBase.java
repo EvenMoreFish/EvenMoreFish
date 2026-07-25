@@ -10,8 +10,8 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class ConfigBase {
         }
     }
 
-    public ConfigBase(@NotNull File file, @NotNull Plugin plugin, boolean configUpdater) {
+    public ConfigBase(@NonNull File file, @NonNull Plugin plugin, boolean configUpdater) {
         this.preventIO = false;
         this.fileName = file.getName();
         this.resourceName = null;
@@ -53,7 +53,7 @@ public class ConfigBase {
         update();
     }
 
-    public ConfigBase(@NotNull String fileName, @NotNull String resourceName, @NotNull Plugin plugin, boolean configUpdater) {
+    public ConfigBase(@NonNull String fileName, @NonNull String resourceName, @NonNull Plugin plugin, boolean configUpdater) {
         this.preventIO = false;
         this.fileName = fileName;
         this.resourceName = resourceName;
@@ -75,7 +75,7 @@ public class ConfigBase {
         this.config = empty();
     }
 
-    public void reload(@NotNull File configFile) {
+    public void reload(@NonNull File configFile) {
         if (preventIO) {
             return;
         }
@@ -106,7 +106,7 @@ public class ConfigBase {
         reload(this.file);
     }
 
-    public final @NotNull YamlDocument getConfig() {
+    public final @NonNull YamlDocument getConfig() {
         if (this.config == null) {
             throw new IllegalStateException("Config " + getFileName() + " is not loaded. Please check for startup errors.");
         }
@@ -115,7 +115,7 @@ public class ConfigBase {
 
     public final @Nullable File getFile() { return this.file; }
 
-    public final @NotNull Plugin getPlugin() { return this.plugin; }
+    public final @NonNull Plugin getPlugin() { return this.plugin; }
 
     public final @Nullable String getFileName() { return this.fileName; }
 

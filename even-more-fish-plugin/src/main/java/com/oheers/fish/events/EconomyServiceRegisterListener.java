@@ -7,7 +7,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServiceRegisterEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @author sarhatabaot
@@ -20,7 +20,7 @@ public class EconomyServiceRegisterListener implements Listener {
     }
 
     @EventHandler
-    public void onEconomyServiceRegister(@NotNull ServiceRegisterEvent event) {
+    public void onEconomyServiceRegister(@NonNull ServiceRegisterEvent event) {
         if (EMFRegistry.ECONOMY_TYPE.get("Vault") != null) {
             // Do not overwrite if it already exists.
             return;

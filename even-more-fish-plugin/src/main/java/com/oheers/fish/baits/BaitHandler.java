@@ -41,9 +41,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ import java.util.stream.Collectors;
 
 public class BaitHandler extends ConfigBase implements IBait, Sortable {
 
-    private final @NotNull String id;
+    private final @NonNull String id;
     private BaitData baitData;
     private ItemFactory itemFactory;
     private boolean warnedLegacyFormat;
@@ -83,7 +83,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      *
      * @param file The bait's config file
      */
-    public BaitHandler(@NotNull File file, FishManager fishManager, MainConfig mainConfig) throws InvalidConfigurationException {
+    public BaitHandler(@NonNull File file, FishManager fishManager, MainConfig mainConfig) throws InvalidConfigurationException {
         super(file, EvenMoreFish.getInstance(), false);
         BaitFileUpdates.update(this);
 
@@ -151,7 +151,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      * @return An item stack representing the bait object, with nbt.
      */
     @Override
-    public @NotNull ItemStack create(@NotNull OfflinePlayer player) {
+    public @NonNull ItemStack create(@NonNull OfflinePlayer player) {
         return itemFactory.createItem(player.getUniqueId());
     }
 
@@ -162,7 +162,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      * @return An item stack representing the bait object, with nbt.
      */
     @Override
-    public @NotNull ItemStack create() {
+    public @NonNull ItemStack create() {
         return itemFactory.createItem();
     }
 
@@ -193,11 +193,11 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      * @return All configured rarities from this bait's configuration.
      */
     @Override
-    public @NotNull List<Rarity> getRarities() {
+    public @NonNull List<Rarity> getRarities() {
         return baitData.rarities();
     }
 
-    private @NotNull Map<Rarity, WeightModifier> resolveRarityModifiers() {
+    private @NonNull Map<Rarity, WeightModifier> resolveRarityModifiers() {
         final Section rarityModifiers = getConfig().getSection("rarity-modifiers");
         if (rarityModifiers != null) {
             return parseRarityModifiers(rarityModifiers);
@@ -222,7 +222,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return Map.copyOf(resolved);
     }
 
-    private @NotNull Map<Rarity, WeightModifier> parseRarityModifiers(@NotNull Section section) {
+    private @NonNull Map<Rarity, WeightModifier> parseRarityModifiers(@NonNull Section section) {
         final Map<Rarity, WeightModifier> resolved = new LinkedHashMap<>();
         for (String rarityName : section.getRoutesAsStrings(false)) {
             final Rarity rarity = FishManager.getInstance().getRarity(rarityName);
@@ -240,7 +240,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return Map.copyOf(resolved);
     }
 
-    private @NotNull Map<Fish, WeightModifier> resolveFishModifiers() {
+    private @NonNull Map<Fish, WeightModifier> resolveFishModifiers() {
         final Section fishModifiers = getConfig().getSection("fish-modifiers");
         if (fishModifiers != null) {
             return parseFishModifiers(fishModifiers);
@@ -273,7 +273,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return Map.copyOf(resolved);
     }
 
-    private @NotNull Map<Fish, WeightModifier> parseFishModifiers(@NotNull Section section) {
+    private @NonNull Map<Fish, WeightModifier> parseFishModifiers(@NonNull Section section) {
         final Map<Fish, WeightModifier> resolved = new LinkedHashMap<>();
         for (String rarityName : section.getRoutesAsStrings(false)) {
             final Section raritySection = section.getSection(rarityName);
@@ -305,7 +305,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return Map.copyOf(resolved);
     }
 
-    private @NotNull List<Fish> getFish() {
+    private @NonNull List<Fish> getFish() {
         return baitData.fish();
     }
 
@@ -325,7 +325,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      * @return The selected fish, or null if no valid fish was found
      */
     @Override
-    public @NotNull Fish chooseFish(@NotNull Player player, @NotNull Location location) {
+    public @NonNull Fish chooseFish(@NonNull Player player, @NonNull Location location) {
         RequirementContext context = new RequirementContext(
             player.getWorld(),
             player.getLocation(),
@@ -337,7 +337,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return chooseFish(player, location, context);
     }
 
-    public @NotNull Fish chooseFish(@NotNull Player player, @NotNull Location location, @NotNull RequirementContext requirementContext) {
+    public @NonNull Fish chooseFish(@NonNull Player player, @NonNull Location location, @NonNull RequirementContext requirementContext) {
         Rarity selectedRarity = selectRarityWithModifiers(player, requirementContext);
         Fish selectedFish = selectFishFromRarity(selectedRarity, player, location);
 
@@ -346,15 +346,15 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return selectedFish;
     }
 
-    private @NotNull Map<Rarity, WeightModifier> getRarityModifiers() {
+    private @NonNull Map<Rarity, WeightModifier> getRarityModifiers() {
         return baitData.rarityModifiers();
     }
 
-    private @NotNull Map<Fish, WeightModifier> getFishModifiers() {
+    private @NonNull Map<Fish, WeightModifier> getFishModifiers() {
         return baitData.fishModifiers();
     }
 
-    private @Nullable Rarity selectRarityWithModifiers(@NotNull Player player, @NotNull RequirementContext requirementContext) {
+    private @Nullable Rarity selectRarityWithModifiers(@NonNull Player player, @NonNull RequirementContext requirementContext) {
         return fishManager.getWeightedRarity(
             player,
             Set.copyOf(fishManager.getRarityMap().values()),
@@ -364,7 +364,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         );
     }
 
-    private @Nullable Fish selectFishFromRarity(@Nullable Rarity rarity, @NotNull Player player, @NotNull Location location) {
+    private @Nullable Fish selectFishFromRarity(@Nullable Rarity rarity, @NonNull Player player, @NonNull Location location) {
         if (rarity == null) {
             return null;
         }
@@ -379,15 +379,15 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         );
     }
 
-    private double getEffectiveRarityWeight(@NotNull Rarity rarity) {
+    private double getEffectiveRarityWeight(@NonNull Rarity rarity) {
         return getRarityModifiers().getOrDefault(rarity, WeightModifier.IDENTITY).apply(rarity.getWeight());
     }
 
-    private double getEffectiveFishWeight(@NotNull Fish fish) {
+    private double getEffectiveFishWeight(@NonNull Fish fish) {
         return getFishModifiers().getOrDefault(fish, WeightModifier.IDENTITY).apply(FishManager.getBaseFishWeight(fish));
     }
 
-    private void processBaitUsage(@NotNull Player player, @Nullable Rarity rarity, @Nullable Fish fish) {
+    private void processBaitUsage(@NonNull Player player, @Nullable Rarity rarity, @Nullable Fish fish) {
         if (fish == null) {
             return;
         }
@@ -400,12 +400,12 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         }
     }
 
-    private boolean shouldAlertUsage(@Nullable Rarity rarity, @NotNull Fish fish) {
+    private boolean shouldAlertUsage(@Nullable Rarity rarity, @NonNull Fish fish) {
         return (rarity != null && hasRarityModifier(rarity)) || hasFishModifier(fish);
     }
 
     @Override
-    public void handleFish(@NotNull Player player, @NotNull IFish iFish, @NotNull ItemStack fishingRod) {
+    public void handleFish(@NonNull Player player, @NonNull IFish iFish, @NonNull ItemStack fishingRod) {
         if (!(iFish instanceof Fish fish)) {
             Logging.debug("Fish: " + iFish.getName() + " is not a Fish object, ignoring..");
             return;
@@ -437,27 +437,27 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         }
     }
 
-    private boolean shouldConsumeBait(@NotNull Fish fish) {
+    private boolean shouldConsumeBait(@NonNull Fish fish) {
         return shouldConsumeBait(getRarityModifiers(), getFishModifiers(), fish);
     }
 
     static boolean shouldConsumeBait(
-        @NotNull Map<Rarity, WeightModifier> rarityModifiers,
-        @NotNull Map<Fish, WeightModifier> fishModifiers,
-        @NotNull Fish fish
+        @NonNull Map<Rarity, WeightModifier> rarityModifiers,
+        @NonNull Map<Fish, WeightModifier> fishModifiers,
+        @NonNull Fish fish
     ) {
         return rarityModifiers.containsKey(fish.getRarity()) || fishModifiers.containsKey(fish);
     }
 
-    private boolean hasRarityModifier(@NotNull Rarity rarity) {
+    private boolean hasRarityModifier(@NonNull Rarity rarity) {
         return getRarityModifiers().containsKey(rarity);
     }
 
-    private boolean hasFishModifier(@NotNull Fish fish) {
+    private boolean hasFishModifier(@NonNull Fish fish) {
         return getFishModifiers().containsKey(fish);
     }
 
-    private boolean hasModifiersInRarity(@NotNull Rarity rarity) {
+    private boolean hasModifiersInRarity(@NonNull Rarity rarity) {
         return hasRarityModifier(rarity) || getFishModifiers().keySet().stream().anyMatch(fish -> fish.getRarity().equals(rarity));
     }
 
@@ -491,16 +491,16 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      * @return The name identifier of the bait.
      */
     @Override
-    public @NotNull String getId() {
+    public @NonNull String getId() {
         return id;
     }
 
-    public @NotNull EMFSingleMessage getFormat() {
+    public @NonNull EMFSingleMessage getFormat() {
         String format = getConfig().getString("format", "<yellow>{name}");
         return EMFSingleMessage.fromString(format);
     }
 
-    public @NotNull EMFSingleMessage format(@NotNull String name) {
+    public @NonNull EMFSingleMessage format(@NonNull String name) {
         EMFSingleMessage message = getFormat();
         message.setVariable("{name}", name);
         return message;
@@ -510,7 +510,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      * @return The displayname setting for the bait.
      */
     @Override
-    public @NotNull String getDisplayName() {
+    public @NonNull String getDisplayName() {
         return baitData.displayName();
     }
 
@@ -525,7 +525,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     }
 
     @Override
-    public @NotNull List<Reward> getCatchRewards() {
+    public @NonNull List<Reward> getCatchRewards() {
         return getConfig().getStringList("catch-event").stream()
             .map(this::parseEventPlaceholders)
             .map(Reward::new)
@@ -533,7 +533,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     }
 
     @Override
-    public void reload(@NotNull File configFile) {
+    public void reload(@NonNull File configFile) {
         super.reload(configFile);
         if (fishManager == null || mainConfig == null) {
             return;
@@ -574,11 +574,11 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         logger.warning("Bait file '" + getFileName() + "' is using the pre-2.3.0 bait format. Please migrate it to 'rarity-modifiers' and/or 'fish-modifiers'.");
     }
 
-    public @NotNull List<Component> createDebugMessages(@NotNull Player player, @NotNull RequirementContext requirementContext) {
+    public @NonNull List<Component> createDebugMessages(@NonNull Player player, @NonNull RequirementContext requirementContext) {
         return createDebugMessages(player, player.getLocation(), requirementContext);
     }
 
-    public @NotNull List<Component> createDebugMessages(@NotNull Player player, @NotNull Location location, @NotNull RequirementContext requirementContext) {
+    public @NonNull List<Component> createDebugMessages(@NonNull Player player, @NonNull Location location, @NonNull RequirementContext requirementContext) {
         final List<Component> messages = new ArrayList<>();
         final List<RarityChance> rarityChances = calculateRarityChances(player, location, requirementContext);
 
@@ -627,7 +627,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return messages;
     }
 
-    private @NotNull List<RarityChance> calculateRarityChances(@NotNull Player player, @NotNull Location location, @NotNull RequirementContext requirementContext) {
+    private @NonNull List<RarityChance> calculateRarityChances(@NonNull Player player, @NonNull Location location, @NonNull RequirementContext requirementContext) {
         final List<Rarity> availableRarities = fishManager.getAvailableRarities(
             player,
             Set.copyOf(fishManager.getRarityMap().values()),
@@ -650,9 +650,9 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
             .toList();
     }
 
-    private @NotNull RarityChance buildRarityChance(@NotNull Rarity rarity,
-                                                    @NotNull Player player,
-                                                    @NotNull Location location,
+    private @NonNull RarityChance buildRarityChance(@NonNull Rarity rarity,
+                                                    @NonNull Player player,
+                                                    @NonNull Location location,
                                                     double totalRarityWeight,
                                                     int totalCandidateCount,
                                                     long multiplicity) {
@@ -667,7 +667,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return new RarityChance(rarity, baseWeight, effectiveWeight, rarityChance, rarityModifier, fishChances);
     }
 
-    private @NotNull List<FishChance> calculateFishChances(@NotNull Rarity rarity, @NotNull Player player, @NotNull Location location, double rarityChance) {
+    private @NonNull List<FishChance> calculateFishChances(@NonNull Rarity rarity, @NonNull Player player, @NonNull Location location, double rarityChance) {
         final List<Fish> availableFish = fishManager.getAvailableFish(rarity, location, player, true, null, null);
         if (availableFish.isEmpty()) {
             return List.of();
@@ -691,16 +691,16 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
             .toList();
     }
 
-    private @NotNull String formatLocation(@NotNull Location location) {
+    private @NonNull String formatLocation(@NonNull Location location) {
         final String world = location.getWorld() != null ? location.getWorld().getName() : "unknown";
         return "%s %.1f %.1f %.1f".formatted(world, location.getX(), location.getY(), location.getZ());
     }
 
-    private @NotNull String formatPercent(double value) {
+    private @NonNull String formatPercent(double value) {
         return String.format(Locale.ROOT, "%.2f%%", value * 100.0D);
     }
 
-    private @NotNull String formatNumber(double value) {
+    private @NonNull String formatNumber(double value) {
         return String.format(Locale.ROOT, "%.3f", value)
             .replaceAll("0+$", "")
             .replaceAll("\\.$", "");
@@ -740,7 +740,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      * @return True if the purchase was successful, false otherwise.
      */
     @Override
-    public boolean attemptPurchase(@NotNull Player player) {
+    public boolean attemptPurchase(@NonNull Player player) {
         if (economy == null || economy.isEmpty()) {
             ConfigMessage.BAIT_NOT_FOR_SALE.getMessage().send(player);
             return false;
@@ -778,11 +778,11 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return true;
     }
 
-    private @NotNull NamespacedKey getRecipeKey() {
+    private @NonNull NamespacedKey getRecipeKey() {
         return new NamespacedKey(EvenMoreFish.getInstance(), "bait-" + getId());
     }
 
-    static int resolveMaxBaits(@NotNull Section config) {
+    static int resolveMaxBaits(@NonNull Section config) {
         return config.getInt("max-baits", -1);
     }
 

@@ -4,8 +4,8 @@ import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,7 +24,7 @@ public class RarityBoostRegistry implements EMFRegistry<RarityWeightBoost> {
 
     private RarityBoostRegistry() {}
 
-    public static @NotNull RarityBoostRegistry getInstance() {
+    public static @NonNull RarityBoostRegistry getInstance() {
         return instance;
     }
 
@@ -42,7 +42,7 @@ public class RarityBoostRegistry implements EMFRegistry<RarityWeightBoost> {
      * @return An immutable copy of the current registry.
      */
     @Override
-    public @NotNull Map<String, RarityWeightBoost> getRegistry() {
+    public @NonNull Map<String, RarityWeightBoost> getRegistry() {
         return Map.copyOf(registry);
     }
 
@@ -53,7 +53,7 @@ public class RarityBoostRegistry implements EMFRegistry<RarityWeightBoost> {
      * @return The value, or null if not found.
      */
     @Override
-    public @Nullable RarityWeightBoost get(@NotNull String key) {
+    public @Nullable RarityWeightBoost get(@NonNull String key) {
         return registry.get(key);
     }
 
@@ -65,7 +65,7 @@ public class RarityBoostRegistry implements EMFRegistry<RarityWeightBoost> {
      * @return The value, or the default value if not found.
      */
     @Override
-    public @NotNull RarityWeightBoost getOrDefault(@NotNull String key, @NotNull RarityWeightBoost defaultValue) {
+    public @NonNull RarityWeightBoost getOrDefault(@NonNull String key, @NonNull RarityWeightBoost defaultValue) {
         return registry.getOrDefault(key, defaultValue);
     }
 
@@ -76,7 +76,7 @@ public class RarityBoostRegistry implements EMFRegistry<RarityWeightBoost> {
      * @return True if the key was unregistered, false if not found.
      */
     @Override
-    public boolean unregister(@NotNull String key) {
+    public boolean unregister(@NonNull String key) {
         return registry.remove(key) != null;
     }
 
@@ -88,7 +88,7 @@ public class RarityBoostRegistry implements EMFRegistry<RarityWeightBoost> {
      * @return True if the value was registered, false if a value with the same key already exists and force is false.
      */
     @Override
-    public boolean register(@NotNull RarityWeightBoost value, boolean force) {
+    public boolean register(@NonNull RarityWeightBoost value, boolean force) {
         if (!force && registry.containsKey(value.getKey())) {
             return false;
         }
@@ -107,7 +107,7 @@ public class RarityBoostRegistry implements EMFRegistry<RarityWeightBoost> {
      * @param rarityId The id of the candidate rarity.
      * @return The combined multiplier, {@code 1.0} when no boosts are registered.
      */
-    public double combinedMultiplier(@NotNull Player fisher, @NotNull Location location, @NotNull String rarityId) {
+    public double combinedMultiplier(@NonNull Player fisher, @NonNull Location location, @NonNull String rarityId) {
         double combined = 1.0;
         for (RarityWeightBoost boost : registry.values()) {
             combined *= boost.weightMultiplier(fisher, location, rarityId);

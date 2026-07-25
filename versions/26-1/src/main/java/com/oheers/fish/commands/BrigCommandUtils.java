@@ -10,9 +10,9 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSele
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class BrigCommandUtils {
         )
     );
 
-    public static @NotNull Player requirePlayer(@Nullable CommandSourceStack source) throws CommandSyntaxException {
+    public static @NonNull Player requirePlayer(@Nullable CommandSourceStack source) throws CommandSyntaxException {
         if (source == null) {
             throw CANT_BE_CONSOLE.create();
         }
@@ -40,14 +40,14 @@ public class BrigCommandUtils {
         return player;
     }
 
-    public static @NotNull Player requirePlayer(@Nullable CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    public static @NonNull Player requirePlayer(@Nullable CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         if (context == null) {
             throw CANT_BE_CONSOLE.create();
         }
         return requirePlayer(context.getSource());
     }
 
-    public static <T> @NotNull T getArgumentOrDefault(@NotNull CommandContext<CommandSourceStack> ctx, @NotNull String name, @NotNull Class<T> clazz, @NotNull T def) {
+    public static <T> @NonNull T getArgumentOrDefault(@NonNull CommandContext<CommandSourceStack> ctx, @NonNull String name, @NonNull Class<T> clazz, @NonNull T def) {
         try {
             return ctx.getArgument(name, clazz);
         } catch (Exception exception) {
@@ -55,7 +55,7 @@ public class BrigCommandUtils {
         }
     }
 
-    public static <T> @Nullable T getArgumentOrNull(@NotNull CommandContext<CommandSourceStack> ctx, @NotNull String name, @NotNull Class<T> clazz) {
+    public static <T> @Nullable T getArgumentOrNull(@NonNull CommandContext<CommandSourceStack> ctx, @NonNull String name, @NonNull Class<T> clazz) {
         try {
             return ctx.getArgument(name, clazz);
         } catch (Exception exception) {
@@ -63,7 +63,7 @@ public class BrigCommandUtils {
         }
     }
 
-    public static @NotNull List<Player> resolvePlayers(@NotNull CommandContext<CommandSourceStack> ctx, @Nullable PlayerSelectorArgumentResolver resolver) throws CommandSyntaxException {
+    public static @NonNull List<Player> resolvePlayers(@NonNull CommandContext<CommandSourceStack> ctx, @Nullable PlayerSelectorArgumentResolver resolver) throws CommandSyntaxException {
         if (resolver == null) {
             return List.of();
         }

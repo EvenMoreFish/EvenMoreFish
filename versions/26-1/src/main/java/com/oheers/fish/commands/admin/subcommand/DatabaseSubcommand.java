@@ -8,19 +8,19 @@ import com.oheers.fish.permissions.AdminPerms;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @SuppressWarnings("UnstableApiUsage")
 public class DatabaseSubcommand {
 
     private final String name;
 
-    public DatabaseSubcommand(@NotNull String name) {
+    public DatabaseSubcommand(@NonNull String name) {
         this.name = name;
     }
 
-    public @NotNull LiteralArgumentBuilder<CommandSourceStack> get() {
+    public @NonNull LiteralArgumentBuilder<CommandSourceStack> get() {
         return Commands.literal(name)
             .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE))
             .then(dropFlyway())
@@ -30,7 +30,7 @@ public class DatabaseSubcommand {
             .then(help());
     }
 
-    private @NotNull ArgumentBuilder<CommandSourceStack, ?> dropFlyway() {
+    private @NonNull ArgumentBuilder<CommandSourceStack, ?> dropFlyway() {
         return Commands.literal("drop-flyway")
             .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE_FLYWAY))
             .executes(ctx -> {
@@ -45,7 +45,7 @@ public class DatabaseSubcommand {
             });
     }
 
-    private @NotNull ArgumentBuilder<CommandSourceStack, ?> repairFlyway() {
+    private @NonNull ArgumentBuilder<CommandSourceStack, ?> repairFlyway() {
         return Commands.literal("repair-flyway")
             .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE_FLYWAY))
             .executes(ctx -> {
@@ -60,7 +60,7 @@ public class DatabaseSubcommand {
             });
     }
 
-    private @NotNull ArgumentBuilder<CommandSourceStack, ?> cleanFlyway() {
+    private @NonNull ArgumentBuilder<CommandSourceStack, ?> cleanFlyway() {
         return Commands.literal("clean-flyway")
             .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE_CLEAN))
             .executes(ctx -> {
@@ -75,7 +75,7 @@ public class DatabaseSubcommand {
             });
     }
 
-    private @NotNull ArgumentBuilder<CommandSourceStack, ?> migrateToLatest() {
+    private @NonNull ArgumentBuilder<CommandSourceStack, ?> migrateToLatest() {
         return Commands.literal("migrate-to-latest")
             .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE_MIGRATE))
             .executes(ctx -> {
@@ -89,7 +89,7 @@ public class DatabaseSubcommand {
             });
     }
 
-    private @NotNull ArgumentBuilder<CommandSourceStack, ?> help() {
+    private @NonNull ArgumentBuilder<CommandSourceStack, ?> help() {
         return Commands.literal("help")
             .executes(ctx -> {
                 ctx.getSource().getSender().sendPlainMessage(

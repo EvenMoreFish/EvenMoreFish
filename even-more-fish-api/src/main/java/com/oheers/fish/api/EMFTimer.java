@@ -1,6 +1,6 @@
 package com.oheers.fish.api;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,7 +12,7 @@ public abstract class EMFTimer extends TimerTask {
     private final TimeUnit unit;
     private final long interval;
 
-    public EMFTimer(@NotNull TimeUnit unit, long interval) {
+    public EMFTimer(@NonNull TimeUnit unit, long interval) {
         this.unit = unit;
         this.interval = interval;
     }

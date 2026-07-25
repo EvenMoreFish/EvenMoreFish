@@ -2,18 +2,18 @@ package com.oheers.fish.database.data;
 
 import com.oheers.fish.fishing.items.Fish;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 //For use with caching only
-public record FishRarityKey(@NotNull String fishName, @NotNull String fishRarity) {
+public record FishRarityKey(@NonNull String fishName, @NonNull String fishRarity) {
 
 
     @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull FishRarityKey of(final String fishName, final String fishRarity) {
+    public static @NonNull FishRarityKey of(final String fishName, final String fishRarity) {
         return new FishRarityKey(fishName, fishRarity);
     }
 
-    public static @NotNull FishRarityKey from(final String pattern) {
+    public static @NonNull FishRarityKey from(final String pattern) {
         if (pattern == null || pattern.isEmpty())
             return empty();
 
@@ -28,16 +28,16 @@ public record FishRarityKey(@NotNull String fishName, @NotNull String fishRarity
         );
     }
 
-    public static @NotNull FishRarityKey of(final @NotNull Fish fish) {
+    public static @NonNull FishRarityKey of(final @NonNull Fish fish) {
         return new FishRarityKey(fish.getName(), fish.getRarity().getId());
     }
 
-    public static @NotNull FishRarityKey empty() {
+    public static @NonNull FishRarityKey empty() {
         return new FishRarityKey("", "");
     }
 
     @Override
-    public @NotNull String toString() {
+    public @NonNull String toString() {
         return fishName + "." + fishRarity;
     }
 

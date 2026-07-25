@@ -3,8 +3,8 @@ package com.oheers.fish.api.fishing.rods;
 import com.oheers.fish.api.AbstractFileBasedManager;
 import com.oheers.fish.api.baits.AbstractBaitManager;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public abstract class AbstractRodManager<T extends ICustomRod> extends AbstractFileBasedManager<T> {
 
@@ -18,15 +18,15 @@ public abstract class AbstractRodManager<T extends ICustomRod> extends AbstractF
         instance = this;
     }
 
-    public static @NotNull AbstractRodManager<? extends ICustomRod> getInstance() {
+    public static @NonNull AbstractRodManager<? extends ICustomRod> getInstance() {
         if (instance == null) {
             throw new IllegalStateException("RodManager has not been initialized yet!");
         }
         return instance;
     }
 
-    public abstract @Nullable ICustomRod getRod(@NotNull ItemStack item);
+    public abstract @Nullable ICustomRod getRod(@NonNull ItemStack item);
 
-    public abstract @Nullable ICustomRod getRod(@NotNull String rodId);
+    public abstract @Nullable ICustomRod getRod(@NonNull String rodId);
 
 }

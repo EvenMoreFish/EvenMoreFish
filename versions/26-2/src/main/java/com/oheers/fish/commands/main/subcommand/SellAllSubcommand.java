@@ -11,14 +11,14 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 @SuppressWarnings("UnstableApiUsage")
 public class SellAllSubcommand {
 
     private final String name;
 
-    public SellAllSubcommand(@NotNull String name) {
+    public SellAllSubcommand(@NonNull String name) {
         this.name = name;
     }
 
@@ -41,7 +41,7 @@ public class SellAllSubcommand {
             );
     }
 
-    private void execute(@NotNull CommandSender sender, @NotNull Player target) {
+    private void execute(@NonNull CommandSender sender, @NonNull Player target) {
         if (CommandUtils.isEconomyEnabled(sender)) {
             SellHelper.get().sell(target.getInventory(), target);
         }

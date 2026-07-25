@@ -12,8 +12,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentListMessage;
 import uk.firedev.messagelib.message.ComponentMessage;
 import uk.firedev.messagelib.message.ComponentSingleMessage;
@@ -29,7 +29,7 @@ public abstract class EMFMessage {
     protected boolean perPlayer = true;
     protected OfflinePlayer relevantPlayer = null;
 
-    public static EMFMessage fromUnderlying(@NotNull ComponentMessage message) {
+    public static EMFMessage fromUnderlying(@NonNull ComponentMessage message) {
         if (message instanceof ComponentListMessage listMessage) {
             return EMFListMessage.ofUnderlying(listMessage);
         } else if (message instanceof ComponentSingleMessage singleMessage) {
@@ -43,13 +43,13 @@ public abstract class EMFMessage {
 
     public abstract EMFMessage createCopy();
 
-    public abstract @NotNull ComponentMessage getUnderlying();
+    public abstract @NonNull ComponentMessage getUnderlying();
 
-    public abstract void setUnderlying(@NotNull ComponentMessage message);
+    public abstract void setUnderlying(@NonNull ComponentMessage message);
 
     public abstract ComponentMessage processPlaceholders(@Nullable OfflinePlayer player);
 
-    public final void send(@NotNull Audience target) {
+    public final void send(@NonNull Audience target) {
         if (getUnderlying().isEmpty()) {
             return;
         }
@@ -57,11 +57,11 @@ public abstract class EMFMessage {
         processPlaceholders(player).send(target);
     }
 
-    public final void send(@NotNull Collection<? extends Audience> targets) {
+    public final void send(@NonNull Collection<? extends Audience> targets) {
         targets.forEach(this::send);
     }
 
-    public final void sendActionBar(@NotNull Audience target) {
+    public final void sendActionBar(@NonNull Audience target) {
         if (getUnderlying().isEmpty()) {
             return;
         }
@@ -71,29 +71,29 @@ public abstract class EMFMessage {
             .send(target);
     }
 
-    public final void sendActionBar(@NotNull Collection<? extends Audience> targets) {
+    public final void sendActionBar(@NonNull Collection<? extends Audience> targets) {
         targets.forEach(this::sendActionBar);
     }
 
-    public final @NotNull Component getComponentMessage() {
+    public final @NonNull Component getComponentMessage() {
         return getComponentMessage(null);
     }
 
-    public abstract @NotNull Component getComponentMessage(@Nullable OfflinePlayer player);
+    public abstract @NonNull Component getComponentMessage(@Nullable OfflinePlayer player);
 
-    public final @NotNull List<Component> getComponentListMessage() {
+    public final @NonNull List<Component> getComponentListMessage() {
         return getComponentListMessage(null);
     }
 
-    public abstract @NotNull List<Component> getComponentListMessage(@Nullable OfflinePlayer player);
+    public abstract @NonNull List<Component> getComponentListMessage(@Nullable OfflinePlayer player);
 
-    public abstract @NotNull String getLegacyMessage(@Nullable OfflinePlayer player);
+    public abstract @NonNull String getLegacyMessage(@Nullable OfflinePlayer player);
 
-    public abstract @NotNull List<String> getLegacyListMessage(@Nullable OfflinePlayer player);
+    public abstract @NonNull List<String> getLegacyListMessage(@Nullable OfflinePlayer player);
 
-    public abstract @NotNull String getPlainTextMessage(@Nullable OfflinePlayer player);
+    public abstract @NonNull String getPlainTextMessage(@Nullable OfflinePlayer player);
 
-    public abstract @NotNull List<String> getPlainTextListMessage(@Nullable OfflinePlayer player);
+    public abstract @NonNull List<String> getPlainTextListMessage(@Nullable OfflinePlayer player);
 
     public abstract void formatPlaceholderAPI();
 
@@ -120,7 +120,7 @@ public abstract class EMFMessage {
         return getUnderlying().isEmpty();
     }
 
-    public abstract boolean containsString(@NotNull String string);
+    public abstract boolean containsString(@NonNull String string);
 
     // Broadcast
 
@@ -136,65 +136,65 @@ public abstract class EMFMessage {
 
     // Append
 
-    public final void appendString(@NotNull String string) {
+    public final void appendString(@NonNull String string) {
         setUnderlying(
             getUnderlying().append(string)
         );
     }
 
-    public final void appendStringList(@NotNull List<String> strings) {
+    public final void appendStringList(@NonNull List<String> strings) {
         strings.forEach(this::appendString);
     }
 
-    public final void appendMessage(@NotNull EMFMessage message) {
+    public final void appendMessage(@NonNull EMFMessage message) {
         setUnderlying(
             getUnderlying().append(message.getUnderlying())
         );
     }
 
-    public final void appendMessageList(@NotNull List<EMFMessage> messages) {
+    public final void appendMessageList(@NonNull List<EMFMessage> messages) {
         messages.forEach(this::appendMessage);
     }
 
-    public final void appendComponent(@NotNull Component component) {
+    public final void appendComponent(@NonNull Component component) {
         setUnderlying(
             getUnderlying().append(component)
         );
     }
 
-    public final void appendComponentList(@NotNull List<Component> components) {
+    public final void appendComponentList(@NonNull List<Component> components) {
         components.forEach(this::appendComponent);
     }
 
     // Prepend
 
-    public final void prependString(@NotNull String string) {
+    public final void prependString(@NonNull String string) {
         setUnderlying(
             getUnderlying().prepend(string)
         );
     }
 
-    public final void prependStringList(@NotNull List<String> strings) {
+    public final void prependStringList(@NonNull List<String> strings) {
         strings.forEach(this::prependString);
     }
 
-    public final void prependMessage(@NotNull EMFMessage message) {
+    public final void prependMessage(@NonNull EMFMessage message) {
         setUnderlying(
             getUnderlying().prepend(message.getUnderlying())
         );
     }
 
-    public final void prependMessageList(@NotNull List<EMFMessage> messages) {
+    public final void prependMessageList(@NonNull List<EMFMessage> messages) {
         messages.forEach(this::prependMessage);
     }
 
-    public final void prependComponent(@NotNull Component component) {
+    public final void prependComponent(@NonNull Component component) {
         setUnderlying(
             getUnderlying().prepend(component)
         );
     }
 
-    public final void prependComponentList(@NotNull List<Component> components) {
+    public final void prependComponentList(@NonNull List<Component> components) {
         components.forEach(this::prependComponent);
     }
 
@@ -205,7 +205,7 @@ public abstract class EMFMessage {
      * @param variable The variable.
      * @param replacement The replacement for the variable.
      */
-    public final void setVariable(@NotNull final String variable, @NotNull final Object replacement) {
+    public final void setVariable(@NonNull final String variable, @NonNull final Object replacement) {
         setUnderlying(
             getUnderlying().replace(variable, replacement)
         );
@@ -242,7 +242,7 @@ public abstract class EMFMessage {
      *
      * @param length The length of the fish.
      */
-    public void setLength(@NotNull final Object length) {
+    public void setLength(@NonNull final Object length) {
         setVariable("{length}", length);
     }
 
@@ -251,7 +251,7 @@ public abstract class EMFMessage {
      * Performs {@link #setLength(Object)}, {@link #setFishCaught(Object)}, and {@link #setRarity(Object)}.
      * @param fish The fish that was caught.
      */
-    public void setFishCatchVariables(@NotNull Fish fish) {
+    public void setFishCatchVariables(@NonNull Fish fish) {
         setLength(Processor.LENGTH_FORMAT.format(fish.getLength()));
         setRarity(fish.getRarity().getDisplayName());
 
@@ -270,7 +270,7 @@ public abstract class EMFMessage {
      *
      * @param rarity The fish's rarity.
      */
-    public void setRarity(@NotNull final Object rarity) {
+    public void setRarity(@NonNull final Object rarity) {
         setVariable("{rarity}", rarity);
         setVariable("{rarity_colour}", "");
     }
@@ -280,7 +280,7 @@ public abstract class EMFMessage {
      *
      * @param fish The fish's name.
      */
-    public void setFishCaught(@NotNull final Object fish) {
+    public void setFishCaught(@NonNull final Object fish) {
         setVariable("{fish}", fish);
     }
 
@@ -289,7 +289,7 @@ public abstract class EMFMessage {
      *
      * @param sellPrice The sell price of the fish.
      */
-    public void setSellPrice(@NotNull final Object sellPrice) {
+    public void setSellPrice(@NonNull final Object sellPrice) {
         setVariable("{sell-price}", sellPrice);
     }
 
@@ -298,7 +298,7 @@ public abstract class EMFMessage {
      *
      * @param amount The amount of x.
      */
-    public void setAmount(@NotNull final Object amount) {
+    public void setAmount(@NonNull final Object amount) {
         setVariable("{amount}", amount);
     }
 
@@ -307,7 +307,7 @@ public abstract class EMFMessage {
      *
      * @param position The position.
      */
-    public void setPosition(@NotNull final Object position) {
+    public void setPosition(@NonNull final Object position) {
         setVariable("{position}", position);
     }
 
@@ -316,7 +316,7 @@ public abstract class EMFMessage {
      *
      * @param timeFormatted The formatted time.
      */
-    public void setTimeFormatted(@NotNull final Object timeFormatted) {
+    public void setTimeFormatted(@NonNull final Object timeFormatted) {
         setVariable("{time_formatted}", timeFormatted);
     }
 
@@ -325,7 +325,7 @@ public abstract class EMFMessage {
      *
      * @param timeRaw The raw time.
      */
-    public void setTimeRaw(@NotNull final Object timeRaw) {
+    public void setTimeRaw(@NonNull final Object timeRaw) {
         setVariable("{time_raw}", timeRaw);
     }
 
@@ -335,7 +335,7 @@ public abstract class EMFMessage {
      * @param bait The bait.
      * @param baitItem The item to show when hovering over the variable.
      */
-    public void setBait(@NotNull final BaitHandler bait, @Nullable final ItemStack baitItem) {
+    public void setBait(@NonNull final BaitHandler bait, @Nullable final ItemStack baitItem) {
         setVariable("{bait_theme}", "");
 
         Component display = bait.format(bait.getDisplayName()).getComponentMessage().hoverEvent(baitItem);
@@ -347,7 +347,7 @@ public abstract class EMFMessage {
      *
      * @param bait The bait.
      */
-    public void setBait(@NotNull final BaitHandler bait) {
+    public void setBait(@NonNull final BaitHandler bait) {
         setVariable("{bait_theme}", "");
         setVariable("{bait}", bait.format(bait.getDisplayName()));
     }
@@ -357,7 +357,7 @@ public abstract class EMFMessage {
      *
      * @param bait The name of the bait.
      */
-    public void setBait(@NotNull final Object bait) {
+    public void setBait(@NonNull final Object bait) {
         setVariable("{bait_theme}", "");
         setVariable("{bait}", bait);
     }
@@ -367,7 +367,7 @@ public abstract class EMFMessage {
      *
      * @param days The number of days.
      */
-    public void setDays(@NotNull final Object days) {
+    public void setDays(@NonNull final Object days) {
         setVariable("{days}", days);
     }
 
@@ -376,7 +376,7 @@ public abstract class EMFMessage {
      *
      * @param hours The number of hours.
      */
-    public void setHours(@NotNull final Object hours) {
+    public void setHours(@NonNull final Object hours) {
         setVariable("{hours}", hours);
     }
 
@@ -385,7 +385,7 @@ public abstract class EMFMessage {
      *
      * @param minutes The number of minutes.
      */
-    public void setMinutes(@NotNull final Object minutes) {
+    public void setMinutes(@NonNull final Object minutes) {
         setVariable("{minutes}", minutes);
     }
 
@@ -394,7 +394,7 @@ public abstract class EMFMessage {
      *
      * @param toggleMSG The applicable toggle msg.
      */
-    public void setToggleMSG(@NotNull final Object toggleMSG) {
+    public void setToggleMSG(@NonNull final Object toggleMSG) {
         setVariable("{toggle_msg}", toggleMSG);
     }
 
@@ -403,7 +403,7 @@ public abstract class EMFMessage {
      *
      * @param toggleIcon The applicable toggle material.
      */
-    public void setToggleIcon(@NotNull final Object toggleIcon) {
+    public void setToggleIcon(@NonNull final Object toggleIcon) {
         setVariable("{toggle_icon}", toggleIcon);
     }
 
@@ -412,7 +412,7 @@ public abstract class EMFMessage {
      *
      * @param day The day number.
      */
-    public void setDay(@NotNull final Object day) {
+    public void setDay(@NonNull final Object day) {
         setVariable("{day}", day);
     }
 
@@ -421,7 +421,7 @@ public abstract class EMFMessage {
      *
      * @param name The name of the fish or user
      */
-    public void setName(@NotNull final Object name) {
+    public void setName(@NonNull final Object name) {
         setVariable("{name}", name);
     }
 
@@ -430,7 +430,7 @@ public abstract class EMFMessage {
      *
      * @param numCaught The number of fish caught.
      */
-    public void setNumCaught(@NotNull final Object numCaught) {
+    public void setNumCaught(@NonNull final Object numCaught) {
         setVariable("{num_caught}", numCaught);
     }
 
@@ -439,7 +439,7 @@ public abstract class EMFMessage {
      *
      * @param largestSize The largest size of the fish.
      */
-    public void setLargestSize(@NotNull final Object largestSize) {
+    public void setLargestSize(@NonNull final Object largestSize) {
         setVariable("{largest_size}", largestSize);
     }
 
@@ -448,7 +448,7 @@ public abstract class EMFMessage {
      *
      * @param firstCaught The first fish caught.
      */
-    public void setFirstCaught(@NotNull final Object firstCaught) {
+    public void setFirstCaught(@NonNull final Object firstCaught) {
         setVariable("{first_caught}", firstCaught);
     }
 
@@ -457,7 +457,7 @@ public abstract class EMFMessage {
      *
      * @param timeRemaining The time remaining.
      */
-    public void setTimeRemaining(@NotNull final Object timeRemaining) {
+    public void setTimeRemaining(@NonNull final Object timeRemaining) {
         setVariable("{time_remaining}", timeRemaining);
     }
 
@@ -467,7 +467,7 @@ public abstract class EMFMessage {
      *
      * @param typeString The competition type.
      */
-    public void setCompetitionType(@NotNull final Object typeString) {
+    public void setCompetitionType(@NonNull final Object typeString) {
         setVariable("{type}", typeString);
     }
 
@@ -476,7 +476,7 @@ public abstract class EMFMessage {
      *
      * @param currentBaits The amount of baits.
      */
-    public void setCurrentBaits(@NotNull final Object currentBaits) {
+    public void setCurrentBaits(@NonNull final Object currentBaits) {
         setVariable("{current_baits}", currentBaits);
     }
 
@@ -485,7 +485,7 @@ public abstract class EMFMessage {
      *
      * @param maxBaits The max amount of baits.
      */
-    public void setMaxBaits(@NotNull final Object maxBaits) {
+    public void setMaxBaits(@NonNull final Object maxBaits) {
         setVariable("{max_baits}", maxBaits);
     }
 

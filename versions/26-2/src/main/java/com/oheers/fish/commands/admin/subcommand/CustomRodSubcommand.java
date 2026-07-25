@@ -17,7 +17,7 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSele
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class CustomRodSubcommand {
 
     private final String name;
 
-    public CustomRodSubcommand(@NotNull String name) {
+    public CustomRodSubcommand(@NonNull String name) {
         this.name = name;
     }
 
@@ -44,7 +44,7 @@ public class CustomRodSubcommand {
             );
     }
 
-    private int execute(@NotNull CommandContext<CommandSourceStack> ctx, boolean allowConsole) throws CommandSyntaxException {
+    private int execute(@NonNull CommandContext<CommandSourceStack> ctx, boolean allowConsole) throws CommandSyntaxException {
         CommandSender sender = allowConsole ? ctx.getSource().getSender() : BrigCommandUtils.requirePlayer(ctx);
         CustomRod rod = ctx.getArgument("rod", CustomRod.class);
         PlayerSelectorArgumentResolver targets = BrigCommandUtils.getArgumentOrNull(ctx, "targets", PlayerSelectorArgumentResolver.class);
@@ -55,7 +55,7 @@ public class CustomRodSubcommand {
         );
     }
 
-    private int execute(@NotNull CommandSender sender, @NotNull CustomRod rod, @NotNull List<Player> targets) throws CommandSyntaxException {
+    private int execute(@NonNull CommandSender sender, @NonNull CustomRod rod, @NonNull List<Player> targets) throws CommandSyntaxException {
         if (targets.isEmpty()) {
             if (!(sender instanceof Player player)) {
                 throw BrigCommandUtils.ERROR_NO_PLAYERS.create();

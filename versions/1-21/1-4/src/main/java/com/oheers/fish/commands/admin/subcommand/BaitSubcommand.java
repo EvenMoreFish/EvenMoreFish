@@ -19,7 +19,7 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSele
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class BaitSubcommand {
 
     private final String name;
 
-    public BaitSubcommand(@NotNull String name) {
+    public BaitSubcommand(@NonNull String name) {
         this.name = name;
     }
 
@@ -51,7 +51,7 @@ public class BaitSubcommand {
             );
     }
 
-    private int execute(@NotNull CommandContext<CommandSourceStack> ctx, boolean allowConsole) throws CommandSyntaxException {
+    private int execute(@NonNull CommandContext<CommandSourceStack> ctx, boolean allowConsole) throws CommandSyntaxException {
         CommandSender sender = allowConsole ? ctx.getSource().getSender() : BrigCommandUtils.requirePlayer(ctx);
         BaitHandler bait = ctx.getArgument("bait", BaitHandler.class);
         int quantity = BrigCommandUtils.getArgumentOrDefault(ctx, "quantity", int.class, 1);

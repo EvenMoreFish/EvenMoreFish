@@ -4,8 +4,8 @@ import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.api.registry.RegistryItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A way to register custom economies for EMF.
@@ -15,7 +15,7 @@ public interface EconomyType extends RegistryItem {
     String getIdentifier();
 
     @Override
-    default @NotNull String getKey() {
+    default @NonNull String getKey() {
         return getIdentifier();
     }
 
@@ -23,13 +23,13 @@ public interface EconomyType extends RegistryItem {
 
     double getMultiplier();
 
-    boolean deposit(@NotNull OfflinePlayer player, double amount, boolean allowMultiplier);
+    boolean deposit(@NonNull OfflinePlayer player, double amount, boolean allowMultiplier);
 
-    boolean withdraw(@NotNull OfflinePlayer player, double amount, boolean allowMultiplier);
+    boolean withdraw(@NonNull OfflinePlayer player, double amount, boolean allowMultiplier);
 
-    boolean has(@NotNull OfflinePlayer player, double amount);
+    boolean has(@NonNull OfflinePlayer player, double amount);
 
-    double get(@NotNull OfflinePlayer player);
+    double get(@NonNull OfflinePlayer player);
 
     /**
      * Prepares a double for use with this economy type.
