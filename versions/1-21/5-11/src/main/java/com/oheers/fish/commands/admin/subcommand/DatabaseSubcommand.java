@@ -5,10 +5,10 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.permissions.AdminPerms;
+import com.oheers.fish.api.utils.Scheduling;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NonNull;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -40,7 +40,7 @@ public class DatabaseSubcommand {
                 }
                 EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker()
                     .write(() -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().dropFlywaySchemaHistory())
-                    .thenRun(() -> EvenMoreFish.getScheduler().runTask(() -> sender.sendMessage("Dropped flyway schema history.")));
+                    .thenRun(() -> Scheduling.getInstance().runTask(() -> sender.sendMessage("Dropped flyway schema history.")));
                 return 1;
             });
     }

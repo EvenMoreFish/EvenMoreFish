@@ -340,6 +340,11 @@ public class EvenMoreFish extends EMFPlugin {
         return this.dimensionFishing;
     }
 
+    @Override
+    public boolean isRunningOnFolia() {
+        return this.isFolia;
+    }
+
     // Things that don't belong here but have no place right now.
 
     /**

@@ -1,24 +1,26 @@
-package com.oheers.fish.utils;
+package com.oheers.fish.api.utils;
 
-import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.plugin.EMFPlugin;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.TimeUnit;
-
+/**
+ * Internal scheduling utility class.
+ * <p>
+ * While this likely won't change much, it is not recommended to use in external plugins.
+ */
+@ApiStatus.Internal
 public class Scheduling {
 
     private static final Scheduling INSTANCE = new Scheduling();
 
-    private static final EvenMoreFish PLUGIN = EvenMoreFish.getInstance();
-    private static final Logger log = LoggerFactory.getLogger(Scheduling.class);
+    private static final EMFPlugin PLUGIN = EMFPlugin.getInstance();
 
     private Scheduling() {}
 
@@ -106,7 +108,7 @@ public class Scheduling {
 
     private long calculateDelay(long initialDelay) {
         // Folia requires the initial delay to be 1 or above.
-        if (EvenMoreFish.getInstance().isRunningOnFolia()) {
+        if (PLUGIN.isRunningOnFolia()) {
             return Math.max(1, initialDelay);
         }
         return initialDelay;

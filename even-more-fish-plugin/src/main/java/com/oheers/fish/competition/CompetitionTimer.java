@@ -1,8 +1,6 @@
 package com.oheers.fish.competition;
 
-import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.EMFTimer;
-import com.oheers.fish.utils.Scheduling;
 import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.TimeUnit;

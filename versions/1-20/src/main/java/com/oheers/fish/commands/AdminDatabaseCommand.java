@@ -1,6 +1,7 @@
 package com.oheers.fish.commands;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.utils.Scheduling;
 import dev.jorel.commandapi.CommandAPICommand;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class AdminDatabaseCommand extends CommandAPICommand {
                             }
                             EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker()
                                 .write(() -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().getMigrationManager().dropFlywaySchemaHistory())
-                                .thenRun(() -> EvenMoreFish.getScheduler().runTask(() -> commandSender.sendMessage("Dropped flyway schema history.")));
+                                .thenRun(() -> Scheduling.getInstance().runTask(() -> commandSender.sendMessage("Dropped flyway schema history.")));
                         }
                 );
     }

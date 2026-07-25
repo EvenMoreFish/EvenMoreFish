@@ -17,6 +17,7 @@ import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
+import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.utils.sort.SortType;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
@@ -55,7 +56,7 @@ public class FishJournalGui extends ConfigGui {
                 return;
             }
             plugin.debug("Fish journal data prepared for %s with user id %d.".formatted(player.getName(), userId));
-            EvenMoreFish.getScheduler().runTask(player, () -> {
+            Scheduling.getInstance().runTask(player, () -> {
                 try {
                     if (!player.isOnline()) {
                         plugin.debug("Skipping fish journal open for %s because the player is offline.".formatted(player.getName()));

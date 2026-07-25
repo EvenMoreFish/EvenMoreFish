@@ -2,6 +2,7 @@ package com.oheers.fish.addons.internal.reward;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.reward.RewardType;
+import com.oheers.fish.api.utils.Scheduling;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -26,7 +27,7 @@ public class CommandRewardType extends RewardType {
 
         // running the command
         final String finalCommand = inputCommand;
-        EvenMoreFish.getScheduler().runTask(() -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand));
+        Scheduling.getInstance().runTask(() -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand));
     }
 
     @Override

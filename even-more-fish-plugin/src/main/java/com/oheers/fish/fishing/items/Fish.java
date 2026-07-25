@@ -1,6 +1,5 @@
 package com.oheers.fish.fishing.items;
 
-import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigUtils;
@@ -17,6 +16,7 @@ import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.selling.WorthNBT;
+import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.utils.sort.Sortable;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
@@ -265,7 +265,7 @@ public class Fish implements IFish, Sortable {
             return;
         }
 
-        EvenMoreFish.getScheduler().runTask(player, () -> player.addPotionEffect(effect));
+        Scheduling.getInstance().runTask(player, () -> player.addPotionEffect(effect));
     }
 
     // prepares it to be given to the player

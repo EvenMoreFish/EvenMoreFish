@@ -1,9 +1,9 @@
 package com.oheers.fish.addons.internal.reward;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
 import com.oheers.fish.api.reward.RewardType;
+import com.oheers.fish.api.utils.Scheduling;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,7 +20,7 @@ public class EffectRewardType extends RewardType {
             return;
         }
         // Adds a potion effect in accordance to the config.yml "EFFECT:" value
-        EvenMoreFish.getScheduler().runTask(player, () -> player.addPotionEffect(effect));
+        Scheduling.getInstance().runTask(player, () -> player.addPotionEffect(effect));
     }
 
     @Override
