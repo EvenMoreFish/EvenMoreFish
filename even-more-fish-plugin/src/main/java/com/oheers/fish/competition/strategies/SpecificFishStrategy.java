@@ -9,8 +9,11 @@ import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
+
+import java.util.UUID;
 
 public class SpecificFishStrategy implements CompetitionStrategy {
 
@@ -45,23 +48,23 @@ public class SpecificFishStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition) {
+    public void applyToLeaderboard(Fish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
         Fish selected = competition.getSelectedFish();
         if (selected != null && !fish.equals(selected)) {
             return;
         }
 
-        CompetitionEntry entry = leaderboard.getEntry(fisher.getUniqueId());
+        CompetitionEntry entry = leaderboard.getEntry(fisher);
 
         if (entry != null) {
             entry = leaderboard.trackFish(entry, fish);
         } else {
-            entry = new CompetitionEntry(fisher.getUniqueId(), fish, competition.getCompetitionType());
+            entry = new CompetitionEntry(fisher, fish, competition.getCompetitionType());
             leaderboard.addEntry(entry);
         }
 
         if (entry.getValue() >= competition.getNumberNeeded()) {
-            competition.setSingleWinner(fisher);
+            competition.setSingleWinner(Bukkit.getPlayer(fisher));
             competition.end(false);
         }
     }

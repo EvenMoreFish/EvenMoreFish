@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
@@ -38,8 +39,8 @@ public class RandomStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition) {
-        randomType.getStrategy().applyToLeaderboard(fish,fisher,leaderboard,competition);
+    public void applyToLeaderboard(Fish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
+        randomType.getStrategy().applyToLeaderboard(fish, fisher, leaderboard, competition);
     }
 
     @Override

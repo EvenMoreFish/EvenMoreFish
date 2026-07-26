@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 import java.text.DecimalFormat;
+import java.util.UUID;
 
 /**
  * This interface defines the behavior for competition strategies.
@@ -38,7 +39,7 @@ public interface CompetitionStrategy {
      * @param leaderboard The leaderboard to apply the competition to.
      * @param competition The competition being applied.
      */
-    void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition);
+    void applyToLeaderboard(Fish fish, UUID fisher, Leaderboard leaderboard, Competition competition);
 
     /**
      * Gets the begin message for the competition.

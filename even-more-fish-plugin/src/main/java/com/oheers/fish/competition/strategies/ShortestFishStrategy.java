@@ -11,6 +11,8 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
+import java.util.UUID;
+
 public class ShortestFishStrategy implements CompetitionStrategy {
 
     @Override
@@ -19,19 +21,19 @@ public class ShortestFishStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition) {
+    public void applyToLeaderboard(Fish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
         if (fish.getLength() <= 0) return;
 
-        CompetitionEntry entry = leaderboard.getEntry(fisher.getUniqueId());
+        CompetitionEntry entry = leaderboard.getEntry(fisher);
 
         if (entry != null) {
             if (fish.getLength() < entry.getFish().getLength()) {
                 // These HAVE to be in this order, otherwise players are spammed with new first place messages
-                leaderboard.addEntry(new CompetitionEntry(fisher.getUniqueId(), fish, competition.getCompetitionType()));
+                leaderboard.addEntry(new CompetitionEntry(fisher, fish, competition.getCompetitionType()));
                 leaderboard.removeEntry(entry);
             }
         } else {
-            leaderboard.addEntry(new CompetitionEntry(fisher.getUniqueId(), fish, competition.getCompetitionType()));
+            leaderboard.addEntry(new CompetitionEntry(fisher, fish, competition.getCompetitionType()));
         }
     }
 

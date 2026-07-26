@@ -8,6 +8,7 @@ import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.reward.Reward;
+import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.config.MainConfig;
@@ -404,7 +405,9 @@ public class Competition {
     }
 
     public void applyToLeaderboard(Fish fish, Player fisher) {
-        competitionType.getStrategy().applyToLeaderboard(fish, fisher, leaderboard, this);
+        UUID uuid = fisher.getUniqueId();
+        // Ensure this is executed on the global scheduler to avoid CMEs.
+        Scheduling.getInstance().runTask(() -> competitionType.getStrategy().applyToLeaderboard(fish, uuid, leaderboard, this));
     }
 
     public void announceBegin() {

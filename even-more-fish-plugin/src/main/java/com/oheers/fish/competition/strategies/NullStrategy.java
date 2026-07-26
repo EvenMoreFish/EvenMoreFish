@@ -10,6 +10,8 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
+import java.util.UUID;
+
 
 public class NullStrategy implements CompetitionStrategy {
 
@@ -19,7 +21,7 @@ public class NullStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition) {
+    public void applyToLeaderboard(Fish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
         //do nothing duh
     }
 

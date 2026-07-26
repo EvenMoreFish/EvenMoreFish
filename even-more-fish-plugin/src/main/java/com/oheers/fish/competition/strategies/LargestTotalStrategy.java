@@ -10,6 +10,8 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
+import java.util.UUID;
+
 public class LargestTotalStrategy implements CompetitionStrategy {
 
     @Override
@@ -18,13 +20,13 @@ public class LargestTotalStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public void applyToLeaderboard(Fish fish, Player fisher, Leaderboard leaderboard, Competition competition) {
-        CompetitionEntry entry = leaderboard.getEntry(fisher.getUniqueId());
+    public void applyToLeaderboard(Fish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
+        CompetitionEntry entry = leaderboard.getEntry(fisher);
 
         if (entry != null) {
             leaderboard.trackFish(entry, fish);
         } else {
-            leaderboard.addEntry(new CompetitionEntry(fisher.getUniqueId(), fish, competition.getCompetitionType()));
+            leaderboard.addEntry(new CompetitionEntry(fisher, fish, competition.getCompetitionType()));
         }
     }
 
