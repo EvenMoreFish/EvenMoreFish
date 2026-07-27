@@ -84,19 +84,6 @@
       "allowedVersions": "3.47.0.0"
     },
     {
-      "groupName": "jOOQ",
-      "allowedVersions": "~3.19.0",
-      "matchPackageNames": [
-        "org.jooq:{/,}**"
-      ]
-    },
-    {
-      "allowedVersions": "~9.0",
-      "matchPackageNames": [
-        "nu.studer.jooq:{/,}**"
-      ]
-    },
-    {
       "matchUpdateTypes": [
         "patch",
         "minor"
@@ -121,6 +108,7 @@
   "dependencyDashboard": true,
   "ignoreDeps": [
     "org.gradle.toolchains.foojay-resolver-convention",
-    "com.github.TechFortress:GriefPrevention"
+    "com.github.TechFortress:GriefPrevention",
+    "io.papermc.paperweight.userdev:io.papermc.paperweight.userdev.gradle.plugin"
   ]
 }
