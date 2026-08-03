@@ -24,8 +24,9 @@ public class WorldRequirementType extends RequirementType {
             return false;
         }
         String worldName = world.getName();
+        String worldKey = world.getKey().asString();
         for (String value : values) {
-            if (worldName.equalsIgnoreCase(value)) {
+            if (worldName.equalsIgnoreCase(value) || worldKey.equals(value)) {
                 debugLogStatus(true, worldName);
                 return true;
             }
