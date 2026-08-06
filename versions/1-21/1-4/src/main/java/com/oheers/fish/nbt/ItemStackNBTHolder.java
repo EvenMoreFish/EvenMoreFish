@@ -1,6 +1,7 @@
 package com.oheers.fish.nbt;
 
-import com.oheers.fish.items.nbt.abstracted.NBTHolder;
+import com.oheers.fish.api.Logging;
+import com.oheers.fish.items.nbt.abstracted.ItemStackNBTHolderBase;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.component.CustomData;
@@ -9,14 +10,13 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 
-public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
+public class ItemStackNBTHolder extends ItemStackNBTHolderBase {
 
     private final @NonNull CompoundTag data;
 
-    public ItemStackNBTHolder(@NonNull ItemStack obj) {
-        super(obj);
+    public ItemStackNBTHolder(@NonNull ItemStack item) {
+        super(fetchCraft(item));
 
         net.minecraft.world.item.ItemStack handle = ((CraftItemStack) obj).handle;
         CustomData customData = handle.getComponents().get(DataComponents.CUSTOM_DATA);
@@ -176,6 +176,19 @@ public class ItemStackNBTHolder extends NBTHolder<ItemStack> {
         } else {
             return null;
         }
+    }
+
+    private static CraftItemStack fetchCraft(@NonNull ItemStack bukkit) {
+        if (bukkit instanceof CraftItemStack craft) {
+            Logging.debug("Given ItemStack was a CraftItemStack");
+            return craft;
+        }
+        ItemStack craftDelegate = fetchCraftDelegate(bukkit);
+        if (craftDelegate instanceof CraftItemStack craft) {
+            Logging.debug("Given ItemStack's craftDelegate was a CraftItemStack");
+            return craft;
+        }
+        throw new IllegalArgumentException("Could not fetch CraftItemStack.");
     }
 
 }
