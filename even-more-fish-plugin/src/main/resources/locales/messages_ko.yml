@@ -291,9 +291,9 @@ bait:
 exploits:
   afk-fishing:
     # When AFK Fishing is detected. This is sent on the final fish before the limit.
-    detected: "<white>There are no more fish in this area. Try moving your hook at least {range} blocks away."
+    detected: "<white>이 영역에는 더 이상 물고기가 없습니다. 낚시 찌를 최소한 {range}블록만큼 떨어뜨려 주세요."
     # When AFK Fishing is blocked.
-    blocked: "<white>There are no more fish in this area. Try moving your hook at least {range} blocks away."
+    blocked: "<white>이 영역에는 더 이상 물고기가 없습니다. 낚시 찌를 최소한 {range}블록만큼 떨어뜨려 주세요."
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
 version: 15
