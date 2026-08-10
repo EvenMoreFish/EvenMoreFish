@@ -1,6 +1,7 @@
 package com.oheers.fish.api.fishing.items;
 
 import com.oheers.fish.api.fishing.CatchType;
+import com.oheers.fish.api.items.AbstractItemFactory;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
 import org.bukkit.OfflinePlayer;
@@ -92,6 +93,8 @@ public interface IFish {
     double getWeight();
 
     void setWeight(double weight);
+
+    @NonNull AbstractItemFactory getFactory();
 
     @NonNull Requirement getRequirement();
 

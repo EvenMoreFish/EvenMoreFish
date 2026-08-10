@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.serializer.ItemSerializer;
+import com.oheers.fish.api.items.AbstractItemFactory;
 import com.oheers.fish.items.configs.ItemConfig;
 import com.oheers.fish.utils.ItemUtils;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -28,10 +29,9 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class ItemFactory {
+public class ItemFactory extends AbstractItemFactory {
 
     private final @NonNull Section configuration;
-    private final @Nullable String itemPath;
 
     private boolean rawItem = false;
     private UUID relevantPlayer = null;
@@ -67,7 +67,6 @@ public class ItemFactory {
             new ItemFactoryConversion().performConversions(section);
         }
 
-        this.itemPath = itemPath;
         this.configuration = itemPath == null ? section : section.createSection(itemPath);
 
         ItemConfigResolver resolver = ItemConfigResolver.getInstance();
@@ -92,7 +91,8 @@ public class ItemFactory {
         this.baseItem = getBaseItem();
     }
 
-    public ItemFactory createCopy() {
+    @Override
+    public @NonNull ItemFactory createCopy() {
         ItemFactory newFactory = new ItemFactory(this.configuration, null, null);
         newFactory.relevantPlayer = this.relevantPlayer;
         newFactory.randomIndex = this.randomIndex;
@@ -129,10 +129,7 @@ public class ItemFactory {
         return new ItemFactory(configuration, configLocation, itemPath);
     }
 
-    public @NonNull ItemStack createItem() {
-        return createItem((Map<String, ?>) null);
-    }
-
+    @Override
     public @NonNull ItemStack createItem(@Nullable Map<String, ?> replacements) {
         ItemStack item = baseItem.clone();
 
@@ -170,11 +167,7 @@ public class ItemFactory {
         return item;
     }
 
-    public @NonNull ItemStack createItem(@NonNull UUID relevantPlayer) {
-        this.relevantPlayer = relevantPlayer;
-        return createItem();
-    }
-
+    @Override
     public @NonNull ItemStack createItem(@NonNull UUID relevantPlayer, @Nullable Map<String, ?> replacements) {
         this.relevantPlayer = relevantPlayer;
         return createItem(replacements);
@@ -526,11 +519,13 @@ public class ItemFactory {
         return rawItem;
     }
 
+    @Override
     public void setRandomIndex(int randomIndex) {
         this.randomIndex = randomIndex;
         this.baseItem = getBaseItem();
     }
 
+    @Override
     public int getRandomIndex() {
         return randomIndex;
     }

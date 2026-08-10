@@ -525,7 +525,8 @@ public class Fish implements IFish, Sortable {
         return rarity.format(displayName);
     }
 
-    public ItemFactory getFactory() {
+    @Override
+    public @NonNull ItemFactory getFactory() {
         return factory;
     }
 
