@@ -2,13 +2,13 @@ package com.oheers.fish.gui.guis;
 
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.economy.Economy;
+import com.oheers.fish.api.sort.SortType;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.config.gui.impl.BaitsMenuGuiConfig;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.utils.CooldownHelper;
-import com.oheers.fish.utils.sort.SortType;
 import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.StaticGuiElement;

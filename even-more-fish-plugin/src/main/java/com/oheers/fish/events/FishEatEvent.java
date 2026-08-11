@@ -1,8 +1,6 @@
 package com.oheers.fish.events;
 
-import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.fishing.items.IFish;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;

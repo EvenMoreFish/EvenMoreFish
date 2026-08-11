@@ -5,14 +5,12 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.commands.BrigCommandUtils;
-import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.arguments.EMFPlayerArgument;
-import com.oheers.fish.commands.arguments.FishArgument;
 import com.oheers.fish.commands.arguments.RarityArgument;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
@@ -21,14 +19,10 @@ import com.oheers.fish.messages.PrefixType;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
-import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
-
-import java.util.List;
 
 // Branches:
 // [rarity]
@@ -92,7 +86,7 @@ public class RandomFishSubcommand {
             null
         );
 
-        Fish fish = FishManager.getInstance().getFish(
+        IFish fish = FishManager.getInstance().getFish(
             rarity,
             target.getLocation(),
             target,

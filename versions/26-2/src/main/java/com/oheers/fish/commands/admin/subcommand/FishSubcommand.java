@@ -5,11 +5,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.arguments.FishArgument;
 import com.oheers.fish.commands.arguments.RarityArgument;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
@@ -83,13 +83,13 @@ public class FishSubcommand {
             targets = List.of(player);
         }
 
-        Fish initialFish = FishArgument.resolveFish(rarity, fishStr);
+        IFish initialFish = FishArgument.resolveFish(rarity, fishStr);
         if (initialFish == null) {
             throw FishArgument.INVALID_FISH.create(fishStr);
         }
 
         targets.forEach(target -> {
-            Fish fish = initialFish.createCopy();
+            IFish fish = initialFish.createCopy();
             fish.init();
 
             if (fish.hasCatchRewards()) {

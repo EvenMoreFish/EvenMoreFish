@@ -18,6 +18,7 @@ import com.oheers.fish.items.configs.MaxStackSizeItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.nbt.ItemStackNBTHolder;
+import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -30,7 +31,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jspecify.annotations.NonNull;
-import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;

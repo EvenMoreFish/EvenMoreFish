@@ -1,12 +1,12 @@
 package com.oheers.fish.database;
 
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.database.model.CompetitionReport;
 import com.oheers.fish.database.model.fish.FishLog;
 import com.oheers.fish.database.model.fish.FishStats;
 import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.database.model.user.UserReport;
-import com.oheers.fish.fishing.items.Fish;
 import org.jspecify.annotations.NonNull;
 
 import java.sql.Timestamp;
@@ -53,7 +53,7 @@ public interface DatabaseAPI {
      * @param fish The fish to check
      * @return true if statistics exist, false otherwise
      */
-    boolean hasFishStats(@NonNull Fish fish);
+    boolean hasFishStats(@NonNull IFish fish);
 
 
     /**
@@ -61,7 +61,7 @@ public interface DatabaseAPI {
      *
      * @param fish The fish to update
      */
-    void incrementFish(@NonNull Fish fish);
+    void incrementFish(@NonNull IFish fish);
 
 
     /**

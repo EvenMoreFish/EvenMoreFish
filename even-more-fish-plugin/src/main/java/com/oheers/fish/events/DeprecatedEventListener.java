@@ -5,14 +5,11 @@ import com.oheers.fish.api.EMFFishSellEvent;
 import com.oheers.fish.api.events.EMFFishCaughtEvent;
 import com.oheers.fish.api.events.EMFFishHuntEvent;
 import com.oheers.fish.api.events.EMFFishPreSaleEvent;
-import com.oheers.fish.api.events.EMFFishSoldEvent;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.selling.SoldFish;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import java.time.LocalDateTime;
 
 /**
  * Used for handling deprecated EMF events until they are removed.

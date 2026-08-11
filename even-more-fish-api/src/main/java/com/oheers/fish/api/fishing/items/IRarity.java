@@ -1,7 +1,10 @@
 package com.oheers.fish.api.fishing.items;
 
 import com.oheers.fish.api.requirement.Requirement;
+import com.oheers.fish.api.sort.Sortable;
+import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -11,13 +14,19 @@ import java.util.Optional;
 /**
  * Internal implementation only. Extending this interface WILL cause issues.
  */
-public interface IRarity {
+public interface IRarity extends Sortable {
 
     @NonNull String getId();
 
     boolean isDisabled();
 
     double getWeight();
+
+    /**
+     * Internal use only. Will be removed in the future.
+     */
+    @ApiStatus.Internal
+    @NonNull Component getDisplayNameComponent();
 
     /**
      * @deprecated Use {@link #getBroadcastEnabled()} instead.

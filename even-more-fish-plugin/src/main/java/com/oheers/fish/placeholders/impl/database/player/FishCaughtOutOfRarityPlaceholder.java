@@ -1,15 +1,9 @@
 package com.oheers.fish.placeholders.impl.database.player;
 
-import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.placeholders.abstracted.UniqueFishCaughtProgressPlaceholder;
 import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
-import java.util.List;
-import java.util.UUID;
 
 public class FishCaughtOutOfRarityPlaceholder extends UniqueFishCaughtProgressPlaceholder {
 

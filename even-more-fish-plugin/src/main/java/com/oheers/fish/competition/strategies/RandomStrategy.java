@@ -1,15 +1,14 @@
 package com.oheers.fish.competition.strategies;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.competition.CompetitionStrategy;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 import java.text.DecimalFormat;
@@ -39,7 +38,7 @@ public class RandomStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public void applyToLeaderboard(Fish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
+    public void applyToLeaderboard(IFish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
         randomType.getStrategy().applyToLeaderboard(fish, fisher, leaderboard, competition);
     }
 

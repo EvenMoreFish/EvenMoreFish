@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.CommandUtils;

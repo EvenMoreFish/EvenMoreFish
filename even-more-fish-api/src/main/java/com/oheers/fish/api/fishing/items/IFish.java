@@ -4,8 +4,11 @@ import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.items.AbstractItemFactory;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
+import com.oheers.fish.api.sort.Sortable;
+import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -16,7 +19,7 @@ import java.util.UUID;
 /**
  * Internal implementation only. Extending this interface WILL cause issues.
  */
-public interface IFish {
+public interface IFish extends Sortable {
 
     @NonNull ItemStack give(int randomIndex);
 
@@ -91,6 +94,14 @@ public interface IFish {
     @NonNull List<Reward> getSellRewards();
 
     double getWeight();
+
+    /**
+     * Internal use only. Will be removed in the future.
+     */
+    @ApiStatus.Internal
+    @NonNull Component getDisplayNameComponent();
+
+    int getCatchLimit();
 
     void setWeight(double weight);
 

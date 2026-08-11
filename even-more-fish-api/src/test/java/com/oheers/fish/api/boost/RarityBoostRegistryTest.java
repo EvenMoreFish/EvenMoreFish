@@ -3,11 +3,11 @@ package com.oheers.fish.api.boost;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.jspecify.annotations.NonNull;
 import org.mockito.Mockito;
 
 import java.lang.reflect.Field;

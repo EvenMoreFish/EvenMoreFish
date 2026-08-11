@@ -2,17 +2,16 @@ package com.oheers.fish.competition.strategies;
 
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.competition.CompetitionStrategy;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
-import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
@@ -50,8 +49,8 @@ public class SpecificRarityStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public void applyToLeaderboard(Fish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
-        Rarity compRarity = competition.getSelectedRarity();
+    public void applyToLeaderboard(IFish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
+        IRarity compRarity = competition.getSelectedRarity();
         if (compRarity != null && !fish.getRarity().getId().equals(compRarity.getId())) {
             return; // Fish doesn't match the required rarity
         }
@@ -80,12 +79,12 @@ public class SpecificRarityStrategy implements CompetitionStrategy {
     public @NonNull EMFMessage getTypeFormat(@NonNull Competition competition, ConfigMessage configMessage) {
         final EMFMessage message = CompetitionStrategy.super.getTypeFormat(competition, configMessage);
         message.setAmount(Integer.toString(competition.getNumberNeeded()));
-        Rarity selectedRarity = competition.getSelectedRarity();
+        IRarity selectedRarity = competition.getSelectedRarity();
         if (selectedRarity == null) {
             EvenMoreFish.getInstance().getLogger().warning("Null rarity found. Please check your config files.");
             return message;
         }
-        message.setRarity(selectedRarity.getDisplayName());
+        message.setRarity(selectedRarity.getDisplayNameComponent());
 
         return message;
     }

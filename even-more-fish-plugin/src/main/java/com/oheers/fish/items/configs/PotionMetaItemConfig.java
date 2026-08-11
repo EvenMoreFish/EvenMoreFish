@@ -1,7 +1,6 @@
 package com.oheers.fish.items.configs;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.config.serializer.PotionEffectSerializer;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;

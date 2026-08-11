@@ -6,7 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.fishing.items.Rarity;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
@@ -46,12 +46,12 @@ public class FishArgument implements CustomArgumentType.Converted<String, String
     }
 
     @Override
-    public String convert(String nativeType) {
+    public @NonNull String convert(@NonNull String nativeType) {
         return nativeType;
     }
 
-    public static @Nullable Fish resolveFish(@NonNull Rarity rarity, @NonNull String fishStr) {
-        Fish fish = rarity.getFish(fishStr);
+    public static @Nullable IFish resolveFish(@NonNull Rarity rarity, @NonNull String fishStr) {
+        IFish fish = rarity.getFish(fishStr);
         if (fish == null) {
             fish = rarity.getFish(fishStr.replace("_", " "));
         }

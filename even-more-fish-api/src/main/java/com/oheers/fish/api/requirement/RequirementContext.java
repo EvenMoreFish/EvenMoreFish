@@ -4,7 +4,6 @@ import com.oheers.fish.api.fishing.FishingType;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Fish;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;

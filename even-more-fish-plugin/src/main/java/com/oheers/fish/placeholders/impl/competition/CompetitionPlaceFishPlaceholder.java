@@ -1,9 +1,9 @@
 package com.oheers.fish.placeholders.impl.competition;
 
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.competition.CompetitionType;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.placeholders.abstracted.EMFPlaceholder;
@@ -43,7 +43,7 @@ public class CompetitionPlaceFishPlaceholder implements EMFPlaceholder {
         }
     }
 
-    private @Nullable String formatFishMessage(@Nullable Fish fish) {
+    private @Nullable String formatFishMessage(@Nullable IFish fish) {
         if (fish == null) {
             return null;
         }
@@ -52,8 +52,8 @@ public class CompetitionPlaceFishPlaceholder implements EMFPlaceholder {
             : ConfigMessage.PLACEHOLDER_FISH_FORMAT.getMessage();
 
         message.setLength(Float.toString(fish.getLength()));
-        message.setFishCaught(fish.getDisplayName());
-        message.setRarity(fish.getRarity().getDisplayName());
+        message.setFishCaught(fish.getDisplayNameComponent());
+        message.setRarity(fish.getRarity().getDisplayNameComponent());
         return message.getLegacyMessage(null);
     }
 

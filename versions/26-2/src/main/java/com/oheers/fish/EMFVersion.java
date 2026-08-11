@@ -4,9 +4,6 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
-import com.oheers.fish.items.nbt.abstracted.NBTHolder;
-import com.oheers.fish.nbt.ItemStackNBTHolder;
-import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.MainCommand;
 import com.oheers.fish.config.MainConfig;
@@ -16,6 +13,9 @@ import com.oheers.fish.items.configs.HideTooltipItemConfig;
 import com.oheers.fish.items.configs.ItemRarityItemConfig;
 import com.oheers.fish.items.configs.MaxStackSizeItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
+import com.oheers.fish.nbt.ItemStackNBTHolder;
+import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import io.papermc.paper.datacomponent.item.TooltipDisplay;
@@ -30,8 +30,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 public class EMFVersion extends EMFVersionProvider {

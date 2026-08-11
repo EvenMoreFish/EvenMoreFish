@@ -126,10 +126,10 @@ public final class WeightedRandom {
      * @return the effective weight of the element, or {@code 0.0} if the base weight is non-positive
      */
     private static <T> double getEffectiveWeight(
-            T element,
-            @NonNull ToDoubleFunction<T> weightFunction,
-            double boostRate,
-            Set<T> boosted
+        T element,
+        ToDoubleFunction<T> weightFunction,
+        double boostRate,
+        Set<? extends T> boosted
     ) {
         double baseWeight = weightFunction.applyAsDouble(element);
         if (baseWeight <= 0.0) return 0.0;

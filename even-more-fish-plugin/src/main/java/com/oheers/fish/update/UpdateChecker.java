@@ -3,10 +3,10 @@ package com.oheers.fish.update;
 import com.oheers.fish.EvenMoreFish;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.jetbrains.annotations.Contract;
-import org.jspecify.annotations.NonNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
 import java.net.URI;

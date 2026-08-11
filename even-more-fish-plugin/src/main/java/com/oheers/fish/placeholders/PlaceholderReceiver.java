@@ -10,9 +10,9 @@ import com.oheers.fish.placeholders.impl.competition.CompetitionTimeLeftPlacehol
 import com.oheers.fish.placeholders.impl.competition.CompetitionTypeFormatPlaceholder;
 import com.oheers.fish.placeholders.impl.competition.CompetitionTypePlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.DistinctFishCaughtInRarityPlaceholder;
+import com.oheers.fish.placeholders.impl.database.player.FirstUncaughtFishPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.FishCaughtOutOfRarityPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.FishCaughtOutOfTotalPlaceholder;
-import com.oheers.fish.placeholders.impl.database.player.FirstUncaughtFishPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.HasCaughtFishPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.HasCompletedCollectionPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.HasCompletedRarityPlaceholder;
@@ -23,8 +23,8 @@ import com.oheers.fish.placeholders.impl.database.player.RemainingFishTotalPlace
 import com.oheers.fish.placeholders.impl.database.player.TimesCaughtFishPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.TotalCompetitionsJoinedPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.TotalCompetitionsWonPlaceholder;
-import com.oheers.fish.placeholders.impl.database.player.TotalFishCaughtPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.TotalFishCaughtInRarityPlaceholder;
+import com.oheers.fish.placeholders.impl.database.player.TotalFishCaughtPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.TotalFishSoldPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.TotalMoneyEarnedPlaceholder;
 import com.oheers.fish.placeholders.impl.player.CustomFishingBooleanPlaceholder;

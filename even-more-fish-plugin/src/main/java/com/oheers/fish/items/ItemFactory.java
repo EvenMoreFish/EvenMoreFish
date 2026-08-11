@@ -6,7 +6,6 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.serializer.ItemSerializer;
 import com.oheers.fish.api.items.AbstractItemFactory;
 import com.oheers.fish.items.configs.ItemConfig;
-import com.oheers.fish.utils.ItemUtils;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import net.kyori.adventure.text.Component;

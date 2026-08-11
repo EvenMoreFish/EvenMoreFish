@@ -6,14 +6,15 @@ import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.config.ConfigUtils;
 import com.oheers.fish.api.config.serializer.ItemSerializer;
 import com.oheers.fish.api.fishing.CatchType;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.config.RarityFileUpdates;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFSingleMessage;
-import com.oheers.fish.utils.sort.Sortable;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
@@ -27,14 +28,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
-public class Rarity extends ConfigBase implements IRarity, Sortable {
+public class Rarity extends ConfigBase implements IRarity {
 
     private final @NonNull String id;
 
     private boolean fishWeighted;
     private boolean showInJournal = true;
     private final Requirement requirement;
-    private final List<Fish> fishList;
+    private final List<IFish> fishList;
 
     /**
      * Constructs a Rarity from its config file.
@@ -88,6 +89,14 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     @Override
     public double getWeight() {
         return getConfig().getDouble("weight");
+    }
+
+    /**
+     * Internal use only. Will be removed in the future.
+     */
+    @Override
+    public @NonNull Component getDisplayNameComponent() {
+        return getDisplayName().getComponentMessage();
     }
 
     public int getCatchLimit() {
@@ -188,16 +197,11 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
         return maxSize == null ? 10D : maxSize;
     }
 
-    // TODO this was set to always be false at some point, we need to re-add the removed code.
-    public boolean hasCompExemptFish() {
-        return false;
-    }
-
     /**
      * @return This rarity's original list of loaded fish
      */
     @Override
-    public @NonNull List<Fish> getOriginalFishList() {
+    public @NonNull List<IFish> getOriginalFishList() {
         return fishList;
     }
 
@@ -205,13 +209,13 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
      * @return This rarity's list of loaded fish, but each fish is a clone of the original
      */
     @Override
-    public @NonNull List<Fish> getFishList() {
-        return fishList.stream().map(Fish::createCopy).toList();
+    public @NonNull List<IFish> getFishList() {
+        return fishList.stream().map(IFish::createCopy).toList();
     }
 
     @Override
-    public @Nullable Fish getEditableFish(@NonNull String name) {
-        for (Fish fish : fishList) {
+    public @Nullable IFish getEditableFish(@NonNull String name) {
+        for (IFish fish : fishList) {
             if (fish.getName().equalsIgnoreCase(name)) {
                 return fish;
             }
@@ -220,8 +224,8 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
     }
 
     @Override
-    public @Nullable Fish getFish(@NonNull String name) {
-        Fish fish = getEditableFish(name);
+    public @Nullable IFish getFish(@NonNull String name) {
+        IFish fish = getEditableFish(name);
         if (fish == null) {
             return null;
         }
@@ -269,12 +273,12 @@ public class Rarity extends ConfigBase implements IRarity, Sortable {
 
     // Loading stuff
 
-    private List<Fish> loadFish() {
+    private List<IFish> loadFish() {
         Section rootFishSection = getConfig().getSection("fish");
         if (rootFishSection == null) {
             return List.of();
         }
-        List<Fish> fishList = new ArrayList<>();
+        List<IFish> fishList = new ArrayList<>();
         rootFishSection.getRoutesAsStrings(false).forEach(fishStr -> {
             Section fishSection = rootFishSection.getSection(fishStr);
             if (fishSection == null) {

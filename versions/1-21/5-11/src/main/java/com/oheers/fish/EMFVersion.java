@@ -3,7 +3,6 @@ package com.oheers.fish;
 import ca.spottedleaf.moonrise.common.PlatformHooks;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
@@ -18,6 +17,7 @@ import com.oheers.fish.items.configs.MaxStackSizeItemConfig;
 import com.oheers.fish.items.configs.ModernGlowingItemConfig;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.nbt.ItemStackNBTHolder;
+import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -37,12 +37,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jspecify.annotations.NonNull;
-import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import org.jspecify.annotations.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Optional;
 import java.util.UUID;
 
 public class EMFVersion extends EMFVersionProvider {

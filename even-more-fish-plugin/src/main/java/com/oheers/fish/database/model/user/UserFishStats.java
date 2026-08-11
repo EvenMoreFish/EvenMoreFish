@@ -1,7 +1,6 @@
 package com.oheers.fish.database.model.user;
 
-
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -27,7 +26,7 @@ public class UserFishStats {
         this.quantity = quantity;
     }
 
-    public UserFishStats(int userId, Fish fish, LocalDateTime firstCatchTime) {
+    public UserFishStats(int userId, IFish fish, LocalDateTime firstCatchTime) {
         this.userId = userId;
         this.fishName = fish.getName();
         this.fishRarity = fish.getRarity().getId();

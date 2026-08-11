@@ -5,6 +5,8 @@ import com.oheers.fish.api.EMFCompetitionEndEvent;
 import com.oheers.fish.api.EMFCompetitionStartEvent;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.reward.Reward;
@@ -16,9 +18,7 @@ import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.model.CompetitionReport;
 import com.oheers.fish.database.model.user.UserReport;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -60,8 +60,8 @@ public class Competition {
     private boolean originallyRandom;
     private Leaderboard leaderboard;
     private CompetitionType competitionType;
-    private Fish selectedFish;
-    private Rarity selectedRarity;
+    private IFish selectedFish;
+    private IRarity selectedRarity;
     private String competitionName;
     private boolean adminStarted = false;
     private EMFMessage startMessage;
@@ -103,10 +103,10 @@ public class Competition {
 
         EMFSingleMessage prefix = competitionFile.getBossbarPrefix();
         if (selectedRarity != null) {
-            prefix.setRarity(selectedRarity.getDisplayName());
+            prefix.setRarity(selectedRarity.getDisplayNameComponent());
         } else if (selectedFish != null) {
-            prefix.setRarity(selectedFish.getRarity().getDisplayName());
-            prefix.setVariable("{fish}", selectedFish.getDisplayName());
+            prefix.setRarity(selectedFish.getRarity().getDisplayNameComponent());
+            prefix.setVariable("{fish}", selectedFish.getDisplayNameComponent());
         }
         bar.setPrefix(prefix, competitionType);
         return bar;
@@ -404,7 +404,7 @@ public class Competition {
         return doActionBarMessage && isSupportedActionBarType;
     }
 
-    public void applyToLeaderboard(Fish fish, Player fisher) {
+    public void applyToLeaderboard(IFish fish, Player fisher) {
         UUID uuid = fisher.getUniqueId();
         // Ensure this is executed on the global scheduler to avoid CMEs.
         Scheduling.getInstance().runTask(() -> competitionType.getStrategy().applyToLeaderboard(fish, uuid, leaderboard, this));
@@ -479,8 +479,8 @@ public class Competition {
             message.setPlayer(player);
 
             message.setPosition(Integer.toString(pos));
-            message.setRarity(entry.getFish().getRarity().getDisplayName());
-            message.setFishCaught(entry.getFish().getDisplayName());
+            message.setRarity(entry.getFish().getRarity().getDisplayNameComponent());
+            message.setFishCaught(entry.getFish().getDisplayNameComponent());
 
             leaderboard.add(message.getComponentMessage());
         }
@@ -642,11 +642,11 @@ public class Competition {
         this.competitionType = competitionType;
     }
 
-    public @Nullable Fish getSelectedFish() {
+    public @Nullable IFish getSelectedFish() {
         return selectedFish;
     }
 
-    public @Nullable Rarity getSelectedRarity() {
+    public @Nullable IRarity getSelectedRarity() {
         return selectedRarity;
     }
 
@@ -674,13 +674,13 @@ public class Competition {
     }
 
     public boolean chooseFish() {
-        List<Rarity> configRarities = getAllowedRaritiesOrLog();
+        List<IRarity> configRarities = getAllowedRaritiesOrLog();
         if (configRarities == null) return false;
 
         final Logger logger = EvenMoreFish.getInstance().getLogger();
 
-        List<Fish> fishPool = new ArrayList<>();
-        for (Rarity rarity : configRarities) {
+        List<IFish> fishPool = new ArrayList<>();
+        for (IRarity rarity : configRarities) {
             fishPool.addAll(rarity.getOriginalFishList());
         }
 
@@ -690,7 +690,7 @@ public class Competition {
         }
 
         try {
-            Fish selectedFish = FishManager.getInstance().getRandomWeightedFish(fishPool, 1.0d, null);
+            IFish selectedFish = FishManager.getInstance().getRandomWeightedFish(fishPool, 1.0d, null);
             if (selectedFish == null) {
                 throw new IllegalArgumentException("No fish selected from pool");
             }
@@ -709,13 +709,13 @@ public class Competition {
 
 
     public boolean chooseRarity() {
-        List<Rarity> configRarities = getAllowedRaritiesOrLog();
+        List<IRarity> configRarities = getAllowedRaritiesOrLog();
         if (configRarities == null) return false;
 
         final Logger logger = EvenMoreFish.getInstance().getLogger();
 
         try {
-            Rarity rarity = configRarities.get(EvenMoreFish.getInstance().getRandom().nextInt(configRarities.size()));
+            IRarity rarity = configRarities.get(EvenMoreFish.getInstance().getRandom().nextInt(configRarities.size()));
 
             if (rarity == null) {
                 rarity = FishManager.getInstance().getRandomWeightedRarity(
@@ -750,8 +750,8 @@ public class Competition {
         this.singleWinner = player;
     }
 
-    private List<Rarity> getAllowedRaritiesOrLog() {
-        List<Rarity> configRarities = getCompetitionFile().getAllowedRarities();
+    private List<IRarity> getAllowedRaritiesOrLog() {
+        List<IRarity> configRarities = getCompetitionFile().getAllowedRarities();
         if (configRarities.isEmpty()) {
             EvenMoreFish.getInstance().getLogger()
                     .severe("No allowed-rarities list found in " + getCompetitionFile().getFileName() + " competition config file.");
@@ -828,7 +828,7 @@ public class Competition {
                 Logging.warn("Failed to restore leaderboard entry. Fish " + fishStr + " is no longer configured?");
                 return;
             }
-            CompetitionEntry entry = new CompetitionEntry(player, (Fish) rarityKey.getFish(), competition.competitionType);
+            CompetitionEntry entry = new CompetitionEntry(player, rarityKey.getFish(), competition.competitionType);
             entry.value = entrySection.getFloat("value");
             entry.time = entrySection.getLong("time");
             competition.leaderboard.addEntry(entry);

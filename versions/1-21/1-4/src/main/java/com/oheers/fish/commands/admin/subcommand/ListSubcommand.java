@@ -2,9 +2,10 @@ package com.oheers.fish.commands.admin.subcommand;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.arguments.RarityArgument;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -81,10 +82,10 @@ public class ListSubcommand {
 
     private void showRarities(@NonNull CommandSender sender) {
         TextComponent.Builder builder = Component.text();
-        for (Rarity rarity : FishManager.getInstance().getRarityMap().values()) {
+        for (IRarity rarity : FishManager.getInstance().getRarityMap().values()) {
             TextComponent.Builder rarityBuilder = Component.text();
             EMFSingleMessage message = EMFSingleMessage.fromString("<gray>[</gray>{rarity}<gray>]</gray>");
-            message.setVariable("{rarity}", rarity.getDisplayName());
+            message.setVariable("{rarity}", rarity.getDisplayNameComponent());
             rarityBuilder.append(message.getComponentMessage());
             rarityBuilder.hoverEvent(HoverEvent.hoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
@@ -100,10 +101,10 @@ public class ListSubcommand {
         TextComponent.Builder builder = Component.text();
         builder.append(rarity.getDisplayName().getComponentMessage());
         builder.append(Component.space());
-        for (Fish fish : rarity.getOriginalFishList()) {
+        for (IFish fish : rarity.getOriginalFishList()) {
             TextComponent.Builder fishBuilder = Component.text();
             EMFSingleMessage message = EMFSingleMessage.fromString("<gray>[</gray>{fish}<gray>]</gray>");
-            message.setVariable("{fish}", fish.getDisplayName());
+            message.setVariable("{fish}", fish.getDisplayNameComponent());
             fishBuilder.append(message.getComponentMessage());
             fishBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Click to receive fish")));
             fishBuilder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/emf admin fish " + rarity.getId() + " " + fish.getName().replace(" ", "_")));

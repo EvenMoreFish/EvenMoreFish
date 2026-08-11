@@ -60,7 +60,8 @@ public class EMFAPI {
      */
     @Deprecated(forRemoval = true)
     public @Nullable Fish getFish(String rarityName, String fishName) {
-        return FishManager.getInstance().getFish(rarityName, fishName);
+        IFish abstracted = FishManager.getInstance().getFish(rarityName, fishName);
+        return (abstracted instanceof Fish fish) ? fish : null;
     }
 
 }

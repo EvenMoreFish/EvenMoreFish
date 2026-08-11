@@ -1,6 +1,6 @@
 package com.oheers.fish.competition;
 
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -8,12 +8,12 @@ import java.util.UUID;
 public class CompetitionEntry {
 
     private final UUID player;
-    private final Fish fish;
+    private final IFish fish;
     protected long time;
     protected float value;
     private final CompetitionType type;
 
-    public CompetitionEntry(UUID player, Fish fish, CompetitionType type) {
+    public CompetitionEntry(UUID player, IFish fish, CompetitionType type) {
         this.player = player;
         this.fish = fish;
         this.time = Instant.now().toEpochMilli();
@@ -37,7 +37,7 @@ public class CompetitionEntry {
         this.time = Instant.now().toEpochMilli();
     }
 
-    public Fish getFish() {
+    public IFish getFish() {
         return fish;
     }
 

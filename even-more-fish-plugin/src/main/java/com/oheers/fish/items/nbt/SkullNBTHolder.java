@@ -7,7 +7,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 
 import java.util.Locale;
 

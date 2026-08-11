@@ -5,14 +5,12 @@ import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.gmail.nossr50.datatypes.player.McMMOPlayer;
 import com.gmail.nossr50.util.player.UserManager;
-import com.oheers.fish.api.Logging;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.exploits.AFKFishingTracker;
 import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.fishing.rods.RodManager;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
@@ -28,7 +26,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * A utility class for common checks

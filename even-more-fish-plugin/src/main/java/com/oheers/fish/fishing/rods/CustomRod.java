@@ -3,15 +3,15 @@ package com.oheers.fish.fishing.rods;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.fishing.rods.ICustomRod;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.items.ItemFactory;
+import com.oheers.fish.items.nbt.NbtKeys;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.recipe.EMFRecipe;
 import com.oheers.fish.recipe.RecipeUtil;
-import com.oheers.fish.items.nbt.NbtKeys;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -27,8 +27,8 @@ import java.util.stream.Stream;
 public class CustomRod extends ConfigBase implements ICustomRod {
 
     private final @NonNull String id;
-    private final List<Rarity> allowedRarities;
-    private final List<Fish> allowedFish;
+    private final List<IRarity> allowedRarities;
+    private final List<IFish> allowedFish;
     private final EMFRecipe<?> recipe;
     private final ItemFactory factory;
 
@@ -54,7 +54,7 @@ public class CustomRod extends ConfigBase implements ICustomRod {
     /**
      * @return the contents of the "allowed-rarities" section, or an empty list if the section does not exist.
      */
-    public List<Rarity> loadAllowedRarities() {
+    public List<IRarity> loadAllowedRarities() {
         if ("ALL".equalsIgnoreCase(getConfig().getString("allowed-rarities"))) {
             return FishManager.getInstance().getRarityMap().values().stream().toList();
         }
@@ -67,7 +67,7 @@ public class CustomRod extends ConfigBase implements ICustomRod {
     /**
      * @return the contents of the "allowed-fish" section, or an empty list if the section does not exist.
      */
-    public List<Fish> loadAllowedFish() {
+    public List<IFish> loadAllowedFish() {
         Section section = getConfig().getSection("allowed-fish");
         if (section == null) {
             return List.of();
@@ -75,7 +75,7 @@ public class CustomRod extends ConfigBase implements ICustomRod {
 
         return section.getRoutesAsStrings(false).stream()
             .flatMap(rarityId -> {
-                Rarity rarity = FishManager.getInstance().getRarity(rarityId);
+                IRarity rarity = FishManager.getInstance().getRarity(rarityId);
                 if (rarity == null) {
                     Logging.warn("Rarity '" + rarityId + "' not found for custom rod '" + getId() + "'.");
                     return Stream.empty();
@@ -139,12 +139,12 @@ public class CustomRod extends ConfigBase implements ICustomRod {
     }
 
     @Override
-    public @NonNull List<Rarity> getAllowedRarities() {
+    public @NonNull List<IRarity> getAllowedRarities() {
         return this.allowedRarities;
     }
 
     @Override
-    public @NonNull List<Fish> getAllowedFish() {
+    public @NonNull List<IFish> getAllowedFish() {
         return this.allowedFish;
     }
 

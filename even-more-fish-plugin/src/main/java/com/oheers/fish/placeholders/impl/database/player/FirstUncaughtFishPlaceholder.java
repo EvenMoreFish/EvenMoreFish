@@ -1,6 +1,6 @@
 package com.oheers.fish.placeholders.impl.database.player;
 
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.placeholders.abstracted.UniqueFishCaughtProgressPlaceholder;
 import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NonNull;
@@ -19,7 +19,7 @@ public class FirstUncaughtFishPlaceholder extends UniqueFishCaughtProgressPlaceh
             return null;
         }
 
-        Fish fish = firstUncaughtFish(target.uuid(), target.fishList());
+        IFish fish = firstUncaughtFish(target.uuid(), target.fishList());
         return fish == null ? "" : fish.getName();
     }
 }

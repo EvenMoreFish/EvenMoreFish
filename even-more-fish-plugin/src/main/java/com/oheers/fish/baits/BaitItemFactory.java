@@ -1,8 +1,8 @@
 package com.oheers.fish.baits;
 
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.baits.manager.BaitNBTManager;
-import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.items.configs.ItemConfig;
 import com.oheers.fish.messages.ConfigMessage;
@@ -19,11 +19,11 @@ import java.util.function.Supplier;
 
 public class BaitItemFactory {
     private final String baitId;
-    private final List<Rarity> rarities;
-    private final List<Fish> fish;
+    private final List<IRarity> rarities;
+    private final List<IFish> fish;
     private final YamlDocument config;
 
-    public BaitItemFactory(String baitId, List<Rarity> rarities, List<Fish> fish, YamlDocument config) {
+    public BaitItemFactory(String baitId, List<IRarity> rarities, List<IFish> fish, YamlDocument config) {
         this.baitId = baitId;
         this.rarities = rarities;
         this.fish = fish;

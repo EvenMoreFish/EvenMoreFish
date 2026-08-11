@@ -1,7 +1,6 @@
 package com.oheers.fish.gui;
 
 import de.themoep.inventorygui.GuiPageElement;
-import de.themoep.inventorygui.InventoryGui;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;

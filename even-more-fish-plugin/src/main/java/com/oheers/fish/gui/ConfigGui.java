@@ -2,15 +2,12 @@ package com.oheers.fish.gui;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.api.Logging;
-import com.oheers.fish.api.config.ConfigBase;
-import com.oheers.fish.config.gui.GuiConfig;
 import com.oheers.fish.config.GuiFillerConfig;
+import com.oheers.fish.config.gui.GuiConfig;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.ItemUtils;
-import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiPageElement;
 import de.themoep.inventorygui.GuiStorageElement;
@@ -24,11 +21,8 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.units.qual.N;
 import org.jspecify.annotations.NonNull;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
