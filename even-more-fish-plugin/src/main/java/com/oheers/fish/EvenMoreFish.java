@@ -23,7 +23,6 @@ import com.oheers.fish.database.data.manager.DataManager;
 import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.events.McMMOTreasureEvent;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
@@ -49,10 +48,8 @@ import uk.firedev.vanishchecker.VanishChecker;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -72,9 +69,6 @@ public class EvenMoreFish extends EMFPlugin {
     private CompetitionQueue competitionQueue;
     private final AutoRunner autoRunner = new AutoRunner();
 
-    // this is for pre-deciding a rarity and running particles if it will be chosen
-    // it's a work-in-progress solution and probably won't stick.
-    private Map<UUID, Rarity> decidedRarities;
     private volatile boolean isUpdateAvailable;
 
     private DependencyManager dependencyManager;
@@ -125,8 +119,6 @@ public class EvenMoreFish extends EMFPlugin {
         versionProvider.enableCommands();
 
         this.api = new EMFAPI();
-
-        this.decidedRarities = new HashMap<>();
 
         this.configurationManager = new ConfigurationManager(this);
         this.configurationManager.loadConfigurations(); //need to test, order may be important
@@ -285,10 +277,6 @@ public class EvenMoreFish extends EMFPlugin {
 
     public AutoRunner getAutoRunner() {
         return autoRunner;
-    }
-
-    public Map<UUID, Rarity> getDecidedRarities() {
-        return decidedRarities;
     }
 
     public boolean isUpdateAvailable() {

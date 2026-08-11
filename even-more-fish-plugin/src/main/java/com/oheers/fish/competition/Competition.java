@@ -220,8 +220,6 @@ public class Competition {
 
             // Execute start commands
             getCompetitionFile().getStartCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
-
-            EvenMoreFish.getInstance().getDecidedRarities().clear();
             return true;
         } catch (Exception ex) {
             Logging.error("An exception was thrown while starting the competition.", ex);

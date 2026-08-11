@@ -242,9 +242,6 @@ public class FishManager extends AbstractFishManager<IRarity> {
                                           Set<IRarity> totalRarities,
                                           @Nullable CustomRod customRod,
                                           @NonNull RequirementContext requirementContext) {
-        IRarity preDecided = getPreDecidedRarity(fisher);
-        if (preDecided != null) return preDecided;
-
         List<IRarity> allowedRarities = filterByCustomRod(
                 getAllowedRarities(fisher, boostRate, boostedRarities, totalRarities, requirementContext),
                 customRod
@@ -267,11 +264,6 @@ public class FishManager extends AbstractFishManager<IRarity> {
                                               @NonNull ToDoubleFunction<IRarity> weightFunction,
                                               @Nullable CustomRod customRod,
                                               @NonNull RequirementContext requirementContext) {
-        IRarity preDecided = getPreDecidedRarity(fisher);
-        if (preDecided != null) {
-            return preDecided;
-        }
-
         List<IRarity> allowedRarities = getAvailableRarities(fisher, totalRarities, customRod, requirementContext);
         if (allowedRarities.isEmpty()) {
             return null;
@@ -525,12 +517,6 @@ public class FishManager extends AbstractFishManager<IRarity> {
                                      Set<IRarity> boostedRarities, Player fisher) {
         return (boostedRarities != null && boostRate == -1 && !boostedRarities.contains(rarity)) ||
             (rarity.getPermission() != null && !fisher.hasPermission(rarity.getPermission()));
-    }
-
-    private IRarity getPreDecidedRarity(Player player) {
-        return player != null ?
-            EvenMoreFish.getInstance().getDecidedRarities().remove(player.getUniqueId()) :
-            null;
     }
 
     private boolean isFishingAllowedInCompetition() {
