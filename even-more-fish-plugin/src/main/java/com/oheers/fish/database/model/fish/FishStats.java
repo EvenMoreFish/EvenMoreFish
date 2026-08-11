@@ -1,8 +1,7 @@
 package com.oheers.fish.database.model.fish;
 
-
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -46,7 +45,7 @@ public class FishStats {
         this.quantity = quantity;
     }
 
-    public FishStats(Fish fish, @NonNull LocalDateTime firstCatchTime, @NonNull UUID discoverer, float shortestLength, @NonNull UUID shortestFisher, float longestLength, @NonNull UUID longestFisher, int quantity) {
+    public FishStats(IFish fish, @NonNull LocalDateTime firstCatchTime, @NonNull UUID discoverer, float shortestLength, @NonNull UUID shortestFisher, float longestLength, @NonNull UUID longestFisher, int quantity) {
         this(
             fish.getName(),
             fish.getRarity().getId(),
@@ -60,7 +59,7 @@ public class FishStats {
         );
     }
 
-    public static FishStats empty(Fish fish, LocalDateTime firstCatchTime) {
+    public static FishStats empty(IFish fish, LocalDateTime firstCatchTime) {
         return new FishStats(fish,firstCatchTime,fish.getFishermanUUID(), fish.getLength(),fish.getFishermanUUID(),fish.getLength(), fish.getFishermanUUID(), 0);
     }
 

@@ -11,7 +11,6 @@ import org.evenmorefish.dimensionfishing.config.DimensionFishingConfigProvider;
 import org.evenmorefish.dimensionfishing.util.ParticleFactory;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.function.Predicate;

@@ -1,6 +1,6 @@
 package com.oheers.fish.database.data;
 
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 import org.jspecify.annotations.NonNull;
 
 public record UserFishRarityKey(int userId, @NonNull String fishName, @NonNull String fishRarity) {
@@ -9,7 +9,7 @@ public record UserFishRarityKey(int userId, @NonNull String fishName, @NonNull S
         return new UserFishRarityKey(userId, fishName, fishRarity);
     }
 
-    public static @NonNull UserFishRarityKey of(final int userId, final @NonNull Fish fish) {
+    public static @NonNull UserFishRarityKey of(final int userId, final @NonNull IFish fish) {
         return new UserFishRarityKey(userId, fish.getName(), fish.getRarity().getId());
     }
 

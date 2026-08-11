@@ -1,8 +1,6 @@
 package com.oheers.fish.addons;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.addons.internal.requirement.ActiveCompetitionRequirementType;
-import com.oheers.fish.addons.internal.requirement.FishingTypeRequirementType;
 import com.oheers.fish.addons.external.requirement.PermissionRequirementType;
 import com.oheers.fish.addons.external.reward.AuraSkillsXPRewardType;
 import com.oheers.fish.addons.external.reward.GPClaimBlocksRewardType;
@@ -11,9 +9,11 @@ import com.oheers.fish.addons.external.reward.MoneyRewardType;
 import com.oheers.fish.addons.external.reward.PermissionRewardType;
 import com.oheers.fish.addons.external.reward.PlayerPointsRewardType;
 import com.oheers.fish.addons.internal.item.Head64ItemAddon;
+import com.oheers.fish.addons.internal.requirement.ActiveCompetitionRequirementType;
 import com.oheers.fish.addons.internal.requirement.BiomeRequirementType;
 import com.oheers.fish.addons.internal.requirement.BiomeSetRequirementType;
 import com.oheers.fish.addons.internal.requirement.DisabledRequirementType;
+import com.oheers.fish.addons.internal.requirement.FishingTypeRequirementType;
 import com.oheers.fish.addons.internal.requirement.GroupRequirementType;
 import com.oheers.fish.addons.internal.requirement.IRLTimeRequirementType;
 import com.oheers.fish.addons.internal.requirement.InGameTimeRequirementType;

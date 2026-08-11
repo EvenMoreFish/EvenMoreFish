@@ -1,14 +1,12 @@
 package com.oheers.fish.selling;
 
-import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.items.nbt.abstracted.NBTHolder;
-import com.oheers.fish.items.nbt.NbtKeys;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public class WorthNBT {
 
@@ -16,40 +14,15 @@ public class WorthNBT {
         throw new UnsupportedOperationException();
     }
 
-    public static void setNBT(@NonNull ItemStack fishItem, @NonNull Fish fish) {
-        if (fishItem.isEmpty()) {
-            return;
-        }
-        NBTHolder<ItemStack> holder = NBTHolder.itemStack(fishItem);
-        setNBT(holder, fish);
+    public static void setNBT(@NonNull ItemStack fishItem, @NonNull IFish fish) {
+        FishManager.getInstance().setFishNbt(fishItem, fish);
     }
 
-    public static void setNBT(@NonNull Skull skull, @NonNull Fish fish) {
-        NBTHolder<Skull> holder = NBTHolder.skull(skull);
-        setNBT(holder, fish);
+    public static void setNBT(@NonNull Skull skull, @NonNull IFish fish) {
+        FishManager.getInstance().setFishNbt(skull, fish);
     }
 
-    public static void setNBT(@NonNull NBTHolder<?> holder, @NonNull Fish fish) {
-        holder.setAutoSave(false);
-
-        float length = fish.getLength();
-        if (length > 0) {
-            holder.setFloat(NbtKeys.EMF_FISH_LENGTH.get(), length);
-        }
-
-        UUID fisherman = fish.getFishermanUUID();
-        if (!fish.hasFishermanDisabled() && fisherman != null) {
-            holder.setString(NbtKeys.EMF_FISH_PLAYER.get(), fisherman.toString());
-        }
-
-        holder.setString(NbtKeys.EMF_FISH_NAME.get(), fish.getName());
-        holder.setString(NbtKeys.EMF_FISH_RARITY.get(), fish.getRarity().getId());
-        holder.setInteger(NbtKeys.EMF_FISH_RANDOM_INDEX.get(), fish.getFactory().getRandomIndex());
-
-        holder.save();
-    }
-
-    public static @NonNull Optional<Double> getValue(@NonNull Fish fish) {
+    public static @NonNull Optional<Double> getValue(@NonNull IFish fish) {
         double setWorth = fish.getSetWorth();
         float length = fish.getLength();
         if (setWorth > 0) {
@@ -61,7 +34,7 @@ public class WorthNBT {
         }
     }
 
-    private static Optional<Double> getMultipliedValue(float length, @NonNull Fish fish) {
+    private static Optional<Double> getMultipliedValue(float length, @NonNull IFish fish) {
         double multiplier = fish.getWorthMultiplier();
         if (multiplier <= 0.0D) {
             return Optional.empty();

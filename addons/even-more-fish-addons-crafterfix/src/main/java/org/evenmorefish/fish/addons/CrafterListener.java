@@ -1,6 +1,5 @@
 package org.evenmorefish.fish.addons;
 
-import com.oheers.fish.FishUtils;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.items.FishManager;

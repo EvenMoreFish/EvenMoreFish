@@ -3,6 +3,7 @@ package com.oheers.fish.database;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.annotations.NeedsTesting;
 import com.oheers.fish.api.annotations.TestType;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
@@ -24,7 +25,6 @@ import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.database.sql.DatabaseSqlDialect;
 import com.oheers.fish.database.sql.DatabaseSqlDialectFactory;
-import com.oheers.fish.fishing.items.Fish;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.PreparedBatch;
@@ -155,12 +155,12 @@ public class Database implements DatabaseAPI {
     }
 
     @Override
-    public boolean hasFishStats(@NonNull Fish fish) {
+    public boolean hasFishStats(@NonNull IFish fish) {
         return withHandle(handle -> handle.createQuery("select 1 from " + fishTable + " where fish_name = :fish_name and fish_rarity = :fish_rarity limit 1").bind("fish_name", fish.getName()).bind("fish_rarity", fish.getRarity().getId()).mapTo(Integer.class).findOne().isPresent(), false);
     }
 
     @Override
-    public void incrementFish(@NonNull Fish fish) {
+    public void incrementFish(@NonNull IFish fish) {
         useHandle(handle -> handle.createUpdate("update " + fishTable + " set total_caught = total_caught + 1 where fish_rarity = :fish_rarity and fish_name = :fish_name").bind("fish_rarity", fish.getRarity().getId()).bind("fish_name", fish.getName()).execute());
     }
 
@@ -196,7 +196,7 @@ public class Database implements DatabaseAPI {
         return entries.stream().map(CompetitionEntry::getPlayer).map(UUID::toString).collect(Collectors.joining(","));
     }
 
-    private @NonNull String prepareRarityFishString(final @NonNull Fish fish) {
+    private @NonNull String prepareRarityFishString(final @NonNull IFish fish) {
         return fish.getRarity().getId() + ":" + fish.getName();
     }
 

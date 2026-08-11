@@ -3,11 +3,11 @@ package com.oheers.fish.competition.configs;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.api.config.serializer.SoundSerializer;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.competition.CompetitionType;
-import com.oheers.fish.api.config.serializer.SoundSerializer;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.bossbar.BossBar;
@@ -165,7 +165,7 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return A list of rarities that can be caught in this competition.
      */
-    public @NonNull List<Rarity> getAllowedRarities() {
+    public @NonNull List<IRarity> getAllowedRarities() {
         return getConfig().getStringList("allowed-rarities").stream()
                 .map(FishManager.getInstance()::getRarity)
                 .filter(Objects::nonNull)

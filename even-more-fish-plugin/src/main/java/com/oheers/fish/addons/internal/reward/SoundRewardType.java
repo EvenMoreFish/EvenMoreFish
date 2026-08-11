@@ -1,8 +1,8 @@
 package com.oheers.fish.addons.internal.reward;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.api.reward.RewardType;
 import com.oheers.fish.api.config.serializer.SoundSerializer;
+import com.oheers.fish.api.reward.RewardType;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

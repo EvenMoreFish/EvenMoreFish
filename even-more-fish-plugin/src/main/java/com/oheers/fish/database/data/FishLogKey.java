@@ -1,7 +1,7 @@
 package com.oheers.fish.database.data;
 
 
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ public class FishLogKey {
         this.dateTime = dateTime;
     }
 
-    public FishLogKey(int userId, Fish fish, LocalDateTime dateTime) {
+    public FishLogKey(int userId, IFish fish, LocalDateTime dateTime) {
         this.userId = userId;
         this.fishName = fish.getName();
         this.fishRarity = fish.getRarity().getId();
@@ -35,7 +35,7 @@ public class FishLogKey {
         return new FishLogKey(Integer.parseInt(split[0]), split[1], split[2], LocalDateTime.parse(split[3]));
     }
 
-    public static @NonNull FishLogKey of(int userId, final @NonNull Fish fish, LocalDateTime dateTime) {
+    public static @NonNull FishLogKey of(int userId, final @NonNull IFish fish, LocalDateTime dateTime) {
         return new FishLogKey(userId, fish, dateTime);
     }
 

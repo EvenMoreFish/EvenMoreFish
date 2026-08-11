@@ -1,14 +1,13 @@
 package com.oheers.fish.competition.strategies;
 
 
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.competition.CompetitionStrategy;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
@@ -21,7 +20,7 @@ public class ShortestTotalStrategy implements CompetitionStrategy {
     }
 
     @Override
-    public void applyToLeaderboard(Fish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
+    public void applyToLeaderboard(IFish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
         CompetitionEntry entry = leaderboard.getEntry(fisher);
 
         if (entry != null) {

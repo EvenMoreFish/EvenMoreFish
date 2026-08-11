@@ -1,7 +1,7 @@
 package com.oheers.fish.commands.arguments;
 
-import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.fishing.items.Rarity;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
@@ -11,13 +11,13 @@ import dev.jorel.commandapi.arguments.StringArgument;
  */
 public class FishArgument {
 
-    public static Argument<Fish> create() {
+    public static Argument<IFish> create() {
         return new CustomArgument<>(new StringArgument("fish"), info -> {
-            Rarity rarity = info.previousArgs().getUnchecked("rarity");
+            IRarity rarity = info.previousArgs().getUnchecked("rarity");
             if (rarity == null) {
                 throw CustomArgument.CustomArgumentException.fromString("Could not find a previous RarityArgument!");
             }
-            Fish fish = rarity.getFish(info.input());
+            IFish fish = rarity.getFish(info.input());
             if (fish == null) {
                 fish = rarity.getFish(info.input().replace("_", " "));
             }
@@ -29,7 +29,7 @@ public class FishArgument {
             return fish;
         }).replaceSuggestions(ArgumentHelper.getAsyncSuggestions(
                 info -> {
-                    Rarity rarity = info.previousArgs().getUnchecked("rarity");
+                    IRarity rarity = info.previousArgs().getUnchecked("rarity");
                     if (rarity == null) {
                         return new String[0];
                     }

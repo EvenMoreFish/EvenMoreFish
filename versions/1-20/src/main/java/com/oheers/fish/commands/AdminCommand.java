@@ -3,6 +3,8 @@ package com.oheers.fish.commands;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.api.utils.ManifestUtil;
@@ -22,7 +24,6 @@ import com.oheers.fish.database.Database;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -141,7 +142,7 @@ public class AdminCommand {
                 new EntitySelectorArgument.OnePlayer("target").setOptional(true)
             )
             .executes((sender, arguments) -> {
-                final Rarity rarity = arguments.getUnchecked("rarity");
+                final IRarity rarity = arguments.getUnchecked("rarity");
                 if (rarity == null) {
                     return;
                 }
@@ -166,7 +167,7 @@ public class AdminCommand {
                     null
                 );
 
-                Fish fish = FishManager.getInstance().getFish(
+                IFish fish = FishManager.getInstance().getFish(
                     rarity,
                     target.getLocation(),
                     target,
@@ -217,18 +218,18 @@ public class AdminCommand {
                 String listTarget = Objects.requireNonNull(args.getUnchecked("listTarget"));
                 switch (listTarget) {
                     case "fish" -> {
-                        final Rarity rarity = args.getUnchecked("rarity");
+                        final IRarity rarity = args.getUnchecked("rarity");
                         if (rarity == null) {
                             ConfigMessage.RARITY_INVALID.getMessage().send(sender);
                             return;
                         }
                         TextComponent.Builder builder = Component.text();
-                        builder.append(rarity.getDisplayName().getComponentMessage());
+                        builder.append(rarity.getDisplayNameComponent());
                         builder.append(Component.space());
-                        for (Fish fish : rarity.getOriginalFishList()) {
+                        for (IFish fish : rarity.getOriginalFishList()) {
                             TextComponent.Builder fishBuilder = Component.text();
                             EMFSingleMessage message = EMFSingleMessage.fromString("<gray>[</gray>{fish}<gray>]</gray>");
-                            message.setVariable("{fish}", fish.getDisplayName());
+                            message.setVariable("{fish}", fish.getDisplayNameComponent());
                             fishBuilder.append(message.getComponentMessage());
                             fishBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Click to receive fish")));
                             fishBuilder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/emf admin fish " + rarity.getId() + " " + fish.getName().replace(" ", "_")));
@@ -238,10 +239,10 @@ public class AdminCommand {
                     }
                     case "rarities" -> {
                         TextComponent.Builder builder = Component.text();
-                        for (Rarity rarity : FishManager.getInstance().getRarityMap().values()) {
+                        for (IRarity rarity : FishManager.getInstance().getRarityMap().values()) {
                             TextComponent.Builder rarityBuilder = Component.text();
                             EMFSingleMessage message = EMFSingleMessage.fromString("<gray>[</gray>{rarity}<gray>]</gray>");
-                            message.setVariable("{rarity}", rarity.getDisplayName());
+                            message.setVariable("{rarity}", rarity.getDisplayNameComponent());
                             rarityBuilder.append(message.getComponentMessage());
                             rarityBuilder.hoverEvent(HoverEvent.hoverEvent(
                                 HoverEvent.Action.SHOW_TEXT,

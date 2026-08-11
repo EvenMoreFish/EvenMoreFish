@@ -6,10 +6,10 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.events.EMFFishCaughtEvent;
 import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.fishing.FishingType;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.Processor;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -83,7 +83,7 @@ public class LavaFishingProcessor extends Processor<LavaFishCaughtEvent> impleme
     }
 
     @Override
-    protected boolean fireEvent(@NonNull Fish fish, @NonNull Player player) {
+    protected boolean fireEvent(@NonNull IFish fish, @NonNull Player player) {
         return new EMFFishCaughtEvent(fish, player, LocalDateTime.now()).callEvent();
     }
 
@@ -103,7 +103,7 @@ public class LavaFishingProcessor extends Processor<LavaFishCaughtEvent> impleme
     }
 
     @Override
-    public boolean canUseFish(@NonNull Fish fish) {
+    public boolean canUseFish(@NonNull IFish fish) {
         return fish.getCatchType().equals(CatchType.CATCH)
             || fish.getCatchType().equals(CatchType.BOTH);
     }

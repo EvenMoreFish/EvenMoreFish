@@ -2,11 +2,11 @@ package com.oheers.fish.events;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.reward.Reward;
+import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import com.oheers.fish.api.utils.Scheduling;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

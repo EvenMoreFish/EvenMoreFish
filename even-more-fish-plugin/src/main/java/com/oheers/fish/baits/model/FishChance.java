@@ -1,10 +1,10 @@
 package com.oheers.fish.baits.model;
 
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 import org.jspecify.annotations.NonNull;
 
 public record FishChance(
-    @NonNull Fish fish,
+    @NonNull IFish fish,
     double baseWeight,
     double effectiveWeight,
     double conditionalChance,

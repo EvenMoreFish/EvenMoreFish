@@ -2,18 +2,17 @@ package com.oheers.fish.fishing;
 
 import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.fishing.FishingType;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.broadcast.FishBroadcast;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.messages.ConfigMessage;
@@ -81,7 +80,7 @@ public abstract class Processor<E extends Event> {
             bait = getBaitFromRod(fishingRod, customRod);
         }
 
-        Fish fish = chooseFish(player, location, bait, customRod);
+        IFish fish = chooseFish(player, location, bait, customRod);
         if (fish == null) {
             Logging.debug("Could not choose a fish.");
             return null;
@@ -102,7 +101,7 @@ public abstract class Processor<E extends Event> {
         return fish.give();
     }
 
-    private void handleCaughtFish(@NonNull Player player, @NonNull Location location, @NonNull Fish fish) {
+    private void handleCaughtFish(@NonNull Player player, @NonNull Location location, @NonNull IFish fish) {
         if (fish.hasCatchRewards()) {
             fish.getCatchRewards().forEach(fishReward -> fishReward.rewardPlayer(player, location));
         }
@@ -183,7 +182,7 @@ public abstract class Processor<E extends Event> {
      * @param customRod The custom rod being used, null if no custom rod.
      * @return A random fish.
      */
-    private @Nullable Fish chooseFish(@NonNull Player player, @NonNull Location location, @Nullable BaitHandler bait, @Nullable CustomRod customRod) {
+    private @Nullable IFish chooseFish(@NonNull Player player, @NonNull Location location, @Nullable BaitHandler bait, @Nullable CustomRod customRod) {
         RequirementContext context = new RequirementContext(
             player.getWorld(),
             location,
@@ -198,7 +197,7 @@ public abstract class Processor<E extends Event> {
             return bait.chooseFish(player, location, context);
         }
 
-        Rarity rarity = FishManager.getInstance().getRandomWeightedRarity(
+        IRarity rarity = FishManager.getInstance().getRandomWeightedRarity(
             player,
             1,
             Set.of(),
@@ -211,7 +210,7 @@ public abstract class Processor<E extends Event> {
             return null;
         }
 
-        Fish fish = FishManager.getInstance().getFish(
+        IFish fish = FishManager.getInstance().getFish(
             rarity,
             location,
             player,
@@ -230,7 +229,7 @@ public abstract class Processor<E extends Event> {
         return fish;
     }
 
-    protected abstract boolean fireEvent(@NonNull Fish fish, @NonNull Player player);
+    protected abstract boolean fireEvent(@NonNull IFish fish, @NonNull Player player);
 
     protected abstract ConfigMessage getCaughtMessage();
 
@@ -239,7 +238,7 @@ public abstract class Processor<E extends Event> {
     // Checks
 
     protected boolean isCustomFishAllowed(Player player) {
-        return isEnabled() && MainConfig.getInstance().getEnabled() && (competitionOnlyCheck() || EvenMoreFish.getInstance().isRaritiesCompCheckExempt())
+        return isEnabled() && MainConfig.getInstance().getEnabled() && competitionOnlyCheck()
             && !EvenMoreFish.getInstance().getToggle().isCustomFishingDisabled(player);
     }
 
@@ -250,12 +249,12 @@ public abstract class Processor<E extends Event> {
 
     protected abstract boolean shouldCatchBait();
 
-    public abstract boolean canUseFish(@NonNull Fish fish);
+    public abstract boolean canUseFish(@NonNull IFish fish);
 
     /**
      * Checks if we need to update the competition leaderboard.
      */
-    protected void leaderboardCheck(@NonNull Fish fish, @NonNull Player fisherman, @NonNull Location location) {
+    protected void leaderboardCheck(@NonNull IFish fish, @NonNull Player fisherman, @NonNull Location location) {
         final Competition active = Competition.getCurrentlyActive();
         if (active == null) {
             return;

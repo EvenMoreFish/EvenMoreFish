@@ -10,31 +10,30 @@ import com.oheers.fish.api.events.EMFPluginReloadEvent;
 import com.oheers.fish.api.fishing.items.AbstractFishManager;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.plugin.EMFPlugin;
-import com.oheers.fish.config.DimensionFishingConfig;
-import com.oheers.fish.database.Database;
-import com.oheers.fish.database.DatabaseUtil;
-import com.oheers.fish.database.data.manager.DataManager;
-import com.oheers.fish.database.model.user.UserReport;
-import com.oheers.fish.messages.abstracted.EMFMessage;
-import com.oheers.fish.plugin.loading.EMFVersionLoader;
-import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.competition.AutoRunner;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionQueue;
+import com.oheers.fish.config.DimensionFishingConfig;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.database.Database;
+import com.oheers.fish.database.DatabaseUtil;
+import com.oheers.fish.database.data.manager.DataManager;
+import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.events.McMMOTreasureEvent;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.messages.ConfigMessage;
+import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.plugin.ConfigurationManager;
 import com.oheers.fish.plugin.DependencyManager;
 import com.oheers.fish.plugin.EventManager;
 import com.oheers.fish.plugin.IntegrationManager;
 import com.oheers.fish.plugin.MetricsManager;
 import com.oheers.fish.plugin.PluginDataManager;
+import com.oheers.fish.plugin.loading.EMFVersionLoader;
+import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.update.UpdateChecker;
 import com.oheers.fish.utils.MinecraftVersionHelper;
 import de.themoep.inventorygui.InventoryGui;
@@ -49,10 +48,8 @@ import uk.firedev.vanishchecker.VanishChecker;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -69,14 +66,9 @@ public class EvenMoreFish extends EMFPlugin {
 
     private final boolean isFolia = FishUtils.classExists("io.papermc.paper.threadedregions.RegionizedServer");
 
-    // Do some fish in some rarities have the comp-check-exempt: true.
-    private boolean raritiesCompCheckExempt = false;
     private CompetitionQueue competitionQueue;
     private final AutoRunner autoRunner = new AutoRunner();
 
-    // this is for pre-deciding a rarity and running particles if it will be chosen
-    // it's a work-in-progress solution and probably won't stick.
-    private Map<UUID, Rarity> decidedRarities;
     private volatile boolean isUpdateAvailable;
 
     private DependencyManager dependencyManager;
@@ -127,8 +119,6 @@ public class EvenMoreFish extends EMFPlugin {
         versionProvider.enableCommands();
 
         this.api = new EMFAPI();
-
-        this.decidedRarities = new HashMap<>();
 
         this.configurationManager = new ConfigurationManager(this);
         this.configurationManager.loadConfigurations(); //need to test, order may be important
@@ -281,24 +271,12 @@ public class EvenMoreFish extends EMFPlugin {
         return this.versionProvider;
     }
 
-    public boolean isRaritiesCompCheckExempt() {
-        return raritiesCompCheckExempt;
-    }
-
-    public void setRaritiesCompCheckExempt(boolean exempt) {
-        this.raritiesCompCheckExempt = exempt;
-    }
-
     public CompetitionQueue getCompetitionQueue() {
         return competitionQueue;
     }
 
     public AutoRunner getAutoRunner() {
         return autoRunner;
-    }
-
-    public Map<UUID, Rarity> getDecidedRarities() {
-        return decidedRarities;
     }
 
     public boolean isUpdateAvailable() {

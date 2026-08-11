@@ -1,11 +1,10 @@
 package com.oheers.fish.competition;
 
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 import java.text.DecimalFormat;
@@ -39,7 +38,7 @@ public interface CompetitionStrategy {
      * @param leaderboard The leaderboard to apply the competition to.
      * @param competition The competition being applied.
      */
-    void applyToLeaderboard(Fish fish, UUID fisher, Leaderboard leaderboard, Competition competition);
+    void applyToLeaderboard(IFish fish, UUID fisher, Leaderboard leaderboard, Competition competition);
 
     /**
      * Gets the begin message for the competition.

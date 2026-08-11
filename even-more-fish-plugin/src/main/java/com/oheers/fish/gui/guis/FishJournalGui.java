@@ -3,6 +3,10 @@ package com.oheers.fish.gui.guis;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
+import com.oheers.fish.api.sort.SortType;
+import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.config.gui.impl.JournalFishGuiConfig;
 import com.oheers.fish.config.gui.impl.JournalRaritiesGuiConfig;
 import com.oheers.fish.database.Database;
@@ -10,15 +14,11 @@ import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.database.data.UserFishRarityKey;
 import com.oheers.fish.database.model.fish.FishStats;
 import com.oheers.fish.database.model.user.UserFishStats;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
-import com.oheers.fish.api.utils.Scheduling;
-import com.oheers.fish.utils.sort.SortType;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.InventoryGui;
@@ -39,15 +39,15 @@ import java.util.function.Supplier;
 
 public class FishJournalGui extends ConfigGui {
     private final int userId;
-    private final Rarity rarity;
+    private final IRarity rarity;
     private final SortType sortType;
     private final boolean usePreloadedStatsOnly;
 
-    public static void openAsync(@NonNull Player player, @Nullable Rarity rarity) {
+    public static void openAsync(@NonNull Player player, @Nullable IRarity rarity) {
         openAsync(player, rarity, null);
     }
 
-    public static void openAsync(@NonNull Player player, @Nullable Rarity rarity, @Nullable InventoryGui expectedOpenGui) {
+    public static void openAsync(@NonNull Player player, @Nullable IRarity rarity, @Nullable InventoryGui expectedOpenGui) {
         EvenMoreFish plugin = EvenMoreFish.getInstance();
         plugin.debug("Preparing fish journal for %s.".formatted(player.getName()));
         plugin.getPluginDataManager().preloadUserDataAsync(player.getUniqueId()).whenComplete((userId, throwable) -> {
@@ -74,7 +74,7 @@ public class FishJournalGui extends ConfigGui {
         });
     }
 
-    public FishJournalGui(@NonNull HumanEntity player, @Nullable Rarity rarity) {
+    public FishJournalGui(@NonNull HumanEntity player, @Nullable IRarity rarity) {
         this(
             player,
             rarity,
@@ -83,7 +83,7 @@ public class FishJournalGui extends ConfigGui {
         );
     }
 
-    private FishJournalGui(@NonNull HumanEntity player, @Nullable Rarity rarity, int userId, boolean usePreloadedStatsOnly) {
+    private FishJournalGui(@NonNull HumanEntity player, @Nullable IRarity rarity, int userId, boolean usePreloadedStatsOnly) {
         super(
             (rarity == null)
                 ? JournalRaritiesGuiConfig.getInstance()
@@ -93,7 +93,7 @@ public class FishJournalGui extends ConfigGui {
 
         this.rarity = rarity;
         if (rarity != null) {
-            addReplacement("{rarity}", rarity.getDisplayName());
+            addReplacement("{rarity}", rarity.getDisplayNameComponent());
         }
 
         this.userId = userId;
@@ -138,7 +138,7 @@ public class FishJournalGui extends ConfigGui {
         return getGuiConfig().getString("unknown-message", "Unknown");
     }
 
-    private ItemStack getFishItem(Fish fish, Section section) {
+    private ItemStack getFishItem(IFish fish, Section section) {
         final Database database = requireDatabase("Can not show fish in the Journal Menu, please enable the database!");
 
         if (database == null) {
@@ -165,13 +165,13 @@ public class FishJournalGui extends ConfigGui {
         return item;
     }
 
-    private @Nullable EMFSingleMessage prepareDisplay(@NonNull ItemFactory factory, @NonNull Fish fish) {
+    private @Nullable EMFSingleMessage prepareDisplay(@NonNull ItemFactory factory, @NonNull IFish fish) {
         final String displayStr = factory.getDisplayName().getConfiguredValue();
         if (displayStr == null) {
             return null;
         }
         EMFSingleMessage display = EMFSingleMessage.fromString(displayStr);
-        display.setVariable("{fishname}", fish.getDisplayName());
+        display.setVariable("{fishname}", fish.getDisplayNameComponent());
         return display;
     }
 
@@ -180,7 +180,7 @@ public class FishJournalGui extends ConfigGui {
      * possible, so opening the journal does not run one blocking query per
      * fish on the server thread.
      */
-    private boolean userHasFish(@NonNull Database database, @NonNull Fish fish) {
+    private boolean userHasFish(@NonNull Database database, @NonNull IFish fish) {
         final var dataManager = EvenMoreFish.getInstance().getPluginDataManager();
         if (usePreloadedStatsOnly || dataManager.isUserFishStatsPreloaded(userId)) {
             return dataManager.getUserFishStatsDataManager().peek(UserFishRarityKey.of(userId, fish).toString()) != null;
@@ -188,7 +188,7 @@ public class FishJournalGui extends ConfigGui {
         return database.userHasFish(fish.getRarity().getId(), fish.getName(), userId);
     }
 
-    private @NonNull EMFListMessage prepareLore(@NonNull ItemFactory factory, @NonNull Fish fish) {
+    private @NonNull EMFListMessage prepareLore(@NonNull ItemFactory factory, @NonNull IFish fish) {
         final var dataManager = EvenMoreFish.getInstance().getPluginDataManager();
         // When the caches were preloaded, a miss means "no row exists" and
         // falling through to the blocking loader would query the database
@@ -202,7 +202,6 @@ public class FishJournalGui extends ConfigGui {
 
         final String discoverDate = getDiscoverDate(userFishStats, getUnknownMessage());
 
-        @SuppressWarnings("Convert2MethodRef") // Suppressed as it introduces an unwanted Objects#requireNonNull when compiled.
         final String discoverer = getDiscoverer(fishStats, getUnknownMessage());
 
         EMFListMessage lore = EMFListMessage.ofList(
@@ -265,7 +264,7 @@ public class FishJournalGui extends ConfigGui {
         return group;
     }
 
-    private ItemStack getRarityItem(Rarity rarity, Section section) {
+    private ItemStack getRarityItem(IRarity rarity, Section section) {
         final Database database = requireDatabase("Can not show rarities in the Journal Menu, please enable the database!");
 
         if (database == null) {
@@ -287,7 +286,7 @@ public class FishJournalGui extends ConfigGui {
                 Component configuredDisplay = configuredMeta.displayName();
                 if (configuredDisplay != null) {
                     EMFSingleMessage display = EMFSingleMessage.of(configuredDisplay);
-                    display.setRarity(rarity.getDisplayName());
+                    display.setRarity(rarity.getDisplayNameComponent());
                     meta.displayName(display.getComponentMessage(player));
                 }
                 meta.lore(configuredMeta.lore());
@@ -300,7 +299,7 @@ public class FishJournalGui extends ConfigGui {
         return rarityItem;
     }
 
-    private boolean userHasRarity(@NonNull Database database, @NonNull Rarity rarity) {
+    private boolean userHasRarity(@NonNull Database database, @NonNull IRarity rarity) {
         final var dataManager = EvenMoreFish.getInstance().getPluginDataManager();
         if (usePreloadedStatsOnly || dataManager.isUserFishStatsPreloaded(userId)) {
             return rarity.getFishList().stream()

@@ -1,6 +1,7 @@
 package com.oheers.fish.placeholders;
 
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.placeholders.impl.database.player.DistinctFishCaughtInRarityPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.FirstUncaughtFishPlaceholder;
@@ -14,9 +15,9 @@ import com.oheers.fish.placeholders.impl.database.player.RemainingFishTotalPlace
 import com.oheers.fish.placeholders.impl.database.player.TimesCaughtFishPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.TotalFishCaughtInRarityPlaceholder;
 import org.bukkit.OfflinePlayer;
-import org.junit.jupiter.api.Test;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -32,9 +33,9 @@ class AdditionalCollectionPlaceholderTest {
     @Test
     void rarityCountPlaceholdersUseDistinctAndRawCountsSeparately() {
         UUID uuid = UUID.randomUUID();
-        Fish fishA = fish("legendary_plus", "kraken");
-        Fish fishB = fish("legendary_plus", "leviathan");
-        Fish fishC = fish("legendary_plus", "serpent");
+        IFish fishA = fish("legendary_plus", "kraken");
+        IFish fishB = fish("legendary_plus", "leviathan");
+        IFish fishC = fish("legendary_plus", "serpent");
         Rarity rarity = rarity("legendary_plus", List.of(fishA, fishB, fishC));
         Map<String, Integer> catches = Map.of(key(fishA), 12, key(fishB), 0, key(fishC), 4);
 
@@ -51,9 +52,9 @@ class AdditionalCollectionPlaceholderTest {
     @Test
     void completionAndRemainingPlaceholdersUseAllFishCollection() {
         UUID uuid = UUID.randomUUID();
-        Fish fishA = fish("common", "salmon");
-        Fish fishB = fish("common", "trout");
-        Fish fishC = fish("rare", "angler");
+        IFish fishA = fish("common", "salmon");
+        IFish fishB = fish("common", "trout");
+        IFish fishC = fish("rare", "angler");
         Map<String, Integer> catches = Map.of(key(fishA), 1, key(fishB), 0, key(fishC), 3);
 
         assertEquals("1", new StubRemainingFishTotalPlaceholder(List.of(fishA, fishB, fishC), catches)
@@ -67,8 +68,8 @@ class AdditionalCollectionPlaceholderTest {
     @Test
     void completionRarityAndFirstUncaughtReflectMissingFish() {
         UUID uuid = UUID.randomUUID();
-        Fish fishA = fish("mythic", "kraken");
-        Fish fishB = fish("mythic", "leviathan");
+        IFish fishA = fish("mythic", "kraken");
+        IFish fishB = fish("mythic", "leviathan");
         Rarity rarity = rarity("mythic", List.of(fishA, fishB));
         Map<String, Integer> catches = Map.of(key(fishA), 2, key(fishB), 0);
 
@@ -81,7 +82,7 @@ class AdditionalCollectionPlaceholderTest {
     @Test
     void fishSpecificPlaceholdersUseColonSeparatedRarityAndFishIdentifiers() {
         UUID uuid = UUID.randomUUID();
-        Fish fish = fish("rare", "angler");
+        IFish fish = fish("rare", "angler");
         Map<String, Integer> catches = Map.of(key(fish), 5);
 
         assertEquals("true", new StubHasCaughtFishPlaceholder(Map.of(key(fish), fish), catches)
@@ -92,7 +93,7 @@ class AdditionalCollectionPlaceholderTest {
 
     @Test
     void fishSpecificPlaceholdersReturnNullForMalformedOrUnknownFishKeys() {
-        Fish fish = fish("rare", "angler");
+        IFish fish = fish("rare", "angler");
 
         assertNull(new StubHasCaughtFishPlaceholder(Map.of(key(fish), fish), Map.of())
             .parsePAPI(null, "has_caught_rare_angler_player"));
@@ -106,23 +107,23 @@ class AdditionalCollectionPlaceholderTest {
         return player;
     }
 
-    private static Fish fish(String rarityId, String fishName) {
-        Fish fish = mock(Fish.class);
-        Rarity rarity = mock(Rarity.class);
+    private static IFish fish(String rarityId, String fishName) {
+        IFish fish = mock(IFish.class);
+        IRarity rarity = mock(IRarity.class);
         when(rarity.getId()).thenReturn(rarityId);
         when(fish.getName()).thenReturn(fishName);
         when(fish.getRarity()).thenReturn(rarity);
         return fish;
     }
 
-    private static Rarity rarity(String rarityId, List<Fish> fishList) {
+    private static Rarity rarity(String rarityId, List<IFish> fishList) {
         Rarity rarity = mock(Rarity.class);
         when(rarity.getId()).thenReturn(rarityId);
         when(rarity.getOriginalFishList()).thenReturn(fishList);
         return rarity;
     }
 
-    private static String key(Fish fish) {
+    private static String key(IFish fish) {
         return fish.getRarity().getId() + ":" + fish.getName();
     }
 
@@ -135,11 +136,11 @@ class AdditionalCollectionPlaceholderTest {
             this.catches = catches;
         }
 
-        protected int distinct(List<Fish> fishList) {
+        protected int distinct(List<? extends IFish> fishList) {
             return (int) fishList.stream().filter(fish -> catches.getOrDefault(key(fish), 0) > 0).count();
         }
 
-        protected int raw(List<Fish> fishList) {
+        protected int raw(List<? extends IFish> fishList) {
             return fishList.stream().mapToInt(fish -> catches.getOrDefault(key(fish), 0)).sum();
         }
     }
@@ -158,7 +159,7 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<? extends IFish> fishList) {
             return support.distinct(fishList);
         }
     }
@@ -177,7 +178,7 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected int totalCaughtQuantity(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
+        protected int totalCaughtQuantity(@NonNull UUID uuid, @NonNull List<? extends IFish> fishList) {
             return support.raw(fishList);
         }
     }
@@ -196,7 +197,7 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<? extends IFish> fishList) {
             return support.distinct(fishList);
         }
     }
@@ -215,67 +216,67 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<? extends IFish> fishList) {
             return support.distinct(fishList);
         }
     }
 
     private static final class StubRemainingFishTotalPlaceholder extends RemainingFishTotalPlaceholder {
-        private final List<Fish> allFish;
+        private final List<IFish> allFish;
         private final Map<String, Integer> catches;
 
-        private StubRemainingFishTotalPlaceholder(List<Fish> allFish, Map<String, Integer> catches) {
+        private StubRemainingFishTotalPlaceholder(List<IFish> allFish, Map<String, Integer> catches) {
             this.allFish = allFish;
             this.catches = catches;
         }
 
         @Override
-        protected @NonNull List<Fish> getAllFish() {
+        protected @NonNull List<IFish> getAllFish() {
             return allFish;
         }
 
         @Override
-        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<? extends IFish> fishList) {
             return (int) fishList.stream().filter(fish -> catches.getOrDefault(key(fish), 0) > 0).count();
         }
     }
 
     private static final class StubPercentCaughtTotalPlaceholder extends PercentCaughtTotalPlaceholder {
-        private final List<Fish> allFish;
+        private final List<IFish> allFish;
         private final Map<String, Integer> catches;
 
-        private StubPercentCaughtTotalPlaceholder(List<Fish> allFish, Map<String, Integer> catches) {
+        private StubPercentCaughtTotalPlaceholder(List<IFish> allFish, Map<String, Integer> catches) {
             this.allFish = allFish;
             this.catches = catches;
         }
 
         @Override
-        protected @NonNull List<Fish> getAllFish() {
+        protected @NonNull List<IFish> getAllFish() {
             return allFish;
         }
 
         @Override
-        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<? extends IFish> fishList) {
             return (int) fishList.stream().filter(fish -> catches.getOrDefault(key(fish), 0) > 0).count();
         }
     }
 
     private static final class StubHasCompletedCollectionPlaceholder extends HasCompletedCollectionPlaceholder {
-        private final List<Fish> allFish;
+        private final List<IFish> allFish;
         private final Map<String, Integer> catches;
 
-        private StubHasCompletedCollectionPlaceholder(List<Fish> allFish, Map<String, Integer> catches) {
+        private StubHasCompletedCollectionPlaceholder(List<IFish> allFish, Map<String, Integer> catches) {
             this.allFish = allFish;
             this.catches = catches;
         }
 
         @Override
-        protected @NonNull List<Fish> getAllFish() {
+        protected @NonNull List<IFish> getAllFish() {
             return allFish;
         }
 
         @Override
-        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<? extends IFish> fishList) {
             return (int) fishList.stream().filter(fish -> catches.getOrDefault(key(fish), 0) > 0).count();
         }
     }
@@ -294,7 +295,7 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<Fish> fishList) {
+        protected int countCaughtFish(@NonNull UUID uuid, @NonNull List<? extends IFish> fishList) {
             return support.distinct(fishList);
         }
     }
@@ -313,47 +314,47 @@ class AdditionalCollectionPlaceholderTest {
         }
 
         @Override
-        protected boolean hasCaughtFish(@NonNull UUID uuid, @NonNull Fish fish) {
+        protected boolean hasCaughtFish(@NonNull UUID uuid, @NonNull IFish fish) {
             return support.catches.getOrDefault(key(fish), 0) > 0;
         }
     }
 
     private static final class StubHasCaughtFishPlaceholder extends HasCaughtFishPlaceholder {
-        private final Map<String, Fish> fishMap;
+        private final Map<String, IFish> fishMap;
         private final Map<String, Integer> catches;
 
-        private StubHasCaughtFishPlaceholder(Map<String, Fish> fishMap, Map<String, Integer> catches) {
+        private StubHasCaughtFishPlaceholder(Map<String, IFish> fishMap, Map<String, Integer> catches) {
             this.fishMap = fishMap;
             this.catches = catches;
         }
 
         @Override
-        protected @Nullable Fish resolveFish(@NonNull String rarityId, @NonNull String fishName) {
+        protected @Nullable IFish resolveFish(@NonNull String rarityId, @NonNull String fishName) {
             return fishMap.get(rarityId + ":" + fishName);
         }
 
         @Override
-        protected boolean hasCaughtFish(@NonNull UUID uuid, @NonNull Fish fish) {
+        protected boolean hasCaughtFish(@NonNull UUID uuid, @NonNull IFish fish) {
             return catches.getOrDefault(key(fish), 0) > 0;
         }
     }
 
     private static final class StubTimesCaughtFishPlaceholder extends TimesCaughtFishPlaceholder {
-        private final Map<String, Fish> fishMap;
+        private final Map<String, IFish> fishMap;
         private final Map<String, Integer> catches;
 
-        private StubTimesCaughtFishPlaceholder(Map<String, Fish> fishMap, Map<String, Integer> catches) {
+        private StubTimesCaughtFishPlaceholder(Map<String, IFish> fishMap, Map<String, Integer> catches) {
             this.fishMap = fishMap;
             this.catches = catches;
         }
 
         @Override
-        protected @Nullable Fish resolveFish(@NonNull String rarityId, @NonNull String fishName) {
+        protected @Nullable IFish resolveFish(@NonNull String rarityId, @NonNull String fishName) {
             return fishMap.get(rarityId + ":" + fishName);
         }
 
         @Override
-        protected int timesCaught(@NonNull UUID uuid, @NonNull Fish fish) {
+        protected int timesCaught(@NonNull UUID uuid, @NonNull IFish fish) {
             return catches.getOrDefault(key(fish), 0);
         }
     }

@@ -23,7 +23,6 @@ package com.oheers.fish.api;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.plugin.Plugin;
-import org.codehaus.plexus.util.FileUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 

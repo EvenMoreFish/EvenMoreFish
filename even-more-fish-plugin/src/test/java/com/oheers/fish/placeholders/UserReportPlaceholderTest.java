@@ -9,9 +9,9 @@ import com.oheers.fish.placeholders.impl.database.player.TotalFishCaughtPlacehol
 import com.oheers.fish.placeholders.impl.database.player.TotalFishSoldPlaceholder;
 import com.oheers.fish.placeholders.impl.database.player.TotalMoneyEarnedPlaceholder;
 import org.bukkit.OfflinePlayer;
-import org.junit.jupiter.api.Test;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;

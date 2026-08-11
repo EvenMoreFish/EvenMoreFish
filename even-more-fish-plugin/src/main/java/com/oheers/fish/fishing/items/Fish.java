@@ -8,6 +8,7 @@ import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.reward.Reward;
+import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.items.configs.ItemConfig;
@@ -16,8 +17,6 @@ import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.selling.WorthNBT;
-import com.oheers.fish.api.utils.Scheduling;
-import com.oheers.fish.utils.sort.Sortable;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -36,7 +35,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
-public class Fish implements IFish, Sortable {
+public class Fish implements IFish {
 
     private static final Random random = new Random();
 
@@ -455,11 +454,6 @@ public class Fish implements IFish, Sortable {
     }
 
     @Override
-    public @NonNull String getName() {
-        return name;
-    }
-
-    @Override
     public @NonNull Rarity getRarity() {
         return rarity;
     }
@@ -503,6 +497,15 @@ public class Fish implements IFish, Sortable {
         return weight;
     }
 
+    /**
+     * Internal use only. Will be removed in the future.
+     */
+    @Override
+    public @NonNull Component getDisplayNameComponent() {
+        return getDisplayName().getComponentMessage();
+    }
+
+    @Override
     public int getCatchLimit() {
         return catchLimit;
     }

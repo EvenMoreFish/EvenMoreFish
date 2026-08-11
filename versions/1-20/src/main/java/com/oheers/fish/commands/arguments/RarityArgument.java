@@ -1,16 +1,16 @@
 package com.oheers.fish.commands.arguments;
 
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 
 public class RarityArgument {
 
-    public static Argument<Rarity> create() {
+    public static Argument<IRarity> create() {
         return new CustomArgument<>(new StringArgument("rarity"), info -> {
-            Rarity rarity = FishManager.getInstance().getRarity(info.input());
+            IRarity rarity = FishManager.getInstance().getRarity(info.input());
             if (rarity == null) {
                 throw CustomArgument.CustomArgumentException.fromMessageBuilder(
                         new CustomArgument.MessageBuilder("Unknown rarity: ").appendArgInput()

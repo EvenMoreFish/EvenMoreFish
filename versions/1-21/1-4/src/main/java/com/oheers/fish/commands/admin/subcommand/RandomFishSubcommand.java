@@ -5,30 +5,24 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.commands.BrigCommandUtils;
-import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.arguments.EMFPlayerArgument;
-import com.oheers.fish.commands.arguments.FishArgument;
 import com.oheers.fish.commands.arguments.RarityArgument;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.PrefixType;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
-import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
-
-import java.util.List;
 
 // Branches:
 // [rarity]
@@ -64,7 +58,7 @@ public class RandomFishSubcommand {
 
     private int execute(@NonNull CommandContext<CommandSourceStack> ctx, boolean allowConsole) throws CommandSyntaxException {
         CommandSender sender = allowConsole ? ctx.getSource().getSender() : BrigCommandUtils.requirePlayer(ctx);
-        Rarity rarity = ctx.getArgument("rarity", Rarity.class);
+        IRarity rarity = ctx.getArgument("rarity", IRarity.class);
         int amount = BrigCommandUtils.getArgumentOrDefault(ctx, "amount", int.class, 1);
         Player target = BrigCommandUtils.getArgumentOrNull(ctx, "target", Player.class);
         return execute(
@@ -75,7 +69,7 @@ public class RandomFishSubcommand {
         );
     }
 
-    private int execute(CommandSender sender, Rarity rarity, int amount, Player target) throws CommandSyntaxException {
+    private int execute(CommandSender sender, IRarity rarity, int amount, Player target) throws CommandSyntaxException {
         if (target == null) {
             if (!(sender instanceof Player player)) {
                 throw BrigCommandUtils.ERROR_NO_PLAYERS.create();
@@ -92,7 +86,7 @@ public class RandomFishSubcommand {
             null
         );
 
-        Fish fish = FishManager.getInstance().getFish(
+        IFish fish = FishManager.getInstance().getFish(
             rarity,
             target.getLocation(),
             target,

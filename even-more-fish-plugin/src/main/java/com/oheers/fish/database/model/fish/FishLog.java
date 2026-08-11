@@ -1,7 +1,6 @@
 package com.oheers.fish.database.model.fish;
 
-
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 
 import javax.annotation.Nullable;
 import java.sql.Timestamp;
@@ -26,7 +25,7 @@ public class FishLog {
         this.competitionId = competitionId;
     }
 
-    public FishLog(int userId, Fish fish, LocalDateTime catchTime, @Nullable String competitionId) {
+    public FishLog(int userId, IFish fish, LocalDateTime catchTime, @Nullable String competitionId) {
         this.userId = userId;
         this.fishName = fish.getName();
         this.fishRarity = fish.getRarity().getId();

@@ -3,12 +3,13 @@ package com.oheers.fish.commands;
 import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.Toggle;
+import com.oheers.fish.api.economy.selling.SellHelper;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.commands.arguments.ArgumentHelper;
 import com.oheers.fish.commands.arguments.RarityArgument;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.DatabaseUtil;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.gui.guis.ApplyBaitsGui;
 import com.oheers.fish.gui.guis.FishJournalGui;
 import com.oheers.fish.gui.guis.MainMenuGui;
@@ -18,7 +19,6 @@ import com.oheers.fish.messages.PrefixType;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.permissions.AdminPerms;
 import com.oheers.fish.permissions.UserPerms;
-import com.oheers.fish.api.economy.selling.SellHelper;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -212,7 +212,7 @@ public class MainCommand {
                     ConfigMessage.JOURNAL_DISABLED.getMessage().send(info.sender());
                     return;
                 }
-                Rarity rarity = info.args().getUnchecked("rarity"); // This is allowed to be null.
+                IRarity rarity = info.args().getUnchecked("rarity"); // This is allowed to be null.
                 FishJournalGui.openAsync(info.sender(), rarity);
             });
     }

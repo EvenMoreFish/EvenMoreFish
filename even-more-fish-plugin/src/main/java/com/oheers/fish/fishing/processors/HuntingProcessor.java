@@ -3,10 +3,10 @@ package com.oheers.fish.fishing.processors;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.events.EMFFishHuntEvent;
 import com.oheers.fish.api.fishing.CatchType;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.Processor;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.permissions.UserPerms;
 import org.bukkit.entity.Player;
@@ -15,7 +15,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
@@ -81,7 +80,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> implements Lis
     }
 
     @Override
-    protected boolean fireEvent(@NonNull Fish fish, @NonNull Player player) {
+    protected boolean fireEvent(@NonNull IFish fish, @NonNull Player player) {
         return new EMFFishHuntEvent(fish, player, LocalDateTime.now()).callEvent();
     }
 
@@ -101,7 +100,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> implements Lis
     }
 
     @Override
-    public boolean canUseFish(@NonNull Fish fish) {
+    public boolean canUseFish(@NonNull IFish fish) {
         return fish.getCatchType() == CatchType.HUNT || fish.getCatchType() == CatchType.BOTH;
     }
 

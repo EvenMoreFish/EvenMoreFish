@@ -1,10 +1,7 @@
 package com.oheers.fish;
 
 import com.oheers.fish.api.fishing.items.IFish;
-import com.oheers.fish.exceptions.InvalidFishException;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.selling.WorthNBT;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -68,9 +65,9 @@ public class SkullSaver implements Listener {
         if (FishManager.getInstance().isFish(stack)) {
             
             if (block.getState() instanceof Skull sm) {
-                IFish iFish = FishManager.getInstance().getFish(stack);
-                if (iFish instanceof Fish fish) {
-                    WorthNBT.setNBT(sm, fish);
+                IFish fish = FishManager.getInstance().getFish(stack);
+                if (fish != null) {
+                    FishManager.getInstance().setFishNbt(sm, fish);
                     sm.update();
                 }
             } else {

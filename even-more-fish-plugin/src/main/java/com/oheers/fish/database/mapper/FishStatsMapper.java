@@ -6,7 +6,6 @@ import org.jdbi.v3.core.statement.StatementContext;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 

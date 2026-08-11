@@ -1,6 +1,6 @@
 package com.oheers.fish.database.data;
 
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
@@ -28,7 +28,7 @@ public record FishRarityKey(@NonNull String fishName, @NonNull String fishRarity
         );
     }
 
-    public static @NonNull FishRarityKey of(final @NonNull Fish fish) {
+    public static @NonNull FishRarityKey of(final @NonNull IFish fish) {
         return new FishRarityKey(fish.getName(), fish.getRarity().getId());
     }
 

@@ -5,21 +5,16 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.events.EMFFishCaughtEvent;
 import com.oheers.fish.api.fishing.CatchType;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.Processor;
-import com.oheers.fish.fishing.exploits.AFKFishingTracker;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
-import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.permissions.UserPerms;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -122,7 +117,7 @@ public class FishingProcessor extends Processor<PlayerFishEvent> implements List
 
 
     @Override
-    protected boolean fireEvent(@NonNull Fish fish, @NonNull Player player) {
+    protected boolean fireEvent(@NonNull IFish fish, @NonNull Player player) {
         return new EMFFishCaughtEvent(fish, player, LocalDateTime.now()).callEvent();
     }
 
@@ -142,7 +137,7 @@ public class FishingProcessor extends Processor<PlayerFishEvent> implements List
     }
 
     @Override
-    public boolean canUseFish(@NonNull Fish fish) {
+    public boolean canUseFish(@NonNull IFish fish) {
         return fish.getCatchType().equals(CatchType.CATCH)
                 || fish.getCatchType().equals(CatchType.BOTH);
     }

@@ -1,7 +1,7 @@
 package com.oheers.fish.competition.leaderboard;
 
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.CompetitionEntry;
-import com.oheers.fish.fishing.items.Fish;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public interface LeaderboardHandler {
 
     List<CompetitionEntry> getEntries();
 
-    void addEntry(UUID player, Fish fish);
+    void addEntry(UUID player, IFish fish);
 
     void addEntry(CompetitionEntry entry);
 
@@ -31,7 +31,7 @@ public interface LeaderboardHandler {
 
     CompetitionEntry getTopEntry();
 
-    CompetitionEntry trackFish(@NonNull CompetitionEntry entry, @NonNull Fish fish);
+    CompetitionEntry trackFish(@NonNull CompetitionEntry entry, @NonNull IFish fish);
 
 }
 

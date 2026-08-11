@@ -1,6 +1,6 @@
 package com.oheers.fish.placeholders.impl.database.player;
 
-import com.oheers.fish.fishing.items.Fish;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.placeholders.abstracted.UniqueFishCaughtProgressPlaceholder;
 import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NonNull;
@@ -23,7 +23,7 @@ public class RemainingFishTotalPlaceholder extends UniqueFishCaughtProgressPlace
             return null;
         }
 
-        List<Fish> fishList = getAllFish();
+        List<IFish> fishList = getAllFish();
         return String.valueOf(remainingFish(uuid, fishList));
     }
 }

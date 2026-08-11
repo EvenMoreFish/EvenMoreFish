@@ -1,6 +1,5 @@
 package com.oheers.fish.utils;
 
-import com.oheers.fish.FishUtils;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.events.FishEatEvent;

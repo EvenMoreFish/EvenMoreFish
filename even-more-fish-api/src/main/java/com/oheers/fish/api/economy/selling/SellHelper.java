@@ -4,14 +4,12 @@ import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.events.EMFFishPreSaleEvent;
 import com.oheers.fish.api.events.EMFFishSoldEvent;
 import com.oheers.fish.api.plugin.EMFPlugin;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 
 public class SellHelper {
 

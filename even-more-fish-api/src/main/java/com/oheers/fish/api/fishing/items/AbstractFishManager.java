@@ -44,6 +44,16 @@ public abstract class AbstractFishManager<T extends IRarity> extends AbstractFil
 
     public abstract boolean isFish(@Nullable Entity itemEntity);
 
+    /**
+     * Applies fish NBT to the given item.
+     */
+    public abstract void setFishNbt(@NonNull ItemStack item, @NonNull IFish fish);
+
+    /**
+     * Applies fish NBT to the given skull block.
+     */
+    public abstract void setFishNbt(@NonNull Skull skull, @NonNull IFish fish);
+
     public abstract @NonNull TreeMap<String, ? extends IRarity> getRarityMap();
 
 }

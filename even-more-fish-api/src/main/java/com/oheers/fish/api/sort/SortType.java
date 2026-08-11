@@ -1,4 +1,4 @@
-package com.oheers.fish.utils.sort;
+package com.oheers.fish.api.sort;
 
 import org.jspecify.annotations.NonNull;
 

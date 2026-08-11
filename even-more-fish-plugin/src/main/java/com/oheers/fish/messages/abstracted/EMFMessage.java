@@ -1,9 +1,8 @@
 package com.oheers.fish.messages.abstracted;
 
-import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.fishing.Processor;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import net.kyori.adventure.audience.Audience;
@@ -251,11 +250,11 @@ public abstract class EMFMessage {
      * Performs {@link #setLength(Object)}, {@link #setFishCaught(Object)}, and {@link #setRarity(Object)}.
      * @param fish The fish that was caught.
      */
-    public void setFishCatchVariables(@NonNull Fish fish) {
+    public void setFishCatchVariables(@NonNull IFish fish) {
         setLength(Processor.LENGTH_FORMAT.format(fish.getLength()));
-        setRarity(fish.getRarity().getDisplayName());
+        setRarity(fish.getRarity().getDisplayNameComponent());
 
-        Component display = fish.getDisplayName().getComponentMessage();
+        Component display = fish.getDisplayNameComponent();
 
         ItemStack fishItem = fish.give();
         if (!fishItem.isEmpty()) {

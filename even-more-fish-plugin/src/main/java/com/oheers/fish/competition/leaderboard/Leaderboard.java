@@ -1,9 +1,9 @@
 package com.oheers.fish.competition.leaderboard;
 
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.competition.CompetitionType;
-import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.Bukkit;
@@ -31,7 +31,7 @@ public class Leaderboard implements LeaderboardHandler {
     }
 
     @Override
-    public void addEntry(@NonNull UUID player, @NonNull Fish fish) {
+    public void addEntry(@NonNull UUID player, @NonNull IFish fish) {
         CompetitionEntry entry = new CompetitionEntry(player, fish, type);
         addEntry(entry);
     }
@@ -56,7 +56,7 @@ public class Leaderboard implements LeaderboardHandler {
             return;
         }
 
-        Fish newFish = newTopEntry.getFish();
+        IFish newFish = newTopEntry.getFish();
 
         EMFMessage message = ConfigMessage.NEW_FIRST_PLACE_NOTIFICATION.getMessage();
         message.setPerPlayer(false);
@@ -64,7 +64,7 @@ public class Leaderboard implements LeaderboardHandler {
         message.setPlayer(Bukkit.getOfflinePlayer(newPlayer));
         message.setLength(Float.toString(newFish.getLength()));
         message.setFishCaught(newFish.getName());
-        message.setRarity(newFish.getRarity().getDisplayName());
+        message.setRarity(newFish.getRarity().getDisplayNameComponent());
 
         if (Competition.isDoingFirstPlaceActionBar()) {
             message.broadcastActionBar();
@@ -131,7 +131,7 @@ public class Leaderboard implements LeaderboardHandler {
      * @return The new competition entry with the updated values.
      */
     @Override
-    public CompetitionEntry trackFish(@NonNull CompetitionEntry entry, @NonNull Fish fish) {
+    public CompetitionEntry trackFish(@NonNull CompetitionEntry entry, @NonNull IFish fish) {
         CompetitionEntry newEntry = new CompetitionEntry(entry.getPlayer(), fish, type);
         float value = entry.getValue();
         if (type.getStrategy().shouldUseFishLength()) {

@@ -9,6 +9,7 @@ import com.oheers.fish.commands.MainCommand;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.nbt.ItemStackNBTHolder;
+import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import dev.jorel.commandapi.CommandAPI;
@@ -18,7 +19,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jspecify.annotations.NonNull;
-import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;

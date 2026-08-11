@@ -2,10 +2,10 @@ package com.oheers.fish.fishing.broadcast;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.Toggle;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.configs.CompetitionFile;
-import com.oheers.fish.fishing.items.Fish;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,7 +14,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.stream.Stream;
 
-public record FishBroadcast(@NonNull EMFMessage message, @NonNull Player player, @NonNull Fish fish) {
+public record FishBroadcast(@NonNull EMFMessage message, @NonNull Player player, @NonNull IFish fish) {
 
     public void broadcast() {
         if (message.isEmpty()) {
@@ -31,7 +31,7 @@ public record FishBroadcast(@NonNull EMFMessage message, @NonNull Player player,
     }
 
     private Stream<? extends Player> filterRarity(@NonNull Stream<? extends Player> players) {
-        Rarity rarity = fish.getRarity();
+        IRarity rarity = fish.getRarity();
         if (rarity.getBroadcastOnlyRods()) {
             players = players.filter(this::isHoldingRod);
         }
