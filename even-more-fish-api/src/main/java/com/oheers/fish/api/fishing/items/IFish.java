@@ -74,7 +74,10 @@ public interface IFish extends Sortable {
 
     double getSetWorth();
 
-    @Deprecated
+    /**
+     * @deprecated Use {@link #getId()} instead.
+     */
+    @Deprecated(since = "2.4.5")
     default @NonNull String getName() {
         return getId();
     }
@@ -89,7 +92,10 @@ public interface IFish extends Sortable {
 
     @NonNull List<Reward> getActionRewards();
 
-    @Deprecated(forRemoval = true, since = "2.3.5")
+    /**
+     * @deprecated Use {@link #getCatchRewards()} instead.
+     */
+    @Deprecated(since = "2.3.5")
     default @NonNull List<Reward> getFishRewards() {
         return getCatchRewards();
     }
