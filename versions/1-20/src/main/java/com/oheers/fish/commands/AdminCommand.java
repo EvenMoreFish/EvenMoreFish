@@ -143,7 +143,7 @@ public class AdminCommand {
                 new EntitySelectorArgument.OnePlayer("target").setOptional(true)
             )
             .executes((sender, arguments) -> {
-                final Rarity rarity = arguments.getUnchecked("rarity");
+                final IRarity rarity = arguments.getUnchecked("rarity");
                 if (rarity == null) {
                     return;
                 }
@@ -219,13 +219,13 @@ public class AdminCommand {
                 String listTarget = Objects.requireNonNull(args.getUnchecked("listTarget"));
                 switch (listTarget) {
                     case "fish" -> {
-                        final Rarity rarity = args.getUnchecked("rarity");
+                        final IRarity rarity = args.getUnchecked("rarity");
                         if (rarity == null) {
                             ConfigMessage.RARITY_INVALID.getMessage().send(sender);
                             return;
                         }
                         TextComponent.Builder builder = Component.text();
-                        builder.append(rarity.getDisplayName().getComponentMessage());
+                        builder.append(rarity.getDisplayNameComponent());
                         builder.append(Component.space());
                         for (IFish fish : rarity.getOriginalFishList()) {
                             TextComponent.Builder fishBuilder = Component.text();

@@ -4,6 +4,7 @@ import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.Toggle;
 import com.oheers.fish.api.economy.selling.SellHelper;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.commands.arguments.ArgumentHelper;
 import com.oheers.fish.commands.arguments.RarityArgument;
 import com.oheers.fish.competition.Competition;
@@ -212,7 +213,7 @@ public class MainCommand {
                     ConfigMessage.JOURNAL_DISABLED.getMessage().send(info.sender());
                     return;
                 }
-                Rarity rarity = info.args().getUnchecked("rarity"); // This is allowed to be null.
+                IRarity rarity = info.args().getUnchecked("rarity"); // This is allowed to be null.
                 FishJournalGui.openAsync(info.sender(), rarity);
             });
     }

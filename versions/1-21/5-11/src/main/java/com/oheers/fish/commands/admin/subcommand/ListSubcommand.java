@@ -49,7 +49,7 @@ public class ListSubcommand {
             .then(
                 Commands.argument("rarity", new RarityArgument())
                     .executes(ctx -> {
-                        Rarity rarity = ctx.getArgument("rarity", Rarity.class);
+                        IRarity rarity = ctx.getArgument("rarity", IRarity.class);
                         showFish(ctx.getSource().getSender(), rarity);
                         return 1;
                     })
@@ -97,9 +97,9 @@ public class ListSubcommand {
         sender.sendMessage(builder.build());
     }
 
-    private void showFish(@NonNull CommandSender sender, @NonNull Rarity rarity) {
+    private void showFish(@NonNull CommandSender sender, @NonNull IRarity rarity) {
         TextComponent.Builder builder = Component.text();
-        builder.append(rarity.getDisplayName().getComponentMessage());
+        builder.append(rarity.getDisplayNameComponent());
         builder.append(Component.space());
         for (IFish fish : rarity.getOriginalFishList()) {
             TextComponent.Builder fishBuilder = Component.text();

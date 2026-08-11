@@ -1,6 +1,7 @@
 package com.oheers.fish.commands.main.subcommand;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.arguments.RarityArgument;
 import com.oheers.fish.database.DatabaseUtil;
@@ -38,13 +39,13 @@ public class JournalSubcommand {
         return Commands.argument("rarity", new RarityArgument())
             .executes(ctx -> {
                 Player player = BrigCommandUtils.requirePlayer(ctx);
-                Rarity rarity = ctx.getArgument("rarity", Rarity.class);
+                IRarity rarity = ctx.getArgument("rarity", IRarity.class);
                 execute(player, rarity);
                 return 1;
             });
     }
 
-    private void execute(@NonNull Player player, @Nullable Rarity rarity) {
+    private void execute(@NonNull Player player, @Nullable IRarity rarity) {
         if (!DatabaseUtil.isDatabaseOnline()) {
             ConfigMessage.JOURNAL_DISABLED.getMessage().send(player);
             return;

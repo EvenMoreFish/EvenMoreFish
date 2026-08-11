@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.commands.BrigCommandUtils;
@@ -58,7 +59,7 @@ public class RandomFishSubcommand {
 
     private int execute(@NonNull CommandContext<CommandSourceStack> ctx, boolean allowConsole) throws CommandSyntaxException {
         CommandSender sender = allowConsole ? ctx.getSource().getSender() : BrigCommandUtils.requirePlayer(ctx);
-        Rarity rarity = ctx.getArgument("rarity", Rarity.class);
+        IRarity rarity = ctx.getArgument("rarity", IRarity.class);
         int amount = BrigCommandUtils.getArgumentOrDefault(ctx, "amount", int.class, 1);
         Player target = BrigCommandUtils.getArgumentOrNull(ctx, "target", Player.class);
         return execute(
@@ -69,7 +70,7 @@ public class RandomFishSubcommand {
         );
     }
 
-    private int execute(CommandSender sender, Rarity rarity, int amount, Player target) throws CommandSyntaxException {
+    private int execute(CommandSender sender, IRarity rarity, int amount, Player target) throws CommandSyntaxException {
         if (target == null) {
             if (!(sender instanceof Player player)) {
                 throw BrigCommandUtils.ERROR_NO_PLAYERS.create();

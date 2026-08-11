@@ -14,7 +14,7 @@ public class FishArgument {
 
     public static Argument<IFish> create() {
         return new CustomArgument<>(new StringArgument("fish"), info -> {
-            Rarity rarity = info.previousArgs().getUnchecked("rarity");
+            IRarity rarity = info.previousArgs().getUnchecked("rarity");
             if (rarity == null) {
                 throw CustomArgument.CustomArgumentException.fromString("Could not find a previous RarityArgument!");
             }

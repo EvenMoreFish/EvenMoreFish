@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.fishing.items.Rarity;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
@@ -32,9 +33,9 @@ public class FishArgument implements CustomArgumentType.Converted<String, String
     @NonNull
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(@NonNull CommandContext<S> context, @NonNull SuggestionsBuilder builder) {
-        Rarity rarity;
+        IRarity rarity;
         try {
-            rarity = context.getLastChild().getArgument("rarity", Rarity.class);
+            rarity = context.getLastChild().getArgument("rarity", IRarity.class);
         } catch (Exception exception) {
             return builder.buildFuture();
         }
@@ -50,7 +51,7 @@ public class FishArgument implements CustomArgumentType.Converted<String, String
         return nativeType;
     }
 
-    public static @Nullable IFish resolveFish(@NonNull Rarity rarity, @NonNull String fishStr) {
+    public static @Nullable IFish resolveFish(@NonNull IRarity rarity, @NonNull String fishStr) {
         IFish fish = rarity.getFish(fishStr);
         if (fish == null) {
             fish = rarity.getFish(fishStr.replace("_", " "));
