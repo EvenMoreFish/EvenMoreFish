@@ -27,6 +27,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import uk.firedev.messagelib.message.ComponentMessage;
+import uk.firedev.messagelib.message.ComponentSingleMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,7 +155,9 @@ public class Fish implements IFish {
         ItemFactory factory = this.factory.createCopy();
         // Build custom fish lore and include the configured lore.
         factory.getLore().setTransformer(this::buildFishLore);
-        factory.getDisplayName().setDefault(getDisplayName().getUnderlying().getAsMiniMessage());
+        factory.getDisplayName().setDefault(
+            ComponentMessage.componentMessage(getDisplayName()).getAsMiniMessage()
+        );
 
         ItemStack item = fisherman == null
             ? factory.createItem()
@@ -497,12 +501,16 @@ public class Fish implements IFish {
         return weight;
     }
 
-    /**
-     * Internal use only. Will be removed in the future.
-     */
     @Override
-    public @NonNull Component getDisplayNameComponent() {
-        return getDisplayName().getComponentMessage();
+    public @NonNull Component getDisplayName() {
+        return getDisplayNameMessage().getComponentMessage(fisherman);
+    }
+
+    public @NonNull EMFSingleMessage getDisplayNameMessage() {
+        if (displayName == null) {
+            return rarity.format(name);
+        }
+        return rarity.format(displayName);
     }
 
     @Override
@@ -518,14 +526,6 @@ public class Fish implements IFish {
     @Override
     public void setWeight(double weight) {
         this.weight = weight;
-    }
-
-    @NonNull
-    public EMFSingleMessage getDisplayName() {
-        if (displayName == null) {
-            return rarity.format(name);
-        }
-        return rarity.format(displayName);
     }
 
     @Override

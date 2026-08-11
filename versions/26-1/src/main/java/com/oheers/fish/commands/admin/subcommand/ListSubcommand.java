@@ -103,7 +103,7 @@ public class ListSubcommand {
         for (IFish fish : rarity.getOriginalFishList()) {
             TextComponent.Builder fishBuilder = Component.text();
             EMFSingleMessage message = EMFSingleMessage.fromString("<gray>[</gray>{fish}<gray>]</gray>");
-            message.setVariable("{fish}", fish.getDisplayNameComponent());
+            message.setVariable("{fish}", fish.getDisplayName());
             fishBuilder.append(message.getComponentMessage());
             fishBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Click to receive fish")));
             fishBuilder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, ClickEvent.Payload.string("/emf admin fish " + rarity.getId() + " " + fish.getName().replace(" ", "_"))));

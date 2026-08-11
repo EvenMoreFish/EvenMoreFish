@@ -75,7 +75,7 @@ public class SpecificFishStrategy implements CompetitionStrategy {
         message.setAmount(Integer.toString(competition.getNumberNeeded()));
         if (selectedFish != null) {
             message.setRarity(selectedFish.getRarity().getDisplayNameComponent());
-            message.setFishCaught(selectedFish.getDisplayNameComponent());
+            message.setFishCaught(selectedFish.getDisplayName());
         }
         return message;
     }
