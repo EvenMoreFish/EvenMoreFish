@@ -171,7 +171,7 @@ public class FishJournalGui extends ConfigGui {
             return null;
         }
         EMFSingleMessage display = EMFSingleMessage.fromString(displayStr);
-        display.setVariable("{fishname}", fish.getDisplayNameComponent());
+        display.setVariable("{fishname}", fish.getDisplayName());
         return display;
     }
 

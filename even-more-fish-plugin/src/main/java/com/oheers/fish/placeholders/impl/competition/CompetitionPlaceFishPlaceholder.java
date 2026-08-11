@@ -52,7 +52,7 @@ public class CompetitionPlaceFishPlaceholder implements EMFPlaceholder {
             : ConfigMessage.PLACEHOLDER_FISH_FORMAT.getMessage();
 
         message.setLength(Float.toString(fish.getLength()));
-        message.setFishCaught(fish.getDisplayNameComponent());
+        message.setFishCaught(fish.getDisplayName());
         message.setRarity(fish.getRarity().getDisplayNameComponent());
         return message.getLegacyMessage(null);
     }

@@ -106,7 +106,7 @@ public class Competition {
             prefix.setRarity(selectedRarity.getDisplayNameComponent());
         } else if (selectedFish != null) {
             prefix.setRarity(selectedFish.getRarity().getDisplayNameComponent());
-            prefix.setVariable("{fish}", selectedFish.getDisplayNameComponent());
+            prefix.setVariable("{fish}", selectedFish.getDisplayName());
         }
         bar.setPrefix(prefix, competitionType);
         return bar;
@@ -478,7 +478,7 @@ public class Competition {
 
             message.setPosition(Integer.toString(pos));
             message.setRarity(entry.getFish().getRarity().getDisplayNameComponent());
-            message.setFishCaught(entry.getFish().getDisplayNameComponent());
+            message.setFishCaught(entry.getFish().getDisplayName());
 
             leaderboard.add(message.getComponentMessage());
         }
