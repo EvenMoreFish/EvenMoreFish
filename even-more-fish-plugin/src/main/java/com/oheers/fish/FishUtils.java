@@ -51,6 +51,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import uk.firedev.messagelib.Utils;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
@@ -399,6 +400,14 @@ public class FishUtils {
             }
         }
         return worth;
+    }
+
+    public static @Nullable Method getMethodOrNull(@NonNull Class<?> clazz, @NonNull String method, @NonNull Class<?> @NonNull ... parameterTypes) {
+        try {
+            return clazz.getDeclaredMethod(method, parameterTypes);
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
     }
 
     // Deprecated. Keep until the API module can be considered stable.

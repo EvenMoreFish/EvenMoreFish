@@ -4,7 +4,9 @@ import br.net.fabiozumbi12.RedProtect.Bukkit.RedProtect;
 import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.gmail.nossr50.datatypes.player.McMMOPlayer;
+import com.gmail.nossr50.skills.fishing.FishingManager;
 import com.gmail.nossr50.util.player.UserManager;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.exploits.AFKFishingTracker;
 import com.oheers.fish.fishing.rods.CustomRod;
@@ -20,10 +22,13 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +37,26 @@ import java.util.Set;
  */
 @ApiStatus.Internal
 public class Checks {
+
+    // The deprecated isExploitingFishing(Vector) method. If the replacement is present, this is null.
+    private static final Method DEPRECATED_IS_EXPLOITING_FISHING = initDeprecatedMcMMOMethod();
+
+    private static @Nullable Method initDeprecatedMcMMOMethod() {
+        if (!EvenMoreFish.getInstance().getDependencyManager().isUsingMcMMO()) {
+            return null;
+        }
+        Method method = FishUtils.getMethodOrNull(FishingManager.class, "isExploitingFishing");
+        if (method != null) {
+            Logging.debug("Modern mcMMO isExploitingFishing method found.");
+            return null;
+        }
+        Method deprecatedMethod = FishUtils.getMethodOrNull(FishingManager.class, "isExploitingFishing", Vector.class);
+        if (deprecatedMethod == null) {
+            Logging.warn("Could not find mcMMO isExploitingFishing method. Overfishing checks will not work.");
+        }
+        Logging.debug("Deprecated mcMMO isExploitingFishing method found.");
+        return deprecatedMethod;
+    }
 
     /**
      * Checks if the player can use a fishing rod.
@@ -61,9 +86,26 @@ public class Checks {
             return false;
         }
         McMMOPlayer mmoPlayer = UserManager.getPlayer(player);
-        // The deprecated method has to be used here for older mcmmo versions.
-        //noinspection removal
-        return mmoPlayer != null && mmoPlayer.getFishingManager().isExploitingFishing(hookLocation.toVector());
+        if (mmoPlayer == null) {
+            return false;
+        }
+        if (DEPRECATED_IS_EXPLOITING_FISHING != null) {
+            return isDeprecatedOverfishing(mmoPlayer, hookLocation.toVector());
+        }
+        return mmoPlayer.getFishingManager().isExploitingFishing();
+    }
+
+    private static boolean isDeprecatedOverfishing(@NonNull McMMOPlayer mmoPlayer, @NonNull Vector vector) {
+        // Should never pass, but this makes IntelliJ shut up about potential NPEs.
+        if (DEPRECATED_IS_EXPLOITING_FISHING == null) {
+            return false;
+        }
+        try {
+            return (boolean) DEPRECATED_IS_EXPLOITING_FISHING.invoke(mmoPlayer.getFishingManager(), vector);
+        } catch (InvocationTargetException | IllegalAccessException exception) {
+            Logging.error("Failed to check for deprecated overfishing.", exception);
+            return false;
+        }
     }
 
     public static boolean canFishInWorld(@NonNull Location location) {
