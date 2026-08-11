@@ -156,7 +156,6 @@ public class Fish implements IFish {
         // Build custom fish lore and include the configured lore.
         factory.getLore().setTransformer(this::buildFishLore);
         factory.getDisplayName().setDefault(getDisplayNameMessage().getUnderlying().getAsMiniMessage());
-
         ItemStack item = fisherman == null
             ? factory.createItem()
             : factory.createItem(fisherman.getUniqueId());
