@@ -454,11 +454,6 @@ public class Fish implements IFish {
     }
 
     @Override
-    public @NonNull String getName() {
-        return name;
-    }
-
-    @Override
     public @NonNull Rarity getRarity() {
         return rarity;
     }

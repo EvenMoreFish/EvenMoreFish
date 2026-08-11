@@ -8,7 +8,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
-import com.oheers.fish.fishing.items.Rarity;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;

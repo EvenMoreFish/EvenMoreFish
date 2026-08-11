@@ -2,7 +2,6 @@ package com.oheers.fish.commands.arguments;
 
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
-import com.oheers.fish.fishing.items.Rarity;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.StringArgument;

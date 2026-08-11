@@ -74,7 +74,12 @@ public interface IFish extends Sortable {
 
     double getSetWorth();
 
-    @NonNull String getName();
+    @Deprecated
+    default @NonNull String getName() {
+        return getId();
+    }
+
+    @NonNull String getId();
 
     @NonNull IRarity getRarity();
 

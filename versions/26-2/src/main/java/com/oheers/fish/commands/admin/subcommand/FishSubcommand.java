@@ -11,7 +11,6 @@ import com.oheers.fish.commands.BrigCommandUtils;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.arguments.FishArgument;
 import com.oheers.fish.commands.arguments.RarityArgument;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import io.papermc.paper.command.brigadier.CommandSourceStack;

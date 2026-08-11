@@ -7,7 +7,6 @@ import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.arguments.RarityArgument;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.EMFSingleMessage;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;

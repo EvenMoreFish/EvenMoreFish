@@ -24,7 +24,6 @@ import com.oheers.fish.database.Database;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.fishing.items.Fish;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
