@@ -1,0 +1,61 @@
+package org.evenmorefish.fish.commands.arguments;
+
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
+import io.papermc.paper.command.brigadier.MessageComponentSerializer;
+import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
+import net.kyori.adventure.text.Component;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import java.util.concurrent.CompletableFuture;
+
+@SuppressWarnings("UnstableApiUsage")
+public class FishArgument implements CustomArgumentType.Converted<String, String> {
+
+    public static final DynamicCommandExceptionType INVALID_FISH = new DynamicCommandExceptionType(
+        obj -> MessageComponentSerializer.message().serialize(Component.text("Invalid Fish: " + obj))
+    );
+
+    @NonNull
+    @Override
+    public ArgumentType<String> getNativeType() {
+        return StringArgumentType.string();
+    }
+
+    @NonNull
+    @Override
+    public <S> CompletableFuture<Suggestions> listSuggestions(@NonNull CommandContext<S> context, @NonNull SuggestionsBuilder builder) {
+        IRarity rarity;
+        try {
+            rarity = context.getLastChild().getArgument("rarity", IRarity.class);
+        } catch (Exception exception) {
+            return builder.buildFuture();
+        }
+        rarity.getOriginalFishList().stream()
+            .map(fish -> fish.getName().replace(" ", "_"))
+            .filter(name -> name.toLowerCase().startsWith(builder.getRemainingLowerCase()))
+            .forEach(builder::suggest);
+        return builder.buildFuture();
+    }
+
+    @Override
+    public @NonNull String convert(@NonNull String nativeType) {
+        return nativeType;
+    }
+
+    public static @Nullable IFish resolveFish(@NonNull IRarity rarity, @NonNull String fishStr) {
+        IFish fish = rarity.getFish(fishStr);
+        if (fish == null) {
+            fish = rarity.getFish(fishStr.replace("_", " "));
+        }
+        return fish;
+    }
+
+}
