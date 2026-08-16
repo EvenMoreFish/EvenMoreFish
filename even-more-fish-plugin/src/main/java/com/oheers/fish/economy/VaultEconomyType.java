@@ -1,6 +1,7 @@
 package com.oheers.fish.economy;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.economy.EconomyType;
 import com.oheers.fish.config.MainConfig;
@@ -114,6 +115,7 @@ public class VaultEconomyType implements EconomyType {
         }
         EMFSingleMessage message = EMFSingleMessage.fromString(display);
         message.setVariable("{amount}", worthFormatted);
+        message.setVariable("{raw-amount}", FishUtils.roundDouble(worth, economy.fractionalDigits()));
         return message.getComponentMessage();
     }
 

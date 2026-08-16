@@ -105,6 +105,9 @@ economy:
   vault:
     enabled: true
     multiplier: 1.0
+    # {amount} uses the format provided by the economy plugin.
+    # {raw-amount} rounds the provided value based on the economy plugin's settings.
+    display: '{amount}'
   # Allows fish to pay out with PlayerPoints
   playerpoints:
     enabled: false
@@ -304,5 +307,5 @@ dimension-fishing:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 10
+version: 11
 

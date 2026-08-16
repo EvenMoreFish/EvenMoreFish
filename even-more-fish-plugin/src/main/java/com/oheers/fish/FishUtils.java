@@ -239,11 +239,14 @@ public class FishUtils {
      * Sorts a double value by rounding it to the provided amount of decimal places.
      *
      * @param value The double value to be sorted.
-     * @param places The amount of decimal places to round to.
+     * @param places The amount of decimal places to round to. If less than 0, returns the given value without any changes.
      * @return The rounded double value with the provided amount of decimal places.
      */
     public static double roundDouble(final double value, final int places) {
-        return new BigDecimal(value)
+        if (places < 0) {
+            return value;
+        }
+        return BigDecimal.valueOf(value)
             .setScale(places, RoundingMode.HALF_UP)
             .doubleValue();
     }
@@ -252,10 +255,13 @@ public class FishUtils {
      * Sorts a float value by rounding it to the provided amount of decimal places.
      *
      * @param value The float value to be sorted.
-     * @param places The amount of decimal places to round to.
+     * @param places The amount of decimal places to round to. If less than 0, returns the given value without any changes.
      * @return The rounded float value with the provided amount of decimal places.
      */
     public static float roundFloat(final float value, int places) {
+        if (places < 0) {
+            return value;
+        }
         return BigDecimal.valueOf(value)
             .setScale(places, RoundingMode.HALF_UP)
             .floatValue();
