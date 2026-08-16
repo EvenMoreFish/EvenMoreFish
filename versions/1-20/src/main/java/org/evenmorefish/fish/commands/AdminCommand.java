@@ -115,9 +115,7 @@ public class AdminCommand {
                     Fish fish = initialFish.createCopy();
                     fish.init();
 
-                    if (fish.hasCatchRewards()) {
-                        fish.getCatchRewards().forEach(reward -> reward.rewardPlayer(target, target.getLocation()));
-                    }
+                    fish.getCatchRewards().forEach(reward -> reward.rewardPlayer(target, target.getLocation()));
 
                     fish.setFisherman(target);
 
@@ -130,7 +128,7 @@ public class AdminCommand {
                 EMFMessage message = ConfigMessage.ADMIN_GIVE_PLAYER_FISH.getMessage();
                 message.setVariable("{player}", CommandUtils.getPlayersVariable(targets));
 
-                message.setFishCaught(initialFish.getName());
+                message.setFishCaught(initialFish.getId());
                 message.send(sender);
             });
     }

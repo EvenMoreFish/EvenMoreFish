@@ -9,6 +9,7 @@ import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.Requirement;
+import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.config.RarityFileUpdates;
 import com.oheers.fish.items.ItemFactory;
@@ -79,11 +80,6 @@ public class Rarity extends ConfigBase implements IRarity {
         EMFSingleMessage message = getFormat();
         message.setVariable("{name}", name);
         return message;
-    }
-
-    @Override
-    public int getIndex() {
-        return getConfig().getInt("sort-index");
     }
 
     @Override
@@ -308,6 +304,22 @@ public class Rarity extends ConfigBase implements IRarity {
         return type;
     }
 
+    public @NonNull List<String> getInteractRewards() {
+        return getConfig().getStringList("interact-event");
+    }
+
+    public @NonNull List<String> getEatRewards() {
+        return getConfig().getStringList("eat-event");
+    }
+
+    public @NonNull List<String> getCatchRewards() {
+        return getConfig().getStringList("catch-event");
+    }
+
+    public @NonNull List<String> getSellRewards() {
+        return getConfig().getStringList("sell-event");
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -323,6 +335,13 @@ public class Rarity extends ConfigBase implements IRarity {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    // Sortable
+
+    @Override
+    public int getIndex() {
+        return getConfig().getInt("sort-index");
     }
 
 }

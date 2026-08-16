@@ -8,7 +8,6 @@ import com.oheers.fish.api.sort.Sortable;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -27,19 +26,6 @@ public interface IFish extends Sortable {
 
     double getWorthMultiplier();
 
-    boolean hasEatRewards();
-
-    @Deprecated(forRemoval = true, since = "2.3.5")
-    default boolean hasFishRewards() {
-        return hasCatchRewards();
-    }
-
-    boolean hasCatchRewards();
-
-    boolean hasSellRewards();
-
-    boolean hasIntRewards();
-
     void init();
 
     void checkSilent();
@@ -54,33 +40,13 @@ public interface IFish extends Sortable {
 
     double getMaxSize();
 
-    /**
-     * @deprecated Use {@link #getFishermanUUID()} instead.
-     */
-    @Deprecated(forRemoval = true)
-    default @Nullable UUID getFisherman() {
-        return getFishermanUUID();
-    }
-
     @Nullable UUID getFishermanUUID();
 
     void setFisherman(@Nullable UUID uuid);
 
     void setFisherman(@Nullable OfflinePlayer fisherman);
 
-    boolean isCompExemptFish();
-
-    void setCompExemptFish(boolean compExemptFish);
-
     double getSetWorth();
-
-    /**
-     * @deprecated Use {@link #getId()} instead.
-     */
-    @Deprecated(since = "2.4.5")
-    default @NonNull String getName() {
-        return getId();
-    }
 
     @NonNull String getId();
 
@@ -89,20 +55,6 @@ public interface IFish extends Sortable {
     float getLength();
 
     void setLength(@Nullable Float length);
-
-    @NonNull List<Reward> getActionRewards();
-
-    /**
-     * @deprecated Use {@link #getCatchRewards()} instead.
-     */
-    @Deprecated(since = "2.3.5")
-    default @NonNull List<Reward> getFishRewards() {
-        return getCatchRewards();
-    }
-
-    @NonNull List<Reward> getCatchRewards();
-
-    @NonNull List<Reward> getSellRewards();
 
     double getWeight();
 
@@ -134,6 +86,99 @@ public interface IFish extends Sortable {
 
     default RarityKey getRarityKey() {
         return RarityKey.of(this);
+    }
+
+    // Rewards
+
+    default boolean hasEatRewards() {
+        return !getEatRewards().isEmpty();
+    }
+
+    default boolean hasCatchRewards() {
+        return !getCatchRewards().isEmpty();
+    }
+
+    default boolean hasSellRewards() {
+        return !getSellRewards().isEmpty();
+    }
+
+    default boolean hasInteractRewards() {
+        return getInteractRewards().isEmpty();
+    }
+
+    @NonNull List<Reward> getInteractRewards();
+
+    @NonNull List<Reward> getEatRewards();
+
+    @NonNull List<Reward> getCatchRewards();
+
+    @NonNull List<Reward> getSellRewards();
+
+    // Deprecated - Do not remove.
+
+    /**
+     * @deprecated Use {@link #getId()} instead.
+     */
+    @Deprecated(since = "2.4.5")
+    default @NonNull String getName() {
+        return getId();
+    }
+
+    /**
+     * @deprecated Use {@link #getFishermanUUID()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    default @Nullable UUID getFisherman() {
+        return getFishermanUUID();
+    }
+
+    /**
+     * @deprecated This was never functional and is redundant to check.
+     */
+    @Deprecated(forRemoval = true, since = "2.4.5")
+    default boolean isCompExemptFish() {
+        return false;
+    }
+
+    /**
+     * @deprecated This was never functional and is redundant to use.
+     */
+    @Deprecated(forRemoval = true, since = "2.4.5")
+    default void setCompExemptFish(boolean compExemptFish) {}
+
+    /**
+     * @deprecated Use {@link #getCatchRewards()} instead.
+     */
+    @Deprecated(since = "2.3.5")
+    default @NonNull List<Reward> getFishRewards() {
+        return getCatchRewards();
+    }
+
+    /**
+     * @deprecated Use {@link #hasCatchRewards()} instead.
+     */
+    @Deprecated(since = "2.3.5")
+    default boolean hasFishRewards() {
+        return hasCatchRewards();
+    }
+
+    /**
+     * @deprecated Use {@link #hasInteractRewards()} instead.
+     */
+    @Deprecated(since = "2.4.5")
+    default boolean hasIntRewards() {
+        return getInteractRewards().isEmpty();
+    }
+
+    /**
+     * @deprecated Use {@link #getEatRewards()} or {@link #getInteractRewards()} instead.
+     */
+    @Deprecated(since = "2.4.5")
+    default @NonNull List<Reward> getActionRewards() {
+        if (hasInteractRewards()) {
+            return getInteractRewards();
+        }
+        return getEatRewards();
     }
 
 }

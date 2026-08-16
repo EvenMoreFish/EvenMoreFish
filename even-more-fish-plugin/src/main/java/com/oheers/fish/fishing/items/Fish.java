@@ -48,11 +48,6 @@ public class Fish implements IFish {
     private @Nullable OfflinePlayer fisherman;
     private float length;
 
-    private @Nullable List<Reward> actionRewards = null;
-    private @Nullable List<Reward> catchRewards = null;
-    private @Nullable List<Reward> sellRewards = null;
-    private String eventType;
-
     private @NonNull Requirement requirement;
 
     private boolean wasBaited;
@@ -193,38 +188,6 @@ public class Fish implements IFish {
         return section.getDouble("worth-multiplier", rarity.getWorthMultiplier());
     }
 
-    @Override
-    public boolean hasEatRewards() {
-        checkEatEvent();
-        if (eventType != null) {
-            return eventType.equals("eat");
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean hasCatchRewards() {
-        checkCatchEvent();
-        return catchRewards != null && !catchRewards.isEmpty();
-    }
-
-    @Override
-    public boolean hasSellRewards() {
-        checkSellEvent();
-        return sellRewards != null && !sellRewards.isEmpty();
-    }
-
-    @Override
-    public boolean hasIntRewards() {
-        checkIntEvent();
-        if (eventType != null) {
-            return eventType.equals("int");
-        } else {
-            return false;
-        }
-    }
-
     // checks if the config contains a message to be displayed when the fish is fished
     private void checkMessage() {
         String msg = section.getString("message");
@@ -261,7 +224,7 @@ public class Fish implements IFish {
 
         PotionEffect effect = PotionEffectSerializer.get().deserialize(effectConfig);
         if (effect == null) {
-            Logging.warn(effectConfig + " is not a valid potion effect for fish: " + getName());
+            Logging.warn(effectConfig + " is not a valid potion effect for fish: " + getId());
             return;
         }
 
@@ -323,71 +286,6 @@ public class Fish implements IFish {
         return newLoreLine.getComponentListMessage();
     }
 
-    private void checkEatEvent() {
-        if (this.actionRewards != null) {
-            return;
-        }
-        List<String> configRewards = section.getStringList("eat-event");
-        // Checks if the player has actually set reward for an eat event
-        if (!configRewards.isEmpty()) {
-            this.eventType = "eat";
-            this.actionRewards = new ArrayList<>();
-
-            // Translates all the reward into Reward objects and adds them to the fish.
-            configRewards.forEach(reward -> {
-                reward = parseEventPlaceholders(reward);
-                this.actionRewards.add(new Reward(reward));
-            });
-        }
-    }
-
-    private void checkCatchEvent() {
-        if (this.catchRewards != null) {
-            return;
-        }
-        catchRewards = new ArrayList<>();
-        List<String> configRewards = section.getStringList("catch-event");
-        if (!configRewards.isEmpty()) {
-            // Translates all the reward into Reward objects and adds them to the fish.
-            configRewards.forEach(reward -> {
-                reward = parseEventPlaceholders(reward);
-                this.catchRewards.add(new Reward(reward));
-            });
-        }
-    }
-
-    private void checkSellEvent() {
-        if (this.sellRewards != null) {
-            return;
-        }
-        sellRewards = new ArrayList<>();
-        List<String> configRewards = section.getStringList("sell-event");
-        if (!configRewards.isEmpty())  {
-            configRewards.forEach(reward -> {
-                reward = parseEventPlaceholders(reward);
-                this.sellRewards.add(new Reward(reward));
-            });
-        }
-    }
-
-    private void checkIntEvent() {
-        if (this.actionRewards != null) {
-            return;
-        }
-        List<String> configRewards = section.getStringList("interact-event");
-        // Checks if the player has actually set reward for an interact event
-        if (!configRewards.isEmpty()) {
-            this.eventType = "int";
-            actionRewards = new ArrayList<>();
-
-            // Translates all the reward into Reward objects and adds them to the fish.
-            configRewards.forEach(reward -> {
-                reward = parseEventPlaceholders(reward);
-                this.actionRewards.add(new Reward(reward));
-            });
-        }
-    }
-
     /**
      * Checks if the fish has silent: true enabled, which stops the "You caught ... fish" from being broadcasted to anyone.
      */
@@ -440,16 +338,6 @@ public class Fish implements IFish {
     }
 
     @Override
-    public boolean isCompExemptFish() {
-        return isCompExemptFish;
-    }
-
-    @Override
-    public void setCompExemptFish(boolean compExemptFish) {
-        isCompExemptFish = compExemptFish;
-    }
-
-    @Override
     public double getSetWorth() {
         return section.getDouble("set-worth", rarity.getSetWorth());
     }
@@ -467,30 +355,6 @@ public class Fish implements IFish {
     @Override
     public void setLength(Float length) {
         this.length = Optional.ofNullable(length).orElse(-1F);
-    }
-
-    @Override
-    public @NonNull List<Reward> getActionRewards() {
-        checkIntEvent();
-        checkEatEvent();
-        return actionRewards == null ? new ArrayList<>() : actionRewards;
-    }
-
-    @Override
-    public @NonNull List<Reward> getCatchRewards() {
-        checkCatchEvent();
-        return catchRewards == null ? new ArrayList<>() : catchRewards;
-    }
-
-    @Override
-    public @NonNull List<Reward> getSellRewards() {
-        checkSellEvent();
-        return sellRewards == null ? new ArrayList<>() : sellRewards;
-    }
-
-    @Override
-    public int getIndex() {
-        return section.getInt("sort-index");
     }
 
     @Override
@@ -621,12 +485,48 @@ public class Fish implements IFish {
             return false;
         }
         // Check if the rarity and name match.
-        return this.getRarity().equals(fish.getRarity()) && this.getName().equals(fish.getName());
+        return this.getRarity().equals(fish.getRarity()) && this.getId().equals(fish.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRarity(), getName());
+        return Objects.hash(getRarity(), getId());
+    }
+
+    // Sortable
+
+    @Override
+    public int getIndex() {
+        return section.getInt("sort-index");
+    }
+
+    // Rewards
+
+    public @NonNull List<Reward> getInteractRewards() {
+        List<String> strings = section.getStringList("interact-event", rarity.getInteractRewards());
+        return parseRewards(strings);
+    }
+
+    public @NonNull List<Reward> getEatRewards() {
+        List<String> strings = section.getStringList("eat-event", rarity.getEatRewards());
+        return parseRewards(strings);
+    }
+
+    public @NonNull List<Reward> getCatchRewards() {
+        List<String> strings = section.getStringList("catch-event", rarity.getCatchRewards());
+        return parseRewards(strings);
+    }
+
+    public @NonNull List<Reward> getSellRewards() {
+        List<String> strings = section.getStringList("sell-event", rarity.getSellRewards());
+        return parseRewards(strings);
+    }
+
+    private List<Reward> parseRewards(@NonNull List<String> strings) {
+        return strings.stream()
+            .map(this::parseEventPlaceholders)
+            .map(Reward::new)
+            .toList();
     }
 
 }

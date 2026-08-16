@@ -1,6 +1,7 @@
 package com.oheers.fish.events;
 
 import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,6 +9,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class FishInteractEvent implements Listener {
 
@@ -28,13 +31,14 @@ public class FishInteractEvent implements Listener {
         if (fish == null) {
             return;
         }
-        if (fish.hasIntRewards()) {
+        List<Reward> rewards = fish.getInteractRewards();
+        if (!rewards.isEmpty()) {
             // Cancel the interact event
             event.setCancelled(true);
             // Take one item from the player's event hand itemstack so we know that it's gone
             event.getPlayer().getInventory().getItemInMainHand().setAmount(item.getAmount() - 1);
-            // Runs through each eat-event
-            fish.getActionRewards().forEach(r -> r.rewardPlayer(event.getPlayer(), null));
+            // Runs through each interact-event
+            rewards.forEach(r -> r.rewardPlayer(event.getPlayer(), event.getPlayer().getLocation()));
         }
     }
 }

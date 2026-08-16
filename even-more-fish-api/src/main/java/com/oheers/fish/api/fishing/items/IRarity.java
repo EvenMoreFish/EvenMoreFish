@@ -28,14 +28,6 @@ public interface IRarity extends Sortable {
     @ApiStatus.Internal
     @NonNull Component getDisplayNameComponent();
 
-    /**
-     * @deprecated Use {@link #getBroadcastEnabled()} instead.
-     */
-    @Deprecated(forRemoval = true)
-    default boolean getAnnounce() {
-        return getBroadcastEnabled();
-    }
-
     boolean getBroadcastEnabled();
 
     boolean getBroadcastOnlyRods();
@@ -69,14 +61,6 @@ public interface IRarity extends Sortable {
     double getWorthMultiplier();
 
     /**
-     * @deprecated Use {@link #getJournalItem()} instead.
-     */
-    @Deprecated(forRemoval = true)
-    default ItemStack getMaterial() {
-        return getJournalItem();
-    }
-
-    /**
      * @return The item to use in the journal menu, before display and lore is changed.
      */
     @NonNull ItemStack getJournalItem();
@@ -88,5 +72,23 @@ public interface IRarity extends Sortable {
     boolean isFishWeighted();
 
     void setFishWeighted(boolean fishWeighted);
+
+    // Deprecated - Do not remove.
+
+    /**
+     * @deprecated Use {@link #getBroadcastEnabled()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    default boolean getAnnounce() {
+        return getBroadcastEnabled();
+    }
+
+    /**
+     * @deprecated Use {@link #getJournalItem()} instead.
+     */
+    @Deprecated(forRemoval = true)
+    default ItemStack getMaterial() {
+        return getJournalItem();
+    }
 
 }
