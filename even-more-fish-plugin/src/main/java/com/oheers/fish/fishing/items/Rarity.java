@@ -87,14 +87,6 @@ public class Rarity extends ConfigBase implements IRarity {
         return getConfig().getDouble("weight");
     }
 
-    /**
-     * Internal use only. Will be removed in the future.
-     */
-    @Override
-    public @NonNull Component getDisplayNameComponent() {
-        return getDisplayName().getComponentMessage();
-    }
-
     public int getCatchLimit() {
         return getConfig().getInt("catch-limit", -1);
     }
@@ -119,7 +111,11 @@ public class Rarity extends ConfigBase implements IRarity {
         return getConfig().getBoolean("use-this-casing");
     }
 
-    public @NonNull EMFSingleMessage getDisplayName() {
+    public @NonNull Component getDisplayName() {
+        return getDisplayNameMessage().getComponentMessage();
+    }
+
+    public @NonNull EMFSingleMessage getDisplayNameMessage() {
         String displayName = getConfig().getString("displayname", this.id);
         return format(displayName);
     }

@@ -252,7 +252,7 @@ public abstract class EMFMessage {
      */
     public void setFishCatchVariables(@NonNull IFish fish) {
         setLength(Processor.LENGTH_FORMAT.format(fish.getLength()));
-        setRarity(fish.getRarity().getDisplayNameComponent());
+        setRarity(fish.getRarity().getDisplayName());
 
         Component display = fish.getDisplayName();
 

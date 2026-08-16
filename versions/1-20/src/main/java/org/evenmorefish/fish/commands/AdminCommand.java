@@ -223,7 +223,7 @@ public class AdminCommand {
                             return;
                         }
                         TextComponent.Builder builder = Component.text();
-                        builder.append(rarity.getDisplayNameComponent());
+                        builder.append(rarity.getDisplayName());
                         builder.append(Component.space());
                         for (IFish fish : rarity.getOriginalFishList()) {
                             TextComponent.Builder fishBuilder = Component.text();
@@ -241,7 +241,7 @@ public class AdminCommand {
                         for (IRarity rarity : FishManager.getInstance().getRarityMap().values()) {
                             TextComponent.Builder rarityBuilder = Component.text();
                             EMFSingleMessage message = EMFSingleMessage.fromString("<gray>[</gray>{rarity}<gray>]</gray>");
-                            message.setVariable("{rarity}", rarity.getDisplayNameComponent());
+                            message.setVariable("{rarity}", rarity.getDisplayName());
                             rarityBuilder.append(message.getComponentMessage());
                             rarityBuilder.hoverEvent(HoverEvent.hoverEvent(
                                 HoverEvent.Action.SHOW_TEXT,

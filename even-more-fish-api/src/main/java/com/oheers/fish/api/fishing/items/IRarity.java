@@ -22,11 +22,7 @@ public interface IRarity extends Sortable {
 
     double getWeight();
 
-    /**
-     * Internal use only. Will be removed in the future.
-     */
-    @ApiStatus.Internal
-    @NonNull Component getDisplayNameComponent();
+    @NonNull Component getDisplayName();
 
     boolean getBroadcastEnabled();
 

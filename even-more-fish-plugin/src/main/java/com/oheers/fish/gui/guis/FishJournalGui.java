@@ -93,7 +93,7 @@ public class FishJournalGui extends ConfigGui {
 
         this.rarity = rarity;
         if (rarity != null) {
-            addReplacement("{rarity}", rarity.getDisplayNameComponent());
+            addReplacement("{rarity}", rarity.getDisplayName());
         }
 
         this.userId = userId;
@@ -286,7 +286,7 @@ public class FishJournalGui extends ConfigGui {
                 Component configuredDisplay = configuredMeta.displayName();
                 if (configuredDisplay != null) {
                     EMFSingleMessage display = EMFSingleMessage.of(configuredDisplay);
-                    display.setRarity(rarity.getDisplayNameComponent());
+                    display.setRarity(rarity.getDisplayName());
                     meta.displayName(display.getComponentMessage(player));
                 }
                 meta.lore(configuredMeta.lore());

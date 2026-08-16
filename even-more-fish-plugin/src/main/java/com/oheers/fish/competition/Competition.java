@@ -103,9 +103,9 @@ public class Competition {
 
         EMFSingleMessage prefix = competitionFile.getBossbarPrefix();
         if (selectedRarity != null) {
-            prefix.setRarity(selectedRarity.getDisplayNameComponent());
+            prefix.setRarity(selectedRarity.getDisplayName());
         } else if (selectedFish != null) {
-            prefix.setRarity(selectedFish.getRarity().getDisplayNameComponent());
+            prefix.setRarity(selectedFish.getRarity().getDisplayName());
             prefix.setVariable("{fish}", selectedFish.getDisplayName());
         }
         bar.setPrefix(prefix, competitionType);
@@ -477,7 +477,7 @@ public class Competition {
             message.setPlayer(player);
 
             message.setPosition(Integer.toString(pos));
-            message.setRarity(entry.getFish().getRarity().getDisplayNameComponent());
+            message.setRarity(entry.getFish().getRarity().getDisplayName());
             message.setFishCaught(entry.getFish().getDisplayName());
 
             leaderboard.add(message.getComponentMessage());
