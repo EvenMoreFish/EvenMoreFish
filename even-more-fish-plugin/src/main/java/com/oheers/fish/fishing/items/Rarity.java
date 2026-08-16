@@ -71,15 +71,17 @@ public class Rarity extends ConfigBase implements IRarity {
         return getConfig().getBoolean("disabled");
     }
 
+    private @NonNull String getRawFormat() {
+        return getConfig().getString("format", "<white>{name}");
+    }
+
     public @NonNull EMFSingleMessage getFormat() {
-        String format = getConfig().getString("format", "<white>{name}");
-        return EMFSingleMessage.fromString(format);
+        return EMFSingleMessage.fromString(getRawFormat());
     }
 
     public @NonNull EMFSingleMessage format(@NonNull String name) {
-        EMFSingleMessage message = getFormat();
-        message.setVariable("{name}", name);
-        return message;
+        String format = getRawFormat().replace("{name}", name);
+        return EMFSingleMessage.fromString(format);
     }
 
     @Override
