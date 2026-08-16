@@ -45,7 +45,7 @@ public class EMFVersionLoader {
      */
     private EMFVersionProvider fetchVersion() {
         try  {
-            Class<?> clazz = jar.loadClass("com.oheers.fish.EMFVersion");
+            Class<?> clazz = jar.loadClass("org.evenmorefish.fish.EMFVersion");
             return (EMFVersionProvider) clazz.getDeclaredConstructor(EMFPlugin.class).newInstance(plugin);
         } catch (Exception exception) {
             throw new RuntimeException("Failed to load EvenMoreFish", exception);
@@ -54,7 +54,7 @@ public class EMFVersionLoader {
 
     private URLClassLoader getClassLoader(ClassLoader parent) {
         try (InputStream is = getURL(parent).openStream()) {
-            plugin.getDataFolder().mkdirs();
+            plugin.getDataFolder().mkdirs(); // Ensures the folder is always present.
             File file = new File(plugin.getDataFolder(), Bukkit.getMinecraftVersion() + ".jar");
             file.deleteOnExit();
             Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -68,28 +68,23 @@ public class EMFVersionLoader {
     }
 
     private URL getURL(ClassLoader classLoader) {
-        String minecraftVersion = Bukkit.getMinecraftVersion();
-        if (minecraftVersion.startsWith("26.2")) {
-            return classLoader.getResource("versions/26-2.jar");
-        } else if (minecraftVersion.startsWith("26.1")) {
-            return classLoader.getResource("versions/26-1.jar");
-        // 1.21 has multiple version jars.
-        } else if (minecraftVersion.startsWith("1.21")) {
-            // 1.21.0 is not supported.
-            if (minecraftVersion.equals("1.21")) {
-                throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
-            }
-            List<String> oldVersions = List.of("1.21.1", "1.21.3", "1.21.4");
-            if (oldVersions.contains(minecraftVersion)) {
-                return classLoader.getResource("versions/1.21.1-4.jar");
-            } else {
-                return classLoader.getResource("versions/1.21.5-11.jar");
-            }
-        } else if (minecraftVersion.startsWith("1.20")) {
-            return classLoader.getResource("versions/1-20.jar");
-        } else {
-            throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
+        String version = Bukkit.getMinecraftVersion();
+        // Minecraft 26.2.x
+        if (version.startsWith("26.2")) return classLoader.getResource("versions/26-2.jar");
+        // Minecraft 26.1.x
+        if (version.startsWith("26.1")) return classLoader.getResource("versions/26-1.jar");
+        // Minecraft 1.20.x
+        if (version.startsWith("1.20")) return classLoader.getResource("versions/1-20.jar");
+        // Minecraft 1.21.x
+        if (version.startsWith("1.21")) {
+            return switch (version) {
+                // 1.21.0 - Not supported.
+                case "1.21" -> throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
+                case "1.21.1", "1.21.3", "1.21.4" -> classLoader.getResource("versions/1.21.1-4.jar");
+                default -> classLoader.getResource("versions/1.21.5-11.jar");
+            };
         }
+        throw new IllegalStateException("EvenMoreFish does not support this Minecraft version.");
     }
 
 }
