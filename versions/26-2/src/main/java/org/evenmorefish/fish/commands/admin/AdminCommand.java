@@ -57,6 +57,10 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
     public @NonNull LiteralArgumentBuilder<CommandSourceStack> getAsArgument() {
         return Commands.literal(name)
             .requires(source -> source.getSender().hasPermission(AdminPerms.ADMIN))
+            .executes(ctx -> {
+                sendHelpMessage(ctx.getSource().getSender());
+                return 1;
+            })
             .then(database())
             .then(fish())
             .then(randomFish())
