@@ -37,6 +37,17 @@ public class RequirementContext {
         return new RequirementContext(null, null, null, null, null, null);
     }
 
+    public static @NonNull RequirementContext player(@NonNull Player player) {
+        return new RequirementContext(
+            player.getWorld(),
+            player.getLocation(),
+            player,
+            null,
+            null,
+            null
+        );
+    }
+
     public @Nullable World getWorld() {
         return worldRef.get();
     }

@@ -134,15 +134,8 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     public @NonNull Predicate<Player> getLavaPredicate() {
         Section section = MainConfig.getInstance().getConfig().getSection("dimension-fishing.lava.requirements");
         return player -> {
-            RequirementContext context = new RequirementContext(
-                player.getWorld(),
-                player.getLocation(),
-                player,
-                null,
-                null,
-                null
-            );
-            return new Requirement(section).meetsRequirements(context);
+            RequirementContext context = RequirementContext.player(player);
+            return new Requirement(section).check(context);
         };
     }
 
@@ -150,15 +143,8 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
     public @NonNull Predicate<Player> getVoidPredicate() {
         Section section = MainConfig.getInstance().getConfig().getSection("dimension-fishing.void.requirements");
         return player -> {
-            RequirementContext context = new RequirementContext(
-                player.getWorld(),
-                player.getLocation(),
-                player,
-                null,
-                null,
-                null
-            );
-            return new Requirement(section).meetsRequirements(context);
+            RequirementContext context = RequirementContext.player(player);
+            return new Requirement(section).check(context);
         };
     }
 
