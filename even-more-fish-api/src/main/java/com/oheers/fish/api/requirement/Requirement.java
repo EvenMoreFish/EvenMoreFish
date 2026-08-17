@@ -4,6 +4,7 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -61,7 +62,11 @@ public class Requirement {
         this.checkMap.put(identifier, values);
     }
 
-    public boolean meetsRequirements(@NonNull RequirementContext context) {
+    public boolean check(@NonNull Player player) {
+        return check(RequirementContext.player(player));
+    }
+
+    public boolean check(@NonNull RequirementContext context) {
         for (Map.Entry<String, List<String>> entry : checkMap.entrySet()) {
             String key = entry.getKey().toUpperCase();
             List<String> value = entry.getValue();
@@ -80,6 +85,16 @@ public class Requirement {
             }
         }
         return true;
+    }
+
+    // Deprecated - Do not remove.
+
+    /**
+     * @deprecated Use {@link #check(RequirementContext)} instead.
+     */
+    @Deprecated(since = "2.4.5")
+    public boolean meetsRequirements(@NonNull RequirementContext context) {
+        return check(context);
     }
 
 }

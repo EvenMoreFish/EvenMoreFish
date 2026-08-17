@@ -487,7 +487,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
     }
 
     private boolean meetsRequirements(IFish fish, boolean doChecks, RequirementContext context) {
-        return !doChecks || fish.getRequirement().meetsRequirements(context);
+        return !doChecks || fish.getRequirement().check(context);
     }
 
     private List<IRarity> filterByCustomRod(List<IRarity> rarities, CustomRod rod) {
@@ -505,7 +505,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
         String region = FishUtils.getRegionName(fisher.getLocation());
         return getItemMap().values().stream()
             .filter(r -> !shouldSkipRarity(r, boostRate, boostedRarities, fisher))
-            .filter(r -> r.getRequirement().meetsRequirements(requirementContext))
+            .filter(r -> r.getRequirement().check(requirementContext))
             .flatMap(r -> Collections.nCopies(
                 (int) Math.max(1, MainConfig.getInstance().getRegionBoost(region, r.getId())),
                 r
