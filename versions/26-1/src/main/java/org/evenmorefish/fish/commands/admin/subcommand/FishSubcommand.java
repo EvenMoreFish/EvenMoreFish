@@ -92,7 +92,7 @@ public class FishSubcommand {
             IFish fish = initialFish.createCopy();
             fish.init();
 
-            fish.getCatchRewards().forEach(reward -> reward.rewardPlayer(target, target.getLocation()));
+            fish.getCatchRewards().forEach(reward -> reward.give(target, target.getLocation()));
 
             fish.setFisherman(target);
 

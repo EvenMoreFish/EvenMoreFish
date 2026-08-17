@@ -59,7 +59,7 @@ public class SellHelper {
             }
 
             logSoldFish(sold);
-            sold.getFish().getSellRewards().forEach(reward -> reward.rewardPlayer(player, player.getLocation()));
+            sold.getFish().getSellRewards().forEach(reward -> reward.give(player, player.getLocation()));
             new EMFFishSoldEvent(player, sold).callEvent();
 
             inventory.setItem(slot, null);
@@ -108,7 +108,7 @@ public class SellHelper {
             }
 
             logSoldFish(sold);
-            sold.getFish().getSellRewards().forEach(reward -> reward.rewardPlayer(player, player.getLocation()));
+            sold.getFish().getSellRewards().forEach(reward -> reward.give(player, player.getLocation()));
             new EMFFishSoldEvent(player, sold).callEvent();
 
             item.setAmount(0);

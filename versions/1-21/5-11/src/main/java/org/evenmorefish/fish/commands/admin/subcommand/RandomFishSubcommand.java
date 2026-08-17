@@ -107,7 +107,7 @@ public class RandomFishSubcommand {
         fish.init();
 
         for (Reward reward : fish.getCatchRewards()) {
-            reward.rewardPlayer(target, target.getLocation());
+            reward.give(target, target.getLocation());
         }
 
         fish.setFisherman(target);

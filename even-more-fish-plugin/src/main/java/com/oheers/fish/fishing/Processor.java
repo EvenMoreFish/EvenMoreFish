@@ -102,7 +102,7 @@ public abstract class Processor<E extends Event> {
     }
 
     private void handleCaughtFish(@NonNull Player player, @NonNull Location location, @NonNull IFish fish) {
-        fish.getCatchRewards().forEach(fishReward -> fishReward.rewardPlayer(player, location));
+        fish.getCatchRewards().forEach(fishReward -> fishReward.give(player, location));
 
         EvenMoreFish.getInstance().getMetricsManager().incrementFishCaught(1);
         if (fish.isSilent()) {
@@ -157,7 +157,7 @@ public abstract class Processor<E extends Event> {
         ItemStack baitItem = bait.create(player);
 
         if (bait.hasCatchRewards()) {
-            bait.getCatchRewards().forEach(reward -> reward.rewardPlayer(player, location));
+            bait.getCatchRewards().forEach(reward -> reward.give(player, location));
         }
 
         if (!bait.isSilent()) {

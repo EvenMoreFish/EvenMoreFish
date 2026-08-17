@@ -115,7 +115,7 @@ public class AdminCommand {
                     Fish fish = initialFish.createCopy();
                     fish.init();
 
-                    fish.getCatchRewards().forEach(reward -> reward.rewardPlayer(target, target.getLocation()));
+                    fish.getCatchRewards().forEach(reward -> reward.give(target, target.getLocation()));
 
                     fish.setFisherman(target);
 
@@ -187,7 +187,7 @@ public class AdminCommand {
                 fish.init();
 
                 for (Reward reward : fish.getCatchRewards()) {
-                    reward.rewardPlayer(target, target.getLocation());
+                    reward.give(target, target.getLocation());
                 }
 
                 fish.setFisherman(target);

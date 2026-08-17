@@ -527,12 +527,12 @@ public class Competition {
 
             // Does the player's place have reward?
             if (rewards.containsKey(rewardPlace)) {
-                rewards.get(rewardPlace).forEach(reward -> reward.rewardPlayer(player, null));
+                rewards.get(rewardPlace).forEach(reward -> reward.give(player, null));
             } else {
                 // Default to participation reward if not.
                 List<Reward> participation = rewards.get(-1);
                 if (participation != null) {
-                    participation.forEach(reward -> reward.rewardPlayer(player, null));
+                    participation.forEach(reward -> reward.give(player, null));
                 }
             }
 
@@ -555,7 +555,7 @@ public class Competition {
 
         if (!rewards.isEmpty()) {
             for (Reward reward : rewards.get(1)) {
-                reward.rewardPlayer(player, null);
+                reward.give(player, null);
             }
         }
 

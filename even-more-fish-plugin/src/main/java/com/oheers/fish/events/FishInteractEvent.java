@@ -38,7 +38,7 @@ public class FishInteractEvent implements Listener {
             // Take one item from the player's event hand itemstack so we know that it's gone
             event.getPlayer().getInventory().getItemInMainHand().setAmount(item.getAmount() - 1);
             // Runs through each interact-event
-            rewards.forEach(r -> r.rewardPlayer(event.getPlayer(), event.getPlayer().getLocation()));
+            rewards.forEach(r -> r.give(event.getPlayer(), event.getPlayer().getLocation()));
         }
     }
 }

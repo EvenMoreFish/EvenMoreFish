@@ -30,7 +30,7 @@ public class FishEatEvent {
             List<Reward> rewards = fish.getEatRewards();
             if (!rewards.isEmpty()) {
                 // Runs through each eat-event
-                rewards.forEach(r -> r.rewardPlayer(event.getPlayer(), event.getPlayer().getLocation()));
+                rewards.forEach(r -> r.give(event.getPlayer(), event.getPlayer().getLocation()));
                 return true;
             }
         }

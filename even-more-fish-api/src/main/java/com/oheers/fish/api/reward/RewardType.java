@@ -17,7 +17,7 @@ public abstract class RewardType implements RegistryItem {
 
     public RewardType() {}
 
-    public abstract void doReward(@NonNull Player player, @NonNull String key, @NonNull String value, Location hookLocation);
+    public abstract void doReward(@NonNull Player player, @NonNull String key, @NonNull String value, @Nullable Location location);
 
     public abstract @NonNull String getIdentifier();
 
