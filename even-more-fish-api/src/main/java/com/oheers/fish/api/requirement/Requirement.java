@@ -1,5 +1,6 @@
 package com.oheers.fish.api.requirement;
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -65,15 +66,16 @@ public class Requirement {
             String key = entry.getKey().toUpperCase();
             List<String> value = entry.getValue();
             if (key.isEmpty() || value.isEmpty()) {
-                EMFPlugin.getInstance().getLogger().warning("Attempted to process an invalid Requirement. Please check for earlier warnings.");
+                Logging.warn("Attempted to process an invalid Requirement. Please check for earlier warnings.");
                 continue;
             }
             RequirementType requirementType = EMFRegistry.REQUIREMENT_TYPE.get(key);
             if (requirementType == null) {
-                EMFPlugin.getInstance().getLogger().warning("Invalid requirement. Possible typo?: " + key);
+                Logging.warn("Invalid requirement. Possible typo?: " + key);
                 continue;
             }
             if (!requirementType.checkRequirement(context, value)) {
+                Logging.debug("Requirement " + requirementType.getIdentifier() + " failed with value: " + value);
                 return false;
             }
         }
