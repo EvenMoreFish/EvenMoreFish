@@ -63,7 +63,7 @@ public class Leaderboard implements LeaderboardHandler {
 
         message.setPlayer(Bukkit.getOfflinePlayer(newPlayer));
         message.setLength(Float.toString(newFish.getLength()));
-        message.setFishCaught(newFish.getName());
+        message.setFishCaught(newFish.getId());
         message.setRarity(newFish.getRarity().getDisplayName());
 
         if (Competition.isDoingFirstPlaceActionBar()) {
@@ -135,7 +135,9 @@ public class Leaderboard implements LeaderboardHandler {
         CompetitionEntry newEntry = new CompetitionEntry(entry.getPlayer(), fish, type);
         float value = entry.getValue();
         if (type.getStrategy().shouldUseFishLength()) {
-            value += fish.getLength();
+            if (!fish.isLengthless()) {
+                value += fish.getLength();
+            }
         } else {
             value += 1;
         }

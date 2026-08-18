@@ -37,15 +37,14 @@ public class SoldFish {
         }
         int amount = item.getAmount();
         double setWorth = fish.getSetWorth();
-        float length = fish.getLength();
         if (setWorth > 0) {
             return new SoldFish(fish, player, amount, setWorth, LocalDateTime.now());
-        } else if (length > 0.0D) {
-            double multiplier = fish.getWorthMultiplier();
-            double worth = multiplier <= 0.0D ? -1D : multiplier * length;
-            return new SoldFish(fish, player, amount, worth, LocalDateTime.now());
-        } else {
+        } else if (fish.isLengthless()) {
             return null;
+        } else {
+            double multiplier = fish.getWorthMultiplier();
+            double worth = multiplier <= 0.0D ? -1D : multiplier * fish.getLength();
+            return new SoldFish(fish, player, amount, worth, LocalDateTime.now());
         }
     }
 

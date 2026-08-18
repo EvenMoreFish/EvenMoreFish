@@ -109,7 +109,7 @@ public abstract class Processor<E extends Event> {
             return;
         }
 
-        EMFMessage message = fish.getLength() == -1 ?
+        EMFMessage message = fish.isLengthless() ?
             getLengthlessCaughtMessage().getMessage() :
             getCaughtMessage().getMessage();
 

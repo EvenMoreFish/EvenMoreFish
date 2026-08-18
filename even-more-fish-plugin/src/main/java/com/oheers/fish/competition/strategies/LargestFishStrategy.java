@@ -21,7 +21,7 @@ public class LargestFishStrategy implements CompetitionStrategy {
 
     @Override
     public void applyToLeaderboard(IFish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
-        if (fish.getLength() <= 0) return;
+        if (fish.isLengthless()) return;
 
         CompetitionEntry entry = leaderboard.getEntry(fisher);
 

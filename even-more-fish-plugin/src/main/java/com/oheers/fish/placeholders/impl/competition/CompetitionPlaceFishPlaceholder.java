@@ -47,7 +47,7 @@ public class CompetitionPlaceFishPlaceholder implements EMFPlaceholder {
         if (fish == null) {
             return null;
         }
-        EMFMessage message = fish.getLength() == -1
+        EMFMessage message = fish.isLengthless()
             ? ConfigMessage.PLACEHOLDER_FISH_LENGTHLESS_FORMAT.getMessage()
             : ConfigMessage.PLACEHOLDER_FISH_FORMAT.getMessage();
 

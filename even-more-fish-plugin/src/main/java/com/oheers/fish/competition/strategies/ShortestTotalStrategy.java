@@ -21,6 +21,9 @@ public class ShortestTotalStrategy implements CompetitionStrategy {
 
     @Override
     public void applyToLeaderboard(IFish fish, UUID fisher, Leaderboard leaderboard, Competition competition) {
+        if (fish.isLengthless()) {
+            return;
+        }
         CompetitionEntry entry = leaderboard.getEntry(fisher);
 
         if (entry != null) {

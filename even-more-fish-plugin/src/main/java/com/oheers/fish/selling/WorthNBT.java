@@ -24,13 +24,12 @@ public class WorthNBT {
 
     public static @NonNull Optional<Double> getValue(@NonNull IFish fish) {
         double setWorth = fish.getSetWorth();
-        float length = fish.getLength();
         if (setWorth > 0) {
             return Optional.of(setWorth);
-        } else if (length > 0.0D) {
-            return getMultipliedValue(length, fish);
-        } else {
+        } else if (fish.isLengthless()) {
             return Optional.empty();
+        } else {
+            return getMultipliedValue(fish.getLength(), fish);
         }
     }
 

@@ -27,7 +27,7 @@ public class FishLog {
 
     public FishLog(int userId, IFish fish, LocalDateTime catchTime, @Nullable String competitionId) {
         this.userId = userId;
-        this.fishName = fish.getName();
+        this.fishName = fish.getId();
         this.fishRarity = fish.getRarity().getId();
         this.catchTime = catchTime;
         this.length = fish.getLength();

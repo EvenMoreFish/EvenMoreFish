@@ -410,7 +410,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
         holder.setAutoSave(false);
 
         float length = fish.getLength();
-        if (length > 0) {
+        if (!fish.isLengthless()) {
             holder.setFloat(NbtKeys.EMF_FISH_LENGTH.get(), length);
         }
 
