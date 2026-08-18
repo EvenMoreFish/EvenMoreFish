@@ -54,6 +54,10 @@ public interface IFish extends Sortable {
 
     float getLength();
 
+    default boolean isLengthless() {
+        return getLength() <= 0;
+    }
+
     void setLength(@Nullable Float length);
 
     double getWeight();
