@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -507,7 +508,7 @@ public class BaitNBTManager {
             for (int i = 1; i < maxBaits; i++) {
                 try {
                     lore.removeLast();
-                } catch (IndexOutOfBoundsException exception) {
+                } catch (NoSuchElementException | IndexOutOfBoundsException exception) {
                     break;
                 }
             }
@@ -518,7 +519,7 @@ public class BaitNBTManager {
             for (int i = 1; i < numBaitsApplied; i++) {
                 try {
                 lore.removeLast();
-                } catch (IndexOutOfBoundsException exception) {
+                } catch (NoSuchElementException | IndexOutOfBoundsException exception) {
                     break;
                 }
             }
