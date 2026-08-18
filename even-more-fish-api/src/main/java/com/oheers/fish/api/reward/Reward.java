@@ -53,22 +53,18 @@ public class Reward {
     public @NonNull String getValue() { return this.value; }
 
     public void give(@NonNull Player player, @Nullable Location location) {
-        getRewardType().doReward(player, getKey(), getValue(), location);
-    }
-
-    public void give(@NonNull OfflinePlayer player, @Nullable Location location) {
-        if (getRewardType() == null) {
+        if (rewardType == null) {
             EMFPlugin.getInstance().getLogger().warning("No reward type found for key: " + getKey());
             return;
         }
+        rewardType.doReward(player, getKey(), getValue(), location);
+    }
+
+    public void give(@NonNull OfflinePlayer player, @Nullable Location location) {
         give(player, location, true);
     }
 
     public void give(@NonNull OfflinePlayer player, @Nullable Location location, boolean shouldAddToCache) {
-        if (getRewardType() == null) {
-            EMFPlugin.getInstance().getLogger().warning("No reward type found for key: " + getKey());
-            return;
-        }
         Player online = player.getPlayer();
         if (online != null) {
             give(online, location);
