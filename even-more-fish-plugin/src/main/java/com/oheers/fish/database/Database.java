@@ -156,12 +156,12 @@ public class Database implements DatabaseAPI {
 
     @Override
     public boolean hasFishStats(@NonNull IFish fish) {
-        return withHandle(handle -> handle.createQuery("select 1 from " + fishTable + " where fish_name = :fish_name and fish_rarity = :fish_rarity limit 1").bind("fish_name", fish.getName()).bind("fish_rarity", fish.getRarity().getId()).mapTo(Integer.class).findOne().isPresent(), false);
+        return withHandle(handle -> handle.createQuery("select 1 from " + fishTable + " where fish_name = :fish_name and fish_rarity = :fish_rarity limit 1").bind("fish_name", fish.getId()).bind("fish_rarity", fish.getRarity().getId()).mapTo(Integer.class).findOne().isPresent(), false);
     }
 
     @Override
     public void incrementFish(@NonNull IFish fish) {
-        useHandle(handle -> handle.createUpdate("update " + fishTable + " set total_caught = total_caught + 1 where fish_rarity = :fish_rarity and fish_name = :fish_name").bind("fish_rarity", fish.getRarity().getId()).bind("fish_name", fish.getName()).execute());
+        useHandle(handle -> handle.createUpdate("update " + fishTable + " set total_caught = total_caught + 1 where fish_rarity = :fish_rarity and fish_name = :fish_name").bind("fish_rarity", fish.getRarity().getId()).bind("fish_name", fish.getId()).execute());
     }
 
     @Override
@@ -197,7 +197,7 @@ public class Database implements DatabaseAPI {
     }
 
     private @NonNull String prepareRarityFishString(final @NonNull IFish fish) {
-        return fish.getRarity().getId() + ":" + fish.getName();
+        return fish.getRarity().getId() + ":" + fish.getId();
     }
 
     @Override

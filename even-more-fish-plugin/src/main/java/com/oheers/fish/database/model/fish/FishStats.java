@@ -47,7 +47,7 @@ public class FishStats {
 
     public FishStats(IFish fish, @NonNull LocalDateTime firstCatchTime, @NonNull UUID discoverer, float shortestLength, @NonNull UUID shortestFisher, float longestLength, @NonNull UUID longestFisher, int quantity) {
         this(
-            fish.getName(),
+            fish.getId(),
             fish.getRarity().getId(),
             firstCatchTime,
             discoverer,

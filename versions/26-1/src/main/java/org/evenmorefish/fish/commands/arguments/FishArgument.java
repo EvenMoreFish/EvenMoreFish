@@ -39,7 +39,7 @@ public class FishArgument implements CustomArgumentType.Converted<String, String
             return builder.buildFuture();
         }
         rarity.getOriginalFishList().stream()
-            .map(fish -> fish.getName().replace(" ", "_"))
+            .map(fish -> fish.getId().replace(" ", "_"))
             .filter(name -> name.toLowerCase().startsWith(builder.getRemainingLowerCase()))
             .forEach(builder::suggest);
         return builder.buildFuture();

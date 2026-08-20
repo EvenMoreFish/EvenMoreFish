@@ -350,7 +350,7 @@ public class EvenMoreFish extends EMFPlugin {
         final String transactionId = FriendlyId.createFriendlyId();
         final Timestamp timestamp = Timestamp.from(Instant.now());
         final IFish fish = sold.getFish();
-        final String fishName = fish.getName();
+        final String fishName = fish.getId();
         final String rarityId = fish.getRarity().getId();
         final int quantity = sold.getQuantity();
         final float length = fish.getLength();

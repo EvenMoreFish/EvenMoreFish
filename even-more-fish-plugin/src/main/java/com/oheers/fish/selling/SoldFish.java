@@ -38,7 +38,7 @@ public class SoldFish {
     }
     
     public @NonNull String getName() {
-        return ref.getFish().getName();
+        return ref.getFish().getId();
     }
     
     public int getAmount() {

@@ -29,7 +29,7 @@ public record FishRarityKey(@NonNull String fishName, @NonNull String fishRarity
     }
 
     public static @NonNull FishRarityKey of(final @NonNull IFish fish) {
-        return new FishRarityKey(fish.getName(), fish.getRarity().getId());
+        return new FishRarityKey(fish.getId(), fish.getRarity().getId());
     }
 
     public static @NonNull FishRarityKey empty() {

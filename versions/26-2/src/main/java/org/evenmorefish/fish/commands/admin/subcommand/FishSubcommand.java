@@ -105,7 +105,7 @@ public class FishSubcommand {
         EMFMessage message = ConfigMessage.ADMIN_GIVE_PLAYER_FISH.getMessage();
         message.setVariable("{player}", CommandUtils.getPlayersVariable(targets));
 
-        message.setFishCaught(initialFish.getName());
+        message.setFishCaught(initialFish.getId());
         message.send(sender);
         return 1;
     }

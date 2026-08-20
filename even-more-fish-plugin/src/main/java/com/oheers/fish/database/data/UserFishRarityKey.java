@@ -10,7 +10,7 @@ public record UserFishRarityKey(int userId, @NonNull String fishName, @NonNull S
     }
 
     public static @NonNull UserFishRarityKey of(final int userId, final @NonNull IFish fish) {
-        return new UserFishRarityKey(userId, fish.getName(), fish.getRarity().getId());
+        return new UserFishRarityKey(userId, fish.getId(), fish.getRarity().getId());
     }
 
     public static @NonNull UserFishRarityKey from(final @NonNull String pattern) {

@@ -210,7 +210,7 @@ public class Rarity extends ConfigBase implements IRarity {
     @Override
     public @Nullable IFish getEditableFish(@NonNull String name) {
         for (IFish fish : fishList) {
-            if (fish.getName().equalsIgnoreCase(name)) {
+            if (fish.getId().equalsIgnoreCase(name)) {
                 return fish;
             }
         }

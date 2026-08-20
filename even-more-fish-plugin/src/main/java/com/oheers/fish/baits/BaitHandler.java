@@ -608,7 +608,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
             messages.add(Component.text(" * " + rarityChance.rarity().getId()));
             for (FishChance fishChance : rarityChance.fishChances()) {
                 messages.add(Component.text("   - %s: overall=%s, in-rarity=%s [base=%s, effective=%s, modifier=%s]".formatted(
-                    fishChance.fish().getName(),
+                    fishChance.fish().getId(),
                     formatPercent(fishChance.overallChance()),
                     formatPercent(fishChance.conditionalChance()),
                     formatNumber(fishChance.baseWeight()),

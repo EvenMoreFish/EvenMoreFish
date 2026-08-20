@@ -419,7 +419,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
             holder.setString(NbtKeys.EMF_FISH_PLAYER.get(), fisherman.toString());
         }
 
-        holder.setString(NbtKeys.EMF_FISH_NAME.get(), fish.getName());
+        holder.setString(NbtKeys.EMF_FISH_NAME.get(), fish.getId());
         holder.setString(NbtKeys.EMF_FISH_RARITY.get(), fish.getRarity().getId());
         holder.setInteger(NbtKeys.EMF_FISH_RANDOM_INDEX.get(), fish.getFactory().getRandomIndex());
 

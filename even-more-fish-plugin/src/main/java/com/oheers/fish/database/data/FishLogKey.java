@@ -21,7 +21,7 @@ public class FishLogKey {
 
     public FishLogKey(int userId, IFish fish, LocalDateTime dateTime) {
         this.userId = userId;
-        this.fishName = fish.getName();
+        this.fishName = fish.getId();
         this.fishRarity = fish.getRarity().getId();
         this.dateTime = dateTime;
     }

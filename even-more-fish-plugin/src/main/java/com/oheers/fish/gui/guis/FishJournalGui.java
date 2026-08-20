@@ -185,7 +185,7 @@ public class FishJournalGui extends ConfigGui {
         if (usePreloadedStatsOnly || dataManager.isUserFishStatsPreloaded(userId)) {
             return dataManager.getUserFishStatsDataManager().peek(UserFishRarityKey.of(userId, fish).toString()) != null;
         }
-        return database.userHasFish(fish.getRarity().getId(), fish.getName(), userId);
+        return database.userHasFish(fish.getRarity().getId(), fish.getId(), userId);
     }
 
     private @NonNull EMFListMessage prepareLore(@NonNull ItemFactory factory, @NonNull IFish fish) {

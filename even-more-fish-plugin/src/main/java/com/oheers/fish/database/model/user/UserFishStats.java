@@ -28,7 +28,7 @@ public class UserFishStats {
 
     public UserFishStats(int userId, IFish fish, LocalDateTime firstCatchTime) {
         this.userId = userId;
-        this.fishName = fish.getName();
+        this.fishName = fish.getId();
         this.fishRarity = fish.getRarity().getId();
         this.firstCatchTime = firstCatchTime;
         this.shortestLength = fish.getLength();

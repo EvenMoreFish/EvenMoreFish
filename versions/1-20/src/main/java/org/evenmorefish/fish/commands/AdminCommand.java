@@ -199,7 +199,7 @@ public class AdminCommand {
 
                 EMFMessage message = ConfigMessage.ADMIN_GIVE_PLAYER_FISH.getMessage();
                 message.setPlayer(target);
-                message.setFishCaught(fish.getName());
+                message.setFishCaught(fish.getId());
                 message.send(sender);
             });
     }
@@ -231,7 +231,7 @@ public class AdminCommand {
                             message.setVariable("{fish}", fish.getDisplayName());
                             fishBuilder.append(message.getComponentMessage());
                             fishBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Click to receive fish")));
-                            fishBuilder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/emf admin fish " + rarity.getId() + " " + fish.getName().replace(" ", "_")));
+                            fishBuilder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/emf admin fish " + rarity.getId() + " " + fish.getId().replace(" ", "_")));
                             builder.append(fishBuilder);
                         }
                         sender.sendMessage(builder.build());

@@ -98,7 +98,7 @@ public class EMFFishListener implements Listener {
                 // fish has never been caught — no blocking lookup needed.
                 stats = FishStats.empty(fish, LocalDateTime.now());
             } else {
-                final var loadResult = EvenMoreFish.getInstance().getPluginDataManager().getDatabase().loadFishStats(fish.getName(), fish.getRarity().getId());
+                final var loadResult = EvenMoreFish.getInstance().getPluginDataManager().getDatabase().loadFishStats(fish.getId(), fish.getRarity().getId());
                 if (loadResult.isUnreadable()) {
                     EvenMoreFish.getInstance().getLogger().warning("Skipping fish stats update for " + key + " because the stored row could not be read.");
                     return;
@@ -148,7 +148,7 @@ public class EMFFishListener implements Listener {
                 // a first catch of this fish — no blocking lookup needed.
                 stats = new UserFishStats(userId, fish, LocalDateTime.now());
             } else {
-                final var loadResult = EvenMoreFish.getInstance().getPluginDataManager().getDatabase().loadUserFishStats(userId, fish.getName(), fish.getRarity().getId());
+                final var loadResult = EvenMoreFish.getInstance().getPluginDataManager().getDatabase().loadUserFishStats(userId, fish.getId(), fish.getRarity().getId());
                 if (loadResult.isUnreadable()) {
                     EvenMoreFish.getInstance().getLogger().warning("Skipping user fish stats update for " + key + " because the stored row could not be read.");
                     return;

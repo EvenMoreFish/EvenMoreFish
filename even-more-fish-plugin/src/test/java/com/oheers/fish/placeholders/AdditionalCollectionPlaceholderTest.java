@@ -111,7 +111,7 @@ class AdditionalCollectionPlaceholderTest {
         IFish fish = mock(IFish.class);
         IRarity rarity = mock(IRarity.class);
         when(rarity.getId()).thenReturn(rarityId);
-        when(fish.getName()).thenReturn(fishName);
+        when(fish.getId()).thenReturn(fishName);
         when(fish.getRarity()).thenReturn(rarity);
         return fish;
     }
@@ -124,7 +124,7 @@ class AdditionalCollectionPlaceholderTest {
     }
 
     private static String key(IFish fish) {
-        return fish.getRarity().getId() + ":" + fish.getName();
+        return fish.getRarity().getId() + ":" + fish.getId();
     }
 
     private abstract static class StubRarityPlaceholderSupport {

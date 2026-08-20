@@ -119,7 +119,7 @@ public class RandomFishSubcommand {
 
         EMFMessage message = ConfigMessage.ADMIN_GIVE_PLAYER_FISH.getMessage();
         message.setPlayer(target);
-        message.setFishCaught(fish.getName());
+        message.setFishCaught(fish.getId());
         message.send(sender);
         return 1;
     }

@@ -20,6 +20,6 @@ public class FirstUncaughtFishPlaceholder extends UniqueFishCaughtProgressPlaceh
         }
 
         IFish fish = firstUncaughtFish(target.uuid(), target.fishList());
-        return fish == null ? "" : fish.getName();
+        return fish == null ? "" : fish.getId();
     }
 }
