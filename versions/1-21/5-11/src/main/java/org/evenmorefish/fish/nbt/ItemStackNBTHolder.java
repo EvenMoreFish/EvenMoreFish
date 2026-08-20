@@ -11,9 +11,21 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Optional;
 
 public class ItemStackNBTHolder extends ItemStackNBTHolderBase {
+
+    private static final Method REMOVE_METHOD;
+
+    static {
+        try {
+            REMOVE_METHOD = CompoundTag.class.getDeclaredMethod("remove", String.class);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Could not find remove method", e);
+        }
+    }
 
     private final @NonNull CompoundTag data;
 
@@ -54,7 +66,7 @@ public class ItemStackNBTHolder extends ItemStackNBTHolderBase {
     public void setString(@NonNull NamespacedKey namespacedKey, @Nullable String value) {
         CompoundTag tag = getData(namespacedKey.getNamespace());
         if (value == null) {
-            tag.remove(namespacedKey.getKey());
+            removeTag(tag, namespacedKey.getKey());
         } else {
             tag.putString(namespacedKey.getKey(), value);
         }
@@ -79,7 +91,7 @@ public class ItemStackNBTHolder extends ItemStackNBTHolderBase {
     public void setFloat(@NonNull NamespacedKey namespacedKey, @Nullable Float value) {
         CompoundTag tag = getData(namespacedKey.getNamespace());
         if (value == null) {
-            tag.remove(namespacedKey.getKey());
+            removeTag(tag, namespacedKey.getKey());
         } else {
             tag.putFloat(namespacedKey.getKey(), value);
         }
@@ -104,7 +116,7 @@ public class ItemStackNBTHolder extends ItemStackNBTHolderBase {
     public void setInteger(@NonNull NamespacedKey namespacedKey, @Nullable Integer value) {
         CompoundTag tag = getData(namespacedKey.getNamespace());
         if (value == null) {
-            tag.remove(namespacedKey.getKey());
+            removeTag(tag, namespacedKey.getKey());
         } else {
             tag.putInt(namespacedKey.getKey(), value);
         }
@@ -129,7 +141,7 @@ public class ItemStackNBTHolder extends ItemStackNBTHolderBase {
     public void setBoolean(@NonNull NamespacedKey namespacedKey, @Nullable Boolean value) {
         CompoundTag tag = getData(namespacedKey.getNamespace());
         if (value == null) {
-            tag.remove(namespacedKey.getKey());
+            removeTag(tag, namespacedKey.getKey());
         } else {
             tag.putBoolean(namespacedKey.getKey(), value);
         }
@@ -180,6 +192,14 @@ public class ItemStackNBTHolder extends ItemStackNBTHolderBase {
             return craft;
         }
         throw new IllegalArgumentException("Could not fetch CraftItemStack.");
+    }
+
+    private void removeTag(@NonNull CompoundTag compound, @NonNull String string) {
+        try {
+            REMOVE_METHOD.invoke(compound, string);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            Logging.error("Failed to remove tag. Please report this to the developers.", e);
+        }
     }
 
 }

@@ -85,7 +85,7 @@ public final class RarityKey {
     public String toString() {
         return String.join(":",
             this.rarity.getId().toLowerCase(),
-            this.fish.getName().toLowerCase().replace(" ", "_")
+            this.fish.getId().toLowerCase().replace(" ", "_")
         );
     }
 
