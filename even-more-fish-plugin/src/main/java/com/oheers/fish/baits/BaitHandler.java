@@ -26,6 +26,7 @@ import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.exceptions.MaxBaitReachedException;
 import com.oheers.fish.exceptions.MaxBaitsReachedException;
 import com.oheers.fish.fishing.items.FishManager;
+import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -332,12 +333,12 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
             null,
             FishingType.VANILLA
         );
-        return chooseFish(player, location, context);
+        return chooseFish(player, location, context, null);
     }
 
-    public @NonNull IFish chooseFish(@NonNull Player player, @NonNull Location location, @NonNull RequirementContext requirementContext) {
-        IRarity selectedRarity = selectRarityWithModifiers(player, requirementContext);
-        IFish selectedFish = selectFishFromRarity(selectedRarity, player, location);
+    public @NonNull IFish chooseFish(@NonNull Player player, @NonNull Location location, @NonNull RequirementContext requirementContext, @Nullable CustomRod customRod) {
+        IRarity selectedRarity = selectRarityWithModifiers(player, requirementContext, customRod);
+        IFish selectedFish = selectFishFromRarity(selectedRarity, player, location, customRod);
 
         processBaitUsage(player, selectedRarity, selectedFish);
 
@@ -352,17 +353,17 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return baitData.fishModifiers();
     }
 
-    private @Nullable IRarity selectRarityWithModifiers(@NonNull Player player, @NonNull RequirementContext requirementContext) {
+    private @Nullable IRarity selectRarityWithModifiers(@NonNull Player player, @NonNull RequirementContext requirementContext, @Nullable CustomRod customRod) {
         return fishManager.getWeightedRarity(
             player,
             Set.copyOf(fishManager.getRarityMap().values()),
             this::getEffectiveRarityWeight,
-            null,
+            customRod,
             requirementContext
         );
     }
 
-    private @Nullable IFish selectFishFromRarity(@Nullable IRarity rarity, @NonNull Player player, @NonNull Location location) {
+    private @Nullable IFish selectFishFromRarity(@Nullable IRarity rarity, @NonNull Player player, @NonNull Location location, @Nullable CustomRod customRod) {
         if (rarity == null) {
             return null;
         }
@@ -373,7 +374,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
             this::getEffectiveFishWeight,
             true,
             null,
-            null
+            customRod
         );
     }
 

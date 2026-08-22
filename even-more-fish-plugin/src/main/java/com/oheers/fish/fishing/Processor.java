@@ -77,7 +77,7 @@ public abstract class Processor<E extends Event> {
         BaitHandler bait = null;
         if (fishingRod != null && !fishingRod.isEmpty()) {
             customRod = RodManager.getInstance().getRod(fishingRod);
-            bait = getBaitFromRod(fishingRod, customRod);
+            bait = getBaitFromRod(fishingRod);
         }
 
         IFish fish = chooseFish(player, location, bait, customRod);
@@ -125,11 +125,7 @@ public abstract class Processor<E extends Event> {
         }
     }
 
-    private @Nullable BaitHandler getBaitFromRod(@NonNull ItemStack rod, @Nullable CustomRod customRod) {
-        if (customRod != null) {
-            Logging.debug("Bait ignored because custom rods are not compatible with baits.");
-            return null;
-        }
+    private @Nullable BaitHandler getBaitFromRod(@NonNull ItemStack rod) {
         if (MainConfig.getInstance().getBaitCompetitionDisable() && Competition.isActive()) {
             Logging.debug("Bait ignored because bait usage is disabled during competitions.");
             return null;
@@ -141,7 +137,9 @@ public abstract class Processor<E extends Event> {
         BaitHandler bait = BaitNBTManager.randomBaitApplication(rod);
         if (bait == null) {
             Logging.debug("Bait ignored because no valid applied bait could be resolved from the rod.");
+            return null;
         }
+        Logging.debug("Fetched bait " + bait.getId() +  " from the rod.");
         return bait;
     }
 
@@ -190,9 +188,8 @@ public abstract class Processor<E extends Event> {
             this.fishingType
         );
 
-        // Check if the bait exists and a custom rod does not. Custom rods are not compatible with baits.
-        if (bait != null && customRod == null) {
-            return bait.chooseFish(player, location, context);
+        if (bait != null) {
+            return bait.chooseFish(player, location, context, customRod);
         }
 
         IRarity rarity = FishManager.getInstance().getRandomWeightedRarity(
