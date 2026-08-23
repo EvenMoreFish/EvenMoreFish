@@ -27,7 +27,7 @@ public class GlowingItemConfig extends ItemConfig<Boolean> {
         return (item, value) -> {
             if (value) {
                 item.editMeta(meta -> {
-                    meta.addEnchant(Enchantment.DURABILITY, 1, true);
+                    meta.addEnchant(Enchantment.UNBREAKING, 1, true);
                     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 });
             }

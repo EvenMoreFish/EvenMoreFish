@@ -44,6 +44,7 @@ import org.bukkit.event.HandlerList;
 import org.evenmorefish.dimensionfishing.DimensionFishing;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import uk.firedev.daisylib.DaisyLib;
 import uk.firedev.vanishchecker.VanishChecker;
 
 import java.sql.Timestamp;
@@ -116,6 +117,8 @@ public class EvenMoreFish extends EMFPlugin {
 
     @Override
     public void onEnable() {
+        DaisyLib.get().init(this);
+
         versionProvider.enableCommands();
 
         this.api = new EMFAPI();

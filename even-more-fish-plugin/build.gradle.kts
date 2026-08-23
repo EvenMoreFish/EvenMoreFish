@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.bstats)
     implementation(libs.inventorygui)
     implementation(libs.vanishchecker)
-    implementation(libs.messagelib)
+    api(libs.daisylib)
 
     implementation(libs.caffeine)
     implementation(libs.jdbi3.core)

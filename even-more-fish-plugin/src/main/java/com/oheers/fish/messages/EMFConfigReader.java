@@ -3,15 +3,15 @@ package com.oheers.fish.messages;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import uk.firedev.messagelib.config.ConfigLoader;
+import uk.firedev.daisylib.messages.config.ConfigReader;
 
 import java.util.List;
 
-public class EMFConfigLoader implements ConfigLoader<Section> {
+public class EMFConfigReader implements ConfigReader<Section> {
 
     private final Section config;
 
-    public EMFConfigLoader(@NonNull Section section) {
+    public EMFConfigReader(@NonNull Section section) {
         this.config = section;
     }
     
@@ -36,9 +36,9 @@ public class EMFConfigLoader implements ConfigLoader<Section> {
     }
 
     @Override
-    public @Nullable ConfigLoader<Section> getSection(@NonNull String path) {
+    public @Nullable ConfigReader<Section> getSection(@NonNull String path) {
         Section section = config.getSection(path);
-        return section == null ? null : new EMFConfigLoader(section);
+        return section == null ? null : new EMFConfigReader(section);
     }
     
 }

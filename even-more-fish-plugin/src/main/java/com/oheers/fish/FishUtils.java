@@ -49,7 +49,7 @@ import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import uk.firedev.messagelib.Utils;
+import uk.firedev.daisylib.utils.MessageUtils;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -272,7 +272,7 @@ public class FishUtils {
      * @return A string turned into a format key for use in configs.
      */
     public static @NonNull String getFormat(@NonNull String colour) {
-        if (Utils.isLegacy(colour)) {
+        if (MessageUtils.containsLegacy(colour)) {
             // Legacy's formatting makes this insanely simple
             return colour + "{name}";
         } else {

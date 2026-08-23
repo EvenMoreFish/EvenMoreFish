@@ -7,9 +7,9 @@ import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import uk.firedev.messagelib.message.ComponentListMessage;
-import uk.firedev.messagelib.message.ComponentMessage;
-import uk.firedev.messagelib.message.ComponentSingleMessage;
+import uk.firedev.daisylib.messages.message.ComponentListMessage;
+import uk.firedev.daisylib.messages.message.ComponentMessage;
+import uk.firedev.daisylib.messages.message.ComponentSingleMessage;
 
 import java.util.List;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class EMFListMessage extends EMFMessage {
     }
 
     @Override
-    public void setUnderlying(@NonNull ComponentMessage message) {
+    public void setUnderlying(@NonNull ComponentMessage<?, ?> message) {
         if (message instanceof ComponentSingleMessage singleMessage) {
             this.underlying = singleMessage.toListMessage();
         } else if (message instanceof ComponentListMessage listMessage) {
@@ -117,7 +117,7 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public @NonNull List<String> getLegacyListMessage(@Nullable OfflinePlayer player) {
-        return processPlaceholders(player).getAsLegacy();
+        return processPlaceholders(player).getLegacy();
     }
 
     @Override
@@ -127,7 +127,7 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public @NonNull List<String> getPlainTextListMessage(@Nullable OfflinePlayer player) {
-        return processPlaceholders(player).getAsPlainText();
+        return processPlaceholders(player).getPlainText();
     }
 
     @Override
@@ -137,7 +137,7 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public boolean containsString(@NonNull String string) {
-        return underlying.getAsPlainText().stream().anyMatch(line -> line.contains(string));
+        return underlying.getPlainText().stream().anyMatch(line -> line.contains(string));
     }
 
     public void setVariableWithListInsertion(@NonNull String variable, @NonNull Object replacement) {

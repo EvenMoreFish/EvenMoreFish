@@ -27,8 +27,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import uk.firedev.messagelib.message.ComponentMessage;
-import uk.firedev.messagelib.message.ComponentSingleMessage;
+import uk.firedev.daisylib.messages.message.ComponentMessage;
+import uk.firedev.daisylib.messages.message.ComponentSingleMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,7 +150,7 @@ public class Fish implements IFish {
         ItemFactory factory = this.factory.createCopy();
         // Build custom fish lore and include the configured lore.
         factory.getLore().setTransformer(this::buildFishLore);
-        factory.getDisplayName().setDefault(getDisplayNameMessage().getUnderlying().getAsMiniMessage());
+        factory.getDisplayName().setDefault(getDisplayNameMessage().getUnderlying().getMiniMessage());
         ItemStack item = fisherman == null
             ? factory.createItem()
             : factory.createItem(fisherman.getUniqueId());

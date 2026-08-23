@@ -7,9 +7,9 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import uk.firedev.messagelib.message.ComponentListMessage;
-import uk.firedev.messagelib.message.ComponentMessage;
-import uk.firedev.messagelib.message.ComponentSingleMessage;
+import uk.firedev.daisylib.messages.message.ComponentListMessage;
+import uk.firedev.daisylib.messages.message.ComponentMessage;
+import uk.firedev.daisylib.messages.message.ComponentSingleMessage;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +36,7 @@ public class EMFSingleMessage extends EMFMessage {
     }
 
     @Override
-    public void setUnderlying(@NonNull ComponentMessage message) {
+    public void setUnderlying(@NonNull ComponentMessage<?, ?> message) {
         if (message instanceof ComponentListMessage listMessage) {
             this.underlying = listMessage.toSingleMessage();
         } else if (message instanceof ComponentSingleMessage singleMessage) {
@@ -111,7 +111,7 @@ public class EMFSingleMessage extends EMFMessage {
 
     @Override
     public @NonNull String getLegacyMessage(@Nullable OfflinePlayer player) {
-        return processPlaceholders(player).getAsLegacy();
+        return processPlaceholders(player).getLegacy();
     }
 
     @Override
@@ -121,7 +121,7 @@ public class EMFSingleMessage extends EMFMessage {
 
     @Override
     public @NonNull String getPlainTextMessage(@Nullable OfflinePlayer player) {
-        return processPlaceholders(player).getAsPlainText();
+        return processPlaceholders(player).getPlainText();
     }
 
     @Override

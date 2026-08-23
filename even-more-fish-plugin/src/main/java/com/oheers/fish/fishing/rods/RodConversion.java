@@ -6,7 +6,7 @@ import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.config.MainConfig;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import uk.firedev.messagelib.message.ComponentMessage;
+import uk.firedev.daisylib.messages.message.ComponentMessage;
 
 import java.io.File;
 

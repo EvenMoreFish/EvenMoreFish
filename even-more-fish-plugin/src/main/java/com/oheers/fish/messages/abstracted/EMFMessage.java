@@ -13,10 +13,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import uk.firedev.messagelib.message.ComponentListMessage;
-import uk.firedev.messagelib.message.ComponentMessage;
-import uk.firedev.messagelib.message.ComponentSingleMessage;
-import uk.firedev.messagelib.message.MessageType;
+import uk.firedev.daisylib.messages.message.ComponentListMessage;
+import uk.firedev.daisylib.messages.message.ComponentMessage;
+import uk.firedev.daisylib.messages.message.ComponentSingleMessage;
+import uk.firedev.daisylib.messages.message.MessageType;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +28,7 @@ public abstract class EMFMessage {
     protected boolean perPlayer = true;
     protected OfflinePlayer relevantPlayer = null;
 
-    public static EMFMessage fromUnderlying(@NonNull ComponentMessage message) {
+    public static EMFMessage fromUnderlying(@NonNull ComponentMessage<?, ?> message) {
         if (message instanceof ComponentListMessage listMessage) {
             return EMFListMessage.ofUnderlying(listMessage);
         } else if (message instanceof ComponentSingleMessage singleMessage) {
@@ -42,11 +42,11 @@ public abstract class EMFMessage {
 
     public abstract EMFMessage createCopy();
 
-    public abstract @NonNull ComponentMessage getUnderlying();
+    public abstract @NonNull ComponentMessage<?, ?> getUnderlying();
 
-    public abstract void setUnderlying(@NonNull ComponentMessage message);
+    public abstract void setUnderlying(@NonNull ComponentMessage<?, ?> message);
 
-    public abstract ComponentMessage processPlaceholders(@Nullable OfflinePlayer player);
+    public abstract ComponentMessage<?, ?> processPlaceholders(@Nullable OfflinePlayer player);
 
     public final void send(@NonNull Audience target) {
         if (getUnderlying().isEmpty()) {

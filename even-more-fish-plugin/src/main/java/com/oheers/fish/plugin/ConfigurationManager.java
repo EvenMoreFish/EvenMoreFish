@@ -15,8 +15,8 @@ import com.oheers.fish.config.gui.impl.SellMenuConfirmGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuNormalGuiConfig;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
-import uk.firedev.messagelib.MessageLibSettings;
-import uk.firedev.messagelib.ObjectProcessor;
+import uk.firedev.daisylib.messages.MessageSettings;
+import uk.firedev.daisylib.messages.ObjectProcessor;
 
 import java.util.logging.Level;
 
@@ -30,7 +30,7 @@ public class ConfigurationManager {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void loadConfigurations() {
         try {
-            prepareMessageLib();
+            prepareDaisyLib();
 
             new MainConfig();
             new MessageConfig();
@@ -83,11 +83,10 @@ public class ConfigurationManager {
         }
     }
 
-    private void prepareMessageLib() {
-        MessageLibSettings settings = MessageLibSettings.get();
-        settings.setEnableLegacy(true);
-        settings.setAllowEmptyAppend(false);
-        settings.setAllowEmptyPrepend(false);
+    private void prepareDaisyLib() {
+        MessageSettings.setEnableLegacy(true);
+        MessageSettings.setAllowEmptyAppend(false);
+        MessageSettings.setAllowEmptyPrepend(false);
 
         ObjectProcessor.registerProcessor(
             EMFSingleMessage.class,

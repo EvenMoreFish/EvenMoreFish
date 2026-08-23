@@ -17,8 +17,8 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jspecify.annotations.NonNull;
-import uk.firedev.messagelib.message.ComponentListMessage;
-import uk.firedev.messagelib.message.ComponentMessage;
+import uk.firedev.daisylib.messages.message.ComponentListMessage;
+import uk.firedev.daisylib.messages.message.ComponentMessage;
 
 import java.time.Duration;
 import java.util.List;

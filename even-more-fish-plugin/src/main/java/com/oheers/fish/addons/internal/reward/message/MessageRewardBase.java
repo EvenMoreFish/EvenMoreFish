@@ -6,8 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NonNull;
-import uk.firedev.messagelib.message.ComponentMessage;
-import uk.firedev.messagelib.message.MessageType;
+import uk.firedev.daisylib.messages.message.ComponentMessage;
+import uk.firedev.daisylib.messages.message.MessageType;
 
 /**
  * Base for all Message-based reward types.
