@@ -59,6 +59,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -196,8 +197,16 @@ public class FishUtils {
         }
     }
 
+    public static @NonNull String getPlayerNameOrDefault(@Nullable OfflinePlayer player, @NonNull String def) {
+        return Optional.ofNullable(player)
+            .map(OfflinePlayer::getName)
+            .orElse(def);
+    }
+
     public static @Nullable String getPlayerName(@Nullable OfflinePlayer player) {
-        return player == null ? null : player.getName();
+        return Optional.ofNullable(player)
+            .map(OfflinePlayer::getName)
+            .orElse(null);
     }
 
     public static @Nullable String getPlayerName(@Nullable UUID uuid) {
