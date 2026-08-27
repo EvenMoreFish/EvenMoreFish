@@ -27,10 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import uk.firedev.messagelib.message.ComponentMessage;
-import uk.firedev.messagelib.message.ComponentSingleMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -339,7 +336,8 @@ public class Fish implements IFish {
 
     @Override
     public double getSetWorth() {
-        return section.getDouble("set-worth", rarity.getSetWorth());
+        Double worth = FishUtils.parseDoubleOrRange(section.getString("set-worth"));
+        return worth == null ? rarity.getSetWorth() : worth;
     }
 
     @Override

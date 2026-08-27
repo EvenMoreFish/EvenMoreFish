@@ -85,7 +85,7 @@ public class RandomStrategy implements CompetitionStrategy {
             return CompetitionType.LARGEST_FISH;
         }
 
-        int type = EvenMoreFish.getInstance().getRandom().nextInt(types.size());
+        int type = EvenMoreFish.RANDOM.nextInt(types.size());
         return types.get(type);
     }
 

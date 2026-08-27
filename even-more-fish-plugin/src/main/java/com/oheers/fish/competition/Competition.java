@@ -713,7 +713,7 @@ public class Competition {
         final Logger logger = EvenMoreFish.getInstance().getLogger();
 
         try {
-            IRarity rarity = configRarities.get(EvenMoreFish.getInstance().getRandom().nextInt(configRarities.size()));
+            IRarity rarity = configRarities.get(EvenMoreFish.RANDOM.nextInt(configRarities.size()));
 
             if (rarity == null) {
                 rarity = FishManager.getInstance().getRandomWeightedRarity(

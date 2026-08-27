@@ -61,7 +61,7 @@ public class EvenMoreFish extends EMFPlugin {
 
     private final DimensionFishing dimensionFishing;
 
-    private final Random random = ThreadLocalRandom.current();
+    public static final Random RANDOM = new Random();
     private final Toggle toggle;
 
     private final boolean isFolia = FishUtils.classExists("io.papermc.paper.threadedregions.RegionizedServer");
@@ -257,10 +257,6 @@ public class EvenMoreFish extends EMFPlugin {
 
         // This event is not cancellable.
         new EMFPluginReloadEvent().callEvent();
-    }
-
-    public Random getRandom() {
-        return random;
     }
 
     public Toggle getToggle() {

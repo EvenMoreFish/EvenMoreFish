@@ -272,7 +272,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
         IRarity selected = WeightedRandom.pick(
             allowedRarities,
             weightFunction,
-            EvenMoreFish.getInstance().getRandom()
+            EvenMoreFish.RANDOM
         );
         return selected != null && isFishingAllowedInCompetition() ? selected : null;
     }
@@ -326,7 +326,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
         IFish selected = WeightedRandom.pick(
             available,
             weightFunction,
-            EvenMoreFish.getInstance().getRandom()
+            EvenMoreFish.RANDOM
         );
         return isFishingAllowedInCompetition() ? selected : null;
     }
@@ -352,7 +352,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
                 weightFunction,
                 boostRate,
                 boostedSet,
-                EvenMoreFish.getInstance().getRandom()
+                EvenMoreFish.RANDOM
         );
     }
 
@@ -530,7 +530,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
             externallyBoostedWeight(fisher, location),
             boostRate,
             boosted,
-            EvenMoreFish.getInstance().getRandom()
+            EvenMoreFish.RANDOM
         );
     }
 

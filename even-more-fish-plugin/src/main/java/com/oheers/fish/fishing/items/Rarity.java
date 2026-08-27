@@ -9,7 +9,6 @@ import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.Requirement;
-import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.config.RarityFileUpdates;
 import com.oheers.fish.items.ItemFactory;
@@ -159,7 +158,8 @@ public class Rarity extends ConfigBase implements IRarity {
 
     @Override
     public double getSetWorth() {
-        return getConfig().getDouble("set-worth");
+        Double worth = FishUtils.parseDoubleOrRange(getConfig().getString("set-worth"));
+        return worth == null ? -1 : worth;
     }
 
     @Override

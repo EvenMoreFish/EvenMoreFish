@@ -417,6 +417,30 @@ public class FishUtils {
         return worth;
     }
 
+    public static @Nullable Double parseDoubleOrRange(@Nullable String string) {
+        if (string == null) {
+            return null;
+        }
+        Double parsed = getDoubleOrNull(string);
+        // Single double.
+        if (parsed != null) {
+            return parsed;
+        }
+        // Range.
+        String[] split = string.split("-", 2);
+        if (split.length != 2) {
+            Logging.debug(string + " is not a valid set-worth range.");
+            return null;
+        }
+        Double min = getDoubleOrNull(split[0]);
+        Double max = getDoubleOrNull(split[1]);
+        if (min == null || max == null) {
+            Logging.debug(split[0] + " or " + split[1] + " are not valid doubles.");
+            return null;
+        }
+        return EvenMoreFish.RANDOM.nextDouble(min, max);
+    }
+
     public static @Nullable Method getMethodOrNull(@NonNull Class<?> clazz, @NonNull String method, @NonNull Class<?> @NonNull ... parameterTypes) {
         try {
             return clazz.getDeclaredMethod(method, parameterTypes);

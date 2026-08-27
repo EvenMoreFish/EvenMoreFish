@@ -33,7 +33,7 @@ public class ItemDamageItemConfig extends ItemConfig<Integer> {
                     int finalDurability = value / 100 * maxDurability;
                     meta.setDamage(finalDurability);
                 } else if (MainConfig.getInstance().doingRandomDurability()) {
-                    Random random = EvenMoreFish.getInstance().getRandom();
+                    Random random = EvenMoreFish.RANDOM;
                     meta.setDamage(random.nextInt() * (maxDurability + 1));
                 }
             });
