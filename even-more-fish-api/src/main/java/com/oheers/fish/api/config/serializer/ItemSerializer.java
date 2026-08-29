@@ -1,6 +1,8 @@
 package com.oheers.fish.api.config.serializer;
 
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.addons.ItemAddon;
+import com.oheers.fish.api.addons.ItemAddonRegistry;
 import com.oheers.fish.api.registry.EMFRegistry;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -25,12 +27,30 @@ public class ItemSerializer implements EMFSerializer<ItemStack> {
     }
 
     /**
-     * @throws UnsupportedOperationException Items cannot reliably be serialized.
+     * Serializes an ItemStack.
+     * <p>
+     * Checks all item addons, and falls back to material name if none match.
      */
-    @Deprecated
     @Override
     public @NonNull String serialize(@NonNull ItemStack element) {
-        throw new UnsupportedOperationException("ItemSerializer#serialize is unsupported.");
+        return serialize(element, true);
+    }
+
+    /**
+     * Deserializes an ItemStack.
+     * <p>
+     * Optionally checks for item addons.
+     */
+    public @NonNull String serialize(@NonNull ItemStack element, boolean useItemAddons) {
+        if (useItemAddons) {
+            for (ItemAddon addon : EMFRegistry.ITEM_ADDON.getRegistry().values()) {
+                String string = addon.convertToString(element);
+                if (string != null) {
+                    return string;
+                }
+            }
+        }
+        return element.getType().toString();
     }
 
     /**
