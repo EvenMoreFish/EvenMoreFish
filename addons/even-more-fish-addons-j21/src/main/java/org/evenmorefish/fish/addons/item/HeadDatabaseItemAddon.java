@@ -7,6 +7,8 @@ import me.arcaniax.hdb.api.DatabaseLoadEvent;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class HeadDatabaseItemAddon extends ItemAddon {
 
@@ -44,6 +46,18 @@ public class HeadDatabaseItemAddon extends ItemAddon {
         }
 
         return api.getItemHead(id);
+    }
+
+    @Override
+    public @Nullable String convertToString(@NonNull ItemStack item) {
+        if (api == null) {
+            return null;
+        }
+        String id = api.getItemID(item);
+        if (id == null) {
+            return null;
+        }
+        return "headdb:" + id;
     }
 
     @EventHandler

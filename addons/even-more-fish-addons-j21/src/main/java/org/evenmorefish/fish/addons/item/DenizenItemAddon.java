@@ -2,8 +2,12 @@ package org.evenmorefish.fish.addons.item;
 
 
 import com.denizenscript.denizen.objects.ItemTag;
+import com.denizenscript.denizen.scripts.containers.core.ItemScriptContainer;
+import com.denizenscript.denizen.scripts.containers.core.ItemScriptHelper;
 import com.oheers.fish.api.addons.ItemAddon;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class DenizenItemAddon extends ItemAddon {
 
@@ -36,6 +40,15 @@ public class DenizenItemAddon extends ItemAddon {
         }
 
         return itemTag.getItemStack();
+    }
+
+    @Override
+    public @Nullable String convertToString(@NonNull ItemStack item) {
+        ItemScriptContainer container = ItemScriptHelper.getItemScriptContainer(item);
+        if (container == null) {
+            return null;
+        }
+        return "denizen:" + container.getName();
     }
 
 }
