@@ -18,6 +18,10 @@ public class ModernCustomModelDataItemConfig extends ItemConfig<Number> {
         super(section);
     }
 
+    public ModernCustomModelDataItemConfig(@NonNull ModernCustomModelDataItemConfig base) {
+        super(base);
+    }
+
     @Override
     @NonNull
     public Float getConfiguredValue() {
@@ -32,6 +36,11 @@ public class ModernCustomModelDataItemConfig extends ItemConfig<Number> {
             component.setFloats(List.of(value.floatValue()));
             meta.setCustomModelDataComponent(component);
         });
+    }
+
+    @Override
+    public @NonNull ModernCustomModelDataItemConfig createCopy() {
+        return new ModernCustomModelDataItemConfig(this);
     }
 
 }

@@ -40,22 +40,22 @@ public class ItemFactory extends AbstractItemFactory {
     private boolean usingItemAddon = false;
     private boolean usingFallbackBaseItem = false;
 
-    private final ItemConfig<Number> customModelData;
-    private final ItemConfig<Integer> itemDamage;
-    private final ItemConfig<String> displayName;
-    private final ItemConfig<Color> dyeColour;
-    private final ItemConfig<Boolean> glowing;
-    private final ItemConfig<List<Component>> lore;
-    private final ItemConfig<PotionEffect> potionMeta;
-    private final ItemConfig<Map<Enchantment, Integer>> enchantments;
-    private final ItemConfig<Boolean> unbreakable;
-    private final ItemConfig<Integer> quantity;
-    private final ItemConfig<NamespacedKey> itemModel;
-    private final ItemConfig<Boolean> fireResistant;
-    private final ItemConfig<Boolean> hideTooltip;
-    private final ItemConfig<String> itemRarity;
-    private final ItemConfig<NamespacedKey> tooltipStyle;
-    private final ItemConfig<Integer> maxStackSize;
+    private ItemConfig<Number> customModelData;
+    private ItemConfig<Integer> itemDamage;
+    private ItemConfig<String> displayName;
+    private ItemConfig<Color> dyeColour;
+    private ItemConfig<Boolean> glowing;
+    private ItemConfig<List<Component>> lore;
+    private ItemConfig<PotionEffect> potionMeta;
+    private ItemConfig<Map<Enchantment, Integer>> enchantments;
+    private ItemConfig<Boolean> unbreakable;
+    private ItemConfig<Integer> quantity;
+    private ItemConfig<NamespacedKey> itemModel;
+    private ItemConfig<Boolean> fireResistant;
+    private ItemConfig<Boolean> hideTooltip;
+    private ItemConfig<String> itemRarity;
+    private ItemConfig<NamespacedKey> tooltipStyle;
+    private ItemConfig<Integer> maxStackSize;
 
     private ItemFactory(@NonNull Section initialSection, @Nullable String configLocation, @Nullable String itemPath) {
         Section section = configLocation == null ? initialSection : initialSection.createSection(configLocation);
@@ -96,6 +96,25 @@ public class ItemFactory extends AbstractItemFactory {
         newFactory.relevantPlayer = this.relevantPlayer;
         newFactory.randomIndex = this.randomIndex;
         newFactory.finalChanges = this.finalChanges;
+
+        // Copy all ItemConfig instances to the new factory - TODO figure out a cleaner way to handle ItemConfigs because this is not nice to maintain.
+        newFactory.customModelData = this.customModelData.createCopy();
+        newFactory.itemDamage = this.itemDamage.createCopy();
+        newFactory.displayName = this.displayName.createCopy();
+        newFactory.dyeColour = this.dyeColour.createCopy();
+        newFactory.glowing = this.glowing.createCopy();
+        newFactory.lore = this.lore.createCopy();
+        newFactory.potionMeta = this.potionMeta.createCopy();
+        newFactory.enchantments = this.enchantments.createCopy();
+        newFactory.unbreakable = this.unbreakable.createCopy();
+        newFactory.quantity = this.quantity.createCopy();
+        newFactory.itemModel = this.itemModel.createCopy();
+        newFactory.fireResistant = this.fireResistant.createCopy();
+        newFactory.hideTooltip = this.hideTooltip.createCopy();
+        newFactory.itemRarity = this.itemRarity.createCopy();
+        newFactory.tooltipStyle = this.tooltipStyle.createCopy();
+        newFactory.maxStackSize = this.maxStackSize.createCopy();
+
         return newFactory;
     }
 

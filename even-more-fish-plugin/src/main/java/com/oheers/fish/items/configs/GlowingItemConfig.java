@@ -17,6 +17,10 @@ public class GlowingItemConfig extends ItemConfig<Boolean> {
         super(section);
     }
 
+    public GlowingItemConfig(@NonNull GlowingItemConfig base) {
+        super(base);
+    }
+
     @Override
     public @NonNull Boolean getConfiguredValue() {
         return section.getBoolean("glowing", false);
@@ -32,6 +36,11 @@ public class GlowingItemConfig extends ItemConfig<Boolean> {
                 });
             }
         };
+    }
+
+    @Override
+    public @NonNull GlowingItemConfig createCopy() {
+        return new GlowingItemConfig(this);
     }
 
 }

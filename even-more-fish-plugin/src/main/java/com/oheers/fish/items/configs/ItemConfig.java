@@ -3,6 +3,7 @@ package com.oheers.fish.items.configs;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -10,15 +11,24 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+@ApiStatus.Internal
 public abstract class ItemConfig<T> {
 
-    private T def;
-    private Function<T, T> transformer;
+    protected T def;
+    protected Function<T, T> transformer;
     protected final Section section;
     protected boolean enabled = true;
 
     public ItemConfig(@NonNull Section section) {
         this.section = section;
+    }
+
+    protected ItemConfig(@NonNull ItemConfig<T> base) {
+        super();
+        this.def = base.def;
+        this.transformer = base.transformer;
+        this.section = base.section;
+        this.enabled = base.enabled;
     }
 
     public @Nullable T getActualValue() {
@@ -62,5 +72,7 @@ public abstract class ItemConfig<T> {
     public boolean isEnabled() {
         return this.enabled;
     }
+
+    public abstract @NonNull ItemConfig<T> createCopy();
 
 }

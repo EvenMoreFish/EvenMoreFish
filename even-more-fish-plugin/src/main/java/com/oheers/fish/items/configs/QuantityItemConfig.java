@@ -15,6 +15,10 @@ public class QuantityItemConfig extends ItemConfig<Integer> {
         super(section);
     }
 
+    public QuantityItemConfig(@NonNull QuantityItemConfig base) {
+        super(base);
+    }
+
     @Override
     public @NonNull Integer getConfiguredValue() {
         return section.getInt("quantity", 1);
@@ -23,6 +27,11 @@ public class QuantityItemConfig extends ItemConfig<Integer> {
     @Override
     protected BiConsumer<ItemStack, Integer> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return ItemStack::setAmount;
+    }
+
+    @Override
+    public @NonNull QuantityItemConfig createCopy() {
+        return new QuantityItemConfig(this);
     }
 
 }

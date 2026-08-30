@@ -16,6 +16,10 @@ public class HideTooltipItemConfig extends ItemConfig<Boolean> {
         super(section);
     }
 
+    public HideTooltipItemConfig(@NonNull HideTooltipItemConfig base) {
+        super(base);
+    }
+
     @Override
     public Boolean getConfiguredValue() {
         return section.getBoolean("hide-tooltip", false);
@@ -25,6 +29,11 @@ public class HideTooltipItemConfig extends ItemConfig<Boolean> {
     protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) ->
             item.editMeta(meta -> meta.setHideTooltip(value));
+    }
+
+    @Override
+    public @NonNull HideTooltipItemConfig createCopy() {
+        return new HideTooltipItemConfig(this);
     }
 
 }

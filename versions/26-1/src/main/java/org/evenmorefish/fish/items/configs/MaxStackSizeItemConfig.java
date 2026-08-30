@@ -16,6 +16,10 @@ public class MaxStackSizeItemConfig extends ItemConfig<Integer> {
         super(section);
     }
 
+    public MaxStackSizeItemConfig(@NonNull MaxStackSizeItemConfig base) {
+        super(base);
+    }
+
     @Override
     public @Nullable Integer getConfiguredValue() {
         return section.getInt("max-stack-size", null);
@@ -30,6 +34,11 @@ public class MaxStackSizeItemConfig extends ItemConfig<Integer> {
             int finalValue = Math.clamp(value, 1, 99);
             item.editMeta(meta -> meta.setMaxStackSize(finalValue));
         };
+    }
+
+    @Override
+    public @NonNull MaxStackSizeItemConfig createCopy() {
+        return new MaxStackSizeItemConfig(this);
     }
 
 }

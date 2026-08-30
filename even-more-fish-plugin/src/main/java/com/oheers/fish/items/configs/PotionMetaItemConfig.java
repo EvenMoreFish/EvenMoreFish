@@ -19,6 +19,10 @@ public class PotionMetaItemConfig extends ItemConfig<PotionEffect> {
         super(section);
     }
 
+    public PotionMetaItemConfig(@NonNull PotionMetaItemConfig base) {
+        super(base);
+    }
+
     @Override
     public PotionEffect getConfiguredValue() {
         String potionSettings = section.getString("potion");
@@ -37,6 +41,11 @@ public class PotionMetaItemConfig extends ItemConfig<PotionEffect> {
             }
             item.editMeta(PotionMeta.class, meta -> meta.addCustomEffect(value, true));
         };
+    }
+
+    @Override
+    public @NonNull PotionMetaItemConfig createCopy() {
+        return new PotionMetaItemConfig(this);
     }
 
 }

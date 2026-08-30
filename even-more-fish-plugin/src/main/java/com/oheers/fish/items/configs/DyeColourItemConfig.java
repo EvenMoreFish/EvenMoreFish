@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.material.Dye;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -16,6 +17,10 @@ public class DyeColourItemConfig extends ItemConfig<Color> {
 
     public DyeColourItemConfig(@NonNull Section section) {
         super(section);
+    }
+
+    public DyeColourItemConfig(@NonNull DyeColourItemConfig base) {
+        super(base);
     }
 
     @Override
@@ -43,6 +48,11 @@ public class DyeColourItemConfig extends ItemConfig<Color> {
                 meta.addItemFlags(ItemFlag.HIDE_DYE);
             });
         };
+    }
+
+    @Override
+    public @NonNull DyeColourItemConfig createCopy() {
+        return new DyeColourItemConfig(this);
     }
 
 }

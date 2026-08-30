@@ -27,4 +27,9 @@ public class EmptyItemConfig<T> extends ItemConfig<T> {
         };
     }
 
+    @Override
+    public @NonNull EmptyItemConfig<T> createCopy() {
+        return new EmptyItemConfig<T>(this.section);
+    }
+
 }

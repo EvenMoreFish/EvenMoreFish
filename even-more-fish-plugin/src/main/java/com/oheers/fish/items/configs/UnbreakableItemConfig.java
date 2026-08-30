@@ -15,6 +15,10 @@ public class UnbreakableItemConfig extends ItemConfig<Boolean> {
         super(section);
     }
 
+    public UnbreakableItemConfig(@NonNull UnbreakableItemConfig base) {
+        super(base);
+    }
+
     @Override
     public @NonNull Boolean getConfiguredValue() {
         return section.getBoolean("unbreakable", false);
@@ -23,6 +27,11 @@ public class UnbreakableItemConfig extends ItemConfig<Boolean> {
     @Override
     protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) -> item.editMeta(meta -> meta.setUnbreakable(value));
+    }
+
+    @Override
+    public @NonNull UnbreakableItemConfig createCopy() {
+        return new UnbreakableItemConfig(this);
     }
 
 }

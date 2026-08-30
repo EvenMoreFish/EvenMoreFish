@@ -52,10 +52,7 @@ public class Fish implements IFish {
 
     private double weight;
 
-    private boolean isCompExemptFish;
-
     private final boolean disableFisherman;
-    private final String displayName;
 
     private boolean showInJournal;
     private final int catchLimit;
@@ -85,8 +82,7 @@ public class Fish implements IFish {
             });
         });
         this.factory = factory;
-
-        this.displayName = section.getString("displayname", factory.getDisplayName().getConfiguredValue());
+        this.factory.getDisplayName().setDefault(name);
 
         this.showInJournal = section.getBoolean("journal", true);
         this.catchLimit = section.getInt("catch-limit", rarity.getCatchLimit());
@@ -147,7 +143,12 @@ public class Fish implements IFish {
         ItemFactory factory = this.factory.createCopy();
         // Build custom fish lore and include the configured lore.
         factory.getLore().setTransformer(this::buildFishLore);
-        factory.getDisplayName().setDefault(getDisplayNameMessage().getUnderlying().getAsMiniMessage());
+        factory.getDisplayName().setTransformer(name -> {
+            if (name == null) {
+                return null;
+            }
+            return rarity.format(name).getUnderlying().getAsMiniMessage();
+        });
         ItemStack item = fisherman == null
             ? factory.createItem()
             : factory.createItem(fisherman.getUniqueId());
@@ -366,10 +367,11 @@ public class Fish implements IFish {
     }
 
     public @NonNull EMFSingleMessage getDisplayNameMessage() {
-        if (displayName == null) {
+        String configured = factory.getDisplayName().getConfiguredValue();
+        if (configured == null) {
             return rarity.format(name);
         }
-        return rarity.format(displayName);
+        return rarity.format(configured);
     }
 
     @Override
@@ -435,10 +437,7 @@ public class Fish implements IFish {
         rewardString = rewardString.replace("{rarity}", rarityReplacement);
 
         // {displayname} Placeholder
-        String displayNameReplacement = "";
-        if (displayName != null) {
-            displayNameReplacement = displayName;
-        }
+        String displayNameReplacement = getDisplayNameMessage().getPlainTextMessage(fisherman);
         rewardString = rewardString.replace("{displayname}", displayNameReplacement);
 
         // {name} Placeholder

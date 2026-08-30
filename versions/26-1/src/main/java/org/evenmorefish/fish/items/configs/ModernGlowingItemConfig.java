@@ -16,6 +16,10 @@ public class ModernGlowingItemConfig extends ItemConfig<Boolean> {
         super(section);
     }
 
+    public ModernGlowingItemConfig(@NonNull ModernGlowingItemConfig base) {
+        super(base);
+    }
+
     @Override
     public Boolean getConfiguredValue() {
         return section.getBoolean("glowing");
@@ -25,6 +29,11 @@ public class ModernGlowingItemConfig extends ItemConfig<Boolean> {
     protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) ->
             item.editMeta(meta -> meta.setEnchantmentGlintOverride(value));
+    }
+
+    @Override
+    public @NonNull ModernGlowingItemConfig createCopy() {
+        return new ModernGlowingItemConfig(this);
     }
 
 }

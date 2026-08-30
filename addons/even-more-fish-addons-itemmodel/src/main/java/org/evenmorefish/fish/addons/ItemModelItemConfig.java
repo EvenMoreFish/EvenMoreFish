@@ -17,6 +17,10 @@ public class ItemModelItemConfig extends ItemConfig<NamespacedKey> {
         super(section);
     }
 
+    public ItemModelItemConfig(@NonNull ItemModelItemConfig base) {
+        super(base);
+    }
+
     @Override
     public NamespacedKey getConfiguredValue() {
         String keyStr = section.getString("item-model");
@@ -31,6 +35,11 @@ public class ItemModelItemConfig extends ItemConfig<NamespacedKey> {
         return (item, value) -> item.editMeta(
             meta -> meta.setItemModel(value)
         );
+    }
+
+    @Override
+    public @NonNull ItemModelItemConfig createCopy() {
+        return new ItemModelItemConfig(this);
     }
 
 }

@@ -16,6 +16,10 @@ public class FireResistantItemConfig extends ItemConfig<Boolean> {
         super(section);
     }
 
+    public FireResistantItemConfig(@NonNull FireResistantItemConfig base) {
+        super(base);
+    }
+
     @Override
     public Boolean getConfiguredValue() {
         return section.getBoolean("fire-resistant", false);
@@ -25,6 +29,11 @@ public class FireResistantItemConfig extends ItemConfig<Boolean> {
     protected BiConsumer<ItemStack, Boolean> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) ->
             item.editMeta(meta -> meta.setFireResistant(value));
+    }
+
+    @Override
+    public @NonNull FireResistantItemConfig createCopy() {
+        return new FireResistantItemConfig(this);
     }
 
 }

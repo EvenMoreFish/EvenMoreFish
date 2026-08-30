@@ -19,6 +19,10 @@ public class ItemDamageItemConfig extends ItemConfig<Integer> {
         super(section);
     }
 
+    public ItemDamageItemConfig(@NonNull ItemDamageItemConfig base) {
+        super(base);
+    }
+
     @Override
     public @NonNull Integer getConfiguredValue() {
         return section.getInt("durability");
@@ -38,6 +42,11 @@ public class ItemDamageItemConfig extends ItemConfig<Integer> {
                 }
             });
         };
+    }
+
+    @Override
+    public @NonNull ItemDamageItemConfig createCopy() {
+        return new ItemDamageItemConfig(this);
     }
 
 }

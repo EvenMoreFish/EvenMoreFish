@@ -15,6 +15,10 @@ public class CustomModelDataItemConfig extends ItemConfig<Number> {
         super(section);
     }
 
+    public CustomModelDataItemConfig(@NonNull CustomModelDataItemConfig base) {
+        super(base);
+    }
+
     @Override
     @NonNull
     public Integer getConfiguredValue() {
@@ -24,6 +28,11 @@ public class CustomModelDataItemConfig extends ItemConfig<Number> {
     @Override
     protected BiConsumer<ItemStack, Number> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) -> item.editMeta(meta -> meta.setCustomModelData(value.intValue()));
+    }
+
+    @Override
+    public @NonNull CustomModelDataItemConfig createCopy() {
+        return new CustomModelDataItemConfig(this);
     }
 
 }

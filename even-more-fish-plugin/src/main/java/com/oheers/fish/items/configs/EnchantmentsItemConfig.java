@@ -20,6 +20,10 @@ public class EnchantmentsItemConfig extends ItemConfig<Map<Enchantment, Integer>
         super(section);
     }
 
+    public EnchantmentsItemConfig(@NonNull EnchantmentsItemConfig base) {
+        super(base);
+    }
+
     @Override
     public Map<Enchantment, Integer> getConfiguredValue() {
         List<String> strings = section.getStringList("enchantments");
@@ -52,6 +56,11 @@ public class EnchantmentsItemConfig extends ItemConfig<Map<Enchantment, Integer>
     @Override
     protected BiConsumer<ItemStack, Map<Enchantment, Integer>> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return ItemStack::addUnsafeEnchantments;
+    }
+
+    @Override
+    public @NonNull EnchantmentsItemConfig createCopy() {
+        return new EnchantmentsItemConfig(this);
     }
 
 }

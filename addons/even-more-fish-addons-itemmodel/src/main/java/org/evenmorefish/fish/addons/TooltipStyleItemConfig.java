@@ -17,6 +17,10 @@ public class TooltipStyleItemConfig extends ItemConfig<NamespacedKey> {
         super(section);
     }
 
+    public TooltipStyleItemConfig(@NonNull TooltipStyleItemConfig base) {
+        super(base);
+    }
+
     @Override
     public NamespacedKey getConfiguredValue() {
         String keyStr = section.getString("tooltip-style");
@@ -31,6 +35,11 @@ public class TooltipStyleItemConfig extends ItemConfig<NamespacedKey> {
         return (item, value) -> item.editMeta(
             meta -> meta.setTooltipStyle(value)
         );
+    }
+
+    @Override
+    public @NonNull TooltipStyleItemConfig createCopy() {
+        return new TooltipStyleItemConfig(this);
     }
 
 }

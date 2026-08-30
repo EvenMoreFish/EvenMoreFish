@@ -17,6 +17,10 @@ public class DisplayNameItemConfig extends ItemConfig<String> {
         super(section);
     }
 
+    public DisplayNameItemConfig(@NonNull DisplayNameItemConfig base) {
+        super(base);
+    }
+
     @Override
     public String getConfiguredValue() {
         return section.getString("displayname");
@@ -33,6 +37,11 @@ public class DisplayNameItemConfig extends ItemConfig<String> {
             display.setVariables(replacements);
             item.editMeta(meta -> meta.displayName(display.getComponentMessage(player)));
         };
+    }
+
+    @Override
+    public @NonNull DisplayNameItemConfig createCopy() {
+        return new DisplayNameItemConfig(this);
     }
 
 }

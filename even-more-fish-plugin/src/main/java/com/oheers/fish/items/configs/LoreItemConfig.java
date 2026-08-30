@@ -22,6 +22,10 @@ public class LoreItemConfig extends ItemConfig<List<Component>> {
         super(section);
     }
 
+    public LoreItemConfig(@NonNull LoreItemConfig base) {
+        super(base);
+    }
+
     @Override
     public List<Component> getConfiguredValue() {
         List<String> lore = section.getStringList("lore");
@@ -41,6 +45,11 @@ public class LoreItemConfig extends ItemConfig<List<Component>> {
                 meta.lore(message.get());
             });
         };
+    }
+
+    @Override
+    public @NonNull LoreItemConfig createCopy() {
+        return new LoreItemConfig(this);
     }
 
     private Replacer createReplacer(OfflinePlayer player, Map<String, ?> replacements) {

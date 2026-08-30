@@ -18,6 +18,10 @@ public class ItemRarityItemConfig extends ItemConfig<String> {
         super(section);
     }
 
+    public ItemRarityItemConfig(@NonNull ItemRarityItemConfig base) {
+        super(base);
+    }
+
     @Override
     public String getConfiguredValue() {
         return section.getString("item-rarity");
@@ -31,6 +35,11 @@ public class ItemRarityItemConfig extends ItemConfig<String> {
                 item.editMeta(meta -> meta.setRarity(rarity));
             }
         };
+    }
+
+    @Override
+    public @NonNull ItemRarityItemConfig createCopy() {
+        return new ItemRarityItemConfig(this);
     }
 
 }
