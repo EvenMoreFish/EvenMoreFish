@@ -29,7 +29,8 @@ dependencies {
     compileOnly(libs.ecoitems)
     compileOnly("com.willfp:libreforge:4.81.0:all")
     compileOnly(libs.eco)
-    compileOnly(libs.denizen.api)
+    //compileOnly(libs.denizen.api)
+    compileOnly(rootProject.files("temp-libs/denizen.jar")) // Temporary fix because they decided to enable super aggressive filters on their repo...
     compileOnly(libs.itemsadder.api)
     compileOnly(libs.headdatabase.api)
     compileOnly(libs.mmoitems.api)
