@@ -1,64 +1,21 @@
 package com.oheers.fish.competition.types;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
-import com.oheers.fish.competition.CompetitionEntry;
-import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.CompetitionTypeRegistry;
-import net.kyori.adventure.text.Component;
+import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
-public class RandomCompetitionType implements CompetitionType {
+public class RandomCompetitionType extends CompetitionType.Random {
 
     @Override
-    public @NonNull Component getTypeVariable() {
-        throw new UnsupportedOperationException("RANDOM CompetitionType should not be directly used.");
-    }
-
-    @Override
-    public @NonNull Component getBossbarPrefix() {
-        throw new UnsupportedOperationException("RANDOM CompetitionType should not be directly used.");
-    }
-
-    @Override
-    public boolean shouldReverseLeaderboard() {
-        throw new UnsupportedOperationException("RANDOM CompetitionType should not be directly used.");
-    }
-
-    @Override
-    public boolean isUsable(@NonNull Competition competition) {
-        throw new UnsupportedOperationException("RANDOM CompetitionType should not be directly used.");
-    }
-
-    @Override
-    public void applyToLeaderboard(@NonNull IFish fish, @NonNull UUID fisher, @NonNull Leaderboard leaderboard, @NonNull Competition competition) {
-        throw new UnsupportedOperationException("RANDOM CompetitionType should not be directly used.");
-    }
-
-    @Override
-    public @NonNull Component formatLeaderboardEntry(@NonNull CompetitionEntry entry) {
-        throw new UnsupportedOperationException("RANDOM CompetitionType should not be directly used.");
-    }
-
-    @Override
-    public boolean useFishLength() {
-        throw new UnsupportedOperationException("RANDOM CompetitionType should not be directly used.");
-    }
-
-    @Override
-    public boolean isSingleReward() {
-        throw new UnsupportedOperationException("RANDOM CompetitionType should not be directly used.");
-    }
-
-    public CompetitionType getRandomType(@NonNull Competition competition) {
+    public @NonNull CompetitionType getRandomType(@NonNull Competition competition) {
         List<CompetitionType> types = getValidTypes(competition)
             .filter(type -> {
                 if (type instanceof RandomCompetitionType) {
@@ -80,6 +37,11 @@ public class RandomCompetitionType implements CompetitionType {
 
         int type = EvenMoreFish.RANDOM.nextInt(types.size());
         return types.get(type);
+    }
+
+    @Override
+    public @NonNull String getKey() {
+        return "random";
     }
 
     private Stream<CompetitionType> getValidTypes(@NonNull Competition competition) {

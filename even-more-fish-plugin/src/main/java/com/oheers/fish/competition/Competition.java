@@ -16,7 +16,6 @@ import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.competition.timer.CompetitionBackupTimer;
 import com.oheers.fish.competition.timer.CompetitionTimer;
-import com.oheers.fish.competition.types.RandomCompetitionType;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.database.DatabaseUtil;
@@ -61,7 +60,6 @@ public class Competition {
     private static final List<CompetitionFile> held = new ArrayList<>();
 
     private static Competition active;
-    private boolean originallyRandom;
     private Leaderboard leaderboard;
     private CompetitionType competitionType;
     private IFish selectedFish;
@@ -96,8 +94,8 @@ public class Competition {
         this.numberNeeded = competitionFile.getNumberNeeded();
 
         CompetitionType type = competitionFile.getType();
-        if (type instanceof RandomCompetitionType random) {
-            type = random.getRandomType(this);
+        if (type instanceof CompetitionType.Random random) {
+            type = new CompetitionType.Forwarding(random, random.getRandomType(this));
         }
         this.competitionType = type;
     }
@@ -164,10 +162,6 @@ public class Competition {
 
     public static boolean isActive() {
         return getCurrentlyActive() != null;
-    }
-
-    public void setOriginallyRandom(boolean originallyRandom) {
-        this.originallyRandom = originallyRandom;
     }
 
     public static @Nullable Competition getCurrentlyActive() {
@@ -271,7 +265,7 @@ public class Competition {
             fireEndEvent();
             notifyPlayers();
             processRewards();
-            resetCompetitionTypeIfRandom();
+            resetCompetitionTypeIfForwarding();
             updateDatabase();
             leaderboard.clear();
         } catch (Exception exception) {
@@ -326,9 +320,9 @@ public class Competition {
         }
     }
 
-    private void resetCompetitionTypeIfRandom() {
-        if (originallyRandom) {
-            competitionType = CompetitionType.RANDOM;
+    private void resetCompetitionTypeIfForwarding() {
+        if (competitionType instanceof CompetitionType.Forwarding forwarding) {
+            competitionType = forwarding.getRandom();
         }
     }
 
