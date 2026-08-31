@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.database.Database;
 import com.oheers.fish.database.execute.DatabaseWorker;
 import com.oheers.fish.database.model.user.EmptyUserReport;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.junit.jupiter.api.Test;
@@ -100,7 +101,7 @@ class UserManagerTest {
             Player player = mock(Player.class);
             when(player.getUniqueId()).thenReturn(uuid);
 
-            manager.onJoin(new PlayerJoinEvent(player, ""));
+            manager.onJoin(new PlayerJoinEvent(player, Component.empty()));
 
             assertTrue(preloadDone.await(5, TimeUnit.SECONDS));
             assertEquals(uuid, preloadedUuid.get());

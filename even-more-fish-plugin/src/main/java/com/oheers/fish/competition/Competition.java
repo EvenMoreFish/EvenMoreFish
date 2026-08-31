@@ -1,6 +1,7 @@
 package com.oheers.fish.competition;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.EMFCompetitionEndEvent;
 import com.oheers.fish.api.EMFCompetitionStartEvent;
 import com.oheers.fish.api.Logging;
@@ -13,6 +14,9 @@ import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
+import com.oheers.fish.competition.timer.CompetitionBackupTimer;
+import com.oheers.fish.competition.timer.CompetitionTimer;
+import com.oheers.fish.competition.types.RandomCompetitionType;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.database.DatabaseUtil;
@@ -67,7 +71,7 @@ public class Competition {
     private EMFMessage startMessage;
     private long maxDuration;
     private long timeLeft;
-    private Bar statusBar;
+    private CompetitionBossbar statusBar;
     private long epochStartTime;
     private LocalDateTime startTime;
     private final List<Long> alertTimes;
@@ -78,7 +82,7 @@ public class Competition {
     private CompetitionBackupTimer backupSystem;
     private CompetitionFile competitionFile;
     private int numberNeeded = 0;
-    private Player singleWinner = null;
+    private UUID singleWinner = null;
 
     public Competition(final @NonNull CompetitionFile competitionFile) {
         this.competitionFile = competitionFile;
@@ -89,15 +93,20 @@ public class Competition {
         this.timeLeft = this.maxDuration;
         this.alertTimes = competitionFile.getAlertTimes();
         this.rewards = competitionFile.getRewards();
-        this.competitionType = competitionFile.getType();
         this.numberNeeded = competitionFile.getNumberNeeded();
+
+        CompetitionType type = competitionFile.getType();
+        if (type instanceof RandomCompetitionType random) {
+            type = random.getRandomType(this);
+        }
+        this.competitionType = type;
     }
 
     /**
      * @return A valid bossbar for this competition. Null if it should not be shown.
      */
-    private @NonNull Bar createBossbar() {
-        Bar bar = new Bar();
+    private @NonNull CompetitionBossbar createBossbar() {
+        CompetitionBossbar bar = new CompetitionBossbar();
         bar.setShouldShow(competitionFile.shouldShowBossbar());
         bar.setColour(competitionFile.getBossbarColour());
 
@@ -196,8 +205,7 @@ public class Competition {
 
             active = this;
 
-            CompetitionStrategy strategy = competitionType.getStrategy();
-            if (!strategy.begin(this)) {
+            if (!competitionType.isUsable(this)) {
                 active = null;
                 return false;
             }
@@ -307,7 +315,7 @@ public class Competition {
     }
 
     private void processRewards() {
-        if (competitionType.getStrategy().isSingleReward()) {
+        if (competitionType.isSingleReward()) {
             if (singleWinner == null) {
                 Logging.warn("Single-winner competition ended without a winner.");
                 return;
@@ -360,7 +368,7 @@ public class Competition {
      */
     private boolean processCompetitionSecond(long timeLeft) {
         if (alertTimes.contains(timeLeft)) {
-            EMFMessage message = getTypeFormat(ConfigMessage.TIME_ALERT);
+            EMFMessage message = format(ConfigMessage.TIME_ALERT);
             message.broadcast();
         } else if (timeLeft <= 0) {
             end(false);
@@ -369,18 +377,37 @@ public class Competition {
         return false;
     }
 
-    /**
-     * This creates a message object and applies all the settings to it to make it able to use the {type} variable. It
-     * takes into consideration whether it's a specific fish/rarity competition.
-     *
-     * @param configMessage The configmessage to use. Must have the {type} variable in it.
-     * @return A message object that's pre-set to be compatible for the time remaining.
-     */
-    private @NonNull EMFMessage getTypeFormat(ConfigMessage configMessage) {
-        return competitionType.getStrategy().getTypeFormat(this, configMessage);
+    public @NonNull EMFMessage format(@NonNull ConfigMessage configMessage) {
+        return format(configMessage.getMessage());
     }
 
-    protected boolean decreaseTime() {
+    public @NonNull EMFMessage format(@NonNull Component message) {
+        return format(EMFSingleMessage.of(message));
+    }
+
+    public @NonNull EMFMessage format(@NonNull EMFMessage message) {
+        message.setTimeFormatted(FishUtils.timeFormat(timeLeft));
+        message.setTimeRaw(FishUtils.timeRaw(timeLeft));
+        message.setCompetitionType(competitionType.getTypeVariable());
+
+        if (numberNeeded <= 0) {
+            return message;
+        }
+
+        message.setAmount(numberNeeded);
+        // Specific Rarity
+        if (selectedRarity != null) {
+            message.setRarity(selectedRarity);
+            return message;
+        }
+        if (selectedFish != null) {
+            message.setRarity(selectedFish.getRarity());
+            message.setFishCaught(selectedFish);
+        }
+        return message;
+    }
+
+    public boolean decreaseTime() {
         if (processCompetitionSecond(timeLeft)) {
             return true;
         }
@@ -405,13 +432,11 @@ public class Competition {
     public void applyToLeaderboard(IFish fish, Player fisher) {
         UUID uuid = fisher.getUniqueId();
         // Ensure this is executed on the global scheduler to avoid CMEs.
-        Scheduling.getInstance().runTask(() -> competitionType.getStrategy().applyToLeaderboard(fish, uuid, leaderboard, this));
+        Scheduling.getInstance().runTask(() -> competitionType.applyToLeaderboard(fish, uuid, leaderboard, this));
     }
 
     public void announceBegin() {
-        startMessage = competitionType.getStrategy().getBeginMessage(this, competitionType);
-        startMessage.broadcast();
-
+        getStartMessage().broadcast();
         if (startSound != null) {
             Bukkit.getOnlinePlayers().forEach(player -> player.playSound(startSound, Sound.Emitter.self()));
         }
@@ -457,12 +482,7 @@ public class Competition {
             }
 
             // Get the leaderboard message with length/amount defined
-            EMFMessage message;
-            if (isConsole) {
-                message = competitionType.getStrategy().getSingleConsoleLeaderboardMessage(entry);
-            } else {
-                message = competitionType.getStrategy().getSinglePlayerLeaderboard(entry);
-            }
+            EMFSingleMessage message = EMFSingleMessage.of(competitionType.formatLeaderboardEntry(entry));
 
             // Format remaining variables
             OfflinePlayer player = Bukkit.getOfflinePlayer(entry.getPlayer());
@@ -505,11 +525,8 @@ public class Competition {
     }
 
     private void handleRewards() {
-
         if (leaderboard.getSize() == 0) {
-            if (!((competitionType == CompetitionType.SPECIFIC_FISH || competitionType == CompetitionType.SPECIFIC_RARITY) && numberNeeded == 1)) {
-                ConfigMessage.NO_WINNERS.getMessage().broadcast();
-            }
+            ConfigMessage.NO_WINNERS.getMessage().broadcast();
             return;
         }
 
@@ -546,10 +563,12 @@ public class Competition {
         }
     }
 
-    private void singleReward(Player player) {
-        EMFMessage message = getTypeFormat(ConfigMessage.COMPETITION_SINGLE_WINNER);
+    private void singleReward(UUID winner) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(winner);
+
+        EMFMessage message = format(ConfigMessage.COMPETITION_SINGLE_WINNER);
         message.setPlayer(player);
-        message.setCompetitionType(competitionType.getTypeVariable().getMessage());
+        message.setCompetitionType(competitionType.getTypeVariable());
 
         message.broadcast();
 
@@ -572,7 +591,7 @@ public class Competition {
         });
     }
 
-    public @NonNull Bar getStatusBar() {
+    public @NonNull CompetitionBossbar getStatusBar() {
         return this.statusBar;
     }
 
@@ -592,7 +611,11 @@ public class Competition {
         return leaderboard;
     }
 
-    public @Nullable EMFMessage getStartMessage() {
+    public @NonNull EMFMessage getStartMessage() {
+        if (startMessage == null) {
+            startMessage = ConfigMessage.COMPETITION_START.getMessage();
+            startMessage.setCompetitionType(competitionType.getTypeVariable());
+        }
         return startMessage;
     }
 
@@ -744,8 +767,8 @@ public class Competition {
         }
     }
 
-    public void setSingleWinner(@Nullable Player player) {
-        this.singleWinner = player;
+    public void setSingleWinner(@Nullable UUID winner) {
+        this.singleWinner = winner;
     }
 
     private List<IRarity> getAllowedRaritiesOrLog() {

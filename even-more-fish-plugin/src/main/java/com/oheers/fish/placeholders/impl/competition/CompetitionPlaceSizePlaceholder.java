@@ -25,7 +25,7 @@ public class CompetitionPlaceSizePlaceholder implements EMFPlaceholder {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING_SIZE.getMessage().getLegacyMessage(null);
         }
 
-        if (!activeComp.getCompetitionType().getStrategy().shouldUseFishLength()) {
+        if (!activeComp.getCompetitionType().useFishLength()) {
             return ConfigMessage.PLACEHOLDER_SIZE_DURING_MOST_FISH.getMessage().getLegacyMessage(null);
         }
 

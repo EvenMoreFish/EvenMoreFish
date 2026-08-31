@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.UUID;
 
-public class Leaderboard implements LeaderboardHandler {
+public class Leaderboard {
 
     private final CompetitionType type;
     private final TreeSet<CompetitionEntry> entries;
@@ -25,18 +25,15 @@ public class Leaderboard implements LeaderboardHandler {
         this.entries = new TreeSet<>(createComparator());
     }
 
-    @Override
     public List<CompetitionEntry> getEntries() {
         return new ArrayList<>(entries);
     }
 
-    @Override
     public void addEntry(@NonNull UUID player, @NonNull IFish fish) {
         CompetitionEntry entry = new CompetitionEntry(player, fish, type);
         addEntry(entry);
     }
 
-    @Override
     public void addEntry(@NonNull CompetitionEntry entry) {
         CompetitionEntry initialTopEntry = getTopEntry();
 
@@ -73,17 +70,14 @@ public class Leaderboard implements LeaderboardHandler {
         }
     }
 
-    @Override
     public void clear() {
         entries.clear();
     }
 
-    @Override
     public boolean contains(CompetitionEntry entry) {
         return entries.contains(entry);
     }
 
-    @Override
     public CompetitionEntry getEntry(UUID player) {
         for (CompetitionEntry entry : entries) {
             if (entry.getPlayer().equals(player)) {
@@ -93,7 +87,6 @@ public class Leaderboard implements LeaderboardHandler {
         return null;
     }
 
-    @Override
     public CompetitionEntry getEntry(int place) {
         try {
             return getEntries().get(place - 1);
@@ -102,22 +95,18 @@ public class Leaderboard implements LeaderboardHandler {
         }
     }
 
-    @Override
     public int getSize() {
         return entries.size();
     }
 
-    @Override
     public boolean hasEntry(UUID player) {
         return getEntry(player) != null;
     }
 
-    @Override
     public void removeEntry(CompetitionEntry entry) {
         entries.remove(entry);
     }
 
-    @Override
     public CompetitionEntry getTopEntry() {
         return getEntries().isEmpty() ? null : getEntries().getFirst();
     }
@@ -130,18 +119,10 @@ public class Leaderboard implements LeaderboardHandler {
      * @param fish The fish to track.
      * @return The new competition entry with the updated values.
      */
-    @Override
     public CompetitionEntry trackFish(@NonNull CompetitionEntry entry, @NonNull IFish fish) {
-        CompetitionEntry newEntry = new CompetitionEntry(entry.getPlayer(), fish, type);
-        float value = entry.getValue();
-        if (type.getStrategy().shouldUseFishLength()) {
-            if (!fish.isLengthless()) {
-                value += fish.getLength();
-            }
-        } else {
-            value += 1;
-        }
-        newEntry.setValue(value);
+        // Creates a copy of the entry with an updated timestamp.
+        CompetitionEntry newEntry = new CompetitionEntry(entry);
+        newEntry.trackFish(fish);
 
         // Add the new entry and remove the old one.
         // It has to be in this order so the new-first message works.

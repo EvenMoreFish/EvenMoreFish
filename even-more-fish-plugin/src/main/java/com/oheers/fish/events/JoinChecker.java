@@ -30,14 +30,7 @@ public class JoinChecker implements Listener {
         }
 
         activeComp.getStatusBar().addPlayer(player);
-        if (activeComp.getStartMessage() == null) {
-            return;
-        }
-
-        EMFMessage message = activeComp.getCompetitionType().getStrategy().getTypeFormat(
-            activeComp, ConfigMessage.COMPETITION_JOIN
-        );
-
+        EMFMessage message = activeComp.format(ConfigMessage.COMPETITION_JOIN);
         Scheduling.getInstance().runTaskLater(() -> message.send(player), 60L);
     }
 

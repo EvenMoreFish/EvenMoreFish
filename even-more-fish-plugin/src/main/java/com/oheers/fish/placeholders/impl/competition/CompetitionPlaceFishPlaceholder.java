@@ -3,7 +3,6 @@ package com.oheers.fish.placeholders.impl.competition;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
-import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.placeholders.abstracted.EMFPlaceholder;
@@ -32,18 +31,18 @@ public class CompetitionPlaceFishPlaceholder implements EMFPlaceholder {
             return ConfigMessage.PLACEHOLDER_NO_FISH_IN_PLACE.getMessage().getLegacyMessage(null);
         }
 
-        if (activeComp.getCompetitionType() == CompetitionType.LARGEST_FISH) {
-            return formatFishMessage(entry.getFish());
+        if (activeComp.getCompetitionType().useFishLength()) {
+            return formatLengthFishMessage(entry.getFish());
         } else {
             float value = entry.getValue();
             if (value <= 0) {
                 return ConfigMessage.PLACEHOLDER_NO_FISH_IN_PLACE.getMessage().getLegacyMessage(null);
             }
-            return formatMostFishMessage((int) value);
+            return formatNumFishMessage((int) value);
         }
     }
 
-    private @Nullable String formatFishMessage(@Nullable IFish fish) {
+    private @Nullable String formatLengthFishMessage(@Nullable IFish fish) {
         if (fish == null) {
             return null;
         }
@@ -57,7 +56,7 @@ public class CompetitionPlaceFishPlaceholder implements EMFPlaceholder {
         return message.getLegacyMessage(null);
     }
 
-    private @NonNull String formatMostFishMessage(int amount) {
+    private @NonNull String formatNumFishMessage(int amount) {
         EMFMessage message = ConfigMessage.PLACEHOLDER_FISH_MOST_FORMAT.getMessage();
         message.setAmount(amount);
         return message.getLegacyMessage(null);

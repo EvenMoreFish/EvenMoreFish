@@ -1,28 +1,15 @@
 package com.oheers.fish.placeholders.impl.competition;
 
-import com.oheers.fish.api.Logging;
 import com.oheers.fish.competition.Competition;
-import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.placeholders.abstracted.EMFPlaceholder;
+import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Map;
-
 public class CompetitionTypeFormatPlaceholder implements EMFPlaceholder {
-
-    private static final Map<CompetitionType, ConfigMessage> COMPETITION_TYPE_MESSAGES = Map.of(
-        CompetitionType.LARGEST_FISH, ConfigMessage.COMPETITION_TYPE_LARGEST,
-        CompetitionType.LARGEST_TOTAL, ConfigMessage.COMPETITION_TYPE_LARGEST_TOTAL,
-        CompetitionType.MOST_FISH, ConfigMessage.COMPETITION_TYPE_MOST,
-        CompetitionType.SPECIFIC_FISH, ConfigMessage.COMPETITION_TYPE_SPECIFIC,
-        CompetitionType.SPECIFIC_RARITY, ConfigMessage.COMPETITION_TYPE_SPECIFIC_RARITY,
-        CompetitionType.SHORTEST_FISH, ConfigMessage.COMPETITION_TYPE_SHORTEST,
-        CompetitionType.SHORTEST_TOTAL, ConfigMessage.COMPETITION_TYPE_SHORTEST_TOTAL
-    );
 
     @Override
     public boolean shouldProcess(@NonNull String identifier) {
@@ -35,15 +22,8 @@ public class CompetitionTypeFormatPlaceholder implements EMFPlaceholder {
         if (activeComp == null) {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage(null);
         }
-
-        CompetitionType type = activeComp.getCompetitionType();
-        ConfigMessage message = COMPETITION_TYPE_MESSAGES.get(type);
-        if (message == null) {
-            Logging.debug("Could not find message for CompetitionType: " + type);
-            return null;
-        }
-
-        EMFMessage typeFormat = activeComp.getCompetitionType().getStrategy().getTypeFormat(activeComp, message);
+        Component type = activeComp.getCompetitionType().getTypeVariable();
+        EMFMessage typeFormat = activeComp.format(type);
         return typeFormat.getLegacyMessage(null);
     }
 

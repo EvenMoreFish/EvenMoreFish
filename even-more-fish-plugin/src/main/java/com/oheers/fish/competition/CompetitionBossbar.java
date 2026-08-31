@@ -14,14 +14,14 @@ import org.jspecify.annotations.NonNull;
 
 import static net.kyori.adventure.bossbar.BossBar.bossBar;
 
-public class Bar {
+public class CompetitionBossbar {
 
-    BossBar bar;
+    private BossBar bar;
     private boolean shouldShow = true;
 
     EMFMessage prefix;
 
-    public Bar() {
+    public CompetitionBossbar() {
         createBar();
     }
 
@@ -46,7 +46,7 @@ public class Bar {
     }
 
     public void setPrefix(EMFMessage prefix, CompetitionType type) {
-        prefix.setVariable("{type}", type.getBarPrefix());
+        prefix.setVariable("{type}", type.getBossbarPrefix());
         this.prefix = prefix;
     }
 

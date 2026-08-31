@@ -1,6 +1,6 @@
 package com.oheers.fish;
 
-import com.oheers.fish.competition.Bar;
+import com.oheers.fish.competition.CompetitionBossbar;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.permissions.UserPerms;
@@ -60,7 +60,7 @@ public class Toggle {
         PersistentDataContainer pdc = player.getPersistentDataContainer();
 
         Competition activeComp = Competition.getCurrentlyActive();
-        Bar activeBar = activeComp == null ? null : activeComp.getStatusBar();
+        CompetitionBossbar activeBar = activeComp == null ? null : activeComp.getStatusBar();
 
         // If custom fishing is disabled
         if (isBossBarDisabled(player)) {

@@ -87,7 +87,7 @@ public class CompetitionSubcommand {
         return Commands.literal("test")
             // No args
             .executes(ctx -> {
-                test(ctx.getSource().getSender(), 1, CompetitionType.LARGEST_FISH);
+                test(ctx.getSource().getSender(), 1, CompetitionType.DEFAULT);
                 return 1;
             })
             .then(
@@ -95,7 +95,7 @@ public class CompetitionSubcommand {
                     // [duration]
                     .executes(ctx -> {
                         int duration = ctx.getArgument("durationMinutes", int.class);
-                        test(ctx.getSource().getSender(), duration, CompetitionType.LARGEST_FISH);
+                        test(ctx.getSource().getSender(), duration, CompetitionType.DEFAULT);
                         return 1;
                     })
                     .then(

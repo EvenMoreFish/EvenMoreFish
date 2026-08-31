@@ -7,6 +7,7 @@ import com.oheers.fish.api.config.serializer.SoundSerializer;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.competition.CompetitionType;
+import com.oheers.fish.competition.CompetitionTypeRegistry;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -67,7 +68,7 @@ public class CompetitionFile extends ConfigBase {
         if (typeStr == null) {
             throw new InvalidConfigurationException("CompetitionFile " + getFileName() + " has no configured type.");
         }
-        CompetitionType type = CompetitionType.getType(typeStr);
+        CompetitionType type = CompetitionTypeRegistry.getInstance().get(typeStr);
         if (type == null) {
             throw new InvalidConfigurationException("CompetitionFile " + getFileName() + " has an invalid type: " + typeStr);
         }

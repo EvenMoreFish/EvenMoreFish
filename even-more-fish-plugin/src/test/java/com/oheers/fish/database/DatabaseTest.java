@@ -153,12 +153,12 @@ class DatabaseTest {
     }
 
     private static final class TestCompetition extends Competition {
-        private final Leaderboard leaderboard = new Leaderboard(CompetitionType.LARGEST_FISH);
+        private final Leaderboard leaderboard = new Leaderboard(CompetitionType.DEFAULT);
         private final String competitionName;
         private final LocalDateTime startTime;
 
         private TestCompetition(String competitionName, LocalDateTime startTime) {
-            super(60L, CompetitionType.LARGEST_FISH);
+            super(60L, CompetitionType.DEFAULT);
             this.competitionName = competitionName;
             this.startTime = startTime;
         }

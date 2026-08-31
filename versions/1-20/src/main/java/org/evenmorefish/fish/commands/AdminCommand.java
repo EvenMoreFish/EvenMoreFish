@@ -576,7 +576,7 @@ public class AdminCommand {
                     return;
                 }
                 final int duration = (int) args.getOptional("durationMinutes").orElse(1);
-                final CompetitionType type = (CompetitionType) args.getOptional("competitionType").orElse(CompetitionType.LARGEST_FISH);
+                final CompetitionType type = (CompetitionType) args.getOptional("competitionType").orElse(CompetitionType.DEFAULT);
                 CompetitionFile file = new CompetitionFile("adminTest", type, duration);
                 Competition competition = new Competition(file);
                 competition.setAdminStarted(true);
