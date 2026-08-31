@@ -5,6 +5,7 @@ import com.oheers.fish.api.EMFTimer;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.utils.TimeCode;
+import org.jspecify.annotations.NonNull;
 
 import java.time.LocalTime;
 import java.util.Map;
@@ -13,9 +14,11 @@ import java.util.concurrent.TimeUnit;
 public class AutoRunner extends EMFTimer {
 
     private int lastMinute = -1;
+    private final CompetitionManager manager;
 
-    public AutoRunner() {
+    public AutoRunner(@NonNull CompetitionManager manager) {
         super(TimeUnit.SECONDS, 1);
+        this.manager = manager;
     }
 
     /**
@@ -30,7 +33,7 @@ public class AutoRunner extends EMFTimer {
         Logging.debug("AutoRunner checking TimeCode: " + now.code());
 
         // Beginning the competition set for schedule
-        Map<TimeCode, CompetitionFile> competitions = EvenMoreFish.getInstance().getCompetitionQueue().getCompetitions();
+        Map<TimeCode, CompetitionFile> competitions = manager.getCompetitions();
         CompetitionFile file = competitions.get(now);
         if (file == null) {
             return;
