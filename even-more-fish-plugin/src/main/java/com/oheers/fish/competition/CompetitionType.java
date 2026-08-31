@@ -1,6 +1,7 @@
 package com.oheers.fish.competition;
 
 import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.api.registry.RegistryItem;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.competition.types.LargestFishCompetitionType;
@@ -32,5 +33,13 @@ public interface CompetitionType extends RegistryItem {
     boolean useFishLength();
 
     boolean isSingleReward();
+
+    default boolean register() {
+        return CompetitionTypeRegistry.getInstance().register(this);
+    }
+
+    default boolean unregister() {
+        return CompetitionTypeRegistry.getInstance().unregister(this);
+    }
 
 }

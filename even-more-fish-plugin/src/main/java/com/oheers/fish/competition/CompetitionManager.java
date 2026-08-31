@@ -6,6 +6,14 @@ import com.oheers.fish.api.AbstractFileBasedManager;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.competition.configs.CompetitionConversions;
 import com.oheers.fish.competition.configs.CompetitionFile;
+import com.oheers.fish.competition.types.LargestFishCompetitionType;
+import com.oheers.fish.competition.types.LargestTotalCompetitionType;
+import com.oheers.fish.competition.types.MostFishCompetitionType;
+import com.oheers.fish.competition.types.RandomCompetitionType;
+import com.oheers.fish.competition.types.ShortestFishCompetitionType;
+import com.oheers.fish.competition.types.ShortestTotalCompetitionType;
+import com.oheers.fish.competition.types.SpecificFishCompetitionType;
+import com.oheers.fish.competition.types.SpecificRarityCompetitionType;
 import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.utils.TimeCode;
 import org.jspecify.annotations.NonNull;
@@ -43,6 +51,7 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
 
     @Override
     protected void loadItems() {
+        loadDefaultTypes(); // Always do this first. Ensures all default types are loaded before competitions.
         loadItemsFromFiles(
                 "competitions",
                 CompetitionFile::new,
@@ -159,6 +168,18 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
             }
         }
         return null;
+    }
+
+    private void loadDefaultTypes() {
+        CompetitionTypeRegistry registry = CompetitionTypeRegistry.getInstance();
+        registry.register(CompetitionType.DEFAULT, true); // Use the static singleton here so we only initialize LARGEST_FISH once.
+        registry.register(new LargestTotalCompetitionType(), true);
+        registry.register(new MostFishCompetitionType(), true);
+        registry.register(new RandomCompetitionType(), true);
+        registry.register(new ShortestFishCompetitionType(), true);
+        registry.register(new ShortestTotalCompetitionType(), true);
+        registry.register(new SpecificFishCompetitionType(), true);
+        registry.register(new SpecificRarityCompetitionType(), true);
     }
 
 }
