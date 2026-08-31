@@ -21,12 +21,19 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
-public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> {
+public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile> {
+
+    private static final CompetitionManager INSTANCE = new CompetitionManager();
 
     private final TreeMap<TimeCode, CompetitionFile> competitions = new TreeMap<>(TimeCode.getComparator());
+    private final AutoRunner autoRunner = new AutoRunner(this);
 
-    public CompetitionQueue() {
+    private CompetitionManager() {
         super(RodManager.getInstance());
+    }
+
+    public static @NonNull CompetitionManager getInstance() {
+        return INSTANCE;
     }
 
     @Override
@@ -65,6 +72,10 @@ public class CompetitionQueue extends AbstractFileBasedManager<CompetitionFile> 
         EvenMoreFish.getInstance().getLogger().info(
                 "Loaded " + getItemMap().size() + " competition file(s) and " + competitions.size() + " scheduled competitions."
         );
+    }
+
+    public @NonNull AutoRunner getAutoRunner() {
+        return this.autoRunner;
     }
 
     public Map<TimeCode, CompetitionFile> getCompetitions() {

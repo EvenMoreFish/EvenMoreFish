@@ -650,7 +650,7 @@ public class Competition {
     }
 
     private static long getRemainingTime() {
-        TimeCode next = EvenMoreFish.getInstance().getCompetitionQueue().getNextCompetition();
+        TimeCode next = CompetitionManager.getInstance().getNextCompetition();
         if (next == null) {
             return -1L;
         }
@@ -812,7 +812,7 @@ public class Competition {
         long totalDuration = config.getLong("total-duration");
         long timeLeft = config.getLong("time-left");
 
-        CompetitionFile file = plugin.getCompetitionQueue().getFileFromId(id);
+        CompetitionFile file = CompetitionManager.getInstance().getFileFromId(id);
         if (file == null) {
             Logging.warn("Failed to resume competition. It is no longer configured?");
             dataFile.delete();

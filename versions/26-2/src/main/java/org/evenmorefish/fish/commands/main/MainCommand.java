@@ -7,6 +7,7 @@ import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.commands.MainCommandProvider;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.gui.guis.ApplyBaitsGui;
 import com.oheers.fish.gui.guis.MainMenuGui;
@@ -81,7 +82,7 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
     @Override
     public @NonNull ArgumentBuilder<CommandSourceStack, ?> next() {
         return Commands.literal(nextName())
-            .requires(stack -> stack.getSender().hasPermission(UserPerms.NEXT) && EvenMoreFish.getInstance().getCompetitionQueue().hasTimings())
+            .requires(stack -> stack.getSender().hasPermission(UserPerms.NEXT) && CompetitionManager.getInstance().hasTimings())
             .executes(ctx -> {
                 EMFMessage message = Competition.getNextCompetitionMessage();
                 message.prependMessage(PrefixType.DEFAULT.getPrefix());

@@ -13,6 +13,7 @@ import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.database.Database;
@@ -449,7 +450,7 @@ public class AdminCommand {
                 message.setVariable("{rarities}", String.valueOf(FishManager.getInstance().getRarityMap().size()));
                 message.setVariable("{fish}", String.valueOf(fishCount));
                 message.setVariable("{baits}", String.valueOf(BaitManager.getInstance().getItemMap().size()));
-                message.setVariable("{competitions}", String.valueOf(EvenMoreFish.getInstance().getCompetitionQueue().getSize()));
+                message.setVariable("{competitions}", String.valueOf(CompetitionManager.getInstance().getSize()));
                 message.setVariable("{engine}", databaseEngine);
                 message.setVariable("{type}", databaseType);
 
@@ -527,7 +528,7 @@ public class AdminCommand {
                 // StringArgument containing all loaded competition ids
                 ArgumentHelper.getAsyncStringsArgument(
                     "competitionId",
-                    info -> EvenMoreFish.getInstance().getCompetitionQueue().getItemMap().keySet().toArray(String[]::new)
+                    info -> CompetitionManager.getInstance().getItemMap().keySet().toArray(String[]::new)
                 ),
                 new IntegerArgument("durationSeconds", 1).setOptional(true)
             )
@@ -538,7 +539,7 @@ public class AdminCommand {
                     ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
                     return;
                 }
-                CompetitionFile file = EvenMoreFish.getInstance().getCompetitionQueue().getItemMap().get(id);
+                CompetitionFile file = CompetitionManager.getInstance().getItemMap().get(id);
                 if (file == null) {
                     ConfigMessage.INVALID_COMPETITION_ID.getMessage().send(sender);
                     return;
