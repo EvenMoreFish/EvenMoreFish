@@ -210,7 +210,7 @@ public class AdminCommand {
             .withArguments(
                 new MultiLiteralArgument(
                     "listTarget",
-                    "fish", "rarities", "requirementTypes", "rewardTypes", "itemAddons"
+                    "fish", "rarities", "requirementTypes", "rewardTypes", "itemAddons", "competitionTypes"
                 ),
                 RarityArgument.create().setOptional(true)
             )
@@ -256,6 +256,7 @@ public class AdminCommand {
                     case "requirementTypes" -> CommandUtils.listRequirementTypes(sender);
                     case "rewardTypes" -> CommandUtils.listRewardTypes(sender);
                     case "itemAddons" -> CommandUtils.listItemAddons(sender);
+                    case "competitionTypes" -> CommandUtils.listCompetitionTypes(sender);
                 }
             });
     }
