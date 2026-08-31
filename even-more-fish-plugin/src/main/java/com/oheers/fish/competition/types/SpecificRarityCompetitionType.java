@@ -1,5 +1,6 @@
 package com.oheers.fish.competition.types;
 
+import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
@@ -10,6 +11,7 @@ import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import net.kyori.adventure.text.Component;
+import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
@@ -78,6 +80,16 @@ public class SpecificRarityCompetitionType implements CompetitionType {
     @Override
     public boolean isSingleReward() {
         return true;
+    }
+
+    @Override
+    public @NonNull String getAuthor() {
+        return "FireML";
+    }
+
+    @Override
+    public @NonNull Plugin getPlugin() {
+        return EvenMoreFish.getInstance();
     }
 
     @Override

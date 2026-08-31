@@ -162,6 +162,16 @@ public interface CompetitionType extends RegistryItem {
         }
 
         @Override
+        public @NonNull String getAuthor() {
+            return ref.getAuthor();
+        }
+
+        @Override
+        public @NonNull Plugin getPlugin() {
+            return ref.getPlugin();
+        }
+
+        @Override
         public @NonNull String getKey() {
             return ref.getKey();
         }

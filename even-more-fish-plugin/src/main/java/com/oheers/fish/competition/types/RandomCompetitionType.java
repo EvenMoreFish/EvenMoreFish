@@ -55,8 +55,13 @@ public class RandomCompetitionType extends CompetitionType.Random {
     }
 
     @Override
-    public @NonNull String getKey() {
-        return "random";
+    public @NonNull String getAuthor() {
+        return "FireML";
+    }
+
+    @Override
+    public @NonNull Plugin getPlugin() {
+        return EvenMoreFish.getInstance();
     }
 
 }
