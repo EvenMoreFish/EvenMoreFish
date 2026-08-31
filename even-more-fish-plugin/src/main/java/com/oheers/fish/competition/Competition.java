@@ -455,8 +455,7 @@ public class Competition {
         List<String> competitionColours = competitionFile.getLeaderboardColours();
         List<CompetitionEntry> entries = leaderboard.getEntries();
 
-        boolean isConsole = !(sender instanceof Player);
-        EMFMessage leaderboardMessage = buildLeaderboardMessage(entries, competitionColours, isConsole);
+        EMFMessage leaderboardMessage = buildLeaderboardMessage(entries, competitionColours);
         leaderboardMessage.send(sender);
 
         EMFMessage message = ConfigMessage.LEADERBOARD_TOTAL_PLAYERS.getMessage();
@@ -464,7 +463,7 @@ public class Competition {
         message.send(sender);
     }
 
-    private @NonNull EMFListMessage buildLeaderboardMessage(List<CompetitionEntry> entries, List<String> competitionColours, boolean isConsole) {
+    private @NonNull EMFListMessage buildLeaderboardMessage(List<CompetitionEntry> entries, List<String> competitionColours) {
         if (entries == null) {
             entries = List.of();
         }
@@ -487,7 +486,7 @@ public class Competition {
             // Format remaining variables
             OfflinePlayer player = Bukkit.getOfflinePlayer(entry.getPlayer());
 
-            String name = player.getName() == null ? "Unknown" : player.getName();
+            String name = FishUtils.getPlayerNameOrDefault(player, "Unknown Player");
             EMFSingleMessage colour = EMFSingleMessage.fromString(competitionColours.get(pos - 1));
             colour.setVariable("{name}", name);
 
