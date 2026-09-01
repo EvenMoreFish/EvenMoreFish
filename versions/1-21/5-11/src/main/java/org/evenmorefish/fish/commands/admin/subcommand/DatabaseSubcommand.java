@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.commands.CommandUtils;
+import com.oheers.fish.commands.DangerousCommandConfirmation;
 import com.oheers.fish.permissions.AdminPerms;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -27,6 +28,7 @@ public class DatabaseSubcommand {
             .then(repairFlyway())
             .then(cleanFlyway())
             .then(migrateToLatest())
+            .then(reset())
             .then(help());
     }
 
@@ -89,11 +91,40 @@ public class DatabaseSubcommand {
             });
     }
 
+    private @NonNull ArgumentBuilder<CommandSourceStack, ?> reset() {
+        return Commands.literal("reset")
+            .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE_RESET))
+            .executes(ctx -> {
+                CommandSender sender = ctx.getSource().getSender();
+                if (CommandUtils.isLogDbError(sender)) {
+                    return 1;
+                }
+                if (!DangerousCommandConfirmation.confirmOrRequest(
+                    sender,
+                    "database-reset",
+                    "/emf admin database reset"
+                )) {
+                    return 1;
+                }
+                sender.sendMessage("Resetting EMF database tables, check the logs.");
+                EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker()
+                    .writeResult(() -> EvenMoreFish.getInstance().getPluginDataManager().resetDatabaseData())
+                    .thenAccept(resetTableCount -> Scheduling.getInstance().runTask(() ->
+                        sender.sendMessage(
+                            resetTableCount < 0
+                                ? "Failed to reset the EMF database. Check the logs."
+                                : "Reset " + resetTableCount + " EMF database table(s)."
+                        )
+                    ));
+                return 1;
+            });
+    }
+
     private @NonNull ArgumentBuilder<CommandSourceStack, ?> help() {
         return Commands.literal("help")
             .executes(ctx -> {
                 ctx.getSource().getSender().sendPlainMessage(
-                    "Available Commands: migrate-to-latest, clean-flyway, repair-flyway, drop-flyway"
+                    "Available Commands: migrate-to-latest, reset, clean-flyway, repair-flyway, drop-flyway"
                 );
                 return 1;
             });
