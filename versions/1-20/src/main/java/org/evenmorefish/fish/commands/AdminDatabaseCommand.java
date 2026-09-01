@@ -3,6 +3,7 @@ package org.evenmorefish.fish.commands;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.commands.CommandUtils;
+import com.oheers.fish.commands.DangerousCommandConfirmation;
 import dev.jorel.commandapi.CommandAPICommand;
 
 import java.util.List;
@@ -16,7 +17,8 @@ public class AdminDatabaseCommand extends CommandAPICommand {
                 dropFlywayCommand(),
                 repairFlywayCommand(),
                 cleanFlywayCommand(),
-                migrateToLatest()
+                migrateToLatest(),
+                resetDatabaseCommand()
         ));
     }
 
@@ -73,6 +75,35 @@ public class AdminDatabaseCommand extends CommandAPICommand {
                     }
                     EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker()
                         .write(() -> EvenMoreFish.getInstance().getPluginDataManager().getDatabase().migrateFromDatabaseVersionToLatest());
+                });
+    }
+
+    public CommandAPICommand resetDatabaseCommand() {
+        return new CommandAPICommand("reset")
+                .withShortDescription("Reset the emf database.")
+                .withPermission("emf.admin.debug.database.reset")
+                .executes((commandSender, commandArguments) -> {
+                    if (CommandUtils.isLogDbError(commandSender)) {
+                        return;
+                    }
+                    if (!DangerousCommandConfirmation.confirmOrRequest(
+                        commandSender,
+                        "database-reset",
+                        "/emf admin database reset"
+                    )) {
+                        return;
+                    }
+
+                    commandSender.sendMessage("Resetting EMF database tables, check the logs.");
+                    EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker()
+                        .writeResult(() -> EvenMoreFish.getInstance().getPluginDataManager().resetDatabaseData())
+                        .thenAccept(resetTableCount -> Scheduling.getInstance().runTask(() ->
+                            commandSender.sendMessage(
+                                resetTableCount < 0
+                                    ? "Failed to reset the EMF database. Check the logs."
+                                    : "Reset " + resetTableCount + " EMF database table(s)."
+                            )
+                        ));
                 });
     }
 
