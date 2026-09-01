@@ -21,7 +21,7 @@ public class CompetitionPlaceSizePlaceholder implements EMFPlaceholder {
     @Override
     public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
-        if (activeComp == null) {
+        if (activeComp == null || activeComp.getCompetitionType() == null) {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING_SIZE.getMessage().getLegacyMessage(null);
         }
 

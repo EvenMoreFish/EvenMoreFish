@@ -56,7 +56,7 @@ class UserReportPlaceholderTest {
 
         UserReportPlaceholder placeholder = new StubTotalFishSoldPlaceholder(new EmptyUserReport(uuid)) {
             @Override
-            public UserReport fetchUserReport(UUID lookupUuid) {
+            public UserReport fetchUserReport(@NonNull UUID lookupUuid) {
                 resolvedUuid.set(lookupUuid);
                 return super.fetchUserReport(lookupUuid);
             }
@@ -121,7 +121,7 @@ class UserReportPlaceholderTest {
         }
 
         @Override
-        public UserReport fetchUserReport(UUID uuid) {
+        public UserReport fetchUserReport(@NonNull UUID uuid) {
             return report;
         }
 
@@ -144,7 +144,7 @@ class UserReportPlaceholderTest {
         }
 
         @Override
-        public UserReport fetchUserReport(UUID uuid) {
+        public UserReport fetchUserReport(@NonNull UUID uuid) {
             return report;
         }
 
@@ -167,7 +167,7 @@ class UserReportPlaceholderTest {
         }
 
         @Override
-        public UserReport fetchUserReport(UUID uuid) {
+        public UserReport fetchUserReport(@NonNull UUID uuid) {
             return report;
         }
 
@@ -190,7 +190,7 @@ class UserReportPlaceholderTest {
         }
 
         @Override
-        public UserReport fetchUserReport(UUID uuid) {
+        public UserReport fetchUserReport(@NonNull UUID uuid) {
             return report;
         }
 
@@ -213,7 +213,7 @@ class UserReportPlaceholderTest {
         }
 
         @Override
-        public UserReport fetchUserReport(UUID uuid) {
+        public UserReport fetchUserReport(@NonNull UUID uuid) {
             return report;
         }
 

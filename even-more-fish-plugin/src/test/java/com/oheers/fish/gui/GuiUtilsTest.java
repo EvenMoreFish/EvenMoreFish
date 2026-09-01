@@ -3,6 +3,7 @@ package com.oheers.fish.gui;
 import com.oheers.fish.fishing.items.Rarity;
 import de.themoep.inventorygui.InventoryGui;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -29,7 +30,7 @@ class GuiUtilsTest {
         private InventoryGui expectedOpenGui;
 
         @Override
-        public void open(Player player, Rarity rarity, InventoryGui expectedOpenGui) {
+        public void open(@NonNull Player player, Rarity rarity, InventoryGui expectedOpenGui) {
             this.player = player;
             this.rarity = rarity;
             this.expectedOpenGui = expectedOpenGui;

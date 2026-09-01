@@ -61,7 +61,7 @@ public class Competition {
 
     private static Competition active;
     private Leaderboard leaderboard;
-    private CompetitionType competitionType;
+    private @Nullable CompetitionType competitionType;
     private IFish selectedFish;
     private IRarity selectedRarity;
     private String competitionName;
@@ -93,11 +93,20 @@ public class Competition {
         this.rewards = competitionFile.getRewards();
         this.numberNeeded = competitionFile.getNumberNeeded();
 
-        CompetitionType type = competitionFile.getType();
-        if (type instanceof CompetitionType.Random random) {
-            type = new CompetitionType.Forwarding(random, random.getRandomType(this));
+        // Resolve CompetitionType last as it may depend on some values set above.
+        this.competitionType = resolveType(competitionFile, this);
+    }
+
+    private static @Nullable CompetitionType resolveType(@NonNull CompetitionFile file, @NonNull Competition competition) {
+        CompetitionType type = file.getType();
+        if (type == null) {
+            Logging.warn("Invalid competition: " + file.getId() + " has an invalid competition type.");
+            return null;
         }
-        this.competitionType = type;
+        if (type instanceof CompetitionType.Random random) {
+            return new CompetitionType.Forwarding(random, random.getRandomType(competition));
+        }
+        return type;
     }
 
     /**
@@ -115,11 +124,13 @@ public class Competition {
             prefix.setRarity(selectedFish.getRarity().getDisplayName());
             prefix.setVariable("{fish}", selectedFish.getDisplayName());
         }
-        bar.setPrefix(prefix, competitionType);
+        if (competitionType != null) {
+            bar.setPrefix(prefix, competitionType);
+        }
         return bar;
     }
 
-    public Competition(final long duration, final CompetitionType type) {
+    public Competition(final long duration, final @NonNull CompetitionType type) {
         this.maxDuration = duration;
         this.alertTimes = new ArrayList<>();
         this.rewards = new HashMap<>();
@@ -195,6 +206,11 @@ public class Competition {
             // Make sure the active competition has ended.
             if (!ended()) {
                 active.end(false);
+            }
+
+            if (competitionType == null) {
+                Logging.warn("Cannot start competition " + competitionName + ": Invalid CompetitionType.");
+                return false;
             }
 
             active = this;
@@ -309,6 +325,9 @@ public class Competition {
     }
 
     private void processRewards() {
+        if (competitionType == null) {
+            return;
+        }
         if (competitionType.isSingleReward()) {
             if (singleWinner == null) {
                 Logging.warn("Single-winner competition ended without a winner.");
@@ -380,6 +399,10 @@ public class Competition {
     }
 
     public @NonNull EMFMessage format(@NonNull EMFMessage message) {
+        if (competitionType == null) {
+            Logging.warn("Cannot format a Competition message: Invalid CompetitionType.");
+            return EMFSingleMessage.empty();
+        }
         message.setTimeFormatted(FishUtils.timeFormat(timeLeft));
         message.setTimeRaw(FishUtils.timeRaw(timeLeft));
         message.setCompetitionType(competitionType.getTypeVariable());
@@ -415,18 +438,27 @@ public class Competition {
      * @return A boolean, true = do it in actionbar.
      */
     public static boolean isDoingFirstPlaceActionBar() {
+        if (active == null || active.competitionType == null) {
+            Logging.warn("Cannot check Competition#isDoingFirstPlaceActionBar: Invalid CompetitionType.");
+            return false;
+        }
         boolean doActionBarMessage = MessageConfig.getInstance().getConfig().getBoolean("action-bar-message");
         List<String> supportedTypes = MessageConfig.getInstance()
                 .getConfig()
                 .getStringList("action-bar-types");
-        boolean isSupportedActionBarType = active != null && supportedTypes.contains(active.competitionType.toString());
+        boolean isSupportedActionBarType = active != null && supportedTypes.contains(active.competitionType.getKey());
         return doActionBarMessage && isSupportedActionBarType;
     }
 
     public void applyToLeaderboard(IFish fish, Player fisher) {
         UUID uuid = fisher.getUniqueId();
         // Ensure this is executed on the global scheduler to avoid CMEs.
-        Scheduling.getInstance().runTask(() -> competitionType.applyToLeaderboard(fish, uuid, leaderboard, this));
+        Scheduling.getInstance().runTask(() -> {
+            if (competitionType == null) {
+                return;
+            }
+            competitionType.applyToLeaderboard(fish, uuid, leaderboard, this);
+        });
     }
 
     public void announceBegin() {
@@ -458,6 +490,10 @@ public class Competition {
     }
 
     private @NonNull EMFListMessage buildLeaderboardMessage(List<CompetitionEntry> entries, List<String> competitionColours) {
+        if (competitionType == null) {
+            Logging.warn("Cannot fetch leaderboard message: Invalid CompetitionType.");
+            return EMFListMessage.empty();
+        }
         if (entries == null) {
             entries = List.of();
         }
@@ -557,6 +593,9 @@ public class Competition {
     }
 
     private void singleReward(UUID winner) {
+        if (competitionType == null) {
+            return;
+        }
         OfflinePlayer player = Bukkit.getOfflinePlayer(winner);
 
         EMFMessage message = format(ConfigMessage.COMPETITION_SINGLE_WINNER);
@@ -588,7 +627,7 @@ public class Competition {
         return this.statusBar;
     }
 
-    public @NonNull CompetitionType getCompetitionType() {
+    public @Nullable CompetitionType getCompetitionType() {
         return competitionType;
     }
 
@@ -605,6 +644,10 @@ public class Competition {
     }
 
     public @NonNull EMFMessage getStartMessage() {
+        if (competitionType == null) {
+            Logging.warn("Cannot fetch competition start message: Invalid CompetitionType.");
+            return EMFSingleMessage.empty();
+        }
         if (startMessage == null) {
             startMessage = ConfigMessage.COMPETITION_START.getMessage();
             startMessage.setCompetitionType(competitionType.getTypeVariable());
@@ -652,7 +695,7 @@ public class Competition {
         return Duration.ofMillis(startTime - currentTime).toMinutes();
     }
 
-    public void setCompetitionType(CompetitionType competitionType) {
+    public void setCompetitionType(@Nullable CompetitionType competitionType) {
         this.competitionType = competitionType;
     }
 
@@ -817,7 +860,9 @@ public class Competition {
         competition.maxDuration = totalDuration;
         competition.adminStarted = true;
 
-        competition.begin();
+        if (!competition.begin()) {
+            return;
+        }
 
         Section leaderboardSection = config.getSection("leaderboard");
         if (leaderboardSection == null) {

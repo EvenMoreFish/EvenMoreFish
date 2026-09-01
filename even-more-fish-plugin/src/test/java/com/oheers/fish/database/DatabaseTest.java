@@ -10,6 +10,7 @@ import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.HandleConsumer;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Update;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
@@ -164,12 +165,12 @@ class DatabaseTest {
         }
 
         @Override
-        public Leaderboard getLeaderboard() {
+        public @NonNull Leaderboard getLeaderboard() {
             return leaderboard;
         }
 
         @Override
-        public String getCompetitionName() {
+        public @NonNull String getCompetitionName() {
             return competitionName;
         }
 

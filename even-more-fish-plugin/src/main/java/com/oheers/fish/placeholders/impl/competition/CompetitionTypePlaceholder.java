@@ -17,10 +17,10 @@ public class CompetitionTypePlaceholder implements EMFPlaceholder {
     @Override
     public @NonNull String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
         Competition activeComp = Competition.getCurrentlyActive();
-        if (activeComp == null) {
+        if (activeComp == null || activeComp.getCompetitionType() == null) {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage(null);
         }
-        return activeComp.getCompetitionType().toString();
+        return activeComp.getCompetitionType().getKey();
     }
 
 }
