@@ -174,6 +174,10 @@ public class Competition {
             Logging.warn("Tried to start a competition with an invalid duration: " + competitionFile.getId());
             return false;
         }
+        if (timeLeft <= 0) {
+            Logging.warn("Tried to start a competition that has already ended.");
+            return false;
+        }
         try {
             if (!isAdminStarted() && !isPlayerRequirementMet()) {
                 ConfigMessage.NOT_ENOUGH_PLAYERS.getMessage().broadcast();
@@ -260,6 +264,8 @@ public class Competition {
                 exception
             );
         } finally {
+            // Always set timeLeft to 0.
+            this.timeLeft = 0;
             manager.activeCompetition = null;
             manager.checkHeldCompetition();
         }
