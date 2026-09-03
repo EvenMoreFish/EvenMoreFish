@@ -8,7 +8,6 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
-import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.api.utils.Scheduling;
@@ -26,9 +25,7 @@ import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
-import com.oheers.fish.utils.TimeCode;
 import dev.dejvokep.boostedyaml.YamlDocument;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -39,8 +36,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.io.File;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -68,7 +63,7 @@ public class Competition {
     protected long maxDuration;
     protected long timeLeft;
     private CompetitionBossbar statusBar;
-    private long epochStartTime;
+    private Long epochStartTime;
     private LocalDateTime startTime;
     private final List<Long> alertTimes;
     private final Map<Integer, List<Reward>> rewards;
@@ -209,9 +204,9 @@ public class Competition {
             EMFCompetitionStartEvent startEvent = new EMFCompetitionStartEvent(this);
             Bukkit.getServer().getPluginManager().callEvent(startEvent);
 
-            final Instant now = Instant.now();
-            this.epochStartTime = now.getEpochSecond();
-            this.startTime = LocalDateTime.ofInstant(now, ZoneId.systemDefault());
+            if (epochStartTime == null) {
+                setStartTime(Instant.now());
+            }
 
             // Execute start commands
             getCompetitionFile().getStartCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
@@ -603,6 +598,15 @@ public class Competition {
         return startTime;
     }
 
+    public void setStartTime(@NonNull Instant instant) {
+        this.epochStartTime = instant.getEpochSecond();
+        this.startTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    }
+
+    public @Nullable Long getEpochStartTime() {
+        return epochStartTime;
+    }
+
     public @NonNull CompetitionFile getCompetitionFile() {
         return this.competitionFile;
     }
@@ -738,6 +742,9 @@ public class Competition {
         config.set("comp-id", getCompetitionFile().getId());
         config.set("total-duration", maxDuration);
         config.set("time-left", timeLeft);
+        if (epochStartTime != null) {
+            config.set("start-time", epochStartTime);
+        }
         for (CompetitionEntry entry : leaderboard.getEntries()) {
             UUID uuid = entry.getPlayer();
             config.set("leaderboard." + uuid + ".fish", entry.getFish().getRarityKey().toString());

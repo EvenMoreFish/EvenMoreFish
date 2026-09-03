@@ -17,20 +17,19 @@ import com.oheers.fish.competition.types.SpecificFishCompetitionType;
 import com.oheers.fish.competition.types.SpecificRarityCompetitionType;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.MessageConfig;
-import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.utils.TimeCode;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -270,6 +269,7 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
         String id = config.getString("comp-id");
         long totalDuration = config.getLong("total-duration");
         long timeLeft = config.getLong("time-left");
+        long epochStartTime = config.getLong("start-time", -1L);
 
         CompetitionFile file = CompetitionManager.getInstance().getFileFromId(id);
         if (file == null) {
@@ -282,6 +282,10 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
         competition.timeLeft = timeLeft;
         competition.maxDuration = totalDuration;
         competition.adminStarted = true;
+        if (epochStartTime != -1) {
+            Instant instant = Instant.ofEpochMilli(epochStartTime);
+            competition.setStartTime(instant);
+        }
 
         if (!competition.begin()) {
             return;
