@@ -3,6 +3,7 @@ package com.oheers.fish.competition.leaderboard;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
@@ -63,7 +64,7 @@ public class Leaderboard {
         message.setFishCaught(newFish.getId());
         message.setRarity(newFish.getRarity().getDisplayName());
 
-        if (Competition.isDoingFirstPlaceActionBar()) {
+        if (CompetitionManager.getInstance().isDoingFirstPlaceActionBar()) {
             message.broadcastActionBar();
         } else {
             message.broadcast();

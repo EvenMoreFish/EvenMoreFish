@@ -1,11 +1,14 @@
 package com.oheers.fish.database;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.baits.AbstractBaitManager;
+import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.database.model.user.UserReport;
+import com.oheers.fish.fishing.rods.RodManager;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.HandleConsumer;
 import org.jdbi.v3.core.Jdbi;

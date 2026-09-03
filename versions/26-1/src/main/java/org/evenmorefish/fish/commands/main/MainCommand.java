@@ -84,7 +84,7 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
         return Commands.literal(nextName())
             .requires(stack -> stack.getSender().hasPermission(UserPerms.NEXT) && CompetitionManager.getInstance().hasTimings())
             .executes(ctx -> {
-                EMFMessage message = Competition.getNextCompetitionMessage();
+                EMFMessage message = CompetitionManager.getInstance().getNextCompetitionMessage();
                 message.prependMessage(PrefixType.DEFAULT.getPrefix());
                 message.send(ctx.getSource().getSender());
                 return 1;
@@ -118,7 +118,7 @@ public class MainCommand extends MainCommandProvider<CommandNode<CommandSourceSt
             .requires(stack -> stack.getSender().hasPermission(UserPerms.TOP))
             .executes(ctx -> {
                 CommandSender sender = ctx.getSource().getSender();
-                Competition active = Competition.getCurrentlyActive();
+                Competition active = CompetitionManager.getInstance().getActiveCompetition();
                 if (active == null) {
                     ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(sender);
                     return 1;

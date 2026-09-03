@@ -536,7 +536,7 @@ public class AdminCommand {
             .executes((sender, arguments) -> {
                 final String id = Objects.requireNonNull(arguments.getUnchecked("competitionId"));
                 final Integer duration = arguments.getUnchecked("durationSeconds");
-                if (Competition.isActive()) {
+                if (CompetitionManager.getInstance().isCompetitionActive()) {
                     ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
                     return;
                 }
@@ -557,7 +557,7 @@ public class AdminCommand {
     private CommandAPICommand getCompetitionEnd() {
         return new CommandAPICommand("end")
             .executes(info -> {
-                Competition active = Competition.getCurrentlyActive();
+                Competition active = CompetitionManager.getInstance().getActiveCompetition();
                 if (active != null) {
                     active.end(false);
                     return;
@@ -573,7 +573,7 @@ public class AdminCommand {
                 CompetitionTypeArgument.create().setOptional(true)
             )
             .executes((sender, args) -> {
-                if (Competition.isActive()) {
+                if (CompetitionManager.getInstance().isCompetitionActive()) {
                     ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
                     return;
                 }
@@ -590,7 +590,7 @@ public class AdminCommand {
         return new CommandAPICommand("extend")
             .withArguments(new IntegerArgument("durationSeconds", 1))
             .executes(info -> {
-                Competition active = Competition.getCurrentlyActive();
+                Competition active = CompetitionManager.getInstance().getActiveCompetition();
                 if (active == null) {
                     ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
                     return;

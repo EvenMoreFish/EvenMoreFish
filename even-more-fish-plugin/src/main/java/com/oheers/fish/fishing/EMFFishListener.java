@@ -6,6 +6,7 @@ import com.oheers.fish.api.events.EMFFishCaughtEvent;
 import com.oheers.fish.api.events.EMFFishHuntEvent;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.database.data.UserFishRarityKey;
@@ -46,7 +47,8 @@ public class EMFFishListener implements Listener {
         }
 
         final UUID uuid = player.getUniqueId();
-        final String competitionId = Competition.getCurrentlyActive() != null ? Competition.getCurrentlyActive().getCompetitionName() : null;
+        Competition active = CompetitionManager.getInstance().getActiveCompetition();
+        final String competitionId = active == null ? null : active.getCompetitionName();
 
         EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker().execute(() -> {
             final int userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(uuid);

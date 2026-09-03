@@ -1,6 +1,7 @@
 package com.oheers.fish.placeholders.impl.competition;
 
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.placeholders.abstracted.EMFPlaceholder;
@@ -18,7 +19,7 @@ public class CompetitionTypeFormatPlaceholder implements EMFPlaceholder {
 
     @Override
     public @Nullable String parsePAPI(@Nullable OfflinePlayer player, @NonNull String identifier) {
-        Competition activeComp = Competition.getCurrentlyActive();
+        Competition activeComp = CompetitionManager.getInstance().getActiveCompetition();
         if (activeComp == null || activeComp.getCompetitionType() == null) {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage(null);
         }

@@ -74,7 +74,7 @@ public class MainCommand {
             .withRequirement(sender -> sender.hasPermission(UserPerms.NEXT) && CompetitionManager.getInstance().hasTimings())
             .withPermission(UserPerms.NEXT)
             .executes(info -> {
-                EMFMessage message = Competition.getNextCompetitionMessage();
+                EMFMessage message = CompetitionManager.getInstance().getNextCompetitionMessage();
                 message.prependMessage(PrefixType.DEFAULT.getPrefix());
                 message.send(info.sender());
             });
@@ -119,7 +119,7 @@ public class MainCommand {
         return new CommandAPICommand(name)
             .withPermission(UserPerms.TOP)
             .executes(info -> {
-                Competition active = Competition.getCurrentlyActive();
+                Competition active = CompetitionManager.getInstance().getActiveCompetition();
                 if (active == null) {
                     ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
                     return;

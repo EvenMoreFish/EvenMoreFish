@@ -10,6 +10,7 @@ import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.data.FishRarityKey;
@@ -520,7 +521,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
     }
 
     private boolean isFishingAllowedInCompetition() {
-        return Competition.isActive() || !MainConfig.getInstance().isFishCatchOnlyInCompetition();
+        return CompetitionManager.getInstance().isCompetitionActive() || !MainConfig.getInstance().isFishCatchOnlyInCompetition();
     }
 
     private IRarity selectRandomRarity(List<IRarity> rarities, double boostRate, Set<IRarity> boosted,

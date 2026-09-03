@@ -5,6 +5,7 @@ import com.oheers.fish.Toggle;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import org.bukkit.Bukkit;
@@ -48,7 +49,7 @@ public record FishBroadcast(@NonNull EMFMessage message, @NonNull Player player,
     }
 
     private Stream<? extends Player> filterCompetition(@NonNull Stream<? extends Player> players) {
-        Competition active = Competition.getCurrentlyActive();
+        Competition active = CompetitionManager.getInstance().getActiveCompetition();
         if (active == null) {
             return players;
         }

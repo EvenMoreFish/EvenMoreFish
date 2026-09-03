@@ -56,19 +56,17 @@ import java.util.logging.Logger;
 
 public class Competition {
 
-    private static final File dataFile = new File(EvenMoreFish.getInstance().getDataFolder(), "competition-data.yml.tmp");
-    private static final List<CompetitionFile> held = new ArrayList<>();
+    private static final CompetitionManager manager = CompetitionManager.getInstance();
 
-    private static Competition active;
-    private Leaderboard leaderboard;
+    protected Leaderboard leaderboard;
     private @Nullable CompetitionType competitionType;
     private IFish selectedFish;
     private IRarity selectedRarity;
     private String competitionName;
-    private boolean adminStarted = false;
+    protected boolean adminStarted = false;
     private EMFMessage startMessage;
-    private long maxDuration;
-    private long timeLeft;
+    protected long maxDuration;
+    protected long timeLeft;
     private CompetitionBossbar statusBar;
     private long epochStartTime;
     private LocalDateTime startTime;
@@ -171,22 +169,6 @@ public class Competition {
         this.timeLeft += durationSeconds;
     }
 
-    public static boolean isActive() {
-        return getCurrentlyActive() != null;
-    }
-
-    public static @Nullable Competition getCurrentlyActive() {
-        return active;
-    }
-
-    public static void holdCompetition(@NonNull CompetitionFile file) {
-        if (!MainConfig.getInstance().shouldCompetitionHold()) {
-            Logging.debug("Could not hold a competition as the feature is disabled.");
-            return;
-        }
-        held.add(file);
-    }
-
     public boolean isPlayerRequirementMet() {
         return EvenMoreFish.getInstance().getVisibleOnlinePlayers().size() >= playersNeeded;
     }
@@ -203,22 +185,17 @@ public class Competition {
                 return false;
             }
 
-            // Make sure the active competition has ended.
-            if (!ended()) {
-                active.end(false);
-            }
-
             if (competitionType == null) {
                 Logging.warn("Cannot start competition " + competitionName + ": Invalid CompetitionType.");
                 return false;
             }
 
-            active = this;
-
             if (!competitionType.isUsable(this)) {
-                active = null;
                 return false;
             }
+
+            // Sets the active competition to this one. If another competition is active, it will be ended.
+            manager.setActive(this);
 
             this.leaderboard = new Leaderboard(competitionType);
 
@@ -251,9 +228,6 @@ public class Competition {
     }
 
     public void end(boolean startFail, boolean save) {
-        if (ended()) {
-            return;
-        }
         // Print leaderboard
         if (timingSystem != null) {
             timingSystem.stop();
@@ -266,7 +240,7 @@ public class Competition {
         }
 
         if (startFail) {
-            active = null;
+            manager.activeCompetition = null;
             return;
         }
 
@@ -277,7 +251,7 @@ public class Competition {
 
         try {
             // Delete the backup file in case it still exists for whatever reason.
-            dataFile.delete();
+            CompetitionManager.dataFile.delete();
             fireEndEvent();
             notifyPlayers();
             processRewards();
@@ -291,25 +265,9 @@ public class Competition {
                 exception
             );
         } finally {
-            active = null;
-            checkHeldCompetition();
+            manager.activeCompetition = null;
+            manager.checkHeldCompetition();
         }
-    }
-
-    private static void checkHeldCompetition() {
-        if (held.isEmpty()) {
-            Logging.debug("No competitions have been held back.");
-            return;
-        }
-        CompetitionFile file = held.removeFirst();
-        if (file != null) {
-            Logging.info("A competition was held back during this one. It will now be started.");
-            new Competition(file).begin();
-        }
-    }
-
-    public boolean ended() {
-        return active == null;
     }
 
     private void fireEndEvent() {
@@ -432,24 +390,6 @@ public class Competition {
         return false;
     }
 
-    /**
-     * Calculates whether to send the "new first place" notification as an actionbar message or directly into chat.
-     *
-     * @return A boolean, true = do it in actionbar.
-     */
-    public static boolean isDoingFirstPlaceActionBar() {
-        if (active == null || active.competitionType == null) {
-            Logging.warn("Cannot check Competition#isDoingFirstPlaceActionBar: Invalid CompetitionType.");
-            return false;
-        }
-        boolean doActionBarMessage = MessageConfig.getInstance().getConfig().getBoolean("action-bar-message");
-        List<String> supportedTypes = MessageConfig.getInstance()
-                .getConfig()
-                .getStringList("action-bar-types");
-        boolean isSupportedActionBarType = active != null && supportedTypes.contains(active.competitionType.getKey());
-        return doActionBarMessage && isSupportedActionBarType;
-    }
-
     public void applyToLeaderboard(IFish fish, Player fisher) {
         UUID uuid = fisher.getUniqueId();
         // Ensure this is executed on the global scheduler to avoid CMEs.
@@ -469,7 +409,7 @@ public class Competition {
     }
 
     public void sendLeaderboard(@NonNull CommandSender sender) {
-        if (!isActive()) {
+        if (!manager.isCompetitionActive()) {
             ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(sender);
             return;
         }
@@ -667,34 +607,6 @@ public class Competition {
         return this.competitionFile;
     }
 
-    public static @NonNull EMFMessage getNextCompetitionMessage() {
-        if (Competition.isActive()) {
-            return EMFSingleMessage.empty();
-        }
-
-        long remainingTime = getRemainingTime();
-        if (remainingTime == -1) {
-            return ConfigMessage.PLACEHOLDER_NO_COMPETITIONS_SCHEDULED.getMessage();
-        }
-
-        EMFMessage message = ConfigMessage.PLACEHOLDER_TIME_REMAINING_INACTIVE.getMessage();
-        message.setDays(Long.toString(remainingTime / 1440));
-        message.setHours(Long.toString((remainingTime % 1440) / 60));
-        message.setMinutes(Long.toString((((remainingTime % 1440) % 60) % 60)));
-
-        return message;
-    }
-
-    private static long getRemainingTime() {
-        TimeCode next = CompetitionManager.getInstance().getNextCompetition();
-        if (next == null) {
-            return -1L;
-        }
-        long startTime = next.toMillis();
-        long currentTime = System.currentTimeMillis();
-        return Duration.ofMillis(startTime - currentTime).toMinutes();
-    }
-
     public void setCompetitionType(@Nullable CompetitionType competitionType) {
         this.competitionType = competitionType;
     }
@@ -820,7 +732,7 @@ public class Competition {
     @ApiStatus.Experimental
     public void saveToFile() {
         EvenMoreFish plugin = EvenMoreFish.getInstance();
-        ConfigBase base = new ConfigBase(dataFile, plugin, false);
+        ConfigBase base = new ConfigBase(CompetitionManager.dataFile, plugin, false);
 
         YamlDocument config = base.getConfig();
         config.set("comp-id", getCompetitionFile().getId());
@@ -833,66 +745,6 @@ public class Competition {
             config.set("leaderboard." + uuid + ".time", entry.getTime());
         }
         base.save();
-    }
-
-    @ApiStatus.Experimental
-    public static void resumeFromFile() {
-        EvenMoreFish plugin = EvenMoreFish.getInstance();
-        if (!dataFile.exists()) {
-            return;
-        }
-        ConfigBase base = new ConfigBase(dataFile, plugin, false);
-
-        YamlDocument config = base.getConfig();
-        String id = config.getString("comp-id");
-        long totalDuration = config.getLong("total-duration");
-        long timeLeft = config.getLong("time-left");
-
-        CompetitionFile file = CompetitionManager.getInstance().getFileFromId(id);
-        if (file == null) {
-            Logging.warn("Failed to resume competition. It is no longer configured?");
-            dataFile.delete();
-            return;
-        }
-
-        Competition competition = new Competition(file);
-        competition.timeLeft = timeLeft;
-        competition.maxDuration = totalDuration;
-        competition.adminStarted = true;
-
-        if (!competition.begin()) {
-            return;
-        }
-
-        Section leaderboardSection = config.getSection("leaderboard");
-        if (leaderboardSection == null) {
-            Logging.debug("Competition backup file had no leaderboard data.");
-            return;
-        }
-        leaderboardSection.getRoutesAsStrings(false).forEach(key -> {
-            Section entrySection = leaderboardSection.getSection(key);
-            if (entrySection == null) {
-                return;
-            }
-            UUID player;
-            try {
-                player = UUID.fromString(key);
-            } catch (IllegalArgumentException exception) {
-                Logging.warn("Competition backup file had invalid uuid: " + key);
-                return;
-            }
-            String fishStr = entrySection.getString("fish");
-            RarityKey rarityKey = RarityKey.of(fishStr);
-            if (rarityKey == null) {
-                Logging.warn("Failed to restore leaderboard entry. Fish " + fishStr + " is no longer configured?");
-                return;
-            }
-            CompetitionEntry entry = new CompetitionEntry(player, rarityKey.getFish(), competition.competitionType);
-            entry.value = entrySection.getFloat("value");
-            entry.time = entrySection.getLong("time");
-            competition.leaderboard.addEntry(entry);
-        });
-        dataFile.delete();
     }
 
 }

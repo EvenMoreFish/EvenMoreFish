@@ -10,6 +10,7 @@ import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.broadcast.FishBroadcast;
 import com.oheers.fish.fishing.items.FishManager;
@@ -126,7 +127,7 @@ public abstract class Processor<E extends Event> {
     }
 
     private @Nullable BaitHandler getBaitFromRod(@NonNull ItemStack rod) {
-        if (MainConfig.getInstance().getBaitCompetitionDisable() && Competition.isActive()) {
+        if (MainConfig.getInstance().getBaitCompetitionDisable() && CompetitionManager.getInstance().isCompetitionActive()) {
             Logging.debug("Bait ignored because bait usage is disabled during competitions.");
             return null;
         }
@@ -250,7 +251,7 @@ public abstract class Processor<E extends Event> {
      * Checks if we need to update the competition leaderboard.
      */
     protected void leaderboardCheck(@NonNull IFish fish, @NonNull Player fisherman, @NonNull Location location) {
-        final Competition active = Competition.getCurrentlyActive();
+        final Competition active = CompetitionManager.getInstance().getActiveCompetition();
         if (active == null) {
             return;
         }

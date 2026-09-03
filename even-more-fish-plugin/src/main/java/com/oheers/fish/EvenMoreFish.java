@@ -164,7 +164,7 @@ public class EvenMoreFish extends EMFPlugin {
         }
 
         // Attempt to resume a competition if the temporary file exists.
-        Competition.resumeFromFile();
+        CompetitionManager.getInstance().resumeFromFile();
 
         getLogger().info(() -> "EvenMoreFish by Oheers : Enabled");
     }
@@ -181,7 +181,7 @@ public class EvenMoreFish extends EMFPlugin {
 
         terminateGuis();
         // Ends the current competition in case the plugin is being disabled when the server will continue running
-        Competition active = Competition.getCurrentlyActive();
+        Competition active = CompetitionManager.getInstance().getActiveCompetition();
         if (active != null) {
             active.end(false, true);
         }

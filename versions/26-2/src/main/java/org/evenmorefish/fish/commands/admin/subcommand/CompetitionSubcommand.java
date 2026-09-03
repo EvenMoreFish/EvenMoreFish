@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.messages.ConfigMessage;
@@ -58,7 +59,7 @@ public class CompetitionSubcommand {
     }
 
     private void start(@NonNull CommandSender sender, @NonNull CompetitionFile file, @Nullable Integer duration) {
-        if (Competition.isActive()) {
+        if (CompetitionManager.getInstance().isCompetitionActive()) {
             ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
             return;
         }
@@ -73,7 +74,7 @@ public class CompetitionSubcommand {
     private ArgumentBuilder<CommandSourceStack, ?> end() {
         return Commands.literal("end")
             .executes(ctx -> {
-                Competition active = Competition.getCurrentlyActive();
+                Competition active = CompetitionManager.getInstance().getActiveCompetition();
                 if (active == null) {
                     ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(ctx.getSource().getSender());
                     return 1;
@@ -112,7 +113,7 @@ public class CompetitionSubcommand {
     }
 
     private void test(CommandSender sender, int duration, CompetitionType type) {
-        if (Competition.isActive()) {
+        if (CompetitionManager.getInstance().isCompetitionActive()) {
             ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
             return;
         }
@@ -128,7 +129,7 @@ public class CompetitionSubcommand {
                 Commands.argument("durationSeconds", IntegerArgumentType.integer(1))
                     .executes(ctx -> {
                         int duration = ctx.getArgument("durationSeconds", int.class);
-                        Competition active = Competition.getCurrentlyActive();
+                        Competition active = CompetitionManager.getInstance().getActiveCompetition();
                         if (active == null) {
                             ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(ctx.getSource().getSender());
                             return 1;

@@ -4,6 +4,7 @@ import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.Toggle;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import dev.aurelium.auraskills.api.event.loot.LootDropEvent;
 import org.bukkit.event.EventHandler;
@@ -40,7 +41,7 @@ public class AuraSkillsFishingEvent implements Listener {
             event.setCancelled(true);
             return;
         }
-        if (Competition.isActive()) {
+        if (CompetitionManager.getInstance().isCompetitionActive()) {
             event.setCancelled(true);
         }
     }

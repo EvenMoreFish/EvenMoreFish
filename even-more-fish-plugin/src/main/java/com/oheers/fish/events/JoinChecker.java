@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
@@ -24,7 +25,7 @@ public class JoinChecker implements Listener {
     }
 
     private void checkCompetitionJoin(@NonNull Player player) {
-        Competition activeComp = Competition.getCurrentlyActive();
+        Competition activeComp = CompetitionManager.getInstance().getActiveCompetition();
         if (activeComp == null) {
             return;
         }
@@ -45,7 +46,7 @@ public class JoinChecker implements Listener {
     }
 
     private void checkCompetitionLeave(@NonNull Player player) {
-        final Competition activeComp = Competition.getCurrentlyActive();
+        final Competition activeComp = CompetitionManager.getInstance().getActiveCompetition();
         if (activeComp != null) {
             activeComp.getStatusBar().removePlayer(player);
         }

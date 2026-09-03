@@ -1,6 +1,5 @@
 package com.oheers.fish.competition;
 
-import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.EMFTimer;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.competition.configs.CompetitionFile;
@@ -39,9 +38,9 @@ public class AutoRunner extends EMFTimer {
             return;
         }
         Logging.debug("AutoRunner found a competition with this TimeCode. Attempting to start.");
-        if (Competition.isActive()) {
+        if (CompetitionManager.getInstance().isCompetitionActive()) {
             Logging.debug("AutoRunner cannot start a competition as one is active. Attempting to hold until active is finished.");
-            Competition.holdCompetition(file);
+            CompetitionManager.getInstance().holdCompetition(file);
         } else {
             new Competition(file).begin();
         }
