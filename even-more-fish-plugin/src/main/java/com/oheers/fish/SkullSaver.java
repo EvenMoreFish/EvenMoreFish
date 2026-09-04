@@ -4,7 +4,6 @@ import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
@@ -16,9 +15,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class SkullSaver implements Listener {
-    
-    // EventPriority.HIGHEST makes this run last so it can listen to the cancels of protection plugins like Towny
-    @EventHandler(priority = EventPriority.HIGHEST)
+
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBreak(BlockBreakEvent event) {
         if (event.isCancelled()) return;
         if (event.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
@@ -29,26 +27,22 @@ public class SkullSaver implements Listener {
 
         BlockState state = event.getBlock().getState();
         Skull skullMeta = (Skull) state;
-        if (!FishManager.getInstance().isFish(skullMeta)) return;
-
-        ItemStack stack = block.getDrops().iterator().next().clone();
-        event.setCancelled(true);
-        event.setDropItems(false);
 
         IFish f = FishManager.getInstance().getFish(skullMeta, event.getPlayer());
         if (f == null) {
-            // Uncancel the event so people can still pick up the heads.
-            event.setCancelled(false);
-            event.setDropItems(true);
             return;
         }
+
+        event.setCancelled(true);
+        event.setDropItems(false);
+
+        ItemStack stack = block.getDrops().iterator().next().clone();
         ItemStack fishItem = f.give();
         stack.setItemMeta(fishItem.getItemMeta());
         block.setType(Material.AIR);
-        block.getWorld().dropItemNaturally(block.getLocation(), stack);
-        block.getWorld().playSound(block.getLocation(), Sound.BLOCK_BONE_BLOCK_BREAK, 1, 1);
+        block.getWorld().dropItem(block.getLocation(), stack);
     }
-    
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlace(BlockPlaceEvent event) {
         if (event.isCancelled()) {
