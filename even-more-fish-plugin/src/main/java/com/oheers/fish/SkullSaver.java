@@ -18,7 +18,7 @@ public class SkullSaver implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBreak(BlockBreakEvent event) {
-        if (event.isCancelled()) return;
+        if (event.isCancelled() || !event.isDropItems()) return;
         if (event.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
         Block block = event.getBlock();
 
