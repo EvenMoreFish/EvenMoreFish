@@ -113,9 +113,9 @@ public class InternalAddonLoader extends AddonLoader {
         new ActiveCompetitionRequirementType().register();
 
         // Load Group RequirementType
-        Permission permission = EvenMoreFish.getInstance().getDependencyManager().getPermission();
+        Permission permission = VaultWrapper.get().getPermissionOrNull();
         if (permission != null) {
-            new GroupRequirementType(permission).register();
+            new GroupRequirementType().register();
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {

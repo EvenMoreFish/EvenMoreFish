@@ -97,10 +97,6 @@ dependencies {
     implementation(libs.dimensionfishing)
 
     compileOnly(libs.jspecify)
-
-    // TODO remove when 1.20 is dropped...
-    implementation(libs.commandsapi.bukkit)
-    implementation(libs.nbt.api)
 }
 
 bukkit {
@@ -114,7 +110,7 @@ bukkit {
     version = project.version.toString()
     description = "A fishing extension bringing an exciting new experience to fishing."
     website = "https://github.com/EvenMoreFish/EvenMoreFish"
-    apiVersion = "1.20"
+    apiVersion = "1.21"
     foliaSupported = true
 
     softDepend = listOf(
@@ -252,14 +248,12 @@ val copyAddons by tasks.registering(Copy::class) {
 
 val copyVersions by tasks.registering(Copy::class) {
     dependsOn(
-        ":versions:1-20:build",
         ":versions:1-21:1-4:build",
         ":versions:1-21:5-11:build",
         ":versions:26-1:build",
         ":versions:26-2:build"
     )
 
-    from(project(":versions:1-20").layout.buildDirectory.dir("libs"))
     from(project(":versions:1-21:1-4").layout.buildDirectory.dir("libs"))
     from(project(":versions:1-21:5-11").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-1").layout.buildDirectory.dir("libs"))

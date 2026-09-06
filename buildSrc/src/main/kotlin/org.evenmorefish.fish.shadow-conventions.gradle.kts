@@ -22,11 +22,7 @@ afterEvaluate {
             attributes["Database-Baseline-Version"] = "8.0"
         }
 
-        // TODO exclusions can be removed when 1.20 is dropped.
-        minimize {
-            exclude(dependency("dev.jorel:.*:.*"))
-            exclude(dependency("de.tr7zw:.*:.*"))
-        }
+        minimize()
 
         exclude("LICENSE")
         exclude("META-INF/**")

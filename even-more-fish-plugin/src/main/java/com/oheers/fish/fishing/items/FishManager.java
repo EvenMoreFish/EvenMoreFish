@@ -164,7 +164,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
 
         IFish fish = key.getFish();
         fish.setLength(lengthFloat);
-        if (randomIndex != null) { // TODO Can remove that instanceof when ItemFactory is part of API.
+        if (randomIndex != null) {
             fish.getFactory().setRandomIndex(randomIndex);
         }
         if (playerString != null) {

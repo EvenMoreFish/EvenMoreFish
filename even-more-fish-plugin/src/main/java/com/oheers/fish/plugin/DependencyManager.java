@@ -109,20 +109,12 @@ public class DependencyManager implements Listener {
         return usingGriefPrevention;
     }
 
-    public @Nullable Permission getPermission() {
-        return permission;
-    }
-
     public @Nullable HeadDatabaseAPI getHdbapi() {
         return hdbapi;
     }
 
     public boolean isUsingAuraSkills() {
         return usingAuraSkills;
-    }
-
-    public boolean isEconomyAvailable() {
-        return usingVault || usingPlayerPoints || usingGriefPrevention;
     }
 
     public boolean isHeadsDBLoaded() {
