@@ -30,8 +30,6 @@ public class ConfigurationManager {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void loadConfigurations() {
         try {
-            prepareDaisyLib();
-
             new MainConfig();
             new MessageConfig();
             new GuiFillerConfig();
@@ -81,21 +79,6 @@ public class ConfigurationManager {
         } catch (Exception e) {
             plugin.getLogger().log(Level.SEVERE, "Failed to reload configurations", e);
         }
-    }
-
-    private void prepareDaisyLib() {
-        MessageSettings.setEnableLegacy(true);
-        MessageSettings.setAllowEmptyAppend(false);
-        MessageSettings.setAllowEmptyPrepend(false);
-
-        ObjectProcessor.registerProcessor(
-            EMFSingleMessage.class,
-            EMFSingleMessage::getComponentListMessage
-        );
-        ObjectProcessor.registerProcessor(
-            EMFListMessage.class,
-            EMFListMessage::getComponentListMessage
-        );
     }
 
 }

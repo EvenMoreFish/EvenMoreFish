@@ -6,11 +6,11 @@ import com.oheers.fish.api.economy.EconomyType;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.economy.GriefPreventionEconomyType;
 import com.oheers.fish.economy.PlayerPointsEconomyType;
-import com.oheers.fish.economy.VaultEconomyType;
 import com.oheers.fish.events.AuraSkillsFishingEvent;
 import com.oheers.fish.events.DeprecatedEventListener;
-import com.oheers.fish.events.EconomyServiceRegisterListener;
 import com.oheers.fish.events.McMMOTreasureEvent;
+import com.oheers.fish.messages.EMFListMessage;
+import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.placeholders.PlaceholderReceiver;
 import com.oheers.fish.utils.HeadDBIntegration;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
@@ -18,19 +18,17 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
-import java.util.logging.Level;
+import uk.firedev.daisylib.DaisyLib;
+import uk.firedev.daisylib.messages.MessageSettings;
+import uk.firedev.daisylib.messages.ObjectProcessor;
 
 public class DependencyManager implements Listener {
     private final EvenMoreFish plugin;
-    private Permission permission;
     private HeadDatabaseAPI hdbapi;
 
     // Dependency flags
-    private boolean usingVault;
     private boolean usingPAPI;
     private boolean usingMcMMO;
     private boolean usingHeadsDB;
@@ -42,10 +40,24 @@ public class DependencyManager implements Listener {
         this.plugin = plugin;
     }
 
+    public void loadBundledDependencies() {
+        DaisyLib.Settings.ALLOW_LEGACY_MESSAGES = () -> true;
+        MessageSettings.setAllowEmptyAppend(false);
+        MessageSettings.setAllowEmptyPrepend(false);
+
+        ObjectProcessor.registerProcessor(
+            EMFSingleMessage.class,
+            EMFSingleMessage::getComponentListMessage
+        );
+        ObjectProcessor.registerProcessor(
+            EMFListMessage.class,
+            EMFListMessage::getComponentListMessage
+        );
+    }
+
     public void checkDependencies() {
         PluginManager pm = Bukkit.getPluginManager();
 
-        this.usingVault = pm.isPluginEnabled("Vault");
         this.usingGriefPrevention = pm.isPluginEnabled("GriefPrevention");
         this.usingPlayerPoints = pm.isPluginEnabled("PlayerPoints");
         this.usingMcMMO = pm.isPluginEnabled("mcMMO");
@@ -53,11 +65,6 @@ public class DependencyManager implements Listener {
         this.usingPAPI = pm.isPluginEnabled("PlaceholderAPI");
         this.usingAuraSkills = pm.isPluginEnabled("AuraSkills");
 
-        if (usingVault) {
-            setupVaultPermissions();
-        }
-
-        loadVaultEconomy();
         loadPlayerPointsEconomy();
         loadGriefPreventionEconomy();
         checkPapi();
@@ -80,26 +87,6 @@ public class DependencyManager implements Listener {
         if (usingAuraSkills && MainConfig.getInstance().disableAuraSkills()) {
             pm.registerEvents(new AuraSkillsFishingEvent(), plugin);
         }
-
-        if (usingVault) {
-            pm.registerEvents(new EconomyServiceRegisterListener(this),plugin);
-        }
-
-    }
-
-    private void setupVaultPermissions() {
-        try {
-            RegisteredServiceProvider<Permission> rsp =
-                    plugin.getServer().getServicesManager().getRegistration(Permission.class);
-            this.permission = rsp == null ? null : rsp.getProvider();
-        } catch (Exception e) {
-            plugin.getLogger().log(Level.WARNING, "Failed to setup Vault permissions", e);
-            this.permission = null;
-        }
-    }
-
-    public boolean isUsingVault() {
-        return usingVault;
     }
 
     public boolean isUsingPAPI() {
@@ -140,16 +127,6 @@ public class DependencyManager implements Listener {
 
     public boolean isHeadsDBLoaded() {
         return usingHeadsDB && hdbapi != null;
-    }
-
-    public boolean isVaultPermissionsAvailable() {
-        return usingVault && permission != null;
-    }
-
-    public void loadVaultEconomy() {
-        if (isUsingVault()) {
-            loadEconomyType(new VaultEconomyType(), "Vault");
-        }
     }
 
     public void loadPlayerPointsEconomy() {

@@ -43,6 +43,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import uk.firedev.daisylib.external.vault.VaultWrapper;
 
 import java.util.List;
 
@@ -137,16 +138,14 @@ public class InternalAddonLoader extends AddonLoader {
             new McMMOXPRewardType().register();
         }
         // Only enable the PERMISSION type if Vault perms is found.
-        Permission permission = EvenMoreFish.getInstance().getDependencyManager().getPermission();
-        if (permission != null && permission.isEnabled()) {
+        Permission permission = VaultWrapper.get().getPermissionOrNull();
+        if (permission != null) {
             new PermissionRewardType().register();
         }
         // Only enable the Money RewardType is Vault Economy is enabled.
-        if (dependencyManager.isUsingVault()) {
-            RegisteredServiceProvider<Economy> rsp = Bukkit.getServicesManager().getRegistration(Economy.class);
-            if (rsp != null) {
-                new MoneyRewardType().register();
-            }
+        Economy economy = VaultWrapper.get().getEconomyOrNull();
+        if (economy != null) {
+            new MoneyRewardType().register();
         }
     }
 

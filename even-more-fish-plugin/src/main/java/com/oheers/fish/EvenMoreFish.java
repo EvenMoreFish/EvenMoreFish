@@ -123,10 +123,14 @@ public class EvenMoreFish extends EMFPlugin {
 
         this.api = new EMFAPI();
 
+        // Initialize manager and load bundled deps
+        this.dependencyManager = new DependencyManager(this);
+        this.dependencyManager.loadBundledDependencies();
+
         this.configurationManager = new ConfigurationManager(this);
         this.configurationManager.loadConfigurations(); //need to test, order may be important
 
-        this.dependencyManager = new DependencyManager(this);
+        // Load external deps
         this.dependencyManager.checkDependencies(); // need to test, order may be important, if it is, we introduce multiple stages with events
 
         this.integrationManager = new IntegrationManager(this);
