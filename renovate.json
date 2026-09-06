@@ -14,7 +14,7 @@
       "matchPackageNames": [
         "io.papermc.paper:paper-api"
       ],
-      "allowedVersions": "1.20.1-R0.1-SNAPSHOT"
+      "allowedVersions": "1.21.1-R0.1-SNAPSHOT"
     },
     {
       "allowedVersions": "7.0.9",

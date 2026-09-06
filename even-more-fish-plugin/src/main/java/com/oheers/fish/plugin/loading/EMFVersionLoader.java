@@ -73,8 +73,6 @@ public class EMFVersionLoader {
         if (version.startsWith("26.2")) return classLoader.getResource("versions/26-2.jar");
         // Minecraft 26.1.x
         if (version.startsWith("26.1")) return classLoader.getResource("versions/26-1.jar");
-        // Minecraft 1.20.x
-        if (version.startsWith("1.20")) return classLoader.getResource("versions/1-20.jar");
         // Minecraft 1.21.x
         if (version.startsWith("1.21")) {
             return switch (version) {
