@@ -20,7 +20,7 @@ emfAddon {
 dependencies {
     compileOnly(libs.paper.api) {
         version {
-            strictly("1.20.1-R0.1-SNAPSHOT")
+            strictly("1.21.1-R0.1-SNAPSHOT")
         }
     }
     compileOnly(libs.nexo)

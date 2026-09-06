@@ -19,7 +19,7 @@ strokk-commands = "1.5.0"
 
 [libraries]
 # Paper & Core APIs
-paper-api = {module = "io.papermc.paper:paper-api", version = {strictly="[1.20,)"}}
+paper-api = {module = "io.papermc.paper:paper-api", version = {strictly="[1.21,)"}}
 vault-api = "com.github.MilkBowl:VaultAPI:1.7.1"
 placeholder-api = "me.clip:placeholderapi:2.12.3"
 bstats = "org.bstats:bstats-bukkit:3.2.1"

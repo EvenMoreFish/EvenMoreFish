@@ -9,7 +9,7 @@ version = properties["project-version"] as String
 dependencies {
     compileOnly(libs.paper.api) {
         version {
-            strictly("1.20.1-R0.1-SNAPSHOT")
+            strictly("1.21.1-R0.1-SNAPSHOT")
         }
     }
     compileOnlyApi(libs.boostedyaml)
@@ -59,7 +59,7 @@ testing {
                 implementation(libs.mockito.core)
                 implementation(libs.paper.api) {
                     version {
-                        strictly("1.20.1-R0.1-SNAPSHOT")
+                        strictly("1.21.1-R0.1-SNAPSHOT")
                     }
                 }
             }

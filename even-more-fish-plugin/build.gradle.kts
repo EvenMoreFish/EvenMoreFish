@@ -30,7 +30,7 @@ dependencies {
 
     compileOnly(libs.paper.api) {
         version {
-            strictly("1.20.1-R0.1-SNAPSHOT")
+            strictly("1.21.1-R0.1-SNAPSHOT")
         }
     }
 
@@ -310,7 +310,7 @@ testing {
                 implementation(libs.boostedyaml)
                 implementation(libs.paper.api) {
                     version {
-                        strictly("1.20.1-R0.1-SNAPSHOT")
+                        strictly("1.21.1-R0.1-SNAPSHOT")
                     }
                 }
                 runtimeOnly(libs.junit.jupiter.engine)
