@@ -4,7 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.EMFCompetitionEndEvent;
 import com.oheers.fish.api.EMFCompetitionStartEvent;
 import com.oheers.fish.api.Logging;
-import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.fishing.items.RarityKey;

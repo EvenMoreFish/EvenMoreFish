@@ -1,4 +1,4 @@
-package com.oheers.fish.api.config;
+package com.oheers.fish.config;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -21,9 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
-/**
- * For internal use only. This class is used internally and for official addons, and may be changed or removed without notice.
- */
 public class ConfigBase {
 
     private final boolean preventIO;

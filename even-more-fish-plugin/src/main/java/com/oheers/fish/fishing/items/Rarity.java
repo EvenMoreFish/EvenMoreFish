@@ -2,14 +2,13 @@ package com.oheers.fish.fishing.items;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.api.config.ConfigUtils;
 import com.oheers.fish.api.config.serializer.ItemSerializer;
 import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.Requirement;
-import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.items.config.RarityFileUpdates;
 import com.oheers.fish.items.ItemFactory;

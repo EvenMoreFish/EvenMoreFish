@@ -2,7 +2,6 @@ package com.oheers.fish.config;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
-import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.gui.GuiUtils;
 import com.oheers.fish.items.ItemFactory;

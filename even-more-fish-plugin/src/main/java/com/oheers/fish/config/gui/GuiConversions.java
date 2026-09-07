@@ -2,7 +2,7 @@ package com.oheers.fish.config.gui;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.Logging;
-import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.config.gui.impl.ApplyBaitsMenuGuiConfig;
 import com.oheers.fish.config.gui.impl.BaitsMenuGuiConfig;
 import com.oheers.fish.config.gui.impl.JournalFishGuiConfig;

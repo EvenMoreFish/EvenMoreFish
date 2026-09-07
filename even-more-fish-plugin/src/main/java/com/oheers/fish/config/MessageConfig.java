@@ -1,7 +1,6 @@
 package com.oheers.fish.config;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.messages.EMFConfigReader;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;

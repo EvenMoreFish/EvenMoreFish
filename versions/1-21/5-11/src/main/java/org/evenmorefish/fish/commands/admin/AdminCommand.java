@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.api.utils.ManifestUtil;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.commands.AdminCommandProvider;

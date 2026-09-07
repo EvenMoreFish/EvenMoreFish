@@ -2,7 +2,7 @@ package com.oheers.fish.fishing.rods;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.Logging;
-import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.config.MainConfig;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;

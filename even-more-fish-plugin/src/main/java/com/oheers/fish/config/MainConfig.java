@@ -4,7 +4,6 @@ import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
-import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.config.serializer.BossBarOverlaySerializer;
 import com.oheers.fish.api.economy.EconomyType;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
