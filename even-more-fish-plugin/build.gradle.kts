@@ -251,13 +251,15 @@ val copyVersions by tasks.registering(Copy::class) {
         ":versions:1-21:1-4:build",
         ":versions:1-21:5-11:build",
         ":versions:26-1:build",
-        ":versions:26-2:build"
+        ":versions:26-2:build",
+        ":versions:26-3:build"
     )
 
     from(project(":versions:1-21:1-4").layout.buildDirectory.dir("libs"))
     from(project(":versions:1-21:5-11").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-1").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-2").layout.buildDirectory.dir("libs"))
+    from(project(":versions:26-3").layout.buildDirectory.dir("libs"))
     into(file("src/main/resources/versions"))
 }
 

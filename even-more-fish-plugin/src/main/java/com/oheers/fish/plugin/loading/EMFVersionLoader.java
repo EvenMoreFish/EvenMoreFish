@@ -69,6 +69,8 @@ public class EMFVersionLoader {
 
     private URL getURL(ClassLoader classLoader) {
         String version = Bukkit.getMinecraftVersion();
+        // Minecraft 26.3.x
+        if (version.startsWith("26.3")) return classLoader.getResource("versions/26-3.jar");
         // Minecraft 26.2.x
         if (version.startsWith("26.2")) return classLoader.getResource("versions/26-2.jar");
         // Minecraft 26.1.x
