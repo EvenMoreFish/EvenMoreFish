@@ -1,10 +1,15 @@
 package com.oheers.fish.api.config.serializer;
 
 import com.oheers.fish.api.Logging;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
+import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Locale;
 
 public class PotionEffectSerializer implements EMFSerializer<PotionEffect> {
 
@@ -45,7 +50,14 @@ public class PotionEffectSerializer implements EMFSerializer<PotionEffect> {
             Logging.error("The correct format is \"potion,amplifier,duration\".");
             return null;
         }
-        PotionEffectType type = PotionEffectType.getByName(split[0].toUpperCase());
+        NamespacedKey key = NamespacedKey.fromString(split[0].toLowerCase(Locale.ROOT));
+        if (key == null) {
+            Logging.error("Invalid potion effect key: " + split[0]);
+            return null;
+        }
+        PotionEffectType type = RegistryAccess.registryAccess()
+            .getRegistry(RegistryKey.MOB_EFFECT)
+            .get(key);
         if (type == null) {
             Logging.error("Potion effect type " + split[0] + " is not valid.");
             return null;
