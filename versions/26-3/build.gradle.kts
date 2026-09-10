@@ -1,15 +1,13 @@
 plugins {
     id("java-library")
     id("org.evenmorefish.fish.shadow-conventions")
-    //alias(libs.plugins.paperweight)
+    alias(libs.plugins.paperweight)
 }
 
 dependencies {
     compileOnly(project(":even-more-fish-plugin"))
 
-    compileOnly("io.papermc.paper:paper-api:26.3-pre-2.build.0-alpha")
-    compileOnly(rootProject.files("temp-libs/paper-26.3.jar")) // DO NOT PUSH JAR FILE TO GITHUB
-    //paperweight.paperDevBundle("26.3-pre-2.build.0-alpha")
+    paperweight.paperDevBundle("26.2.build.+") // TODO use 26.3 NMS - No real difference for our use but we should use 26.3 in the 26.3 module.
 
     compileOnly(libs.jspecify)
 }
