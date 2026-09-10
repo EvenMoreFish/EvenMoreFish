@@ -37,7 +37,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Registry;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Skull;
 import org.bukkit.enchantments.Enchantment;

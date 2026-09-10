@@ -2,7 +2,6 @@ package com.oheers.fish.api.requirement;
 
 import com.oheers.fish.api.fishing.FishingType;
 import dev.dejvokep.boostedyaml.YamlDocument;
-import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -11,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 public class RequirementContext {

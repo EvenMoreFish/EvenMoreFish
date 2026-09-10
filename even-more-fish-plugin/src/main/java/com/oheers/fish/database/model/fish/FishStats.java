@@ -19,7 +19,7 @@ public class FishStats {
     private final LocalDateTime firstCatchTime;
     @NonNull
     private final UUID discoverer;
-    private String discovererName;
+    private final String discovererName;
     private float shortestLength;
     @NonNull
     private UUID shortestFisher;

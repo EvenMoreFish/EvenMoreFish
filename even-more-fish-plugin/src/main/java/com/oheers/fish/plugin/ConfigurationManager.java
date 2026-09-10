@@ -13,10 +13,6 @@ import com.oheers.fish.config.gui.impl.JournalRaritiesGuiConfig;
 import com.oheers.fish.config.gui.impl.MainMenuGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuConfirmGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuNormalGuiConfig;
-import com.oheers.fish.messages.EMFListMessage;
-import com.oheers.fish.messages.EMFSingleMessage;
-import uk.firedev.daisylib.messages.MessageSettings;
-import uk.firedev.daisylib.messages.ObjectProcessor;
 
 import java.util.logging.Level;
 

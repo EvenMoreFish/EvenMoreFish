@@ -7,10 +7,10 @@ import org.jspecify.annotations.NonNull;
 import java.time.LocalDateTime;
 
 public class FishLogKey {
-    private int userId;
-    private String fishName;
-    private String fishRarity;
-    private LocalDateTime dateTime;
+    private final int userId;
+    private final String fishName;
+    private final String fishRarity;
+    private final LocalDateTime dateTime;
 
     public FishLogKey(int userId, String fishName, String fishRarity, LocalDateTime dateTime) {
         this.userId = userId;

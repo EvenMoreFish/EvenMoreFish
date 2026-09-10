@@ -42,7 +42,6 @@ import com.oheers.fish.plugin.DependencyManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import uk.firedev.daisylib.external.vault.VaultWrapper;
 
 import java.util.List;

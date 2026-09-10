@@ -70,10 +70,10 @@ public record TimeCode(@NonNull String code) {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof TimeCode other)) {
+        if (!(obj instanceof TimeCode(String otherCode))) {
             return false;
         }
-        return other.code.equals(this.code);
+        return otherCode.equals(this.code);
     }
 
     @Override

@@ -11,7 +11,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 
 /**
  * Uses reflection and classloaders to load our version-dependent jar files.

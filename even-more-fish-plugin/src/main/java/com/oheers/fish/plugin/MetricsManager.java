@@ -25,8 +25,7 @@ public class MetricsManager {
         metrics.addCustomChart(new SingleLineChart("fish_caught", this::getAndResetFishCaught));
         metrics.addCustomChart(new SingleLineChart("baits_applied", this::getAndResetBaitsApplied));
         metrics.addCustomChart(new SingleLineChart("baits_used", this::getAndResetBaitsUsed));
-        metrics.addCustomChart(new SimplePie("database", () ->
-                MainConfig.getInstance().databaseEnabled() ? "true" : "false"));
+        metrics.addCustomChart(new SimplePie("database", () -> String.valueOf(MainConfig.getInstance().databaseEnabled())));
     }
 
     public void incrementFishCaught(int amount) {

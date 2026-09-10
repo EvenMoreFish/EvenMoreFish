@@ -27,10 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import uk.firedev.daisylib.messages.message.ComponentMessage;
-import uk.firedev.daisylib.messages.message.ComponentSingleMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -80,13 +77,13 @@ public class Fish implements IFish {
 
         ItemFactory factory = ItemFactory.itemFactory(section);
 
-        factory.setFinalChanges(fish -> {
+        factory.setFinalChanges(fish ->
             fish.editMeta(meta -> {
-                meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+                meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            });
-        });
+            })
+        );
         this.factory = factory;
 
         this.displayName = section.getString("displayname", factory.getDisplayName().getConfiguredValue());
