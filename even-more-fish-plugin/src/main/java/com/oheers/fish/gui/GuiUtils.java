@@ -3,7 +3,7 @@ package com.oheers.fish.gui;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.economy.selling.SellHelper;
-import com.oheers.fish.commands.MainCommandProvider;
+import com.oheers.fish.commands.main.MainCommand;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.gui.guis.BaitsGui;
@@ -64,7 +64,7 @@ public class GuiUtils {
         });
         newActionMap.put("show-command-help", (gui, click) -> {
             click.getWhoClicked().closeInventory();
-            MainCommandProvider.sendHelpMessage(click.getWhoClicked());
+            MainCommand.sendHelpMessage(click.getWhoClicked());
         });
         newActionMap.put("sell-inventory", (gui, click) -> {
             HumanEntity humanEntity = click.getWhoClicked();

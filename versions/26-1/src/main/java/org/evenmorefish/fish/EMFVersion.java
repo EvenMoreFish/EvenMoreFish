@@ -19,8 +19,8 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.evenmorefish.fish.commands.admin.AdminCommand;
-import org.evenmorefish.fish.commands.main.MainCommand;
+import com.oheers.fish.commands.admin.AdminCommand;
+import com.oheers.fish.commands.main.MainCommand;
 import org.evenmorefish.fish.items.configs.FireResistantItemConfig;
 import org.evenmorefish.fish.items.configs.HideTooltipItemConfig;
 import org.evenmorefish.fish.items.configs.ItemRarityItemConfig;
@@ -63,22 +63,6 @@ public class EMFVersion extends EMFVersionProvider {
         inst.setHideTooltipResolver(HideTooltipItemConfig::new);
         inst.setItemRarityResolver(ItemRarityItemConfig::new);
         inst.setMaxStackSizeResolver(MaxStackSizeItemConfig::new);
-    }
-
-    @Override
-    public void loadCommands() {
-        plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(event -> {
-            event.registrar().register(new MainCommand().get(), MainConfig.getInstance().getMainCommandAliases());
-            if (MainConfig.getInstance().isAdminShortcutCommandEnabled()) {
-                String shortcut = MainConfig.getInstance().getAdminShortcutCommandName();
-                event.registrar().register(new AdminCommand(shortcut).get());
-            }
-        }));
-    }
-
-    @Override
-    public void resendCommands() {
-        Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -141,14 +125,5 @@ public class EMFVersion extends EMFVersionProvider {
 
     @Override
     public void reload() {}
-
-    @Override
-    public void enableCommands() {}
-
-    @Override
-    public void registerCommands() {}
-
-    @Override
-    public void disableCommands() {}
 
 }
