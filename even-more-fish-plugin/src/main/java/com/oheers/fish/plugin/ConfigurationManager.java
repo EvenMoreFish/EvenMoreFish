@@ -13,6 +13,7 @@ import com.oheers.fish.config.gui.impl.JournalRaritiesGuiConfig;
 import com.oheers.fish.config.gui.impl.MainMenuGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuConfirmGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuNormalGuiConfig;
+import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import uk.firedev.messagelib.MessageLibSettings;
@@ -96,6 +97,10 @@ public class ConfigurationManager {
         ObjectProcessor.registerProcessor(
             EMFListMessage.class,
             EMFListMessage::getComponentListMessage
+        );
+        ObjectProcessor.registerProcessor(
+            ConfigMessage.class,
+            msg -> msg.getMessage().getComponentListMessage()
         );
     }
 

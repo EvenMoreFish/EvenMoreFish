@@ -13,6 +13,7 @@ import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import com.oheers.fish.database.Database;
@@ -209,7 +210,7 @@ public class AdminCommand {
             .withArguments(
                 new MultiLiteralArgument(
                     "listTarget",
-                    "fish", "rarities", "requirementTypes", "rewardTypes", "itemAddons"
+                    "fish", "rarities", "requirementTypes", "rewardTypes", "itemAddons", "competitionTypes"
                 ),
                 RarityArgument.create().setOptional(true)
             )
@@ -255,6 +256,7 @@ public class AdminCommand {
                     case "requirementTypes" -> CommandUtils.listRequirementTypes(sender);
                     case "rewardTypes" -> CommandUtils.listRewardTypes(sender);
                     case "itemAddons" -> CommandUtils.listItemAddons(sender);
+                    case "competitionTypes" -> CommandUtils.listCompetitionTypes(sender);
                 }
             });
     }
@@ -449,7 +451,7 @@ public class AdminCommand {
                 message.setVariable("{rarities}", String.valueOf(FishManager.getInstance().getRarityMap().size()));
                 message.setVariable("{fish}", String.valueOf(fishCount));
                 message.setVariable("{baits}", String.valueOf(BaitManager.getInstance().getItemMap().size()));
-                message.setVariable("{competitions}", String.valueOf(EvenMoreFish.getInstance().getCompetitionQueue().getSize()));
+                message.setVariable("{competitions}", String.valueOf(CompetitionManager.getInstance().getSize()));
                 message.setVariable("{engine}", databaseEngine);
                 message.setVariable("{type}", databaseType);
 
@@ -527,18 +529,18 @@ public class AdminCommand {
                 // StringArgument containing all loaded competition ids
                 ArgumentHelper.getAsyncStringsArgument(
                     "competitionId",
-                    info -> EvenMoreFish.getInstance().getCompetitionQueue().getItemMap().keySet().toArray(String[]::new)
+                    info -> CompetitionManager.getInstance().getItemMap().keySet().toArray(String[]::new)
                 ),
                 new IntegerArgument("durationSeconds", 1).setOptional(true)
             )
             .executes((sender, arguments) -> {
                 final String id = Objects.requireNonNull(arguments.getUnchecked("competitionId"));
                 final Integer duration = arguments.getUnchecked("durationSeconds");
-                if (Competition.isActive()) {
+                if (CompetitionManager.getInstance().isCompetitionActive()) {
                     ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
                     return;
                 }
-                CompetitionFile file = EvenMoreFish.getInstance().getCompetitionQueue().getItemMap().get(id);
+                CompetitionFile file = CompetitionManager.getInstance().getItemMap().get(id);
                 if (file == null) {
                     ConfigMessage.INVALID_COMPETITION_ID.getMessage().send(sender);
                     return;
@@ -555,7 +557,7 @@ public class AdminCommand {
     private CommandAPICommand getCompetitionEnd() {
         return new CommandAPICommand("end")
             .executes(info -> {
-                Competition active = Competition.getCurrentlyActive();
+                Competition active = CompetitionManager.getInstance().getActiveCompetition();
                 if (active != null) {
                     active.end(false);
                     return;
@@ -571,12 +573,12 @@ public class AdminCommand {
                 CompetitionTypeArgument.create().setOptional(true)
             )
             .executes((sender, args) -> {
-                if (Competition.isActive()) {
+                if (CompetitionManager.getInstance().isCompetitionActive()) {
                     ConfigMessage.COMPETITION_ALREADY_RUNNING.getMessage().send(sender);
                     return;
                 }
                 final int duration = (int) args.getOptional("durationMinutes").orElse(1);
-                final CompetitionType type = (CompetitionType) args.getOptional("competitionType").orElse(CompetitionType.LARGEST_FISH);
+                final CompetitionType type = (CompetitionType) args.getOptional("competitionType").orElse(CompetitionType.DEFAULT);
                 CompetitionFile file = new CompetitionFile("adminTest", type, duration);
                 Competition competition = new Competition(file);
                 competition.setAdminStarted(true);
@@ -588,7 +590,7 @@ public class AdminCommand {
         return new CommandAPICommand("extend")
             .withArguments(new IntegerArgument("durationSeconds", 1))
             .executes(info -> {
-                Competition active = Competition.getCurrentlyActive();
+                Competition active = CompetitionManager.getInstance().getActiveCompetition();
                 if (active == null) {
                     ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
                     return;

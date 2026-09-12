@@ -16,13 +16,14 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("UnstableApiUsage")
 public class BaitArgument implements CustomArgumentType.Converted<BaitHandler, String>{
     private static final DynamicCommandExceptionType NOT_BAIT = new DynamicCommandExceptionType(
             obj -> MessageComponentSerializer.message().serialize(Component.text(obj + " is not a valid bait!"))
     );
 
     @Override
-    public BaitHandler convert(String nativeType) throws CommandSyntaxException {
+    public @NonNull BaitHandler convert(@NonNull String nativeType) throws CommandSyntaxException {
         BaitHandler bait = BaitManager.getInstance().getBait(nativeType);
         if (bait == null) {
             bait = BaitManager.getInstance().getBait(nativeType.replace("_", " "));

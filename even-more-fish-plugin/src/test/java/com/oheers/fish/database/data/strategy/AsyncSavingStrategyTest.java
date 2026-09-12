@@ -1,5 +1,6 @@
 package com.oheers.fish.database.data.strategy;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ class AsyncSavingStrategyTest {
         private final List<Runnable> tasks = new ArrayList<>();
 
         @Override
-        public void execute(Runnable command) {
+        public void execute(@NonNull Runnable command) {
             tasks.add(command);
         }
 

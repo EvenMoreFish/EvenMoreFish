@@ -9,6 +9,7 @@ import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.utils.ManifestUtil;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.commands.AdminCommandProvider;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.database.Database;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.fishing.items.FishManager;
@@ -229,7 +230,7 @@ public class AdminCommand extends AdminCommandProvider<CommandNode<CommandSource
         message.setVariable("{rarities}", String.valueOf(FishManager.getInstance().getRarityMap().size()));
         message.setVariable("{fish}", String.valueOf(fishCount));
         message.setVariable("{baits}", String.valueOf(BaitManager.getInstance().getItemMap().size()));
-        message.setVariable("{competitions}", String.valueOf(EvenMoreFish.getInstance().getCompetitionQueue().getSize()));
+        message.setVariable("{competitions}", String.valueOf(CompetitionManager.getInstance().getSize()));
         message.setVariable("{engine}", databaseEngine);
         message.setVariable("{type}", databaseType);
 

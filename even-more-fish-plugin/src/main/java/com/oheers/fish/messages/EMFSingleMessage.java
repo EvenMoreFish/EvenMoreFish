@@ -49,9 +49,13 @@ public class EMFSingleMessage extends EMFMessage {
 
     @Override
     public ComponentSingleMessage processPlaceholders(@Nullable OfflinePlayer player) {
+        ComponentSingleMessage message = underlying;
         OfflinePlayer relevant = Optional.ofNullable(player).orElse(relevantPlayer);
-        String name = FishUtils.getPlayerNameOrDefault(relevant, "N/A");
-        return underlying.parsePlaceholderAPI(relevant).replace("{player}", name);
+        if (relevant != null) {
+            String name = FishUtils.getPlayerNameOrDefault(relevant, "N/A");
+            message = message.replace("{player}", name);
+        }
+        return message.parsePlaceholderAPI(relevant);
     }
 
     // Factory methods
