@@ -53,4 +53,5 @@ The main command (`/emf`) can have custom aliases configured in `MainConfig`.
 | `/emf admin database repair-flyway`     | None                                | `emf.admin.debug.database.flyway`  | Attempts to repair migrations          |
 | `/emf admin database clean-flyway`      | None                                | `emf.admin.debug.database.clean`   | Cleans Flyway tables                   |
 | `/emf admin database migrate-to-latest` | None                                | `emf.admin.debug.database.migrate` | Forces migration to latest DB version  |
+| `/emf admin database reset`             | None                                | `emf.admin.debug.database.reset`   | Resets EMF DB data after reconfirming within 30 seconds |
 

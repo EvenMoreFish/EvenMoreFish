@@ -86,6 +86,10 @@ public class UserManager implements Listener {
         return databaseWorker.query(() -> getUserId(uuid));
     }
 
+    public void clearCache() {
+        userCache.clear();
+    }
+
     private int loadOrCreateUser(final UUID uuid) {
         int id = database.getUserId(uuid);
         if (id == 0) {

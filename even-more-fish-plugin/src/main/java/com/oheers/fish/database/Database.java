@@ -31,12 +31,21 @@ import org.jdbi.v3.core.statement.PreparedBatch;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jspecify.annotations.NonNull;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -243,6 +252,10 @@ public class Database implements DatabaseAPI {
         return connectionFactory.getType();
     }
 
+    public int resetPluginData() {
+        return withHandle(handle -> resetPluginData(handle.getConnection()), -1);
+    }
+
     @Override
     public UserFishStats getUserFishStats(int userId, String fishName, String fishRarity) {
         return withHandle(handle -> handle.createQuery("select user_id, fish_name, fish_rarity, first_catch_time, shortest_length, longest_length, quantity from " + userFishStatsTable + " where user_id = :user_id and fish_name = :fish_name and fish_rarity = :fish_rarity").bind("user_id", userId).bind("fish_name", fishName).bind("fish_rarity", fishRarity).mapTo(UserFishStats.class).findOne().orElse(null), null);
@@ -399,6 +412,133 @@ public class Database implements DatabaseAPI {
 
     private String fishStatsUpsertSql() {
         return sqlDialect.fishStatsUpsert(fishTable);
+    }
+
+    private int resetPluginData(@NonNull Connection connection) throws SQLException {
+        List<String> tables = discoverManagedTables(connection);
+        if (tables.isEmpty()) {
+            return 0;
+        }
+
+        String type = connectionFactory.getType().toUpperCase(Locale.ROOT);
+        switch (type) {
+            case "SQLITE" -> resetSqliteTables(connection, tables);
+            case "MYSQL", "MARIADB" -> resetMysqlTables(connection, tables);
+            case "H2" -> resetH2Tables(connection, tables);
+            case "POSTGRES", "POSTGRESQL" -> resetPostgresTables(connection, tables);
+            default -> throw new SQLException("Unsupported database type for reset: " + type);
+        }
+
+        EvenMoreFish.getInstance().getLogger().info("Reset EMF database tables: " + String.join(", ", tables));
+        return tables.size();
+    }
+
+    private @NonNull List<String> discoverManagedTables(@NonNull Connection connection) throws SQLException {
+        String prefix = MainConfig.getInstance().getPrefix();
+        String flywayTable = prefix + "flyway_schema_history";
+        DatabaseMetaData metaData = connection.getMetaData();
+        Map<String, String> tablesByLowerName = new LinkedHashMap<>();
+
+        collectManagedTables(metaData, connection.getCatalog(), null, prefix, flywayTable, tablesByLowerName);
+        collectManagedTables(metaData, null, null, prefix, flywayTable, tablesByLowerName);
+
+        return new ArrayList<>(tablesByLowerName.values());
+    }
+
+    private void collectManagedTables(
+        @NonNull DatabaseMetaData metaData,
+        String catalog,
+        String schema,
+        @NonNull String prefix,
+        @NonNull String flywayTable,
+        @NonNull Map<String, String> tablesByLowerName
+    ) throws SQLException {
+        try (ResultSet tables = metaData.getTables(catalog, schema, "%", new String[]{"TABLE"})) {
+            while (tables.next()) {
+                String tableName = tables.getString("TABLE_NAME");
+                if (tableName == null) {
+                    continue;
+                }
+
+                String normalizedName = tableName.toLowerCase(Locale.ROOT);
+                if (!normalizedName.startsWith(prefix.toLowerCase(Locale.ROOT))) {
+                    continue;
+                }
+                if (normalizedName.equals(flywayTable.toLowerCase(Locale.ROOT))) {
+                    continue;
+                }
+
+                tablesByLowerName.putIfAbsent(normalizedName, tableName);
+            }
+        }
+    }
+
+    private void resetSqliteTables(@NonNull Connection connection, @NonNull List<String> tables) throws SQLException {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute("PRAGMA foreign_keys = OFF");
+            try {
+                for (String table : tables) {
+                    statement.executeUpdate("DELETE FROM " + quotedIdentifier(connection, table));
+                }
+                statement.executeUpdate("DELETE FROM sqlite_sequence WHERE name IN (" + quotedStringList(tables) + ")");
+            } finally {
+                statement.execute("PRAGMA foreign_keys = ON");
+            }
+        }
+    }
+
+    private void resetMysqlTables(@NonNull Connection connection, @NonNull List<String> tables) throws SQLException {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute("SET FOREIGN_KEY_CHECKS = 0");
+            try {
+                for (String table : tables) {
+                    statement.executeUpdate("TRUNCATE TABLE " + quotedIdentifier(connection, table));
+                }
+            } finally {
+                statement.execute("SET FOREIGN_KEY_CHECKS = 1");
+            }
+        }
+    }
+
+    private void resetH2Tables(@NonNull Connection connection, @NonNull List<String> tables) throws SQLException {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute("SET REFERENTIAL_INTEGRITY FALSE");
+            try {
+                for (String table : tables) {
+                    statement.executeUpdate("TRUNCATE TABLE " + quotedIdentifier(connection, table) + " RESTART IDENTITY");
+                }
+            } finally {
+                statement.execute("SET REFERENTIAL_INTEGRITY TRUE");
+            }
+        }
+    }
+
+    private void resetPostgresTables(@NonNull Connection connection, @NonNull List<String> tables) throws SQLException {
+        List<String> quotedTables = new ArrayList<>(tables.size());
+        for (String table : tables) {
+            quotedTables.add(quotedIdentifier(connection, table));
+        }
+
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(
+                "TRUNCATE TABLE " + quotedTables.stream()
+                    .collect(Collectors.joining(", ")) + " RESTART IDENTITY"
+            );
+        }
+    }
+
+    private @NonNull String quotedIdentifier(@NonNull Connection connection, @NonNull String identifier) throws SQLException {
+        String quote = connection.getMetaData().getIdentifierQuoteString();
+        if (quote == null || quote.isBlank()) {
+            return identifier;
+        }
+        return quote + identifier.replace(quote, quote + quote) + quote;
+    }
+
+    private @NonNull String quotedStringList(@NonNull List<String> values) {
+        return values.stream()
+            .map(value -> "'" + value.replace("'", "''") + "'")
+            .collect(Collectors.joining(", "));
     }
 
     private <T> T withHandle(HandleCallback<T> callback, T fallback) {
