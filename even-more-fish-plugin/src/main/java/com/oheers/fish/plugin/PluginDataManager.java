@@ -234,5 +234,42 @@ public class PluginDataManager {
         plugin.getLogger().info("Preloaded %d fish stats entries.".formatted(rows.size()));
     }
 
+    public int resetDatabaseData() {
+        if (database == null) {
+            return 0;
+        }
+
+        clearRuntimeCaches();
+        int resetTableCount = database.resetPluginData();
+        if (resetTableCount >= 0) {
+            preloadFishStats();
+        }
+        return resetTableCount;
+    }
+
+    private void clearRuntimeCaches() {
+        if (userManager != null) {
+            userManager.clearCache();
+        }
+        if (fishLogDataManager != null) {
+            fishLogDataManager.clear();
+        }
+        if (fishStatsDataManager != null) {
+            fishStatsDataManager.clear();
+        }
+        if (userFishStatsDataManager != null) {
+            userFishStatsDataManager.clear();
+        }
+        if (userReportDataManager != null) {
+            userReportDataManager.clear();
+        }
+        if (competitionDataManager != null) {
+            competitionDataManager.clear();
+        }
+
+        preloadedUserFishStats.clear();
+        fishStatsPreloaded = false;
+    }
+
 
 }

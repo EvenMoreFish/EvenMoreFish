@@ -157,6 +157,11 @@ public class DataManager<T> {
         flushDirty();
     }
 
+    public void clear() {
+        cache.clear();
+        dirtyKeys.clear();
+    }
+
     private void flushDirty() {
         if (dirtyKeys.isEmpty()) {
             return;
