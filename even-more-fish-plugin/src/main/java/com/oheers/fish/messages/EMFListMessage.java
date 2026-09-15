@@ -50,9 +50,13 @@ public class EMFListMessage extends EMFMessage {
 
     @Override
     public ComponentListMessage processPlaceholders(@Nullable OfflinePlayer player) {
+        ComponentListMessage message = underlying;
         OfflinePlayer relevant = Optional.ofNullable(player).orElse(relevantPlayer);
-        String name = FishUtils.getPlayerNameOrDefault(relevant, "N/A");
-        return underlying.parsePlaceholderAPI(relevant).replace("{player}", name);
+        if (relevant != null) {
+            String name = FishUtils.getPlayerNameOrDefault(relevant, "N/A");
+            message = message.replace("{player}", name);
+        }
+        return message.parsePlaceholderAPI(relevant);
     }
 
     // Factory methods

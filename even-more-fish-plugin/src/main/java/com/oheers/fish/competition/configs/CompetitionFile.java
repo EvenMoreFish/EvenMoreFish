@@ -2,11 +2,13 @@ package com.oheers.fish.competition.configs;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.config.serializer.SoundSerializer;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.competition.CompetitionType;
+import com.oheers.fish.competition.CompetitionTypeRegistry;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.messages.EMFSingleMessage;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -31,7 +33,7 @@ public class CompetitionFile extends ConfigBase {
 
     private final @NonNull Logger logger = getPlugin().getLogger();
     private final @NonNull String id;
-    private final @NonNull CompetitionType type;
+    private final @Nullable CompetitionType type;
     private final int duration;
 
     // We should never use the configUpdater for this.
@@ -39,7 +41,7 @@ public class CompetitionFile extends ConfigBase {
         super(file, EvenMoreFish.getInstance(), false);
         CompetitionFileUpdates.update(this);
         this.id = validateId();
-        this.type = validateType();
+        this.type = null;
         this.duration = validateDuration();
     }
 
@@ -60,18 +62,6 @@ public class CompetitionFile extends ConfigBase {
             throw new InvalidConfigurationException("CompetitionFile " + getFileName() + " has no configured id.");
         }
         return id;
-    }
-
-    private CompetitionType validateType() throws InvalidConfigurationException {
-        String typeStr = getConfig().getString("type");
-        if (typeStr == null) {
-            throw new InvalidConfigurationException("CompetitionFile " + getFileName() + " has no configured type.");
-        }
-        CompetitionType type = CompetitionType.getType(typeStr);
-        if (type == null) {
-            throw new InvalidConfigurationException("CompetitionFile " + getFileName() + " has an invalid type: " + typeStr);
-        }
-        return type;
     }
 
     private int validateDuration() throws InvalidConfigurationException {
@@ -101,8 +91,21 @@ public class CompetitionFile extends ConfigBase {
     /**
      * @return This competition's type.
      */
-    public @NonNull CompetitionType getType() {
-        return this.type;
+    public @Nullable CompetitionType getType() {
+        if (this.type != null) {
+            return this.type;
+        }
+        String typeStr = getConfig().getString("type");
+        if (typeStr == null) {
+            Logging.warn("CompetitionFile " + getFileName() + " has no configured type.");
+            return null;
+        }
+        CompetitionType type = CompetitionTypeRegistry.getInstance().get(typeStr);
+        if (type == null) {
+            Logging.warn("CompetitionFile " + getFileName() + " has an invalid type: " + typeStr);
+            return null;
+        }
+        return type;
     }
 
     /**

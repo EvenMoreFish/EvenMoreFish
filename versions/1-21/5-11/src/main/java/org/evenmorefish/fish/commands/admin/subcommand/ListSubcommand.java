@@ -32,7 +32,8 @@ public class ListSubcommand {
             .then(fish())
             .then(rewardTypes())
             .then(requirementTypes())
-            .then(itemAddons());
+            .then(itemAddons())
+            .then(competitionTypes());
     }
 
     private ArgumentBuilder<CommandSourceStack, ?> rarities() {
@@ -75,6 +76,14 @@ public class ListSubcommand {
         return Commands.literal("itemAddons")
             .executes(ctx -> {
                 CommandUtils.listItemAddons(ctx.getSource().getSender());
+                return 1;
+            });
+    }
+
+    private ArgumentBuilder<CommandSourceStack, ?> competitionTypes() {
+        return Commands.literal("competitionTypes")
+            .executes(ctx -> {
+                CommandUtils.listCompetitionTypes(ctx.getSource().getSender());
                 return 1;
             });
     }

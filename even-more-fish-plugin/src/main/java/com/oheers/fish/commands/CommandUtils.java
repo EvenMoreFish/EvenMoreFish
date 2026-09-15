@@ -5,6 +5,8 @@ import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.api.requirement.RequirementType;
 import com.oheers.fish.api.reward.RewardType;
+import com.oheers.fish.competition.CompetitionType;
+import com.oheers.fish.competition.CompetitionTypeRegistry;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -13,12 +15,14 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class CommandUtils {
@@ -68,12 +72,12 @@ public class CommandUtils {
         builder.append(listMessage.getComponentMessage());
 
         EMFRegistry.REWARD_TYPE.getRegistry().forEach((string, rewardType) -> {
-            Component show = EMFSingleMessage.fromString(
-                "Author: " + rewardType.getAuthor() + "\n" +
-                    "Registered Plugin: " + rewardType.getPlugin().getName()
-            ).getComponentMessage();
+            Component show = EMFSingleMessage.fromStringList(List.of(
+                "Author: " + rewardType.getAuthor(),
+                "Plugin: " + rewardType.getPlugin().getName()
+            )).getComponentMessage();
 
-            TextComponent.Builder typeBuilder = Component.text().content(rewardType.getIdentifier());
+            TextComponent.Builder typeBuilder = buildTypeDisplay(rewardType.getIdentifier());
             typeBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, show));
             builder.append(typeBuilder).append(Component.text(", "));
         });
@@ -88,12 +92,12 @@ public class CommandUtils {
         builder.append(listMessage.getComponentMessage());
 
         EMFRegistry.REQUIREMENT_TYPE.getRegistry().forEach((string, requirementType) -> {
-            Component show = EMFSingleMessage.fromString(
-                "Author: " + requirementType.getAuthor() + "\n" +
-                    "Registered Plugin: " + requirementType.getPlugin().getName()
-            ).getComponentMessage();
+            Component show = EMFSingleMessage.fromStringList(List.of(
+                "Author: " + requirementType.getAuthor(),
+                "Plugin: " + requirementType.getPlugin().getName()
+            )).getComponentMessage();
 
-            TextComponent.Builder typeBuilder = Component.text().content(requirementType.getIdentifier());
+            TextComponent.Builder typeBuilder = buildTypeDisplay(requirementType.getIdentifier());
             typeBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, show));
             builder.append(typeBuilder).append(Component.text(", "));
         });
@@ -112,11 +116,39 @@ public class CommandUtils {
                 "Author: " + itemAddon.getAuthor()
             ).getComponentMessage();
 
-            TextComponent.Builder typeBuilder = Component.text().content(itemAddon.getIdentifier());
+            TextComponent.Builder typeBuilder = buildTypeDisplay(itemAddon.getIdentifier());
             typeBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, show));
             builder.append(typeBuilder).append(Component.text(", "));
         });
         audience.sendMessage(builder.build());
+    }
+
+    public static void listCompetitionTypes(@NonNull Audience audience) {
+        TextComponent.Builder builder = Component.text();
+
+        EMFMessage listMessage = ConfigMessage.ADMIN_LIST_ADDONS.getMessage();
+        listMessage.setVariable("{addon-type}", CompetitionType.class.getSimpleName());
+        builder.append(listMessage.getComponentMessage());
+
+        CompetitionTypeRegistry.getInstance().getRegistry().forEach((string, competitionType) -> {
+            Component show = EMFSingleMessage.fromStringList(List.of(
+                "Author: " + competitionType.getAuthor(),
+                "Plugin: " + competitionType.getPlugin().getName()
+            )).getComponentMessage();
+
+            TextComponent.Builder typeBuilder = buildTypeDisplay(competitionType.getKey());
+            typeBuilder.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, show));
+            builder.append(typeBuilder).append(Component.text(", "));
+        });
+        audience.sendMessage(builder.build());
+    }
+
+    private static TextComponent.Builder buildTypeDisplay(@NonNull String name) {
+        TextComponent.Builder builder = Component.text();
+        builder.append(Component.text("["));
+        builder.append(Component.text(name.toLowerCase(Locale.ROOT)).color(NamedTextColor.AQUA));
+        builder.append(Component.text("]"));
+        return builder;
     }
 
 }

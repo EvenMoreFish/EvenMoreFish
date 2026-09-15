@@ -1,6 +1,8 @@
 package org.evenmorefish.fish.commands.arguments;
 
+import com.oheers.fish.api.registry.RegistryItem;
 import com.oheers.fish.competition.CompetitionType;
+import com.oheers.fish.competition.CompetitionTypeRegistry;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.CustomArgument;
@@ -12,7 +14,7 @@ public class CompetitionTypeArgument {
 
     public static Argument<CompetitionType> create() {
         return new CustomArgument<>(new StringArgument("competitionType"), info -> {
-            CompetitionType type = CompetitionType.getType(info.input());
+            CompetitionType type = CompetitionTypeRegistry.getInstance().get(info.input());
             if (type == null) {
                 throw CustomArgument.CustomArgumentException.fromMessageBuilder(
                         new CustomArgument.MessageBuilder("Unknown competition type: ").appendArgInput()
@@ -20,7 +22,9 @@ public class CompetitionTypeArgument {
             }
             return type;
         }).replaceSuggestions(ArgumentSuggestions.strings(
-                Arrays.stream(CompetitionType.values()).map(CompetitionType::toString).toArray(String[]::new)
+            CompetitionTypeRegistry.getInstance().getRegistry().values().stream()
+                .map(RegistryItem::getKey)
+                .toArray(String[]::new)
         ));
     }
 

@@ -5,6 +5,7 @@ import com.oheers.fish.api.events.EMFFishHuntEvent;
 import com.oheers.fish.api.fishing.CatchType;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.messages.ConfigMessage;
@@ -70,7 +71,7 @@ public class HuntingProcessor extends Processor<EntityDeathEvent> implements Lis
 
     @Override
     protected boolean competitionOnlyCheck() {
-        Competition active = Competition.getCurrentlyActive();
+        Competition active = CompetitionManager.getInstance().getActiveCompetition();
 
         if (active != null) {
             return active.getCompetitionFile().isAllowHunting();

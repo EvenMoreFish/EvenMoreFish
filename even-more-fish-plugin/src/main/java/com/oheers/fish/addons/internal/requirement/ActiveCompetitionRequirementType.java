@@ -5,6 +5,7 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.requirement.RequirementType;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
@@ -23,7 +24,7 @@ public class ActiveCompetitionRequirementType extends RequirementType {
      */
     @Override
     public boolean checkRequirement(@NonNull RequirementContext context, @NonNull List<String> values) {
-        String id = Optional.ofNullable(Competition.getCurrentlyActive())
+        String id = Optional.ofNullable(CompetitionManager.getInstance().getActiveCompetition())
             .map(Competition::getCompetitionName)
             .orElse("none");
         boolean match = values.stream().anyMatch(id::equalsIgnoreCase);

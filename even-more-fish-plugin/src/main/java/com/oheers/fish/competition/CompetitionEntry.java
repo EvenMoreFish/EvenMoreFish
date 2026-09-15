@@ -1,6 +1,7 @@
 package com.oheers.fish.competition;
 
 import com.oheers.fish.api.fishing.items.IFish;
+import org.jspecify.annotations.NonNull;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -10,7 +11,7 @@ public class CompetitionEntry {
     private final UUID player;
     private final IFish fish;
     protected long time;
-    protected float value;
+    protected float value = 0.0F;
     private final CompetitionType type;
 
     public CompetitionEntry(UUID player, IFish fish, CompetitionType type) {
@@ -18,12 +19,18 @@ public class CompetitionEntry {
         this.fish = fish;
         this.time = Instant.now().toEpochMilli();
         this.type = type;
+        trackFish(fish);
+    }
 
-        if (type.getStrategy().shouldUseFishLength()) {
-            this.value = fish.getLength();
-        } else {
-            this.value = 1;
-        }
+    /**
+     * Creates a copy of an existing {@link CompetitionEntry} with an updated timestamp.
+     */
+    public CompetitionEntry(@NonNull CompetitionEntry entry) {
+        this.player = entry.player;
+        this.fish = entry.fish;
+        this.time = Instant.now().toEpochMilli();
+        this.value = entry.value;
+        this.type = entry.type;
     }
 
     /**
@@ -35,6 +42,16 @@ public class CompetitionEntry {
     public void incrementValue(float increaseAmount) {
         this.value += Math.abs(increaseAmount);
         this.time = Instant.now().toEpochMilli();
+    }
+
+    public void trackFish(@NonNull IFish fish) {
+        if (type.useFishLength()) {
+            if (!fish.isLengthless()) {
+                value += fish.getLength();
+            }
+        } else {
+            value += 1;
+        }
     }
 
     public IFish getFish() {

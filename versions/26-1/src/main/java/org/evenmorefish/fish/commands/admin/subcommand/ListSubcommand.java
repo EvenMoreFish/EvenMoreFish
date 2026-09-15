@@ -32,7 +32,8 @@ public class ListSubcommand {
             .then(fish())
             .then(rewardTypes())
             .then(requirementTypes())
-            .then(itemAddons());
+            .then(itemAddons())
+            .then(competitionTypes());
     }
 
     private ArgumentBuilder<CommandSourceStack, ?> rarities() {
@@ -79,6 +80,14 @@ public class ListSubcommand {
             });
     }
 
+    private ArgumentBuilder<CommandSourceStack, ?> competitionTypes() {
+        return Commands.literal("competitionTypes")
+            .executes(ctx -> {
+                CommandUtils.listCompetitionTypes(ctx.getSource().getSender());
+                return 1;
+            });
+    }
+
     private void showRarities(@NonNull CommandSender sender) {
         TextComponent.Builder builder = Component.text();
         for (IRarity rarity : FishManager.getInstance().getRarityMap().values()) {
@@ -90,7 +99,7 @@ public class ListSubcommand {
                 HoverEvent.Action.SHOW_TEXT,
                 EMFSingleMessage.fromString("Click to view " + rarity.getId() + " fish.").getComponentMessage()
             ));
-            rarityBuilder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, ClickEvent.Payload.string("/emf admin list fish " + rarity.getId())));
+            rarityBuilder.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/emf admin list fish " + rarity.getId()));
             builder.append(rarityBuilder);
         }
         sender.sendMessage(builder.build());

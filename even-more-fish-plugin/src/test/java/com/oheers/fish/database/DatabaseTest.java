@@ -1,15 +1,19 @@
 package com.oheers.fish.database;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.baits.AbstractBaitManager;
+import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionType;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.database.model.user.UserReport;
+import com.oheers.fish.fishing.rods.RodManager;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.HandleConsumer;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Update;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
@@ -153,23 +157,23 @@ class DatabaseTest {
     }
 
     private static final class TestCompetition extends Competition {
-        private final Leaderboard leaderboard = new Leaderboard(CompetitionType.LARGEST_FISH);
+        private final Leaderboard leaderboard = new Leaderboard(CompetitionType.DEFAULT);
         private final String competitionName;
         private final LocalDateTime startTime;
 
         private TestCompetition(String competitionName, LocalDateTime startTime) {
-            super(60L, CompetitionType.LARGEST_FISH);
+            super(60L, CompetitionType.DEFAULT);
             this.competitionName = competitionName;
             this.startTime = startTime;
         }
 
         @Override
-        public Leaderboard getLeaderboard() {
+        public @NonNull Leaderboard getLeaderboard() {
             return leaderboard;
         }
 
         @Override
-        public String getCompetitionName() {
+        public @NonNull String getCompetitionName() {
             return competitionName;
         }
 

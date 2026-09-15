@@ -7,6 +7,7 @@ import com.oheers.fish.api.economy.selling.SellHelper;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.gui.guis.ApplyBaitsGui;
@@ -70,10 +71,10 @@ public class MainCommand {
     private CommandAPICommand getNext() {
         String name = MainConfig.getInstance().getNextSubCommandName();
         return new CommandAPICommand(name)
-            .withRequirement(sender -> sender.hasPermission(UserPerms.NEXT) && EvenMoreFish.getInstance().getCompetitionQueue().hasTimings())
+            .withRequirement(sender -> sender.hasPermission(UserPerms.NEXT) && CompetitionManager.getInstance().hasTimings())
             .withPermission(UserPerms.NEXT)
             .executes(info -> {
-                EMFMessage message = Competition.getNextCompetitionMessage();
+                EMFMessage message = CompetitionManager.getInstance().getNextCompetitionMessage();
                 message.prependMessage(PrefixType.DEFAULT.getPrefix());
                 message.send(info.sender());
             });
@@ -118,7 +119,7 @@ public class MainCommand {
         return new CommandAPICommand(name)
             .withPermission(UserPerms.TOP)
             .executes(info -> {
-                Competition active = Competition.getCurrentlyActive();
+                Competition active = CompetitionManager.getInstance().getActiveCompetition();
                 if (active == null) {
                     ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(info.sender());
                     return;
