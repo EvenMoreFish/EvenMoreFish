@@ -2,6 +2,7 @@ package com.oheers.fish.api;
 
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -15,6 +16,7 @@ import java.util.function.Predicate;
 /**
  * Internal use only.
  */
+@ApiStatus.Internal
 public abstract class AbstractFileBasedManager<T> {
     protected AbstractFileBasedManager<?> dependency;
 

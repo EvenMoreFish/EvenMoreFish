@@ -10,10 +10,13 @@ import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.data.FishRarityKey;
+import com.oheers.fish.database.data.UserFishRarityKey;
 import com.oheers.fish.database.model.fish.FishStats;
+import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.fishing.Processor;
 import com.oheers.fish.fishing.items.config.FishConversions;
@@ -21,6 +24,7 @@ import com.oheers.fish.fishing.items.config.RarityConversions;
 import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.items.nbt.NbtKeys;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
+import com.oheers.fish.plugin.PluginDataManager;
 import com.oheers.fish.utils.WeightedRandom;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -272,7 +276,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
         IRarity selected = WeightedRandom.pick(
             allowedRarities,
             weightFunction,
-            EvenMoreFish.getInstance().getRandom()
+            EvenMoreFish.RANDOM
         );
         return selected != null && isFishingAllowedInCompetition() ? selected : null;
     }
@@ -326,7 +330,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
         IFish selected = WeightedRandom.pick(
             available,
             weightFunction,
-            EvenMoreFish.getInstance().getRandom()
+            EvenMoreFish.RANDOM
         );
         return isFishingAllowedInCompetition() ? selected : null;
     }
@@ -352,7 +356,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
                 weightFunction,
                 boostRate,
                 boostedSet,
-                EvenMoreFish.getInstance().getRandom()
+                EvenMoreFish.RANDOM
         );
     }
 
@@ -375,7 +379,8 @@ public class FishManager extends AbstractFishManager<IRarity> {
             .filter(fish -> isFishAllowedByCustomRod(fish, customRod))
             .filter(fish -> isFishAllowedByProcessor(fish, processor))
             .filter(fish -> meetsRequirements(fish, doRequirementChecks, context))
-            .filter(this::isFishWithinCatchLimit)
+            .filter(this::isFishWithinGlobalCatchLimit)
+            .filter(fish -> isFishWithinPlayerCatchLimit(fish, player))
             .collect(Collectors.toList());
     }
 
@@ -455,11 +460,12 @@ public class FishManager extends AbstractFishManager<IRarity> {
             isFishBoosted(fish, boostRate, boostedFish) &&
             isFishAllowedByProcessor(fish, processor) &&
             meetsRequirements(fish, doRequirements, context) &&
-            isFishWithinCatchLimit(fish);
+            isFishWithinGlobalCatchLimit(fish) &&
+            isFishWithinPlayerCatchLimit(fish, context.getPlayer());
     }
 
-    private boolean isFishWithinCatchLimit(@NonNull IFish fish) {
-        int catchLimit = fish.getCatchLimit();
+    private boolean isFishWithinGlobalCatchLimit(@NonNull IFish fish) {
+        int catchLimit = fish.getGlobalCatchLimit();
         if (catchLimit <= 0 || !DatabaseUtil.isDatabaseOnline()) {
             return true;
         }
@@ -470,6 +476,27 @@ public class FishManager extends AbstractFishManager<IRarity> {
         }
 
         FishStats stats = dataManager.getFishStatsDataManager().peek(FishRarityKey.of(fish).toString());
+        int caught = stats == null ? 0 : stats.getQuantity();
+        return hasRemainingCatches(catchLimit, caught);
+    }
+
+    private boolean isFishWithinPlayerCatchLimit(@NonNull IFish fish, @Nullable Player player) {
+        int catchLimit = fish.getPlayerCatchLimit();
+        if (catchLimit <= 0 || !DatabaseUtil.isDatabaseOnline() || player == null) {
+            return true;
+        }
+
+        PluginDataManager dataManager = EvenMoreFish.getInstance().getPluginDataManager();
+        final int userId = dataManager.getUserManager().getUserId(player.getUniqueId());
+        if (userId == 0) {
+            EvenMoreFish.getInstance().getLogger().warning("Cannot check player catch amount because user id could not be resolved for " + player.getUniqueId());
+            return true;
+        }
+        if (!dataManager.isUserFishStatsPreloaded(userId)) {
+            return true;
+        }
+
+        UserFishStats stats = dataManager.getUserFishStatsDataManager().peek(UserFishRarityKey.of(userId, fish).toString());
         int caught = stats == null ? 0 : stats.getQuantity();
         return hasRemainingCatches(catchLimit, caught);
     }
@@ -520,7 +547,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
     }
 
     private boolean isFishingAllowedInCompetition() {
-        return Competition.isActive() || !MainConfig.getInstance().isFishCatchOnlyInCompetition();
+        return CompetitionManager.getInstance().isCompetitionActive() || !MainConfig.getInstance().isFishCatchOnlyInCompetition();
     }
 
     private IRarity selectRandomRarity(List<IRarity> rarities, double boostRate, Set<IRarity> boosted,
@@ -530,7 +557,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
             externallyBoostedWeight(fisher, location),
             boostRate,
             boosted,
-            EvenMoreFish.getInstance().getRandom()
+            EvenMoreFish.RANDOM
         );
     }
 

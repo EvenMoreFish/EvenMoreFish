@@ -8,6 +8,7 @@ import com.oheers.fish.api.sort.Sortable;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -64,7 +65,9 @@ public interface IFish extends Sortable {
 
     @NonNull Component getDisplayName();
 
-    int getCatchLimit();
+    int getGlobalCatchLimit();
+
+    int getPlayerCatchLimit();
 
     void setWeight(double weight);
 
@@ -117,6 +120,9 @@ public interface IFish extends Sortable {
     @NonNull List<Reward> getCatchRewards();
 
     @NonNull List<Reward> getSellRewards();
+
+    @ApiStatus.Internal
+    boolean isTrackInDatabase();
 
     // Deprecated - Do not remove.
 
@@ -183,6 +189,14 @@ public interface IFish extends Sortable {
             return getInteractRewards();
         }
         return getEatRewards();
+    }
+
+    /**
+     * @deprecated Use {@link #getGlobalCatchLimit()} instead.
+     */
+    @Deprecated(since = "2.4.7")
+    default int getCatchLimit() {
+        return getGlobalCatchLimit();
     }
 
 }

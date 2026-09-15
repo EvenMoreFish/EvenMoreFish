@@ -1,4 +1,4 @@
-package com.oheers.fish.commands.arguments;
+package org.evenmorefish.fish.commands.arguments;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -8,6 +8,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.competition.configs.CompetitionFile;
 import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
@@ -24,8 +25,8 @@ public class CompetitionFileArgument implements CustomArgumentType.Converted<Com
     );
 
     @Override
-    public @NonNull CompetitionFile convert(@NonNull String nativeType) throws CommandSyntaxException {
-        CompetitionFile file = EvenMoreFish.getInstance().getCompetitionQueue().getItemMap().get(nativeType);
+    public CompetitionFile convert(String nativeType) throws CommandSyntaxException {
+        CompetitionFile file = CompetitionManager.getInstance().getItemMap().get(nativeType);
         if (file == null) {
             throw UNKNOWN_TYPE.create(nativeType);
         }
@@ -41,7 +42,7 @@ public class CompetitionFileArgument implements CustomArgumentType.Converted<Com
     @NonNull
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(@NonNull CommandContext<S> context, @NonNull SuggestionsBuilder builder) {
-        EvenMoreFish.getInstance().getCompetitionQueue().getItemMap().keySet().stream()
+        CompetitionManager.getInstance().getItemMap().keySet().stream()
             .filter(name -> name.toLowerCase().startsWith(builder.getRemainingLowerCase()))
             .forEach(builder::suggest);
         return builder.buildFuture();

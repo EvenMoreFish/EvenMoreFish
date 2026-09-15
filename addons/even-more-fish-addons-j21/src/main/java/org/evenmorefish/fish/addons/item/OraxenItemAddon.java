@@ -8,6 +8,8 @@ import io.th0rgal.oraxen.api.events.OraxenItemsLoadedEvent;
 import io.th0rgal.oraxen.items.ItemBuilder;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class OraxenItemAddon extends ItemAddon {
 
@@ -46,6 +48,15 @@ public class OraxenItemAddon extends ItemAddon {
         }
 
         return item.build();
+    }
+
+    @Override
+    public @Nullable String convertToString(@NonNull ItemStack item) {
+        String id = OraxenItems.getIdByItem(item);
+        if (id == null) {
+            return null;
+        }
+        return "oraxen:" + id;
     }
 
     @EventHandler

@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -200,8 +201,16 @@ public class FishUtils {
         }
     }
 
+    public static @NonNull String getPlayerNameOrDefault(@Nullable OfflinePlayer player, @NonNull String def) {
+        return Optional.ofNullable(player)
+            .map(OfflinePlayer::getName)
+            .orElse(def);
+    }
+
     public static @Nullable String getPlayerName(@Nullable OfflinePlayer player) {
-        return player == null ? null : player.getName();
+        return Optional.ofNullable(player)
+            .map(OfflinePlayer::getName)
+            .orElse(null);
     }
 
     public static @Nullable String getPlayerName(@Nullable UUID uuid) {
@@ -411,6 +420,30 @@ public class FishUtils {
             }
         }
         return worth;
+    }
+
+    public static @Nullable Double parseDoubleOrRange(@Nullable String string) {
+        if (string == null) {
+            return null;
+        }
+        Double parsed = getDoubleOrNull(string);
+        // Single double.
+        if (parsed != null) {
+            return parsed;
+        }
+        // Range.
+        String[] split = string.split("-", 2);
+        if (split.length != 2) {
+            Logging.debug(string + " is not a valid set-worth range.");
+            return null;
+        }
+        Double min = getDoubleOrNull(split[0]);
+        Double max = getDoubleOrNull(split[1]);
+        if (min == null || max == null) {
+            Logging.debug(split[0] + " or " + split[1] + " are not valid doubles.");
+            return null;
+        }
+        return EvenMoreFish.RANDOM.nextDouble(min, max);
     }
 
     public static @Nullable Method getMethodOrNull(@NonNull Class<?> clazz, @NonNull String method, @NonNull Class<?> @NonNull ... parameterTypes) {

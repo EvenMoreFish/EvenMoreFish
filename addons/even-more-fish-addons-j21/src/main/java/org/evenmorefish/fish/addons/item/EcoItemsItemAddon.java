@@ -2,8 +2,14 @@ package org.evenmorefish.fish.addons.item;
 
 import com.oheers.fish.api.addons.ItemAddon;
 import com.willfp.ecoitems.items.EcoItem;
+import com.willfp.ecoitems.items.EcoItemFinder;
 import com.willfp.ecoitems.items.EcoItems;
+import com.willfp.ecoitems.items.ItemUtilsKt;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import java.util.Locale;
 
 public class EcoItemsItemAddon extends ItemAddon {
 
@@ -37,6 +43,15 @@ public class EcoItemsItemAddon extends ItemAddon {
         }
 
         return item.getItemStack();
+    }
+
+    @Override
+    public @Nullable String convertToString(@NonNull ItemStack item) {
+        EcoItem ecoItem = ItemUtilsKt.getEcoItem(item);
+        if (ecoItem == null) {
+            return null;
+        }
+        return "ecoitems:" + ecoItem.getID().toLowerCase(Locale.ROOT);
     }
 
 }

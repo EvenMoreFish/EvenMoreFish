@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("UnstableApiUsage")
 public class CustomRodArgument implements CustomArgumentType.Converted<CustomRod, String> {
+
     private static final DynamicCommandExceptionType UNKNOWN_ROD = new DynamicCommandExceptionType(
             obj -> MessageComponentSerializer.message().serialize(Component.text(obj + " is not a valid custom rod!"))
     );

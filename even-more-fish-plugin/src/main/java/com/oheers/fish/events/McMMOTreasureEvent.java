@@ -6,6 +6,7 @@ import com.oheers.fish.Checks;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.Toggle;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +25,7 @@ public class McMMOTreasureEvent implements Listener {
     }
 
     @EventHandler
-    public void mcmmoTreasure(McMMOReplaceVanillaTreasureEvent event) {
+    public void mcMMOTreasure(McMMOReplaceVanillaTreasureEvent event) {
         if (!MainConfig.getInstance().disableMcMMOTreasure()) {
             return;
         }
@@ -33,14 +34,14 @@ public class McMMOTreasureEvent implements Listener {
         if (causingPlayer != null && toggle.isCustomFishingDisabled(causingPlayer)) {
             return;
         }
-        if (MainConfig.getInstance().isFishCatchOnlyInCompetition() && !Competition.isActive()) {
+        if (MainConfig.getInstance().isFishCatchOnlyInCompetition() && !CompetitionManager.getInstance().isCompetitionActive()) {
             return;
         }
         event.setReplacementItemStack(event.getOriginalItem().getItemStack());
     }
 
     @EventHandler
-    public void mcmmoTreasure(McMMOPlayerFishingTreasureEvent event) {
+    public void mcMMOTreasure(McMMOPlayerFishingTreasureEvent event) {
         if (!MainConfig.getInstance().disableMcMMOTreasure()) {
             return;
         }
@@ -54,7 +55,7 @@ public class McMMOTreasureEvent implements Listener {
         if (toggle.isCustomFishingDisabled(event.getPlayer())) {
             return;
         }
-        if (MainConfig.getInstance().isFishCatchOnlyInCompetition() && !Competition.isActive()) {
+        if (MainConfig.getInstance().isFishCatchOnlyInCompetition() && !CompetitionManager.getInstance().isCompetitionActive()) {
             return;
         }
         event.setTreasure(null);

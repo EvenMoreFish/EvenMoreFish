@@ -6,8 +6,11 @@ import com.nexomc.nexo.api.events.NexoItemsLoadedEvent;
 import com.nexomc.nexo.items.ItemBuilder;
 import com.oheers.fish.api.addons.ItemAddon;
 import com.oheers.fish.api.plugin.EMFPlugin;
+import io.th0rgal.oraxen.api.OraxenItems;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class NexoItemAddon extends ItemAddon {
     
@@ -46,6 +49,15 @@ public class NexoItemAddon extends ItemAddon {
         }
 
         return item.build();
+    }
+
+    @Override
+    public @Nullable String convertToString(@NonNull ItemStack item) {
+        String id = NexoItems.idFromItem(item);
+        if (id == null) {
+            return null;
+        }
+        return "nexo:" + id;
     }
 
     @EventHandler

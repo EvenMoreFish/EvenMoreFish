@@ -5,12 +5,16 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.requirement.RequirementType;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ActiveCompetitionRequirementType extends RequirementType {
+
+    private static final String NONE = "none";
 
     /**
      * Checks if a player meets this requirement.
@@ -20,12 +24,9 @@ public class ActiveCompetitionRequirementType extends RequirementType {
      */
     @Override
     public boolean checkRequirement(@NonNull RequirementContext context, @NonNull List<String> values) {
-        Competition active = Competition.getCurrentlyActive();
-        if (active == null) {
-            Logging.debug("There is no active competition. Failing active-competition requirement.");
-            return false;
-        }
-        String id = active.getCompetitionFile().getId();
+        String id = Optional.ofNullable(CompetitionManager.getInstance().getActiveCompetition())
+            .map(Competition::getCompetitionName)
+            .orElse("none");
         boolean match = values.stream().anyMatch(id::equalsIgnoreCase);
         debugLogStatus(match, id);
         return match;

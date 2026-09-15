@@ -1,11 +1,13 @@
 package com.oheers.fish.fishing;
 
-
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.events.EMFFishCaughtEvent;
 import com.oheers.fish.api.events.EMFFishHuntEvent;
 import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.database.data.UserFishRarityKey;
@@ -14,6 +16,7 @@ import com.oheers.fish.database.model.fish.FishLog;
 import com.oheers.fish.database.model.fish.FishStats;
 import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.database.model.user.UserReport;
+import com.oheers.fish.fishing.items.Fish;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,9 +47,14 @@ public class EMFFishListener implements Listener {
         if (!DatabaseUtil.isDatabaseOnline()) {
             return;
         }
+        if (!fish.isTrackInDatabase()) {
+            Logging.debug("Not tracking fish " + RarityKey.of(fish) + " in the database.");
+            return;
+        }
 
         final UUID uuid = player.getUniqueId();
-        final String competitionId = Competition.getCurrentlyActive() != null ? Competition.getCurrentlyActive().getCompetitionName() : null;
+        Competition active = CompetitionManager.getInstance().getActiveCompetition();
+        final String competitionId = active == null ? null : active.getCompetitionName();
 
         EvenMoreFish.getInstance().getPluginDataManager().getDatabaseWorker().execute(() -> {
             final int userId = EvenMoreFish.getInstance().getPluginDataManager().getUserManager().getUserId(uuid);

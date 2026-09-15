@@ -4,6 +4,10 @@ import com.oheers.fish.api.addons.ItemAddon;
 import net.momirealms.craftengine.bukkit.api.CraftEngineItems;
 import net.momirealms.craftengine.bukkit.item.BukkitItemDefinition;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import java.util.Locale;
 
 public class CraftEngineItemAddon extends ItemAddon {
 
@@ -43,6 +47,15 @@ public class CraftEngineItemAddon extends ItemAddon {
         }
 
         return item;
+    }
+
+    @Override
+    public @Nullable String convertToString(@NonNull ItemStack item) {
+        BukkitItemDefinition itemDef = CraftEngineItems.byItemStack(item);
+        if (itemDef == null) {
+            return null;
+        }
+        return "craftengine:" + itemDef.id().asString().toLowerCase(Locale.ROOT);
     }
 
 }

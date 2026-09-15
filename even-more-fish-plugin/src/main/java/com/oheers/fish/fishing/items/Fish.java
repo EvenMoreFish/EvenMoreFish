@@ -56,10 +56,10 @@ public class Fish implements IFish {
     private double weight;
 
     private final boolean disableFisherman;
-    private final String displayName;
 
     private boolean showInJournal;
-    private final int catchLimit;
+    private final int globalCatchLimit;
+    private final int playerCatchLimit;
 
     private Fish(@NonNull Rarity rarity, @NonNull Section section) {
         this.section = section;
@@ -96,7 +96,8 @@ public class Fish implements IFish {
         );
 
         this.showInJournal = section.getBoolean("journal", true);
-        this.catchLimit = section.getInt("catch-limit", rarity.getCatchLimit());
+        this.globalCatchLimit = section.getInt("catch-limit", rarity.getGlobalCatchLimit());
+        this.playerCatchLimit = section.getInt("player-catch-limit", rarity.getPlayerCatchLimit());
 
         LoreItemConfig config = factory.getItemConfig(LoreItemConfig.class);
         if (config != null && config.isEnabled()) {
@@ -350,7 +351,8 @@ public class Fish implements IFish {
 
     @Override
     public double getSetWorth() {
-        return section.getDouble("set-worth", rarity.getSetWorth());
+        Double worth = FishUtils.parseDoubleOrRange(section.getString("set-worth"));
+        return worth == null ? rarity.getSetWorth() : worth;
     }
 
     @Override
@@ -379,15 +381,21 @@ public class Fish implements IFish {
     }
 
     public @NonNull EMFSingleMessage getDisplayNameMessage() {
-        if (displayName == null) {
+        String configured = factory.getDisplayName().getConfiguredValue();
+        if (configured == null) {
             return rarity.format(name);
         }
-        return rarity.format(displayName);
+        return rarity.format(configured);
     }
 
     @Override
-    public int getCatchLimit() {
-        return catchLimit;
+    public int getGlobalCatchLimit() {
+        return globalCatchLimit;
+    }
+
+    @Override
+    public int getPlayerCatchLimit() {
+        return playerCatchLimit;
     }
 
     @Override
@@ -448,10 +456,7 @@ public class Fish implements IFish {
         rewardString = rewardString.replace("{rarity}", rarityReplacement);
 
         // {displayname} Placeholder
-        String displayNameReplacement = "";
-        if (displayName != null) {
-            displayNameReplacement = displayName;
-        }
+        String displayNameReplacement = getDisplayNameMessage().getPlainTextMessage(fisherman);
         rewardString = rewardString.replace("{displayname}", displayNameReplacement);
 
         // {name} Placeholder
@@ -485,6 +490,10 @@ public class Fish implements IFish {
     @Override
     public void setShowInJournal(boolean showInJournal) {
         this.showInJournal = showInJournal;
+    }
+
+    public boolean isTrackInDatabase() {
+        return section.getBoolean("track-in-database", true);
     }
 
     @Override

@@ -7,6 +7,7 @@ import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class ItemsAdderItemAddon extends ItemAddon {
 
@@ -50,6 +51,15 @@ public class ItemsAdderItemAddon extends ItemAddon {
             return null;
         }
         return CustomStack.getInstance(namespaceId).getItemStack();
+    }
+
+    @Override
+    public @Nullable String convertToString(@NonNull ItemStack item) {
+        CustomStack customStack = CustomStack.byItemStack(item);
+        if (customStack == null) {
+            return null;
+        }
+        return "itemsadder:" + customStack.getNamespacedID();
     }
 
     @EventHandler

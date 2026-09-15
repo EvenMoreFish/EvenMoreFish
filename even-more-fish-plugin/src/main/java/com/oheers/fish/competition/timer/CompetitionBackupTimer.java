@@ -1,6 +1,7 @@
-package com.oheers.fish.competition;
+package com.oheers.fish.competition.timer;
 
 import com.oheers.fish.api.EMFTimer;
+import com.oheers.fish.competition.Competition;
 import com.oheers.fish.config.MainConfig;
 import org.jspecify.annotations.NonNull;
 

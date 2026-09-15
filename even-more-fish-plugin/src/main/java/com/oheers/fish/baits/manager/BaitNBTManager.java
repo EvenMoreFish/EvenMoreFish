@@ -278,7 +278,7 @@ public class BaitNBTManager {
         return WeightedRandom.pick(
                 baitList,
                 bait -> bait.getBaitData().applicationWeight(),
-                EvenMoreFish.getInstance().getRandom()
+                EvenMoreFish.RANDOM
         );
     }
 
@@ -301,7 +301,7 @@ public class BaitNBTManager {
             return Optional.empty();
         }
 
-        return Optional.of(WeightedRandom.pick(baitList, bait -> bait.getBaitData().catchWeight(), EvenMoreFish.getInstance().getRandom()));
+        return Optional.of(WeightedRandom.pick(baitList, bait -> bait.getBaitData().catchWeight(), EvenMoreFish.RANDOM));
     }
 
     /**

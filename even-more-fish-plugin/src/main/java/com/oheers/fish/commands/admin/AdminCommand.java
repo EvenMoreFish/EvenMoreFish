@@ -1,14 +1,12 @@
 package com.oheers.fish.commands.admin;
 
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.commands.HelpMessage;
 import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.api.utils.ManifestUtil;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.database.Database;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.fishing.items.FishManager;
@@ -17,8 +15,6 @@ import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.PrefixType;
 import com.oheers.fish.permissions.AdminPerms;
 import dev.dejvokep.boostedyaml.YamlDocument;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.command.brigadier.Commands;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -38,7 +34,6 @@ import com.oheers.fish.commands.admin.subcommand.FishSubcommand;
 import com.oheers.fish.commands.admin.subcommand.ListSubcommand;
 import com.oheers.fish.commands.admin.subcommand.RandomFishSubcommand;
 import org.jspecify.annotations.NonNull;
-import uk.firedev.daisylib.command.CommandUtils;
 
 import java.util.jar.Attributes;
 
@@ -231,7 +226,7 @@ public class AdminCommand {
         message.setVariable("{rarities}", String.valueOf(FishManager.getInstance().getRarityMap().size()));
         message.setVariable("{fish}", String.valueOf(fishCount));
         message.setVariable("{baits}", String.valueOf(BaitManager.getInstance().getItemMap().size()));
-        message.setVariable("{competitions}", String.valueOf(EvenMoreFish.getInstance().getCompetitionQueue().getSize()));
+        message.setVariable("{competitions}", String.valueOf(CompetitionManager.getInstance().getSize()));
         message.setVariable("{engine}", databaseEngine);
         message.setVariable("{type}", databaseType);
 

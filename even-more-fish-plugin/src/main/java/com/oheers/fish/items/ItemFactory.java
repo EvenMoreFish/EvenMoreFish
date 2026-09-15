@@ -77,6 +77,10 @@ public class ItemFactory extends AbstractItemFactory {
         newFactory.relevantPlayer = this.relevantPlayer;
         newFactory.randomIndex = this.randomIndex;
         newFactory.finalChanges = this.finalChanges;
+
+        newFactory.configMap.clear();
+        newFactory.configMap.putAll(this.configMap);
+
         return newFactory;
     }
 
@@ -392,7 +396,7 @@ public class ItemFactory extends AbstractItemFactory {
         }
 
         ArrayList<String> checkList = new ArrayList<>(strings);
-        final Random random = EvenMoreFish.getInstance().getRandom();
+        final Random random = EvenMoreFish.RANDOM;
 
         // Get a random item from the list, keep trying until we find a valid one
         while (!checkList.isEmpty()) {

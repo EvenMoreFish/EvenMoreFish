@@ -6,6 +6,10 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.addons.ItemAddon;
 import com.oheers.fish.utils.Base64;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class Head64ItemAddon extends ItemAddon {
 
@@ -32,6 +36,11 @@ public class Head64ItemAddon extends ItemAddon {
         }
 
         return FishUtils.getSkullFromBase64(id);
+    }
+
+    @Override
+    public @Nullable String convertToString(@NonNull ItemStack item) {
+        return null;
     }
 
 }

@@ -36,4 +36,9 @@ public class GlowingItemConfig extends ItemConfig<Boolean> {
         return new GlowingItemConfig(this);
     }
 
+    @Override
+    public @NonNull GlowingItemConfig createCopy() {
+        return new GlowingItemConfig(this);
+    }
+
 }

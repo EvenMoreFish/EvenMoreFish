@@ -78,7 +78,7 @@ public class Checks {
      * @param player The player to check.
      * @param location The location of the hook.
      */
-    public static boolean isMcMMOOverfishing(@NonNull Player player, @NonNull Location hookLocation) {
+    public static boolean isMcMMOOverfishing(@NonNull Player player, @NonNull Location location) {
         if (!EvenMoreFish.getInstance().getDependencyManager().isUsingMcMMO()) {
             return false;
         }
@@ -90,7 +90,7 @@ public class Checks {
             return false;
         }
         if (DEPRECATED_IS_EXPLOITING_FISHING != null) {
-            return isDeprecatedOverfishing(mmoPlayer, hookLocation.toVector());
+            return isDeprecatedOverfishing(mmoPlayer, location.toVector());
         }
         return mmoPlayer.getFishingManager().isExploitingFishing();
     }

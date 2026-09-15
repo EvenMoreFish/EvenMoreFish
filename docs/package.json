@@ -22,8 +22,8 @@
     "@mdx-js/react": "^3.1.1",
     "clsx": "^2.1.1",
     "prism-react-renderer": "^2.4.1",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0"
   },
@@ -34,7 +34,7 @@
     "typescript": "~5.9.3"
   },
   "overrides": {
-    "serialize-javascript": "^7.1.0"
+    "serialize-javascript": "^7.1.1"
   },
   "browserslist": {
     "production": [
@@ -49,6 +49,6 @@
     ]
   },
   "engines": {
-    "node": ">=24.19.0"
+    "node": ">=24.21.0"
   }
 }

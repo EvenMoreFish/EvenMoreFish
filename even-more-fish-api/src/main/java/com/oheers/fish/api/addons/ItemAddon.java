@@ -23,6 +23,13 @@ public abstract class ItemAddon implements Listener, RegistryItem {
      */
     public abstract ItemStack getItemStack(final String id);
 
+    /**
+     * Converts the given ItemStack into the raw addon string.
+     * <p>
+     * Example: {@code nexo:forest_trident}
+     */
+    public abstract @Nullable String convertToString(@NonNull ItemStack item);
+
     public abstract String getPluginName();
 
     public abstract String getAuthor();
@@ -55,25 +62,36 @@ public abstract class ItemAddon implements Listener, RegistryItem {
         return EMFPlugin.getInstance().getLogger();
     }
 
-    // Deprecated
+    // Deprecated - Do not remove.
 
-    @Deprecated(forRemoval = true, since = "2.1.0")
+    /**
+     * @deprecated Use {@link ItemAddonRegistry#getRegistry()} instead.
+     */
+    @Deprecated(since = "2.1.0")
     public static Map<String, ItemAddon> getLoadedAddons() {
         return EMFRegistry.ITEM_ADDON.getRegistry();
     }
 
     /**
-     * @deprecated This method now does nothing as clearing the registry is unsupported.
+     * @deprecated Use {@link ItemAddonRegistry#clear()} instead.
      */
-    @Deprecated(forRemoval = true, since = "2.1.0")
-    public static void unregisterAll() {}
+    @Deprecated(since = "2.1.0")
+    public static void unregisterAll() {
+        EMFRegistry.ITEM_ADDON.clear();
+    }
 
-    @Deprecated(forRemoval = true, since = "2.1.0")
+    /**
+     * @deprecated Use {@link ItemAddonRegistry#get(String)} instead.
+     */
+    @Deprecated(since = "2.1.0")
     public static @Nullable ItemAddon get(final @NonNull String prefix) {
         return EMFRegistry.ITEM_ADDON.get(prefix);
     }
 
-    @Deprecated(forRemoval = true, since = "2.1.0")
+    /**
+     * @deprecated Use {@link ItemAddonRegistry#getItem(String, String)} instead.
+     */
+    @Deprecated(since = "2.1.0")
     public static @Nullable ItemStack getItem(final @NonNull String prefix, final @NonNull String id) {
         return EMFRegistry.ITEM_ADDON.getItem(prefix, id);
     }

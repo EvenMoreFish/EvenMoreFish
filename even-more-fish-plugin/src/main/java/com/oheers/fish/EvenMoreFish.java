@@ -16,7 +16,7 @@ import com.oheers.fish.commands.admin.AdminCommand;
 import com.oheers.fish.commands.main.MainCommand;
 import com.oheers.fish.competition.AutoRunner;
 import com.oheers.fish.competition.Competition;
-import com.oheers.fish.competition.CompetitionQueue;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.DimensionFishingConfig;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.Database;
@@ -56,7 +56,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class EvenMoreFish extends EMFPlugin {
 
@@ -65,13 +64,10 @@ public class EvenMoreFish extends EMFPlugin {
 
     private final DimensionFishing dimensionFishing;
 
-    private final Random random = ThreadLocalRandom.current();
+    public static final Random RANDOM = new Random();
     private final Toggle toggle;
 
     private final boolean isFolia = FishUtils.classExists("io.papermc.paper.threadedregions.RegionizedServer");
-
-    private CompetitionQueue competitionQueue;
-    private final AutoRunner autoRunner = new AutoRunner();
 
     private volatile boolean isUpdateAvailable;
 
@@ -152,8 +148,7 @@ public class EvenMoreFish extends EMFPlugin {
         RodManager.getInstance().load();
 
         // Always load this after RodManager
-        this.competitionQueue = new CompetitionQueue();
-        this.competitionQueue.load();
+        CompetitionManager.getInstance().load();
 
         // check for updates on the Modrinth page
         new UpdateChecker(this).checkUpdate().thenAccept(available -> {
@@ -166,7 +161,7 @@ public class EvenMoreFish extends EMFPlugin {
         this.metricsManager = new MetricsManager(this);
         this.metricsManager.setupMetrics();
 
-        autoRunner.start();
+        CompetitionManager.getInstance().getAutoRunner().start();
 
         versionProvider.enable();
 
@@ -176,7 +171,7 @@ public class EvenMoreFish extends EMFPlugin {
         }
 
         // Attempt to resume a competition if the temporary file exists.
-        Competition.resumeFromFile();
+        CompetitionManager.getInstance().resumeFromFile();
 
         getLogger().info(() -> "EvenMoreFish by Oheers : Enabled");
     }
@@ -184,7 +179,7 @@ public class EvenMoreFish extends EMFPlugin {
     @Override
     public void onDisable() {
         // Do this first.
-        autoRunner.stop();
+        CompetitionManager.getInstance().getAutoRunner().stop();
 
         if (dimensionFishing != null) {
             dimensionFishing.disable();
@@ -192,7 +187,7 @@ public class EvenMoreFish extends EMFPlugin {
 
         terminateGuis();
         // Ends the current competition in case the plugin is being disabled when the server will continue running
-        Competition active = Competition.getCurrentlyActive();
+        Competition active = CompetitionManager.getInstance().getActiveCompetition();
         if (active != null) {
             active.end(false, true);
         }
@@ -203,7 +198,7 @@ public class EvenMoreFish extends EMFPlugin {
         }
 
         // Make sure this is in the reverse order of loading.
-        this.competitionQueue.unload();
+        CompetitionManager.getInstance().unload();
         RodManager.getInstance().unload();
         BaitManager.getInstance().unload();
         FishManager.getInstance().unload();
@@ -245,7 +240,7 @@ public class EvenMoreFish extends EMFPlugin {
 
         this.eventManager.registerOptionalListeners();
 
-        competitionQueue.reload();
+        CompetitionManager.getInstance().reload();
 
         // Refresh global economy instance with any new EconomyTypes that may have been registered.
         Economy.getInstance().setEconomyTypes(EMFRegistry.ECONOMY_TYPE.getRegistry().values());
@@ -265,10 +260,6 @@ public class EvenMoreFish extends EMFPlugin {
         new EMFPluginReloadEvent().callEvent();
     }
 
-    public Random getRandom() {
-        return random;
-    }
-
     public Toggle getToggle() {
         return toggle;
     }
@@ -277,13 +268,6 @@ public class EvenMoreFish extends EMFPlugin {
         return this.versionProvider;
     }
 
-    public CompetitionQueue getCompetitionQueue() {
-        return competitionQueue;
-    }
-
-    public AutoRunner getAutoRunner() {
-        return autoRunner;
-    }
 
     public boolean isUpdateAvailable() {
         return isUpdateAvailable;
