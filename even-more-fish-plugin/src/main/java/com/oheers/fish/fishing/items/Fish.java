@@ -155,7 +155,7 @@ public class Fish implements IFish {
         // Build custom fish lore and include the configured lore.
         LoreItemConfig loreConfig = factory.getItemConfig(LoreItemConfig.class);
         if (loreConfig != null) {
-            loreConfig.addTransformer((lore, item) -> buildFishLore(lore));
+            loreConfig.setTransformer(this::buildFishLore);
         }
         DisplayNameItemConfig displayConfig = factory.getItemConfig(DisplayNameItemConfig.class);
         if (displayConfig != null) {

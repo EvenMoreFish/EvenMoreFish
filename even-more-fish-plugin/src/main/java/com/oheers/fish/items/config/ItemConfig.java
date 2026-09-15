@@ -2,24 +2,20 @@ package com.oheers.fish.items.config;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.OfflinePlayer;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @ApiStatus.Internal
 public abstract class ItemConfig<T> {
 
     protected T def;
-    protected List<BiFunction<T, ItemStack, T>> transformers = new ArrayList<>();
+    protected Function<T, T> transformer;
     protected final Section section;
     protected boolean enabled = true;
 
@@ -30,7 +26,7 @@ public abstract class ItemConfig<T> {
     protected ItemConfig(@NonNull ItemConfig<T> base) {
         super();
         this.def = base.def;
-        this.transformers = new ArrayList<>(base.transformers);
+        this.transformer = base.transformer;
         this.section = base.section;
         this.enabled = base.enabled;
     }
@@ -51,10 +47,7 @@ public abstract class ItemConfig<T> {
         if (!enabled) {
             return;
         }
-        T value = getActualValue();
-        for (BiFunction<T, ItemStack, T> transformer : transformers) {
-            value = transformer.apply(value, item);
-        }
+        T value = transformer == null ? getActualValue() : transformer.apply(getActualValue());
         if (value != null) {
             applyToItem(player, replacements).accept(item, value);
         }
@@ -68,8 +61,8 @@ public abstract class ItemConfig<T> {
         this.def = def;
     }
 
-    public void addTransformer(@Nullable BiFunction<T, ItemStack, T> transformer) {
-        this.transformers.add(transformer);
+    public void setTransformer(@Nullable Function<T, T> transformer) {
+        this.transformer = transformer;
     }
 
     public void setEnabled(boolean enabled) {

@@ -23,15 +23,10 @@ import com.oheers.fish.items.config.TooltipStyleItemConfig;
 import com.oheers.fish.items.config.UnbreakableItemConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.oheers.fish.items.config.ItemConfig;
@@ -54,6 +49,7 @@ public class ItemFactory extends AbstractItemFactory {
     private int randomIndex = -1;
     private Consumer<ItemStack> finalChanges = null;
     private @NonNull ItemStack baseItem;
+    private boolean usingItemAddon = false;
     private boolean usingFallbackBaseItem = false;
 
     @SuppressWarnings("rawtypes") // Safe to ignore.
@@ -123,7 +119,7 @@ public class ItemFactory extends AbstractItemFactory {
         OfflinePlayer player = relevantPlayer == null ? null : Bukkit.getOfflinePlayer(relevantPlayer);
 
         for (ItemConfig<?> config : configMap.values()) {
-            config.apply(item, player, replacements);
+            ItemConfigApplier.apply(item, player, replacements, config, this.usingItemAddon);
         }
 
         if (finalChanges != null) {
@@ -238,8 +234,7 @@ public class ItemFactory extends AbstractItemFactory {
         ItemStack customItem = ItemSerializer.get().deserializeItemAddon(materialString);
         if (customItem != null) {
             Logging.debug(materialString + " was a valid ItemAddon.");
-            ItemFactoryConfig.getAddonDisplayBehavior().modifyDisplay(getItemConfig(DisplayNameItemConfig.class));
-            ItemFactoryConfig.getAddonLoreBehavior().modifyLore(getItemConfig(LoreItemConfig.class));
+            this.usingItemAddon = true;
             return customItem;
         }
 

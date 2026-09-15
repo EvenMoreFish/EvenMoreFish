@@ -465,6 +465,14 @@ public class MainConfig extends ConfigBase {
                 MainConfig.getInstance().getDatabase() != null;
     }
 
+    public @Nullable String getDisplayNameAddonBehavior() {
+        return getConfig().getString("items.addons.display-behavior");
+    }
+
+    public @Nullable String getLoreAddonBehavior() {
+        return getConfig().getString("items.addons.lore-behavior");
+    }
+
     // Bait configs
 
     public double getBaitBoostRate() {
