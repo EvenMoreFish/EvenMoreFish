@@ -56,6 +56,7 @@ public class Fish implements IFish {
     private double weight;
 
     private final boolean disableFisherman;
+    private final String displayName;
 
     private boolean showInJournal;
     private final int globalCatchLimit;
@@ -381,11 +382,10 @@ public class Fish implements IFish {
     }
 
     public @NonNull EMFSingleMessage getDisplayNameMessage() {
-        String configured = factory.getDisplayName().getConfiguredValue();
-        if (configured == null) {
+        if (displayName == null) {
             return rarity.format(name);
         }
-        return rarity.format(configured);
+        return rarity.format(displayName);
     }
 
     @Override

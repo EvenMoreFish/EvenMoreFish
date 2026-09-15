@@ -83,7 +83,7 @@ public class ListSubcommand implements EMFCommand {
     private ArgumentBuilder<CommandSourceStack, ?> competitionTypes() {
         return Commands.literal("competitionTypes")
             .executes(ctx -> {
-                CommandUtils.listCompetitionTypes(ctx.getSource().getSender());
+                listCompetitionTypes(ctx.getSource().getSender());
                 return 1;
             });
     }

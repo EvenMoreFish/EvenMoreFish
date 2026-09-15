@@ -119,7 +119,7 @@ public interface EMFCommand {
         audience.sendMessage(builder.build());
     }
 
-    public static void listCompetitionTypes(@NonNull Audience audience) {
+    default void listCompetitionTypes(@NonNull Audience audience) {
         TextComponent.Builder builder = Component.text();
 
         EMFMessage listMessage = ConfigMessage.ADMIN_LIST_ADDONS.getMessage();

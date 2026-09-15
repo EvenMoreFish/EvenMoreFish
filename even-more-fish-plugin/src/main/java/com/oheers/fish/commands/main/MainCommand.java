@@ -7,6 +7,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.commands.EMFCommand;
 import com.oheers.fish.commands.HelpMessage;
 import com.oheers.fish.competition.Competition;
+import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.gui.guis.ApplyBaitsGui;
 import com.oheers.fish.gui.guis.MainMenuGui;
@@ -89,9 +90,9 @@ public class MainCommand implements EMFCommand {
 
     public @NonNull ArgumentBuilder<CommandSourceStack, ?> next() {
         return Commands.literal(MainConfig.getInstance().getNextSubCommandName())
-            .requires(stack -> stack.getSender().hasPermission(UserPerms.NEXT) && EvenMoreFish.getInstance().getCompetitionQueue().hasTimings())
+            .requires(stack -> stack.getSender().hasPermission(UserPerms.NEXT) && CompetitionManager.getInstance().hasTimings())
             .executes(ctx -> {
-                EMFMessage message = Competition.getNextCompetitionMessage();
+                EMFMessage message = CompetitionManager.getInstance().getNextCompetitionMessage();
                 message.prependMessage(PrefixType.DEFAULT.getPrefix());
                 message.send(ctx.getSource().getSender());
                 return 1;
@@ -122,7 +123,7 @@ public class MainCommand implements EMFCommand {
             .requires(stack -> stack.getSender().hasPermission(UserPerms.TOP))
             .executes(ctx -> {
                 CommandSender sender = ctx.getSource().getSender();
-                Competition active = Competition.getCurrentlyActive();
+                Competition active = CompetitionManager.getInstance().getActiveCompetition();
                 if (active == null) {
                     ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(sender);
                     return 1;

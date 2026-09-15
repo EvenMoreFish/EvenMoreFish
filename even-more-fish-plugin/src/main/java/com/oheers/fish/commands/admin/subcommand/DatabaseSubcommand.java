@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.commands.EMFCommand;
-import com.oheers.fish.commands.CommandUtils;
 import com.oheers.fish.commands.DangerousCommandConfirmation;
 import com.oheers.fish.permissions.AdminPerms;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -98,7 +97,7 @@ public class DatabaseSubcommand implements EMFCommand {
             .requires(source -> source.getSender().hasPermission(AdminPerms.DATABASE_RESET))
             .executes(ctx -> {
                 CommandSender sender = ctx.getSource().getSender();
-                if (CommandUtils.isLogDbError(sender)) {
+                if (isLogDbError(sender)) {
                     return 1;
                 }
                 if (!DangerousCommandConfirmation.confirmOrRequest(

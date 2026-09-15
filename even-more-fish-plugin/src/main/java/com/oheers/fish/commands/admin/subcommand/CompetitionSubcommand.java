@@ -13,10 +13,10 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
-import com.oheers.fish.commands.arguments.CompetitionFileArgument;
-import com.oheers.fish.commands.arguments.CompetitionTypeArgument;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.evenmorefish.fish.commands.arguments.CompetitionFileArgument;
+import org.evenmorefish.fish.commands.arguments.CompetitionTypeArgument;
 
 @SuppressWarnings("UnstableApiUsage")
 public class CompetitionSubcommand {
