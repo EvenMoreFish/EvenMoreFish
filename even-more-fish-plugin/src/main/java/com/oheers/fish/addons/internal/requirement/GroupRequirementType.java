@@ -7,21 +7,17 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
+import uk.firedev.daisylib.external.vault.VaultWrapper;
 
 import java.util.List;
 
 public class GroupRequirementType extends RequirementType {
 
-    private final @NonNull Permission permission;
-
-    public GroupRequirementType(@NonNull Permission permission) {
-        this.permission = permission;
-    }
-
     @Override
     public boolean checkRequirement(@NonNull RequirementContext context, @NonNull List<String> values) {
         Player player = context.getPlayer();
-        if (player == null) {
+        Permission permission = VaultWrapper.get().getPermissionOrNull();
+        if (player == null || permission == null) {
             return false;
         }
         for (String value : values) {

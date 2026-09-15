@@ -23,19 +23,6 @@ public abstract class EMFVersionProvider {
 
     public abstract void reload();
 
-    /**
-     * Stuff to do onLoad() with commands
-     */
-    public abstract void loadCommands();
-
-    public abstract void enableCommands();
-
-    public abstract void registerCommands();
-
-    public abstract void resendCommands();
-
-    public abstract void disableCommands();
-
     // NBT Things
 
     public abstract @NonNull NBTHolder<ItemStack> createItemStackNbtHolder(@NonNull ItemStack item);

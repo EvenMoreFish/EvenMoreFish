@@ -80,21 +80,21 @@ public class PluginDataManager {
             return database.getFishStats(fishRarityKey.fishName(),fishRarityKey.fishRarity());
         });
 
-        this.userFishStatsDataManager = new DataManager<UserFishStats>(
+        this.userFishStatsDataManager = new DataManager<>(
             new UserFishStatsSavingStrategy(databaseWorker),
             key -> {
                 final UserFishRarityKey userFishRarityKey = UserFishRarityKey.from(key);
                 return database.getUserFishStats(userFishRarityKey.userId(), userFishRarityKey.fishName(), userFishRarityKey.fishRarity());
             },
-            Long.valueOf(MainConfig.getInstance().getUserFishStatsSaveInterval()),
+            (long) MainConfig.getInstance().getUserFishStatsSaveInterval(),
             TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
         );
 
         this.userReportDataManager = new DataManager<>(new UserReportsSavingStrategy(databaseWorker), uuid -> database.getUserReport(UUID.fromString(uuid)));
-        this.competitionDataManager = new DataManager<CompetitionReport>(
+        this.competitionDataManager = new DataManager<>(
             new CompetitionSavingStrategy(databaseWorker),
             key -> database.getCompetitionReport(Integer.parseInt(key)),
-            Long.valueOf(MainConfig.getInstance().getCompetitionSaveInterval()),
+            (long) MainConfig.getInstance().getCompetitionSaveInterval(),
             TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
         );
     }

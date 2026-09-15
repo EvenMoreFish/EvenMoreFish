@@ -30,7 +30,7 @@ dependencies {
 
     compileOnly(libs.paper.api) {
         version {
-            strictly("1.20.1-R0.1-SNAPSHOT")
+            strictly("1.21.1-R0.1-SNAPSHOT")
         }
     }
 
@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.bstats)
     implementation(libs.inventorygui)
     implementation(libs.vanishchecker)
-    implementation(libs.messagelib)
+    api(libs.daisylib)
 
     implementation(libs.caffeine)
     implementation(libs.jdbi3.core)
@@ -97,10 +97,6 @@ dependencies {
     implementation(libs.dimensionfishing)
 
     compileOnly(libs.jspecify)
-
-    // TODO remove when 1.20 is dropped...
-    implementation(libs.commandsapi.bukkit)
-    implementation(libs.nbt.api)
 }
 
 bukkit {
@@ -114,7 +110,7 @@ bukkit {
     version = project.version.toString()
     description = "A fishing extension bringing an exciting new experience to fishing."
     website = "https://github.com/EvenMoreFish/EvenMoreFish"
-    apiVersion = "1.20"
+    apiVersion = "1.21"
     foliaSupported = true
 
     softDepend = listOf(
@@ -237,14 +233,10 @@ val copyAddons by tasks.registering(Copy::class) {
     // Make sure the plugin waits for the addons to be built first
     dependsOn(
         ":addons:even-more-fish-addons-j21:build",
-        ":addons:even-more-fish-addons-itemmodel:build",
-        ":addons:even-more-fish-addons-moderncmd:build",
         ":addons:even-more-fish-addons-crafterfix:build"
     )
 
     from(project(":addons:even-more-fish-addons-j21").layout.buildDirectory.dir("libs"))
-    from(project(":addons:even-more-fish-addons-itemmodel").layout.buildDirectory.dir("libs"))
-    from(project(":addons:even-more-fish-addons-moderncmd").layout.buildDirectory.dir("libs"))
     from(project(":addons:even-more-fish-addons-crafterfix").layout.buildDirectory.dir("libs"))
 
     into(file("src/main/resources/addons"))
@@ -252,18 +244,18 @@ val copyAddons by tasks.registering(Copy::class) {
 
 val copyVersions by tasks.registering(Copy::class) {
     dependsOn(
-        ":versions:1-20:build",
         ":versions:1-21:1-4:build",
         ":versions:1-21:5-11:build",
         ":versions:26-1:build",
-        ":versions:26-2:build"
+        ":versions:26-2:build",
+        ":versions:26-3:build"
     )
 
-    from(project(":versions:1-20").layout.buildDirectory.dir("libs"))
     from(project(":versions:1-21:1-4").layout.buildDirectory.dir("libs"))
     from(project(":versions:1-21:5-11").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-1").layout.buildDirectory.dir("libs"))
     from(project(":versions:26-2").layout.buildDirectory.dir("libs"))
+    from(project(":versions:26-3").layout.buildDirectory.dir("libs"))
     into(file("src/main/resources/versions"))
 }
 
@@ -310,7 +302,7 @@ testing {
                 implementation(libs.boostedyaml)
                 implementation(libs.paper.api) {
                     version {
-                        strictly("1.20.1-R0.1-SNAPSHOT")
+                        strictly("1.21.1-R0.1-SNAPSHOT")
                     }
                 }
                 runtimeOnly(libs.junit.jupiter.engine)

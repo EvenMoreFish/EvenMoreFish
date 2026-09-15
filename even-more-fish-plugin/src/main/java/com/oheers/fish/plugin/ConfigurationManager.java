@@ -13,11 +13,6 @@ import com.oheers.fish.config.gui.impl.JournalRaritiesGuiConfig;
 import com.oheers.fish.config.gui.impl.MainMenuGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuConfirmGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuNormalGuiConfig;
-import com.oheers.fish.messages.ConfigMessage;
-import com.oheers.fish.messages.EMFListMessage;
-import com.oheers.fish.messages.EMFSingleMessage;
-import uk.firedev.messagelib.MessageLibSettings;
-import uk.firedev.messagelib.ObjectProcessor;
 
 import java.util.logging.Level;
 
@@ -31,8 +26,6 @@ public class ConfigurationManager {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void loadConfigurations() {
         try {
-            prepareMessageLib();
-
             new MainConfig();
             new MessageConfig();
             new GuiFillerConfig();
@@ -82,26 +75,6 @@ public class ConfigurationManager {
         } catch (Exception e) {
             plugin.getLogger().log(Level.SEVERE, "Failed to reload configurations", e);
         }
-    }
-
-    private void prepareMessageLib() {
-        MessageLibSettings settings = MessageLibSettings.get();
-        settings.setEnableLegacy(true);
-        settings.setAllowEmptyAppend(false);
-        settings.setAllowEmptyPrepend(false);
-
-        ObjectProcessor.registerProcessor(
-            EMFSingleMessage.class,
-            EMFSingleMessage::getComponentListMessage
-        );
-        ObjectProcessor.registerProcessor(
-            EMFListMessage.class,
-            EMFListMessage::getComponentListMessage
-        );
-        ObjectProcessor.registerProcessor(
-            ConfigMessage.class,
-            msg -> msg.getMessage().getComponentListMessage()
-        );
     }
 
 }

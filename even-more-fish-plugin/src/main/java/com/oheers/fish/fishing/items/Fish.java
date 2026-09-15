@@ -11,7 +11,9 @@ import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.items.ItemFactory;
-import com.oheers.fish.items.configs.ItemConfig;
+import com.oheers.fish.items.config.DisplayNameItemConfig;
+import com.oheers.fish.items.config.ItemConfig;
+import com.oheers.fish.items.config.LoreItemConfig;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -19,6 +21,7 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.selling.WorthNBT;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -53,6 +56,7 @@ public class Fish implements IFish {
     private double weight;
 
     private final boolean disableFisherman;
+    private final String displayName;
 
     private boolean showInJournal;
     private final int globalCatchLimit;
@@ -75,23 +79,30 @@ public class Fish implements IFish {
 
         ItemFactory factory = ItemFactory.itemFactory(section);
 
-        factory.setFinalChanges(fish -> {
+        factory.setFinalChanges(fish ->
             fish.editMeta(meta -> {
-                meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+                meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            });
-        });
+            })
+        );
         this.factory = factory;
-        this.factory.getDisplayName().setDefault(name);
+
+        this.displayName = section.getString(
+            "displayname",
+            Optional.ofNullable(factory.getItemConfig(DisplayNameItemConfig.class))
+                .map(ItemConfig::getConfiguredValue)
+                .map(MiniMessage.miniMessage()::serialize)
+                .orElse(null)
+        );
 
         this.showInJournal = section.getBoolean("journal", true);
         this.globalCatchLimit = section.getInt("catch-limit", rarity.getGlobalCatchLimit());
         this.playerCatchLimit = section.getInt("player-catch-limit", rarity.getPlayerCatchLimit());
 
-        ItemConfig<List<Component>> lore = factory.getLore();
-        if (lore.isEnabled()) {
-            lore.setEnabled(!section.getBoolean("disable-lore", false));
+        LoreItemConfig config = factory.getItemConfig(LoreItemConfig.class);
+        if (config != null && config.isEnabled()) {
+            config.setEnabled(!section.getBoolean("disable-lore", false));
         }
 
         checkSilent();
@@ -144,13 +155,15 @@ public class Fish implements IFish {
     public @NonNull ItemStack give() {
         ItemFactory factory = this.factory.createCopy();
         // Build custom fish lore and include the configured lore.
-        factory.getLore().setTransformer(this::buildFishLore);
-        factory.getDisplayName().setTransformer(name -> {
-            if (name == null) {
-                return null;
-            }
-            return rarity.format(name).getUnderlying().getAsMiniMessage();
-        });
+        LoreItemConfig loreConfig = factory.getItemConfig(LoreItemConfig.class);
+        if (loreConfig != null) {
+            loreConfig.setTransformer(this::buildFishLore);
+        }
+        DisplayNameItemConfig displayConfig = factory.getItemConfig(DisplayNameItemConfig.class);
+        if (displayConfig != null) {
+            displayConfig.setDefault(getDisplayNameMessage().getUnderlying().get());
+        }
+
         ItemStack item = fisherman == null
             ? factory.createItem()
             : factory.createItem(fisherman.getUniqueId());
@@ -369,11 +382,10 @@ public class Fish implements IFish {
     }
 
     public @NonNull EMFSingleMessage getDisplayNameMessage() {
-        String configured = factory.getDisplayName().getConfiguredValue();
-        if (configured == null) {
+        if (displayName == null) {
             return rarity.format(name);
         }
-        return rarity.format(configured);
+        return rarity.format(displayName);
     }
 
     @Override

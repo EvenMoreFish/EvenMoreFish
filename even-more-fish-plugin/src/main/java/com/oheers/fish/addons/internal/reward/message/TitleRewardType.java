@@ -1,7 +1,7 @@
 package com.oheers.fish.addons.internal.reward.message;
 
 import org.jspecify.annotations.NonNull;
-import uk.firedev.messagelib.message.MessageType;
+import uk.firedev.daisylib.messages.message.MessageType;
 
 public class TitleRewardType extends MessageRewardBase {
 

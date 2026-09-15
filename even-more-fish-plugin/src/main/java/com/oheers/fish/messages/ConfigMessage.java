@@ -5,11 +5,11 @@ import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NonNull;
-import uk.firedev.messagelib.message.ComponentListMessage;
-import uk.firedev.messagelib.message.ComponentMessage;
-import uk.firedev.messagelib.message.ComponentSingleMessage;
+import uk.firedev.daisylib.messages.message.ComponentListMessage;
+import uk.firedev.daisylib.messages.message.ComponentMessage;
+import uk.firedev.daisylib.messages.message.ComponentSingleMessage;
 
-import static uk.firedev.messagelib.message.ComponentMessage.componentMessage;
+import static uk.firedev.daisylib.messages.message.ComponentMessage.componentMessage;
 
 /**
  * Represents a message inside the messages.yml file.
@@ -228,7 +228,7 @@ public enum ConfigMessage {
 
     public EMFMessage getMessage() {
         MessageConfig config = MessageConfig.getInstance();
-        ComponentMessage message = componentMessage(
+        ComponentMessage<?, ?> message = componentMessage(
             config.getMessageLoader(),
             getId()
         );

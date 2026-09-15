@@ -1,7 +1,6 @@
 package com.oheers.fish.api.requirement;
 
 import com.oheers.fish.api.Logging;
-import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.entity.Player;

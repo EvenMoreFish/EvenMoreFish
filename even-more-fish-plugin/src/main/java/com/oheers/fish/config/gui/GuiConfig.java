@@ -1,7 +1,7 @@
 package com.oheers.fish.config.gui;
 
 import com.oheers.fish.EvenMoreFish;
-import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.messages.EMFSingleMessage;
 import org.jspecify.annotations.NonNull;
 

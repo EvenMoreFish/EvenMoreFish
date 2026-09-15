@@ -5,22 +5,34 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.config.serializer.ItemSerializer;
 import com.oheers.fish.api.items.AbstractItemFactory;
-import com.oheers.fish.items.configs.ItemConfig;
+import com.oheers.fish.items.config.CustomModelDataItemConfig;
+import com.oheers.fish.items.config.DisplayNameItemConfig;
+import com.oheers.fish.items.config.DurabilityItemConfig;
+import com.oheers.fish.items.config.DyeColorItemConfig;
+import com.oheers.fish.items.config.EnchantmentsItemConfig;
+import com.oheers.fish.items.config.FireResistantItemConfig;
+import com.oheers.fish.items.config.GlowingItemConfig;
+import com.oheers.fish.items.config.HideTooltipItemConfig;
+import com.oheers.fish.items.config.ItemModelItemConfig;
+import com.oheers.fish.items.config.ItemRarityItemConfig;
+import com.oheers.fish.items.config.LoreItemConfig;
+import com.oheers.fish.items.config.MaxStackSizeItemConfig;
+import com.oheers.fish.items.config.PotionEffectItemConfig;
+import com.oheers.fish.items.config.QuantityItemConfig;
+import com.oheers.fish.items.config.TooltipStyleItemConfig;
+import com.oheers.fish.items.config.UnbreakableItemConfig;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import com.oheers.fish.items.config.ItemConfig;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -40,22 +52,8 @@ public class ItemFactory extends AbstractItemFactory {
     private boolean usingItemAddon = false;
     private boolean usingFallbackBaseItem = false;
 
-    private ItemConfig<Number> customModelData;
-    private ItemConfig<Integer> itemDamage;
-    private ItemConfig<String> displayName;
-    private ItemConfig<Color> dyeColour;
-    private ItemConfig<Boolean> glowing;
-    private ItemConfig<List<Component>> lore;
-    private ItemConfig<PotionEffect> potionMeta;
-    private ItemConfig<Map<Enchantment, Integer>> enchantments;
-    private ItemConfig<Boolean> unbreakable;
-    private ItemConfig<Integer> quantity;
-    private ItemConfig<NamespacedKey> itemModel;
-    private ItemConfig<Boolean> fireResistant;
-    private ItemConfig<Boolean> hideTooltip;
-    private ItemConfig<String> itemRarity;
-    private ItemConfig<NamespacedKey> tooltipStyle;
-    private ItemConfig<Integer> maxStackSize;
+    @SuppressWarnings("rawtypes") // Safe to ignore.
+    private final Map<Class<? extends ItemConfig>, ItemConfig<?>> configMap = new HashMap<>();
 
     private ItemFactory(@NonNull Section initialSection, @Nullable String configLocation, @Nullable String itemPath) {
         Section section = configLocation == null ? initialSection : initialSection.createSection(configLocation);
@@ -68,24 +66,7 @@ public class ItemFactory extends AbstractItemFactory {
 
         this.configuration = itemPath == null ? section : section.createSection(itemPath);
 
-        ItemConfigResolver resolver = ItemConfigResolver.getInstance();
-
-        this.customModelData = resolver.getCustomModelData(this.configuration);
-        this.itemDamage = resolver.getDamage(this.configuration);
-        this.displayName = resolver.getDisplayName(this.configuration);
-        this.dyeColour = resolver.getDyeColour(this.configuration);
-        this.glowing = resolver.getGlowing(this.configuration);
-        this.lore = resolver.getLore(this.configuration);
-        this.potionMeta = resolver.getPotionMeta(this.configuration);
-        this.enchantments = resolver.getEnchantments(this.configuration);
-        this.unbreakable = resolver.getUnbreakable(this.configuration);
-        this.quantity = resolver.getQuantity(this.configuration);
-        this.itemModel = resolver.getItemModel(this.configuration);
-        this.fireResistant = resolver.getFireResistant(this.configuration);
-        this.hideTooltip = resolver.getHideTooltip(this.configuration);
-        this.itemRarity = resolver.getItemRarity(this.configuration);
-        this.tooltipStyle = resolver.getTooltipStyle(this.configuration);
-        this.maxStackSize = resolver.getMaxStackSize(this.configuration);
+        loadConfigMap();
 
         this.baseItem = getBaseItem();
     }
@@ -97,23 +78,8 @@ public class ItemFactory extends AbstractItemFactory {
         newFactory.randomIndex = this.randomIndex;
         newFactory.finalChanges = this.finalChanges;
 
-        // Copy all ItemConfig instances to the new factory - TODO figure out a cleaner way to handle ItemConfigs because this is not nice to maintain.
-        newFactory.customModelData = this.customModelData.createCopy();
-        newFactory.itemDamage = this.itemDamage.createCopy();
-        newFactory.displayName = this.displayName.createCopy();
-        newFactory.dyeColour = this.dyeColour.createCopy();
-        newFactory.glowing = this.glowing.createCopy();
-        newFactory.lore = this.lore.createCopy();
-        newFactory.potionMeta = this.potionMeta.createCopy();
-        newFactory.enchantments = this.enchantments.createCopy();
-        newFactory.unbreakable = this.unbreakable.createCopy();
-        newFactory.quantity = this.quantity.createCopy();
-        newFactory.itemModel = this.itemModel.createCopy();
-        newFactory.fireResistant = this.fireResistant.createCopy();
-        newFactory.hideTooltip = this.hideTooltip.createCopy();
-        newFactory.itemRarity = this.itemRarity.createCopy();
-        newFactory.tooltipStyle = this.tooltipStyle.createCopy();
-        newFactory.maxStackSize = this.maxStackSize.createCopy();
+        newFactory.configMap.clear();
+        newFactory.configMap.putAll(this.configMap);
 
         return newFactory;
     }
@@ -150,36 +116,18 @@ public class ItemFactory extends AbstractItemFactory {
     @Override
     public @NonNull ItemStack createItem(@Nullable Map<String, ?> replacements) {
         ItemStack item = baseItem.clone();
+        if (rawItem) {
+            return item;
+        }
 
-        if (!rawItem) {
-            OfflinePlayer player = relevantPlayer == null ? null : Bukkit.getOfflinePlayer(relevantPlayer);
+        OfflinePlayer player = relevantPlayer == null ? null : Bukkit.getOfflinePlayer(relevantPlayer);
 
-            if (this.usingItemAddon) {
-                ItemFactoryConfig.getAddonDisplayBehavior().applyDisplay(item, player, replacements, displayName);
-                ItemFactoryConfig.getAddonLoreBehavior().applyLore(item, player, replacements, lore);
-            } else {
-                displayName.apply(item, player, replacements);
-                lore.apply(item, player, replacements);
-            }
+        for (ItemConfig<?> config : configMap.values()) {
+            ItemConfigApplier.apply(item, player, replacements, config, this.usingItemAddon);
+        }
 
-            customModelData.apply(item, player, replacements);
-            itemDamage.apply(item, player, replacements);
-            dyeColour.apply(item, player, replacements);
-            glowing.apply(item, player, replacements);
-            potionMeta.apply(item, player, replacements);
-            enchantments.apply(item, player, replacements);
-            unbreakable.apply(item, player, replacements);
-            quantity.apply(item, player, replacements);
-            itemModel.apply(item, player, replacements);
-            fireResistant.apply(item, player, replacements);
-            hideTooltip.apply(item, player, replacements);
-            itemRarity.apply(item, player, replacements);
-            tooltipStyle.apply(item, player, replacements);
-            maxStackSize.apply(item, player, replacements);
-
-            if (finalChanges != null) {
-                finalChanges.accept(item);
-            }
+        if (finalChanges != null) {
+            finalChanges.accept(item);
         }
 
         return item;
@@ -262,70 +210,9 @@ public class ItemFactory extends AbstractItemFactory {
         return new ItemStack(Material.COD);
     }
 
-    // Customization Methods //
-
-    public ItemConfig<Number> getCustomModelData() {
-        return customModelData;
-    }
-
-    public ItemConfig<Integer> getItemDamage() {
-        return itemDamage;
-    }
-
-    public ItemConfig<String> getDisplayName() {
-        return displayName;
-    }
-
-    public ItemConfig<Color> getDyeColour() {
-        return dyeColour;
-    }
-
-    public ItemConfig<Boolean> getGlowing() {
-        return glowing;
-    }
-
-    public ItemConfig<List<Component>> getLore() {
-        return lore;
-    }
-
-    public ItemConfig<PotionEffect> getPotionMeta() {
-        return potionMeta;
-    }
-
-    public ItemConfig<Map<Enchantment, Integer>> getEnchantments() {
-        return enchantments;
-    }
-
-    public ItemConfig<Boolean> getUnbreakable() {
-        return unbreakable;
-    }
-
-    public ItemConfig<Integer> getQuantity() {
-        return quantity;
-    }
-
-    public ItemConfig<NamespacedKey> getItemModel() {
-        return itemModel;
-    }
-
-    public ItemConfig<Boolean> getFireResistant() {
-        return fireResistant;
-    }
-
-    public ItemConfig<Boolean> getHideTooltip() {
-        return hideTooltip;
-    }
-
-    public ItemConfig<String> getItemRarity() {
-        return itemRarity;
-    }
-
-    public ItemConfig<NamespacedKey> getTooltipStyle() {
-        return tooltipStyle;
-    }
-
-    public ItemConfig<Integer> getMaxStackSize() {
-        return maxStackSize;
+    @SuppressWarnings("unchecked") // Safe to ignore.
+    public <T extends ItemConfig<?>> @Nullable T getItemConfig(@NonNull Class<T> clazz) {
+        return (T) configMap.get(clazz);
     }
 
     // Base Item Methods //
@@ -554,6 +441,31 @@ public class ItemFactory extends AbstractItemFactory {
 
     public boolean isUsingFallbackBaseItem() {
         return this.usingFallbackBaseItem;
+    }
+
+    // Configs
+
+    private void loadConfigMap() {
+        loadConfig(new CustomModelDataItemConfig(configuration));
+        loadConfig(new DisplayNameItemConfig(configuration));
+        loadConfig(new DurabilityItemConfig(configuration));
+        loadConfig(new DyeColorItemConfig(configuration));
+        loadConfig(new EnchantmentsItemConfig(configuration));
+        loadConfig(new FireResistantItemConfig(configuration));
+        loadConfig(new GlowingItemConfig(configuration));
+        loadConfig(new HideTooltipItemConfig(configuration));
+        loadConfig(new ItemModelItemConfig(configuration));
+        loadConfig(new ItemRarityItemConfig(configuration));
+        loadConfig(new LoreItemConfig(configuration));
+        loadConfig(new MaxStackSizeItemConfig(configuration));
+        loadConfig(new PotionEffectItemConfig(configuration));
+        loadConfig(new QuantityItemConfig(configuration));
+        loadConfig(new TooltipStyleItemConfig(configuration));
+        loadConfig(new UnbreakableItemConfig(configuration));
+    }
+
+    private <T extends ItemConfig<?>> void loadConfig(@NonNull T config) {
+        configMap.put(config.getClass(), config);
     }
 
 }

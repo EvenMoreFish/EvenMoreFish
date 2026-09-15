@@ -2,7 +2,7 @@ package com.oheers.fish.config.gui;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.Logging;
-import com.oheers.fish.api.config.ConfigBase;
+import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.config.gui.impl.ApplyBaitsMenuGuiConfig;
 import com.oheers.fish.config.gui.impl.BaitsMenuGuiConfig;
 import com.oheers.fish.config.gui.impl.JournalFishGuiConfig;
@@ -14,7 +14,7 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.boostedyaml.route.Route;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import uk.firedev.messagelib.message.ComponentMessage;
+import uk.firedev.daisylib.messages.message.ComponentMessage;
 
 import java.io.File;
 import java.util.HashMap;

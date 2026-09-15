@@ -11,7 +11,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 
 /**
  * Uses reflection and classloaders to load our version-dependent jar files.
@@ -69,12 +68,12 @@ public class EMFVersionLoader {
 
     private URL getURL(ClassLoader classLoader) {
         String version = Bukkit.getMinecraftVersion();
+        // Minecraft 26.3.x
+        if (version.startsWith("26.3")) return classLoader.getResource("versions/26-3.jar");
         // Minecraft 26.2.x
         if (version.startsWith("26.2")) return classLoader.getResource("versions/26-2.jar");
         // Minecraft 26.1.x
         if (version.startsWith("26.1")) return classLoader.getResource("versions/26-1.jar");
-        // Minecraft 1.20.x
-        if (version.startsWith("1.20")) return classLoader.getResource("versions/1-20.jar");
         // Minecraft 1.21.x
         if (version.startsWith("1.21")) {
             return switch (version) {

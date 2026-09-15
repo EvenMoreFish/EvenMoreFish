@@ -22,11 +22,7 @@ afterEvaluate {
             attributes["Database-Baseline-Version"] = "8.0"
         }
 
-        // TODO exclusions can be removed when 1.20 is dropped.
-        minimize {
-            exclude(dependency("dev.jorel:.*:.*"))
-            exclude(dependency("de.tr7zw:.*:.*"))
-        }
+        minimize()
 
         exclude("LICENSE")
         exclude("META-INF/**")
@@ -50,7 +46,7 @@ afterEvaluate {
         relocate("org.bstats", "com.oheers.fish.libs.bstats")
         relocate("de.themoep.inventorygui", "com.oheers.fish.libs.inventorygui")
         relocate("uk.firedev.vanishchecker", "com.oheers.fish.libs.vanishchecker")
-        relocate("uk.firedev.messagelib", "com.oheers.fish.libs.messagelib")
+        relocate("uk.firedev.daisylib", "com.oheers.fish.libs.daisylib")
         relocate("org.jooq", "com.oheers.fish.libs.jooq")
         relocate("com.zaxxer", "com.oheers.fish.libs.hikaricp")
         relocate("dev.jorel.commandapi", "com.oheers.fish.libs.commandapi")

@@ -12,6 +12,8 @@ import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
 import com.oheers.fish.baits.manager.BaitManager;
+import com.oheers.fish.commands.admin.AdminCommand;
+import com.oheers.fish.commands.main.MainCommand;
 import com.oheers.fish.competition.AutoRunner;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionManager;
@@ -37,6 +39,7 @@ import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.update.UpdateChecker;
 import com.oheers.fish.utils.MinecraftVersionHelper;
 import de.themoep.inventorygui.InventoryGui;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -44,6 +47,7 @@ import org.bukkit.event.HandlerList;
 import org.evenmorefish.dimensionfishing.DimensionFishing;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import uk.firedev.daisylib.DaisyLib;
 import uk.firedev.vanishchecker.VanishChecker;
 
 import java.sql.Timestamp;
@@ -103,7 +107,7 @@ public class EvenMoreFish extends EMFPlugin {
     @Override
     public void onLoad() {
         instance = this;
-        versionProvider.loadCommands();
+        loadCommands();
         versionProvider.load();
         if (dimensionFishing != null) {
             dimensionFishing.load();
@@ -112,14 +116,18 @@ public class EvenMoreFish extends EMFPlugin {
 
     @Override
     public void onEnable() {
-        versionProvider.enableCommands();
+        DaisyLib.get().init(this);
 
         this.api = new EMFAPI();
+
+        // Initialize manager and load bundled deps
+        this.dependencyManager = new DependencyManager(this);
+        this.dependencyManager.loadBundledDependencies();
 
         this.configurationManager = new ConfigurationManager(this);
         this.configurationManager.loadConfigurations(); //need to test, order may be important
 
-        this.dependencyManager = new DependencyManager(this);
+        // Load external deps
         this.dependencyManager.checkDependencies(); // need to test, order may be important, if it is, we introduce multiple stages with events
 
         this.integrationManager = new IntegrationManager(this);
@@ -155,7 +163,6 @@ public class EvenMoreFish extends EMFPlugin {
 
         CompetitionManager.getInstance().getAutoRunner().start();
 
-        versionProvider.registerCommands();
         versionProvider.enable();
 
         if (dimensionFishing != null) {
@@ -177,7 +184,6 @@ public class EvenMoreFish extends EMFPlugin {
         if (dimensionFishing != null) {
             dimensionFishing.disable();
         }
-        versionProvider.disableCommands();
 
         terminateGuis();
         // Ends the current competition in case the plugin is being disabled when the server will continue running
@@ -243,7 +249,7 @@ public class EvenMoreFish extends EMFPlugin {
             ConfigMessage.RELOAD_SUCCESS.getMessage().send(sender);
         }
 
-        versionProvider.resendCommands();
+        resendCommands();
         versionProvider.reload();
 
         if (dimensionFishing != null) {
@@ -384,6 +390,21 @@ public class EvenMoreFish extends EMFPlugin {
         message.setAmount(count);
         message.setPlayer(player);
         message.send(player);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public void loadCommands() {
+        getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(event -> {
+            event.registrar().register(new MainCommand().get(), MainConfig.getInstance().getMainCommandAliases());
+            if (MainConfig.getInstance().isAdminShortcutCommandEnabled()) {
+                String shortcut = MainConfig.getInstance().getAdminShortcutCommandName();
+                event.registrar().register(new AdminCommand(shortcut).get());
+            }
+        }));
+    }
+
+    public void resendCommands() {
+        Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
     }
 
 }

@@ -18,9 +18,8 @@ public abstract class ItemStackNBTHolderBase extends NBTHolder<ItemStack> {
         try {
             field = ItemStack.class.getDeclaredField("craftDelegate");
             field.setAccessible(true);
-        // Should only throw on 1.20 servers.
         } catch (NoSuchFieldException exception) {
-            field = null;
+            throw new IllegalStateException("Could not find ItemStack's craftDelegate field, but it should exist.");
         }
         CRAFT_DELEGATE = field;
     }

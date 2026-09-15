@@ -2,8 +2,8 @@ package com.oheers.fish.competition.configs;
 
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
+import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.api.Logging;
-import com.oheers.fish.api.config.ConfigBase;
 import com.oheers.fish.api.config.serializer.SoundSerializer;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.reward.Reward;

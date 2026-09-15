@@ -26,16 +26,18 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import de.themoep.inventorygui.GuiStorageElement;
 import de.themoep.inventorygui.InventoryGui;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Registry;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Skull;
 import org.bukkit.enchantments.Enchantment;
@@ -49,14 +51,16 @@ import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import uk.firedev.messagelib.Utils;
+import uk.firedev.daisylib.utils.MessageUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -178,7 +182,7 @@ public class FishUtils {
     }
 
     public static @Nullable Biome getBiome(@NonNull String keyString) {
-        Biome biome = getFromBukkitRegistry(keyString, Registry.BIOME);
+        Biome biome = getFromPaperRegistry(keyString, RegistryKey.BIOME);
         if (biome == null) {
             EvenMoreFish.getInstance().getLogger().severe(keyString + " is not a valid biome.");
         }
@@ -281,7 +285,7 @@ public class FishUtils {
      * @return A string turned into a format key for use in configs.
      */
     public static @NonNull String getFormat(@NonNull String colour) {
-        if (Utils.isLegacy(colour)) {
+        if (MessageUtils.containsLegacy(colour)) {
             // Legacy's formatting makes this insanely simple
             return colour + "{name}";
         } else {
@@ -307,7 +311,7 @@ public class FishUtils {
     }
 
     public static @Nullable Enchantment getEnchantment(@NonNull String namespace) {
-        return getFromBukkitRegistry(namespace, Registry.ENCHANTMENT);
+        return getFromPaperRegistry(namespace, RegistryKey.ENCHANTMENT);
     }
 
     public static @NonNull <E extends Enum<E>> E getEnumValue(@NonNull Class<E> enumClass, @Nullable String value, @NonNull E def) {
@@ -334,13 +338,14 @@ public class FishUtils {
         }
     }
 
-    private static <T extends Keyed> @Nullable T getFromBukkitRegistry(@NonNull String namespace, @NonNull Registry<T> registry) {
-        namespace = namespace.toLowerCase();
-        NamespacedKey key = NamespacedKey.fromString(namespace);
+    private static <T extends Keyed> @Nullable T getFromPaperRegistry(@NonNull String namespace, @NonNull RegistryKey<T> registryKey) {
+        NamespacedKey key = NamespacedKey.fromString(namespace.toLowerCase(Locale.ROOT));
         if (key == null) {
             return null;
         }
-        return registry.get(key);
+        return RegistryAccess.registryAccess()
+            .getRegistry(registryKey)
+            .get(key);
     }
 
     public static boolean inventoryHasSpace(@Nullable Inventory inventory) {

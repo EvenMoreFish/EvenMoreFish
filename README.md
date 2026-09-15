@@ -8,7 +8,7 @@ plugin for your server.
 
 ---
 
-Supports 1.20.1+
+Supports 1.21.1+
 
 If you encounter any issues with the plugin, please do the following before reporting the problem:
 - Create a Paper test server using one of the supported versions.
@@ -31,6 +31,7 @@ YourKit is the creator of [YourKit Java Profiler](https://www.yourkit.com/java/p
 
 There are three sources for the plugin:
 - [Modrinth](https://modrinth.com/plugin/evenmorefish)
+- [Hangar](https://hangar.papermc.io/EvenMoreFish/EvenMoreFish)
 - [GitHub Releases](https://github.com/EvenMoreFish/EvenMoreFish/releases)
 - [Jenkins](https://ci.codemc.io/job/EvenMoreFish/job/EvenMoreFish/) (Experimental)
 

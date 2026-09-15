@@ -30,10 +30,6 @@ public interface IBait {
 
     @NonNull String getId();
 
-    // TODO Add format methods after EMFMessage is moved to API module.
-    // @NonNull EMFSingleMessage getFormat();
-    //@NonNull EMFSingleMessage format(@NonNull String name);
-
     @NonNull String getDisplayName();
 
     boolean isSilent();

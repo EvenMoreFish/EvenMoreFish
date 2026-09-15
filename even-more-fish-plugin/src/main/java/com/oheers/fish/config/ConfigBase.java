@@ -1,0 +1,179 @@
+package com.oheers.fish.config;
+
+import com.oheers.fish.api.plugin.EMFPlugin;
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.libs.org.snakeyaml.engine.v2.exceptions.ScannerException;
+import dev.dejvokep.boostedyaml.settings.Settings;
+import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
+import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
+import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
+import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+import org.bukkit.plugin.Plugin;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+
+public class ConfigBase {
+
+    private final boolean preventIO;
+    private final String fileName;
+    private final String resourceName;
+    private final Plugin plugin;
+    private final boolean configUpdater;
+
+    private YamlDocument config = null;
+    private File file = null;
+
+    private static YamlDocument empty() {
+        try {
+            return YamlDocument.create(InputStream.nullInputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ConfigBase(@NonNull File file, @NonNull Plugin plugin, boolean configUpdater) {
+        this.preventIO = false;
+        this.fileName = file.getName();
+        this.resourceName = null;
+        this.plugin = plugin;
+        this.configUpdater = configUpdater;
+        reload(file);
+        update();
+    }
+
+    public ConfigBase(@NonNull String fileName, @NonNull String resourceName, @NonNull Plugin plugin, boolean configUpdater) {
+        this.preventIO = false;
+        this.fileName = fileName;
+        this.resourceName = resourceName;
+        this.plugin = plugin;
+        this.configUpdater = configUpdater;
+        reload(new File(getPlugin().getDataFolder(), getFileName()));
+        update();
+    }
+
+    /**
+     * Creates an instance of ConfigBase with a blank file. This disables all I/O methods.
+     */
+    public ConfigBase() {
+        this.preventIO = true;
+        this.fileName = null;
+        this.resourceName = null;
+        this.plugin = EMFPlugin.getInstance();
+        this.configUpdater = false;
+        this.config = empty();
+    }
+
+    public void reload(@NonNull File configFile) {
+        if (preventIO) {
+            return;
+        }
+
+        final Settings[] settings = getSettings();
+
+        try {
+            InputStream resource = getResourceName() == null ? null : getPlugin().getResource(getResourceName());
+            if (resource == null) {
+                this.config = YamlDocument.create(configFile, settings);
+            } else {
+                this.config = YamlDocument.create(configFile, resource, settings);
+            }
+            this.file = configFile;
+        } catch (IOException ex) {
+            plugin.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+            this.config = empty();
+        } catch (ScannerException ex) {
+            plugin.getLogger().log(Level.WARNING, "Failed to reload " + getFileName() + " due to invalid YAML syntax. Please check the file for errors.");
+            this.config = empty();
+        }
+    }
+
+    public void reload() {
+        if (preventIO || file == null) {
+            return;
+        }
+        reload(this.file);
+    }
+
+    public final @NonNull YamlDocument getConfig() {
+        if (this.config == null) {
+            throw new IllegalStateException("Config " + getFileName() + " is not loaded. Please check for startup errors.");
+        }
+        return this.config;
+    }
+
+    public final @Nullable File getFile() { return this.file; }
+
+    public final @NonNull Plugin getPlugin() { return this.plugin; }
+
+    public final @Nullable String getFileName() { return this.fileName; }
+
+    public final @Nullable String getResourceName() { return this.resourceName; }
+
+    public Settings[] getSettings() {
+        List<Settings> settingsList = new ArrayList<>(Arrays.asList(
+                getGeneralSettings(),
+                getDumperSettings(),
+                getLoaderSettings()
+        ));
+
+        if (configUpdater) {
+            settingsList.add(getUpdaterSettings());
+        }
+
+        return settingsList.toArray(Settings[]::new);
+    }
+
+    public GeneralSettings getGeneralSettings() {
+        return GeneralSettings.builder().setUseDefaults(false).build();
+    }
+
+    public DumperSettings getDumperSettings() {
+        return DumperSettings.DEFAULT;
+    }
+
+    public LoaderSettings getLoaderSettings() {
+        return LoaderSettings.DEFAULT;
+    }
+
+    public UpdaterSettings getUpdaterSettings() {
+        return UpdaterSettings.builder()
+            .setVersioning(new BasicVersioning("version"))
+            .setKeepAll(true)
+            .setEnableDowngrading(false)
+            .build();
+    }
+
+    public void save() {
+        if (preventIO) {
+            return;
+        }
+        try {
+            getConfig().save();
+        } catch (IOException exception) {
+            plugin.getLogger().log(Level.WARNING, "Failed to update " + getFileName(), exception);
+        }
+    }
+
+    public void update() {
+        if (preventIO || !configUpdater) {
+            return;
+        }
+        try {
+            getConfig().update();
+        } catch (IOException | UnsupportedOperationException exception) {
+            plugin.getLogger().warning("Failed to update " + getFileName());
+        }
+    }
+
+
+
+}

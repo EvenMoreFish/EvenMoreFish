@@ -4,7 +4,6 @@ import com.oheers.fish.api.requirement.Requirement;
 import com.oheers.fish.api.sort.Sortable;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
