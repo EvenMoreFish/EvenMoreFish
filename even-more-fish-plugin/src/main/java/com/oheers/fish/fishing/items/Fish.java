@@ -11,7 +11,9 @@ import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.exceptions.InvalidFishException;
 import com.oheers.fish.items.ItemFactory;
-import com.oheers.fish.items.configs.ItemConfig;
+import com.oheers.fish.items.config.DisplayNameItemConfig;
+import com.oheers.fish.items.config.ItemConfig;
+import com.oheers.fish.items.config.LoreItemConfig;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -19,6 +21,7 @@ import com.oheers.fish.messages.abstracted.EMFMessage;
 import com.oheers.fish.selling.WorthNBT;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -52,8 +55,6 @@ public class Fish implements IFish {
 
     private double weight;
 
-    private boolean isCompExemptFish;
-
     private final boolean disableFisherman;
     private final String displayName;
 
@@ -86,14 +87,20 @@ public class Fish implements IFish {
         );
         this.factory = factory;
 
-        this.displayName = section.getString("displayname", factory.getDisplayName().getConfiguredValue());
+        this.displayName = section.getString(
+            "displayname",
+            Optional.ofNullable(factory.getItemConfig(DisplayNameItemConfig.class))
+                .map(ItemConfig::getConfiguredValue)
+                .map(MiniMessage.miniMessage()::serialize)
+                .orElse(null)
+        );
 
         this.showInJournal = section.getBoolean("journal", true);
         this.catchLimit = section.getInt("catch-limit", rarity.getCatchLimit());
 
-        ItemConfig<List<Component>> lore = factory.getLore();
-        if (lore.isEnabled()) {
-            lore.setEnabled(!section.getBoolean("disable-lore", false));
+        LoreItemConfig config = factory.getItemConfig(LoreItemConfig.class);
+        if (config != null && config.isEnabled()) {
+            config.setEnabled(!section.getBoolean("disable-lore", false));
         }
 
         checkSilent();
@@ -146,8 +153,15 @@ public class Fish implements IFish {
     public @NonNull ItemStack give() {
         ItemFactory factory = this.factory.createCopy();
         // Build custom fish lore and include the configured lore.
-        factory.getLore().setTransformer(this::buildFishLore);
-        factory.getDisplayName().setDefault(getDisplayNameMessage().getUnderlying().getMiniMessage());
+        LoreItemConfig loreConfig = factory.getItemConfig(LoreItemConfig.class);
+        if (loreConfig != null) {
+            loreConfig.addTransformer((lore, item) -> buildFishLore(lore));
+        }
+        DisplayNameItemConfig displayConfig = factory.getItemConfig(DisplayNameItemConfig.class);
+        if (displayConfig != null) {
+            displayConfig.setDefault(getDisplayNameMessage().getUnderlying().get());
+        }
+
         ItemStack item = fisherman == null
             ? factory.createItem()
             : factory.createItem(fisherman.getUniqueId());

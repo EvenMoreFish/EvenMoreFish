@@ -7,13 +7,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
-import com.oheers.fish.config.MainConfig;
-import com.oheers.fish.items.ItemConfigResolver;
 import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import it.unimi.dsi.fastutil.objects.ReferenceLinkedOpenHashSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -26,16 +23,8 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.CraftRegistry;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import com.oheers.fish.commands.admin.AdminCommand;
-import com.oheers.fish.commands.main.MainCommand;
-import org.evenmorefish.fish.items.configs.FireResistantItemConfig;
-import org.evenmorefish.fish.items.configs.HideTooltipItemConfig;
-import org.evenmorefish.fish.items.configs.ItemRarityItemConfig;
-import org.evenmorefish.fish.items.configs.MaxStackSizeItemConfig;
-import org.evenmorefish.fish.items.configs.ModernGlowingItemConfig;
 import org.evenmorefish.fish.nbt.ItemStackNBTHolder;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -46,20 +35,6 @@ public class EMFVersion extends EMFVersionProvider {
 
     public EMFVersion(@NonNull EMFPlugin plugin) {
         super(plugin);
-    }
-
-    @Override
-    public void load() {
-        registerItemConfigs();
-    }
-
-    private void registerItemConfigs() {
-        ItemConfigResolver inst = ItemConfigResolver.getInstance();
-        inst.setGlowingResolver(ModernGlowingItemConfig::new);
-        inst.setFireResistantResolver(FireResistantItemConfig::new);
-        inst.setHideTooltipResolver(HideTooltipItemConfig::new);
-        inst.setItemRarityResolver(ItemRarityItemConfig::new);
-        inst.setMaxStackSizeResolver(MaxStackSizeItemConfig::new);
     }
 
     @Override
@@ -133,6 +108,9 @@ public class EMFVersion extends EMFVersionProvider {
     }
 
     // Ignored Methods
+
+    @Override
+    public void load() {}
 
     @Override
     public void enable() {}

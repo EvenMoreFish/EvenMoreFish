@@ -17,6 +17,9 @@ import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.items.ItemFactory;
+import com.oheers.fish.items.config.DisplayNameItemConfig;
+import com.oheers.fish.items.config.ItemConfig;
+import com.oheers.fish.items.config.LoreItemConfig;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import de.themoep.inventorygui.GuiElement;
@@ -166,13 +169,17 @@ public class FishJournalGui extends ConfigGui {
     }
 
     private @Nullable EMFSingleMessage prepareDisplay(@NonNull ItemFactory factory, @NonNull IFish fish) {
-        final String displayStr = factory.getDisplayName().getConfiguredValue();
-        if (displayStr == null) {
+        DisplayNameItemConfig displayConfig = factory.getItemConfig(DisplayNameItemConfig.class);
+        if (displayConfig == null) {
             return null;
         }
-        EMFSingleMessage display = EMFSingleMessage.fromString(displayStr);
-        display.setVariable("{fishname}", fish.getDisplayName());
-        return display;
+        final Component display = displayConfig.getConfiguredValue();
+        if (display == null) {
+            return null;
+        }
+        EMFSingleMessage displayMessage = EMFSingleMessage.of(display);
+        displayMessage.setVariable("{fishname}", fish.getDisplayName());
+        return displayMessage;
     }
 
     /**
@@ -205,7 +212,8 @@ public class FishJournalGui extends ConfigGui {
         final String discoverer = getDiscoverer(fishStats, getUnknownMessage());
 
         EMFListMessage lore = EMFListMessage.ofList(
-            Optional.ofNullable(factory.getLore().getConfiguredValue())
+            Optional.ofNullable(factory.getItemConfig(LoreItemConfig.class))
+                .map(ItemConfig::getConfiguredValue)
                 .orElse(Collections.emptyList())
         );
 

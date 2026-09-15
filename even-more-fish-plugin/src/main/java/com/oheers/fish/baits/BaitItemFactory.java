@@ -4,13 +4,16 @@ import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.items.ItemFactory;
-import com.oheers.fish.items.configs.ItemConfig;
+import com.oheers.fish.items.config.DisplayNameItemConfig;
+import com.oheers.fish.items.config.ItemConfig;
+import com.oheers.fish.items.config.LoreItemConfig;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 
@@ -33,9 +36,11 @@ public class BaitItemFactory {
     public ItemFactory createFactory() {
         ItemFactory factory = ItemFactory.itemFactory(config);
 
-        ItemConfig<String> displayNameConfig = factory.getDisplayName();
-        displayNameConfig.setEnabled(true);
-        displayNameConfig.setDefault("<yellow>" + baitId);
+        DisplayNameItemConfig displayNameConfig = factory.getItemConfig(DisplayNameItemConfig.class);
+        if (displayNameConfig != null) {
+            displayNameConfig.setEnabled(true);
+            displayNameConfig.setDefault(Component.text(baitId).color(NamedTextColor.YELLOW));
+        }
 
         factory.setFinalChanges(item -> {
             item.setAmount(config.getInt("drop-quantity", 1));
@@ -95,7 +100,11 @@ public class BaitItemFactory {
     @Contract(pure = true)
     private @NonNull Supplier<EMFListMessage> createItemLoreVariable(ItemFactory factory) {
         return () -> {
-            List<Component> configured = factory.getLore().getConfiguredValue();
+            LoreItemConfig loreConfig = factory.getItemConfig(LoreItemConfig.class);
+            if (loreConfig == null) {
+                return EMFListMessage.empty();
+            }
+            List<Component> configured = loreConfig.getConfiguredValue();
             if (configured == null) {
                 return EMFListMessage.empty();
             }
