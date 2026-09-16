@@ -89,8 +89,7 @@ dependencies {
     library(libs.maven.artifact)
     library(libs.guava)
 
-    library(libs.boostedyaml)
-    compileOnlyApi(libs.boostedyaml)
+    implementation(libs.boostedyaml)
 
     library(libs.bundles.connectors)
 
@@ -286,6 +285,14 @@ tasks {
         options.compilerArgs.add("-parameters")
         options.isFork = true
         options.encoding = "UTF-8"
+    }
+
+    shadowJar {
+        dependsOn(":even-more-fish-api:shadowJar")
+    }
+
+    test {
+        dependsOn(":even-more-fish-api:shadowJar")
     }
 
 }

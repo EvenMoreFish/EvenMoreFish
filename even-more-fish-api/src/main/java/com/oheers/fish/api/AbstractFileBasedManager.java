@@ -16,7 +16,6 @@ import java.util.function.Predicate;
 /**
  * Internal use only.
  */
-@ApiStatus.Internal
 public abstract class AbstractFileBasedManager<T> {
     protected AbstractFileBasedManager<?> dependency;
 

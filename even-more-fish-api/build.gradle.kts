@@ -1,5 +1,6 @@
 plugins {
     id("org.evenmorefish.fish.publishing-conventions")
+    id("org.evenmorefish.fish.shadow-conventions")
     `java-library`
 }
 
@@ -12,7 +13,7 @@ dependencies {
             strictly("1.21.1-R0.1-SNAPSHOT")
         }
     }
-    compileOnlyApi(libs.boostedyaml)
+    compileOnly(libs.boostedyaml) // Relocated to "org.evenmorefish.fish.libs.boostedyaml"
 
     compileOnly(libs.jspecify)
 }
@@ -34,7 +35,7 @@ publishing {
             artifactId = project.name
             version = project.version.toString()
 
-            from(components["java"])
+            from(components["shadow"])
         }
     }
 }

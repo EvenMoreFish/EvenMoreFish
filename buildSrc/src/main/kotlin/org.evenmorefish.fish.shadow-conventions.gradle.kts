@@ -51,6 +51,7 @@ afterEvaluate {
         relocate("com.zaxxer", "com.oheers.fish.libs.hikaricp")
         relocate("dev.jorel.commandapi", "com.oheers.fish.libs.commandapi")
         relocate("org.evenmorefish.dimensionfishing", "com.oheers.fish.libs.dimensionfishing")
+        relocate("dev.dejvokep.boostedyaml", "org.evenmorefish.fish.libs.boostedyaml")
     }
     tasks.named<Jar>("jar") {
         enabled = false
