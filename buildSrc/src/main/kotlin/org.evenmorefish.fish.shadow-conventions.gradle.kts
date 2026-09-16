@@ -42,15 +42,12 @@ afterEvaluate {
         }
         archiveClassifier.set("")
 
-        relocate("de.tr7zw.changeme.nbtapi", "com.oheers.fish.utils.nbtapi")
-        relocate("org.bstats", "com.oheers.fish.libs.bstats")
-        relocate("de.themoep.inventorygui", "com.oheers.fish.libs.inventorygui")
-        relocate("uk.firedev.vanishchecker", "com.oheers.fish.libs.vanishchecker")
-        relocate("uk.firedev.daisylib", "com.oheers.fish.libs.daisylib")
-        relocate("org.jooq", "com.oheers.fish.libs.jooq")
-        relocate("com.zaxxer", "com.oheers.fish.libs.hikaricp")
-        relocate("dev.jorel.commandapi", "com.oheers.fish.libs.commandapi")
-        relocate("org.evenmorefish.dimensionfishing", "com.oheers.fish.libs.dimensionfishing")
+        relocate("org.bstats", "org.evenmorefish.fish.libs.bstats")
+        relocate("de.themoep.inventorygui", "org.evenmorefish.fish.libs.inventorygui")
+        relocate("uk.firedev.vanishchecker", "org.evenmorefish.fish.libs.vanishchecker")
+        relocate("uk.firedev.daisylib", "org.evenmorefish.fish.libs.daisylib")
+        relocate("com.zaxxer", "org.evenmorefish.fish.libs.hikaricp")
+        relocate("org.evenmorefish.dimensionfishing", "org.evenmorefish.fish.libs.dimensionfishing")
         relocate("dev.dejvokep.boostedyaml", "org.evenmorefish.fish.libs.boostedyaml")
     }
     tasks.named<Jar>("jar") {
