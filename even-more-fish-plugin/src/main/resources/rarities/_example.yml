@@ -119,6 +119,9 @@ fish:
     # Should this fish be shown in the journal? (Default: true)
     journal: true
 
+    # Should this fish be tracked in the database? Useful for testing new fish without saving any data. (Default: true)
+    track-in-database: true
+
     # Optionally choose an exact worth for this fish. If unspecified or set to 0, the normal maths are applied.
     # This overrides the rarity's setting.
     set-worth: 0
