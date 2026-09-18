@@ -6,6 +6,7 @@ import com.oheers.fish.api.economy.EconomyType;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.economy.GriefPreventionEconomyType;
 import com.oheers.fish.economy.PlayerPointsEconomyType;
+import com.oheers.fish.economy.VaultEconomyType;
 import com.oheers.fish.events.AuraSkillsFishingEvent;
 import com.oheers.fish.events.DeprecatedEventListener;
 import com.oheers.fish.events.McMMOTreasureEvent;
@@ -20,6 +21,7 @@ import org.bukkit.plugin.PluginManager;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import uk.firedev.daisylib.DaisyLib;
+import uk.firedev.daisylib.external.vault.VaultWrapper;
 import uk.firedev.daisylib.messages.MessageSettings;
 import uk.firedev.daisylib.messages.ObjectProcessor;
 
@@ -64,6 +66,7 @@ public class DependencyManager implements Listener {
         this.usingPAPI = pm.isPluginEnabled("PlaceholderAPI");
         this.usingAuraSkills = pm.isPluginEnabled("AuraSkills");
 
+        loadVaultEconomy();
         loadPlayerPointsEconomy();
         loadGriefPreventionEconomy();
         checkPapi();
@@ -118,6 +121,12 @@ public class DependencyManager implements Listener {
 
     public boolean isHeadsDBLoaded() {
         return usingHeadsDB && hdbapi != null;
+    }
+
+    public void loadVaultEconomy() {
+        if (VaultWrapper.get().isEconomyAvailable()) {
+            loadEconomyType(new VaultEconomyType(), "Vault");
+        }
     }
 
     public void loadPlayerPointsEconomy() {

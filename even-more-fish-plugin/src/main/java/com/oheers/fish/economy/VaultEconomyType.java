@@ -13,12 +13,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import uk.firedev.daisylib.external.vault.VaultWrapper;
 
 import java.util.logging.Level;
 
 public class VaultEconomyType implements EconomyType {
-
-    private Economy economy;
     
     @Override
     public String getIdentifier() {
@@ -36,12 +35,11 @@ public class VaultEconomyType implements EconomyType {
             return;
         }
         Logging.info("Economy attempting to hook into Vault.");
-        RegisteredServiceProvider<Economy> rsp = emf.getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
+        Economy economy = VaultWrapper.get().getEconomyOrNull();
+        if (economy == null) {
             Logging.warn("Could not obtain Vault Economy service.");
             return;
         }
-        economy = rsp.getProvider();
         emf.getLogger().log(Level.INFO, "Economy hooked into Vault.");
     }
 
@@ -55,7 +53,7 @@ public class VaultEconomyType implements EconomyType {
         if (!isAvailable()) {
             return false;
         }
-        return economy.depositPlayer(player, prepareValue(amount, allowMultiplier)).transactionSuccess();
+        return VaultWrapper.get().getEconomy().depositPlayer(player, prepareValue(amount, allowMultiplier)).transactionSuccess();
     }
 
     @Override
@@ -63,7 +61,7 @@ public class VaultEconomyType implements EconomyType {
         if (!isAvailable()) {
             return false;
         }
-        return economy.withdrawPlayer(player, prepareValue(amount, allowMultiplier)).transactionSuccess();
+        return VaultWrapper.get().getEconomy().withdrawPlayer(player, prepareValue(amount, allowMultiplier)).transactionSuccess();
     }
 
     @Override
@@ -71,7 +69,7 @@ public class VaultEconomyType implements EconomyType {
         if (!isAvailable()) {
             return false;
         }
-        return economy.has(player, amount);
+        return VaultWrapper.get().getEconomy().has(player, amount);
     }
 
     @Override
@@ -79,7 +77,7 @@ public class VaultEconomyType implements EconomyType {
         if (!isAvailable()) {
             return 0;
         }
-        return economy.getBalance(player);
+        return VaultWrapper.get().getEconomy().getBalance(player);
     }
 
     /**
@@ -107,7 +105,7 @@ public class VaultEconomyType implements EconomyType {
             return null;
         }
         double worth = prepareValue(totalWorth, applyMultiplier);
-        String worthFormatted = economy.format(worth);
+        String worthFormatted = VaultWrapper.get().getEconomy().format(worth);
 
         String display = MainConfig.getInstance().getEconomyDisplay(this);
         if (display == null) {
@@ -115,13 +113,13 @@ public class VaultEconomyType implements EconomyType {
         }
         EMFSingleMessage message = EMFSingleMessage.fromString(display);
         message.setVariable("{amount}", worthFormatted);
-        message.setVariable("{raw-amount}", FishUtils.roundDouble(worth, economy.fractionalDigits()));
+        message.setVariable("{raw-amount}", FishUtils.roundDouble(worth, VaultWrapper.get().getEconomy().fractionalDigits()));
         return message.getComponentMessage();
     }
 
     @Override
     public boolean isAvailable() {
-        return MainConfig.getInstance().isEconomyEnabled(this) && economy != null;
+        return MainConfig.getInstance().isEconomyEnabled(this) && VaultWrapper.get().isEconomyAvailable();
     }
 
 }
