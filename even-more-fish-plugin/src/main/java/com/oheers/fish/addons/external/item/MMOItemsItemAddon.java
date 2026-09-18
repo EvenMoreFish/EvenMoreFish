@@ -1,11 +1,10 @@
-package org.evenmorefish.fish.addons.item;
+package com.oheers.fish.addons.external.item;
 
 import com.oheers.fish.api.addons.ItemAddon;
 import io.lumine.mythic.lib.api.item.NBTItem;
 import net.Indyuce.mmoitems.MMOItems;
 import net.Indyuce.mmoitems.api.Type;
 import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
-import net.Indyuce.mmoitems.manager.ItemManager;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;

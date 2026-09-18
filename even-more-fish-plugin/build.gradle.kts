@@ -1,5 +1,3 @@
-import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
-
 plugins {
     `java-library`
     `maven-publish`
@@ -85,9 +83,6 @@ dependencies {
         exclude("org.xerial", "sqlite-jdbc")
         exclude("com.mysql", "mysql-connector-j")
     }
-    library(libs.friendlyid)
-    library(libs.maven.artifact)
-    library(libs.guava)
 
     implementation(libs.boostedyaml)
 
@@ -96,6 +91,18 @@ dependencies {
     implementation(libs.dimensionfishing)
 
     compileOnly(libs.jspecify)
+
+    // External Addons
+    compileOnly(libs.nexo)
+    compileOnly(libs.oraxen)
+    compileOnly(libs.bundles.craftengine)
+    compileOnly(libs.ecoitems)
+    compileOnly("com.willfp:libreforge:4.81.0:all")
+    compileOnly(libs.eco)
+    compileOnly(libs.denizen.api)
+    compileOnly(libs.itemsadder.api)
+    compileOnly(libs.mmoitems.api)
+    compileOnly(libs.mythic.lib)
 }
 
 bukkit {
@@ -148,10 +155,10 @@ sonar {
 val copyAddons by tasks.registering(Copy::class) {
     // Make sure the plugin waits for the addons to be built first
     dependsOn(
-        ":addons:even-more-fish-addons-j21:build"
+        //":addons:addon-template:build"
     )
 
-    from(project(":addons:even-more-fish-addons-j21").layout.buildDirectory.dir("libs"))
+    //from(project(":addons:addon-template").layout.buildDirectory.dir("libs"))
 
     into(file("src/main/resources/addons"))
 }

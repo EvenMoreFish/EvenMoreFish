@@ -1,6 +1,14 @@
 package com.oheers.fish.addons;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.addons.external.item.CraftEngineItemAddon;
+import com.oheers.fish.addons.external.item.DenizenItemAddon;
+import com.oheers.fish.addons.external.item.EcoItemsItemAddon;
+import com.oheers.fish.addons.external.item.HeadDatabaseItemAddon;
+import com.oheers.fish.addons.external.item.ItemsAdderItemAddon;
+import com.oheers.fish.addons.external.item.MMOItemsItemAddon;
+import com.oheers.fish.addons.external.item.NexoItemAddon;
+import com.oheers.fish.addons.external.item.OraxenItemAddon;
 import com.oheers.fish.addons.external.requirement.PermissionRequirementType;
 import com.oheers.fish.addons.external.reward.AuraSkillsXPRewardType;
 import com.oheers.fish.addons.external.reward.GPClaimBlocksRewardType;
@@ -76,6 +84,7 @@ public class InternalAddonLoader extends AddonLoader {
     private void loadItemAddons() {
         // Load ItemAddons
         new Head64ItemAddon().register();
+        loadExternalItemAddons();
     }
 
     private void loadRewardTypes() {
@@ -146,6 +155,17 @@ public class InternalAddonLoader extends AddonLoader {
         if (economy != null) {
             new MoneyRewardType().register();
         }
+    }
+
+    private void loadExternalItemAddons() {
+        new CraftEngineItemAddon().register();
+        new DenizenItemAddon().register();
+        new EcoItemsItemAddon().register();
+        new HeadDatabaseItemAddon().register();
+        new ItemsAdderItemAddon().register();
+        new MMOItemsItemAddon().register();
+        new NexoItemAddon().register();
+        new OraxenItemAddon().register();
     }
 
 }
