@@ -156,8 +156,12 @@ public class FishManager extends AbstractFishManager<IRarity> {
         final Float lengthFloat = pdc.get(NbtKeys.EMF_FISH_LENGTH.get(), PersistentDataType.FLOAT);
         final Integer randomIndex = pdc.get(NbtKeys.EMF_FISH_RANDOM_INDEX.get(), PersistentDataType.INTEGER);
 
-        if (nameString == null || rarityString == null) {
-            Logging.warn("NBT Error", new InvalidFishException("NBT Error"));
+        if (nameString == null) {
+            Logging.debug("Skull does not have a fish name set. It is not a fish.");
+            return null;
+        }
+        if (rarityString == null) {
+            Logging.debug("Skull does not have a rarity set. It is not a fish.");
             return null;
         }
 
