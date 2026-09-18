@@ -119,7 +119,12 @@ public class FishManager extends AbstractFishManager<IRarity> {
         Float length = holder.getFloat(NbtKeys.EMF_FISH_LENGTH.get());
         Integer randomIndex = holder.getInteger(NbtKeys.EMF_FISH_RANDOM_INDEX.get());
 
-        if (nameString == null || rarityString == null) {
+        if (nameString == null) {
+            Logging.debug("ItemStack does not have a fish name set. It is not a fish.");
+            return null;
+        }
+        if (rarityString == null) {
+            Logging.debug("ItemStack does not have a rarity set. It is not a fish.");
             return null;
         }
 
