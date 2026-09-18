@@ -5,10 +5,12 @@ import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.events.FishEatEvent;
 import com.oheers.fish.fishing.items.FishManager;
 import org.bukkit.Material;
+import org.bukkit.block.Crafter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockCookEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -23,6 +25,22 @@ public class ItemProtectionListener implements Listener {
             return;
         }
         for (ItemStack craftItem : event.getInventory().getMatrix()) {
+            if (craftItem == null) {
+                continue;
+            }
+            if (FishManager.getInstance().isFish(craftItem) || BaitManager.getInstance().isBait(craftItem)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onCrafterCraft(CrafterCraftEvent event) {
+        if (!MainConfig.getInstance().preventCrafting()) {
+            return;
+        }
+        Crafter crafter = (Crafter) event.getBlock().getState();
+        for (ItemStack craftItem : crafter.getInventory().getContents()) {
             if (craftItem == null) {
                 continue;
             }

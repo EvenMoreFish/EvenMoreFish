@@ -12,7 +12,6 @@ include(":even-more-fish-plugin")
 
 // Addons
 include(":addons:even-more-fish-addons-j21")
-include(":addons:even-more-fish-addons-crafterfix")
 
 // Versions
 include(":versions:1-21:1-4") // 1.21.1 to 1.21.4
