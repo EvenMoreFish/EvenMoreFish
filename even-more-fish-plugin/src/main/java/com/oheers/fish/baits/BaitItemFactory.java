@@ -16,11 +16,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 public class BaitItemFactory {
+
     private final String baitId;
     private final List<IRarity> rarities;
     private final List<IFish> fish;
@@ -41,10 +43,14 @@ public class BaitItemFactory {
             displayNameConfig.setEnabled(true);
             displayNameConfig.setDefault(Component.text(baitId).color(NamedTextColor.YELLOW));
         }
+        LoreItemConfig loreConfig = factory.getItemConfig(LoreItemConfig.class);
+        if (loreConfig != null) {
+            loreConfig.setEnabled(true);
+            loreConfig.setTransformer(this::createBoostLore);
+        }
 
         factory.setFinalChanges(item -> {
             item.setAmount(config.getInt("drop-quantity", 1));
-            item.editMeta(meta -> meta.lore(createBoostLore(factory)));
             BaitNBTManager.applyBaitNBT(item, baitId);
         });
 
@@ -57,10 +63,10 @@ public class BaitItemFactory {
      *
      * @return A list of formatted Adventure components for the bait's lore
      */
-    private @NonNull List<Component> createBoostLore(ItemFactory factory) {
+    private @NonNull List<Component> createBoostLore(@Nullable List<Component> original) {
         final EMFListMessage lore = getBaseLoreTemplate();
         lore.setVariableWithListInsertion("{boosts}", createBoostsVariable());
-        lore.setVariableWithListInsertion("{lore}", createItemLoreVariable(factory).get());
+        lore.setVariableWithListInsertion("{lore}", original == null ? EMFListMessage.empty() : original);
         lore.setVariable("{bait_theme}", Component.empty());
 
         return lore.getComponentListMessage();
@@ -71,47 +77,28 @@ public class BaitItemFactory {
     }
 
     private @NonNull EMFMessage createBoostsVariable() {
-        Component boostsMessage = Component.empty();
-        boostsMessage = appendRarityBoosts(boostsMessage);
-        boostsMessage = appendFishBoosts(boostsMessage);
-        return EMFSingleMessage.of(boostsMessage);
+        EMFListMessage message = EMFListMessage.empty();
+        message.appendMessage(appendRarityBoosts());
+        message.appendMessage(appendFishBoosts());
+        return message;
     }
 
-    private Component appendRarityBoosts(Component message) {
-        if (rarities.isEmpty()) return message;
+    private EMFMessage appendRarityBoosts() {
+        if (rarities.isEmpty()) return EMFListMessage.empty();
 
-        ConfigMessage boostMessage = rarities.size() > 1
-                ? ConfigMessage.BAIT_BOOSTS_RARITIES
-                : ConfigMessage.BAIT_BOOSTS_RARITY;
-        EMFMessage boost = boostMessage.getMessage();
+        EMFMessage boost = rarities.size() > 1
+                ? ConfigMessage.BAIT_BOOSTS_RARITIES.getMessage()
+                : ConfigMessage.BAIT_BOOSTS_RARITY.getMessage();
         boost.setAmount(rarities.size());
-        return message.append(boost.getComponentMessage());
+        return boost;
     }
 
-    private Component appendFishBoosts(Component message) {
-        if (fish.isEmpty()) return message;
+    private EMFMessage appendFishBoosts() {
+        if (fish.isEmpty()) return EMFListMessage.empty();
 
         EMFMessage boost = ConfigMessage.BAIT_BOOSTS_FISH.getMessage();
         boost.setAmount(fish.size());
-        return message.append(boost.getComponentMessage());
+        return boost;
     }
-
-
-    @Contract(pure = true)
-    private @NonNull Supplier<EMFListMessage> createItemLoreVariable(ItemFactory factory) {
-        return () -> {
-            LoreItemConfig loreConfig = factory.getItemConfig(LoreItemConfig.class);
-            if (loreConfig == null) {
-                return EMFListMessage.empty();
-            }
-            List<Component> configured = loreConfig.getConfiguredValue();
-            if (configured == null) {
-                return EMFListMessage.empty();
-            }
-            return EMFListMessage.ofList(configured);
-        };
-    }
-
-
 
 }

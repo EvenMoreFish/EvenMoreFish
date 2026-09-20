@@ -61,7 +61,7 @@ public abstract class ItemConfig<T> {
         this.def = def;
     }
 
-    public void setTransformer(@Nullable Function<T, T> transformer) {
+    public void setTransformer(@Nullable Function<@Nullable T, @Nullable T> transformer) {
         this.transformer = transformer;
     }
 
