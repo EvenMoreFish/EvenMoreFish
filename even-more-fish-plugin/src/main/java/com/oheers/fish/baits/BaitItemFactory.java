@@ -1,5 +1,6 @@
 package com.oheers.fish.baits;
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.baits.manager.BaitNBTManager;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -77,15 +79,19 @@ public class BaitItemFactory {
     }
 
     private @NonNull EMFMessage createBoostsVariable() {
-        EMFListMessage message = EMFListMessage.empty();
-        message.appendMessage(appendRarityBoosts());
-        message.appendMessage(appendFishBoosts());
-        return message;
+        Logging.debug("Creating {boosts} replacement for " + baitId);
+        List<Component> message = new ArrayList<>();
+        message.addAll(appendRarityBoosts().getComponentListMessage());
+        message.addAll(appendFishBoosts().getComponentListMessage());
+        return EMFListMessage.ofList(message);
     }
 
     private EMFMessage appendRarityBoosts() {
-        if (rarities.isEmpty()) return EMFListMessage.empty();
-
+        if (rarities.isEmpty()) {
+            Logging.debug("No rarities available.");
+            return EMFListMessage.empty();
+        }
+        Logging.debug("Adding rarities to replacement.");
         EMFMessage boost = rarities.size() > 1
                 ? ConfigMessage.BAIT_BOOSTS_RARITIES.getMessage()
                 : ConfigMessage.BAIT_BOOSTS_RARITY.getMessage();
@@ -94,8 +100,11 @@ public class BaitItemFactory {
     }
 
     private EMFMessage appendFishBoosts() {
-        if (fish.isEmpty()) return EMFListMessage.empty();
-
+        if (fish.isEmpty()) {
+            Logging.debug("No fish available.");
+            return EMFListMessage.empty();
+        }
+        Logging.debug("Adding fish to replacement.");
         EMFMessage boost = ConfigMessage.BAIT_BOOSTS_FISH.getMessage();
         boost.setAmount(fish.size());
         return boost;
