@@ -75,11 +75,12 @@ public class ItemFactory extends AbstractItemFactory {
     public @NonNull ItemFactory createCopy() {
         ItemFactory newFactory = new ItemFactory(this.configuration, null, null);
         newFactory.relevantPlayer = this.relevantPlayer;
-        newFactory.randomIndex = this.randomIndex;
         newFactory.finalChanges = this.finalChanges;
 
         newFactory.configMap.clear();
         newFactory.configMap.putAll(this.configMap);
+
+        newFactory.setRandomIndex(this.randomIndex); // Use the method to ensure the "base item" is reassigned.
 
         return newFactory;
     }
