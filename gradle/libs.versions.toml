@@ -5,7 +5,7 @@ redprotect = "7.7.3"
 flyway = "12.2.0"
 jdbi = "3.54.0"
 junit = "6.1.3"
-craftengine = "26.8.2"
+craftengine = "26.9.1"
 
 paperweight = "2.0.0-beta.23"
 shadow = "9.6.1"
@@ -38,13 +38,13 @@ griefprevention = "com.github.TechFortress:GriefPrevention:16.18.4"
 
 # Skills & Economy
 mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.3.001"
-aura-skills = "dev.aurelium:auraskills-api-bukkit:2.3.12"
+aura-skills = "dev.aurelium:auraskills-api-bukkit:2.4.0"
 playerpoints = "org.black_ixx:playerpoints:3.3.5"
 
 # Items & Customization
 headdatabase-api = "com.arcaniax:HeadDatabase-API:1.3.2"
 itemsadder-api = "com.github.LoneDev6:API-ItemsAdder:3.6.1"
-oraxen = "io.th0rgal:oraxen:1.218.0"
+oraxen = "io.th0rgal:oraxen:1.219.1"
 nexo = "com.nexomc:nexo:1.28.0"
 
 # Craft Engine
@@ -65,7 +65,7 @@ mmoitems-api = "net.Indyuce:MMOItems-API:6.10.1-SNAPSHOT"
 mythic-lib = "io.lumine:MythicLib-dist:1.7.1-SNAPSHOT"
 
 # Utilities
-caffeine = "com.github.ben-manes.caffeine:caffeine:3.2.4"
+caffeine = "com.github.ben-manes.caffeine:caffeine:3.3.0"
 jspecify = "org.jspecify:jspecify:1.0.1"
 friendlyid = "com.devskiller.friendly-id:friendly-id:1.1.0"
 hikaricp = "com.zaxxer:HikariCP:7.1.0"
