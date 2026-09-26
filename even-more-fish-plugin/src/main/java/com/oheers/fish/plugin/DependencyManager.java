@@ -124,7 +124,7 @@ public class DependencyManager implements Listener {
     }
 
     public void loadVaultEconomy() {
-        if (VaultWrapper.get().isEconomyAvailable()) {
+        if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             loadEconomyType(new VaultEconomyType(), "Vault");
         }
     }

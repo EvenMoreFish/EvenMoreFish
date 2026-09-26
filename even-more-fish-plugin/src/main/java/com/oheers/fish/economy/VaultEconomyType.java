@@ -10,7 +10,6 @@ import net.kyori.adventure.text.Component;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import uk.firedev.daisylib.external.vault.VaultWrapper;
@@ -29,18 +28,10 @@ public class VaultEconomyType implements EconomyType {
         if (!MainConfig.getInstance().isEconomyEnabled(this)) {
             return;
         }
-        EvenMoreFish emf = EvenMoreFish.getInstance();
         if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             EvenMoreFish.getInstance().debug("Attempting to register Vault but it is not available.. ignoring");
             return;
         }
-        Logging.info("Economy attempting to hook into Vault.");
-        Economy economy = VaultWrapper.get().getEconomyOrNull();
-        if (economy == null) {
-            Logging.warn("Could not obtain Vault Economy service.");
-            return;
-        }
-        emf.getLogger().log(Level.INFO, "Economy hooked into Vault.");
     }
 
     @Override
@@ -119,7 +110,14 @@ public class VaultEconomyType implements EconomyType {
 
     @Override
     public boolean isAvailable() {
-        return MainConfig.getInstance().isEconomyEnabled(this) && VaultWrapper.get().isEconomyAvailable();
+        if (!MainConfig.getInstance().isEconomyEnabled(this)) {
+            return false;
+        }
+        if (!VaultWrapper.get().isEconomyAvailable()) {
+            Logging.warn("There is no registered economy provider. Cannot use Vault EconomyType.");
+            return false;
+        }
+        return true;
     }
 
 }

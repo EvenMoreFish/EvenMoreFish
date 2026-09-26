@@ -1,6 +1,5 @@
 package com.oheers.fish.api.economy;
 
-import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import com.oheers.fish.api.registry.EMFRegistry;
 import org.jspecify.annotations.NonNull;
@@ -83,10 +82,6 @@ public class EconomyTypeRegistry implements EMFRegistry<EconomyType> {
     @Override
     public boolean register(@NonNull EconomyType value, boolean force) {
         if (!force && registry.containsKey(value.getKey())) {
-            return false;
-        }
-        if (!value.isAvailable()) {
-            Logging.debug("EconomyType " + value.getKey() + " was not available. Not registering.");
             return false;
         }
         registry.put(value.getKey(), value);
