@@ -43,7 +43,7 @@ public class BaitItemFactory {
         DisplayNameItemConfig displayNameConfig = factory.getItemConfig(DisplayNameItemConfig.class);
         if (displayNameConfig != null) {
             displayNameConfig.setEnabled(true);
-            displayNameConfig.setDefault(Component.text(baitId).color(NamedTextColor.YELLOW));
+            displayNameConfig.setDefault("<yellow>" + baitId);
         }
         LoreItemConfig loreConfig = factory.getItemConfig(LoreItemConfig.class);
         if (loreConfig != null) {

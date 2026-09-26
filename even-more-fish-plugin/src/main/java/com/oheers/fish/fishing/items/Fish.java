@@ -88,13 +88,7 @@ public class Fish implements IFish {
         );
         this.factory = factory;
 
-        this.displayName = section.getString(
-            "displayname",
-            Optional.ofNullable(factory.getItemConfig(DisplayNameItemConfig.class))
-                .map(ItemConfig::getConfiguredValue)
-                .map(MiniMessage.miniMessage()::serialize)
-                .orElse(null)
-        );
+        this.displayName = section.getString("displayname", section.getString("item.displayname")); // Falls back to item display name.
 
         this.showInJournal = section.getBoolean("journal", true);
         this.globalCatchLimit = section.getInt("catch-limit", rarity.getGlobalCatchLimit());
@@ -161,7 +155,8 @@ public class Fish implements IFish {
         }
         DisplayNameItemConfig displayConfig = factory.getItemConfig(DisplayNameItemConfig.class);
         if (displayConfig != null) {
-            displayConfig.setDefault(getDisplayNameMessage().getUnderlying().get());
+            displayConfig.setTransformer(display -> display == null ? null : rarity.format(display).getUnderlying().getMiniMessage());
+            displayConfig.setDefault(getDisplayNameMessage().getUnderlying().getMiniMessage());
         }
 
         ItemStack item = fisherman == null

@@ -173,11 +173,11 @@ public class FishJournalGui extends ConfigGui {
         if (displayConfig == null) {
             return null;
         }
-        final Component display = displayConfig.getConfiguredValue();
+        final String display = displayConfig.getConfiguredValue();
         if (display == null) {
             return null;
         }
-        EMFSingleMessage displayMessage = EMFSingleMessage.of(display);
+        EMFSingleMessage displayMessage = EMFSingleMessage.fromString(display);
         displayMessage.setVariable("{fishname}", fish.getDisplayName());
         return displayMessage;
     }

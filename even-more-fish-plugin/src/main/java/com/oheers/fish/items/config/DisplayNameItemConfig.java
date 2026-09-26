@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-public class DisplayNameItemConfig extends ItemConfig<Component> {
+public class DisplayNameItemConfig extends ItemConfig<String> {
 
     public DisplayNameItemConfig(@NonNull Section section) {
         super(section);
@@ -27,15 +27,14 @@ public class DisplayNameItemConfig extends ItemConfig<Component> {
     }
 
     @Override
-    public Component getConfiguredValue() {
-        String string = section.getString("displayname");
-        return string == null ? null : ComponentMessage.componentMessage(string).get();
+    public String getConfiguredValue() {
+        return section.getString("displayname");
     }
 
     @Override
-    protected BiConsumer<ItemStack, Component> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
+    protected BiConsumer<ItemStack, String> applyToItem(@Nullable OfflinePlayer player, @Nullable Map<String, ?> replacements) {
         return (item, value) -> {
-            if (value == null || MessageUtils.isEmpty(value)) {
+            if (value == null || value.isEmpty()) {
                 item.editMeta(meta -> meta.displayName(Component.empty()));
                 return;
             }
