@@ -3,11 +3,11 @@ worldguard = "7.0.9"
 worldedit = "7.3.0"
 redprotect = "7.7.3"
 flyway = "12.2.0"
-jdbi = "3.54.0"
+jdbi = "3.55.0"
 junit = "6.1.3"
 craftengine = "26.9.1"
 
-paperweight = "2.0.0-beta.23"
+paperweight = "2.0.0-beta.24"
 shadow = "9.6.1"
 plugin-yml = "0.9.0"
 grgit = "5.3.3"
@@ -37,7 +37,7 @@ redprotect-spigot = { module = "br.net.fabiozumbi12.RedProtect:RedProtect-Spigot
 griefprevention = "com.github.TechFortress:GriefPrevention:16.18.4"
 
 # Skills & Economy
-mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.3.001"
+mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.3.002"
 aura-skills = "dev.aurelium:auraskills-api-bukkit:2.4.0"
 playerpoints = "org.black_ixx:playerpoints:3.3.5"
 
@@ -74,7 +74,7 @@ inventorygui = "de.themoep:inventorygui:1.6.4-SNAPSHOT"
 boostedyaml = "dev.dejvokep:boosted-yaml:1.3.7"
 daisylib = "uk.firedev:DaisyLib:4.2"
 guava = "com.google.guava:guava:33.7.1-jre"
-maven-artifact = "org.apache.maven:maven-artifact:4.0.0-rc-6"
+maven-artifact = "org.apache.maven:maven-artifact:4.0.0-rc-7"
 
 # Database
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
@@ -89,7 +89,7 @@ connectors-sqlite = "org.xerial:sqlite-jdbc:3.47.0.0"
 # Testing
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
-mockito-core = "org.mockito:mockito-core:5.23.0"
+mockito-core = "org.mockito:mockito-core:5.24.0"
 
 plugin-yml = { module = "de.eldoria.plugin-yml.bukkit:de.eldoria.plugin-yml.bukkit.gradle.plugin", version.ref = "plugin-yml"}
 shadow =  {module = "com.gradleup.shadow:com.gradleup.shadow.gradle.plugin", version.ref = "shadow"}
