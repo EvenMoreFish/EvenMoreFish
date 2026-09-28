@@ -68,7 +68,7 @@ public class RandomFishSubcommand {
                 ctx.getSource(),
                 ctx.getArgument("target", PlayerSelectorArgumentResolver.class)
             );
-        } catch (CommandSyntaxException exception) {
+        } catch (CommandSyntaxException | IllegalArgumentException exception) {
             target = null;
         }
         return execute(
