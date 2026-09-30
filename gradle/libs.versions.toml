@@ -41,6 +41,9 @@ mcmmo = "com.gmail.nossr50.mcMMO:mcMMO:2.3.002"
 aura-skills = "dev.aurelium:auraskills-api-bukkit:2.4.0"
 playerpoints = "org.black_ixx:playerpoints:3.3.5"
 
+excellenteconomy = "su.nightexpress.excellenteconomy:ExcellentEconomy:2.8.0"
+nightcore = "su.nightexpress.nightcore:main:2.16.4"
+
 # Items & Customization
 headdatabase-api = "com.arcaniax:HeadDatabase-API:1.3.2"
 itemsadder-api = "com.github.LoneDev6:API-ItemsAdder:3.6.1"

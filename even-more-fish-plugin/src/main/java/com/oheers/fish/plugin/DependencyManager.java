@@ -21,7 +21,6 @@ import org.bukkit.plugin.PluginManager;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import uk.firedev.daisylib.DaisyLib;
-import uk.firedev.daisylib.external.vault.VaultWrapper;
 import uk.firedev.daisylib.messages.MessageSettings;
 import uk.firedev.daisylib.messages.ObjectProcessor;
 
@@ -36,6 +35,7 @@ public class DependencyManager implements Listener {
     private boolean usingPlayerPoints;
     private boolean usingGriefPrevention;
     private boolean usingAuraSkills;
+    private boolean usingExcellentEconomy;
 
     public DependencyManager(EvenMoreFish plugin) {
         this.plugin = plugin;
@@ -65,6 +65,7 @@ public class DependencyManager implements Listener {
         this.usingHeadsDB = pm.isPluginEnabled("HeadDatabase") && FishUtils.classExists("me.arcaniax.hdb.api.HeadDatabaseAPI");
         this.usingPAPI = pm.isPluginEnabled("PlaceholderAPI");
         this.usingAuraSkills = pm.isPluginEnabled("AuraSkills");
+        this.usingExcellentEconomy = pm.isPluginEnabled("ExcellentEconomy");
 
         loadVaultEconomy();
         loadPlayerPointsEconomy();
@@ -109,6 +110,10 @@ public class DependencyManager implements Listener {
 
     public boolean isUsingGriefPrevention() {
         return usingGriefPrevention;
+    }
+
+    public boolean isUsingExcellentEconomy() {
+        return usingExcellentEconomy;
     }
 
     public @Nullable HeadDatabaseAPI getHdbapi() {

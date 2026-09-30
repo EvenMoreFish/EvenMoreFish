@@ -11,7 +11,8 @@ include(":even-more-fish-api")
 include(":even-more-fish-plugin")
 
 // Addons
-include("addons:addon-template") // Acts as a base for any addons we might need to load with a different Java or Minecraft version.
+include(":addons:addon-template") // Acts as a base for any addons we might need to load with a different Java or Minecraft version.
+include(":addons:even-more-fish-addons-excellenteconomy")
 
 // Versions
 include(":versions:1-21:1-4") // 1.21.1 to 1.21.4

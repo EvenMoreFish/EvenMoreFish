@@ -404,6 +404,10 @@ public class MainConfig extends ConfigBase {
         return getConfig().getString("economy." + type.getIdentifier().toLowerCase() + ".display");
     }
 
+    public @Nullable String getExcellentEconomyCurrency() {
+        return getConfig().getString("economy.excellenteconomy.currency");
+    }
+
     public boolean shouldCompetitionResume() {
         return getConfig().getBoolean("fishing.resume-competition-on-restart", false);
     }

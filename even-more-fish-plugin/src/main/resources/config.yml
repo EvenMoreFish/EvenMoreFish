@@ -118,6 +118,13 @@ economy:
     enabled: false
     multiplier: 1.0
     display: '{amount} Claim Block(s)'
+  # Allows fish to pay out with the chosen ExcellentEconomy currency.
+  excellenteconomy:
+    enabled: false
+    multiplier: 1.0
+    display: '{amount}'
+    # The name of the currency to use.
+    currency: Money
 
 # Setting this to change the bossbar style
 # Valid options are listed here: https://jd.advntr.dev/api/4.26.1/net/kyori/adventure/bossbar/BossBar.Overlay.html
@@ -307,5 +314,5 @@ dimension-fishing:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 11
+version: 12
 

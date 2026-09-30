@@ -21,6 +21,7 @@ allprojects {
         maven("https://repo.momirealms.net/releases/")
         maven("https://repo.oraxen.com/releases/")
         maven("https://repo.nexomc.com/releases/")
+        maven("https://repo.nightexpressdev.com/releases/")
 
         // This should always be last because it likes to act up.
         maven("https://jitpack.io")

@@ -59,6 +59,7 @@ dependencies {
     }
     compileOnly(libs.headdatabase.api)
     compileOnly(libs.playerpoints)
+    compileOnly(libs.excellenteconomy)
 
     implementation(libs.bstats)
     implementation(libs.inventorygui)
@@ -134,6 +135,7 @@ bukkit {
         "RedProtect",
         "Vault",
         "WorldGuard",
+        "ExcellentEconomy",
         // VanishChecker dependencies.
         "Essentials",
         "CMI",
@@ -155,10 +157,10 @@ sonar {
 val copyAddons by tasks.registering(Copy::class) {
     // Make sure the plugin waits for the addons to be built first
     dependsOn(
-        //":addons:addon-template:build"
+        ":addons:even-more-fish-addons-excellenteconomy:build"
     )
 
-    //from(project(":addons:addon-template").layout.buildDirectory.dir("libs"))
+    from(project(":addons:even-more-fish-addons-excellenteconomy").layout.buildDirectory.dir("libs"))
 
     into(file("src/main/resources/addons"))
 }
