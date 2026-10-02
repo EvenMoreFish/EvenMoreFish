@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.oheers.evenmorefish"
-version = properties["project-version"] as String
+version = rootProject.property("project-version") as String
 
 dependencies {
     compileOnly(libs.paper.api) {
@@ -51,7 +51,7 @@ tasks.javadoc {
 
 testing {
     suites {
-        val test by getting(JvmTestSuite::class) {
+        named<JvmTestSuite>("test") {
             useJUnitJupiter()
 
             dependencies {

@@ -11,7 +11,7 @@ plugins {
 extra["plugin"] = true
 
 group = "com.oheers.evenmorefish"
-version = properties["project-version"] as String
+version = rootProject.property("project-version") as String
 
 description = "A fishing extension bringing an exciting new experience to fishing."
 
@@ -153,7 +153,9 @@ sonar {
     }
 }
 
-val copyAddons by tasks.registering(Copy::class) {
+val copyAddons = tasks.register<Copy>("copyAddons") {
+    description = "Copies addon jars to the resources folder."
+
     // Make sure the plugin waits for the addons to be built first
     dependsOn(
         ":addons:even-more-fish-addons-excellenteconomy:build"
@@ -164,7 +166,9 @@ val copyAddons by tasks.registering(Copy::class) {
     into(file("src/main/resources/addons"))
 }
 
-val copyVersions by tasks.registering(Copy::class) {
+val copyVersions = tasks.register<Copy>("copyVersions") {
+    description = "Copies version jars to the resources folder."
+
     dependsOn(
         ":versions:1-21:1-4:build",
         ":versions:1-21:5-11:build",
@@ -222,7 +226,7 @@ tasks {
 
 testing {
     suites {
-        val test by getting(JvmTestSuite::class) {
+        named<JvmTestSuite>("test") {
             useJUnitJupiter()
 
             dependencies {
