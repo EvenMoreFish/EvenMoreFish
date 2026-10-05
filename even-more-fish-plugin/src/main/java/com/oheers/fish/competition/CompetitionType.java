@@ -1,18 +1,19 @@
 package com.oheers.fish.competition;
 
+import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.fishing.items.IFish;
-import com.oheers.fish.api.registry.EMFRegistry;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.registry.RegistryItem;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.competition.types.LargestFishCompetitionType;
 import com.oheers.fish.competition.types.RandomCompetitionType;
-import com.oheers.fish.messages.ConfigMessage;
-import com.oheers.fish.messages.abstracted.EMFMessage;
 import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface CompetitionType extends RegistryItem {
@@ -20,7 +21,7 @@ public interface CompetitionType extends RegistryItem {
     LargestFishCompetitionType DEFAULT = new LargestFishCompetitionType();
     RandomCompetitionType RANDOM = new RandomCompetitionType();
 
-    @NonNull Component getTypeVariable();
+    @NonNull Component getTypeVariable(@NonNull Competition competition);
 
     @NonNull Component getBossbarPrefix();
 
@@ -48,13 +49,23 @@ public interface CompetitionType extends RegistryItem {
 
     @NonNull Plugin getPlugin();
 
+    default @Nullable List<@NonNull IRarity> getAllowedRaritiesOrLog(@NonNull Competition competition) {
+        List<IRarity> configRarities = competition.getCompetitionFile().getAllowedRarities();
+        if (configRarities.isEmpty()) {
+            EvenMoreFish.getInstance().getLogger()
+                .severe("No allowed-rarities list found in " + competition.getCompetitionFile().getFileName() + " competition config file.");
+            return null;
+        }
+        return configRarities;
+    }
+
     /**
      * Chooses a random CompetitionType.
      */
     abstract class Random implements CompetitionType {
 
         @Override
-        public final @NonNull Component getTypeVariable() {
+        public final @NonNull Component getTypeVariable(@NonNull Competition competition) {
             throw new UnsupportedOperationException("RANDOM CompetitionType should not be directly used.");
         }
 
@@ -122,8 +133,8 @@ public interface CompetitionType extends RegistryItem {
         }
 
         @Override
-        public @NonNull Component getTypeVariable() {
-            return ref.getTypeVariable();
+        public @NonNull Component getTypeVariable(@NonNull Competition competition) {
+            return ref.getTypeVariable(competition);
         }
 
         @Override

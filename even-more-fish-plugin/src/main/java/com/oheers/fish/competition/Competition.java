@@ -5,10 +5,11 @@ import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.EMFCompetitionEndEvent;
 import com.oheers.fish.api.EMFCompetitionStartEvent;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.competition.types.SpecificFishCompetitionType;
+import com.oheers.fish.competition.types.SpecificRarityCompetitionType;
 import com.oheers.fish.config.ConfigBase;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
-import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.api.reward.Reward;
 import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.competition.configs.CompetitionFile;
@@ -20,7 +21,6 @@ import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.model.CompetitionReport;
 import com.oheers.fish.database.model.user.UserReport;
-import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
@@ -40,14 +40,11 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Competition {
 
@@ -55,8 +52,6 @@ public class Competition {
 
     protected Leaderboard leaderboard;
     private @Nullable CompetitionType competitionType;
-    private IFish selectedFish;
-    private IRarity selectedRarity;
     private String competitionName;
     protected boolean adminStarted = false;
     private EMFMessage startMessage;
@@ -111,9 +106,13 @@ public class Competition {
         bar.setColour(competitionFile.getBossbarColour());
 
         EMFSingleMessage prefix = competitionFile.getBossbarPrefix();
+
+        IRarity selectedRarity = getSelectedRarity();
         if (selectedRarity != null) {
             prefix.setRarity(selectedRarity.getDisplayName());
-        } else if (selectedFish != null) {
+        }
+        IFish selectedFish = getSelectedFish();
+        if (selectedFish != null) {
             prefix.setRarity(selectedFish.getRarity().getDisplayName());
             prefix.setVariable("{fish}", selectedFish.getDisplayName());
         }
@@ -364,7 +363,7 @@ public class Competition {
         }
         message.setTimeFormatted(FishUtils.timeFormat(timeLeft));
         message.setTimeRaw(FishUtils.timeRaw(timeLeft));
-        message.setCompetitionType(competitionType.getTypeVariable());
+        message.setCompetitionType(competitionType.getTypeVariable(this));
 
         if (numberNeeded <= 0) {
             return message;
@@ -372,10 +371,12 @@ public class Competition {
 
         message.setAmount(numberNeeded);
         // Specific Rarity
+        IRarity selectedRarity = getSelectedRarity();
         if (selectedRarity != null) {
             message.setRarity(selectedRarity);
             return message;
         }
+        IFish selectedFish = getSelectedFish();
         if (selectedFish != null) {
             message.setRarity(selectedFish.getRarity());
             message.setFishCaught(selectedFish);
@@ -541,7 +542,7 @@ public class Competition {
 
         EMFMessage message = format(ConfigMessage.COMPETITION_SINGLE_WINNER);
         message.setPlayer(player);
-        message.setCompetitionType(competitionType.getTypeVariable());
+        message.setCompetitionType(competitionType.getTypeVariable(this));
 
         message.broadcast();
 
@@ -591,7 +592,7 @@ public class Competition {
         }
         if (startMessage == null) {
             startMessage = ConfigMessage.COMPETITION_START.getMessage();
-            startMessage.setCompetitionType(competitionType.getTypeVariable());
+            startMessage.setCompetitionType(competitionType.getTypeVariable(this));
         }
         return startMessage;
     }
@@ -622,11 +623,11 @@ public class Competition {
     }
 
     public @Nullable IFish getSelectedFish() {
-        return selectedFish;
+        return (competitionType instanceof SpecificFishCompetitionType specific) ? specific.getSelectedFish() : null;
     }
 
     public @Nullable IRarity getSelectedRarity() {
-        return selectedRarity;
+        return (competitionType instanceof SpecificRarityCompetitionType specific) ? specific.getSelectedRarity() : null;
     }
 
     public int getNumberNeeded() {
@@ -652,91 +653,8 @@ public class Competition {
         return this.maxDuration;
     }
 
-    public boolean chooseFish() {
-        List<IRarity> configRarities = getAllowedRaritiesOrLog();
-        if (configRarities == null) return false;
-
-        final Logger logger = EvenMoreFish.getInstance().getLogger();
-
-        List<IFish> fishPool = new ArrayList<>();
-        for (IRarity rarity : configRarities) {
-            fishPool.addAll(rarity.getOriginalFishList());
-        }
-
-        if (fishPool.isEmpty()) {
-            logger.severe("No fish available in allowed rarities for " + getCompetitionName());
-            return false;
-        }
-
-        try {
-            IFish selectedFish = FishManager.getInstance().getRandomWeightedFish(fishPool, 1.0d, null);
-            if (selectedFish == null) {
-                throw new IllegalArgumentException("No fish selected from pool");
-            }
-
-            this.selectedFish = selectedFish;
-            return true;
-
-        } catch (Exception e) {
-            logger.severe(() -> "Could not load: " + getCompetitionName() + " because a random fish could not be chosen.");
-            logger.severe(() -> "fishPool.size(): " + fishPool.size());
-            logger.severe(() -> "configRarities.size(): " + configRarities.size());
-            logger.log(Level.SEVERE, e.getMessage(), e);
-            return false;
-        }
-    }
-
-
-    public boolean chooseRarity() {
-        List<IRarity> configRarities = getAllowedRaritiesOrLog();
-        if (configRarities == null) return false;
-
-        final Logger logger = EvenMoreFish.getInstance().getLogger();
-
-        try {
-            IRarity rarity = configRarities.get(EvenMoreFish.RANDOM.nextInt(configRarities.size()));
-
-            if (rarity == null) {
-                rarity = FishManager.getInstance().getRandomWeightedRarity(
-                    null,
-                    0,
-                    Collections.emptySet(),
-                    Set.copyOf(FishManager.getInstance().getRarityMap().values()),
-                    null,
-                    // RequirementContext cannot be filled as we have nothing to base it on.
-                    RequirementContext.empty()
-                );
-            }
-
-            if (rarity == null) {
-                logger.severe("No rarity could be chosen for " + getCompetitionName());
-                return false;
-            }
-
-            this.selectedRarity = rarity;
-            return true;
-
-        } catch (Exception e) {
-            logger.severe("Could not load: " + getCompetitionName() + " because a random rarity could not be chosen.");
-            logger.severe(() -> "rarityMap.size(): " + FishManager.getInstance().getRarityMap().size());
-            logger.severe(() -> "configRarities.size(): " + configRarities.size());
-            logger.log(Level.SEVERE, e.getMessage(), e);
-            return false;
-        }
-    }
-
     public void setSingleWinner(@Nullable UUID winner) {
         this.singleWinner = winner;
-    }
-
-    private List<IRarity> getAllowedRaritiesOrLog() {
-        List<IRarity> configRarities = getCompetitionFile().getAllowedRarities();
-        if (configRarities.isEmpty()) {
-            EvenMoreFish.getInstance().getLogger()
-                    .severe("No allowed-rarities list found in " + getCompetitionFile().getFileName() + " competition config file.");
-            return null;
-        }
-        return configRarities;
     }
 
     @ApiStatus.Experimental

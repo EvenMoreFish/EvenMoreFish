@@ -23,7 +23,7 @@ public class CompetitionTypeFormatPlaceholder implements EMFPlaceholder {
         if (activeComp == null || activeComp.getCompetitionType() == null) {
             return ConfigMessage.PLACEHOLDER_NO_COMPETITION_RUNNING.getMessage().getLegacyMessage(null);
         }
-        Component type = activeComp.getCompetitionType().getTypeVariable();
+        Component type = activeComp.getCompetitionType().getTypeVariable(activeComp);
         EMFMessage typeFormat = activeComp.format(type);
         return typeFormat.getLegacyMessage(null);
     }

@@ -3,6 +3,8 @@ package com.oheers.fish.plugin;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.economy.EconomyType;
+import com.oheers.fish.api.fishing.items.IFish;
+import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.economy.GriefPreventionEconomyType;
 import com.oheers.fish.economy.PlayerPointsEconomyType;
@@ -23,6 +25,8 @@ import org.jspecify.annotations.Nullable;
 import uk.firedev.daisylib.DaisyLib;
 import uk.firedev.daisylib.messages.MessageSettings;
 import uk.firedev.daisylib.messages.ObjectProcessor;
+
+import java.util.List;
 
 public class DependencyManager implements Listener {
     private final EvenMoreFish plugin;
@@ -53,6 +57,14 @@ public class DependencyManager implements Listener {
         ObjectProcessor.registerProcessor(
             EMFListMessage.class,
             EMFListMessage::getComponentListMessage
+        );
+        ObjectProcessor.registerProcessor(
+            IRarity.class,
+            rarity -> List.of(rarity.getDisplayName())
+        );
+        ObjectProcessor.registerProcessor(
+            IFish.class,
+            fish -> List.of(fish.getDisplayName())
         );
     }
 

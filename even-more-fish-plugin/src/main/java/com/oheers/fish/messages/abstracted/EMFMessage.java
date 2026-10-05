@@ -3,6 +3,7 @@ package com.oheers.fish.messages.abstracted;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.fishing.Processor;
+import com.oheers.fish.fishing.items.Rarity;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import net.kyori.adventure.audience.Audience;
@@ -252,7 +253,7 @@ public abstract class EMFMessage {
      */
     public void setFishCatchVariables(@NonNull IFish fish) {
         setLength(Processor.LENGTH_FORMAT.format(fish.getLength()));
-        setRarity(fish.getRarity().getDisplayName());
+        setRarity(fish.getRarity());
 
         Component display = fish.getDisplayName();
 

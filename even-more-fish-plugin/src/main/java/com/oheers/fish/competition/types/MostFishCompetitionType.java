@@ -17,7 +17,7 @@ import java.util.UUID;
 public class MostFishCompetitionType implements CompetitionType {
 
     @Override
-    public @NonNull Component getTypeVariable() {
+    public @NonNull Component getTypeVariable(@NonNull Competition competition) {
         return ConfigMessage.COMPETITION_TYPE_MOST.getMessage().getComponentMessage();
     }
 

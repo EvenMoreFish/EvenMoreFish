@@ -18,7 +18,7 @@ import java.util.UUID;
 public class LargestFishCompetitionType implements CompetitionType {
 
     @Override
-    public @NonNull Component getTypeVariable() {
+    public @NonNull Component getTypeVariable(@NonNull Competition competition) {
         return ConfigMessage.COMPETITION_TYPE_LARGEST.getMessage().getComponentMessage();
     }
 
