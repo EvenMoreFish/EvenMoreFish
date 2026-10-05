@@ -42,13 +42,13 @@ aura-skills = "dev.aurelium:auraskills-api-bukkit:2.4.0"
 playerpoints = "org.black_ixx:playerpoints:3.3.5"
 
 excellenteconomy = "su.nightexpress.excellenteconomy:ExcellentEconomy:2.8.0"
-nightcore = "su.nightexpress.nightcore:main:2.16.4"
+nightcore = "su.nightexpress.nightcore:main:2.16.6"
 
 # Items & Customization
 headdatabase-api = "com.arcaniax:HeadDatabase-API:1.3.2"
 itemsadder-api = "com.github.LoneDev6:API-ItemsAdder:3.6.1"
 oraxen = "io.th0rgal:oraxen:1.219.1"
-nexo = "com.nexomc:nexo:1.28.0"
+nexo = "com.nexomc:nexo:1.29.0"
 
 # Craft Engine
 craftengine-core = { module = "net.momirealms:craft-engine-core", version.ref = "craftengine" }
@@ -76,7 +76,7 @@ vanishchecker = "uk.firedev:VanishChecker:1.0.6"
 inventorygui = "de.themoep:inventorygui:1.6.4-SNAPSHOT"
 boostedyaml = "dev.dejvokep:boosted-yaml:1.3.7"
 daisylib = "uk.firedev:DaisyLib:4.2"
-guava = "com.google.guava:guava:33.7.1-jre"
+guava = "com.google.guava:guava:33.7.2-jre"
 maven-artifact = "org.apache.maven:maven-artifact:4.0.0-rc-7"
 
 # Database
