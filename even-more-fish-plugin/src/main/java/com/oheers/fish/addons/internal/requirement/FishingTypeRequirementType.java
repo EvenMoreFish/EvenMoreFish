@@ -22,7 +22,7 @@ public class FishingTypeRequirementType extends RequirementType {
                 return true;
             }
         }
-        debugLogStatus(false, contextType.toString());
+        debugLogStatus(false, contextType == null ? null : contextType.toString());
         return false;
     }
 

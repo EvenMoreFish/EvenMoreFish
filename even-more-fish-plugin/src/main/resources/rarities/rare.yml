@@ -14,6 +14,8 @@ sort-index: 3
 size:
   minSize: 20
   maxSize: 150
+requirements:
+  fishing-type: vanilla
 
 fish:
   Penguin Feather:

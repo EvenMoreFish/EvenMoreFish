@@ -14,6 +14,8 @@ sort-index: 4
 size:
   minSize: 125
   maxSize: 800
+requirements:
+  fishing-type: vanilla
 
 fish:
   Glowing Jellyfish:
