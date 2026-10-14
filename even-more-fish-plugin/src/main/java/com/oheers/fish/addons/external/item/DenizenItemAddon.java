@@ -4,6 +4,7 @@ package com.oheers.fish.addons.external.item;
 import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizen.scripts.containers.core.ItemScriptContainer;
 import com.denizenscript.denizen.scripts.containers.core.ItemScriptHelper;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.addons.ItemAddon;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
@@ -35,7 +36,7 @@ public class DenizenItemAddon extends ItemAddon {
     public ItemStack getItemStack(String id) {
         final ItemTag itemTag = ItemTag.valueOf(id, false);
         if (itemTag == null) {
-            getLogger().info(() -> String.format("Could not obtain denizen item %s", id));
+            Logging.debug(String.format("Could not obtain Denizen item %s", id));
             return null;
         }
 

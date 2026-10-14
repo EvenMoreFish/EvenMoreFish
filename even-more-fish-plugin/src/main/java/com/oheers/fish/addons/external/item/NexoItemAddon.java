@@ -4,6 +4,7 @@ package com.oheers.fish.addons.external.item;
 import com.nexomc.nexo.api.NexoItems;
 import com.nexomc.nexo.api.events.NexoItemsLoadedEvent;
 import com.nexomc.nexo.items.ItemBuilder;
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.addons.ItemAddon;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.event.EventHandler;
@@ -36,14 +37,14 @@ public class NexoItemAddon extends ItemAddon {
     @Override
     public ItemStack getItemStack(String id) {
         if (!NexoItems.exists(id)) {
-            getLogger().warning(() -> "Nexo item with id %s doesn't exist.".formatted(id));
+            Logging.debug("Nexo item with id " + id + " doesn't exist.");
             return null;
         }
 
         final ItemBuilder item = NexoItems.itemFromId(id);
 
         if (item == null) {
-            getLogger().info(() -> String.format("Could not obtain Nexo item %s", id));
+            Logging.warn("Could not obtain Nexo item " + id);
             return null;
         }
 

@@ -1,5 +1,6 @@
 package com.oheers.fish.addons.external.item;
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.addons.ItemAddon;
 import io.lumine.mythic.lib.api.item.NBTItem;
 import net.Indyuce.mmoitems.MMOItems;
@@ -26,12 +27,12 @@ public class MMOItemsItemAddon extends ItemAddon {
         MMOItems plugin = MMOItems.plugin;
         Type type = plugin.getTypes().get(splitMaterialValue[0]);
         if (type == null) {
-            getLogger().info(() -> String.format("Could not obtain MMOItems item %s", id));
+            Logging.debug(String.format("Could not obtain MMOItems item %s", id));
             return null;
         }
         MMOItem item = plugin.getMMOItem(type, splitMaterialValue[1]);
         if (item == null) {
-            getLogger().info(() -> String.format("Could not obtain MMOItems item %s", id));
+            Logging.warn(String.format("Could not obtain MMOItems item %s", id));
             return null;
         }
 

@@ -1,5 +1,6 @@
 package com.oheers.fish.addons.external.item;
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.addons.ItemAddon;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import dev.lone.itemsadder.api.CustomStack;
@@ -47,10 +48,15 @@ public class ItemsAdderItemAddon extends ItemAddon {
 
         final CustomStack customStack = CustomStack.getInstance(namespaceId);
         if (customStack == null) {
-            getLogger().info(() -> String.format("Could not obtain itemsadder item %s", namespaceId));
+            Logging.debug(String.format("Could not obtain ItemsAdder item %s", namespaceId));
             return null;
         }
-        return CustomStack.getInstance(namespaceId).getItemStack();
+        ItemStack item = customStack.getItemStack();
+        if (item == null) {
+            Logging.warn("Could not obtain ItemsAdder item " + id);
+            return null;
+        }
+        return item;
     }
 
     @Override

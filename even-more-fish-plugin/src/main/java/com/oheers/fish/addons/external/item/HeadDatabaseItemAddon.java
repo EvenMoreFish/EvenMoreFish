@@ -1,6 +1,7 @@
 package com.oheers.fish.addons.external.item;
 
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.addons.ItemAddon;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import me.arcaniax.hdb.api.DatabaseLoadEvent;
@@ -41,7 +42,7 @@ public class HeadDatabaseItemAddon extends ItemAddon {
         }
 
         if (!api.isHead(id)) {
-            getLogger().warning(() -> String.format("No such head with the id %s", id));
+            Logging.debug(String.format("No such head with the id %s", id));
             return null;
         }
 

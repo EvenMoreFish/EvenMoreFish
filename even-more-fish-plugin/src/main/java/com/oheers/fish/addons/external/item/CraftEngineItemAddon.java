@@ -1,5 +1,6 @@
 package com.oheers.fish.addons.external.item;
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.addons.ItemAddon;
 import net.momirealms.craftengine.bukkit.api.CraftEngineItems;
 import net.momirealms.craftengine.bukkit.item.BukkitItemDefinition;
@@ -35,14 +36,14 @@ public class CraftEngineItemAddon extends ItemAddon {
     public ItemStack getItemStack(String id) {
         BukkitItemDefinition itemDef = CraftEngineItems.byId(id);
         if (itemDef == null) {
-            getLogger().warning(() -> "CraftEngine item with id %s doesn't exist.".formatted(id));
+            Logging.debug("CraftEngine item with id %s doesn't exist.".formatted(id));
             return null;
         }
 
         final ItemStack item = itemDef.buildBukkitItem();
 
         if (item == null) {
-            getLogger().info(() -> String.format("Could not obtain CraftEngine item %s", id));
+            Logging.warn(String.format("Could not obtain CraftEngine item %s", id));
             return null;
         }
 

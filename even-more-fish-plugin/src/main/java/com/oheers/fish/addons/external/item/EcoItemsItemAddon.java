@@ -1,5 +1,6 @@
 package com.oheers.fish.addons.external.item;
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.addons.ItemAddon;
 import com.willfp.ecoitems.items.EcoItem;
 import com.willfp.ecoitems.items.EcoItems;
@@ -37,7 +38,7 @@ public class EcoItemsItemAddon extends ItemAddon {
         final EcoItem item = EcoItems.INSTANCE.getByID(id);
 
         if (item == null) {
-            getLogger().info(() -> String.format("Could not obtain EcoItems item %s", id));
+            Logging.debug(String.format("Could not obtain EcoItems item %s", id));
             return null;
         }
 

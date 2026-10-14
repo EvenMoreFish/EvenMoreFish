@@ -1,6 +1,7 @@
 package com.oheers.fish.addons.external.item;
 
 
+import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.addons.ItemAddon;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import io.th0rgal.oraxen.api.OraxenItems;
@@ -36,14 +37,14 @@ public class OraxenItemAddon extends ItemAddon {
     @Override
     public ItemStack getItemStack(String id) {
         if (!OraxenItems.exists(id)) {
-            getLogger().warning(() -> "Oraxen item with id %s doesn't exist.".formatted(id));
+            Logging.debug("Oraxen item with id %s doesn't exist.".formatted(id));
             return null;
         }
 
         final ItemBuilder item = OraxenItems.getItemById(id);
 
         if (item == null) {
-            getLogger().info(() -> "Could not obtain Oraxen item %s".formatted(id));
+            Logging.warn("Could not obtain Oraxen item %s".formatted(id));
             return null;
         }
 
