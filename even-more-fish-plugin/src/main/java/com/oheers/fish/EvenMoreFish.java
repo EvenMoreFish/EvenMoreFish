@@ -94,7 +94,7 @@ public class EvenMoreFish extends EMFPlugin {
         this.toggle = new Toggle(this);
 
         // Dimension Fishing is disabled on Folia for now.
-        if (MinecraftVersionHelper.isAtLeastVersion("1.21.1") && !isFolia) {
+        if (!isFolia) {
             this.dimensionFishing = new DimensionFishing(
                 this,
                 DimensionFishingConfig.getInstance()
