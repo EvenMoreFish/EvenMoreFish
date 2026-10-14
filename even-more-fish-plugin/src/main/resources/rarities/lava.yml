@@ -1,0 +1,51 @@
+# Default Lava rarity. Requires lava fishing to be enabled.
+id: Lava
+disabled: false
+weight: 100
+item:
+  material: lava_bucket
+format: <#DD571C>{name}
+worth-multiplier: 0.15
+broadcast:
+  enabled: false
+  only-rods: false
+  range: -1
+size:
+  minSize: 200
+  maxSize: 300
+requirements:
+  fishing-type: lava
+
+fish:
+  Magma Minnow:
+    item:
+      material: magma_block
+      glowing: true
+      fire-resistant: true
+  Obsidian Pike:
+    item:
+      material: obsidian
+      fire-resistant: true
+  Ember Eel:
+    item:
+      material: string
+      fire-resistant: true
+  Crimson Carp:
+    item:
+      fire-resistant: true
+  Blaze Fin:
+    item:
+      material: blaze_powder
+      fire-resistant: true
+  Glowstone Goby:
+    item:
+      material: glowstone_dust
+      fire-resistant: true
+  Magma Jellyfish:
+    item:
+      material: magma_cream
+      fire-resistant: true
+  Obsidian Bream:
+    item:
+      material: obsidian
+      fire-resistant: true

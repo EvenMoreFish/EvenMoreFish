@@ -1,0 +1,37 @@
+# Default Void rarity. Requires void fishing to be enabled.
+id: Void
+disabled: false
+weight: 100
+item:
+  material: ender_eye
+format: <#A719CD>{name}
+worth-multiplier: 0.15
+broadcast:
+  enabled: false
+  only-rods: false
+  range: -1
+size:
+  minSize: 200
+  maxSize: 300
+requirements:
+  fishing-type: void
+
+fish:
+  Nebula Carp:
+    item:
+      glowing: true
+  Purpur Perch:
+    item:
+      material: popped_chorus_fruit
+  Ender Minnow:
+    item:
+      material: ender_pearl
+  Purpur Pike:
+    item:
+      material: popped_chorus_fruit
+  Shulkerfin:
+    item:
+      material: shulker_shell
+  Shulker Shellfish:
+    item:
+      material: shulker_shell
