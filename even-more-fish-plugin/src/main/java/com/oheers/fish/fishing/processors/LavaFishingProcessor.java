@@ -63,8 +63,11 @@ public class LavaFishingProcessor extends Processor<LavaFishCaughtEvent> impleme
             return;
         }
 
-        // As there is no item to replace, always give directly to the player.
-        FishUtils.giveItem(fish, player);
+        if (MainConfig.getInstance().isGiveStraightToInventory() && FishUtils.inventoryHasSpace(event.getPlayer().getInventory())) {
+            FishUtils.giveItem(fish, event.getPlayer());
+        } else {
+            event.setCaughtItem(fish);
+        }
     }
 
     @Override
