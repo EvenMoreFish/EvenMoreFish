@@ -4,10 +4,13 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.config.MessageConfig;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.TextReplacementConfig;
 import org.jspecify.annotations.NonNull;
 import uk.firedev.daisylib.messages.message.ComponentListMessage;
 import uk.firedev.daisylib.messages.message.ComponentMessage;
 import uk.firedev.daisylib.messages.message.ComponentSingleMessage;
+
+import java.util.regex.Pattern;
 
 import static uk.firedev.daisylib.messages.message.ComponentMessage.componentMessage;
 
@@ -210,6 +213,13 @@ public enum ConfigMessage {
     EXPLOITS_AFK_FISHING_DETECTED(PrefixType.ERROR, "exploits.afk-fishing.detected"),
     EXPLOITS_AFK_FISHING_BLOCKED(PrefixType.ERROR, "exploits.afk-fishing.blocked");
 
+    private static final String SILENT = "-s";
+    private static final String NO_PREFIX = "[noPrefix]";
+    private static final TextReplacementConfig NO_PREFIX_REPLACER = TextReplacementConfig.builder()
+        .matchLiteral(NO_PREFIX)
+        .replacement("")
+        .build();
+
     private final String id;
     private final PrefixType prefixType;
 
@@ -254,16 +264,16 @@ public enum ConfigMessage {
         getMessage().send(target);
     }
 
-    private EMFMessage processList(ComponentListMessage list) {
+    private EMFListMessage processList(ComponentListMessage list) {
         list = list.editAllLines(line -> {
             // If silent, return null to remove the line.
-            if (line.contains("-s")) {
+            if (line.contains(SILENT)) {
                 return null;
             }
 
             // If hide prefix, remove the [noPrefix] tag and don't add a prefix.
-            if (line.contains("[noPrefix]")) {
-                return line.replace("[noPrefix]", "");
+            if (line.contains(NO_PREFIX)) {
+                return line.edit(c -> c.replaceText(NO_PREFIX_REPLACER));
             }
             // Otherwise, add the prefix.
             return line.prepend(getPrefixType().getPrefix());
@@ -271,15 +281,15 @@ public enum ConfigMessage {
         return EMFListMessage.ofUnderlying(list);
     }
 
-    private EMFMessage processSingle(ComponentSingleMessage single) {
+    private EMFSingleMessage processSingle(ComponentSingleMessage single) {
         // If silent, return an empty message.
-        if (single.contains("-s")) {
+        if (single.contains(SILENT)) {
             return EMFSingleMessage.empty();
         }
 
         // If hide prefix, remove the [noPrefix] tag and don't add a prefix.
-        if (single.contains("[noPrefix]")) {
-            single = single.replace("[noPrefix]", "");
+        if (single.contains(NO_PREFIX)) {
+            single = single.edit(c -> c.replaceText(NO_PREFIX_REPLACER));
         // Otherwise, add the prefix.
         } else {
             single = single.prepend(getPrefixType().getPrefix());
