@@ -148,4 +148,9 @@ public class DimensionFishingConfig implements DimensionFishingConfigProvider {
         };
     }
 
+    @Override
+    public boolean enableWorldGuardBypass() {
+        return MainConfig.getInstance().getConfig().getBoolean("dimension-fishing.bypass-worldguard", true);
+    }
+
 }
