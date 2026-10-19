@@ -82,10 +82,6 @@ public class MainConfig extends ConfigBase {
         return getConfig().getString("locale", "en");
     }
 
-    public boolean doingRandomDurability() {
-        return getConfig().getBoolean("random-durability", true);
-    }
-
     @Deprecated
     public boolean isDatabaseOnline() {
         if (!databaseEnabled() || EvenMoreFish.getInstance().getPluginDataManager().getDatabase().isLegacyDatabase())
@@ -96,6 +92,10 @@ public class MainConfig extends ConfigBase {
 
     public boolean isCatchEnabled() {
         return getConfig().getBoolean("fishing.catch-enabled", true);
+    }
+
+    public boolean isDisabledByDefault() {
+        return getConfig().getBoolean("fishing.disabled-by-default", false);
     }
 
     public boolean isFishCatchOnlyInCompetition() {

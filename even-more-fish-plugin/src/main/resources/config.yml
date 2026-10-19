@@ -11,6 +11,10 @@ debug: false
 locale: en
 
 fishing:
+  # Should custom fishing be disabled by default?
+  # This requires players to use "/emf toggle fishing" to enable custom fishing.
+  disabled-by-default: false
+
   # Gives the fish directly to the player instead of creating an item entity.
   # This only happens if the player has space in their inventory.
   give-straight-to-inventory: false
@@ -93,10 +97,6 @@ database:
       unit: SECONDS
       user-fish-stats: 5
       competition: 5
-
-# When dropping tool items (e.g. fishing rod) should they be dropped with a random durability
-# instead of always full durability?
-random-durability: true
 
 # Enable/Disable different economy types here.
 # Optionally choose a multiplier for each type you have enabled.
@@ -317,5 +317,5 @@ dimension-fishing:
 
 # ATTENTION ATTENTION ATTENTION
 # DO NOT EDIT THIS VALUE OR THINGS WILL BREAK!!!
-version: 12
+version: 13
 

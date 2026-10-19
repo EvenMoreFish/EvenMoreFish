@@ -3,6 +3,7 @@ package com.oheers.fish;
 import com.oheers.fish.competition.CompetitionBossbar;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionManager;
+import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.permissions.UserPerms;
 import org.bukkit.NamespacedKey;
@@ -45,10 +46,9 @@ public class Toggle {
         }
     }
 
-
     public boolean isCustomFishingDisabled(@NonNull Player player) {
         PersistentDataContainer pdc = player.getPersistentDataContainer();
-        return pdc.getOrDefault(fishToggleKey, PersistentDataType.BOOLEAN, false);
+        return pdc.getOrDefault(fishToggleKey, PersistentDataType.BOOLEAN, MainConfig.getInstance().isDisabledByDefault());
     }
 
     // Bossbar Toggle
