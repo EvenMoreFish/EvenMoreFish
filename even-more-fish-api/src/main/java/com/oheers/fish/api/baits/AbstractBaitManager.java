@@ -36,4 +36,6 @@ public abstract class AbstractBaitManager<T extends IBait> extends AbstractFileB
 
     public abstract boolean isBait(@Nullable Entity itemEntity);
 
+    public abstract boolean hasCatchableBait();
+
 }

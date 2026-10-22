@@ -102,4 +102,13 @@ public class BaitManager extends AbstractBaitManager<BaitHandler> {
         return isBait(item.getItemStack());
     }
 
+    @Override
+    public boolean hasCatchableBait() {
+        if (itemMap.isEmpty()) {
+            return false;
+        }
+        return itemMap.values().stream()
+            .anyMatch(b -> b.getBaitData().canBeCaught());
+    }
+
 }

@@ -8,6 +8,7 @@ import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
 import com.oheers.fish.api.requirement.RequirementContext;
 import com.oheers.fish.baits.BaitHandler;
+import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.baits.manager.BaitNBTManager;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionManager;
@@ -69,9 +70,14 @@ public abstract class Processor<E extends Event> {
         }
 
         double baitCatchPercentage = MainConfig.getInstance().getBaitCatchPercentage();
-        if (shouldCatchBait() && baitCatchPercentage > 0 && random.nextDouble() * 100 < baitCatchPercentage) {
+        boolean canCatchBait = BaitManager.getInstance().hasCatchableBait();
+        if (canCatchBait && shouldCatchBait() && baitCatchPercentage > 0 && random.nextDouble() * 100 < baitCatchPercentage) {
             Logging.debug("Bait should be caught.");
-            return getBaitItem(player, location);
+            ItemStack baitItem = getBaitItem(player, location);
+            if (baitItem != null) {
+                return baitItem;
+            }
+            Logging.debug("Could not choose a bait. Falling back to fish.");
         }
 
         CustomRod customRod = null;
@@ -147,7 +153,7 @@ public abstract class Processor<E extends Event> {
     private @Nullable ItemStack getBaitItem(@NonNull Player player, @NonNull Location location) {
         Optional<BaitHandler> caughtBait = BaitNBTManager.randomBaitCatch();
         if (caughtBait.isEmpty()) {
-            Logging.debug("Could not determine bait for player " + player.getName() + ". This is usually a bug.");
+            Logging.debug("Could not determine bait for player " + player.getName() + ". This is usually a bug."); // Keep this message as it will now be a bug if this is sent.
             return null;
         }
 
