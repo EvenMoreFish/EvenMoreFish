@@ -243,7 +243,7 @@ public class ItemFactory extends AbstractItemFactory {
             return customItem;
         }
 
-        EvenMoreFish.getInstance().getLogger().severe("Could not find material or custom item for: " + materialString);
+        Logging.debug("Could not find material or custom item for: " + materialString);
         return null;
     }
 
