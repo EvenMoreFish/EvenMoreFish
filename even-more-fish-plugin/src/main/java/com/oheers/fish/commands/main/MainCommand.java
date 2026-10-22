@@ -41,7 +41,7 @@ public class MainCommand implements EMFCommand {
         .addEntry(MainConfig.getInstance().getApplyBaitsSubCommandName(), ConfigMessage.HELP_GENERAL_APPLYBAITS::getMessage, UserPerms.APPLYBAITS)
         .addEntry(MainConfig.getInstance().getJournalSubCommandName(), ConfigMessage.HELP_GENERAL_JOURNAL::getMessage, UserPerms.JOURNAL)
         .addEntry(MainConfig.getInstance().getNextSubCommandName(), ConfigMessage.HELP_GENERAL_NEXT::getMessage, UserPerms.NEXT)
-        .addEntry(MainConfig.getInstance().getToggleSubCommandName(), ConfigMessage.HELP_GENERAL_TOGGLE::getMessage, UserPerms.TOGGLE)
+        .addEntry(MainConfig.getInstance().getToggleSubCommandName(), ConfigMessage.HELP_GENERAL_TOGGLE::getMessage, UserPerms::checkTogglePerms)
         .addEntry(MainConfig.getInstance().getShopSubCommandName(), ConfigMessage.HELP_GENERAL_SHOP::getMessage, UserPerms.SHOP);
 
     public @NonNull LiteralCommandNode<CommandSourceStack> get() {
