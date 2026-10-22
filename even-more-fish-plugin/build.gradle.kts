@@ -142,6 +142,17 @@ bukkit {
         "AdvancedVanish"
     )
     loadBefore = listOf("AntiAC")
+
+    permissions {
+        // emf.toggle permission should allow any toggle to be used.
+        register("emf.toggle") {
+            children = listOf(
+                "emf.toggle.fishing",
+                "emf.toggle.bossbar",
+                "emf.toggle.catchmessage"
+            )
+        }
+    }
 }
 
 

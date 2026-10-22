@@ -19,7 +19,7 @@ public class UserPerms {
     public static final String APPLYBAITS = "emf.applybaits";
     public static final String JOURNAL = "emf.journal";
 
-    public static final String TOGGLE = "emf.toggle";
+    // IMPORTANT: When adding toggle permissions, add them to emf.toggle's children in build.gradle.kts.
     public static final String TOGGLE_FISHING = "emf.toggle.fishing";
     public static final String TOGGLE_BOSSBAR = "emf.toggle.bossbar";
     public static final String TOGGLE_CATCH_MESSAGE = "emf.toggle.catchmessage";
