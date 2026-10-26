@@ -34,7 +34,7 @@
     "typescript": "~5.9.3"
   },
   "overrides": {
-    "serialize-javascript": "^7.1.2"
+    "serialize-javascript": "^7.1.4"
   },
   "browserslist": {
     "production": [
@@ -49,6 +49,6 @@
     ]
   },
   "engines": {
-    "node": ">=24.22.0"
+    "node": ">=24.22.1"
   }
 }
