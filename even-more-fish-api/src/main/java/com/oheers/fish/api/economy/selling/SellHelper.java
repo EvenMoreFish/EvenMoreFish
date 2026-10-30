@@ -3,6 +3,7 @@ package com.oheers.fish.api.economy.selling;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.events.EMFFishPreSaleEvent;
 import com.oheers.fish.api.events.EMFFishSoldEvent;
+import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.plugin.EMFPlugin;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -10,6 +11,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import java.util.function.Predicate;
 
 public class SellHelper {
 
@@ -33,6 +36,10 @@ public class SellHelper {
     }
 
     public void sell(@NonNull Inventory inventory, @NonNull Player player) {
+        sell(inventory, player, f -> true);
+    }
+
+    public void sell(@NonNull Inventory inventory, @NonNull Player player, @NonNull Predicate<IFish> filter) {
         if (!economy.isEnabled()) {
             EMFPlugin.getInstance().sendMessage("ECONOMY_DISABLED", player);
             return;
@@ -50,6 +57,9 @@ public class SellHelper {
             }
             SoldFish sold = SoldFish.get(player, item);
             if (sold == null) {
+                continue;
+            }
+            if (!filter.test(sold.getFish())) {
                 continue;
             }
             // PreSaleEvent - Allows for modifying the sold fish and cancellation.
@@ -84,6 +94,10 @@ public class SellHelper {
     }
 
     public void sell(@Nullable ItemStack @NonNull[] itemStacks, @NonNull Player player) {
+        sell(itemStacks, player, f -> true);
+    }
+
+    public void sell(@Nullable ItemStack @NonNull[] itemStacks, @NonNull Player player, @NonNull Predicate<IFish> filter) {
         if (!economy.isEnabled()) {
             EMFPlugin.getInstance().sendMessage("ECONOMY_DISABLED", player);
             return;
@@ -99,6 +113,9 @@ public class SellHelper {
             }
             SoldFish sold = SoldFish.get(player, item);
             if (sold == null) {
+                continue;
+            }
+            if (!filter.test(sold.getFish())) {
                 continue;
             }
             // PreSaleEvent - Allows for modifying the sold fish and cancellation.
