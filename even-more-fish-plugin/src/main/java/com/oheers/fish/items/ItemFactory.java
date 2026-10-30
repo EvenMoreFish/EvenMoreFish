@@ -17,6 +17,7 @@ import com.oheers.fish.items.config.ItemModelItemConfig;
 import com.oheers.fish.items.config.ItemRarityItemConfig;
 import com.oheers.fish.items.config.LoreItemConfig;
 import com.oheers.fish.items.config.MaxStackSizeItemConfig;
+import com.oheers.fish.items.config.PotionColorItemConfig;
 import com.oheers.fish.items.config.PotionEffectItemConfig;
 import com.oheers.fish.items.config.QuantityItemConfig;
 import com.oheers.fish.items.config.TooltipStyleItemConfig;
@@ -459,6 +460,7 @@ public class ItemFactory extends AbstractItemFactory {
         loadConfig(new ItemRarityItemConfig(configuration));
         loadConfig(new LoreItemConfig(configuration));
         loadConfig(new MaxStackSizeItemConfig(configuration));
+        loadConfig(new PotionColorItemConfig(configuration));
         loadConfig(new PotionEffectItemConfig(configuration));
         loadConfig(new QuantityItemConfig(configuration));
         loadConfig(new TooltipStyleItemConfig(configuration));

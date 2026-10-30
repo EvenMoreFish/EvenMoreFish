@@ -9,7 +9,7 @@ This page will cover every item config available in EvenMoreFish (as of 2.3.6), 
 
 ### Setting the base item
 To set the base item, you can use one of the following settings:
-- `material` - This takes a Material name as shown on [this page](https://jd.papermc.io/paper/1.21.10/org/bukkit/Material.html).
+- `material` - This takes a Material name as shown on [this page](https://jd.papermc.io/paper/26.3/org/bukkit/Material.html).
 - `materials` - This takes a list of Material names, and will randomly choose one when the item is created.
 - `raw-material` - This acts the same as `material`, but none of the plugin's custom data is set on the item.
 - `raw-nbt` - This takes the raw NBT data for an item, which can be obtained via `/emf admin raw-nbt`. None of the plugin's custom data is set on the item.
@@ -122,6 +122,17 @@ item:
   potion: POISON,1,15
 ```
 
+### Potion Colour
+If the item is a potion, you can give it a custom colour using the `potion-colour` setting.
+
+This requires a valid hex colour code (e.g. `#87CEEB`).
+
+Example:
+```yaml
+item:
+  dye-colour: "#87CEEB"
+```
+
 ### Quantity
 
 You can set the quantity of the item using the `quantity` setting.
@@ -194,7 +205,7 @@ item:
 ```
 
 ### Max Stack Size
-On 1.21.1 and above, you can set a custom max stack size using the `max-stack-size` setting.
+You can set a custom max stack size using the `max-stack-size` setting.
 
 This cannot be less than 1 or more than 99.
 
