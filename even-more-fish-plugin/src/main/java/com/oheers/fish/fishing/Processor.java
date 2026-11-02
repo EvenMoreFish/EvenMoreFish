@@ -15,25 +15,37 @@ import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.broadcast.FishBroadcast;
 import com.oheers.fish.fishing.items.FishManager;
+import com.oheers.fish.fishing.processors.HuntingProcessor;
 import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class Processor<E extends Event> {
+public abstract class Processor<E extends Event> implements Listener {
+
+    private static final Map<UUID, ItemStack> ACTIVE_FISHERS = new ConcurrentHashMap<>();
 
     // Used for formatting fish length.
     public static final DecimalFormat LENGTH_FORMAT = new DecimalFormat("#.0");
@@ -253,6 +265,10 @@ public abstract class Processor<E extends Event> {
 
     public abstract boolean canUseFish(@NonNull IFish fish);
 
+    public void register() {
+        Bukkit.getPluginManager().registerEvents(this, EvenMoreFish.getInstance());
+    }
+
     /**
      * Checks if we need to update the competition leaderboard.
      */
@@ -270,6 +286,18 @@ public abstract class Processor<E extends Event> {
             }
         }
         active.applyToLeaderboard(fish, fisherman);
+    }
+
+    protected @Nullable ItemStack getRod(@NonNull PlayerFishEvent event) {
+        PlayerFishEvent.State state = event.getState();
+        if (state == PlayerFishEvent.State.BITE || state == PlayerFishEvent.State.FAILED_ATTEMPT) {
+            return null;
+        }
+        EquipmentSlot hand = event.getHand();
+        if (hand == null) {
+            return null;
+        }
+        return event.getPlayer().getInventory().getItem(hand);
     }
 
 }

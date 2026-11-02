@@ -27,7 +27,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
-public class FishingProcessor extends Processor<PlayerFishEvent> implements Listener {
+public class FishingProcessor extends Processor<PlayerFishEvent> {
+
     private final EvenMoreFish plugin = EvenMoreFish.getInstance();
 
     @Override
@@ -141,33 +142,6 @@ public class FishingProcessor extends Processor<PlayerFishEvent> implements List
     public boolean canUseFish(@NonNull IFish fish) {
         return fish.getCatchType().equals(CatchType.CATCH)
                 || fish.getCatchType().equals(CatchType.BOTH);
-    }
-
-    private @Nullable ItemStack getRod(@NonNull PlayerFishEvent event) {
-        Player player = event.getPlayer();
-
-        // Use getHand() only if the state is FISHING
-        if (event.getState() == PlayerFishEvent.State.FISHING) {
-            EquipmentSlot hand = event.getHand();
-            if (hand != null) {
-                return player.getInventory().getItem(hand);
-            }
-            return null; // Defensive fallback, though shouldn't happen if state is FISHING
-        }
-
-        // Fallback: check both hands for a rod
-        ItemStack mainHand = player.getInventory().getItem(EquipmentSlot.HAND);
-        if (mainHand.getType() == Material.FISHING_ROD) {
-            return mainHand;
-        }
-
-        ItemStack offHand = player.getInventory().getItem(EquipmentSlot.OFF_HAND);
-        if (offHand.getType() == Material.FISHING_ROD) {
-            return offHand;
-        }
-
-        // No rod found
-        return null;
     }
 
 

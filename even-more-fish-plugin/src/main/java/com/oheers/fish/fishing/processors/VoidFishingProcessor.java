@@ -26,7 +26,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
-public class VoidFishingProcessor extends Processor<VoidFishCaughtEvent> implements Listener {
+public class VoidFishingProcessor extends Processor<VoidFishCaughtEvent> {
 
     private final EvenMoreFish plugin = EvenMoreFish.getInstance();
 
@@ -40,7 +40,7 @@ public class VoidFishingProcessor extends Processor<VoidFishCaughtEvent> impleme
         TrackedHook hook = event.getTrackedHook();
         Player player = hook.getPlayer();
 
-        ItemStack rod = getRod(player);
+        ItemStack rod = getRod(event.getOriginalEvent());
         if (rod == null) {
             plugin.debug("Fishing blocked: could not find rod.");
             return;
@@ -111,22 +111,5 @@ public class VoidFishingProcessor extends Processor<VoidFishCaughtEvent> impleme
         return fish.getCatchType().equals(CatchType.CATCH)
             || fish.getCatchType().equals(CatchType.BOTH);
     }
-
-    private @Nullable ItemStack getRod(@NonNull Player player) {
-        // Fallback: check both hands for a rod
-        ItemStack mainHand = player.getInventory().getItem(EquipmentSlot.HAND);
-        if (mainHand.getType() == Material.FISHING_ROD) {
-            return mainHand;
-        }
-
-        ItemStack offHand = player.getInventory().getItem(EquipmentSlot.OFF_HAND);
-        if (offHand.getType() == Material.FISHING_ROD) {
-            return offHand;
-        }
-
-        // No rod found
-        return null;
-    }
-
 
 }

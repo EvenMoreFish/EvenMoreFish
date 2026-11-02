@@ -35,8 +35,8 @@ public class EventManager {
 
         // Always-registered listeners
         pm.registerEvents(new JoinChecker(), plugin);
-        pm.registerEvents(new FishingProcessor(), plugin);
-        pm.registerEvents(new HuntingProcessor(), plugin);
+        new FishingProcessor().register();
+        new HuntingProcessor().register();
         pm.registerEvents(new SkullSaver(), plugin);
         pm.registerEvents(new UpdateNotify(), plugin);
         pm.registerEvents(new BaitApplicationListener(), plugin);

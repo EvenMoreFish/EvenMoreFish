@@ -43,8 +43,8 @@ public class IntegrationManager {
     }
 
     public void setupDimensionFishing() {
-        Bukkit.getPluginManager().registerEvents(new LavaFishingProcessor(), plugin);
-        Bukkit.getPluginManager().registerEvents(new VoidFishingProcessor(), plugin);
+        new LavaFishingProcessor().register();
+        new VoidFishingProcessor().register();
         DimensionFishing.getInstance().reload(null);
     }
 

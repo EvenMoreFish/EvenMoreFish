@@ -20,7 +20,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
 
-public class HuntingProcessor extends Processor<EntityDeathEvent> implements Listener {
+public class HuntingProcessor extends Processor<EntityDeathEvent> {
 
     @Override
     @EventHandler(priority = EventPriority.HIGHEST)
