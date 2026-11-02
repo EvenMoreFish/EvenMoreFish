@@ -38,8 +38,12 @@ public class FishingProcessor extends Processor<PlayerFishEvent> {
             plugin.debug("Fishing event was cancelled. Skipping handling.");
             return;
         }
+        if (event.getState() != PlayerFishEvent.State.CAUGHT_FISH) {
+            plugin.debug("Ignoring event state: %s".formatted(event.getState()));
+            return;
+        }
 
-        ItemStack rod = getRod(event);
+        ItemStack rod = getRod(event.getPlayer());
 
         if (rod == null) {
             plugin.debug("Custom fishing blocked: could not find rod.");
@@ -62,11 +66,6 @@ public class FishingProcessor extends Processor<PlayerFishEvent> {
                 //send msg only when throw the lure
                 ConfigMessage.NO_PERMISSION_FISHING.getMessage().send(event.getPlayer());
             }
-            return;
-        }
-
-        if (event.getState() != PlayerFishEvent.State.CAUGHT_FISH) {
-            plugin.debug("Ignoring event state: %s".formatted(event.getState()));
             return;
         }
 

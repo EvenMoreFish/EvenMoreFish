@@ -33,10 +33,12 @@ public class EventManager {
             pm.registerEvents(new EMFFishListener(), plugin);
         }
 
-        // Always-registered listeners
-        pm.registerEvents(new JoinChecker(), plugin);
+        // Fishing Processors
         new FishingProcessor().register();
         new HuntingProcessor().register();
+
+        // Always-registered listeners
+        pm.registerEvents(new JoinChecker(), plugin);
         pm.registerEvents(new SkullSaver(), plugin);
         pm.registerEvents(new UpdateNotify(), plugin);
         pm.registerEvents(new BaitApplicationListener(), plugin);

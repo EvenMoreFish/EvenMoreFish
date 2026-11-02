@@ -14,6 +14,7 @@ import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.broadcast.FishBroadcast;
+import com.oheers.fish.fishing.exploits.ActiveRodTracker;
 import com.oheers.fish.fishing.items.FishManager;
 import com.oheers.fish.fishing.processors.HuntingProcessor;
 import com.oheers.fish.fishing.rods.CustomRod;
@@ -29,6 +30,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
@@ -44,8 +46,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class Processor<E extends Event> implements Listener {
-
-    private static final Map<UUID, ItemStack> ACTIVE_FISHERS = new ConcurrentHashMap<>();
 
     // Used for formatting fish length.
     public static final DecimalFormat LENGTH_FORMAT = new DecimalFormat("#.0");
@@ -288,16 +288,8 @@ public abstract class Processor<E extends Event> implements Listener {
         active.applyToLeaderboard(fish, fisherman);
     }
 
-    protected @Nullable ItemStack getRod(@NonNull PlayerFishEvent event) {
-        PlayerFishEvent.State state = event.getState();
-        if (state == PlayerFishEvent.State.BITE || state == PlayerFishEvent.State.FAILED_ATTEMPT) {
-            return null;
-        }
-        EquipmentSlot hand = event.getHand();
-        if (hand == null) {
-            return null;
-        }
-        return event.getPlayer().getInventory().getItem(hand);
+    protected @Nullable ItemStack getRod(@NonNull Player player) {
+        return ActiveRodTracker.getRod(player.getUniqueId());
     }
 
 }

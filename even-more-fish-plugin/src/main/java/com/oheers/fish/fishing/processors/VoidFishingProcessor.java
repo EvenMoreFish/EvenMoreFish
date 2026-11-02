@@ -40,7 +40,7 @@ public class VoidFishingProcessor extends Processor<VoidFishCaughtEvent> {
         TrackedHook hook = event.getTrackedHook();
         Player player = hook.getPlayer();
 
-        ItemStack rod = getRod(event.getOriginalEvent());
+        ItemStack rod = getRod(event.getPlayer());
         if (rod == null) {
             plugin.debug("Fishing blocked: could not find rod.");
             return;
