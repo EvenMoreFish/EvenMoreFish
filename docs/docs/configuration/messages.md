@@ -25,18 +25,48 @@ help, you have to add one for each line of the list.
 A message type can be specified to choose where the message is sent to. Only one type can be added per message.
 
 While a normal chat message can be configured like this:
-```
+```yaml
 reload: "<white>Successfully reloaded the plugin."
 ```
 
-You can slightly change the configuration to choose a type like this:
+You can slightly change the configuration to choose a type, listed in the examples below.
+
+### Examples
+
+Chat:
+```yaml
+reload:
+  type: chat
+  message: "<white>This is a chat message."
 ```
+
+Action Bar:
+```yaml
+reload:
+  type: action_bar
+  message: "<white>This is an action bar message."
+```
+
+Title and Subtitle:
+```yaml
+reload:
+  type: title
+  message: 
+    - "<white>This is a title."
+    - "<white>This is a subtitle."
+```
+
+Title Only:
+```yaml
+reload:
+  type: title
+  message: "<white>This is a title."
+```
+
+Subtitle Only:
+```yaml
 reload:
   type: subtitle
-  message: "<white>Successfully reloaded the plugin."
+  message: "<white>This is a subtitle."
 ```
-The list of currently supported types are:
-- chat
-- action_bar
-- title
-- subtitle
+
