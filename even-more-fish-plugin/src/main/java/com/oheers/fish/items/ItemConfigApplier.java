@@ -68,13 +68,10 @@ public class ItemConfigApplier {
                 case NOTHING -> {}
                 case APPEND -> {
                     List<Component> before = fetchLoreOrEmpty(item);
-                    System.out.println(before);
                     lore.apply(item, player, replacements);
                     List<Component> after = item.lore();
-                    System.out.println(after);
                     if (after != null) {
                         before.addAll(after);
-                        System.out.println(before);
                         item.editMeta(meta -> meta.lore(before));
                     }
                 }

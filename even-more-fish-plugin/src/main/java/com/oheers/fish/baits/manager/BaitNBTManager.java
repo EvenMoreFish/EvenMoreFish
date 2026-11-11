@@ -98,16 +98,6 @@ public class BaitNBTManager {
         return NBTHolder.itemStack(itemStack).hasKey(NbtKeys.EMF_APPLIED_BAIT.get());
     }
 
-    public static boolean haveMatchingBaits(ItemStack rod, ItemStack other) {
-        String[] baits = getBaitArray(rod);
-        String[] otherBaits = getBaitArray(other);
-        Arrays.sort(baits);
-        Arrays.sort(otherBaits);
-        System.out.println("Current Rod Baits: " + Arrays.toString(baits));
-        System.out.println("Original Rod Baits: " + Arrays.toString(otherBaits));
-        return Arrays.equals(baits, otherBaits);
-    }
-
     /**
      * This applies a bait NBT reference to a fishing rod, and also checks whether the bait is already applied,
      * making an effort to increase it rather than apply it.

@@ -144,8 +144,6 @@ public abstract class Processor<E extends Event> implements Listener {
         if (rodBaits.isEmpty() || otherBaits.isEmpty()) {
             return null;
         }
-        System.out.println(rodBaits);
-        System.out.println(otherBaits);
         return rodBaits.equals(otherBaits) ? getBaitFromRod(rod) : null;
     }
 
