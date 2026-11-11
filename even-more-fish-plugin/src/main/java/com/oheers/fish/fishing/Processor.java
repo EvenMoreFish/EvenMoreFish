@@ -37,6 +37,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -65,6 +67,7 @@ public abstract class Processor<E extends Event> implements Listener {
     protected abstract boolean isEnabled();
 
     public @Nullable ItemStack getCaughtItem(@NonNull Player player, @NonNull Location location, @Nullable ItemStack fishingRod) {
+        ItemStack originalRod = ActiveRodTracker.getRod(player.getUniqueId()); // The rod that was used when casting.
         // Check if fishing is allowed in this world.
         if (!Checks.canFishInWorld(location)) {
             Logging.debug("Fish cannot be caught in this world.");
@@ -95,8 +98,8 @@ public abstract class Processor<E extends Event> implements Listener {
         CustomRod customRod = null;
         BaitHandler bait = null;
         if (fishingRod != null && !fishingRod.isEmpty()) {
-            customRod = RodManager.getInstance().getRod(fishingRod);
-            bait = getBaitFromRod(fishingRod);
+            customRod = validateCustomRod(fishingRod, originalRod);
+            bait = validateBaitedRod(fishingRod, originalRod);
         }
 
         IFish fish = chooseFish(player, location, bait, customRod);
@@ -118,6 +121,32 @@ public abstract class Processor<E extends Event> implements Listener {
         handleCaughtFish(player, location, fish);
         leaderboardCheck(fish, player, location);
         return fish.give();
+    }
+
+    /**
+     * Checks if both rods are the same {@link CustomRod}.
+     */
+    private @Nullable CustomRod validateCustomRod(ItemStack rod, ItemStack other) {
+        CustomRod customRod = RodManager.getInstance().getRod(rod);
+        if (customRod == null) {
+            return null;
+        }
+        CustomRod otherRod = RodManager.getInstance().getRod(other);
+        return customRod.equals(otherRod) ? customRod : null;
+    }
+
+    /**
+     * Checks if both rods contain the same baits and chooses one randomly if they do.
+     */
+    private @Nullable BaitHandler validateBaitedRod(ItemStack rod, ItemStack other) {
+        List<String> rodBaits = BaitNBTManager.getBaitNames(rod);
+        List<String> otherBaits = BaitNBTManager.getBaitNames(other);
+        if (rodBaits.isEmpty() || otherBaits.isEmpty()) {
+            return null;
+        }
+        System.out.println(rodBaits);
+        System.out.println(otherBaits);
+        return rodBaits.equals(otherBaits) ? getBaitFromRod(rod) : null;
     }
 
     private void handleCaughtFish(@NonNull Player player, @NonNull Location location, @NonNull IFish fish) {
@@ -288,8 +317,11 @@ public abstract class Processor<E extends Event> implements Listener {
         active.applyToLeaderboard(fish, fisherman);
     }
 
-    protected @Nullable ItemStack getRod(@NonNull Player player) {
-        return ActiveRodTracker.getRod(player.getUniqueId());
+    protected @Nullable ItemStack getRod(@NonNull Player player, @Nullable EquipmentSlot hand) {
+        if (hand == null) {
+            return null;
+        }
+        return player.getInventory().getItem(hand);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.oheers.fish.baits.manager;
 
 import com.oheers.fish.EvenMoreFish;
+import com.oheers.fish.api.baits.IBait;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.model.ApplicationResult;
 import com.oheers.fish.config.MainConfig;
@@ -95,6 +96,16 @@ public class BaitNBTManager {
             return false;
         }
         return NBTHolder.itemStack(itemStack).hasKey(NbtKeys.EMF_APPLIED_BAIT.get());
+    }
+
+    public static boolean haveMatchingBaits(ItemStack rod, ItemStack other) {
+        String[] baits = getBaitArray(rod);
+        String[] otherBaits = getBaitArray(other);
+        Arrays.sort(baits);
+        Arrays.sort(otherBaits);
+        System.out.println("Current Rod Baits: " + Arrays.toString(baits));
+        System.out.println("Original Rod Baits: " + Arrays.toString(otherBaits));
+        return Arrays.equals(baits, otherBaits);
     }
 
     /**
@@ -331,6 +342,10 @@ public class BaitNBTManager {
         return false;
     }
 
+    public static boolean hasBaitApplied(ItemStack itemStack, IBait bait) {
+        return hasBaitApplied(itemStack, bait.getId());
+    }
+
     /**
      * Removes all the baits stored in the nbt of the fishing rod. It then returns the total number of baits deleted just
      * incase you fancy doing something special with this number. It first checks whether there's any baits actually on
@@ -541,6 +556,13 @@ public class BaitNBTManager {
             return new String[0];
         }
         return appliedBait.split(",");
+    }
+
+    public static List<String> getBaitNames(final ItemStack item) {
+        return Arrays.stream(getBaitArray(item))
+            .map(s -> s.split(BAIT_SEPARATOR)[0])
+            .sorted()
+            .toList();
     }
 
 }

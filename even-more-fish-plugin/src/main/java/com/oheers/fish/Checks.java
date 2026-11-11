@@ -11,6 +11,8 @@ import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.exploits.AFKFishingTracker;
 import com.oheers.fish.fishing.rods.CustomRod;
 import com.oheers.fish.fishing.rods.RodManager;
+import com.oheers.fish.items.nbt.NbtKeys;
+import com.oheers.fish.items.nbt.abstracted.NBTHolder;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -154,6 +156,16 @@ public class Checks {
             return false;
         }
         return AFKFishingTracker.get(player.getUniqueId()).isAFKFishing();
+    }
+
+    public static boolean hasEMFData(@NonNull ItemStack item) {
+        NBTHolder<ItemStack> holder = NBTHolder.itemStack(item);
+        for (NbtKeys key : NbtKeys.values()) {
+            if (holder.hasKey(key.get())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

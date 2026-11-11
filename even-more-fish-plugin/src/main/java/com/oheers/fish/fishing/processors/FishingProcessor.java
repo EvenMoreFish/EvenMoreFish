@@ -43,7 +43,7 @@ public class FishingProcessor extends Processor<PlayerFishEvent> {
             return;
         }
 
-        ItemStack rod = getRod(event.getPlayer());
+        ItemStack rod = getRod(event.getPlayer(), event.getHand());
 
         if (rod == null) {
             plugin.debug("Custom fishing blocked: could not find rod.");

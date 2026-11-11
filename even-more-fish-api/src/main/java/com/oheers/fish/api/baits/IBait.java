@@ -24,7 +24,7 @@ public interface IBait {
 
     @NonNull List<? extends IRarity> getRarities();
 
-    @NonNull IFish chooseFish(@NonNull Player player, @NonNull Location location);
+    @Nullable IFish chooseFish(@NonNull Player player, @NonNull Location location);
 
     void handleFish(@NonNull Player player, @NonNull IFish fish, @NonNull ItemStack fishingRod);
 

@@ -65,6 +65,9 @@ public final class WeightedRandom {
         if (elements.isEmpty()) {
             return null;
         }
+        if (elements.size() == 1) {
+            return elements.getFirst(); // Avoids unnecessary checks.
+        }
 
         Random rng = (random != null) ? random : ThreadLocalRandom.current();
         double totalWeight = calcTotalWeight(elements, weightFunction, boostRate, boosted);

@@ -11,6 +11,7 @@ import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionManager;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.fishing.Processor;
+import com.oheers.fish.fishing.exploits.ActiveRodTracker;
 import com.oheers.fish.messages.ConfigMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -38,9 +39,9 @@ public class LavaFishingProcessor extends Processor<LavaFishCaughtEvent> {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void process(@NonNull LavaFishCaughtEvent event) {
         TrackedHook hook = event.getTrackedHook();
-        Player player = hook.getPlayer();
+        Player player = event.getPlayer();
 
-        ItemStack rod = getRod(event.getPlayer());
+        ItemStack rod = getRod(player, event.getOriginalEvent().getHand());
         if (rod == null) {
             plugin.debug("Fishing blocked: could not find rod.");
             return;

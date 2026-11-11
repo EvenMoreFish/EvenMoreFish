@@ -324,7 +324,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
      * @return The selected fish, or null if no valid fish was found
      */
     @Override
-    public @NonNull IFish chooseFish(@NonNull Player player, @NonNull Location location) {
+    public @Nullable IFish chooseFish(@NonNull Player player, @NonNull Location location) {
         RequirementContext context = new RequirementContext(
             player.getWorld(),
             player.getLocation(),
@@ -336,7 +336,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         return chooseFish(player, location, context, null);
     }
 
-    public @NonNull IFish chooseFish(@NonNull Player player, @NonNull Location location, @NonNull RequirementContext requirementContext, @Nullable CustomRod customRod) {
+    public @Nullable IFish chooseFish(@NonNull Player player, @NonNull Location location, @NonNull RequirementContext requirementContext, @Nullable CustomRod customRod) {
         IRarity selectedRarity = selectRarityWithModifiers(player, requirementContext, customRod);
         IFish selectedFish = selectFishFromRarity(selectedRarity, player, location, customRod);
 
