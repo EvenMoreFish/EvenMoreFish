@@ -60,11 +60,7 @@ afterEvaluate {
 private fun getBuildNumberOrDate(): String? {
     val currentBranch = grgit.branch.current().name
     if (currentBranch.equals("head", ignoreCase = true) || currentBranch.equals("master", ignoreCase = true)) {
-        val buildNumber: String? by project
-        if (buildNumber == null)
-            return "RELEASE"
-
-        return buildNumber
+        return project.findProperty("buildNumber") as? String ?: "RELEASE"
     }
 
     val time = DateTimeFormatter.ofPattern("yyyyMMdd-HHmm", Locale.ENGLISH)
