@@ -1,7 +1,7 @@
 [versions]
 worldguard = "7.0.9"
 worldedit = "7.3.0"
-redprotect = "7.7.3"
+redprotect = "8.1.2"
 flyway = "12.2.0"
 jdbi = "3.55.0"
 junit = "6.1.3"
@@ -32,8 +32,8 @@ worldedit-core = { module = "com.sk89q.worldedit:worldedit-core", version.ref = 
 worldedit-bukkit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
 
 # Protection Plugins
-redprotect-core = { module = "br.net.fabiozumbi12.RedProtect:RedProtect-Core", version.ref = "redprotect" }
-redprotect-spigot = { module = "br.net.fabiozumbi12.RedProtect:RedProtect-Spigot-1.13", version.ref = "redprotect" }
+redprotect-core = { module = "io.github.fabiozumbi12.RedProtect:RedProtect-Core", version.ref = "redprotect" }
+redprotect-spigot = { module = "io.github.fabiozumbi12.RedProtect:RedProtect-Spigot", version.ref = "redprotect" }
 griefprevention = "com.github.TechFortress:GriefPrevention:16.18.4"
 
 # Skills & Economy

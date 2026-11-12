@@ -42,13 +42,7 @@ dependencies {
 
     compileOnly(libs.bundles.worldedit)
     compileOnly(libs.bundles.redprotect) {
-        exclude("net.ess3", "EssentialsX")
-        exclude("org.spigotmc", "spigot-api")
-        exclude("com.destroystokyo.paper", "paper-api")
-        exclude("de.keyle", "mypet")
-        exclude("com.sk89q.worldedit", "worldedit-core")
-        exclude("com.sk89q.worldedit", "worldedit-bukkit")
-        exclude("com.sk89q.worldguard", "worldguard-bukkit")
+        exclude("*", "*")
     }
 
     compileOnly(libs.aura.skills)
