@@ -15,7 +15,7 @@ sonar = "7.5.0.8588"
 
 [libraries]
 # Paper & Core APIs
-paper-api = {module = "io.papermc.paper:paper-api", version = {strictly="[1.21,)"}}
+paper-api = "io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT"
 vault-api = "com.github.MilkBowl:VaultAPI:1.7.1"
 placeholder-api = "me.clip:placeholderapi:2.12.3"
 bstats = "org.bstats:bstats-bukkit:3.2.1"
@@ -91,6 +91,7 @@ connectors-sqlite = "org.xerial:sqlite-jdbc:3.47.0.0"
 # Testing
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
 mockito-core = "org.mockito:mockito-core:5.24.0"
 
 plugin-yml = { module = "de.eldoria.plugin-yml.bukkit:de.eldoria.plugin-yml.bukkit.gradle.plugin", version.ref = "plugin-yml"}

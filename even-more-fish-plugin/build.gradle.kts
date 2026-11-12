@@ -251,6 +251,7 @@ testing {
                     }
                 }
                 runtimeOnly(libs.junit.jupiter.engine)
+                runtimeOnly(libs.junit.platform.launcher)
             }
 
             targets {

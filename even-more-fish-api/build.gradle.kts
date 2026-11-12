@@ -57,6 +57,7 @@ testing {
             dependencies {
                 implementation(libs.junit.jupiter.api)
                 runtimeOnly(libs.junit.jupiter.engine)
+                runtimeOnly(libs.junit.platform.launcher)
                 implementation(libs.mockito.core)
                 implementation(libs.paper.api) {
                     version {
