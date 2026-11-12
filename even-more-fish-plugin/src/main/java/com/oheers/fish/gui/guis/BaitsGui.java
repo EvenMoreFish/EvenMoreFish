@@ -12,6 +12,7 @@ import com.oheers.fish.utils.CooldownHelper;
 import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.StaticGuiElement;
+import de.themoep.inventorygui.actions.ClickAction;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
@@ -69,16 +70,16 @@ public class BaitsGui extends ConfigGui {
             click -> {
                 UUID uuid = player.getUniqueId();
                 if (cooldown.hasCooldown(uuid)) {
-                    return true;
+                    return ClickAction.Result.CANCEL_EVENT;
                 }
                 if (requireConfirmation(uuid)) {
                     ConfigMessage.BAIT_CONFIRM_PURCHASE.getMessage().send(player);
-                    return true;
+                    return ClickAction.Result.CANCEL_EVENT;
                 }
                 bait.attemptPurchase(player);
                 // Quarter-second cooldown to prevent spam and accidents.
                 cooldown.applyCooldown(uuid, Duration.ofMillis(250));
-                return true;
+                return ClickAction.Result.CANCEL_EVENT;
             }
         );
     }

@@ -9,6 +9,7 @@ import com.oheers.fish.config.gui.impl.SellMenuConfirmGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuNormalGuiConfig;
 import com.oheers.fish.gui.ConfigGui;
 import de.themoep.inventorygui.GuiStorageElement;
+import de.themoep.inventorygui.actions.CloseAction;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -42,7 +43,7 @@ public class SellGui extends ConfigGui {
                 SellHelper.get().sell(this.fishInventory, this.player);
             }
             doRescue();
-            return false;
+            return CloseAction.Result.COMPLETE;
         });
 
         createGui();

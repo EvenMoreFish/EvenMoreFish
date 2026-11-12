@@ -26,6 +26,7 @@ import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
+import de.themoep.inventorygui.actions.ClickAction;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
@@ -265,7 +266,7 @@ public class FishJournalGui extends ConfigGui {
             group.addElement(
                 new StaticGuiElement(character, item, click -> {
                     FishJournalGui.openAsync(player, rarity, click.getGui());
-                    return true;
+                    return ClickAction.Result.CANCEL_EVENT;
                 })
             );
         });

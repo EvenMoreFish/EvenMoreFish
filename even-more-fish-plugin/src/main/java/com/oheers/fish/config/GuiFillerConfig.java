@@ -7,6 +7,7 @@ import com.oheers.fish.gui.GuiUtils;
 import com.oheers.fish.items.ItemFactory;
 import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.StaticGuiElement;
+import de.themoep.inventorygui.actions.ClickAction;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -67,7 +68,7 @@ public class GuiFillerConfig extends ConfigBase {
                 if (action != null) {
                     action.accept(null, click);
                 }
-                return true;
+                return ClickAction.Result.CANCEL_EVENT;
             });
         } else {
             return new StaticGuiElement(character, item, click -> {
@@ -75,7 +76,7 @@ public class GuiFillerConfig extends ConfigBase {
                 if (action != null) {
                     action.accept(gui, click);
                 }
-                return true;
+                return ClickAction.Result.CANCEL_EVENT;
             });
         }
     }

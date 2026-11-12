@@ -13,6 +13,8 @@ import de.themoep.inventorygui.GuiPageElement;
 import de.themoep.inventorygui.GuiStorageElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
+import de.themoep.inventorygui.actions.ClickAction;
+import de.themoep.inventorygui.actions.CloseAction;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -36,7 +38,7 @@ public class ConfigGui {
     private final @NonNull Map<String, EMFMessage> replacements = new HashMap<>();
 
     private InventoryGui gui;
-    private InventoryGui.CloseAction closeAction = null;
+    private CloseAction closeAction = null;
 
     public ConfigGui(@NonNull GuiConfig config, @NonNull HumanEntity human) {
         this.config = config;
@@ -63,7 +65,7 @@ public class ConfigGui {
         this.replacements.putAll(replacements);
     }
 
-    public void setCloseAction(InventoryGui.@NonNull CloseAction closeAction) {
+    public void setCloseAction(@NonNull CloseAction closeAction) {
         this.closeAction = closeAction;
     }
 
@@ -85,7 +87,7 @@ public class ConfigGui {
     public void createGui() {
         InventoryGui gui = new InventoryGui(
             EvenMoreFish.getInstance(),
-            config.getTitle().getLegacyMessage(player),
+            config.getTitle().getComponentMessage(player),
             config.getLayout()
         );
 
@@ -146,7 +148,7 @@ public class ConfigGui {
         StaticGuiElement actionElement = new StaticGuiElement(character, item, click -> {
             executeClickAction(itemSection, click);
             executeClickCommands(itemSection, click);
-            return true;
+            return ClickAction.Result.CANCEL_EVENT;
         });
         gui.addElement(actionElement);
     }
@@ -154,7 +156,7 @@ public class ConfigGui {
     private GuiPageElement fetchPageElement(char character, @NonNull ItemStack item, @NonNull Section section, GuiPageElement.@NonNull PageAction pageAction) {
         ItemFactory factory = ItemFactory.itemFactory(section, null, "fallback-item");
         ItemStack fallbackItem = factory.isUsingFallbackBaseItem() ? null : factory.createItem(this.player.getUniqueId(), this.replacements);
-        return new EMFGuiPageElement(character, item, fallbackItem, pageAction);
+        return new GuiPageElement(character, item, fallbackItem, pageAction);
     }
 
     private void executeClickAction(@NonNull Section section, GuiElement.@NonNull Click click) {

@@ -14,6 +14,7 @@ import com.oheers.fish.gui.ConfigGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import de.themoep.inventorygui.GuiStorageElement;
+import de.themoep.inventorygui.actions.CloseAction;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -40,7 +41,7 @@ public class ApplyBaitsGui extends ConfigGui {
         setCloseAction(close -> {
             processBaits();
             doRescue();
-            return false;
+            return CloseAction.Result.COMPLETE;
         });
 
         createGui();
