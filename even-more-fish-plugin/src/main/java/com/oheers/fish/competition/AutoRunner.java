@@ -29,7 +29,7 @@ public class AutoRunner extends EMFTimer {
             return;
         }
         TimeCode now = TimeCode.now();
-        Logging.debug("AutoRunner checking TimeCode: " + now.code());
+        Logging.debug("AutoRunner checking TimeCode: " + now);
 
         // Beginning the competition set for schedule
         Map<TimeCode, CompetitionFile> competitions = manager.getCompetitions();

@@ -46,7 +46,7 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
     protected static final File dataFile = new File(EvenMoreFish.getInstance().getDataFolder(), "competition-data.yml.tmp");
     private static final List<CompetitionFile> held = new ArrayList<>();
 
-    private final TreeMap<TimeCode, CompetitionFile> competitions = new TreeMap<>(TimeCode.getComparator());
+    private final TreeMap<TimeCode, CompetitionFile> competitions = new TreeMap<>();
     private final AutoRunner autoRunner = new AutoRunner(this);
 
     protected Competition activeCompetition;
@@ -96,6 +96,13 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
         EvenMoreFish.getInstance().getLogger().info(
                 "Loaded " + getItemMap().size() + " competition file(s) and " + competitions.size() + " scheduled competitions."
         );
+        // Used for testing TimeCodes.
+        /*
+        String debug = competitions.entrySet().stream()
+            .map(entry -> "Time: " + entry.getKey() + " | File: " + entry.getValue().getId())
+            .collect(java.util.stream.Collectors.joining("\n"));
+        System.out.println(debug);
+         */
     }
 
     public @NonNull AutoRunner getAutoRunner() {
