@@ -17,6 +17,8 @@ sell-item:
     lore:
       - <dark_gray>Fish Shop
       - ''
+      - <gray>Total Value » <yellow>{sell-price}
+      - ''
       - <gray>Click this button to sell all
       - <gray>the fish inside the shop menu.
       - ''
@@ -33,6 +35,8 @@ sell-all-item:
     displayname: <bold><gold>Sell All
     lore:
       - <dark_gray>Inventory
+      - ''
+      - <gray>Total Value » <yellow>{sell-all-price}
       - ''
       - <gray>Click this button to sell all
       - <gray>the fish in your inventory.
