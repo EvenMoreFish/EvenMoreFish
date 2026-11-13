@@ -27,7 +27,6 @@ import de.themoep.inventorygui.GuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
-import de.themoep.inventorygui.actions.ClickAction;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
@@ -39,10 +38,11 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class FishJournalGui extends ConfigGui {
+public class FishJournalGui extends EMFConfigGui {
     private final int userId;
     private final IRarity rarity;
     private final SortType sortType;
@@ -99,19 +99,12 @@ public class FishJournalGui extends ConfigGui {
 
         this.userId = userId;
         this.usePreloadedStatsOnly = usePreloadedStatsOnly;
-        createGui();
 
-        Section config = getGuiConfig();
-        if (config != null) {
-            sortType = FishUtils.getEnumValue(
-                SortType.class,
-                config.getString("sort-type"),
-                SortType.ALPHABETICAL
-            );
-            getGui().addElement(getGroup(config));
-        } else {
-            sortType = SortType.ALPHABETICAL;
-        }
+        sortType = FishUtils.getEnumValue(
+            SortType.class,
+            guiConfig.getConfig().getString("sort-type"),
+            SortType.ALPHABETICAL
+        );
     }
 
     private GuiElement getGroup(Section section) {
@@ -136,7 +129,7 @@ public class FishJournalGui extends ConfigGui {
     }
 
     private @NonNull String getUnknownMessage() {
-        return getGuiConfig().getString("unknown-message", "Unknown");
+        return guiConfig.getConfig().getString("unknown-message", "Unknown");
     }
 
     private ItemStack getFishItem(IFish fish, Section section) {
@@ -263,7 +256,7 @@ public class FishJournalGui extends ConfigGui {
             group.addElement(
                 new StaticGuiElement(character, item, click -> {
                     openAsync(player, rarity);
-                    return ClickAction.Result.CANCEL_EVENT;
+                    return true;
                 })
             );
         });
@@ -315,8 +308,7 @@ public class FishJournalGui extends ConfigGui {
     }
 
     @Override
-    public void doRescue() { /* Don't rescue, view only */ }
-
+    public void doRescue(@NonNull InventoryGui gui) { /* Don't rescue, view only */ }
 
     private @Nullable Database requireDatabase(String logMessage) {
         Database db = EvenMoreFish.getInstance().getPluginDataManager().getDatabase();
@@ -325,5 +317,13 @@ public class FishJournalGui extends ConfigGui {
         }
         return db;
     }
+
+    @Override
+    public void configure(@NonNull InventoryGui inventoryGui) {
+        inventoryGui.addElement(getGroup(guiConfig.getConfig()));
+    }
+
+    @Override
+    protected void addClickActions(@NonNull Map<String, ConfigGuiClickAction> map) {}
 
 }

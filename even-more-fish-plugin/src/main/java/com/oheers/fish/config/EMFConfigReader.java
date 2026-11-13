@@ -1,5 +1,6 @@
-package com.oheers.fish.messages;
+package com.oheers.fish.config;
 
+import de.themoep.inventorygui.config.ConfigSupplier;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -7,7 +8,7 @@ import uk.firedev.daisylib.messages.config.ConfigReader;
 
 import java.util.List;
 
-public class EMFConfigReader implements ConfigReader<Section> {
+public class EMFConfigReader implements ConfigReader<Section>, ConfigSupplier<Section> {
 
     private final Section config;
 
@@ -31,12 +32,17 @@ public class EMFConfigReader implements ConfigReader<Section> {
     }
 
     @Override
+    public @NonNull List<String> getKeys(boolean deep) {
+        return List.copyOf(config.getRoutesAsStrings(deep));
+    }
+
+    @Override
     public @NonNull Section getConfig() {
         return config;
     }
 
     @Override
-    public @Nullable ConfigReader<Section> getSection(@NonNull String path) {
+    public @Nullable EMFConfigReader getSection(@NonNull String path) {
         Section section = config.getSection(path);
         return section == null ? null : new EMFConfigReader(section);
     }

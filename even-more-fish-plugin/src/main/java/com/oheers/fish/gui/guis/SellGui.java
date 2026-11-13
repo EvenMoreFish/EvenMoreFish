@@ -7,21 +7,21 @@ import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.config.gui.GuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuConfirmGuiConfig;
 import com.oheers.fish.config.gui.impl.SellMenuNormalGuiConfig;
-import com.oheers.fish.gui.ConfigGui;
+import com.oheers.fish.gui.EMFConfigGui;
 import de.themoep.inventorygui.GuiStorageElement;
-import de.themoep.inventorygui.actions.CloseAction;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
+import de.themoep.inventorygui.InventoryGui;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-// TODO look into dynamically updating the sell items when a fish is added/removed - AFTER we switch to another library
-public class SellGui extends ConfigGui {
+// TODO look into dynamically updating the sell items when a fish is added/removed
+public class SellGui extends EMFConfigGui {
 
     private final Inventory fishInventory;
 
@@ -32,31 +32,36 @@ public class SellGui extends ConfigGui {
 
         Economy economy = Economy.getInstance();
 
-        double shopSaleValue = FishUtils.calculateInventoryWorth(this.fishInventory);
-        addReplacement("{sell-price}", economy.getWorthFormat(shopSaleValue, true));
-
-        double playerSaleValue = FishUtils.calculateInventoryWorth(player.getInventory());
-        addReplacement("{sell-all-price}", economy.getWorthFormat(playerSaleValue, true));
+        addReplacement("{sell-price}", () -> {
+            double shopSaleValue = FishUtils.calculateInventoryWorth(this.fishInventory);
+            return economy.getWorthFormat(shopSaleValue, true);
+        });
+        addReplacement("{sell-all-price}", () -> {
+            double playerSaleValue = FishUtils.calculateInventoryWorth(player.getInventory());
+            return economy.getWorthFormat(playerSaleValue, true);
+        });
 
         setCloseAction(close -> {
             if (MainConfig.getInstance().sellOverDrop()) {
                 SellHelper.get().sell(this.fishInventory, this.player);
             }
-            doRescue();
-            return CloseAction.Result.COMPLETE;
+            doRescue(close.getGui());
+            return false;
         });
-
-        createGui();
-
-        Section config = getGuiConfig();
-        if (config != null) {
-            getGui().addElement(new GuiStorageElement(FishUtils.getCharFromString(getGuiConfig().getString("deposit-character", "i"), 'i'), this.fishInventory));
-        }
     }
 
     public Inventory getFishInventory() {
         return this.fishInventory;
     }
+
+    @Override
+    public void configure(@NonNull InventoryGui inventoryGui) {
+        char character = FishUtils.getCharFromString(guiConfig.getConfig().getString("deposit-character", "i"), 'i');
+        inventoryGui.addElement(new GuiStorageElement(character, this.fishInventory));
+    }
+
+    @Override
+    protected void addClickActions(@NonNull Map<String, ConfigGuiClickAction> map) {}
 
     public enum SellState {
         NORMAL(SellMenuNormalGuiConfig::getInstance),

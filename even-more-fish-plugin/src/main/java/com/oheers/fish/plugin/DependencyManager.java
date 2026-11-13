@@ -3,21 +3,34 @@ package com.oheers.fish.plugin;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.FishUtils;
 import com.oheers.fish.api.economy.EconomyType;
+import com.oheers.fish.api.economy.selling.SellHelper;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
+import com.oheers.fish.commands.main.MainCommand;
 import com.oheers.fish.config.MainConfig;
+import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.economy.GriefPreventionEconomyType;
 import com.oheers.fish.economy.PlayerPointsEconomyType;
 import com.oheers.fish.economy.VaultEconomyType;
 import com.oheers.fish.events.AuraSkillsFishingEvent;
 import com.oheers.fish.events.DeprecatedEventListener;
 import com.oheers.fish.events.McMMOTreasureEvent;
+import com.oheers.fish.gui.EMFConfigGui;
+import com.oheers.fish.gui.guis.BaitsGui;
+import com.oheers.fish.gui.guis.FishJournalGui;
+import com.oheers.fish.gui.guis.MainMenuGui;
+import com.oheers.fish.gui.guis.SellGui;
+import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.EMFListMessage;
 import com.oheers.fish.messages.EMFSingleMessage;
 import com.oheers.fish.placeholders.PlaceholderReceiver;
 import com.oheers.fish.utils.HeadDBIntegration;
+import de.themoep.inventorygui.InventoryGui;
+import de.themoep.inventorygui.config.ConfigGui;
+import de.themoep.inventorygui.config.GlobalConfigActions;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.jspecify.annotations.NonNull;
@@ -66,6 +79,7 @@ public class DependencyManager implements Listener {
             IFish.class,
             fish -> List.of(fish.getDisplayName())
         );
+        configureInventoryGui();
     }
 
     public void checkDependencies() {
@@ -174,6 +188,101 @@ public class DependencyManager implements Listener {
 
     public void setHdbapi(HeadDatabaseAPI hdbapi) {
         this.hdbapi = hdbapi;
+    }
+
+    private void configureInventoryGui() {
+        GlobalConfigActions.register("full-exit", (configGui, inventoryGui, click) -> {
+            doRescue(configGui, inventoryGui);
+            click.getWhoClicked().closeInventory();
+            return true;
+        });
+        // Exiting a sub-menu should open the main menu
+        GlobalConfigActions.register("open-main-menu", (configGui, inventoryGui, click) -> {
+            doRescue(configGui, inventoryGui);
+            new MainMenuGui(click.getWhoClicked()).open();
+            return true;
+        });
+
+        // Toggling custom fish should redraw the GUI and leave it at that
+        GlobalConfigActions.register("fish-toggle", (configGui, inventoryGui, click) -> {
+            EvenMoreFish.getInstance().getToggle().performFishToggle((Player) click.getWhoClicked());
+            inventoryGui.draw();
+            return true;
+        });
+
+        // The shop action should just open the shop menu
+        GlobalConfigActions.register("open-shop", (configGui, inventoryGui, click) -> {
+            doRescue(configGui, inventoryGui);
+            new SellGui((Player) click.getWhoClicked(), SellGui.SellState.NORMAL, null).open();
+            return true;
+        });
+
+        GlobalConfigActions.register("show-command-help", (configGui, inventoryGui, click) -> {
+            click.getWhoClicked().closeInventory();
+            MainCommand.sendHelpMessage(click.getWhoClicked());
+            return true;
+        });
+
+        GlobalConfigActions.register("sell-inventory", (configGui, inventoryGui, click) -> {
+            Player player = (Player) click.getWhoClicked();
+            if (configGui instanceof SellGui sellGui) {
+                new SellGui(player, SellGui.SellState.CONFIRM, sellGui.getFishInventory()).open();
+                return true;
+            }
+            SellHelper.get().sell(player.getInventory(), player);
+            player.closeInventory();
+            return true;
+        });
+
+        GlobalConfigActions.register("sell-shop", (configGui, inventoryGui, click) -> {
+            Player player = (Player) click.getWhoClicked();
+            if (configGui instanceof SellGui sellGui) {
+                new SellGui(player, SellGui.SellState.CONFIRM, sellGui.getFishInventory()).open();
+                return true;
+            }
+
+            FishUtils.sellInventoryGui(inventoryGui, player);
+            player.closeInventory();
+            return true;
+        });
+
+        GlobalConfigActions.register("sell-inventory-confirm", (configGui, inventoryGui, click) -> {
+            Player player = (Player) click.getWhoClicked();
+            SellHelper.get().sell(player.getInventory(), player);
+            doRescue(configGui, inventoryGui);
+            player.closeInventory();
+            return true;
+        });
+
+        GlobalConfigActions.register("sell-shop-confirm", (configGui, inventoryGui, click) -> {
+            Player player = (Player) click.getWhoClicked();
+            FishUtils.sellInventoryGui(inventoryGui, player);
+            doRescue(configGui, inventoryGui);
+            player.closeInventory();
+            return true;
+        });
+
+        GlobalConfigActions.register("open-baits-menu", (configGui, inventoryGui, click) -> {
+            doRescue(configGui, inventoryGui);
+            new BaitsGui(click.getWhoClicked()).open();
+            return true;
+        });
+
+        GlobalConfigActions.register("open-journal-menu", (configGui, inventoryGui, click) -> {
+            if (!DatabaseUtil.isDatabaseOnline()) {
+                ConfigMessage.JOURNAL_DISABLED.getMessage().send(click.getWhoClicked());
+                return true;
+            }
+            doRescue(configGui, inventoryGui);
+            FishJournalGui.openAsync((Player) click.getWhoClicked());
+            return true;
+        });
+    }
+
+    private void doRescue(ConfigGui<?> configGui, InventoryGui gui) {
+        if (configGui instanceof EMFConfigGui custom) {
+            custom.doRescue(gui);
+        }
     }
 
 }

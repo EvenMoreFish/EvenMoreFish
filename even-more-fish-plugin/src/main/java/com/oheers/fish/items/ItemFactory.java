@@ -111,7 +111,7 @@ public class ItemFactory extends AbstractItemFactory {
      * @param configLocation The config location to use.
      * @return A new ItemFactory instance.
      */
-    public static ItemFactory itemFactory(@NonNull Section configuration, @Nullable String configLocation, @NonNull String itemPath) {
+    public static ItemFactory itemFactory(@NonNull Section configuration, @Nullable String configLocation, @Nullable String itemPath) {
         return new ItemFactory(configuration, configLocation, itemPath);
     }
 

@@ -10,12 +10,11 @@ import com.oheers.fish.baits.model.ApplicationResult;
 import com.oheers.fish.config.gui.impl.ApplyBaitsMenuGuiConfig;
 import com.oheers.fish.exceptions.MaxBaitReachedException;
 import com.oheers.fish.exceptions.MaxBaitsReachedException;
-import com.oheers.fish.gui.ConfigGui;
+import com.oheers.fish.gui.EMFConfigGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
 import de.themoep.inventorygui.GuiStorageElement;
-import de.themoep.inventorygui.actions.CloseAction;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
+import de.themoep.inventorygui.InventoryGui;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -25,9 +24,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-public class ApplyBaitsGui extends ConfigGui {
+public class ApplyBaitsGui extends EMFConfigGui {
 
     private final Inventory baitInventory;
 
@@ -40,16 +40,9 @@ public class ApplyBaitsGui extends ConfigGui {
 
         setCloseAction(close -> {
             processBaits();
-            doRescue();
-            return CloseAction.Result.COMPLETE;
+            doRescue(close.getGui());
+            return false;
         });
-
-        createGui();
-
-        Section config = getGuiConfig();
-        if (config != null) {
-            getGui().addElement(new GuiStorageElement(FishUtils.getCharFromString(getGuiConfig().getString("bait-character", "b"), 'b'), this.baitInventory));
-        }
     }
 
     private void processBaits() {
@@ -102,5 +95,14 @@ public class ApplyBaitsGui extends ConfigGui {
             this.player.getInventory().setItemInMainHand(handItem);
         }
     }
+
+    @Override
+    public void configure(@NonNull InventoryGui inventoryGui) {
+        char character = FishUtils.getCharFromString(guiConfig.getConfig().getString("bait-character", "b"), 'b');
+        inventoryGui.addElement(new GuiStorageElement(character, this.baitInventory));
+    }
+
+    @Override
+    protected void addClickActions(@NonNull Map<String, ConfigGuiClickAction> map) {}
 
 }

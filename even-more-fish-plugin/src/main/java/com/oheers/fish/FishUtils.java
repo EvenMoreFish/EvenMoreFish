@@ -393,11 +393,7 @@ public class FishUtils {
         return papiParsed;
     }
 
-    public static void sellInventoryGui(@NonNull InventoryGui gui, @NonNull HumanEntity humanEntity) {
-        if (!(humanEntity instanceof Player player)) {
-            return;
-        }
-
+    public static void sellInventoryGui(@NonNull InventoryGui gui, @NonNull Player player) {
         if (!Economy.getInstance().isEnabled()) {
             ConfigMessage.ECONOMY_DISABLED.getMessage().send(player);
             return;

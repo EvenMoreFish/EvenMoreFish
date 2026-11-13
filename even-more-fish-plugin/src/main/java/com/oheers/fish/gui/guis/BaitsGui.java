@@ -6,13 +6,13 @@ import com.oheers.fish.api.sort.SortType;
 import com.oheers.fish.baits.BaitHandler;
 import com.oheers.fish.baits.manager.BaitManager;
 import com.oheers.fish.config.gui.impl.BaitsMenuGuiConfig;
-import com.oheers.fish.gui.ConfigGui;
+import com.oheers.fish.gui.EMFConfigGui;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.utils.CooldownHelper;
 import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.GuiElementGroup;
+import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
-import de.themoep.inventorygui.actions.ClickAction;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
@@ -23,9 +23,10 @@ import uk.firedev.daisylib.messages.message.ComponentMessage;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-public class BaitsGui extends ConfigGui {
+public class BaitsGui extends EMFConfigGui {
 
     private final CooldownHelper confirmation = CooldownHelper.create();
     private final CooldownHelper cooldown = CooldownHelper.create();
@@ -37,19 +38,11 @@ public class BaitsGui extends ConfigGui {
             player
         );
 
-        createGui();
-
-        Section config = getGuiConfig();
-        if (config != null) {
-            sortType = FishUtils.getEnumValue(
-                SortType.class,
-                config.getString("sort-type"),
-                SortType.ALPHABETICAL
-            );
-            getGui().addElements(getBaitsGroup(config));
-        } else {
-            sortType = SortType.ALPHABETICAL;
-        }
+        sortType = FishUtils.getEnumValue(
+            SortType.class,
+            guiConfig.getConfig().getString("sort-type"),
+            SortType.ALPHABETICAL
+        );
     }
 
     private DynamicGuiElement getBaitsGroup(Section section) {
@@ -70,22 +63,22 @@ public class BaitsGui extends ConfigGui {
             click -> {
                 UUID uuid = player.getUniqueId();
                 if (cooldown.hasCooldown(uuid)) {
-                    return ClickAction.Result.CANCEL_EVENT;
+                    return true;
                 }
                 if (requireConfirmation(uuid)) {
                     ConfigMessage.BAIT_CONFIRM_PURCHASE.getMessage().send(player);
-                    return ClickAction.Result.CANCEL_EVENT;
+                    return true;
                 }
                 bait.attemptPurchase(player);
                 // Quarter-second cooldown to prevent spam and accidents.
                 cooldown.applyCooldown(uuid, Duration.ofMillis(250));
-                return ClickAction.Result.CANCEL_EVENT;
+                return true;
             }
         );
     }
 
     private List<String> getPurchaseLoreFormat() {
-        return getGuiConfig().getStringList("purchase-lore");
+        return guiConfig.getConfig().getStringList("purchase-lore");
     }
 
     private ItemStack createBaitItem(@NonNull BaitHandler bait) {
@@ -118,5 +111,13 @@ public class BaitsGui extends ConfigGui {
         confirmation.removeCooldown(uuid);
         return false;
     }
+
+    @Override
+    public void configure(@NonNull InventoryGui inventoryGui) {
+        inventoryGui.addElements(getBaitsGroup(guiConfig.getConfig()));
+    }
+
+    @Override
+    protected void addClickActions(@NonNull Map<String, ConfigGuiClickAction> map) {}
 
 }
