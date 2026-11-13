@@ -15,7 +15,8 @@ import com.oheers.fish.database.data.UserFishRarityKey;
 import com.oheers.fish.database.model.fish.FishStats;
 import com.oheers.fish.database.model.user.UserFishStats;
 import com.oheers.fish.fishing.items.FishManager;
-import com.oheers.fish.gui.ConfigGui;
+import com.oheers.fish.fishing.items.Rarity;
+import com.oheers.fish.gui.EMFConfigGui;
 import com.oheers.fish.items.ItemFactory;
 import com.oheers.fish.items.config.DisplayNameItemConfig;
 import com.oheers.fish.items.config.ItemConfig;
@@ -47,11 +48,11 @@ public class FishJournalGui extends ConfigGui {
     private final SortType sortType;
     private final boolean usePreloadedStatsOnly;
 
-    public static void openAsync(@NonNull Player player, @Nullable IRarity rarity) {
-        openAsync(player, rarity, null);
+    public static void openAsync(@NonNull Player player) {
+        openAsync(player, null);
     }
 
-    public static void openAsync(@NonNull Player player, @Nullable IRarity rarity, @Nullable InventoryGui expectedOpenGui) {
+    public static void openAsync(@NonNull Player player, @Nullable IRarity rarity) {
         EvenMoreFish plugin = EvenMoreFish.getInstance();
         plugin.debug("Preparing fish journal for %s.".formatted(player.getName()));
         plugin.getPluginDataManager().preloadUserDataAsync(player.getUniqueId()).whenComplete((userId, throwable) -> {
@@ -64,10 +65,6 @@ public class FishJournalGui extends ConfigGui {
                 try {
                     if (!player.isOnline()) {
                         plugin.debug("Skipping fish journal open for %s because the player is offline.".formatted(player.getName()));
-                        return;
-                    }
-                    if (expectedOpenGui != null && InventoryGui.getOpen(player) != expectedOpenGui) {
-                        plugin.debug("Skipping fish journal open for %s because the open GUI changed while data loaded.".formatted(player.getName()));
                         return;
                     }
                     new FishJournalGui(player, rarity, userId, true).open();
@@ -265,7 +262,7 @@ public class FishJournalGui extends ConfigGui {
             }
             group.addElement(
                 new StaticGuiElement(character, item, click -> {
-                    FishJournalGui.openAsync(player, rarity, click.getGui());
+                    openAsync(player, rarity);
                     return ClickAction.Result.CANCEL_EVENT;
                 })
             );
