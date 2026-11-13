@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class SkullSaver implements Listener {
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBreak(BlockBreakEvent event) {
         if (event.isCancelled() || !event.isDropItems()) return;
         if (event.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
