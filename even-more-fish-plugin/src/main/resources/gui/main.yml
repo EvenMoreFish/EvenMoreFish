@@ -20,6 +20,7 @@ fish-toggle:
       - <gray>Click this button to
       - <gray>toggle custom fish.
       - ""
+      - "<gray>Current: <yellow>{toggle-status}"
   character: t
   click-action: fish-toggle
 
