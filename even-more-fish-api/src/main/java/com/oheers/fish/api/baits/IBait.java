@@ -46,4 +46,6 @@ public interface IBait {
 
     boolean attemptPurchase(@NonNull Player player);
 
+    boolean isForSale();
+
 }

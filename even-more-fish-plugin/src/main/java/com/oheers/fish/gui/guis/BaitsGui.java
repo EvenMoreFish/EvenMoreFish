@@ -61,6 +61,9 @@ public class BaitsGui extends EMFConfigGui {
             character,
             createBaitItem(bait),
             click -> {
+                if (!bait.isForSale()) {
+                    return true;
+                }
                 UUID uuid = player.getUniqueId();
                 if (cooldown.hasCooldown(uuid)) {
                     return true;

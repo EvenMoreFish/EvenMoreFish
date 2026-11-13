@@ -741,7 +741,7 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
             return false;
         }
         double price = getPurchasePrice();
-        if (price <= -1.0D) {
+        if (price < 0.0D) {
             ConfigMessage.BAIT_NOT_FOR_SALE.getMessage().send(player);
             return false;
         }
@@ -771,6 +771,16 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
         message.send(player);
 
         return true;
+    }
+
+    /**
+     * Checks if the bait is for sale.
+     * <p>
+     * Ensures a valid economy is present, the price is 0 or above, and the quantity is at least 1.
+     */
+    @Override
+    public boolean isForSale() {
+        return economy != null && !economy.isEmpty() && getPurchasePrice() >= 0 && getPurchaseQuantity() > 0;
     }
 
     private @NonNull NamespacedKey getRecipeKey() {
