@@ -76,9 +76,10 @@ public class PotionEffectSerializer implements EMFSerializer<PotionEffect> {
             Logging.error("Potion effect duration " + split[2] + " is not valid.");
             return null;
         }
+        int finalDuration = duration == -1 ? -1 : duration * 20; // Turns the duration into ticks if not -1 (infinite).
         return new PotionEffect(
             type,
-            duration * 20,
+            finalDuration,
             amplifier - 1,
             false
         );
