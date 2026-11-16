@@ -35,21 +35,21 @@ You can slightly change the configuration to choose a type, listed in the exampl
 
 Chat:
 ```yaml
-reload:
+chat-message:
   type: chat
   message: "<white>This is a chat message."
 ```
 
 Action Bar:
 ```yaml
-reload:
+actionbar-message:
   type: action_bar
   message: "<white>This is an action bar message."
 ```
 
 Title and Subtitle:
 ```yaml
-reload:
+title-and-subtitle-message:
   type: title
   message: 
     - "<white>This is a title."
@@ -58,15 +58,29 @@ reload:
 
 Title Only:
 ```yaml
-reload:
+title-message:
   type: title
   message: "<white>This is a title."
 ```
 
 Subtitle Only:
 ```yaml
-reload:
+subtitle-message:
   type: subtitle
   message: "<white>This is a subtitle."
+```
+
+## Sounds
+
+A sound can optionally be attached to the message, which will be played when the message is sent.
+
+This follows the same format as the [Sound RewardType](https://evenmorefish.github.io/EvenMoreFish/docs/configuration/reward-types).
+
+### Example
+```yaml
+chat-message:
+  type: chat
+  sound: entity.player.levelup # Will play the level up sound when this message is sent.
+  message: "<white>This is a chat message."
 ```
 
