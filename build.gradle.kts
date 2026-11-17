@@ -1,7 +1,6 @@
 allprojects {
     repositories {
-        // For testing local snapshots.
-        mavenLocal()
+        //mavenLocal() // For testing local snapshots.
         gradlePluginPortal()
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/")
