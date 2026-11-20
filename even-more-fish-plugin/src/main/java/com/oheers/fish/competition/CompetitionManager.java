@@ -49,7 +49,7 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
     private final TreeMap<TimeCode, CompetitionFile> competitions = new TreeMap<>();
     private final AutoRunner autoRunner = new AutoRunner(this);
 
-    protected Competition activeCompetition;
+    protected volatile Competition activeCompetition;
 
     private CompetitionManager() {
         super();

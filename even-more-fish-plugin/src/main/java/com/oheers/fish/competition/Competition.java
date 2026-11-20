@@ -69,6 +69,7 @@ public class Competition {
     private CompetitionFile competitionFile;
     private int numberNeeded = 0;
     private UUID singleWinner = null;
+    private final CompetitionScoreGate scoreGate = new CompetitionScoreGate();
 
     public Competition(final @NonNull CompetitionFile competitionFile) {
         this.competitionFile = competitionFile;
@@ -202,6 +203,7 @@ public class Competition {
             }
             statusBar.show();
 
+            scoreGate.start();
             initTimer();
             announceBegin();
             EMFCompetitionStartEvent startEvent = new EMFCompetitionStartEvent(this);
@@ -226,7 +228,21 @@ public class Competition {
     }
 
     public void end(boolean startFail, boolean save) {
-        // Print leaderboard
+        List<CompetitionEntry> finalEntries = scoreGate.close(() -> leaderboard == null
+            ? List.of()
+            : leaderboard.getEntries().stream().map(CompetitionEntry::snapshot).toList());
+        if (finalEntries == null) {
+            return;
+        }
+
+        try {
+            finish(startFail, save, finalEntries);
+        } finally {
+            scoreGate.markEnded();
+        }
+    }
+
+    private void finish(boolean startFail, boolean save, List<CompetitionEntry> finalEntries) {
         if (timingSystem != null) {
             timingSystem.stop();
         }
@@ -238,7 +254,9 @@ public class Competition {
         }
 
         if (startFail) {
-            manager.activeCompetition = null;
+            if (manager.activeCompetition == this) {
+                manager.activeCompetition = null;
+            }
             return;
         }
 
@@ -251,10 +269,10 @@ public class Competition {
             // Delete the backup file in case it still exists for whatever reason.
             CompetitionManager.dataFile.delete();
             fireEndEvent();
-            notifyPlayers();
-            processRewards();
+            notifyPlayers(finalEntries);
+            processRewards(finalEntries);
             resetCompetitionTypeIfForwarding();
-            updateDatabase();
+            updateDatabase(finalEntries);
             leaderboard.clear();
         } catch (Exception exception) {
             EvenMoreFish.getInstance().getLogger().log(
@@ -265,8 +283,10 @@ public class Competition {
         } finally {
             // Always set timeLeft to 0.
             this.timeLeft = 0;
-            manager.activeCompetition = null;
-            manager.checkHeldCompetition();
+            if (manager.activeCompetition == this) {
+                manager.activeCompetition = null;
+                manager.checkHeldCompetition();
+            }
         }
     }
 
@@ -275,14 +295,14 @@ public class Competition {
         endEvent.callEvent();
     }
 
-    private void notifyPlayers() {
+    private void notifyPlayers(List<CompetitionEntry> finalEntries) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             ConfigMessage.COMPETITION_END.getMessage().send(player);
-            sendLeaderboard(player);
+            sendLeaderboard(player, finalEntries);
         }
     }
 
-    private void processRewards() {
+    private void processRewards(List<CompetitionEntry> finalEntries) {
         if (competitionType == null) {
             return;
         }
@@ -291,9 +311,9 @@ public class Competition {
                 Logging.warn("Single-winner competition ended without a winner.");
                 return;
             }
-            singleReward(singleWinner);
+            singleReward(singleWinner, finalEntries);
         } else {
-            handleRewards();
+            handleRewards(finalEntries);
         }
     }
 
@@ -303,7 +323,7 @@ public class Competition {
         }
     }
 
-    private void updateDatabase() {
+    private void updateDatabase(List<CompetitionEntry> finalEntries) {
         if (!DatabaseUtil.isDatabaseOnline()) {
             return;
         }
@@ -311,7 +331,7 @@ public class Competition {
         EvenMoreFish plugin = EvenMoreFish.getInstance();
         plugin.getPluginDataManager().getCompetitionDataManager().update(
                 competitionName,
-                new CompetitionReport(this, startTime, LocalDateTime.now())
+                new CompetitionReport(competitionName, finalEntries, startTime, LocalDateTime.now())
         );
 
     }
@@ -396,10 +416,8 @@ public class Competition {
         UUID uuid = fisher.getUniqueId();
         // Ensure this is executed on the global scheduler to avoid CMEs.
         Scheduling.getInstance().runTask(() -> {
-            if (competitionType == null) {
-                return;
-            }
-            competitionType.applyToLeaderboard(fish, uuid, leaderboard, this);
+            scoreGate.acceptScore(() -> manager.getActiveCompetition() == this && competitionType != null,
+                () -> competitionType.applyToLeaderboard(fish, uuid, leaderboard, this));
         });
     }
 
@@ -411,23 +429,26 @@ public class Competition {
     }
 
     public void sendLeaderboard(@NonNull CommandSender sender) {
-        if (!manager.isCompetitionActive()) {
+        if (manager.getActiveCompetition() != this) {
             ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(sender);
             return;
         }
-        if (leaderboard.getSize() == 0) {
+        sendLeaderboard(sender, leaderboard.getEntries());
+    }
+
+    private void sendLeaderboard(@NonNull CommandSender sender, List<CompetitionEntry> entries) {
+        if (entries.isEmpty()) {
             ConfigMessage.NO_FISH_CAUGHT.getMessage().send(sender);
             return;
         }
 
         List<String> competitionColours = competitionFile.getLeaderboardColours();
-        List<CompetitionEntry> entries = leaderboard.getEntries();
 
         EMFMessage leaderboardMessage = buildLeaderboardMessage(entries, competitionColours);
         leaderboardMessage.send(sender);
 
         EMFMessage message = ConfigMessage.LEADERBOARD_TOTAL_PLAYERS.getMessage();
-        message.setAmount(Integer.toString(leaderboard.getSize()));
+        message.setAmount(Integer.toString(entries.size()));
         message.send(sender);
     }
 
@@ -495,17 +516,15 @@ public class Competition {
         userReport.incrementCompetitionsJoined(1);
     }
 
-    private void handleRewards() {
-        if (leaderboard.getSize() == 0) {
+    private void handleRewards(List<CompetitionEntry> entries) {
+        if (entries.isEmpty()) {
             ConfigMessage.NO_WINNERS.getMessage().broadcast();
             return;
         }
 
         int rewardPlace = 1;
 
-        List<CompetitionEntry> entries = leaderboard.getEntries();
-
-        CompetitionEntry topEntry = leaderboard.getTopEntry();
+        CompetitionEntry topEntry = entries.getFirst();
         if (DatabaseUtil.isDatabaseOnline() && !entries.isEmpty()) {
             handleDatabaseUpdates(topEntry, true); // Top entry
         }
@@ -534,7 +553,7 @@ public class Competition {
         }
     }
 
-    private void singleReward(UUID winner) {
+    private void singleReward(UUID winner, List<CompetitionEntry> finalEntries) {
         if (competitionType == null) {
             return;
         }
@@ -554,10 +573,12 @@ public class Competition {
 
         // Handle database updates for all entries. This was originally missed.
 
-        CompetitionEntry entry = leaderboard.getEntry(player.getUniqueId());
+        CompetitionEntry entry = finalEntries.stream()
+            .filter(e -> e.getPlayer().equals(player.getUniqueId()))
+            .findFirst().orElse(null);
         handleDatabaseUpdates(entry, true);
 
-        leaderboard.getEntries().forEach(e -> {
+        finalEntries.forEach(e -> {
             if (e.getPlayer().equals(player.getUniqueId())) {
                 return;
             }

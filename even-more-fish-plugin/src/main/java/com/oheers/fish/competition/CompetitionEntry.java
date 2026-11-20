@@ -33,6 +33,13 @@ public class CompetitionEntry {
         this.type = entry.type;
     }
 
+    /** Copies a final result without changing the catch timestamp. */
+    public CompetitionEntry snapshot() {
+        CompetitionEntry copy = new CompetitionEntry(this);
+        copy.time = time;
+        return copy;
+    }
+
     /**
      * Increases the player's "score" by a set amount. The time that the entry was made will always be set to the current
      * epoch millisecond and will be unaffected by an increaseAmount that is not 1.
