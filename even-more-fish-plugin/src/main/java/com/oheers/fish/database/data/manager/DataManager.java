@@ -24,6 +24,7 @@ public class DataManager<T> {
     private final Map<String, Long> dirtyVersions = new LinkedHashMap<>();
     private final Map<String, Long> inFlightVersions = new LinkedHashMap<>();
     private long nextVersion;
+    private boolean acceptingUpdates = true;
     private final DataSavingStrategy<T> savingStrategy;
     private final Function<String, T> defaultLoader;
     private final ScheduledExecutorService flushScheduler;
@@ -86,6 +87,7 @@ public class DataManager<T> {
         long version;
         T savedValue = fallbackValue;
         synchronized (dirtyLock) {
+            requireAcceptingUpdates();
             T existing = cache.putIfAbsent(key, fallbackValue);
             if (existing != null) {
                 return existing;
@@ -94,10 +96,8 @@ public class DataManager<T> {
             if (savingStrategy.writesThroughOnCreate()) {
                 savedValue = savingStrategy.snapshot(fallbackValue);
                 inFlightVersions.put(key, version);
+                saveCreatedValue(key, version, savedValue);
             }
-        }
-        if (savingStrategy.writesThroughOnCreate()) {
-            saveCreatedValue(key, version, savedValue);
         }
         debug("Using fallback value.");
         return fallbackValue;
@@ -142,30 +142,30 @@ public class DataManager<T> {
 
     public void update(String key, T data) {
         synchronized (dirtyLock) {
+            requireAcceptingUpdates();
             cache.put(key, data);
             if (!savingStrategy.writesThrough()) {
                 markDirty(key);
+            } else {
+                savingStrategy.save(data);
             }
-        }
-        if (savingStrategy.writesThrough()) {
-            savingStrategy.save(data);
         }
     }
 
     public void updateAll(Map<String, T> data) {
         synchronized (dirtyLock) {
+            requireAcceptingUpdates();
             cache.putAll(data);
             if (!savingStrategy.writesThrough()) {
                 data.keySet().forEach(this::markDirty);
+            } else {
+                savingStrategy.saveAll(data.values());
             }
-        }
-        if (savingStrategy.writesThrough()) {
-            savingStrategy.saveAll(data.values());
         }
     }
 
     public void flush() {
-        flushDirty();
+        flushDirty(false);
     }
 
     public int getPendingPersistenceCount() {
@@ -175,10 +175,23 @@ public class DataManager<T> {
     }
 
     public void shutdown() {
+        quiesce();
+        flushDirty(true);
+    }
+
+    public void quiesce() {
+        synchronized (dirtyLock) {
+            acceptingUpdates = false;
+        }
         if (flushScheduler != null) {
             flushScheduler.shutdown();
         }
-        flushDirty();
+    }
+
+    private void requireAcceptingUpdates() {
+        if (!acceptingUpdates) {
+            throw new IllegalStateException("Data manager is shutting down; update was rejected");
+        }
     }
 
     public void clear() {
@@ -189,9 +202,12 @@ public class DataManager<T> {
         }
     }
 
-    private void flushDirty() {
+    private void flushDirty(boolean finalFlush) {
         Map<String, DirtyValue<T>> batch = new LinkedHashMap<>();
         synchronized (dirtyLock) {
+            if (!finalFlush && !acceptingUpdates) {
+                return;
+            }
             for (Map.Entry<String, Long> entry : dirtyVersions.entrySet()) {
                 String key = entry.getKey();
                 if (inFlightVersions.containsKey(key)) {
@@ -204,15 +220,15 @@ public class DataManager<T> {
                     inFlightVersions.put(key, version);
                 }
             }
-        }
-        if (batch.isEmpty()) {
-            return;
-        }
-        try {
-            savingStrategy.saveAllAcknowledged(batch.values().stream().map(DirtyValue::value).toList())
-                .whenComplete((unused, failure) -> completeBatch(batch, failure));
-        } catch (RuntimeException exception) {
-            completeBatch(batch, exception);
+            if (batch.isEmpty()) {
+                return;
+            }
+            try {
+                savingStrategy.saveAllAcknowledged(batch.values().stream().map(DirtyValue::value).toList())
+                    .whenComplete((unused, failure) -> completeBatch(batch, failure));
+            } catch (RuntimeException exception) {
+                completeBatch(batch, exception);
+            }
         }
     }
 
@@ -257,7 +273,7 @@ public class DataManager<T> {
             thread.setDaemon(true);
             return thread;
         });
-        scheduler.scheduleAtFixedRate(this::flushDirty, flushInterval, flushInterval, flushUnit);
+        scheduler.scheduleAtFixedRate(() -> flushDirty(false), flushInterval, flushInterval, flushUnit);
         return scheduler;
     }
 

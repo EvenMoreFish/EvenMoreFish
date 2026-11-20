@@ -1,5 +1,7 @@
 package com.oheers.fish.database.data.strategy;
 
+import com.oheers.fish.database.execute.DatabaseWorker;
+
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -39,6 +41,9 @@ public class ImmediateSavingStrategy<T> implements DataSavingStrategy<T> {
 
     @Override
     public CompletionStage<Void> saveAcknowledged(T data) {
+        if (executor instanceof DatabaseWorker worker) {
+            return worker.write(() -> saveFunction.accept(data));
+        }
         if (executor != null) {
             return CompletableFuture.runAsync(() -> saveFunction.accept(data), executor);
         }

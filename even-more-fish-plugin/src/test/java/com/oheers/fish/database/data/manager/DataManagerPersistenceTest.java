@@ -13,8 +13,45 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DataManagerPersistenceTest {
+
+    @Test
+    void shutdownFlushesExistingValueAndRejectsLateUpdate() {
+        DeferredExecutor executor = new DeferredExecutor();
+        List<List<String>> saved = new ArrayList<>();
+        DataManager<String> manager = new DataManager<>(
+            new BufferedSavingStrategy<>(null, values -> saved.add(List.copyOf(values)), false, executor),
+            key -> null
+        );
+
+        manager.update("fish", "first");
+        manager.shutdown();
+        assertThrows(IllegalStateException.class, () -> manager.update("fish", "late"));
+        assertEquals("first", manager.peek("fish"));
+        executor.runNext();
+        assertEquals(List.of(List.of("first")), saved);
+        assertEquals(0, manager.getPendingPersistenceCount());
+    }
+
+    @Test
+    void quiesceLeavesOnlyFinalFlushAbleToSubmit() {
+        DeferredExecutor executor = new DeferredExecutor();
+        DataManager<String> manager = new DataManager<>(
+            new BufferedSavingStrategy<>(null, values -> { }, false, executor),
+            key -> null
+        );
+
+        manager.update("fish", "first");
+        manager.quiesce();
+        manager.flush();
+        assertEquals(0, executor.pending());
+        manager.shutdown();
+        assertEquals(1, executor.pending());
+        executor.runNext();
+        assertEquals(0, manager.getPendingPersistenceCount());
+    }
 
     @Test
     void queuedWriteDoesNotClearDirtyKeyBeforeCompletion() {

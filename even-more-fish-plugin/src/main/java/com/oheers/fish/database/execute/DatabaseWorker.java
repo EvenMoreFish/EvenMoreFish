@@ -13,6 +13,7 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,21 +56,21 @@ public class DatabaseWorker implements Executor, AutoCloseable {
     @Override
     public void execute(@NonNull Runnable task) {
         Objects.requireNonNull(task, "task");
-        submit(() -> runLogged(task));
+        submit(() -> runLogged(task), ignored -> { });
     }
 
     public @NonNull CompletableFuture<Void> write(@NonNull Runnable work) {
         Objects.requireNonNull(work, "work");
         CompletableFuture<Void> future = new CompletableFuture<>();
-        submit(() -> {
+        submitFutureTask(() -> {
             try {
                 work.run();
                 future.complete(null);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 logger().log(Level.SEVERE, "Async database write failed.", e);
                 future.completeExceptionally(e);
             }
-        });
+        }, future);
         return future;
     }
 
@@ -89,7 +90,7 @@ public class DatabaseWorker implements Executor, AutoCloseable {
      * Stops accepting new tasks and blocks until every queued database task has
      * completed, or the timeout elapses.
      *
-     * @return true if the queue drained fully, false if tasks were dropped
+     * @return true if the queue drained fully, false if the timeout or interruption forced cancellation
      */
     public boolean shutdown(long timeout, @NonNull TimeUnit unit) {
         executor.shutdown();
@@ -101,8 +102,14 @@ public class DatabaseWorker implements Executor, AutoCloseable {
             Thread.currentThread().interrupt();
         }
         List<Runnable> dropped = executor.shutdownNow();
+        RejectedExecutionException failure = new RejectedExecutionException("Database worker shutdown timed out");
+        dropped.forEach(task -> ((ManagedTask) task).cancel(failure));
         logger().warning("Database worker did not drain in time; " + dropped.size() + " pending task(s) were dropped.");
         return false;
+    }
+
+    public boolean awaitTermination(long timeout, @NonNull TimeUnit unit) throws InterruptedException {
+        return executor.awaitTermination(timeout, unit);
     }
 
     @Override
@@ -113,36 +120,75 @@ public class DatabaseWorker implements Executor, AutoCloseable {
     private <T> CompletableFuture<T> submitFuture(Supplier<T> work, String failureMessage) {
         Objects.requireNonNull(work, "work");
         CompletableFuture<T> future = new CompletableFuture<>();
-        submit(() -> {
+        submitFutureTask(() -> {
             try {
                 future.complete(work.get());
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 logger().log(Level.SEVERE, failureMessage, e);
                 future.completeExceptionally(e);
             }
-        });
+        }, future);
         return future;
     }
 
-    private void submit(Runnable task) {
+    private void submitFutureTask(Runnable task, CompletableFuture<?> future) {
+        try {
+            submit(task, future::completeExceptionally);
+        } catch (RejectedExecutionException ignored) {
+            // The future already carries the rejection.
+        }
+    }
+
+    private void submit(Runnable task, Consumer<Throwable> onDropped) {
         int backlog = pendingTasks.incrementAndGet();
         warnIfBacklogged(backlog);
+        ManagedTask managedTask = new ManagedTask(task, onDropped);
         try {
-            executor.execute(() -> {
-                try {
-                    task.run();
-                } finally {
-                    int remaining = pendingTasks.decrementAndGet();
-                    if (remaining < backlogWarningThreshold) {
-                        backlogWarningActive.set(false);
-                    }
-                }
-            });
+            executor.execute(managedTask);
         } catch (RejectedExecutionException e) {
-            pendingTasks.decrementAndGet();
-            // Queue already shut down (plugin disable in progress). Run inline
-            // so writes submitted during disable are not silently lost.
-            task.run();
+            managedTask.cancel(e);
+            throw e;
+        }
+    }
+
+    private void taskCompleted() {
+        int remaining = pendingTasks.decrementAndGet();
+        if (remaining < backlogWarningThreshold) {
+            backlogWarningActive.set(false);
+        }
+    }
+
+    private final class ManagedTask implements Runnable {
+        private final Runnable task;
+        private final Consumer<Throwable> onDropped;
+        private final AtomicBoolean startedOrCancelled = new AtomicBoolean();
+
+        private ManagedTask(Runnable task, Consumer<Throwable> onDropped) {
+            this.task = task;
+            this.onDropped = onDropped;
+        }
+
+        @Override
+        public void run() {
+            if (!startedOrCancelled.compareAndSet(false, true)) {
+                return;
+            }
+            try {
+                task.run();
+            } finally {
+                taskCompleted();
+            }
+        }
+
+        private void cancel(Throwable failure) {
+            if (!startedOrCancelled.compareAndSet(false, true)) {
+                return;
+            }
+            try {
+                onDropped.accept(failure);
+            } finally {
+                taskCompleted();
+            }
         }
     }
 

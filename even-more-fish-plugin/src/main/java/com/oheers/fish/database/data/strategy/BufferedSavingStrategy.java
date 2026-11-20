@@ -1,5 +1,7 @@
 package com.oheers.fish.database.data.strategy;
 
+import com.oheers.fish.database.execute.DatabaseWorker;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -93,6 +95,9 @@ public class BufferedSavingStrategy<T> implements DataSavingStrategy<T> {
     }
 
     private CompletionStage<Void> dispatch(Runnable write) {
+        if (executor instanceof DatabaseWorker worker) {
+            return worker.write(write);
+        }
         if (executor != null) {
             return CompletableFuture.runAsync(write, executor);
         }

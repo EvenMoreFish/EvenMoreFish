@@ -4,7 +4,6 @@ package com.oheers.fish.plugin;
 import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.config.MainConfig;
 import com.oheers.fish.database.Database;
-import com.oheers.fish.database.DatabaseUtil;
 import com.oheers.fish.database.data.FishLogKey;
 import com.oheers.fish.database.data.FishRarityKey;
 import com.oheers.fish.database.data.UserFishRarityKey;
@@ -31,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PluginDataManager {
     private final EvenMoreFish plugin;
@@ -106,37 +106,68 @@ public class PluginDataManager {
     }
 
     public void shutdown() {
-        if (database == null || !DatabaseUtil.isDatabaseOnline()) {
+        if (database == null) {
             return;
         }
+        DataManager<?>[] managers = {
+            userReportDataManager, userFishStatsDataManager, fishStatsDataManager,
+            fishLogDataManager, competitionDataManager
+        };
+        String[] names = {"user reports", "user fish stats", "fish stats", "fish logs", "competition reports"};
 
-        try {
-            // Flush all pending data. The managers enqueue their remaining
-            // writes onto the database worker.
-            userReportDataManager.shutdown();
-            userFishStatsDataManager.shutdown();
-            fishStatsDataManager.shutdown();
-            fishLogDataManager.shutdown();
-            competitionDataManager.shutdown();
-
-            // Drain the database worker before closing the pool so no queued
-            // database tasks are lost. Blocking here (onDisable) is acceptable.
-            if (databaseWorker != null) {
-                databaseWorker.shutdown(60, TimeUnit.SECONDS);
+        // Close every update gate before any manager starts its final flush.
+        for (DataManager<?> manager : managers) {
+            if (manager != null) {
+                manager.quiesce();
             }
-
-            int unacknowledged = userFishStatsDataManager.getPendingPersistenceCount()
-                + competitionDataManager.getPendingPersistenceCount();
-            if (unacknowledged > 0) {
-                plugin.getLogger().severe(unacknowledged + " buffered database value(s) were not confirmed saved before shutdown.");
-            }
-
-            // Close database connection
-            database.shutdown();
-            plugin.getLogger().info("Database connections closed successfully");
-        } catch (Exception e) {
-            plugin.getLogger().log(Level.WARNING, "Error while shutting down database", e);
         }
+        for (DataManager<?> manager : managers) {
+            if (manager == null) {
+                continue;
+            }
+            try {
+                manager.shutdown();
+            } catch (RuntimeException e) {
+                plugin.getLogger().log(Level.SEVERE, "Final database flush failed.", e);
+            }
+        }
+
+        boolean drained = databaseWorker == null || databaseWorker.shutdown(60, TimeUnit.SECONDS);
+        for (int i = 0; i < managers.length; i++) {
+            int pending = managers[i] == null ? 0 : managers[i].getPendingPersistenceCount();
+            if (pending > 0) {
+                plugin.getLogger().severe(pending + " " + names[i] + " value(s) were not confirmed saved before shutdown.");
+            }
+        }
+
+        if (drained) {
+            closeDatabase();
+        } else {
+            plugin.getLogger().severe("Database worker did not drain; final writes are unconfirmed. Connection pool will close after the running task stops.");
+            closeAfterWorkerStops(databaseWorker, this::closeDatabase, plugin.getLogger());
+        }
+    }
+
+    static void closeAfterWorkerStops(DatabaseWorker worker, Runnable closePool, Logger logger) {
+        Thread closer = new Thread(() -> {
+            while (true) {
+                try {
+                    if (worker.awaitTermination(1, TimeUnit.MINUTES)) {
+                        closePool.run();
+                        return;
+                    }
+                } catch (InterruptedException e) {
+                    logger.log(Level.WARNING, "Interrupted while waiting for the database worker to stop; still waiting before closing the pool.", e);
+                }
+            }
+        }, "emf-db-pool-closer");
+        closer.setDaemon(true);
+        closer.start();
+    }
+
+    private void closeDatabase() {
+        database.shutdown();
+        plugin.getLogger().info("Database connection shutdown requested.");
     }
 
     public UserManager getUserManager() {
