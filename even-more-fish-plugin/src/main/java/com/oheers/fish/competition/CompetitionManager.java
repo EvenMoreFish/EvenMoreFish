@@ -184,15 +184,7 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
     }
 
     public @Nullable CompetitionFile getFileFromId(@Nullable String id) {
-        if (id == null) {
-            return null;
-        }
-        for (CompetitionFile file : competitions.values()) {
-            if (file.getId().equalsIgnoreCase(id)) {
-                return file;
-            }
-        }
-        return null;
+        return getItem(id);
     }
 
     private void loadDefaultTypes() {
