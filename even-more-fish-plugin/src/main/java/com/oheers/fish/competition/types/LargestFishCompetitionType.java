@@ -48,13 +48,12 @@ public class LargestFishCompetitionType implements CompetitionType {
             return;
         }
         if (fish.getLength() > entry.getFish().getLength()) {
-            // These HAVE to be in this order, otherwise players are spammed with new first place messages
-            leaderboard.addEntry(new CompetitionEntry(
+            // Replacement preserves first-place notifications without dropping an equal-key entry.
+            leaderboard.replaceEntry(entry, new CompetitionEntry(
                 fisher,
                 fish,
                 competition.getCompetitionType()
             ));
-            leaderboard.removeEntry(entry);
         }
     }
 

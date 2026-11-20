@@ -113,6 +113,22 @@ public class Leaderboard {
         entries.remove(entry);
     }
 
+    /** Replaces one player's score while preserving first-place notifications for real rank changes. */
+    public void replaceEntry(@NonNull CompetitionEntry oldEntry, @NonNull CompetitionEntry newEntry) {
+        if (!oldEntry.getPlayer().equals(newEntry.getPlayer())) {
+            throw new IllegalArgumentException("A leaderboard replacement must belong to the same player.");
+        }
+        if (entries.comparator().compare(oldEntry, newEntry) == 0) {
+            // Adding first would be ignored by TreeSet, then removing would lose the player.
+            entries.remove(oldEntry);
+            entries.add(newEntry);
+            return;
+        }
+        // Keep the new entry visible while checking for a genuine first-place change.
+        addEntry(newEntry);
+        removeEntry(oldEntry);
+    }
+
     public CompetitionEntry getTopEntry() {
         return getEntries().isEmpty() ? null : getEntries().getFirst();
     }
@@ -130,10 +146,7 @@ public class Leaderboard {
         CompetitionEntry newEntry = new CompetitionEntry(entry);
         newEntry.trackFish(fish);
 
-        // Add the new entry and remove the old one.
-        // It has to be in this order so the new-first message works.
-        addEntry(newEntry);
-        removeEntry(entry);
+        replaceEntry(entry, newEntry);
 
         return newEntry;
     }
@@ -145,7 +158,8 @@ public class Leaderboard {
             // If a tie, compare by the time of the most recent catch
             .thenComparing(Comparator.comparingLong(CompetitionEntry::getTime).reversed());
 
-        return type.shouldReverseLeaderboard() ? comparator : comparator.reversed();
+        Comparator<CompetitionEntry> ranked = type.shouldReverseLeaderboard() ? comparator : comparator.reversed();
+        return ranked.thenComparing(CompetitionEntry::getPlayer);
     }
 
 }
