@@ -71,6 +71,11 @@ public class Leaderboard {
         }
     }
 
+    /** Loads a saved score without sending a new-first-place announcement. */
+    public boolean restoreEntry(@NonNull CompetitionEntry entry) {
+        return entries.add(entry);
+    }
+
     public void clear() {
         entries.clear();
     }

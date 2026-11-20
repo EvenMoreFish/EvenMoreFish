@@ -76,6 +76,11 @@ public class LargestFishCompetitionType implements CompetitionType {
     }
 
     @Override
+    public boolean supportsResume() {
+        return getClass() == LargestFishCompetitionType.class;
+    }
+
+    @Override
     public @NonNull String getAuthor() {
         return "FireML";
     }

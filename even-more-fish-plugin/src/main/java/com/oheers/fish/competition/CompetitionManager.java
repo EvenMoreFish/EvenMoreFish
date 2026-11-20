@@ -7,6 +7,7 @@ import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.competition.configs.CompetitionConversions;
 import com.oheers.fish.competition.configs.CompetitionFile;
+import com.oheers.fish.competition.leaderboard.Leaderboard;
 import com.oheers.fish.competition.types.LargestTotalCompetitionType;
 import com.oheers.fish.competition.types.MostFishCompetitionType;
 import com.oheers.fish.competition.types.RandomCompetitionType;
@@ -27,6 +28,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.Instant;
@@ -273,61 +276,109 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
         ConfigBase base = new ConfigBase(dataFile, plugin, false);
 
         YamlDocument config = base.getConfig();
+        CompetitionResumeSnapshot snapshot = CompetitionResumeSnapshot.read(config);
+        if (snapshot == null) {
+            archiveUnrestorableBackup("Cannot safely resume the competition backup: its snapshot is legacy or incomplete. " +
+                "Legacy start-time values were stored in epoch seconds.");
+            return;
+        }
+        if (!snapshot.resumeSupported()) {
+            archiveUnrestorableBackup("Cannot safely resume the competition backup: its competition type has no restore contract.");
+            return;
+        }
         String id = config.getString("comp-id");
         long totalDuration = config.getLong("total-duration");
         long timeLeft = config.getLong("time-left");
-        long epochStartTime = config.getLong("start-time", -1L);
+        if (totalDuration <= 0 || timeLeft <= 0 || timeLeft > totalDuration) {
+            archiveUnrestorableBackup("Cannot resume competition backup with invalid time values.");
+            return;
+        }
 
         CompetitionFile file = CompetitionManager.getInstance().getFileFromId(id);
         if (file == null) {
-            Logging.warn("Failed to resume competition. It is no longer configured?");
-            dataFile.delete();
+            archiveUnrestorableBackup("Cannot resume competition backup: competition " + id + " is not configured.");
             return;
         }
 
-        Competition competition = new Competition(file);
+        CompetitionType configuredType = file.getType();
+        CompetitionType resolvedType = CompetitionTypeRegistry.getInstance().get(snapshot.resolvedType());
+        if (configuredType == null || !configuredType.getKey().equalsIgnoreCase(snapshot.configuredType())
+            || !configuredType.supportsResume() || resolvedType == null || resolvedType instanceof CompetitionType.Random
+            || !resolvedType.supportsResume()) {
+            archiveUnrestorableBackup("Cannot resume competition backup: its saved type is missing or no longer matches the config.");
+            return;
+        }
+        if (!(configuredType instanceof CompetitionType.Random)
+            && !configuredType.getKey().equalsIgnoreCase(resolvedType.getKey())) {
+            archiveUnrestorableBackup("Cannot resume competition backup: its resolved type differs from the configured type.");
+            return;
+        }
+
+        Competition competition = new Competition(file, false);
         competition.timeLeft = timeLeft;
         competition.maxDuration = totalDuration;
         competition.adminStarted = true;
-        if (epochStartTime != -1) {
-            Instant instant = Instant.ofEpochMilli(epochStartTime);
-            competition.setStartTime(instant);
-        }
-
-        if (!competition.begin()) {
+        competition.setNumberNeeded(snapshot.numberNeeded());
+        competition.setStartTime(Instant.ofEpochMilli(snapshot.startTimeMillis()));
+        CompetitionType restoredType = resolvedType.freshInstance();
+        if (restoredType.isSingleReward() && snapshot.numberNeeded() <= 0) {
+            archiveUnrestorableBackup("Cannot resume competition backup: its winning threshold is invalid.");
             return;
         }
+        if (!restoredType.restoreResumeState(snapshot.typeState(), competition)) {
+            archiveUnrestorableBackup("Cannot resume competition backup: its saved target is missing or invalid.");
+            return;
+        }
+        competition.setCompetitionType(configuredType instanceof CompetitionType.Random random
+            ? new CompetitionType.Forwarding(random, restoredType) : restoredType);
 
+        competition.leaderboard = new Leaderboard(competition.getCompetitionType());
         Section leaderboardSection = config.getSection("leaderboard");
-        if (leaderboardSection == null) {
-            Logging.debug("Competition backup file had no leaderboard data.");
+        if (leaderboardSection != null) {
+            for (String key : leaderboardSection.getRoutesAsStrings(false)) {
+                Section entrySection = leaderboardSection.getSection(key);
+                if (entrySection == null) {
+                    archiveUnrestorableBackup("Cannot resume competition backup: a leaderboard entry is incomplete.");
+                    return;
+                }
+                UUID player;
+                try {
+                    player = UUID.fromString(key);
+                } catch (IllegalArgumentException exception) {
+                    archiveUnrestorableBackup("Cannot resume competition backup: invalid player UUID " + key + ".");
+                    return;
+                }
+                String fishStr = entrySection.getString("fish");
+                RarityKey rarityKey = fishStr == null ? null : RarityKey.of(fishStr);
+                if (rarityKey == null) {
+                    archiveUnrestorableBackup("Cannot resume competition backup: fish " + fishStr + " is missing.");
+                    return;
+                }
+                CompetitionEntry entry = new CompetitionEntry(player, rarityKey.getFish(), competition.getCompetitionType());
+                entry.value = entrySection.getFloat("value", Float.NaN);
+                entry.time = entrySection.getLong("time", -1L);
+                if (!Float.isFinite(entry.value) || entry.time <= 0 || !competition.leaderboard.restoreEntry(entry)) {
+                    archiveUnrestorableBackup("Cannot resume competition backup: a leaderboard score is invalid or collides with another entry.");
+                    return;
+                }
+            }
+        }
+        if (!competition.begin()) {
+            archiveUnrestorableBackup("Cannot resume competition backup: the restored competition could not start.");
             return;
         }
-        CompetitionType type = competition.getCompetitionType();
-        leaderboardSection.getRoutesAsStrings(false).forEach(key -> {
-            Section entrySection = leaderboardSection.getSection(key);
-            if (entrySection == null) {
-                return;
-            }
-            UUID player;
-            try {
-                player = UUID.fromString(key);
-            } catch (IllegalArgumentException exception) {
-                Logging.warn("Competition backup file had invalid uuid: " + key);
-                return;
-            }
-            String fishStr = entrySection.getString("fish");
-            RarityKey rarityKey = RarityKey.of(fishStr);
-            if (rarityKey == null) {
-                Logging.warn("Failed to restore leaderboard entry. Fish " + fishStr + " is no longer configured?");
-                return;
-            }
-            CompetitionEntry entry = new CompetitionEntry(player, rarityKey.getFish(), type);
-            entry.value = entrySection.getFloat("value");
-            entry.time = entrySection.getLong("time");
-            competition.leaderboard.addEntry(entry);
-        });
         dataFile.delete();
+    }
+
+    private void archiveUnrestorableBackup(String reason) {
+        File archive = dataFile.toPath().resolveSibling(dataFile.getName() + ".unrestorable-" + UUID.randomUUID() + ".yml").toFile();
+        try {
+            Files.move(dataFile.toPath(), archive.toPath());
+            Logging.warn(reason + " Backup preserved at " + archive.getAbsolutePath());
+        } catch (IOException exception) {
+            Logging.warn(reason + " Could not archive the backup; it remains at " + dataFile.getAbsolutePath());
+            EvenMoreFish.getInstance().getLogger().log(Level.SEVERE, "Could not archive competition backup", exception);
+        }
     }
 
     public void holdCompetition(@NonNull CompetitionFile file) {

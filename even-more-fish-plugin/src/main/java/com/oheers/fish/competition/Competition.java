@@ -59,6 +59,7 @@ public class Competition {
     protected long timeLeft;
     private CompetitionBossbar statusBar;
     private Long epochStartTime;
+    private Long epochStartTimeMillis;
     private LocalDateTime startTime;
     private final List<Long> alertTimes;
     private final Map<Integer, List<Reward>> rewards;
@@ -67,11 +68,16 @@ public class Competition {
     private CompetitionTimer timingSystem;
     private CompetitionBackupTimer backupSystem;
     private CompetitionFile competitionFile;
+    private final @Nullable String configuredTypeKey;
     private int numberNeeded = 0;
     private UUID singleWinner = null;
     private final CompetitionScoreGate scoreGate = new CompetitionScoreGate();
 
     public Competition(final @NonNull CompetitionFile competitionFile) {
+        this(competitionFile, true);
+    }
+
+    Competition(final @NonNull CompetitionFile competitionFile, boolean resolveTypeNow) {
         this.competitionFile = competitionFile;
         this.competitionName = competitionFile.getId();
         this.playersNeeded = competitionFile.getPlayersNeeded();
@@ -82,12 +88,13 @@ public class Competition {
         this.rewards = competitionFile.getRewards();
         this.numberNeeded = competitionFile.getNumberNeeded();
 
-        // Resolve CompetitionType last as it may depend on some values set above.
-        this.competitionType = resolveType(competitionFile, this);
+        CompetitionType configuredType = competitionFile.getType();
+        this.configuredTypeKey = configuredType == null ? null : configuredType.getKey();
+        // Resume restores the exact resolved type before begin(), without drawing here.
+        this.competitionType = resolveTypeNow ? resolveType(competitionFile, this, configuredType) : null;
     }
 
-    private static @Nullable CompetitionType resolveType(@NonNull CompetitionFile file, @NonNull Competition competition) {
-        CompetitionType type = file.getType();
+    private static @Nullable CompetitionType resolveType(@NonNull CompetitionFile file, @NonNull Competition competition, @Nullable CompetitionType type) {
         if (type == null) {
             Logging.warn("Invalid competition: " + file.getId() + " has an invalid competition type.");
             return null;
@@ -95,7 +102,7 @@ public class Competition {
         if (type instanceof CompetitionType.Random random) {
             return new CompetitionType.Forwarding(random, random.getRandomType(competition));
         }
-        return type;
+        return type.freshInstance();
     }
 
     /**
@@ -128,6 +135,7 @@ public class Competition {
         this.alertTimes = new ArrayList<>();
         this.rewards = new HashMap<>();
         this.competitionType = type;
+        this.configuredTypeKey = type.getKey();
     }
 
     /**
@@ -196,22 +204,23 @@ public class Competition {
             // Sets the active competition to this one. If another competition is active, it will be ended.
             manager.setActive(this);
 
-            this.leaderboard = new Leaderboard(competitionType);
+            if (this.leaderboard == null) {
+                this.leaderboard = new Leaderboard(competitionType);
+            }
 
             if (this.statusBar == null) {
                 this.statusBar = createBossbar();
             }
             statusBar.show();
 
+            if (epochStartTime == null) {
+                setStartTime(Instant.now());
+            }
             scoreGate.start();
             initTimer();
             announceBegin();
             EMFCompetitionStartEvent startEvent = new EMFCompetitionStartEvent(this);
             Bukkit.getServer().getPluginManager().callEvent(startEvent);
-
-            if (epochStartTime == null) {
-                setStartTime(Instant.now());
-            }
 
             // Execute start commands
             getCompetitionFile().getStartCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
@@ -624,6 +633,7 @@ public class Competition {
 
     public void setStartTime(@NonNull Instant instant) {
         this.epochStartTime = instant.getEpochSecond();
+        this.epochStartTimeMillis = instant.toEpochMilli();
         this.startTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
@@ -640,11 +650,18 @@ public class Competition {
     }
 
     public @Nullable IFish getSelectedFish() {
-        return (competitionType instanceof SpecificFishCompetitionType specific) ? specific.getSelectedFish() : null;
+        CompetitionType resolved = getResolvedType();
+        return (resolved instanceof SpecificFishCompetitionType specific) ? specific.getSelectedFish() : null;
     }
 
     public @Nullable IRarity getSelectedRarity() {
-        return (competitionType instanceof SpecificRarityCompetitionType specific) ? specific.getSelectedRarity() : null;
+        CompetitionType resolved = getResolvedType();
+        return (resolved instanceof SpecificRarityCompetitionType specific) ? specific.getSelectedRarity() : null;
+    }
+
+    private @Nullable CompetitionType getResolvedType() {
+        return competitionType instanceof CompetitionType.Forwarding forwarding
+            ? forwarding.getResolvedType() : competitionType;
     }
 
     public int getNumberNeeded() {
@@ -683,6 +700,10 @@ public class Competition {
         config.set("comp-id", getCompetitionFile().getId());
         config.set("total-duration", maxDuration);
         config.set("time-left", timeLeft);
+        CompetitionResumeSnapshot snapshot = createResumeSnapshot();
+        if (snapshot != null) {
+            snapshot.write(config);
+        }
         if (epochStartTime != null) {
             config.set("start-time", epochStartTime);
         }
@@ -693,6 +714,17 @@ public class Competition {
             config.set("leaderboard." + uuid + ".time", entry.getTime());
         }
         base.save();
+    }
+
+    @Nullable CompetitionResumeSnapshot createResumeSnapshot() {
+        CompetitionType resolved = getResolvedType();
+        if (configuredTypeKey == null || resolved == null || epochStartTimeMillis == null) {
+            return null;
+        }
+        boolean configuredSupportsResume = competitionType instanceof CompetitionType.Forwarding forwarding
+            ? forwarding.getRandom().supportsResume() : resolved.supportsResume();
+        return new CompetitionResumeSnapshot(configuredTypeKey, resolved.getKey(), numberNeeded,
+            epochStartTimeMillis, configuredSupportsResume && resolved.supportsResume(), resolved.saveResumeState());
     }
 
 }

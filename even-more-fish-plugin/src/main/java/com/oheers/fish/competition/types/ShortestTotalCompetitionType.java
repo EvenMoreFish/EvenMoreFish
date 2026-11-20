@@ -68,6 +68,11 @@ public class ShortestTotalCompetitionType implements CompetitionType {
     }
 
     @Override
+    public boolean supportsResume() {
+        return getClass() == ShortestTotalCompetitionType.class;
+    }
+
+    @Override
     public @NonNull String getAuthor() {
         return "FireML";
     }

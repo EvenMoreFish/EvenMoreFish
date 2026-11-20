@@ -19,6 +19,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -48,7 +49,7 @@ public class SpecificRarityCompetitionType implements CompetitionType {
 
     @Override
     public boolean isUsable(@NonNull Competition competition) {
-        if (!chooseRarity(competition)) {
+        if (selectedRarity == null && !chooseRarity(competition)) {
             Logging.warn("Failed to select a rarity for Competition " + competition.getCompetitionName());
             return false;
         }
@@ -92,6 +93,30 @@ public class SpecificRarityCompetitionType implements CompetitionType {
     @Override
     public boolean isSingleReward() {
         return true;
+    }
+
+    @Override
+    public CompetitionType freshInstance() {
+        return getClass() == SpecificRarityCompetitionType.class ? new SpecificRarityCompetitionType() : this;
+    }
+
+    @Override
+    public boolean supportsResume() {
+        return getClass() == SpecificRarityCompetitionType.class;
+    }
+
+    @Override
+    public Map<String, String> saveResumeState() {
+        return selectedRarity == null ? Map.of() : Map.of("selected-rarity", selectedRarity.getId());
+    }
+
+    @Override
+    public boolean restoreResumeState(Map<String, String> state, Competition competition) {
+        if (!supportsResume() || state.size() != 1 || !state.containsKey("selected-rarity")) {
+            return false;
+        }
+        selectedRarity = FishManager.getInstance().getRarity(state.get("selected-rarity"));
+        return selectedRarity != null;
     }
 
     @Override

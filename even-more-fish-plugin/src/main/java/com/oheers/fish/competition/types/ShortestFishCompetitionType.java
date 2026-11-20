@@ -74,6 +74,11 @@ public class ShortestFishCompetitionType implements CompetitionType {
     }
 
     @Override
+    public boolean supportsResume() {
+        return getClass() == ShortestFishCompetitionType.class;
+    }
+
+    @Override
     public @NonNull String getAuthor() {
         return "FireML";
     }
