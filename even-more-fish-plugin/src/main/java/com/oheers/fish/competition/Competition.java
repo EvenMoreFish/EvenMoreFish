@@ -563,10 +563,8 @@ public class Competition {
 
         message.broadcast();
 
-        if (!rewards.isEmpty()) {
-            for (Reward reward : rewards.get(1)) {
-                reward.give(player, null);
-            }
+        for (Reward reward : rewards.getOrDefault(1, List.of())) {
+            reward.give(player, null);
         }
 
         // Handle database updates for all entries. This was originally missed.
