@@ -13,6 +13,7 @@ import java.util.UUID;
 
 public class CompetitionReport {
 
+    private final UUID runId;
     private final String competitionConfigId;
     private final String winnerFish;
     private final UUID winnerUuid;
@@ -25,6 +26,11 @@ public class CompetitionReport {
 
 
     public CompetitionReport(String competitionConfigID, String winnerFish, String winnerUUIDString, float winnerScore, String contestants, LocalDateTime startTime, LocalDateTime endTime) {
+        this(UUID.randomUUID(), competitionConfigID, winnerFish, winnerUUIDString, winnerScore, contestants, startTime, endTime);
+    }
+
+    public CompetitionReport(UUID runId, String competitionConfigID, String winnerFish, String winnerUUIDString, float winnerScore, String contestants, LocalDateTime startTime, LocalDateTime endTime) {
+        this.runId = runId;
         this.competitionConfigId = competitionConfigID;
         this.winnerFish = winnerFish;
         this.winnerUuid = UUID.fromString(winnerUUIDString);
@@ -41,6 +47,7 @@ public class CompetitionReport {
     }
 
     public CompetitionReport(String competitionName, List<CompetitionEntry> finalEntries, LocalDateTime startTime, LocalDateTime endTime) {
+        this.runId = UUID.randomUUID();
         this.competitionConfigId = competitionName;
         CompetitionEntry topEntry = finalEntries.isEmpty() ? null : finalEntries.getFirst();
         if (topEntry == null) {
@@ -60,6 +67,10 @@ public class CompetitionReport {
 
     public String getCompetitionConfigId() {
         return competitionConfigId;
+    }
+
+    public UUID getRunId() {
+        return runId;
     }
 
     public String getWinnerFish() {

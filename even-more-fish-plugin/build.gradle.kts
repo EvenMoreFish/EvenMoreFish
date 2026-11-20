@@ -246,6 +246,7 @@ testing {
                 }
                 runtimeOnly(libs.junit.jupiter.engine)
                 runtimeOnly(libs.junit.platform.launcher)
+                runtimeOnly(libs.connectors.sqlite)
             }
 
             targets {

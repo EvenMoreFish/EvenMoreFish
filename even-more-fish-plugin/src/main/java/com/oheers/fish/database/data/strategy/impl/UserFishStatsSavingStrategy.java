@@ -15,4 +15,9 @@ public class UserFishStatsSavingStrategy extends BufferedSavingStrategy<UserFish
             executor
         );
     }
+
+    @Override
+    public UserFishStats snapshot(UserFishStats stats) {
+        return stats.snapshot();
+    }
 }

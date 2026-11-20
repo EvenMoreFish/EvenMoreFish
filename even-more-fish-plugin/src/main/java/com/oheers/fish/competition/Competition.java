@@ -329,10 +329,8 @@ public class Competition {
         }
 
         EvenMoreFish plugin = EvenMoreFish.getInstance();
-        plugin.getPluginDataManager().getCompetitionDataManager().update(
-                competitionName,
-                new CompetitionReport(competitionName, finalEntries, startTime, LocalDateTime.now())
-        );
+        CompetitionReport report = new CompetitionReport(competitionName, finalEntries, startTime, LocalDateTime.now());
+        plugin.getPluginDataManager().getCompetitionDataManager().update(report.getRunId().toString(), report);
 
     }
 

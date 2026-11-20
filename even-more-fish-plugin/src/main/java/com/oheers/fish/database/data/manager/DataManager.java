@@ -5,10 +5,8 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.database.data.strategy.DataSavingStrategy;
 import com.oheers.fish.database.execute.DatabaseWorker;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -17,10 +15,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DataManager<T> {
     private final Map<String, T> cache = new ConcurrentHashMap<>();
-    private final Set<String> dirtyKeys = ConcurrentHashMap.newKeySet();
+    private final Object dirtyLock = new Object();
+    private final Map<String, Long> dirtyVersions = new LinkedHashMap<>();
+    private final Map<String, Long> inFlightVersions = new LinkedHashMap<>();
+    private long nextVersion;
     private final DataSavingStrategy<T> savingStrategy;
     private final Function<String, T> defaultLoader;
     private final ScheduledExecutorService flushScheduler;
@@ -77,15 +80,26 @@ public class DataManager<T> {
         }
 
         T fallbackValue = fallbackValueSupplier.get();
-        if (fallbackValue != null) {
-            cache.put(key, fallbackValue);
-            if (savingStrategy.writesThroughOnCreate()) {
-                savingStrategy.save(fallbackValue);
-            } else {
-                dirtyKeys.add(key);
-            }
-            debug("Using fallback value.");
+        if (fallbackValue == null) {
+            return null;
         }
+        long version;
+        T savedValue = fallbackValue;
+        synchronized (dirtyLock) {
+            T existing = cache.putIfAbsent(key, fallbackValue);
+            if (existing != null) {
+                return existing;
+            }
+            version = markDirty(key);
+            if (savingStrategy.writesThroughOnCreate()) {
+                savedValue = savingStrategy.snapshot(fallbackValue);
+                inFlightVersions.put(key, version);
+            }
+        }
+        if (savingStrategy.writesThroughOnCreate()) {
+            saveCreatedValue(key, version, savedValue);
+        }
+        debug("Using fallback value.");
         return fallbackValue;
     }
 
@@ -127,27 +141,37 @@ public class DataManager<T> {
     }
 
     public void update(String key, T data) {
-        cache.put(key, data);
+        synchronized (dirtyLock) {
+            cache.put(key, data);
+            if (!savingStrategy.writesThrough()) {
+                markDirty(key);
+            }
+        }
         if (savingStrategy.writesThrough()) {
             savingStrategy.save(data);
-            dirtyKeys.remove(key);
-        } else {
-            dirtyKeys.add(key);
         }
     }
 
     public void updateAll(Map<String, T> data) {
-        cache.putAll(data);
+        synchronized (dirtyLock) {
+            cache.putAll(data);
+            if (!savingStrategy.writesThrough()) {
+                data.keySet().forEach(this::markDirty);
+            }
+        }
         if (savingStrategy.writesThrough()) {
             savingStrategy.saveAll(data.values());
-            dirtyKeys.removeAll(data.keySet());
-        } else {
-            dirtyKeys.addAll(data.keySet());
         }
     }
 
     public void flush() {
         flushDirty();
+    }
+
+    public int getPendingPersistenceCount() {
+        synchronized (dirtyLock) {
+            return dirtyVersions.size();
+        }
     }
 
     public void shutdown() {
@@ -158,31 +182,68 @@ public class DataManager<T> {
     }
 
     public void clear() {
-        cache.clear();
-        dirtyKeys.clear();
+        synchronized (dirtyLock) {
+            cache.clear();
+            dirtyVersions.clear();
+            inFlightVersions.clear();
+        }
     }
 
     private void flushDirty() {
-        if (dirtyKeys.isEmpty()) {
-            return;
-        }
-
-        Map<String, T> dirtySnapshot = new LinkedHashMap<>();
-        for (String key : dirtyKeys) {
-            T value = cache.get(key);
-            if (value != null) {
-                dirtySnapshot.put(key, value);
+        Map<String, DirtyValue<T>> batch = new LinkedHashMap<>();
+        synchronized (dirtyLock) {
+            for (Map.Entry<String, Long> entry : dirtyVersions.entrySet()) {
+                String key = entry.getKey();
+                if (inFlightVersions.containsKey(key)) {
+                    continue;
+                }
+                T value = cache.get(key);
+                if (value != null) {
+                    long version = entry.getValue();
+                    batch.put(key, new DirtyValue<>(version, savingStrategy.snapshot(value)));
+                    inFlightVersions.put(key, version);
+                }
             }
         }
-
-        if (dirtySnapshot.isEmpty()) {
-            dirtyKeys.clear();
+        if (batch.isEmpty()) {
             return;
         }
+        try {
+            savingStrategy.saveAllAcknowledged(batch.values().stream().map(DirtyValue::value).toList())
+                .whenComplete((unused, failure) -> completeBatch(batch, failure));
+        } catch (RuntimeException exception) {
+            completeBatch(batch, exception);
+        }
+    }
 
-        Collection<T> dirtyValues = dirtySnapshot.values();
-        savingStrategy.saveAll(dirtyValues);
-        dirtyKeys.removeAll(dirtySnapshot.keySet());
+    private void saveCreatedValue(String key, long version, T value) {
+        Map<String, DirtyValue<T>> batch = Map.of(key, new DirtyValue<>(version, value));
+        try {
+            savingStrategy.saveAcknowledged(value)
+                .whenComplete((unused, failure) -> completeBatch(batch, failure));
+        } catch (RuntimeException exception) {
+            completeBatch(batch, exception);
+        }
+    }
+
+    private void completeBatch(Map<String, DirtyValue<T>> batch, Throwable failure) {
+        synchronized (dirtyLock) {
+            batch.forEach((key, submitted) -> {
+                inFlightVersions.remove(key, submitted.version());
+                if (failure == null) {
+                    dirtyVersions.remove(key, submitted.version());
+                }
+            });
+        }
+        if (failure != null) {
+            LOGGER.log(Level.SEVERE, "Database save failed for " + batch.size() + " cached value(s); they remain dirty for retry.", failure);
+        }
+    }
+
+    private long markDirty(String key) {
+        long version = ++nextVersion;
+        dirtyVersions.put(key, version);
+        return version;
     }
 
     private ScheduledExecutorService createFlushScheduler(Long flushInterval, TimeUnit flushUnit) {
@@ -210,4 +271,7 @@ public class DataManager<T> {
     }
 
     private static final AtomicInteger THREAD_COUNTER = new AtomicInteger(1);
+    private static final Logger LOGGER = Logger.getLogger(DataManager.class.getName());
+
+    private record DirtyValue<T>(long version, T value) {}
 }

@@ -93,7 +93,13 @@ public class PluginDataManager {
         this.userReportDataManager = new DataManager<>(new UserReportsSavingStrategy(databaseWorker), uuid -> database.getUserReport(UUID.fromString(uuid)));
         this.competitionDataManager = new DataManager<>(
             new CompetitionSavingStrategy(databaseWorker),
-            key -> database.getCompetitionReport(Integer.parseInt(key)),
+            key -> {
+                try {
+                    return database.getCompetitionReport(UUID.fromString(key));
+                } catch (IllegalArgumentException ignored) {
+                    return database.getCompetitionReport(Integer.parseInt(key));
+                }
+            },
             (long) MainConfig.getInstance().getCompetitionSaveInterval(),
             TimeUnit.valueOf(MainConfig.getInstance().getSaveIntervalUnit())
         );
@@ -117,6 +123,12 @@ public class PluginDataManager {
             // database tasks are lost. Blocking here (onDisable) is acceptable.
             if (databaseWorker != null) {
                 databaseWorker.shutdown(60, TimeUnit.SECONDS);
+            }
+
+            int unacknowledged = userFishStatsDataManager.getPendingPersistenceCount()
+                + competitionDataManager.getPendingPersistenceCount();
+            if (unacknowledged > 0) {
+                plugin.getLogger().severe(unacknowledged + " buffered database value(s) were not confirmed saved before shutdown.");
             }
 
             // Close database connection
