@@ -116,7 +116,7 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
         return competitions;
     }
 
-    private boolean loadSpecificDayTimes(@NonNull CompetitionFile file) {
+    boolean loadSpecificDayTimes(@NonNull CompetitionFile file) {
         Map<DayOfWeek, List<String>> scheduledDays = file.getScheduledDays();
         if (scheduledDays.isEmpty()) {
             return false;
@@ -128,13 +128,13 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
                     Logging.warn("Invalid TimeCode in " + file.getFileName() + ": " + time);
                     return;
                 }
-                competitions.put(generateTimeCode(day, split[0], split[1]), file);
+                addScheduledCompetition(generateTimeCode(day, split[0], split[1]), file);
             })
         );
         return true;
     }
 
-    private boolean loadRepeatedTiming(@NonNull CompetitionFile file) {
+    boolean loadRepeatedTiming(@NonNull CompetitionFile file) {
         List<String> repeatedTimes = file.getTimes();
 
         if (repeatedTimes.isEmpty()) {
@@ -151,10 +151,24 @@ public class CompetitionManager extends AbstractFileBasedManager<CompetitionFile
                 continue;
             }
             for (DayOfWeek day : daysToUse) {
-                competitions.put(generateTimeCode(day, split[0], split[1]), file);
+                addScheduledCompetition(generateTimeCode(day, split[0], split[1]), file);
             }
         }
         return true;
+    }
+
+    private void addScheduledCompetition(@Nullable TimeCode time, @NonNull CompetitionFile file) {
+        if (time == null) {
+            Logging.warn("Invalid competition time in " + file.getFileName() + ".");
+            return;
+        }
+        CompetitionFile existing = competitions.putIfAbsent(time, file);
+        if (existing != null && !existing.getId().equalsIgnoreCase(file.getId())) {
+            EvenMoreFish.getInstance().getLogger().severe(
+                "Competition schedule conflict at " + time + ": '" + file.getId() +
+                    "' conflicts with '" + existing.getId() + "'. Keeping '" + existing.getId() + "'."
+            );
+        }
     }
 
     public @Nullable TimeCode generateTimeCode(@NonNull DayOfWeek day, @NonNull String hourStr, @NonNull String minuteStr) {
