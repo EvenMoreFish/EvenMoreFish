@@ -544,6 +544,10 @@ public class MainConfig extends ConfigBase {
         return getConfig().getInt("exploits.afk-fishing.max-caught", 10) + 1;
     }
 
+    public int getAFKReconnectRetentionSeconds() {
+        return Math.max(0, getConfig().getInt("exploits.afk-fishing.reconnect-retention-seconds", 600));
+    }
+
     public int getAFKCheckRange() {
         return getConfig().getInt("exploits.afk-fishing.range", 3);
     }
