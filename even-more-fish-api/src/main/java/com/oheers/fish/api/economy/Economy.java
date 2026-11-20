@@ -13,8 +13,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Economy {
+
+    private static final Logger LOGGER = Logger.getLogger(Economy.class.getName());
+
+    public enum DepositResult {
+        SUCCESS,
+        FAILED,
+        PARTIAL
+    }
 
     public static Economy instance;
 
@@ -79,7 +89,53 @@ public class Economy {
     }
 
     public void deposit(@NonNull OfflinePlayer player, double amount, boolean applyMultiplier) {
-        relevantTypes.forEach(type -> type.deposit(player, amount, applyMultiplier));
+        relevantTypes.stream()
+            .filter(EconomyType::isAvailable)
+            .forEach(type -> type.deposit(player, amount, applyMultiplier));
+    }
+
+    /**
+     * Deposits to every available economy. If one fails, previously successful
+     * deposits are withdrawn. Independent providers cannot guarantee rollback,
+     * so PARTIAL must be handled as a failed sale requiring reconciliation.
+     */
+    public @NonNull DepositResult depositForSale(@NonNull OfflinePlayer player, double amount, boolean applyMultiplier) {
+        List<EconomyType> available = relevantTypes.stream().filter(EconomyType::isAvailable).toList();
+        if (available.isEmpty()) {
+            return DepositResult.FAILED;
+        }
+
+        List<EconomyType> credited = new ArrayList<>();
+        for (EconomyType type : available) {
+            try {
+                if (type.deposit(player, amount, applyMultiplier)) {
+                    credited.add(type);
+                    continue;
+                }
+                LOGGER.warning("Sale deposit failed for economy " + type.getIdentifier() + " and player " + player.getUniqueId());
+            } catch (RuntimeException exception) {
+                LOGGER.log(Level.SEVERE, "Sale deposit threw for economy " + type.getIdentifier() + " and player " + player.getUniqueId(), exception);
+            }
+            return compensateSaleDeposit(player, amount, applyMultiplier, credited);
+        }
+        return DepositResult.SUCCESS;
+    }
+
+    private DepositResult compensateSaleDeposit(OfflinePlayer player, double amount, boolean applyMultiplier, List<EconomyType> credited) {
+        boolean compensated = true;
+        for (int index = credited.size() - 1; index >= 0; index--) {
+            EconomyType type = credited.get(index);
+            try {
+                if (!type.withdraw(player, amount, applyMultiplier)) {
+                    compensated = false;
+                    LOGGER.severe("Could not reverse sale deposit for economy " + type.getIdentifier() + " and player " + player.getUniqueId());
+                }
+            } catch (RuntimeException exception) {
+                compensated = false;
+                LOGGER.log(Level.SEVERE, "Could not reverse sale deposit for economy " + type.getIdentifier() + " and player " + player.getUniqueId(), exception);
+            }
+        }
+        return compensated ? DepositResult.FAILED : DepositResult.PARTIAL;
     }
 
     public void withdraw(@NonNull OfflinePlayer player, double amount, boolean applyMultiplier) {
