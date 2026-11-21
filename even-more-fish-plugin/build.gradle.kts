@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     `java-library`
     `maven-publish`
@@ -229,6 +231,17 @@ tasks {
 
 }
 
+val prepareWatchWolfPlugin by tasks.registering(Copy::class) {
+    group = "verification"
+    description = "Copies the shaded plugin jar to the path used by WatchWolf"
+    val pluginJar = tasks.named<ShadowJar>("shadowJar")
+    dependsOn(pluginJar)
+    from(pluginJar.flatMap { it.archiveFile }) {
+        rename { "EvenMoreFish.jar" }
+    }
+    into(layout.buildDirectory.dir("watchwolf"))
+}
+
 testing {
     suites {
         named<JvmTestSuite>("test") {
@@ -253,6 +266,31 @@ testing {
                 all {
                     testTask.configure {
                         useJUnitPlatform()
+                    }
+                }
+            }
+        }
+
+        val testWatchWolf by creating(JvmTestSuite::class) {
+            useJUnitJupiter()
+
+            dependencies {
+                implementation(libs.watchwolf.tester)
+                implementation(libs.watchwolf.snakeyaml)
+                implementation(libs.junit.jupiter.api)
+                implementation(libs.junit.jupiter.params)
+                runtimeOnly(libs.junit.jupiter.engine)
+                runtimeOnly(libs.junit.platform.launcher)
+            }
+
+            targets {
+                all {
+                    testTask.configure {
+                        group = "verification"
+                        description = "Runs real Paper integration tests through the WatchWolf fork"
+                        dependsOn(prepareWatchWolfPlugin)
+                        useJUnitPlatform()
+                        testLogging.showStandardStreams = true
                     }
                 }
             }

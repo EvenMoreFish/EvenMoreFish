@@ -1,0 +1,39 @@
+name: even-more-fish-watchwolf
+
+services:
+  servers-manager:
+    image: ${WATCHWOLF_SERVERS_MANAGER_IMAGE:-ghcr.io/sarhatabaot/watchwolf-servers-manager:v0.4.2}
+    ports:
+      - "8000:8000"
+    environment:
+      MACHINE_IP: 127.0.0.1
+      PUBLIC_IP: 127.0.0.1
+      PARENT_PWD: /servers
+      SERVER_PATH_SHIFT: .
+      WATCHWOLF_MINECRAFT_RUNTIME: itzg
+      WATCHWOLF_ITZG_IMAGE: ${WATCHWOLF_ITZG_IMAGE:-itzg/minecraft-server}
+      WATCHWOLF_ITZG_TAG: ${WATCHWOLF_ITZG_TAG:-java21}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - watchwolf_logs:/servers/logs
+    healthcheck:
+      test: ["CMD-SHELL", "grep -q ':1F40 ' /proc/net/tcp /proc/net/tcp6"]
+      interval: 5s
+      timeout: 2s
+      retries: 24
+
+  clients-manager:
+    image: ghcr.io/sarhatabaot/watchwolf-clients-manager:v0.4.2
+    ports:
+      - "7000-7199:7000-7199"
+    environment:
+      MACHINE_IP: 127.0.0.1
+      PUBLIC_IP: 127.0.0.1
+    healthcheck:
+      test: ["CMD-SHELL", "grep -q ':1B58 ' /proc/net/tcp /proc/net/tcp6"]
+      interval: 5s
+      timeout: 3s
+      retries: 24
+
+volumes:
+  watchwolf_logs:
