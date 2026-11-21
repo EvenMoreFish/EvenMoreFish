@@ -1,5 +1,7 @@
 package com.oheers.fish.database.execute;
 
+import com.oheers.fish.database.data.strategy.BufferedSavingStrategy;
+import com.oheers.fish.database.data.strategy.ImmediateSavingStrategy;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
@@ -14,6 +17,8 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DatabaseWorkerTest {
@@ -91,14 +96,86 @@ class DatabaseWorkerTest {
     }
 
     @Test
-    void writeSubmittedAfterShutdownRunsInlineInsteadOfBeingLost() {
+    void submissionsAfterShutdownAreRejectedWithoutRunningInline() {
         DatabaseWorker worker = new DatabaseWorker("emf-db-test", 1_000);
         assertTrue(worker.shutdown(5, TimeUnit.SECONDS));
 
         AtomicReference<Thread> executionThread = new AtomicReference<>();
-        worker.execute(() -> executionThread.set(Thread.currentThread()));
+        assertThrows(RejectedExecutionException.class, () -> worker.execute(() -> executionThread.set(Thread.currentThread())));
+        assertTrue(worker.write(() -> executionThread.set(Thread.currentThread())).isCompletedExceptionally());
+        assertTrue(worker.writeResult(() -> "result").isCompletedExceptionally());
+        assertTrue(worker.query(() -> "result").isCompletedExceptionally());
 
-        assertEquals(Thread.currentThread(), executionThread.get());
+        assertNull(executionThread.get());
+        assertEquals(0, worker.getPendingTasks());
+    }
+
+    @Test
+    void timeoutFailsDroppedFuturesAndKeepsRunningTaskPending() throws Exception {
+        DatabaseWorker worker = new DatabaseWorker("emf-db-test", 1_000);
+        CountDownLatch started = new CountDownLatch(1);
+        CountDownLatch release = new CountDownLatch(1);
+        CompletableFuture<Void> running = worker.write(() -> {
+            started.countDown();
+            boolean released = false;
+            while (!released) {
+                try {
+                    release.await();
+                    released = true;
+                } catch (InterruptedException ignored) {
+                    // Model a database call that cannot stop immediately.
+                }
+            }
+        });
+        assertTrue(started.await(5, TimeUnit.SECONDS));
+        CompletableFuture<Void> dropped = worker.write(() -> { });
+        CompletableFuture<String> droppedResult = worker.writeResult(() -> "result");
+        CompletableFuture<String> droppedQuery = worker.query(() -> "query");
+        try {
+            assertEquals(false, worker.shutdown(10, TimeUnit.MILLISECONDS));
+            assertTrue(dropped.isCompletedExceptionally());
+            assertTrue(droppedResult.isCompletedExceptionally());
+            assertTrue(droppedQuery.isCompletedExceptionally());
+            assertEquals(1, worker.getPendingTasks());
+            assertEquals(false, worker.awaitTermination(0, TimeUnit.MILLISECONDS));
+        } finally {
+            release.countDown();
+        }
+        running.get(5, TimeUnit.SECONDS);
+        assertTrue(worker.awaitTermination(5, TimeUnit.SECONDS));
+        assertEquals(0, worker.getPendingTasks());
+    }
+
+    @Test
+    void timedOutStrategyWritesCompleteExceptionally() throws Exception {
+        DatabaseWorker worker = new DatabaseWorker("emf-db-test", 1_000);
+        CountDownLatch started = new CountDownLatch(1);
+        CountDownLatch release = new CountDownLatch(1);
+        worker.write(() -> {
+            started.countDown();
+            while (true) {
+                try {
+                    release.await();
+                    return;
+                } catch (InterruptedException ignored) {
+                    // Keep the write active until the test releases it.
+                }
+            }
+        });
+        assertTrue(started.await(5, TimeUnit.SECONDS));
+        try {
+            ImmediateSavingStrategy<String> immediate = new ImmediateSavingStrategy<>(ignored -> { }, worker);
+            BufferedSavingStrategy<String> buffered = new BufferedSavingStrategy<>(null, ignored -> { }, false, worker);
+            CompletableFuture<Void> immediateResult = immediate.saveAcknowledged("a").toCompletableFuture();
+            CompletableFuture<Void> bufferedResult = buffered.saveAcknowledged("b").toCompletableFuture();
+
+            assertEquals(false, worker.shutdown(10, TimeUnit.MILLISECONDS));
+            assertTrue(immediateResult.isCompletedExceptionally());
+            assertTrue(bufferedResult.isCompletedExceptionally());
+        } finally {
+            release.countDown();
+        }
+        assertTrue(worker.awaitTermination(5, TimeUnit.SECONDS));
     }
 
     @Test

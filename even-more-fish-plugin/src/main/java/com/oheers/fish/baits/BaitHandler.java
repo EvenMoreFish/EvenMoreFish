@@ -53,10 +53,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class BaitHandler extends ConfigBase implements IBait, Sortable {
 
@@ -623,40 +622,54 @@ public class BaitHandler extends ConfigBase implements IBait, Sortable {
     }
 
     private @NonNull List<RarityChance> calculateRarityChances(@NonNull Player player, @NonNull Location location, @NonNull RequirementContext requirementContext) {
+        final String region = FishUtils.getRegionName(player.getLocation());
         final List<IRarity> availableRarities = fishManager.getAvailableRarities(
             player,
             Set.copyOf(fishManager.getRarityMap().values()),
             null,
-            requirementContext
+            requirementContext,
+            region
         );
         if (availableRarities.isEmpty()) {
             return List.of();
         }
 
-        final Map<IRarity, Long> rarityCounts = availableRarities.stream()
-            .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
-        final double totalRarityWeight = rarityCounts.entrySet().stream()
-            .mapToDouble(entry -> getEffectiveRarityWeight(entry.getKey()) * entry.getValue())
-            .sum();
+        final Map<IRarity, Double> chances = rarityChances(availableRarities,
+            rarity -> getEffectiveRarityWeight(rarity) * mainConfig.getRegionBoost(region, rarity.getId()));
 
-        return rarityCounts.entrySet().stream()
-            .map(entry -> buildRarityChance(entry.getKey(), player, location, totalRarityWeight, availableRarities.size(), entry.getValue()))
+        return availableRarities.stream()
+            .map(rarity -> buildRarityChance(rarity, player, location, region, chances.get(rarity)))
             .sorted(Comparator.comparingDouble(RarityChance::chance).reversed())
             .toList();
+    }
+
+    static @NonNull Map<IRarity, Double> rarityChances(@NonNull List<IRarity> rarities,
+                                                      @NonNull ToDoubleFunction<IRarity> effectiveWeight) {
+        if (rarities.isEmpty()) {
+            return Map.of();
+        }
+        Map<IRarity, Double> weights = new LinkedHashMap<>();
+        for (IRarity rarity : rarities) {
+            weights.put(rarity, Math.max(0.0D, effectiveWeight.applyAsDouble(rarity)));
+        }
+        double total = weights.values().stream().mapToDouble(Double::doubleValue).sum();
+        Map<IRarity, Double> chances = new LinkedHashMap<>();
+        for (Map.Entry<IRarity, Double> entry : weights.entrySet()) {
+            chances.put(entry.getKey(), total > 0.0D
+                ? entry.getValue() / total : 1.0D / weights.size());
+        }
+        return chances;
     }
 
     private @NonNull RarityChance buildRarityChance(@NonNull IRarity rarity,
                                                     @NonNull Player player,
                                                     @NonNull Location location,
-                                                    double totalRarityWeight,
-                                                    int totalCandidateCount,
-                                                    long multiplicity) {
-        final double baseWeight = rarity.getWeight() * multiplicity;
+                                                    @Nullable String region,
+                                                    double rarityChance) {
+        final double factor = mainConfig.getRegionBoost(region, rarity.getId());
+        final double baseWeight = rarity.getWeight() * factor;
         final WeightModifier rarityModifier = getRarityModifiers().getOrDefault(rarity, WeightModifier.IDENTITY);
-        final double effectiveWeight = rarityModifier.apply(rarity.getWeight()) * multiplicity;
-        final double rarityChance = totalRarityWeight > 0.0D
-            ? effectiveWeight / totalRarityWeight
-            : (double) multiplicity / totalCandidateCount;
+        final double effectiveWeight = Math.max(0.0D, rarityModifier.apply(rarity.getWeight()) * factor);
         final List<FishChance> fishChances = calculateFishChances(rarity, player, location, rarityChance);
 
         return new RarityChance(rarity, baseWeight, effectiveWeight, rarityChance, rarityModifier, fishChances);

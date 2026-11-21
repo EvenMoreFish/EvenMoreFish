@@ -356,14 +356,39 @@ public class MainConfig extends ConfigBase {
             }
 
             Map<String, Double> rarityBoosts = new HashMap<>();
-            regionSection.getRoutesAsStrings(false).forEach(rarityKey ->
-                    rarityBoosts.put(rarityKey, regionSection.getDouble(rarityKey, 1.0))
-            );
+            regionSection.getRoutesAsStrings(false).forEach(rarityKey -> {
+                Object raw = regionSection.get(rarityKey);
+                Double factor = parseRegionBoost(raw);
+                if (factor == null) {
+                    EvenMoreFish.getInstance().getLogger().warning(
+                        "Invalid region-boosts." + regionKey + "." + rarityKey + " factor '" + raw +
+                            "'; expected a finite non-negative number. Using 1.0."
+                    );
+                    factor = 1.0D;
+                }
+                rarityBoosts.put(rarityKey, factor);
+            });
 
             boosts.put(regionKey, rarityBoosts);
         });
 
         return boosts;
+    }
+
+    static @Nullable Double parseRegionBoost(@Nullable Object raw) {
+        double factor;
+        if (raw instanceof Number number) {
+            factor = number.doubleValue();
+        } else if (raw instanceof String text) {
+            try {
+                factor = Double.parseDouble(text);
+            } catch (NumberFormatException exception) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+        return Double.isFinite(factor) && factor >= 0.0D ? factor : null;
     }
 
     public Map<String, List<Biome>> getBiomeSets() {
@@ -517,6 +542,10 @@ public class MainConfig extends ConfigBase {
     public int getAFKMaxFishCaught() {
         // Internally add 1 because otherwise it'll stop on the number instead of after.
         return getConfig().getInt("exploits.afk-fishing.max-caught", 10) + 1;
+    }
+
+    public int getAFKReconnectRetentionSeconds() {
+        return Math.max(0, getConfig().getInt("exploits.afk-fishing.reconnect-retention-seconds", 600));
     }
 
     public int getAFKCheckRange() {

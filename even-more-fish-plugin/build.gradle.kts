@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     `java-library`
     `maven-publish`
@@ -158,17 +160,9 @@ sonar {
     }
 }
 
-val copyAddons = tasks.register<Copy>("copyAddons") {
-    description = "Copies addon jars to the resources folder."
-
-    // Make sure the plugin waits for the addons to be built first
-    dependsOn(
-        ":addons:even-more-fish-addons-excellenteconomy:build"
-    )
-
-    from(project(":addons:even-more-fish-addons-excellenteconomy").layout.buildDirectory.dir("libs"))
-
-    into(file("src/main/resources/addons"))
+// Bundled addons come from the current build, never from old files left in src/main/resources.
+sourceSets.main {
+    resources.exclude("addons/**")
 }
 
 val copyVersions = tasks.register<Copy>("copyVersions") {
@@ -193,8 +187,15 @@ val copyVersions = tasks.register<Copy>("copyVersions") {
 
 tasks {
     processResources {
-        dependsOn(copyAddons)
         dependsOn(copyVersions)
+        dependsOn(":addons:even-more-fish-addons-excellenteconomy:jar")
+        from(project(":addons:even-more-fish-addons-excellenteconomy")
+            .layout.buildDirectory.file("libs/EMF-Addons-EXCELLENTECONOMY.addon")) {
+            into("addons")
+        }
+        doFirst {
+            delete(destinationDir.resolve("addons"))
+        }
     }
 
     clean {
@@ -229,6 +230,17 @@ tasks {
 
 }
 
+val prepareWatchWolfPlugin by tasks.registering(Copy::class) {
+    group = "verification"
+    description = "Copies the shaded plugin jar to the path used by WatchWolf"
+    val pluginJar = tasks.named<ShadowJar>("shadowJar")
+    dependsOn(pluginJar)
+    from(pluginJar.flatMap { it.archiveFile }) {
+        rename { "EvenMoreFish.jar" }
+    }
+    into(layout.buildDirectory.dir("watchwolf"))
+}
+
 testing {
     suites {
         named<JvmTestSuite>("test") {
@@ -246,12 +258,38 @@ testing {
                 }
                 runtimeOnly(libs.junit.jupiter.engine)
                 runtimeOnly(libs.junit.platform.launcher)
+                runtimeOnly(libs.connectors.sqlite)
             }
 
             targets {
                 all {
                     testTask.configure {
                         useJUnitPlatform()
+                    }
+                }
+            }
+        }
+
+        val testWatchWolf by creating(JvmTestSuite::class) {
+            useJUnitJupiter()
+
+            dependencies {
+                implementation(libs.watchwolf.tester)
+                implementation(libs.watchwolf.snakeyaml)
+                implementation(libs.junit.jupiter.api)
+                implementation(libs.junit.jupiter.params)
+                runtimeOnly(libs.junit.jupiter.engine)
+                runtimeOnly(libs.junit.platform.launcher)
+            }
+
+            targets {
+                all {
+                    testTask.configure {
+                        group = "verification"
+                        description = "Runs real Paper integration tests through the WatchWolf fork"
+                        dependsOn(prepareWatchWolfPlugin)
+                        useJUnitPlatform()
+                        testLogging.showStandardStreams = true
                     }
                 }
             }

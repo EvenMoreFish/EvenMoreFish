@@ -17,6 +17,7 @@ public class RandomCompetitionType extends CompetitionType.Random {
     @Override
     public @NonNull CompetitionType getRandomType(@NonNull Competition competition) {
         List<CompetitionType> types = getValidTypes(competition)
+            .map(CompetitionType::freshInstance)
             .filter(type -> {
                 if (type instanceof RandomCompetitionType) {
                     return false;
@@ -42,6 +43,11 @@ public class RandomCompetitionType extends CompetitionType.Random {
     @Override
     public @NonNull String getKey() {
         return "random";
+    }
+
+    @Override
+    public boolean supportsResume() {
+        return getClass() == RandomCompetitionType.class;
     }
 
     private Stream<CompetitionType> getValidTypes(@NonNull Competition competition) {

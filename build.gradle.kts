@@ -19,6 +19,18 @@ allprojects {
         maven("https://repo.oraxen.com/releases/")
         maven("https://repo.nexomc.com/releases/")
         maven("https://repo.nightexpressdev.com/releases/")
+        ivy {
+            url = uri("https://github.com/sarhatabaot/WatchWolf-Tester/releases/download/")
+            patternLayout {
+                artifact("v[revision]/[artifact]-[revision].[ext]")
+            }
+            metadataSources {
+                artifact()
+            }
+            content {
+                includeModule("dev.watchwolf", "watchwolf-tester")
+            }
+        }
 
         // This should always be last because it likes to act up.
         maven("https://jitpack.io")

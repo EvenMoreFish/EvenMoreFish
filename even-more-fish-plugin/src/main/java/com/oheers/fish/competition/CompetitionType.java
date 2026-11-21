@@ -14,6 +14,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface CompetitionType extends RegistryItem {
@@ -36,6 +37,24 @@ public interface CompetitionType extends RegistryItem {
     boolean useFishLength();
 
     boolean isSingleReward();
+
+    /** Returns a separate instance when this type holds per-competition state. */
+    default CompetitionType freshInstance() {
+        return this;
+    }
+
+    /** Addon types must opt in after implementing a safe state restore. */
+    default boolean supportsResume() {
+        return false;
+    }
+
+    default Map<String, String> saveResumeState() {
+        return Map.of();
+    }
+
+    default boolean restoreResumeState(Map<String, String> state, Competition competition) {
+        return supportsResume() && state.isEmpty();
+    }
 
     default boolean register() {
         return CompetitionTypeRegistry.getInstance().register(this);
@@ -189,6 +208,25 @@ public interface CompetitionType extends RegistryItem {
 
         public @NonNull CompetitionType getRandom() {
             return this.random;
+        }
+
+        public @NonNull CompetitionType getResolvedType() {
+            return ref;
+        }
+
+        @Override
+        public boolean supportsResume() {
+            return ref.supportsResume();
+        }
+
+        @Override
+        public Map<String, String> saveResumeState() {
+            return ref.saveResumeState();
+        }
+
+        @Override
+        public boolean restoreResumeState(Map<String, String> state, Competition competition) {
+            return ref.restoreResumeState(state, competition);
         }
 
     }

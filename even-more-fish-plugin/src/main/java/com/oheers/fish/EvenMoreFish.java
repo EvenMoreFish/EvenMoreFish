@@ -3,6 +3,7 @@ package com.oheers.fish;
 import com.devskiller.friendly_id.FriendlyId;
 import com.oheers.fish.api.EMFAPI;
 import com.oheers.fish.api.Logging;
+import com.oheers.fish.api.utils.Scheduling;
 import com.oheers.fish.api.baits.AbstractBaitManager;
 import com.oheers.fish.api.economy.Economy;
 import com.oheers.fish.api.economy.selling.SoldFish;
@@ -25,6 +26,7 @@ import com.oheers.fish.database.data.manager.DataManager;
 import com.oheers.fish.database.model.user.UserReport;
 import com.oheers.fish.events.McMMOTreasureEvent;
 import com.oheers.fish.fishing.items.FishManager;
+import com.oheers.fish.fishing.exploits.AFKFishingTracker;
 import com.oheers.fish.fishing.rods.RodManager;
 import com.oheers.fish.messages.ConfigMessage;
 import com.oheers.fish.messages.abstracted.EMFMessage;
@@ -39,6 +41,7 @@ import com.oheers.fish.plugin.loading.EMFVersionProvider;
 import com.oheers.fish.update.UpdateChecker;
 import com.oheers.fish.utils.MinecraftVersionHelper;
 import de.themoep.inventorygui.InventoryGui;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -77,6 +80,7 @@ public class EvenMoreFish extends EMFPlugin {
     private IntegrationManager integrationManager;
     private EventManager eventManager;
     private MetricsManager metricsManager;
+    private ScheduledTask afkTrackerCleanupTask;
 
     private static EvenMoreFish instance;
     private EMFAPI api;
@@ -162,6 +166,8 @@ public class EvenMoreFish extends EMFPlugin {
         this.metricsManager.setupMetrics();
 
         CompetitionManager.getInstance().getAutoRunner().start();
+        afkTrackerCleanupTask = Scheduling.getInstance().runTaskTimer(
+            AFKFishingTracker::cleanupExpired, 1200L, 1200L);
 
         versionProvider.enable();
 
@@ -180,6 +186,11 @@ public class EvenMoreFish extends EMFPlugin {
     public void onDisable() {
         // Do this first.
         CompetitionManager.getInstance().getAutoRunner().stop();
+        if (afkTrackerCleanupTask != null) {
+            afkTrackerCleanupTask.cancel();
+            afkTrackerCleanupTask = null;
+        }
+        AFKFishingTracker.clearAll();
 
         if (dimensionFishing != null) {
             dimensionFishing.disable();
@@ -231,6 +242,7 @@ public class EvenMoreFish extends EMFPlugin {
         terminateGuis();
 
         this.configurationManager.reloadConfigurations();
+        AFKFishingTracker.clearAll();
 
         FishManager.getInstance().reload();
         BaitManager.getInstance().reload();

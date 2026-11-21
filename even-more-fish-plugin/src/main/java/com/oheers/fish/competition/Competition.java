@@ -59,6 +59,7 @@ public class Competition {
     protected long timeLeft;
     private CompetitionBossbar statusBar;
     private Long epochStartTime;
+    private Long epochStartTimeMillis;
     private LocalDateTime startTime;
     private final List<Long> alertTimes;
     private final Map<Integer, List<Reward>> rewards;
@@ -67,10 +68,16 @@ public class Competition {
     private CompetitionTimer timingSystem;
     private CompetitionBackupTimer backupSystem;
     private CompetitionFile competitionFile;
+    private final @Nullable String configuredTypeKey;
     private int numberNeeded = 0;
     private UUID singleWinner = null;
+    private final CompetitionScoreGate scoreGate = new CompetitionScoreGate();
 
     public Competition(final @NonNull CompetitionFile competitionFile) {
+        this(competitionFile, true);
+    }
+
+    Competition(final @NonNull CompetitionFile competitionFile, boolean resolveTypeNow) {
         this.competitionFile = competitionFile;
         this.competitionName = competitionFile.getId();
         this.playersNeeded = competitionFile.getPlayersNeeded();
@@ -81,12 +88,13 @@ public class Competition {
         this.rewards = competitionFile.getRewards();
         this.numberNeeded = competitionFile.getNumberNeeded();
 
-        // Resolve CompetitionType last as it may depend on some values set above.
-        this.competitionType = resolveType(competitionFile, this);
+        CompetitionType configuredType = competitionFile.getType();
+        this.configuredTypeKey = configuredType == null ? null : configuredType.getKey();
+        // Resume restores the exact resolved type before begin(), without drawing here.
+        this.competitionType = resolveTypeNow ? resolveType(competitionFile, this, configuredType) : null;
     }
 
-    private static @Nullable CompetitionType resolveType(@NonNull CompetitionFile file, @NonNull Competition competition) {
-        CompetitionType type = file.getType();
+    private static @Nullable CompetitionType resolveType(@NonNull CompetitionFile file, @NonNull Competition competition, @Nullable CompetitionType type) {
         if (type == null) {
             Logging.warn("Invalid competition: " + file.getId() + " has an invalid competition type.");
             return null;
@@ -94,7 +102,7 @@ public class Competition {
         if (type instanceof CompetitionType.Random random) {
             return new CompetitionType.Forwarding(random, random.getRandomType(competition));
         }
-        return type;
+        return type.freshInstance();
     }
 
     /**
@@ -127,6 +135,7 @@ public class Competition {
         this.alertTimes = new ArrayList<>();
         this.rewards = new HashMap<>();
         this.competitionType = type;
+        this.configuredTypeKey = type.getKey();
     }
 
     /**
@@ -195,21 +204,23 @@ public class Competition {
             // Sets the active competition to this one. If another competition is active, it will be ended.
             manager.setActive(this);
 
-            this.leaderboard = new Leaderboard(competitionType);
+            if (this.leaderboard == null) {
+                this.leaderboard = new Leaderboard(competitionType);
+            }
 
             if (this.statusBar == null) {
                 this.statusBar = createBossbar();
             }
             statusBar.show();
 
+            if (epochStartTime == null) {
+                setStartTime(Instant.now());
+            }
+            scoreGate.start();
             initTimer();
             announceBegin();
             EMFCompetitionStartEvent startEvent = new EMFCompetitionStartEvent(this);
             Bukkit.getServer().getPluginManager().callEvent(startEvent);
-
-            if (epochStartTime == null) {
-                setStartTime(Instant.now());
-            }
 
             // Execute start commands
             getCompetitionFile().getStartCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
@@ -226,7 +237,21 @@ public class Competition {
     }
 
     public void end(boolean startFail, boolean save) {
-        // Print leaderboard
+        List<CompetitionEntry> finalEntries = scoreGate.close(() -> leaderboard == null
+            ? List.of()
+            : leaderboard.getEntries().stream().map(CompetitionEntry::snapshot).toList());
+        if (finalEntries == null) {
+            return;
+        }
+
+        try {
+            finish(startFail, save, finalEntries);
+        } finally {
+            scoreGate.markEnded();
+        }
+    }
+
+    private void finish(boolean startFail, boolean save, List<CompetitionEntry> finalEntries) {
         if (timingSystem != null) {
             timingSystem.stop();
         }
@@ -238,7 +263,9 @@ public class Competition {
         }
 
         if (startFail) {
-            manager.activeCompetition = null;
+            if (manager.activeCompetition == this) {
+                manager.activeCompetition = null;
+            }
             return;
         }
 
@@ -251,10 +278,10 @@ public class Competition {
             // Delete the backup file in case it still exists for whatever reason.
             CompetitionManager.dataFile.delete();
             fireEndEvent();
-            notifyPlayers();
-            processRewards();
+            notifyPlayers(finalEntries);
+            processRewards(finalEntries);
             resetCompetitionTypeIfForwarding();
-            updateDatabase();
+            updateDatabase(finalEntries);
             leaderboard.clear();
         } catch (Exception exception) {
             EvenMoreFish.getInstance().getLogger().log(
@@ -265,8 +292,10 @@ public class Competition {
         } finally {
             // Always set timeLeft to 0.
             this.timeLeft = 0;
-            manager.activeCompetition = null;
-            manager.checkHeldCompetition();
+            if (manager.activeCompetition == this) {
+                manager.activeCompetition = null;
+                manager.checkHeldCompetition();
+            }
         }
     }
 
@@ -275,14 +304,14 @@ public class Competition {
         endEvent.callEvent();
     }
 
-    private void notifyPlayers() {
+    private void notifyPlayers(List<CompetitionEntry> finalEntries) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             ConfigMessage.COMPETITION_END.getMessage().send(player);
-            sendLeaderboard(player);
+            sendLeaderboard(player, finalEntries);
         }
     }
 
-    private void processRewards() {
+    private void processRewards(List<CompetitionEntry> finalEntries) {
         if (competitionType == null) {
             return;
         }
@@ -291,9 +320,9 @@ public class Competition {
                 Logging.warn("Single-winner competition ended without a winner.");
                 return;
             }
-            singleReward(singleWinner);
+            singleReward(singleWinner, finalEntries);
         } else {
-            handleRewards();
+            handleRewards(finalEntries);
         }
     }
 
@@ -303,16 +332,14 @@ public class Competition {
         }
     }
 
-    private void updateDatabase() {
+    private void updateDatabase(List<CompetitionEntry> finalEntries) {
         if (!DatabaseUtil.isDatabaseOnline()) {
             return;
         }
 
         EvenMoreFish plugin = EvenMoreFish.getInstance();
-        plugin.getPluginDataManager().getCompetitionDataManager().update(
-                competitionName,
-                new CompetitionReport(this, startTime, LocalDateTime.now())
-        );
+        CompetitionReport report = new CompetitionReport(competitionName, finalEntries, startTime, LocalDateTime.now());
+        plugin.getPluginDataManager().getCompetitionDataManager().update(report.getRunId().toString(), report);
 
     }
 
@@ -396,10 +423,8 @@ public class Competition {
         UUID uuid = fisher.getUniqueId();
         // Ensure this is executed on the global scheduler to avoid CMEs.
         Scheduling.getInstance().runTask(() -> {
-            if (competitionType == null) {
-                return;
-            }
-            competitionType.applyToLeaderboard(fish, uuid, leaderboard, this);
+            scoreGate.acceptScore(() -> manager.getActiveCompetition() == this && competitionType != null,
+                () -> competitionType.applyToLeaderboard(fish, uuid, leaderboard, this));
         });
     }
 
@@ -411,23 +436,26 @@ public class Competition {
     }
 
     public void sendLeaderboard(@NonNull CommandSender sender) {
-        if (!manager.isCompetitionActive()) {
+        if (manager.getActiveCompetition() != this) {
             ConfigMessage.NO_COMPETITION_RUNNING.getMessage().send(sender);
             return;
         }
-        if (leaderboard.getSize() == 0) {
+        sendLeaderboard(sender, leaderboard.getEntries());
+    }
+
+    private void sendLeaderboard(@NonNull CommandSender sender, List<CompetitionEntry> entries) {
+        if (entries.isEmpty()) {
             ConfigMessage.NO_FISH_CAUGHT.getMessage().send(sender);
             return;
         }
 
         List<String> competitionColours = competitionFile.getLeaderboardColours();
-        List<CompetitionEntry> entries = leaderboard.getEntries();
 
         EMFMessage leaderboardMessage = buildLeaderboardMessage(entries, competitionColours);
         leaderboardMessage.send(sender);
 
         EMFMessage message = ConfigMessage.LEADERBOARD_TOTAL_PLAYERS.getMessage();
-        message.setAmount(Integer.toString(leaderboard.getSize()));
+        message.setAmount(Integer.toString(entries.size()));
         message.send(sender);
     }
 
@@ -495,17 +523,15 @@ public class Competition {
         userReport.incrementCompetitionsJoined(1);
     }
 
-    private void handleRewards() {
-        if (leaderboard.getSize() == 0) {
+    private void handleRewards(List<CompetitionEntry> entries) {
+        if (entries.isEmpty()) {
             ConfigMessage.NO_WINNERS.getMessage().broadcast();
             return;
         }
 
         int rewardPlace = 1;
 
-        List<CompetitionEntry> entries = leaderboard.getEntries();
-
-        CompetitionEntry topEntry = leaderboard.getTopEntry();
+        CompetitionEntry topEntry = entries.getFirst();
         if (DatabaseUtil.isDatabaseOnline() && !entries.isEmpty()) {
             handleDatabaseUpdates(topEntry, true); // Top entry
         }
@@ -534,7 +560,7 @@ public class Competition {
         }
     }
 
-    private void singleReward(UUID winner) {
+    private void singleReward(UUID winner, List<CompetitionEntry> finalEntries) {
         if (competitionType == null) {
             return;
         }
@@ -546,18 +572,18 @@ public class Competition {
 
         message.broadcast();
 
-        if (!rewards.isEmpty()) {
-            for (Reward reward : rewards.get(1)) {
-                reward.give(player, null);
-            }
+        for (Reward reward : rewards.getOrDefault(1, List.of())) {
+            reward.give(player, null);
         }
 
         // Handle database updates for all entries. This was originally missed.
 
-        CompetitionEntry entry = leaderboard.getEntry(player.getUniqueId());
+        CompetitionEntry entry = finalEntries.stream()
+            .filter(e -> e.getPlayer().equals(player.getUniqueId()))
+            .findFirst().orElse(null);
         handleDatabaseUpdates(entry, true);
 
-        leaderboard.getEntries().forEach(e -> {
+        finalEntries.forEach(e -> {
             if (e.getPlayer().equals(player.getUniqueId())) {
                 return;
             }
@@ -607,6 +633,7 @@ public class Competition {
 
     public void setStartTime(@NonNull Instant instant) {
         this.epochStartTime = instant.getEpochSecond();
+        this.epochStartTimeMillis = instant.toEpochMilli();
         this.startTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
@@ -623,11 +650,18 @@ public class Competition {
     }
 
     public @Nullable IFish getSelectedFish() {
-        return (competitionType instanceof SpecificFishCompetitionType specific) ? specific.getSelectedFish() : null;
+        CompetitionType resolved = getResolvedType();
+        return (resolved instanceof SpecificFishCompetitionType specific) ? specific.getSelectedFish() : null;
     }
 
     public @Nullable IRarity getSelectedRarity() {
-        return (competitionType instanceof SpecificRarityCompetitionType specific) ? specific.getSelectedRarity() : null;
+        CompetitionType resolved = getResolvedType();
+        return (resolved instanceof SpecificRarityCompetitionType specific) ? specific.getSelectedRarity() : null;
+    }
+
+    private @Nullable CompetitionType getResolvedType() {
+        return competitionType instanceof CompetitionType.Forwarding forwarding
+            ? forwarding.getResolvedType() : competitionType;
     }
 
     public int getNumberNeeded() {
@@ -666,6 +700,10 @@ public class Competition {
         config.set("comp-id", getCompetitionFile().getId());
         config.set("total-duration", maxDuration);
         config.set("time-left", timeLeft);
+        CompetitionResumeSnapshot snapshot = createResumeSnapshot();
+        if (snapshot != null) {
+            snapshot.write(config);
+        }
         if (epochStartTime != null) {
             config.set("start-time", epochStartTime);
         }
@@ -676,6 +714,17 @@ public class Competition {
             config.set("leaderboard." + uuid + ".time", entry.getTime());
         }
         base.save();
+    }
+
+    @Nullable CompetitionResumeSnapshot createResumeSnapshot() {
+        CompetitionType resolved = getResolvedType();
+        if (configuredTypeKey == null || resolved == null || epochStartTimeMillis == null) {
+            return null;
+        }
+        boolean configuredSupportsResume = competitionType instanceof CompetitionType.Forwarding forwarding
+            ? forwarding.getRandom().supportsResume() : resolved.supportsResume();
+        return new CompetitionResumeSnapshot(configuredTypeKey, resolved.getKey(), numberNeeded,
+            epochStartTimeMillis, configuredSupportsResume && resolved.supportsResume(), resolved.saveResumeState());
     }
 
 }

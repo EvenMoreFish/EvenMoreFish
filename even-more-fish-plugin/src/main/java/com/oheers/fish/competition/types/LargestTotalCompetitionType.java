@@ -68,6 +68,11 @@ public class LargestTotalCompetitionType implements CompetitionType {
     }
 
     @Override
+    public boolean supportsResume() {
+        return getClass() == LargestTotalCompetitionType.class;
+    }
+
+    @Override
     public @NonNull String getAuthor() {
         return "FireML";
     }

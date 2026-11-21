@@ -4,6 +4,7 @@ import com.oheers.fish.EvenMoreFish;
 import com.oheers.fish.api.Logging;
 import com.oheers.fish.api.fishing.items.IFish;
 import com.oheers.fish.api.fishing.items.IRarity;
+import com.oheers.fish.api.fishing.items.RarityKey;
 import com.oheers.fish.competition.Competition;
 import com.oheers.fish.competition.CompetitionEntry;
 import com.oheers.fish.competition.leaderboard.Leaderboard;
@@ -18,6 +19,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,7 +49,7 @@ public class SpecificFishCompetitionType implements CompetitionType {
 
     @Override
     public boolean isUsable(@NonNull Competition competition) {
-        if (!chooseFish(competition)) {
+        if (selectedFish == null && !chooseFish(competition)) {
             Logging.warn("Failed to select a fish for Competition " + competition.getCompetitionName());
             return false;
         }
@@ -90,6 +92,34 @@ public class SpecificFishCompetitionType implements CompetitionType {
 
     @Override
     public boolean isSingleReward() {
+        return true;
+    }
+
+    @Override
+    public CompetitionType freshInstance() {
+        return getClass() == SpecificFishCompetitionType.class ? new SpecificFishCompetitionType() : this;
+    }
+
+    @Override
+    public boolean supportsResume() {
+        return getClass() == SpecificFishCompetitionType.class;
+    }
+
+    @Override
+    public Map<String, String> saveResumeState() {
+        return selectedFish == null ? Map.of() : Map.of("selected-fish", selectedFish.getRarityKey().toString());
+    }
+
+    @Override
+    public boolean restoreResumeState(Map<String, String> state, Competition competition) {
+        if (!supportsResume() || state.size() != 1 || !state.containsKey("selected-fish")) {
+            return false;
+        }
+        RarityKey key = RarityKey.of(state.get("selected-fish"));
+        if (key == null) {
+            return false;
+        }
+        selectedFish = key.getFish();
         return true;
     }
 

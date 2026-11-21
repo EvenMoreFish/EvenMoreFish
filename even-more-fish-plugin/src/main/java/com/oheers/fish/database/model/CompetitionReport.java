@@ -13,6 +13,7 @@ import java.util.UUID;
 
 public class CompetitionReport {
 
+    private final UUID runId;
     private final String competitionConfigId;
     private final String winnerFish;
     private final UUID winnerUuid;
@@ -25,6 +26,11 @@ public class CompetitionReport {
 
 
     public CompetitionReport(String competitionConfigID, String winnerFish, String winnerUUIDString, float winnerScore, String contestants, LocalDateTime startTime, LocalDateTime endTime) {
+        this(UUID.randomUUID(), competitionConfigID, winnerFish, winnerUUIDString, winnerScore, contestants, startTime, endTime);
+    }
+
+    public CompetitionReport(UUID runId, String competitionConfigID, String winnerFish, String winnerUUIDString, float winnerScore, String contestants, LocalDateTime startTime, LocalDateTime endTime) {
+        this.runId = runId;
         this.competitionConfigId = competitionConfigID;
         this.winnerFish = winnerFish;
         this.winnerUuid = UUID.fromString(winnerUUIDString);
@@ -37,18 +43,23 @@ public class CompetitionReport {
         this.endTime = endTime;
     }
     public CompetitionReport(Competition competition, LocalDateTime startTime, LocalDateTime endTime) {
-        this.competitionConfigId = competition.getCompetitionName();
-        CompetitionEntry topEntry = competition.getLeaderboard().getTopEntry();
+        this(competition.getCompetitionName(), competition.getLeaderboard().getEntries(), startTime, endTime);
+    }
+
+    public CompetitionReport(String competitionName, List<CompetitionEntry> finalEntries, LocalDateTime startTime, LocalDateTime endTime) {
+        this.runId = UUID.randomUUID();
+        this.competitionConfigId = competitionName;
+        CompetitionEntry topEntry = finalEntries.isEmpty() ? null : finalEntries.getFirst();
         if (topEntry == null) {
             this.winnerFish = FishRarityKey.empty().toStringDefault();
             this.winnerScore = 0F;
             this.winnerUuid = null;
             this.contestants = Collections.emptyList();
         } else {
-            this.winnerFish = FishRarityKey.of(competition.getLeaderboard().getTopEntry().getFish()).toString();
-            this.winnerScore = competition.getLeaderboard().getTopEntry().getValue();
-            this.winnerUuid = competition.getLeaderboard().getTopEntry().getPlayer();
-            this.contestants = competition.getLeaderboard().getEntries().stream().map(CompetitionEntry::getPlayer).toList();
+            this.winnerFish = FishRarityKey.of(topEntry.getFish()).toString();
+            this.winnerScore = topEntry.getValue();
+            this.winnerUuid = topEntry.getPlayer();
+            this.contestants = finalEntries.stream().map(CompetitionEntry::getPlayer).toList();
         }
         this.startTime = startTime;
         this.endTime = endTime;
@@ -56,6 +67,10 @@ public class CompetitionReport {
 
     public String getCompetitionConfigId() {
         return competitionConfigId;
+    }
+
+    public UUID getRunId() {
+        return runId;
     }
 
     public String getWinnerFish() {

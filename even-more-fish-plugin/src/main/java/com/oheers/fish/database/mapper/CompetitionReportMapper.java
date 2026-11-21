@@ -33,6 +33,7 @@ public class CompetitionReportMapper implements RowMapper<CompetitionReport> {
         boolean noContestants = contestants == null || contestants.isBlank() || "None".equalsIgnoreCase(contestants);
 
         CompetitionReport report = new CompetitionReport(
+                rs.getString("report_id") == null ? UUID.randomUUID() : UUID.fromString(rs.getString("report_id")),
                 rs.getString("competition_name"),
                 rs.getString("winner_fish"),
                 noWinner ? NIL_UUID.toString() : winnerUuid.trim(),
