@@ -27,5 +27,20 @@ class WatchWolfSmokeTest extends AbstractTest {
         String response = connector.server.runCommand("version EvenMoreFish");
         assertTrue(response.toLowerCase(Locale.ROOT).contains("evenmorefish"),
             () -> "Expected Paper to report EvenMoreFish as loaded, but got: " + response);
+
+        connector.server.runCommand("emf admin reload");
+        String afterReload = connector.server.runCommand("version EvenMoreFish");
+        assertTrue(afterReload.toLowerCase(Locale.ROOT).contains("evenmorefish"),
+            () -> "Expected EvenMoreFish to remain available after reload, but got: " + afterReload);
+
+        connector.server.runCommand("emf admin competition test");
+        String alreadyRunning = connector.server.runCommand("emf admin competition test");
+        assertTrue(alreadyRunning.toLowerCase(Locale.ROOT).contains("already"),
+            () -> "Expected the second start to find an active competition, but got: " + alreadyRunning);
+
+        connector.server.runCommand("emf admin competition end");
+        String noCompetition = connector.server.runCommand("emf admin competition end");
+        assertTrue(noCompetition.toLowerCase(Locale.ROOT).contains("no competition"),
+            () -> "Expected the competition to be ended, but got: " + noCompetition);
     }
 }

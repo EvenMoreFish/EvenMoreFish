@@ -4,8 +4,5 @@ server-type:
   - Paper:
       - "1.21.1"
 
-users:
-  - "EMFWatchWolf"
-
 plugin: "build/watchwolf/EvenMoreFish.jar"
 world-type: "FLAT"

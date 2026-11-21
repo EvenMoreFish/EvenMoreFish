@@ -160,17 +160,9 @@ sonar {
     }
 }
 
-val copyAddons = tasks.register<Copy>("copyAddons") {
-    description = "Copies addon jars to the resources folder."
-
-    // Make sure the plugin waits for the addons to be built first
-    dependsOn(
-        ":addons:even-more-fish-addons-excellenteconomy:build"
-    )
-
-    from(project(":addons:even-more-fish-addons-excellenteconomy").layout.buildDirectory.dir("libs"))
-
-    into(file("src/main/resources/addons"))
+// Bundled addons come from the current build, never from old files left in src/main/resources.
+sourceSets.main {
+    resources.exclude("addons/**")
 }
 
 val copyVersions = tasks.register<Copy>("copyVersions") {
@@ -195,8 +187,15 @@ val copyVersions = tasks.register<Copy>("copyVersions") {
 
 tasks {
     processResources {
-        dependsOn(copyAddons)
         dependsOn(copyVersions)
+        dependsOn(":addons:even-more-fish-addons-excellenteconomy:jar")
+        from(project(":addons:even-more-fish-addons-excellenteconomy")
+            .layout.buildDirectory.file("libs/EMF-Addons-EXCELLENTECONOMY.addon")) {
+            into("addons")
+        }
+        doFirst {
+            delete(destinationDir.resolve("addons"))
+        }
     }
 
     clean {
