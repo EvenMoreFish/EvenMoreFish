@@ -47,7 +47,7 @@ public class RandomCompetitionType extends CompetitionType.Random {
 
     @Override
     public boolean supportsResume() {
-        return getClass() == RandomCompetitionType.class;
+        return true;
     }
 
     private Stream<CompetitionType> getValidTypes(@NonNull Competition competition) {

@@ -65,7 +65,7 @@ public class MostFishCompetitionType implements CompetitionType {
 
     @Override
     public boolean supportsResume() {
-        return getClass() == MostFishCompetitionType.class;
+        return true;
     }
 
     @Override

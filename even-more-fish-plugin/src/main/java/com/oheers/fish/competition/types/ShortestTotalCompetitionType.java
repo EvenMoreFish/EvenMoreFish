@@ -69,7 +69,7 @@ public class ShortestTotalCompetitionType implements CompetitionType {
 
     @Override
     public boolean supportsResume() {
-        return getClass() == ShortestTotalCompetitionType.class;
+        return true;
     }
 
     @Override

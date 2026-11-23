@@ -97,12 +97,12 @@ public class SpecificFishCompetitionType implements CompetitionType {
 
     @Override
     public CompetitionType freshInstance() {
-        return getClass() == SpecificFishCompetitionType.class ? new SpecificFishCompetitionType() : this;
+        return new SpecificFishCompetitionType();
     }
 
     @Override
     public boolean supportsResume() {
-        return getClass() == SpecificFishCompetitionType.class;
+        return true;
     }
 
     @Override

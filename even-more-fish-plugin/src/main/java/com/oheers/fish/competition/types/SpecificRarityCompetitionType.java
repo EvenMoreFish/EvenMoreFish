@@ -97,12 +97,12 @@ public class SpecificRarityCompetitionType implements CompetitionType {
 
     @Override
     public CompetitionType freshInstance() {
-        return getClass() == SpecificRarityCompetitionType.class ? new SpecificRarityCompetitionType() : this;
+        return new SpecificRarityCompetitionType();
     }
 
     @Override
     public boolean supportsResume() {
-        return getClass() == SpecificRarityCompetitionType.class;
+        return true;
     }
 
     @Override

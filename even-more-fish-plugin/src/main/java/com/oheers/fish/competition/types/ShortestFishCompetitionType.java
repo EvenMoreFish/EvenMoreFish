@@ -74,7 +74,7 @@ public class ShortestFishCompetitionType implements CompetitionType {
 
     @Override
     public boolean supportsResume() {
-        return getClass() == ShortestFishCompetitionType.class;
+        return true;
     }
 
     @Override

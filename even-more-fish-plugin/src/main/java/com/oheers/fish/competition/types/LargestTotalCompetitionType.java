@@ -69,7 +69,7 @@ public class LargestTotalCompetitionType implements CompetitionType {
 
     @Override
     public boolean supportsResume() {
-        return getClass() == LargestTotalCompetitionType.class;
+        return true;
     }
 
     @Override
