@@ -152,14 +152,15 @@ public class Leaderboard {
     }
 
     private Comparator<CompetitionEntry> createComparator() {
+        Comparator<CompetitionEntry> playerOrder = Comparator.comparing(CompetitionEntry::getPlayer);
         Comparator<CompetitionEntry> comparator = Comparator
             // First compare the entry values
             .comparingDouble(CompetitionEntry::getValue)
             // If a tie, compare by the time of the most recent catch
-            .thenComparing(Comparator.comparingLong(CompetitionEntry::getTime).reversed());
+            .thenComparing(Comparator.comparingLong(CompetitionEntry::getTime).reversed())
+            .thenComparing(type.shouldReverseLeaderboard() ? playerOrder : playerOrder.reversed());
 
-        Comparator<CompetitionEntry> ranked = type.shouldReverseLeaderboard() ? comparator : comparator.reversed();
-        return ranked.thenComparing(CompetitionEntry::getPlayer);
+        return type.shouldReverseLeaderboard() ? comparator : comparator.reversed();
     }
 
 }
