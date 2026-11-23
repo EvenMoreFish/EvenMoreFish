@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 
 public class SellHelper {
@@ -56,12 +55,11 @@ public class SellHelper {
         for (int slot = 0; slot < size; slot++) {
             ItemStack item = inventory.getItem(slot);
             SaleLine line = prepareLine(player, item, filter, slot);
-            if (line != null && matches(inventory.getItem(slot), line.snapshot())) {
+            if (line != null) {
                 lines.add(line);
             }
         }
-        settle(player, lines, () -> lines.stream().allMatch(line -> matches(inventory.getItem(line.slot()), line.snapshot())),
-            () -> lines.forEach(line -> inventory.setItem(line.slot(), null)));
+        settle(player, lines, inventory);
     }
 
     public void sell(@Nullable ItemStack @NonNull[] itemStacks, @NonNull Player player) {
@@ -81,12 +79,11 @@ public class SellHelper {
                 continue;
             }
             SaleLine line = prepareLine(player, item, filter, -1);
-            if (line != null && matches(item, line.snapshot())) {
+            if (line != null) {
                 lines.add(line);
             }
         }
-        settle(player, lines, () -> lines.stream().allMatch(line -> matches(line.item(), line.snapshot())),
-            () -> lines.forEach(line -> line.item().setAmount(0)));
+        settle(player, lines, null);
     }
 
     private @Nullable SaleLine prepareLine(Player player, @Nullable ItemStack item, Predicate<IFish> filter, int slot) {
@@ -108,12 +105,15 @@ public class SellHelper {
         return item != null && item.getAmount() == snapshot.getAmount() && item.isSimilar(snapshot);
     }
 
-    private void settle(Player player, List<SaleLine> lines, BooleanSupplier stillPresent, Runnable removeItems) {
+    private void settle(Player player, List<SaleLine> lines, @Nullable Inventory inventory) {
         if (lines.isEmpty()) {
             EMFPlugin.getInstance().sendMessage("NO_SELLABLE_FISH", player);
             return;
         }
-        if (!stillPresent.getAsBoolean()) {
+        // Sale events can alter the inventory; only pay for fish still in their original slots.
+        boolean unchanged = lines.stream().allMatch(line -> matches(
+            inventory == null ? line.item() : inventory.getItem(line.slot()), line.snapshot()));
+        if (!unchanged) {
             EMFPlugin.getInstance().sendMessage("FISH_SALE_FAILED", player);
             return;
         }
@@ -123,7 +123,13 @@ public class SellHelper {
             EMFPlugin.getInstance().sendMessage("FISH_SALE_FAILED", player);
             return;
         }
-        removeItems.run();
+        for (SaleLine line : lines) {
+            if (inventory == null) {
+                line.item().setAmount(0);
+            } else {
+                inventory.setItem(line.slot(), null);
+            }
+        }
         lines.forEach(line -> {
             SoldFish sold = line.sold();
             logSoldFish(sold);
