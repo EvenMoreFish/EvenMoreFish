@@ -104,6 +104,7 @@ not-enough-players: <white>There are not enough players online to start the sche
 time-alert: <reset>這場比賽還有{time_formatted} 結束
 # The message sent to players when they've sold their fish in the /emf shop
 fish-sale: <white>你出售了 </white><green>{amount} </green><white>條魚，賺取了 </white><yellow>{sell-price} </yellow><white>塊錢！
+fish-sale-failed: <white>The sale could not be completed. Your fish were kept. Please contact a server administrator if your balance changed.
 # The message sent to players when they attempt to sell and there are no sellable fish
 no-sellable-fish: <white>沒有可出售的物品！
 # Help messages

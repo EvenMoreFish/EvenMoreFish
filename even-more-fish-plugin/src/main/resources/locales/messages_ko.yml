@@ -104,6 +104,7 @@ not-enough-players: <white>예정된 낚시 대회를 시작할 만큼 사람이
 time-alert: <white>{type} 유형의 대회가 {time_formatted}만큼 남았습니다
 # The message sent to players when they've sold their fish in the /emf shop
 fish-sale: <white>물고기 <green>{amount}개<white>를 <green>{sell-price}<white>에 판매했습니다.
+fish-sale-failed: <white>The sale could not be completed. Your fish were kept. Please contact a server administrator if your balance changed.
 # The message sent to players when they attempt to sell and there are no sellable fish
 no-sellable-fish: <white>팔 것이 없습니다!
 # Help messages

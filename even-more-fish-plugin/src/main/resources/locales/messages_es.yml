@@ -104,6 +104,7 @@ not-enough-players: <white>There are not enough players online to start the sche
 time-alert: <reset>Solo quedan {time_formatted} para que termine la competición de {type}
 # The message sent to players when they've sold their fish in the /emf shop
 fish-sale: <white>Has vendido </white><green>{amount} </green><white>pescados por </white><green>{sell-price}</green><white>.
+fish-sale-failed: <white>The sale could not be completed. Your fish were kept. Please contact a server administrator if your balance changed.
 # The message sent to players when they attempt to sell and there are no sellable fish
 no-sellable-fish: <white>You have nothing to sell!
 # Help messages
