@@ -36,6 +36,10 @@ public class UserFishStats {
         this.quantity = 0;
     }
 
+    public UserFishStats snapshot() {
+        return new UserFishStats(userId, fishName, fishRarity, firstCatchTime, shortestLength, longestLength, quantity);
+    }
+
     public int getUserId() {
         return userId;
     }

@@ -50,6 +50,9 @@ exploits:
     enabled: false
     # How many fish can be caught before needing to move the hook?
     max-caught: 10
+    # Retain the same-area catch count after a disconnect for this many seconds.
+    # 0 resets it immediately. Trackers are not saved across server restarts.
+    reconnect-retention-seconds: 600
     # How far should the player need to move their hook?
     range: 3
 

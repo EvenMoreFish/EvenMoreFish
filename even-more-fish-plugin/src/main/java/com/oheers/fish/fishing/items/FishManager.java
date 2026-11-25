@@ -255,8 +255,9 @@ public class FishManager extends AbstractFishManager<IRarity> {
                                           Set<IRarity> totalRarities,
                                           @Nullable CustomRod customRod,
                                           @NonNull RequirementContext requirementContext) {
+        String region = regionFor(fisher);
         List<IRarity> allowedRarities = filterByCustomRod(
-                getAllowedRarities(fisher, boostRate, boostedRarities, totalRarities, requirementContext),
+                getAllowedRarities(fisher, boostRate, boostedRarities, totalRarities, requirementContext, region),
                 customRod
         );
 
@@ -268,7 +269,7 @@ public class FishManager extends AbstractFishManager<IRarity> {
         }
 
         IRarity selected = selectRandomRarity(allowedRarities, boostRate, boostedRarities,
-                fisher, requirementContext.getLocation());
+                fisher, requirementContext.getLocation(), region);
         return selected != null && isFishingAllowedInCompetition() ? selected : null;
     }
 
@@ -277,14 +278,15 @@ public class FishManager extends AbstractFishManager<IRarity> {
                                               @NonNull ToDoubleFunction<IRarity> weightFunction,
                                               @Nullable CustomRod customRod,
                                               @NonNull RequirementContext requirementContext) {
-        List<IRarity> allowedRarities = getAvailableRarities(fisher, totalRarities, customRod, requirementContext);
+        String region = regionFor(fisher);
+        List<IRarity> allowedRarities = getAvailableRarities(fisher, totalRarities, customRod, requirementContext, region);
         if (allowedRarities.isEmpty()) {
             return null;
         }
 
         IRarity selected = WeightedRandom.pick(
             allowedRarities,
-            weightFunction,
+            rarity -> weightFunction.applyAsDouble(rarity) * MainConfig.getInstance().getRegionBoost(region, rarity.getId()),
             EvenMoreFish.RANDOM
         );
         return selected != null && isFishingAllowedInCompetition() ? selected : null;
@@ -348,8 +350,17 @@ public class FishManager extends AbstractFishManager<IRarity> {
                                                       @NonNull Set<IRarity> totalRarities,
                                                       @Nullable CustomRod customRod,
                                                       @NonNull RequirementContext requirementContext) {
+        return getAvailableRarities(fisher, totalRarities, customRod, requirementContext, regionFor(fisher));
+    }
+
+    /** Uses an already resolved player-region name for consistent filtering and weight calculation. */
+    public @NonNull List<IRarity> getAvailableRarities(@Nullable Player fisher,
+                                                      @NonNull Set<IRarity> totalRarities,
+                                                      @Nullable CustomRod customRod,
+                                                      @NonNull RequirementContext requirementContext,
+                                                      @Nullable String region) {
         return filterByCustomRod(
-            getAllowedRarities(fisher, 1.0D, Collections.emptySet(), totalRarities, requirementContext),
+            getAllowedRarities(fisher, 1.0D, Collections.emptySet(), totalRarities, requirementContext, region),
             customRod
         );
     }
@@ -535,18 +546,20 @@ public class FishManager extends AbstractFishManager<IRarity> {
     private List<IRarity> getAllowedRarities(Player fisher, double boostRate,
                                             Set<IRarity> boostedRarities,
                                             Set<IRarity> totalRarities,
-                                            @NonNull RequirementContext requirementContext) {
+                                            @NonNull RequirementContext requirementContext,
+                                            @Nullable String region) {
         if (fisher == null) return new ArrayList<>(totalRarities);
 
-        String region = FishUtils.getRegionName(fisher.getLocation());
         return getItemMap().values().stream()
             .filter(r -> !shouldSkipRarity(r, boostRate, boostedRarities, fisher))
             .filter(r -> r.getRequirement().check(requirementContext))
-            .flatMap(r -> Collections.nCopies(
-                (int) Math.max(1, MainConfig.getInstance().getRegionBoost(region, r.getId())),
-                r
-            ).stream())
+            // Exclude zero factors before WeightedRandom's singleton/uniform fallback.
+            .filter(r -> MainConfig.getInstance().getRegionBoost(region, r.getId()) > 0.0D)
             .toList();
+    }
+
+    private @Nullable String regionFor(@Nullable Player fisher) {
+        return fisher == null ? null : FishUtils.getRegionName(fisher.getLocation());
     }
 
     private boolean shouldSkipRarity(IRarity rarity, double boostRate,
@@ -560,10 +573,11 @@ public class FishManager extends AbstractFishManager<IRarity> {
     }
 
     private IRarity selectRandomRarity(List<IRarity> rarities, double boostRate, Set<IRarity> boosted,
-                                      @Nullable Player fisher, @Nullable Location location) {
+                                      @Nullable Player fisher, @Nullable Location location, @Nullable String region) {
+        ToDoubleFunction<IRarity> externalWeight = externallyBoostedWeight(fisher, location);
         return WeightedRandom.pick(
             rarities,
-            externallyBoostedWeight(fisher, location),
+            rarity -> externalWeight.applyAsDouble(rarity) * MainConfig.getInstance().getRegionBoost(region, rarity.getId()),
             boostRate,
             boosted,
             EvenMoreFish.RANDOM

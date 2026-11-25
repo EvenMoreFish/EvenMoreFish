@@ -58,6 +58,8 @@ days:
 
 These two options cannot be mixed in the same file. If both are present, `days` is prioritised.
 
+Two different competitions cannot be scheduled for the same day and minute. If their times conflict, the plugin logs an error naming both competitions and keeps the one whose ID sorts first. The other competition remains loaded and can still be started manually, but it will not run at that conflicting time. Repeating a time within the same file has no additional effect.
+
 ## Disabling Competitions
 To disable a competition, you have two choices:
 - Set `disabled` to true inside the file and reload.

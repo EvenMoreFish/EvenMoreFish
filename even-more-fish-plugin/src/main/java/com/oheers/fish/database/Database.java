@@ -270,7 +270,7 @@ public class Database implements DatabaseAPI {
     }
 
     public void upsertUserFishStats(UserFishStats userFishStats) {
-        useHandle(handle -> bindUserFishStatsUpdate(handle, userFishStatsUpsertSql(), userFishStats).execute());
+        useHandleStrict(handle -> bindUserFishStatsUpdate(handle, userFishStatsUpsertSql(), userFishStats).execute());
     }
 
     /**
@@ -363,7 +363,7 @@ public class Database implements DatabaseAPI {
     }
 
     public void batchUpdateUserFishStats(Collection<UserFishStats> userFishStats) {
-        useHandle(handle -> {
+        useTransactionStrict(handle -> {
             PreparedBatch batch = handle.prepareBatch(userFishStatsUpsertSql());
             int count = 0;
             for (UserFishStats stats : userFishStats) {
@@ -381,27 +381,31 @@ public class Database implements DatabaseAPI {
     }
 
     public void updateCompetition(CompetitionReport competition) {
-        useHandle(handle -> bindCompetitionInsert(handle, competition).execute());
+        batchUpdateCompetitions(List.of(competition));
     }
 
     public CompetitionReport getCompetitionReport(int id) {
-        return withHandle(handle -> handle.createQuery("select id, competition_name, winner_fish, winner_uuid, winner_score, contestants, start_time, end_time from " + competitionsTable + " where id = :id").bind("id", id).mapTo(CompetitionReport.class).findOne().orElse(null), null);
+        return withHandle(handle -> handle.createQuery("select id, report_id, competition_name, winner_fish, winner_uuid, winner_score, contestants, start_time, end_time from " + competitionsTable + " where id = :id").bind("id", id).mapTo(CompetitionReport.class).findOne().orElse(null), null);
+    }
+
+    public CompetitionReport getCompetitionReport(UUID runId) {
+        return withHandle(handle -> handle.createQuery("select id, report_id, competition_name, winner_fish, winner_uuid, winner_score, contestants, start_time, end_time from " + competitionsTable + " where report_id = :report_id").bind("report_id", runId.toString()).mapTo(CompetitionReport.class).findOne().orElse(null), null);
     }
 
     public void batchUpdateCompetitions(Collection<CompetitionReport> competitions) {
-        useHandle(handle -> {
-            PreparedBatch batch = handle.prepareBatch("insert into " + competitionsTable + " (competition_name, winner_fish, winner_uuid, winner_score, contestants, start_time, end_time) values (:competition_name, :winner_fish, :winner_uuid, :winner_score, :contestants, :start_time, :end_time)");
-            int count = 0;
+        useTransactionStrict(handle -> {
             for (CompetitionReport competition : competitions) {
                 if (competition == null) {
                     continue;
                 }
-                bindCompetitionBatch(batch, competition);
-                batch.add();
-                count++;
-            }
-            if (count > 0) {
-                batch.execute();
+                boolean exists = handle.createQuery("select 1 from " + competitionsTable + " where report_id = :report_id limit 1")
+                    .bind("report_id", competition.getRunId().toString())
+                    .mapTo(Integer.class)
+                    .findOne()
+                    .isPresent();
+                if (!exists) {
+                    bindCompetitionInsert(handle, competition).execute();
+                }
             }
         });
     }
@@ -577,6 +581,28 @@ public class Database implements DatabaseAPI {
         }
     }
 
+    private void useHandleStrict(HandleConsumer consumer) {
+        if (jdbi == null) {
+            throw new IllegalStateException("Database is not available");
+        }
+        try {
+            jdbi.useHandle(consumer::accept);
+        } catch (Exception exception) {
+            throw new IllegalStateException("Database write failed", exception);
+        }
+    }
+
+    private void useTransactionStrict(HandleConsumer consumer) {
+        if (jdbi == null) {
+            throw new IllegalStateException("Database is not available");
+        }
+        try {
+            jdbi.useTransaction(consumer::accept);
+        } catch (Exception exception) {
+            throw new IllegalStateException("Database transaction failed", exception);
+        }
+    }
+
     private org.jdbi.v3.core.statement.Update bindUserFishStatsUpdate(Handle handle, String sql, UserFishStats stats) {
         return handle.createUpdate(sql).bind("user_id", stats.getUserId()).bind("fish_name", stats.getFishName()).bind("fish_rarity", stats.getFishRarity()).bind("first_catch_time", stats.getFirstCatchTimestamp()).bind("shortest_length", stats.getShortestLength()).bind("longest_length", stats.getLongestLength()).bind("quantity", stats.getQuantity());
     }
@@ -617,11 +643,7 @@ public class Database implements DatabaseAPI {
     }
 
     private org.jdbi.v3.core.statement.Update bindCompetitionInsert(Handle handle, CompetitionReport competition) {
-        return handle.createUpdate("insert into " + competitionsTable + " (competition_name, winner_fish, winner_uuid, winner_score, contestants, start_time, end_time) values (:competition_name, :winner_fish, :winner_uuid, :winner_score, :contestants, :start_time, :end_time)").bind("competition_name", competition.getCompetitionConfigId()).bind("winner_fish", competition.getWinnerFish()).bind("winner_uuid", competition.getWinnerUuid() == null ? "None" : competition.getWinnerUuid().toString()).bind("winner_score", competition.getWinnerScore()).bind("contestants", competition.getContestants().isEmpty() ? "None" : competition.getContestants().stream().map(UUID::toString).collect(Collectors.joining(","))).bind("start_time", competition.getStartTimestamp()).bind("end_time", competition.getEndTimestamp());
-    }
-
-    private void bindCompetitionBatch(PreparedBatch batch, CompetitionReport competition) {
-        batch.bind("competition_name", competition.getCompetitionConfigId()).bind("winner_fish", competition.getWinnerFish()).bind("winner_uuid", competition.getWinnerUuid() == null ? "None" : competition.getWinnerUuid().toString()).bind("winner_score", competition.getWinnerScore()).bind("contestants", competition.getContestants().isEmpty() ? "None" : competition.getContestants().stream().map(UUID::toString).collect(Collectors.joining(","))).bind("start_time", competition.getStartTimestamp()).bind("end_time", competition.getEndTimestamp());
+        return handle.createUpdate("insert into " + competitionsTable + " (report_id, competition_name, winner_fish, winner_uuid, winner_score, contestants, start_time, end_time) values (:report_id, :competition_name, :winner_fish, :winner_uuid, :winner_score, :contestants, :start_time, :end_time)").bind("report_id", competition.getRunId().toString()).bind("competition_name", competition.getCompetitionConfigId()).bind("winner_fish", competition.getWinnerFish()).bind("winner_uuid", competition.getWinnerUuid() == null ? "None" : competition.getWinnerUuid().toString()).bind("winner_score", competition.getWinnerScore()).bind("contestants", competition.getContestants().isEmpty() ? "None" : competition.getContestants().stream().map(UUID::toString).collect(Collectors.joining(","))).bind("start_time", competition.getStartTimestamp()).bind("end_time", competition.getEndTimestamp());
     }
 
     @FunctionalInterface

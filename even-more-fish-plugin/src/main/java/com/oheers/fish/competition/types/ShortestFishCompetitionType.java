@@ -50,9 +50,8 @@ public class ShortestFishCompetitionType implements CompetitionType {
             return;
         }
         if (fish.getLength() < entry.getFish().getLength()) {
-            // These HAVE to be in this order, otherwise players are spammed with new first place messages
-            leaderboard.addEntry(newEntry);
-            leaderboard.removeEntry(entry);
+            // Replacement preserves first-place notifications without dropping an equal-key entry.
+            leaderboard.replaceEntry(entry, newEntry);
         }
     }
 
@@ -71,6 +70,11 @@ public class ShortestFishCompetitionType implements CompetitionType {
     @Override
     public boolean isSingleReward() {
         return false;
+    }
+
+    @Override
+    public boolean supportsResume() {
+        return true;
     }
 
     @Override

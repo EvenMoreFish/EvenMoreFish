@@ -119,6 +119,7 @@ time-alert: <white>There is {time_formatted} left on the competition for {type}
 
 # The message sent to players when they've sold their fish in the /emf shop
 fish-sale: <white>You've sold <green>{amount} <white>fish for <green>{sell-price}<white>.
+fish-sale-failed: <white>The sale could not be completed. Your fish were kept. Please contact a server administrator if your balance changed.
 # The message sent to players when they attempt to sell and there are no sellable fish
 no-sellable-fish: <white>You have nothing to sell!
 

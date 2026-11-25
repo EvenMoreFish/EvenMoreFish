@@ -1,0 +1,8 @@
+provider: "127.0.0.1"
+
+server-type:
+  - Paper:
+      - "1.21.1"
+
+plugin: "build/watchwolf/EvenMoreFish.jar"
+world-type: "FLAT"

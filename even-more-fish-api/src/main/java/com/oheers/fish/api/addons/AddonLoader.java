@@ -124,7 +124,7 @@ public abstract class AddonLoader {
             validateMetadata();
             loadAddons();
             plugin.getLogger().info("Loaded Addon %s %s by %s".formatted(getAddonMetadata().name(), getAddonMetadata().version(), getAddonMetadata().authors()));
-        } catch (Exception e) {
+        } catch (Exception | LinkageError e) {
             plugin.getLogger().log(Level.SEVERE, "Failed to load addon %s".formatted(getAddonMetadata().name()), e);
         }
     }

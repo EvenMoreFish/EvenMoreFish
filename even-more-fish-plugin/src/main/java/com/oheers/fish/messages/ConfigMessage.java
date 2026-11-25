@@ -89,6 +89,7 @@ public enum ConfigMessage {
     FISHERMAN_LORE(PrefixType.NONE, "fisherman-lore"),
     LENGTH_LORE(PrefixType.NONE, "length-lore"),
     FISH_SALE(PrefixType.DEFAULT, "fish-sale"),
+    FISH_SALE_FAILED(PrefixType.ERROR, "fish-sale-failed"),
     NO_SELLABLE_FISH(PrefixType.ERROR, "no-sellable-fish"),
     HELP_FORMAT(
         PrefixType.DEFAULT,

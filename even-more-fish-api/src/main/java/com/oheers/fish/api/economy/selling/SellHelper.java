@@ -12,6 +12,11 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class SellHelper {
@@ -45,52 +50,16 @@ public class SellHelper {
             return;
         }
 
-        boolean soldAny = false;
-        double totalValue = 0;
-        int count = 0;
-
+        List<SaleLine> lines = new ArrayList<>();
         int size = inventory.getSize();
         for (int slot = 0; slot < size; slot++) {
             ItemStack item = inventory.getItem(slot);
-            if (item == null || item.isEmpty()) {
-                continue;
+            SaleLine line = prepareLine(player, item, filter, slot);
+            if (line != null) {
+                lines.add(line);
             }
-            SoldFish sold = SoldFish.get(player, item);
-            if (sold == null) {
-                continue;
-            }
-            if (!filter.test(sold.getFish())) {
-                continue;
-            }
-            // PreSaleEvent - Allows for modifying the sold fish and cancellation.
-            boolean cancelled = !new EMFFishPreSaleEvent(player, sold).callEvent();
-            if (cancelled || sold.getValue() < 0) {
-                continue;
-            }
-
-            logSoldFish(sold);
-            sold.getFish().getSellRewards().forEach(reward -> reward.give(player, player.getLocation()));
-            new EMFFishSoldEvent(player, sold).callEvent();
-
-            inventory.setItem(slot, null);
-            soldAny = true;
-            totalValue += sold.getFinalValue();
-            count += sold.getQuantity();
         }
-
-        if (!soldAny) {
-            EMFPlugin.getInstance().sendMessage("NO_SELLABLE_FISH", player);
-            return;
-        }
-
-        // Give money
-        economy.deposit(player, totalValue, true);
-
-        // Send Message
-        EMFPlugin.getInstance().sendSoldMessage(totalValue, count, player);
-
-        // Play sound
-        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.06f);
+        settle(player, lines, inventory);
     }
 
     public void sell(@Nullable ItemStack @NonNull[] itemStacks, @NonNull Player player) {
@@ -103,51 +72,75 @@ public class SellHelper {
             return;
         }
 
-        boolean soldAny = false;
-        double totalValue = 0;
-        int count = 0;
-
+        List<SaleLine> lines = new ArrayList<>();
+        Set<ItemStack> seen = Collections.newSetFromMap(new IdentityHashMap<>());
         for (ItemStack item : itemStacks) {
-            if (item == null || item.isEmpty()) {
+            if (item == null || !seen.add(item)) {
                 continue;
             }
-            SoldFish sold = SoldFish.get(player, item);
-            if (sold == null) {
-                continue;
+            SaleLine line = prepareLine(player, item, filter, -1);
+            if (line != null) {
+                lines.add(line);
             }
-            if (!filter.test(sold.getFish())) {
-                continue;
-            }
-            // PreSaleEvent - Allows for modifying the sold fish and cancellation.
-            boolean cancelled = !new EMFFishPreSaleEvent(player, sold).callEvent();
-            if (cancelled || sold.getValue() < 0) {
-                continue;
-            }
-
-            logSoldFish(sold);
-            sold.getFish().getSellRewards().forEach(reward -> reward.give(player, player.getLocation()));
-            new EMFFishSoldEvent(player, sold).callEvent();
-
-            item.setAmount(0);
-            soldAny = true;
-            totalValue += sold.getFinalValue();
-            count += sold.getQuantity();
         }
+        settle(player, lines, null);
+    }
 
-        if (!soldAny) {
+    private @Nullable SaleLine prepareLine(Player player, @Nullable ItemStack item, Predicate<IFish> filter, int slot) {
+        if (item == null || item.isEmpty()) {
+            return null;
+        }
+        SoldFish sold = SoldFish.get(player, item);
+        if (sold == null || !filter.test(sold.getFish())) {
+            return null;
+        }
+        ItemStack snapshot = item.clone();
+        if (!new EMFFishPreSaleEvent(player, sold).callEvent() || sold.getValue() < 0) {
+            return null;
+        }
+        return new SaleLine(item, snapshot, sold, slot);
+    }
+
+    private boolean matches(@Nullable ItemStack item, ItemStack snapshot) {
+        return item != null && item.getAmount() == snapshot.getAmount() && item.isSimilar(snapshot);
+    }
+
+    private void settle(Player player, List<SaleLine> lines, @Nullable Inventory inventory) {
+        if (lines.isEmpty()) {
             EMFPlugin.getInstance().sendMessage("NO_SELLABLE_FISH", player);
             return;
         }
-
-        // Give money
-        economy.deposit(player, totalValue, true);
-
-        // Send Message
+        // Sale events can alter the inventory; only pay for fish still in their original slots.
+        boolean unchanged = lines.stream().allMatch(line -> matches(
+            inventory == null ? line.item() : inventory.getItem(line.slot()), line.snapshot()));
+        if (!unchanged) {
+            EMFPlugin.getInstance().sendMessage("FISH_SALE_FAILED", player);
+            return;
+        }
+        double totalValue = lines.stream().mapToDouble(line -> line.sold().getFinalValue()).sum();
+        int count = lines.stream().mapToInt(line -> line.sold().getQuantity()).sum();
+        if (economy.depositForSale(player, totalValue, true) != Economy.DepositResult.SUCCESS) {
+            EMFPlugin.getInstance().sendMessage("FISH_SALE_FAILED", player);
+            return;
+        }
+        for (SaleLine line : lines) {
+            if (inventory == null) {
+                line.item().setAmount(0);
+            } else {
+                inventory.setItem(line.slot(), null);
+            }
+        }
+        lines.forEach(line -> {
+            SoldFish sold = line.sold();
+            logSoldFish(sold);
+            sold.getFish().getSellRewards().forEach(reward -> reward.give(player, player.getLocation()));
+            new EMFFishSoldEvent(player, sold).callEvent();
+        });
         EMFPlugin.getInstance().sendSoldMessage(totalValue, count, player);
-
-        // Play sound
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.06f);
     }
+
+    private record SaleLine(ItemStack item, ItemStack snapshot, SoldFish sold, int slot) {}
 
     private void logSoldFish(@NonNull SoldFish soldFish) {
         EMFPlugin.getInstance().logSoldFish(soldFish);
